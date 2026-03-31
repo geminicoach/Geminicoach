@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:52px;}.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;}
+  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--blue-bright);}.nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}.hamburger span{display:block;width:24px;height:2px;background:var(--white);}
+  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+  .mobile-nav.open{display:flex;}.mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;}
+  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
+  .page-hero{padding:10rem 3rem 5rem;background:var(--navy-mid);border-bottom:1px solid rgba(30,111,196,0.15);position:relative;overflow:hidden;}
+  .page-hero::before{content:'BLOG';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(8rem,18vw,16rem);color:rgba(30,111,196,0.06);pointer-events:none;}
+  .page-hero-inner{max-width:1200px;margin:0 auto;}
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,7rem);line-height:1;color:var(--white);}
+  .page-title em{font-style:normal;color:var(--blue-bright);}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin-top:1rem;}
+  .blog-section{padding:6rem 3rem;max-width:1000px;margin:0 auto;}
+  .empty-state{text-align:center;padding:5rem 2rem;border:1px dashed rgba(30,111,196,0.2);}
+  .empty-icon{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:rgba(30,111,196,0.15);margin-bottom:1rem;}
+  .empty-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);margin-bottom:1rem;}
+  .empty-text{font-size:0.95rem;color:var(--gray);line-height:1.8;max-width:450px;margin:0 auto 2rem;}
+  .btn{display:inline-block;background:var(--blue);color:var(--white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;padding:1rem 2.5rem;border:2px solid var(--blue-bright);transition:all 0.25s;}
+  .btn:hover{background:var(--blue-bright);}
+  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+  .footer-logo img{height:44px;}.footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;}
+  .footer-links a{color:var(--gray);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--blue-light);}.footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
+  @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.hamburger{display:flex;}.page-hero{padding:8rem 1.5rem 4rem;}.blog-section{padding:4rem 1.5rem;}footer{padding:2rem 1.5rem;}.footer-inner{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+</div>
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="images/logo.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html" class="active">Blog</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="section-label">Education</p>
+    <h1 class="page-title">The <em>Blog.</em></h1>
+    <div class="blue-line"></div>
+  </div>
+</div>
+<div class="blog-section">
+  <div class="empty-state">
+    <div class="empty-icon">✍</div>
+    <div class="empty-title">First Post Coming Soon</div>
+    <p class="empty-text">Weekly education on nutrition, training, recovery, and everything in between. No fluff — just the stuff that actually matters. Check back soon or follow on Instagram for updates.</p>
+    <a href="https://instagram.com/Thegeminicoach" target="_blank" class="btn">Follow @TheGeminiCoach</a>
+  </div>
+</div>
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="images/logo.png" alt="Gemini Coach"></div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html">Blog</a></li><li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+  </div>
+</footer>
+<script>function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}</script>
+</body>
+</html>
