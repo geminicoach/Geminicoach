@@ -1,187 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Podcast — Gemini Coach</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root { --navy:#0a1628; --navy-mid:#0d1f3c; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5; --white:#fff; --off-white:#e8edf5; --gray:#8a9ab5; --dark-gray:#1c2a40; }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { background:var(--navy); color:var(--white); font-family:'Barlow',sans-serif; font-weight:300; }
-  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:rgba(10,22,40,0.96); backdrop-filter:blur(12px); border-bottom:1px solid rgba(30,111,196,0.2); }
-  .nav-logo img { height:52px; }
-  .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; }
-  .nav-links a { color:var(--off-white); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; transition:color 0.2s; }
-  .nav-links a:hover, .nav-links a.active { color:var(--blue-bright); }
-  .nav-cta { background:var(--blue); color:var(--white) !important; padding:0.5rem 1.4rem; border:1px solid var(--blue-bright); }
-  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
-  .hamburger span { display:block; width:24px; height:2px; background:var(--white); }
-  .mobile-nav { display:none; position:fixed; inset:0; background:rgba(10,22,40,0.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
-  .mobile-nav.open { display:flex; }
-  .mobile-nav a { color:var(--white); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; }
-  .mobile-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--white); font-size:2rem; cursor:pointer; }
-
-  .page-hero { padding:10rem 3rem 5rem; background:var(--navy-mid); border-bottom:1px solid rgba(30,111,196,0.15); position:relative; overflow:hidden; }
-  .page-hero::before { content:'PODCAST'; position:absolute; right:-1rem; top:50%; transform:translateY(-50%); font-family:'Bebas Neue',sans-serif; font-size:clamp(8rem,18vw,16rem); color:rgba(30,111,196,0.06); pointer-events:none; }
-  .page-hero-inner { max-width:1200px; margin:0 auto; }
-  .section-label { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue-light); margin-bottom:1rem; }
-  .page-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(4rem,8vw,7rem); line-height:1; color:var(--white); }
-  .page-title em { font-style:normal; color:var(--blue-bright); }
-  .blue-line { width:60px; height:3px; background:var(--blue-bright); margin-top:1rem; }
-
-  .podcast-section { padding:6rem 3rem; }
-  .podcast-inner { max-width:1000px; margin:0 auto; }
-
-  /* SOLO PODCAST - COMING SOON */
-  .coming-soon-block {
-    border:1px solid rgba(30,111,196,0.2); padding:4rem;
-    display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center;
-    margin-bottom:3rem; background:var(--dark-gray);
-  }
-  .cs-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue); margin-bottom:1rem; }
-  .cs-title { font-family:'Bebas Neue',sans-serif; font-size:3rem; color:var(--white); line-height:1; margin-bottom:1rem; }
-  .cs-desc { font-size:0.95rem; color:var(--gray); line-height:1.8; margin-bottom:1.5rem; }
-  .cs-badge { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; background:rgba(30,111,196,0.15); border:1px solid var(--blue); color:var(--blue-light); padding:0.4rem 1rem; }
-  .cs-visual { display:flex; align-items:center; justify-content:center; height:200px; border:1px dashed rgba(30,111,196,0.3); }
-  .cs-icon { font-family:'Bebas Neue',sans-serif; font-size:6rem; color:rgba(30,111,196,0.2); }
-
-  /* FEATURED APPEARANCES */
-  .featured-section { margin-top:2rem; }
-  .featured-header { margin-bottom:2rem; }
-  .featured-header h2 { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--white); }
-  .featured-header p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-top:0.5rem; }
-
-  .episode-placeholder {
-    border:1px solid rgba(30,111,196,0.15); padding:2rem;
-    display:flex; align-items:center; gap:2rem; margin-bottom:2px;
-    background:var(--dark-gray); transition:border-color 0.3s;
-  }
-  .episode-placeholder:hover { border-color:var(--blue); }
-  .ep-number { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:rgba(30,111,196,0.3); min-width:60px; }
-  .ep-info { flex:1; }
-  .ep-show { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue-light); margin-bottom:0.25rem; }
-  .ep-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; color:var(--white); margin-bottom:0.25rem; }
-  .ep-date { font-size:0.8rem; color:var(--gray); }
-  .ep-cta { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:var(--blue-bright); text-decoration:none; padding:0.5rem 1rem; border:1px solid var(--blue); white-space:nowrap; transition:all 0.2s; }
-  .ep-cta:hover { background:var(--blue); color:var(--white); }
-
-  .ig-cta { margin-top:3rem; padding:3rem; background:var(--navy-mid); border:1px solid rgba(30,111,196,0.2); text-align:center; }
-  .ig-cta p { color:var(--gray); font-size:0.95rem; line-height:1.8; margin-bottom:1.5rem; }
-  .ig-cta a { display:inline-flex; align-items:center; gap:0.5rem; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:1rem; font-weight:700; letter-spacing:0.1em; }
-  .ig-icon { width:20px; height:20px; fill:currentColor; }
-
-  footer { background:var(--navy-mid); border-top:1px solid rgba(30,111,196,0.2); padding:3rem; margin-top:6rem; }
-  .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; }
-  .footer-logo img { height:44px; }
-  .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
-  .footer-links a { color:var(--gray); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
-  .footer-links a:hover { color:var(--blue-light); }
-  .footer-copy { font-size:0.8rem; color:var(--gray); font-family:'Barlow Condensed',sans-serif; }
-  .ig-link-footer { display:flex; align-items:center; gap:0.5rem; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:600; }
-
-  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s, transform 0.7s; }
-  .reveal.visible { opacity:1; transform:translateY(0); }
-
-  @media (max-width:900px) {
-    nav { padding:1rem 1.5rem; } .nav-links { display:none; } .hamburger { display:flex; }
-    .page-hero { padding:8rem 1.5rem 4rem; }
-    .podcast-section { padding:4rem 1.5rem; }
-    .coming-soon-block { grid-template-columns:1fr; padding:2rem; }
-    footer { padding:2rem 1.5rem; } .footer-inner { flex-direction:column; align-items:flex-start; }
-    .episode-placeholder { flex-direction:column; align-items:flex-start; }
-  }
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:52px;}.nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;}
+  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--blue-bright);}.nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}.hamburger span{display:block;width:24px;height:2px;background:var(--white);}
+  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+  .mobile-nav.open{display:flex;}.mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;}
+  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
+  .page-hero{padding:10rem 3rem 5rem;background:var(--navy-mid);border-bottom:1px solid rgba(30,111,196,0.15);position:relative;overflow:hidden;}
+  .page-hero::before{content:'BLOG';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(8rem,18vw,16rem);color:rgba(30,111,196,0.06);pointer-events:none;}
+  .page-hero-inner{max-width:1200px;margin:0 auto;}
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,7rem);line-height:1;color:var(--white);}
+  .page-title em{font-style:normal;color:var(--blue-bright);}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin-top:1rem;}
+  .blog-section{padding:6rem 3rem;max-width:1000px;margin:0 auto;}
+  .empty-state{text-align:center;padding:5rem 2rem;border:1px dashed rgba(30,111,196,0.2);}
+  .empty-icon{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:rgba(30,111,196,0.15);margin-bottom:1rem;}
+  .empty-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);margin-bottom:1rem;}
+  .empty-text{font-size:0.95rem;color:var(--gray);line-height:1.8;max-width:450px;margin:0 auto 2rem;}
+  .btn{display:inline-block;background:var(--blue);color:var(--white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;padding:1rem 2.5rem;border:2px solid var(--blue-bright);transition:all 0.25s;}
+  .btn:hover{background:var(--blue-bright);}
+  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+  .footer-logo img{height:44px;}.footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;}
+  .footer-links a{color:var(--gray);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
+  .footer-links a:hover{color:var(--blue-light);}.footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
+  @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.hamburger{display:flex;}.page-hero{padding:8rem 1.5rem 4rem;}.blog-section{padding:4rem 1.5rem;}footer{padding:2rem 1.5rem;}.footer-inner{flex-direction:column;align-items:flex-start;}}
 </style>
 </head>
 <body>
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-close" onclick="closeMobileNav()">✕</button>
-  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a>
-  <a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
 </div>
 <nav>
   <div class="nav-logo"><a href="index.html"><img src="images/logo.png" alt="Gemini Coach"></a></div>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li>
-    <li><a href="services.html">Services</a></li><li><a href="podcast.html" class="active">Podcast</a></li>
-    <li><a href="blog.html">Blog</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html" class="active">Blog</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
   </ul>
   <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
 </nav>
-
 <div class="page-hero">
   <div class="page-hero-inner">
-    <p class="section-label">Audio &amp; Media</p>
-    <h1 class="page-title">Podcast &amp;<br><em>Features.</em></h1>
+    <p class="section-label">Education</p>
+    <h1 class="page-title">The <em>Blog.</em></h1>
     <div class="blue-line"></div>
   </div>
 </div>
-
-<section class="podcast-section">
-  <div class="podcast-inner">
-
-    <div class="coming-soon-block reveal">
-      <div>
-        <div class="cs-label">Coming Soon</div>
-        <div class="cs-title">Smarter, Stronger</div>
-        <p class="cs-desc">Smarter, Stronger — S#!t That Matters with Parker Gruenhagen. A monologue-style show covering nutrition science, training, mindset, and everything in between. Direct, no-fluff education from someone who has lived it. Launching soon — follow on Instagram for updates.</p>
-        <span class="cs-badge">In Development</span>
-      </div>
-      <div class="cs-visual">
-        <img src="images/podcast-cover.jpg" alt="Smarter Stronger Podcast" style="width:100%;height:100%;object-fit:cover;">
-      </div>
-    </div>
-
-    <div class="featured-section reveal">
-      <div class="featured-header">
-        <h2>Guest Appearances</h2>
-        <p>Monthly recordings and guest spots on other shows. Links added as episodes go live — check back or follow on Instagram for announcements.</p>
-      </div>
-
-      <div class="episode-placeholder">
-        <div class="ep-number">—</div>
-        <div class="ep-info">
-          <div class="ep-show">Guest Feature</div>
-          <div class="ep-title">Episode links will appear here as they go live</div>
-          <div class="ep-date">Check back soon</div>
-        </div>
-        <a href="https://instagram.com/Thegeminicoach" target="_blank" class="ep-cta">Follow for Updates</a>
-      </div>
-    </div>
-
-    <div class="ig-cta reveal">
-      <p>The fastest way to stay up to date on new podcast episodes, guest features, and content drops is Instagram. Give the page a follow.</p>
-      <a href="https://instagram.com/Thegeminicoach" target="_blank">
-        <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        @TheGeminiCoach on Instagram
-      </a>
-    </div>
+<div class="blog-section">
+  <div class="empty-state">
+    <div class="empty-icon">✍</div>
+    <div class="empty-title">First Post Coming Soon</div>
+    <p class="empty-text">Weekly education on nutrition, training, recovery, and everything in between. No fluff — just the stuff that actually matters. Check back soon or follow on Instagram for updates.</p>
+    <a href="https://instagram.com/Thegeminicoach" target="_blank" class="btn">Follow @TheGeminiCoach</a>
   </div>
-</section>
-
+</div>
 <footer>
   <div class="footer-inner">
     <div class="footer-logo"><img src="images/logo.png" alt="Gemini Coach"></div>
     <ul class="footer-links">
-      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li>
-      <li><a href="podcast.html">Podcast</a></li><li><a href="blog.html">Blog</a></li>
-      <li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
+      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html">Blog</a></li><li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
     </ul>
-    <div>
-      <a href="https://instagram.com/Thegeminicoach" target="_blank" class="ig-link-footer">
-        <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-        @TheGeminiCoach
-      </a>
-      <p class="footer-copy" style="margin-top:0.75rem">&copy; 2026 Gemini Coach. All rights reserved.</p>
-    </div>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
   </div>
 </footer>
-<script>
-  function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}
-  function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}
-  const reveals=document.querySelectorAll('.reveal');
-  const observer=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);observer.unobserve(e.target);}});},{threshold:0.08});
-  reveals.forEach(el=>observer.observe(el));
-</script>
+<script>function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}</script>
 </body>
 </html>
