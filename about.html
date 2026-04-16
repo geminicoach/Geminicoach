@@ -32,14 +32,18 @@
   .about-hero-image {
     position:relative; overflow:hidden;
   }
-  .about-hero-image img {
-    width:100%; height:100%; object-fit:cover; object-position:center top;
-    transition:transform 8s ease;
-  }
-  .about-hero-image:hover img { transform:scale(1.04); }
   .about-hero-image::after {
-    content:''; position:absolute; inset:0;
+    content:''; position:absolute; inset:0; z-index:2;
     background:linear-gradient(to right, transparent 60%, var(--navy) 100%);
+    pointer-events:none;
+  }
+  .hero-slide {
+    position:absolute; inset:0; opacity:0;
+    transition:opacity 1.2s ease;
+  }
+  .hero-slide.active { opacity:1; }
+  .hero-slide img {
+    width:100%; height:100%; object-fit:cover; object-position:center top;
   }
   .about-hero-content {
     background:var(--navy); display:flex; flex-direction:column;
@@ -183,7 +187,10 @@
 <!-- HERO -->
 <div class="about-hero">
   <div class="about-hero-image">
-    <!-- PHOTO SLOT: hero portrait -->
+    <div class="hero-slide active"><img src="smiling-red-bench.JPG" alt="Parker Gruenhagen"></div>
+    <div class="hero-slide"><img src="stage-vacuum-bicep.jpg" alt="Parker Gruenhagen on stage"></div>
+    <div class="hero-slide"><img src="lying-ground-bw.jpg" alt="Parker Gruenhagen"></div>
+    <div class="hero-slide"><img src="mirror-looking-back.JPG" alt="Parker Gruenhagen"></div>
   </div>
   <div class="about-hero-content">
     <p class="section-label">The Coach</p>
@@ -344,6 +351,13 @@
 <script>
   function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
   function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+  const heroSlides = document.querySelectorAll('.hero-slide');
+  let heroIndex = 0;
+  setInterval(() => {
+    heroSlides[heroIndex].classList.remove('active');
+    heroIndex = (heroIndex + 1) % heroSlides.length;
+    heroSlides[heroIndex].classList.add('active');
+  }, 5000);
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver(entries => {
     entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); observer.unobserve(e.target); } });
