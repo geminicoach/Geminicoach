@@ -37,13 +37,9 @@
     background:linear-gradient(to right, transparent 60%, var(--navy) 100%);
     pointer-events:none;
   }
-  .hero-slide {
-    position:absolute; inset:0; opacity:0;
-    transition:opacity 1.2s ease;
-  }
-  .hero-slide.active { opacity:1; }
-  .hero-slide img {
+  .about-hero-image img {
     width:100%; height:100%; object-fit:cover; object-position:center top;
+    display:block;
   }
   .about-hero-content {
     background:var(--navy); display:flex; flex-direction:column;
@@ -62,20 +58,16 @@
   .story-section { padding:7rem 3rem; background:var(--navy-mid); }
   .story-inner { max-width:1200px; margin:0 auto; }
 
-  .story-grid { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; }
+  .story-row { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; margin-bottom:6rem; }
+  .story-row:last-child { margin-bottom:0; }
 
-  .story-chapter { margin-bottom:3rem; }
+  .story-chapter { }
   .chapter-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; }
   .chapter-title { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--white); line-height:1; margin-bottom:1rem; }
   .chapter-text { font-size:0.95rem; color:var(--gray); line-height:1.9; }
 
-  .story-image-stack { position:relative; }
-  .story-img-main { width:100%; display:block; }
-  .story-img-secondary {
-    position:absolute; bottom:-2rem; right:-2rem;
-    width:55%; border:4px solid var(--navy-mid);
-    box-shadow:0 20px 60px rgba(0,0,0,0.5);
-  }
+  .story-chapter-image { overflow:hidden; }
+  .story-chapter-image img { width:100%; display:block; object-fit:cover; aspect-ratio:3/4; }
 
   /* QUOTE */
   .quote-section { padding:6rem 3rem; background:var(--navy); text-align:center; }
@@ -98,10 +90,14 @@
   /* COACHING GALLERY */
   .coaching-section { padding:7rem 3rem; background:var(--navy); }
   .coaching-inner { max-width:1200px; margin:0 auto; }
+  .coaching-intro { font-size:0.95rem; color:var(--gray); line-height:1.85; max-width:680px; margin-top:1rem; }
   .coaching-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:3px; margin-top:3rem; }
   .coaching-img { overflow:hidden; aspect-ratio:3/4; }
   .coaching-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s; }
   .coaching-img:hover img { transform:scale(1.05); }
+  .coaching-review { margin-top:3rem; padding:2rem 2.5rem; border-left:3px solid var(--blue-bright); background:var(--navy-mid); }
+  .coaching-review blockquote { font-size:0.95rem; color:var(--off-white); line-height:1.85; font-style:italic; margin-bottom:1rem; }
+  .coaching-review cite { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue-light); font-style:normal; }
 
   /* PHILOSOPHY */
   .philosophy-section { padding:7rem 3rem; background:var(--dark-gray); }
@@ -146,10 +142,11 @@
     .about-hero-image::after { background:linear-gradient(to top, var(--navy) 0%, transparent 60%); }
     .about-hero-content { padding:3rem 1.5rem; }
     .story-section, .competition-section, .coaching-section, .philosophy-section { padding:5rem 1.5rem; }
-    .story-grid { grid-template-columns:1fr; gap:3rem; }
-    .story-img-secondary { display:none; }
+    .story-row { grid-template-columns:1fr; gap:2rem; margin-bottom:4rem; }
+    .story-row .story-chapter-image { order:-1; }
     .comp-grid { grid-template-columns:1fr; gap:2rem; }
     .coaching-grid { grid-template-columns:1fr 1fr; }
+    .coaching-review { padding:1.5rem; }
     .philosophy-grid { grid-template-columns:1fr; }
     .about-cta { padding:4rem 1.5rem; }
     footer { padding:2rem 1.5rem; }
@@ -187,10 +184,7 @@
 <!-- HERO -->
 <div class="about-hero">
   <div class="about-hero-image">
-    <div class="hero-slide active"><img src="smiling-red-bench.JPG" alt="Parker Gruenhagen"></div>
-    <div class="hero-slide"><img src="stage-vacuum-bicep.jpg" alt="Parker Gruenhagen on stage"></div>
-    <div class="hero-slide"><img src="lying-ground-bw.jpg" alt="Parker Gruenhagen"></div>
-    <div class="hero-slide"><img src="mirror-looking-back.JPG" alt="Parker Gruenhagen"></div>
+    <img src="smiling-red-bench.JPG" alt="Parker Gruenhagen">
   </div>
   <div class="about-hero-content">
     <p class="section-label">The Coach</p>
@@ -211,35 +205,48 @@
 <!-- STORY -->
 <section class="story-section">
   <div class="story-inner">
-    <div class="story-grid">
-      <div>
-        <div class="story-chapter reveal">
-          <div class="chapter-label">Where it started</div>
-          <div class="chapter-title">The Foundation.</div>
-          <p class="chapter-text">Wrestling was where it all started for me. It built the mindset that still drives how I coach today: discipline, intensity, resilience, and a willingness to lean into hard things. After that, I fell in love with lifting, performance, and the process of becoming stronger. Over time, that grew into working with college athletes, general population clients, and strength athletes like bodybuilders and powerlifters. Early on, I realized I didn't just love training myself; I loved helping other people discover what they were capable of.</p>
-        </div>
-        <div class="story-chapter reveal">
-          <div class="chapter-label">The pivot</div>
-          <div class="chapter-title">A Different Path.</div>
-          <p class="chapter-text">I was originally headed toward chiropractic medicine, but bodybuilding pulled my interest more deeply into digestive health, nutrition, and human performance. That shift led me to pursue additional coursework and continue expanding my education over time. I've made it a priority to stay current with the research, because this field is always evolving and I believe good coaching should evolve with it. Along the way, I've had the opportunity to mentor others, speak with gym owners, and serve as a guest speaker in schools on anatomy and health sciences. Nearly a decade later, I'm still learning and still committed to getting better at what I do.</p>
-        </div>
-        <div class="story-chapter reveal">
-          <div class="chapter-label">Who I work with</div>
-          <div class="chapter-title">Different Goals. Same Standard.</div>
-          <p class="chapter-text">I work with a wide variety of people, but the ones who succeed usually share the same mindset. They are ready to make real changes, willing to communicate, and open to being pushed. That might look like a woman balancing higher education while preparing for her wedding and wanting to feel her best, a retired Air Force veteran stepping into bodybuilding and attacking a new challenge, or someone who simply knows it is time to change their lifestyle but needs the structure, education, and accountability to do it right. My coaching is built for different people with different goals, but always with the same standard of commitment.</p>
-        </div>
+    <!-- Row 1: The Foundation -->
+    <div class="story-row">
+      <div class="story-chapter reveal">
+        <div class="chapter-label">Where it started</div>
+        <div class="chapter-title">The Foundation.</div>
+        <p class="chapter-text">Wrestling was where it all started for me. It built the mindset that still drives how I coach today: discipline, intensity, resilience, and a willingness to lean into hard things. After that, I fell in love with lifting, performance, and the process of becoming stronger. Over time, that grew into working with college athletes, general population clients, and strength athletes like bodybuilders and powerlifters. Early on, I realized I didn't just love training myself; I loved helping other people discover what they were capable of.</p>
       </div>
-      <div class="story-image-stack reveal">
-        <!-- PHOTO SLOT: gym / training photo (story-img-main) -->
-        <!-- PHOTO SLOT: stage / competition photo (story-img-secondary) -->
+      <div class="story-chapter-image reveal">
+        <img src="mirror-looking-back.JPG" alt="Parker Gruenhagen">
+      </div>
+    </div>
+    <!-- Row 2: A Different Path (image left, text right) -->
+    <div class="story-row">
+      <div class="story-chapter-image reveal">
+        <img src="stage-vacuum-bicep.jpg" alt="Parker Gruenhagen on stage">
+      </div>
+      <div class="story-chapter reveal">
+        <div class="chapter-label">The pivot</div>
+        <div class="chapter-title">A Different Path.</div>
+        <p class="chapter-text">I was originally headed toward chiropractic medicine, but bodybuilding pulled my interest more deeply into digestive health, nutrition, and human performance. That shift led me to pursue additional coursework and continue expanding my education over time. I've made it a priority to stay current with the research, because this field is always evolving and I believe good coaching should evolve with it. Along the way, I've had the opportunity to mentor others, speak with gym owners, and serve as a guest speaker in schools on anatomy and health sciences. Nearly a decade later, I'm still learning and still committed to getting better at what I do.</p>
+      </div>
+    </div>
+    <!-- Row 3: Different Goals. Same Standard. -->
+    <div class="story-row">
+      <div class="story-chapter reveal">
+        <div class="chapter-label">Who I work with</div>
+        <div class="chapter-title">Different Goals. Same Standard.</div>
+        <p class="chapter-text">I work with a wide variety of people, but the ones who succeed usually share the same mindset. They are ready to make real changes, willing to communicate, and open to being pushed. That might look like a woman balancing higher education while preparing for her wedding and wanting to feel her best, a retired Air Force veteran stepping into bodybuilding and attacking a new challenge, or someone who simply knows it is time to change their lifestyle but needs the structure, education, and accountability to do it right. My coaching is built for different people with different goals, but always with the same standard of commitment.</p>
+      </div>
+      <div class="story-chapter-image reveal">
+        <img src="anna-transformation.JPG" alt="Client transformation">
       </div>
     </div>
   </div>
 </section>
 
 <!-- QUOTE -->
-<section class="quote-section">
-  <div class="quote-inner reveal">
+<section class="quote-section" style="position:relative; overflow:hidden;">
+  <div style="position:absolute; inset:0; z-index:0;">
+    <img src="lying-ground-bw.jpg" alt="" style="width:100%; height:100%; object-fit:cover; object-position:center; opacity:0.18; display:block;">
+  </div>
+  <div class="quote-inner reveal" style="position:relative; z-index:1;">
     <div class="quote-line"></div>
     <p class="big-quote">"Your brain will make you stop<br><em>long before your body will."</em></p>
   </div>
@@ -255,7 +262,7 @@
     </div>
     <div class="comp-grid">
       <div class="comp-image reveal">
-        <!-- PHOTO SLOT: competition / stage photo -->
+        <img src="justin-front-double-posing.jpeg" alt="Competition posing">
       </div>
       <div class="comp-content reveal">
         <p>Bodybuilding has given me firsthand experience with discipline, structure, physique development, and the consistency it takes to create real change. It has also taught me the value of productive off-seasons, recovery, and a more holistic approach to long-term progress.</p>
@@ -274,17 +281,22 @@
       <p class="section-label">In the gym</p>
       <h2 style="font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4.5rem); color:var(--white); line-height:1;">The Work<br><span style="color:var(--blue-bright);">Happens Here.</span></h2>
       <div class="blue-line"></div>
+      <p class="coaching-intro">It happens on the gym floor, on the phone, and in the body itself. Working through check-ins, fixing movement patterns, communicating what's actually going on inside and out. This is the process. Show up, talk to me, and we build from there.</p>
     </div>
     <div class="coaching-grid">
       <div class="coaching-img reveal">
-        <!-- PHOTO SLOT: training action photo -->
+        <img src="lying-cori-armout.JPG" alt="Client training">
       </div>
       <div class="coaching-img reveal">
-        <!-- PHOTO SLOT: coaching posing photo 1 -->
+        <img src="hanson-cups-hands-on-midsection.JPG" alt="Physiotherapy session">
       </div>
       <div class="coaching-img reveal">
-        <!-- PHOTO SLOT: coaching posing photo 2 -->
+        <img src="anna-transformation.JPG" alt="Client transformation">
       </div>
+    </div>
+    <div class="coaching-review reveal">
+      <blockquote>"My expectations were certainly met during coaching for prep. The weekly check-ins helped greatly for accountability and the insights into everything were always appreciated. Having someone who has experienced the pain before was comforting. Quality of coaching was great — you have always done a better job than anyone else I've worked with. Communication was locked in."</blockquote>
+      <cite>Liam &mdash; Competition Prep Client</cite>
     </div>
   </div>
 </section>
@@ -351,13 +363,6 @@
 <script>
   function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
   function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
-  const heroSlides = document.querySelectorAll('.hero-slide');
-  let heroIndex = 0;
-  setInterval(() => {
-    heroSlides[heroIndex].classList.remove('active');
-    heroIndex = (heroIndex + 1) % heroSlides.length;
-    heroSlides[heroIndex].classList.add('active');
-  }, 5000);
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver(entries => {
     entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); observer.unobserve(e.target); } });
