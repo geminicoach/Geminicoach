@@ -1,80 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog — Gemini Coach</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Learning Center — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
-  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
-  .nav-logo img { height:64px; width:auto; display:block; }.nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; margin:0; padding:0; }
-  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
-  .nav-links a:hover,.nav-links a.active{color:var(--blue-bright);}.nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
-  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}.hamburger span{display:block;width:24px;height:2px;background:var(--white);}
-  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
-  .mobile-nav.open{display:flex;}.mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;}
-  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
-  .page-hero{padding:10rem 3rem 5rem;background:var(--navy-mid);border-bottom:1px solid rgba(30,111,196,0.15);position:relative;overflow:hidden;}
-  .page-hero::before{content:'BLOG';position:absolute;right:-1rem;top:50%;transform:translateY(-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(8rem,18vw,16rem);color:rgba(30,111,196,0.06);pointer-events:none;}
-  .page-hero-inner{max-width:1200px;margin:0 auto;}
-  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
-  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,8vw,7rem);line-height:1;color:var(--white);}
-  .page-title em{font-style:normal;color:var(--blue-bright);}
-  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin-top:1rem;}
-  .blog-section{padding:6rem 3rem;max-width:1000px;margin:0 auto;}
-  .empty-state{text-align:center;padding:5rem 2rem;border:1px dashed rgba(30,111,196,0.2);}
-  .empty-icon{font-family:'Bebas Neue',sans-serif;font-size:5rem;color:rgba(30,111,196,0.15);margin-bottom:1rem;}
-  .empty-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);margin-bottom:1rem;}
-  .empty-text{font-size:0.95rem;color:var(--gray);line-height:1.8;max-width:450px;margin:0 auto 2rem;}
-  .btn{display:inline-block;background:var(--blue);color:var(--white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;padding:1rem 2.5rem;border:2px solid var(--blue-bright);transition:all 0.25s;}
-  .btn:hover{background:var(--blue-bright);}
-  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
-  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
-  .footer-logo img { height:120px; width:auto; display:block; }.footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;}
-  .footer-links a{color:var(--gray);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;transition:color 0.2s;}
-  .footer-links a:hover{color:var(--blue-light);}.footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
-  @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; margin:0; padding:0; }.hamburger{display:flex;}.page-hero{padding:8rem 1.5rem 4rem;}.blog-section{padding:4rem 1.5rem;}footer{padding:2rem 1.5rem;}.footer-inner{flex-direction:column;align-items:flex-start;}}
-.nav-links li { list-style:none; margin:0; padding:0; }
+  :root { --navy:#0a1628; --navy-mid:#0d1f3c; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5; --white:#ffffff; --off-white:#e8edf5; --gray:#8a9ab5; --dark-gray:#1c2a40; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--white); font-family:'Barlow',sans-serif; font-weight:300; overflow-x:hidden; }
+
+  /* NAV */
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:rgba(10,22,40,0.96); backdrop-filter:blur(12px); border-bottom:1px solid rgba(30,111,196,0.2); }
+  .nav-logo img { height:64px; width:auto; display:block; }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; margin:0; padding:0; }
+  .nav-links li { list-style:none; margin:0; padding:0; }
+  .nav-links a { color:var(--off-white); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--blue-bright); }
+  .nav-cta { background:var(--blue); color:var(--white) !important; padding:0.5rem 1.4rem; border:1px solid var(--blue-bright); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:24px; height:2px; background:var(--white); }
+  .mobile-nav { display:none; position:fixed; inset:0; background:rgba(10,22,40,0.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a { color:var(--white); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.1em; }
+  .mobile-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--white); font-size:2rem; cursor:pointer; }
+
+  /* UTILITIES */
+  .section-label { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue-light); margin-bottom:1rem; }
+  .blue-line { width:60px; height:3px; background:var(--blue-bright); margin:1.5rem 0; }
+
+  /* HERO */
+  .blog-hero { padding:10rem 3rem 6rem; background:var(--navy); }
+  .blog-hero-inner { max-width:1200px; margin:0 auto; }
+  .hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(4rem,8vw,7rem); line-height:0.95; color:var(--white); }
+  .hero-title em { font-style:normal; color:var(--blue-bright); }
+  .hero-subtitle { font-size:1rem; color:var(--gray); line-height:1.85; max-width:560px; }
+
+  /* TOPICS NAV */
+  .topics-bar { background:var(--navy-mid); border-top:1px solid rgba(30,111,196,0.15); border-bottom:1px solid rgba(30,111,196,0.15); padding:1rem 3rem; position:sticky; top:81px; z-index:100; }
+  .topics-bar-inner { max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; }
+  .topics-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.75rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--gray); white-space:nowrap; margin-right:0.5rem; }
+  .topic-chip { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.35rem 0.9rem; border:1px solid rgba(30,111,196,0.4); color:var(--blue-light); text-decoration:none; transition:all 0.2s; white-space:nowrap; cursor:pointer; }
+  .topic-chip:hover { border-color:var(--blue-bright); color:var(--blue-bright); }
+  .topic-chip.active { background:var(--blue); border-color:var(--blue-bright); color:var(--white); }
+  .topic-chip.muted { border-color:rgba(138,154,181,0.18); color:rgba(138,154,181,0.38); cursor:default; }
+  .topic-chip.muted:hover { border-color:rgba(138,154,181,0.18); color:rgba(138,154,181,0.38); }
+
+  /* CATEGORY SECTION */
+  .category-section { padding:6rem 3rem; background:var(--navy); }
+  .category-section-inner { max-width:1200px; margin:0 auto; }
+  .cat-badge { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--blue-bright); margin-bottom:0.75rem; }
+  .category-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4rem); color:var(--white); line-height:1; margin-bottom:1rem; }
+  .category-description { font-size:0.95rem; color:var(--gray); line-height:1.9; max-width:640px; margin-bottom:0.6rem; }
+  .article-count { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--blue-light); margin-bottom:3rem; }
+
+  /* ARTICLE CARDS */
+  .article-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+  .article-card { background:var(--navy-mid); border:1px solid rgba(30,111,196,0.2); display:flex; flex-direction:column; transition:border-color 0.3s, transform 0.3s; text-decoration:none; color:inherit; }
+  .article-card:hover { border-color:var(--blue-bright); transform:translateY(-4px); }
+  .card-image { width:100%; aspect-ratio:16/9; background:linear-gradient(135deg, #0d1f3c 0%, #091422 50%, #0e2346 100%); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .card-image-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(138,154,181,0.35); }
+  .card-body { padding:1.5rem; display:flex; flex-direction:column; flex:1; }
+  .card-cat { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue-light); margin-bottom:0.6rem; }
+  .card-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.15rem; color:var(--white); line-height:1.3; margin-bottom:0.75rem; }
+  .card-excerpt { font-size:0.88rem; color:var(--gray); line-height:1.75; flex:1; margin-bottom:1.25rem; }
+  .card-meta { display:flex; align-items:center; justify-content:space-between; }
+  .card-read-time { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray); }
+  .card-link { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-bright); }
+
+  /* DIVIDER */
+  .divider-wrap { padding:0 3rem; }
+  .section-divider { max-width:1200px; margin:0 auto; height:1px; background:rgba(30,111,196,0.15); }
+
+  /* COMING SOON */
+  .coming-soon-section { padding:6rem 3rem; background:var(--navy); }
+  .coming-soon-inner { max-width:1200px; margin:0 auto; }
+  .coming-soon-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,5vw,4rem); color:var(--white); line-height:1; margin-bottom:0.5rem; }
+  .coming-soon-title em { font-style:normal; color:var(--blue-bright); }
+  .coming-soon-subtitle { font-size:0.95rem; color:var(--gray); line-height:1.85; max-width:540px; margin-bottom:3rem; }
+  .coming-soon-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; }
+  .coming-soon-card { background:var(--navy-mid); border:1px solid rgba(30,111,196,0.12); padding:2rem; opacity:0.65; }
+  .coming-soon-badge { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gray); background:rgba(138,154,181,0.08); border:1px solid rgba(138,154,181,0.18); padding:0.2rem 0.65rem; display:inline-block; margin-bottom:1rem; }
+  .coming-soon-card-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.1rem; color:var(--off-white); letter-spacing:0.03em; }
+
+  /* FOOTER */
+  footer { background:var(--navy-mid); border-top:1px solid rgba(30,111,196,0.2); padding:3rem; }
+  .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; }
+  .footer-logo img { height:120px; width:auto; display:block; }
+  .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
+  .footer-links a { color:var(--gray); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--blue-light); }
+  .footer-copy { font-size:0.8rem; color:var(--gray); font-family:'Barlow Condensed',sans-serif; }
+  .ig-link { display:flex; align-items:center; gap:0.5rem; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:600; }
+  .ig-icon { width:18px; height:18px; fill:currentColor; }
+
+  .reveal { opacity:0; transform:translateY(30px); transition:opacity 0.7s, transform 0.7s; }
+  .reveal.visible { opacity:1; transform:translateY(0); }
+
+  @media (max-width:900px) {
+    nav { padding:1rem 1.5rem; }
+    .nav-links { display:none; }
+    .hamburger { display:flex; }
+    .blog-hero { padding:7rem 1.5rem 4rem; }
+    .topics-bar { padding:0.75rem 1.5rem; top:73px; }
+    .category-section { padding:4rem 1.5rem; }
+    .article-grid { grid-template-columns:1fr; }
+    .coming-soon-section { padding:4rem 1.5rem; }
+    .coming-soon-grid { grid-template-columns:1fr 1fr; }
+    .divider-wrap { padding:0 1.5rem; }
+    footer { padding:2rem 1.5rem; }
+    .footer-inner { flex-direction:column; align-items:flex-start; }
+  }
+  @media (max-width:600px) {
+    .coming-soon-grid { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
+
 <div class="mobile-nav" id="mobileNav">
-  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
-  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+  <button class="mobile-close" onclick="closeMobileNav()">&#10005;</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="podcast.html">Podcast</a>
+  <a href="blog.html">Blog</a>
+  <a href="index.html#contact">Contact</a>
 </div>
+
 <nav>
   <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
   <ul class="nav-links">
-    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html" class="active">Blog</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="podcast.html">Podcast</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
   </ul>
   <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
 </nav>
-<div class="page-hero">
-  <div class="page-hero-inner">
-    <p class="section-label">Education</p>
-    <h1 class="page-title">The <em>Blog.</em></h1>
+
+<!-- HERO -->
+<section class="blog-hero">
+  <div class="blog-hero-inner reveal">
+    <p class="section-label">Education &amp; Resources</p>
+    <h1 class="hero-title">The Learning<br><em>Center.</em></h1>
     <div class="blue-line"></div>
+    <p class="hero-subtitle">Evidence-based education on nutrition, physique development, recovery, and long-term health. Written for people who want to understand the why behind what they're doing — not just follow a plan.</p>
+  </div>
+</section>
+
+<!-- TOPICS NAV BAR -->
+<div class="topics-bar">
+  <div class="topics-bar-inner">
+    <span class="topics-label">Topics:</span>
+    <a href="#glp1" class="topic-chip active">GLP-1 Medications</a>
+    <span class="topic-chip muted">Nutrition</span>
+    <span class="topic-chip muted">Fat Loss</span>
+    <span class="topic-chip muted">Metabolism</span>
+    <span class="topic-chip muted">Recovery</span>
+    <span class="topic-chip muted">Hormones</span>
+    <span class="topic-chip muted">Supplements</span>
+    <span class="topic-chip muted">Training</span>
   </div>
 </div>
-<div class="blog-section">
-  <div class="empty-state">
-    <div class="empty-icon">✍</div>
-    <div class="empty-title">First Post Coming Soon</div>
-    <p class="empty-text">Weekly education on nutrition, training, recovery, and everything in between. No fluff — just the stuff that actually matters. Check back soon or follow on Instagram for updates.</p>
-    <a href="https://instagram.com/Thegeminicoach" target="_blank" class="btn">Follow @TheGeminiCoach</a>
+
+<!-- GLP-1 CATEGORY SECTION -->
+<section class="category-section" id="glp1">
+  <div class="category-section-inner">
+    <div class="reveal">
+      <p class="cat-badge">Education Series</p>
+      <h2 class="category-title">GLP-1 Medications Education</h2>
+      <p class="category-description">GLP-1 medications have become one of the most talked-about tools in weight management and metabolic health. Before making any decision about these medications, understanding how they actually work — and what they require of you — is essential. This series breaks it down without hype and without dismissiveness.</p>
+      <p class="article-count">3 Articles</p>
+    </div>
+
+    <div class="article-grid">
+
+      <!-- Card 1 -->
+      <a href="blog-glp1-what-they-are.html" class="article-card reveal">
+        <div class="card-image">
+          <span class="card-image-label">Featured Image</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">GLP-1 Medications Education</p>
+          <h3 class="card-title">GLP-1 Medications Explained: What They Are and How They Work</h3>
+          <p class="card-excerpt">Before deciding whether GLP-1 medications are right for you, it helps to understand the biology. What these drugs actually do in the body is different from what most people assume — and the distinction matters.</p>
+          <div class="card-meta">
+            <span class="card-read-time">8 min read</span>
+            <span class="card-link">Read Article &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="blog-glp1-who-they-are-for.html" class="article-card reveal">
+        <div class="card-image">
+          <span class="card-image-label">Featured Image</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">GLP-1 Medications Education</p>
+          <h3 class="card-title">Who GLP-1 Medications Are For — and Who They're Not For</h3>
+          <p class="card-excerpt">GLP-1 medications are not a universal solution. There is a meaningful difference between someone who is a strong candidate for this intervention and someone who may be reaching for a tool that isn't the right fit yet.</p>
+          <div class="card-meta">
+            <span class="card-read-time">6 min read</span>
+            <span class="card-link">Read Article &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="blog-glp1-misunderstandings.html" class="article-card reveal">
+        <div class="card-image">
+          <span class="card-image-label">Featured Image</span>
+        </div>
+        <div class="card-body">
+          <p class="card-cat">GLP-1 Medications Education</p>
+          <h3 class="card-title">What Most People Misunderstand About GLP-1s, Nutrition, and Long-Term Results</h3>
+          <p class="card-excerpt">There is a dangerous narrative spreading around GLP-1 medications — that they do the work for you. That narrative is leading people toward outcomes they never expected, and not in a good way.</p>
+          <div class="card-meta">
+            <span class="card-read-time">7 min read</span>
+            <span class="card-link">Read Article &rarr;</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
   </div>
+</section>
+
+<!-- DIVIDER -->
+<div class="divider-wrap">
+  <div class="section-divider"></div>
 </div>
+
+<!-- COMING SOON -->
+<section class="coming-soon-section">
+  <div class="coming-soon-inner">
+    <div class="reveal">
+      <h2 class="coming-soon-title">More Topics <em>Coming.</em></h2>
+      <p class="coming-soon-subtitle">New education series are in development and will be published on a rolling basis. Each series is built to give you a complete, evidence-based foundation on topics that actually affect your results.</p>
+    </div>
+    <div class="coming-soon-grid">
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Nutrition Fundamentals</p>
+      </div>
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Fat Loss Science</p>
+      </div>
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Metabolism &amp; Metabolic Adaptation</p>
+      </div>
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Recovery &amp; Sleep</p>
+      </div>
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Hormones &amp; Body Composition</p>
+      </div>
+      <div class="coming-soon-card reveal">
+        <span class="coming-soon-badge">Coming Soon</span>
+        <p class="coming-soon-card-title">Supplementation Guide</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-inner">
     <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
     <ul class="footer-links">
-      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="podcast.html">Podcast</a></li><li><a href="blog.html">Blog</a></li><li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="refund-policy.html">Refund Policy</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
     </ul>
-    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+    <div>
+      <a href="https://instagram.com/Thegeminicoach" target="_blank" class="ig-link">
+        <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @TheGeminiCoach
+      </a>
+      <p class="footer-copy" style="margin-top:0.75rem">&copy; 2026 Gemini Coach. All rights reserved.</p>
+    </div>
   </div>
 </footer>
-<script>function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}</script>
+
+<script>
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => { if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('visible'),i*80); observer.unobserve(e.target); } });
+  }, {threshold:0.08});
+  reveals.forEach(el=>observer.observe(el));
+</script>
 </body>
 </html>
