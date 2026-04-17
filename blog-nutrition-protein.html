@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protein Explained — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:64px;width:auto;display:block;}
+  .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;margin:0;padding:0;}
+  .nav-links li{list-style:none;margin:0;padding:0;}
+  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--blue-bright);}
+  .nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);}
+  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+  .mobile-nav.open{display:flex;}
+  .mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;}
+  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
+  .article-header{padding:9rem 3rem 4rem;max-width:820px;margin:0 auto;}
+  .article-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);line-height:1;color:var(--white);margin-bottom:1.5rem;}
+  .article-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:2rem;}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin-bottom:3rem;}
+  .article-body{max-width:820px;margin:0 auto;padding:0 3rem 6rem;}
+  .article-body h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.35rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);margin:3rem 0 1rem;}
+  .article-body p{font-size:1rem;color:var(--gray);line-height:1.9;margin-bottom:1.25rem;}
+  .article-body strong{color:var(--off-white);font-weight:600;}
+  .article-body ul{margin:0 0 1.25rem 1.5rem;}
+  .article-body ul li{font-size:1rem;color:var(--gray);line-height:1.9;margin-bottom:0.4rem;}
+  .callout{background:var(--navy-mid);border-left:3px solid var(--blue-bright);padding:1.5rem 1.75rem;margin:2.5rem 0;}
+  .callout p{margin:0;color:var(--off-white);}
+  .related-section{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:5rem 3rem;}
+  .related-inner{max-width:1200px;margin:0 auto;}
+  .related-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .related-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);margin-bottom:2.5rem;}
+  .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+  .related-card{background:var(--navy);border:1px solid rgba(30,111,196,0.2);padding:1.75rem;text-decoration:none;color:inherit;transition:border-color 0.2s;}
+  .related-card:hover{border-color:var(--blue-bright);}
+  .related-card-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:0.5rem;}
+  .related-card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:var(--white);line-height:1.35;margin-bottom:1rem;}
+  .related-card-link{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-bright);}
+  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+  .footer-logo img{height:120px;width:auto;display:block;}
+  .footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;}
+  .footer-links a{color:var(--gray);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
+  @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.hamburger{display:flex;}.article-header{padding:8rem 1.5rem 3rem;}.article-body{padding:0 1.5rem 4rem;}.related-section{padding:4rem 1.5rem;}.related-grid{grid-template-columns:1fr;}footer{padding:2rem 1.5rem;}.footer-inner{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="blog.html">Education</a><a href="index.html#contact">Contact</a>
+</div>
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Education</a></li><li><a href="booking.html">Book Physio</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="article-header">
+  <p class="article-cat">Nutrition</p>
+  <h1 class="article-title">Protein Explained: Why It Matters for Muscle, Recovery, and Appetite</h1>
+  <p class="article-meta">6 min read &nbsp;·&nbsp; Nutrition Series</p>
+  <div class="blue-line"></div>
+</div>
+
+<div class="article-body">
+  <p>Of all the macronutrients, protein is the one that most directly influences your body composition. It builds and repairs muscle tissue, supports recovery, contributes to satiety, and plays a structural role in nearly every system in your body. Despite this, most people — even those who exercise regularly — consistently undereat it.</p>
+  <p>This article is not a prescription. It is an explanation of what protein actually does and why the evidence points toward it being the macronutrient worth paying closest attention to.</p>
+
+  <h2>What Protein Actually Is</h2>
+  <p>Protein is one of three macronutrients, alongside carbohydrates and fat. It is made up of amino acids — smaller molecules that serve as building blocks for virtually everything structural in the body. There are 20 amino acids in total. Nine of them are considered <strong>essential</strong>, meaning the body cannot synthesize them on its own and must obtain them through food.</p>
+  <p>Animal-based foods — meat, eggs, dairy, fish — tend to provide all nine essential amino acids in sufficient quantities. Most plant-based sources are incomplete or contain lower levels of certain amino acids, particularly leucine, which plays a critical role in muscle protein synthesis.</p>
+
+  <h2>Protein and Muscle Tissue</h2>
+  <p>Muscle tissue is constantly being broken down and rebuilt. This process — called <strong>protein turnover</strong> — occurs continuously whether you train or not. When you resistance train, you accelerate the breakdown of muscle proteins. The rebuilding process (muscle protein synthesis) requires an adequate supply of amino acids from dietary protein.</p>
+  <p>Without sufficient protein intake, the net balance tips toward breakdown. Over time, this makes it increasingly difficult to build or even maintain muscle mass, regardless of how hard you train.</p>
+  <p>Leucine is the key trigger for initiating muscle protein synthesis. It acts as a signaling molecule that tells the body a sufficient anabolic stimulus is present. This is one reason why protein quality matters — not just total grams.</p>
+
+  <h2>Protein and Appetite</h2>
+  <p>Protein is significantly more satiating than carbohydrates or fat on a per-calorie basis. This has been demonstrated consistently in appetite research. Higher protein intakes are associated with greater meal-to-meal fullness, reduced overall calorie consumption, and fewer cravings.</p>
+  <p>Several mechanisms contribute to this. Protein stimulates the release of satiety hormones like GLP-1 and peptide YY. It also suppresses ghrelin, the primary hunger hormone. Additionally, protein has a higher <strong>thermic effect</strong> than other macronutrients — meaning the body expends more energy digesting and processing it.</p>
+
+  <h2>Protein and Recovery</h2>
+  <p>Recovery is not just about muscle repair. It also involves immune function, connective tissue maintenance, enzyme production, and the synthesis of neurotransmitters. Protein supports all of these processes.</p>
+  <p>When training load is high or sleep is compromised, protein requirements increase. Spreading intake across multiple meals rather than concentrating it in one or two sittings appears to optimize muscle protein synthesis throughout the day.</p>
+
+  <div class="callout">
+    <p>Most research points toward a range of <strong>0.7 to 1.0 grams of protein per pound of body weight per day</strong> for active individuals. The higher end of this range is particularly relevant during fat loss phases, when the body is more prone to using muscle tissue for fuel.</p>
+  </div>
+
+  <h2>Common Misconceptions</h2>
+  <p><strong>"High protein is hard on your kidneys."</strong> This concern is not supported by evidence in healthy individuals. High protein intake does not damage kidney function in people without pre-existing kidney disease. If you have a kidney condition, consult a physician before significantly increasing protein.</p>
+  <p><strong>"You can only absorb 30g at a time."</strong> This is a persistent myth with no strong basis in the literature. The body will process all protein consumed — the rate simply varies depending on the source. Spreading intake still has value for optimizing muscle protein synthesis across the day, but it is not because excess protein is "wasted."</p>
+  <p><strong>"Plant protein is just as good."</strong> Plant proteins can absolutely support health and body composition goals, but they require more intentional planning. Lower leucine content, incomplete amino acid profiles in many sources, and lower digestibility mean that total protein targets may need to be higher to achieve the same effect.</p>
+
+  <h2>Bottom Line</h2>
+  <p>Protein is the most functionally important macronutrient for anyone focused on body composition, performance, or recovery. It is not a trend or a supplement category — it is a nutritional fundamental. Getting enough of it consistently, from quality sources, distributed across your day, is one of the highest-leverage nutritional habits you can build.</p>
+</div>
+
+<section class="related-section">
+  <div class="related-inner">
+    <p class="related-label">Continue Reading</p>
+    <h2 class="related-title">Related Articles</h2>
+    <div class="related-grid">
+      <a href="blog-nutrition-carbs.html" class="related-card">
+        <p class="related-card-cat">Nutrition</p>
+        <p class="related-card-title">Carbohydrates Explained: Energy, Performance, and Common Misunderstandings</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-nutrition-fats.html" class="related-card">
+        <p class="related-card-cat">Nutrition</p>
+        <p class="related-card-title">Dietary Fats Explained: Hormones, Brain Health, and Why Low-Fat Is Often Misunderstood</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-fat-loss-basics.html" class="related-card">
+        <p class="related-card-cat">Fat Loss</p>
+        <p class="related-card-title">Weight Loss Basics: How Fat Loss Actually Works</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+  </div>
+</footer>
+<script>function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}</script>
+</body>
+</html>
