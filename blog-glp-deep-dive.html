@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semaglutide, Tirzepatide &amp; Retatrutide: The Complete Deep Dive — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0a1628; --navy-mid:#0d1f3c; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5; --white:#ffffff; --off-white:#e8edf5; --gray:#8a9ab5; --dark-gray:#1c2a40; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--white); font-family:'Barlow',sans-serif; font-weight:300; overflow-x:hidden; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:rgba(10,22,40,0.96); backdrop-filter:blur(12px); border-bottom:1px solid rgba(30,111,196,0.2); }
+  .nav-logo img { height:64px; width:auto; display:block; }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; margin:0; padding:0; }
+  .nav-links li { list-style:none; margin:0; padding:0; }
+  .nav-links a { color:var(--off-white); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--blue-bright); }
+  .nav-cta { background:var(--blue); color:var(--white) !important; padding:0.5rem 1.4rem; border:1px solid var(--blue-bright); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:24px; height:2px; background:var(--white); }
+  .mobile-nav { display:none; position:fixed; inset:0; background:rgba(10,22,40,0.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a { color:var(--white); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.1em; }
+  .mobile-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--white); font-size:2rem; cursor:pointer; }
+  .article-header { padding:8rem 3rem 3rem; background:var(--navy); }
+  .article-header-inner { max-width:860px; margin:0 auto; }
+  .breadcrumb { display:flex; align-items:center; gap:0.5rem; margin-bottom:2rem; }
+  .breadcrumb a { color:var(--gray); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; transition:color 0.2s; }
+  .breadcrumb a:hover { color:var(--blue-light); }
+  .breadcrumb-sep { color:rgba(138,154,181,0.4); font-size:0.7rem; }
+  .breadcrumb-current { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; }
+  .cat-badge { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.7rem; letter-spacing:0.25em; text-transform:uppercase; color:var(--blue-bright); margin-bottom:1rem; display:block; }
+  .article-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,4.5rem); line-height:1; color:var(--white); margin-bottom:1.5rem; }
+  .article-meta { display:flex; gap:2rem; flex-wrap:wrap; }
+  .article-meta-item { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray); }
+  .blue-line { width:60px; height:3px; background:var(--blue-bright); margin:1.5rem 0; }
+  .featured-image-wrap { max-width:860px; margin:0 auto; padding:0 3rem 3rem; }
+  .featured-image { width:100%; aspect-ratio:16/9; overflow:hidden; }
+  .featured-image img { width:100%; height:100%; object-fit:cover; display:block; }
+  .article-body { max-width:720px; margin:0 auto; padding:1rem 3rem 5rem; }
+  .article-body p { font-size:1rem; color:#b8c8de; line-height:1.95; margin-bottom:1.5rem; }
+  .article-body h2 { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--white); line-height:1; margin:3.5rem 0 1rem; }
+  .article-body h3 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--off-white); margin:2rem 0 0.75rem; }
+  .article-body ul { margin:0 0 1.5rem 1.5rem; }
+  .article-body ul li { font-size:1rem; color:#b8c8de; line-height:1.85; margin-bottom:0.5rem; }
+  .callout { background:var(--navy-mid); border-left:3px solid var(--blue-bright); padding:1.5rem 2rem; margin:2.5rem 0; }
+  .callout p { color:var(--off-white); font-style:italic; margin-bottom:0; }
+  .body-figure { margin:2.5rem 0; }
+  .body-figure img { width:100%; display:block; object-fit:cover; max-height:420px; }
+  .body-figure figcaption { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray); margin-top:0.5rem; }
+  .compare-block { background:var(--navy-mid); border:1px solid rgba(30,111,196,0.2); padding:1.75rem 2rem; margin:1.5rem 0; }
+  .compare-block h4 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue-light); margin-bottom:1rem; }
+  .compare-row { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid rgba(30,111,196,0.1); padding:0.5rem 0; gap:1rem; }
+  .compare-row:last-child { border-bottom:none; }
+  .compare-label { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.05em; color:var(--gray); text-transform:uppercase; }
+  .compare-val { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; color:var(--off-white); text-align:right; }
+  .related-section { background:var(--navy-mid); padding:5rem 3rem; border-top:1px solid rgba(30,111,196,0.15); }
+  .related-inner { max-width:860px; margin:0 auto; }
+  .related-label { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.75rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue-light); margin-bottom:0.5rem; }
+  .related-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--white); margin-bottom:2rem; }
+  .related-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:1.5rem; }
+  .related-card { background:var(--navy); border:1px solid rgba(30,111,196,0.2); padding:1.75rem; text-decoration:none; color:inherit; display:block; transition:border-color 0.3s, transform 0.3s; }
+  .related-card:hover { border-color:var(--blue-bright); transform:translateY(-3px); }
+  .related-card-cat { font-family:'Barlow Condensed',sans-serif; font-size:0.65rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue-light); margin-bottom:0.5rem; display:block; }
+  .related-card-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1.05rem; color:var(--white); line-height:1.3; margin-bottom:1rem; }
+  .related-card-link { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--blue-bright); }
+  .back-section { padding:3rem; background:var(--navy); border-top:1px solid rgba(30,111,196,0.1); }
+  .back-inner { max-width:860px; margin:0 auto; }
+  .btn-back { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--white); text-decoration:none; border:2px solid rgba(255,255,255,0.2); padding:0.75rem 2rem; transition:all 0.2s; }
+  .btn-back:hover { border-color:var(--white); }
+  footer { background:var(--navy-mid); border-top:1px solid rgba(30,111,196,0.2); padding:3rem; }
+  .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; }
+  .footer-logo img { height:120px; width:auto; display:block; }
+  .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
+  .footer-links a { color:var(--gray); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--blue-light); }
+  .footer-copy { font-size:0.8rem; color:var(--gray); font-family:'Barlow Condensed',sans-serif; }
+  .ig-link { display:flex; align-items:center; gap:0.5rem; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:600; }
+  .ig-icon { width:18px; height:18px; fill:currentColor; }
+  @media (max-width:900px) {
+    nav { padding:1rem 1.5rem; } .nav-links { display:none; } .hamburger { display:flex; }
+    .article-header { padding:7rem 1.5rem 2rem; } .featured-image-wrap { padding:0 1.5rem 2rem; }
+    .article-body { padding:1rem 1.5rem 4rem; } .related-section { padding:4rem 1.5rem; }
+    .related-grid { grid-template-columns:1fr; } .back-section { padding:2rem 1.5rem; }
+    footer { padding:2rem 1.5rem; } .footer-inner { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">&#10005;</button>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+</div>
+
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="podcast.html">Podcast</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+
+
+<div class="article-header">
+  <div class="article-header-inner">
+    <div class="breadcrumb">
+      <a href="blog.html">Blog</a>
+      <span class="breadcrumb-sep">/</span>
+      <a href="blog.html#glp1">GLP-1 Medications Education</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-current">Deep Dive</span>
+    </div>
+    <span class="cat-badge">GLP-1 Medications Education</span>
+    <h1 class="article-title">Semaglutide, Tirzepatide<br>&amp; Retatrutide:<br>The Complete Deep Dive</h1>
+    <div class="blue-line"></div>
+    <div class="article-meta">
+      <span class="article-meta-item">April 2026</span>
+      <span class="article-meta-item">12 min read</span>
+      <span class="article-meta-item">Deep Dive</span>
+    </div>
+  </div>
+</div>
+
+<div class="featured-image-wrap">
+  <div class="featured-image">
+    <img src="glp-deep-dive-blog.png" alt="Semaglutide, Tirzepatide and Retatrutide: The Complete Deep Dive">
+  </div>
+</div>
+
+
+<div class="article-body">
+
+  <p>This is the deep dive — for people who want more than an overview. It covers the full mechanism, clinical trial data, dosing protocols, and side effect profiles for all three compounds generating the most attention in the GLP-1 space right now. Use it as reference material for any informed conversation with your physician, or simply to understand what the research actually says behind the headlines.</p>
+
+  <h2>The GLP-1 Hormone System</h2>
+
+  <p>Before examining each medication, understanding the hormone they are designed to amplify is essential. GLP-1 — glucagon-like peptide-1 — is produced naturally in the intestinal L-cells following food intake. Its effects are coordinated across multiple systems: it stimulates glucose-dependent insulin secretion from the pancreas, suppresses glucagon release that would otherwise raise blood sugar, slows gastric emptying to blunt post-meal glucose spikes, and communicates satiety signals directly to the hypothalamus.</p>
+
+  <p>In a healthy person, GLP-1 is released after meals and degraded within minutes by the enzyme DPP-4. GLP-1 receptor agonist medications are engineered to activate the same receptor pathways while resisting that enzymatic breakdown — producing sustained effects that the body's own hormone cannot achieve on its own.</p>
+
+  <h2>Semaglutide — The Established Standard</h2>
+
+  <h3>Mechanism</h3>
+  <p>Semaglutide is a selective GLP-1 receptor agonist developed by Novo Nordisk. Its modified amino acid structure combined with albumin binding produces a half-life of approximately 165–184 hours, enabling once-weekly dosing. Sustained receptor activation produces consistent appetite suppression through central nervous system pathways, improved glucose-dependent insulin response, and meaningful reductions in gastric emptying rate.</p>
+
+  <h3>Brand Names &amp; Approvals</h3>
+  <p>Ozempic (type 2 diabetes, FDA approved 2017), Wegovy (chronic weight management at 2.4mg, FDA approved 2021), Rybelsus (oral formulation for T2D). The injectable versions are the primary compounds used in weight management contexts.</p>
+
+  <h3>Dosing Protocol</h3>
+  <p>Semaglutide is initiated at a low dose and escalated gradually to minimize gastrointestinal side effects. The Wegovy weight management escalation schedule: Weeks 1–4: 0.25mg / Weeks 5–8: 0.5mg / Weeks 9–12: 1.0mg / Weeks 13–16: 1.7mg / Week 17 onward: 2.4mg maintenance. Escalation is the prescribed protocol — not optional.</p>
+
+  <h3>Clinical Trial Data — STEP Trials</h3>
+  <p><strong style="color:var(--off-white)">STEP 1</strong> (68 weeks, adults with obesity, no T2D): Average weight loss of 14.9% on 2.4mg vs. 2.4% placebo. 86% of participants achieved ≥5% weight loss. 69% achieved ≥10%.</p>
+  <p><strong style="color:var(--off-white)">STEP 2</strong> (obesity with T2D): 9.6% average weight loss at 2.4mg.</p>
+  <p><strong style="color:var(--off-white)">STEP 3</strong> (with intensive behavioral therapy): 16% average weight loss — the behavioral component meaningfully amplified outcomes.</p>
+  <p><strong style="color:var(--off-white)">STEP 4</strong> (discontinuation study): Participants who stopped semaglutide regained approximately 11.6% of body weight within one year — roughly two-thirds of total weight lost.</p>
+  <p><strong style="color:var(--off-white)">SELECT trial</strong>: Semaglutide 2.4mg reduced major adverse cardiovascular events by 20% in adults with established cardiovascular disease and obesity but without diabetes. A landmark cardiovascular result that extended the compound's relevance beyond weight management.</p>
+
+  <h3>Side Effect Profile</h3>
+  <p>Most common side effects are gastrointestinal and dose-dependent, predominantly occurring during escalation: nausea (approximately 44% of patients), vomiting, diarrhea, constipation. Rare but serious concerns include pancreatitis risk. Contraindicated in personal or family history of medullary thyroid carcinoma (MTC) or Multiple Endocrine Neoplasia syndrome type 2 (MEN2). Not for use during pregnancy.</p>
+
+  <figure class="body-figure">
+    <img src="hands-cups-leg-physio.JPG" alt="Clinical body composition monitoring during GLP-1 treatment">
+    <figcaption>Body composition monitoring throughout treatment helps track lean mass alongside fat loss</figcaption>
+  </figure>
+
+
+  <h2>Tirzepatide — The Dual Agonist</h2>
+
+  <h3>Mechanism — The GIP Addition</h3>
+  <p>Tirzepatide is a dual GLP-1/GIP receptor agonist developed by Eli Lilly — it activates two separate incretin receptor systems simultaneously through a single molecule. GIP (glucose-dependent insulinotropic polypeptide) is the second major incretin hormone. In obesity and insulin-resistant states, GIP receptor sensitivity is often impaired. Tirzepatide's sustained activation of these receptors appears to restore sensitivity over time, contributing improved fat metabolism, reduced adipose tissue inflammation, and additive insulin secretion beyond what GLP-1 alone produces. The result is a broader hormonal response directly reflected in the clinical outcomes.</p>
+
+  <h3>Brand Names &amp; Approvals</h3>
+  <p>Mounjaro (type 2 diabetes, FDA approved May 2022), Zepbound (weight management, FDA approved November 2023).</p>
+
+  <h3>Dosing Protocol</h3>
+  <p>Weekly subcutaneous injection with gradual escalation: Weeks 1–4: 2.5mg / Weeks 5–8: 5mg / Weeks 9–12: 7.5mg / Week 13 onward: escalate to 10mg, 12.5mg, or 15mg as tolerated and clinically indicated.</p>
+
+  <h3>Clinical Trial Data — SURMOUNT Trials</h3>
+  <p><strong style="color:var(--off-white)">SURMOUNT-1</strong> (72 weeks, obesity, no T2D): At 15mg — average 20.9% weight loss. At 10mg — 19.5%. At 5mg — 15.0%. Placebo: 3.1%. 57% of participants at 15mg achieved ≥20% weight loss. Approximately 91% achieved ≥5%.</p>
+  <p><strong style="color:var(--off-white)">SURMOUNT-2</strong> (obesity with T2D): 15.7% average weight loss at 15mg, 14.7% at 10mg. These results are consistently higher than semaglutide averages across comparable trial populations, though individual response variation is substantial for both compounds.</p>
+
+  <div class="callout">
+    <p>"Tirzepatide's dual mechanism does not mean double the side effects. The gastrointestinal profile is similar to semaglutide — the difference shows up in efficacy outcomes, not tolerability burden."</p>
+  </div>
+
+  <h3>Side Effect Profile</h3>
+  <p>Similar to semaglutide — nausea is most common and dose-dependent, predominantly during dose escalation. Diarrhea, vomiting, and constipation also reported. Same contraindications apply: personal or family history of MTC or MEN2, pregnancy.</p>
+
+  <h2>Retatrutide — The Triple Agonist (Investigational)</h2>
+
+  <div class="callout">
+    <p>"Retatrutide is not FDA approved and is not available as a standard prescription medication. This section is included for educational purposes only — to help people understand where the science is heading."</p>
+  </div>
+
+  <h3>Mechanism — Adding Glucagon</h3>
+  <p>Retatrutide is a triple GLP-1/GIP/glucagon receptor agonist in active clinical development by Eli Lilly. The addition of glucagon receptor activity is what distinguishes it from both semaglutide and tirzepatide. Glucagon is classically known as a counter-regulatory hormone that raises blood sugar — but glucagon receptor activation in the liver and fat tissue also drives fatty acid oxidation and thermogenesis (heat production and energy expenditure). Retatrutide targets three metabolic pathways simultaneously: GLP-1 for appetite suppression and insulin modulation, GIP for fat metabolism and enhanced insulin secretion, and glucagon for increased energy expenditure and fat oxidation. The GLP-1 component of the molecule counterbalances glucagon's blood-sugar-raising effect.</p>
+
+  <h3>Phase 2 Trial Data (NEJM, 2023)</h3>
+  <p>48-week study in adults with obesity without diabetes. At the highest dose (12mg): approximately 24.2% average weight loss. 100% of highest-dose participants achieved ≥5% weight loss. 83% achieved ≥15%. 26% achieved ≥25%. Phase 3 trials are ongoing. These are early-phase numbers — smaller studies not yet at the evidence threshold required for approval — but compelling enough to explain the significant clinical interest this compound has generated.</p>
+
+</div>
+
+
+  <h2>Side-by-Side Comparison</h2>
+
+  <div class="compare-block">
+    <h4>Semaglutide (Ozempic / Wegovy)</h4>
+    <div class="compare-row"><span class="compare-label">Mechanism</span><span class="compare-val">GLP-1 receptor agonist</span></div>
+    <div class="compare-row"><span class="compare-label">Approval Status</span><span class="compare-val">FDA Approved</span></div>
+    <div class="compare-row"><span class="compare-label">Avg Weight Loss</span><span class="compare-val">~15–17% (Wegovy trials)</span></div>
+    <div class="compare-row"><span class="compare-label">Dosing</span><span class="compare-val">Weekly injection</span></div>
+    <div class="compare-row"><span class="compare-label">Peak Dose</span><span class="compare-val">2.4mg</span></div>
+  </div>
+
+  <div class="compare-block">
+    <h4>Tirzepatide (Mounjaro / Zepbound)</h4>
+    <div class="compare-row"><span class="compare-label">Mechanism</span><span class="compare-val">GLP-1 + GIP dual agonist</span></div>
+    <div class="compare-row"><span class="compare-label">Approval Status</span><span class="compare-val">FDA Approved</span></div>
+    <div class="compare-row"><span class="compare-label">Avg Weight Loss</span><span class="compare-val">~21% (Zepbound 15mg)</span></div>
+    <div class="compare-row"><span class="compare-label">Dosing</span><span class="compare-val">Weekly injection</span></div>
+    <div class="compare-row"><span class="compare-label">Peak Dose</span><span class="compare-val">15mg</span></div>
+  </div>
+
+  <div class="compare-block">
+    <h4>Retatrutide (Investigational)</h4>
+    <div class="compare-row"><span class="compare-label">Mechanism</span><span class="compare-val">GLP-1 + GIP + Glucagon triple agonist</span></div>
+    <div class="compare-row"><span class="compare-label">Approval Status</span><span class="compare-val">Phase 3 — Not Approved</span></div>
+    <div class="compare-row"><span class="compare-label">Avg Weight Loss</span><span class="compare-val">~24% (Phase 2 data)</span></div>
+    <div class="compare-row"><span class="compare-label">Dosing</span><span class="compare-val">Weekly injection</span></div>
+    <div class="compare-row"><span class="compare-label">Trial Dose</span><span class="compare-val">12mg</span></div>
+  </div>
+
+  <h2>The Muscle Loss Problem</h2>
+
+  <figure class="body-figure">
+    <img src="barbell-row.JPG" alt="Resistance training during GLP-1 treatment to preserve lean mass">
+    <figcaption>Resistance training is the primary tool for preserving lean mass during treatment</figcaption>
+  </figure>
+
+  <p>All three compounds create significant caloric restriction through appetite suppression. The documented pattern across the STEP trials is consistent: approximately 25–40% of total weight lost can be lean mass in people who are not prioritizing protein intake and resistance training. For someone losing 30 pounds, that is potentially 8–12 pounds of muscle — with real consequences for metabolic rate, strength, and how the body looks and functions when the weight loss phase ends.</p>
+
+  <p>This is not a compound-specific problem. It is the predictable result of aggressive caloric deficit without protective behaviors, and it applies equally to semaglutide, tirzepatide, and any future compound in this class. The research is consistent on what prevents it.</p>
+
+  <div class="callout">
+    <p>"Lean mass loss during GLP-1 use is not inevitable — it is the predictable outcome of insufficient protein intake and absent resistance training. These are solvable problems."</p>
+  </div>
+
+  <h2>Nutrition During Treatment</h2>
+
+  <figure class="body-figure">
+    <img src="hanson-cups-hands-on-midsection.JPG" alt="Body composition during GLP-1 treatment">
+    <figcaption>What your body looks like after weight loss depends significantly on how you eat during it</figcaption>
+  </figure>
+
+  <p>Appetite suppression from these medications is powerful enough to drop total caloric intake 30–50% below maintenance. The problem is not the reduction in calories — it is what gets cut alongside them. When eating volume drops sharply, protein is often the first casualty. People gravitate toward smaller, easier, frequently carbohydrate-based meals that do not require preparation.</p>
+
+  <p>The fix is explicit: treat protein as a non-negotiable daily target, not something you eat when you feel hungry for it. A 180-pound person should be consuming a minimum of 130–160 grams of protein daily throughout the treatment period, regardless of how appetite suppression affects hunger signals. Prioritize protein first at every meal before anything else on the plate.</p>
+
+  <h2>Key Takeaways</h2>
+
+  <ul>
+    <li>Semaglutide and tirzepatide are FDA-approved with robust multi-year clinical data. Retatrutide is investigational — not approved, not yet available outside of trials.</li>
+    <li>Tirzepatide produces higher average weight loss than semaglutide due to its dual mechanism. Individual responses vary substantially for both.</li>
+    <li>All three require dose escalation. Starting low and titrating slowly is the prescribed protocol — not something to rush.</li>
+    <li>Lean mass loss is common but preventable with adequate protein intake (minimum 1.6g/kg/day) and consistent resistance training throughout the process.</li>
+    <li>Discontinuation without a lifestyle foundation leads to predictable regain. The STEP 4 data is unambiguous on this point.</li>
+    <li>These medications work best as structure within an intentional approach — not as standalone interventions.</li>
+  </ul>
+
+  <h2>The Bottom Line</h2>
+
+  <p>The science on GLP-1 medications is genuinely compelling. Semaglutide and tirzepatide have produced outcomes that were not achievable with previous pharmacological tools for weight management. Retatrutide may eventually extend that ceiling further. What the research also makes clear — consistently, across every major trial — is that outcomes are better, more durable, and more meaningful when the medication is paired with deliberate nutrition, adequate protein, and resistance training. The medication creates conditions. What you build inside those conditions determines whether the result lasts.</p>
+
+</div>
+
+<section class="related-section">
+  <div class="related-inner">
+    <p class="related-label">From This Series</p>
+    <h2 class="related-title">Continue Reading</h2>
+    <div class="related-grid">
+      <a href="blog-glp1-what-they-are.html" class="related-card">
+        <span class="related-card-cat">GLP-1 Medications Education</span>
+        <div class="related-card-title">GLP-1 Medications Explained: What They Are and How They Work</div>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-glp1-who-they-are-for.html" class="related-card">
+        <span class="related-card-cat">GLP-1 Medications Education</span>
+        <div class="related-card-title">Who GLP-1 Medications Are For — and Who They're Not For</div>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-glp1-misunderstandings.html" class="related-card">
+        <span class="related-card-cat">GLP-1 Medications Education</span>
+        <div class="related-card-title">What Most People Misunderstand About GLP-1s, Nutrition, and Long-Term Results</div>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="back-section">
+  <div class="back-inner">
+    <a href="blog.html#glp1" class="btn-back">&larr; Back to The Learning Center</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="refund-policy.html">Refund Policy</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+    </ul>
+    <div>
+      <a href="https://instagram.com/Thegeminicoach" target="_blank" class="ig-link">
+        <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @TheGeminiCoach
+      </a>
+      <p class="footer-copy" style="margin-top:0.75rem">&copy; 2026 Gemini Coach. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+</script>
+
+</body>
+</html>
