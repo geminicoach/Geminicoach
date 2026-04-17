@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Session — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root { --navy:#0a1628; --navy-mid:#0d1f3c; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5; --white:#ffffff; --off-white:#e8edf5; --gray:#8a9ab5; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--navy); color:var(--white); font-family:'Barlow',sans-serif; font-weight:300; overflow-x:hidden; }
+
+  nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:1rem 3rem; background:rgba(10,22,40,0.96); backdrop-filter:blur(12px); border-bottom:1px solid rgba(30,111,196,0.2); }
+  .nav-logo img { height:64px; width:auto; display:block; }
+  .nav-links { display:flex; gap:2.5rem; list-style:none; align-items:center; margin:0; padding:0; }
+  .nav-links li { list-style:none; margin:0; padding:0; }
+  .nav-links a { color:var(--off-white); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.85rem; letter-spacing:0.12em; text-transform:uppercase; transition:color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color:var(--blue-bright); }
+  .nav-cta { background:var(--blue); color:var(--white) !important; padding:0.5rem 1.4rem; border:1px solid var(--blue-bright); }
+  .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; }
+  .hamburger span { display:block; width:24px; height:2px; background:var(--white); }
+  .mobile-nav { display:none; position:fixed; inset:0; background:rgba(10,22,40,0.98); z-index:999; flex-direction:column; align-items:center; justify-content:center; gap:2rem; }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a { color:var(--white); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:2.5rem; letter-spacing:0.1em; }
+  .mobile-close { position:absolute; top:1.5rem; right:1.5rem; background:none; border:none; color:var(--white); font-size:2rem; cursor:pointer; }
+
+  .page-hero { padding:9rem 3rem 4rem; background:var(--navy); }
+  .page-hero-inner { max-width:860px; margin:0 auto; }
+  .section-label { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:0.75rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue-light); margin-bottom:1rem; }
+  .page-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,5.5rem); line-height:1; color:var(--white); }
+  .page-subtitle { font-size:0.95rem; color:var(--gray); line-height:1.85; max-width:560px; margin-top:1rem; }
+  .blue-line { width:60px; height:3px; background:var(--blue-bright); margin:1.5rem 0; }
+
+  .booking-wrap { max-width:860px; margin:0 auto; padding:0 3rem 6rem; }
+
+  /* STEP INDICATORS */
+  .steps { display:flex; gap:0; margin-bottom:3rem; }
+  .step { flex:1; padding:1rem; background:var(--navy-mid); border:1px solid rgba(30,111,196,0.15); text-align:center; position:relative; }
+  .step + .step { border-left:none; }
+  .step.active { border-color:var(--blue-bright); background:rgba(46,141,232,0.08); }
+  .step.completed { border-color:rgba(46,141,232,0.4); }
+  .step-num { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; color:var(--blue-bright); line-height:1; }
+  .step.completed .step-num { color:rgba(46,141,232,0.5); }
+  .step-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray); margin-top:0.25rem; }
+  .step.active .step-label { color:var(--off-white); }
+
+  /* POLICY BOX */
+  .policy-section { margin-bottom:2rem; }
+  .policy-heading { font-family:'Bebas Neue',sans-serif; font-size:1.75rem; color:var(--white); margin-bottom:1rem; }
+  .policy-box { background:var(--navy-mid); border:1px solid rgba(30,111,196,0.2); padding:2rem; max-height:380px; overflow-y:auto; margin-bottom:1.5rem; scroll-behavior:smooth; }
+  .policy-box::-webkit-scrollbar { width:4px; }
+  .policy-box::-webkit-scrollbar-track { background:rgba(30,111,196,0.05); }
+  .policy-box::-webkit-scrollbar-thumb { background:var(--blue); }
+  .policy-box h3 { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.8rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--blue-light); margin:1.5rem 0 0.5rem; }
+  .policy-box h3:first-child { margin-top:0; }
+  .policy-box p { font-size:0.9rem; color:#b8c8de; line-height:1.85; margin-bottom:0.75rem; }
+  .policy-box strong { color:var(--off-white); }
+  .scroll-note { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gray); margin-bottom:1rem; text-align:right; }
+
+  /* CHECKBOX */
+  .agree-row { display:flex; align-items:flex-start; gap:1rem; padding:1.25rem 1.5rem; background:var(--navy-mid); border:1px solid rgba(30,111,196,0.2); margin-bottom:2rem; cursor:pointer; }
+  .agree-row input[type="checkbox"] { width:18px; height:18px; flex-shrink:0; margin-top:2px; accent-color:var(--blue-bright); cursor:pointer; }
+  .agree-row label { font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; letter-spacing:0.05em; color:var(--off-white); cursor:pointer; line-height:1.5; }
+
+  /* PAYMENT STEP */
+  .step-section { display:none; }
+  .step-section.visible { display:block; }
+  .step-heading { font-family:'Bebas Neue',sans-serif; font-size:1.75rem; color:var(--white); margin-bottom:0.5rem; }
+  .step-sub { font-size:0.9rem; color:var(--gray); line-height:1.7; margin-bottom:1.5rem; }
+  .payment-options { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:2rem; }
+  .payment-card { border:2px solid rgba(30,111,196,0.25); padding:1.75rem; cursor:pointer; transition:border-color 0.2s, background 0.2s; position:relative; }
+  .payment-card:hover { border-color:var(--blue-bright); }
+  .payment-card.selected { border-color:var(--blue-bright); background:rgba(46,141,232,0.07); }
+  .payment-card input[type="radio"] { position:absolute; opacity:0; width:0; height:0; }
+  .payment-card-title { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:1rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--white); margin-bottom:0.5rem; }
+  .payment-card-desc { font-size:0.88rem; color:var(--gray); line-height:1.7; }
+  .payment-card.selected .payment-card-title { color:var(--blue-bright); }
+  .payment-card-check { position:absolute; top:1rem; right:1rem; width:20px; height:20px; border:2px solid rgba(30,111,196,0.3); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .payment-card.selected .payment-card-check { background:var(--blue-bright); border-color:var(--blue-bright); }
+  .payment-card.selected .payment-card-check::after { content:''; width:6px; height:6px; background:var(--white); border-radius:50%; display:block; }
+
+  /* VENMO NOTE */
+  .venmo-note { background:rgba(46,141,232,0.08); border:1px solid rgba(46,141,232,0.3); padding:1.25rem 1.5rem; margin-bottom:1.5rem; display:none; }
+  .venmo-note.visible { display:block; }
+  .venmo-note p { font-size:0.9rem; color:var(--off-white); line-height:1.7; margin:0; }
+  .venmo-note strong { color:var(--blue-bright); }
+
+  /* CALENDAR */
+  .calendar-section { display:none; }
+  .calendar-section.visible { display:block; }
+  .calendar-heading { font-family:'Bebas Neue',sans-serif; font-size:1.75rem; color:var(--white); margin-bottom:0.5rem; }
+  .calendar-sub { font-size:0.9rem; color:var(--gray); line-height:1.7; margin-bottom:1.5rem; }
+  #cal-embed { width:100%; min-height:600px; border:1px solid rgba(30,111,196,0.2); }
+
+  /* PROCEED BTN */
+  .btn-proceed { display:none; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.85rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--white); background:var(--blue); border:2px solid var(--blue-bright); padding:1rem 2.5rem; cursor:pointer; transition:all 0.2s; margin-bottom:2rem; }
+  .btn-proceed:hover { background:var(--blue-bright); }
+  .btn-proceed.visible { display:inline-block; }
+
+  footer { background:var(--navy-mid); border-top:1px solid rgba(30,111,196,0.2); padding:3rem; }
+  .footer-inner { max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:2rem; }
+  .footer-logo img { height:120px; width:auto; display:block; }
+  .footer-links { display:flex; gap:2rem; list-style:none; flex-wrap:wrap; }
+  .footer-links a { color:var(--gray); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--blue-light); }
+  .footer-copy { font-size:0.8rem; color:var(--gray); font-family:'Barlow Condensed',sans-serif; }
+  .ig-link { display:flex; align-items:center; gap:0.5rem; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; font-weight:600; }
+  .ig-icon { width:18px; height:18px; fill:currentColor; }
+
+  @media (max-width:900px) {
+    nav { padding:1rem 1.5rem; } .nav-links { display:none; } .hamburger { display:flex; }
+    .page-hero { padding:7rem 1.5rem 3rem; }
+    .booking-wrap { padding:0 1.5rem 4rem; }
+    .steps { flex-direction:column; }
+    .step + .step { border-left:1px solid rgba(30,111,196,0.15); border-top:none; }
+    .payment-options { grid-template-columns:1fr; }
+    footer { padding:2rem 1.5rem; } .footer-inner { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">&#10005;</button>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="podcast.html">Podcast</a><a href="blog.html">Blog</a><a href="index.html#contact">Contact</a>
+</div>
+
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="podcast.html">Podcast</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <p class="section-label">Physiotherapy</p>
+    <h1 class="page-title">Book a Session</h1>
+    <div class="blue-line"></div>
+    <p class="page-subtitle">Physiotherapy sessions are held on the <strong style="color:var(--off-white)">first Saturday of each month</strong> at <strong style="color:var(--off-white)">Calibrated Strength, Eau Claire</strong>. Sessions are 50 minutes. Available times: 1:00pm, 2:15pm, 3:30pm, 4:45pm, and 6:00pm. Rate: $120 per session.</p>
+  </div>
+</div>
+
+<div class="booking-wrap">
+
+  <!-- STEP INDICATORS -->
+  <div class="steps">
+    <div class="step active" id="step-ind-1"><div class="step-num">01</div><div class="step-label">Review Policy</div></div>
+    <div class="step" id="step-ind-2"><div class="step-num">02</div><div class="step-label">Payment Method</div></div>
+    <div class="step" id="step-ind-3"><div class="step-num">03</div><div class="step-label">Select Date</div></div>
+  </div>
+
+  <!-- STEP 1: POLICY -->
+  <div class="policy-section" id="step1">
+    <h2 class="policy-heading">Booking Policy</h2>
+    <p class="scroll-note">Scroll to read full policy before agreeing ↓</p>
+    <div class="policy-box" id="policyBox">
+
+      <h3>Service &amp; Location</h3>
+      <p>Physiotherapy sessions are offered exclusively on the <strong>first Saturday of each month</strong> at <strong>Calibrated Strength, Eau Claire, WI</strong>. Sessions are 50 minutes at a rate of <strong>$120 per session</strong>. Available time slots are 1:00pm, 2:15pm, 3:30pm, 4:45pm, and 6:00pm.</p>
+
+      <h3>Payment Options</h3>
+      <p><strong>Option 1 — Venmo Prepay:</strong> Send $120 to <strong>@grueny</strong> on Venmo before your session. Include your full name and appointment date in the memo. Your booking is not confirmed until payment is received. If payment is not received within 24 hours of booking, your slot may be released.</p>
+      <p><strong>Option 2 — Cash Day Of:</strong> Arrive with $120 exact cash on the day of your appointment. This option is extended as a courtesy and is subject to strict enforcement of the missed session policy below.</p>
+
+      <h3>Missed Session Policy — Cash Day-Of Bookings</h3>
+      <p>If you book using the cash day-of option and fail to appear for your scheduled session without providing at least <strong>48 hours advance notice</strong>, the following consequences apply immediately and permanently:</p>
+      <p><strong>1.</strong> The cash day-of payment option is <strong>permanently revoked</strong> from your account. All future sessions must be prepaid in full via Venmo prior to booking confirmation.</p>
+      <p><strong>2.</strong> Your next booking will require payment of <strong>two full session fees ($240 total)</strong> — one to cover the missed session and one to hold the new appointment. This must be paid in full via Venmo before the new session is confirmed. No exceptions will be made.</p>
+
+      <h3>Cancellation Policy</h3>
+      <p>Cancellations received more than <strong>48 hours</strong> before a scheduled session will be offered a one-time reschedule at no penalty. Sessions cancelled within 48 hours of the appointment are non-refundable. Prepaid sessions cancelled within 48 hours are non-refundable but may be rescheduled once at my discretion. No-shows receive no refund and no reschedule credit.</p>
+
+      <h3>General</h3>
+      <p>By selecting a date and submitting a booking, you agree to all terms above. For questions or to cancel, contact me via the <a href="index.html#contact" style="color:var(--blue-light)">contact page</a> at least 48 hours before your appointment.</p>
+
+    </div>
+
+    <div class="agree-row" onclick="toggleAgree()">
+      <input type="checkbox" id="agreeCheck" onchange="handleAgree()">
+      <label for="agreeCheck">I have read and understood the full booking policy above and agree to its terms, including the payment requirements and missed session consequences.</label>
+    </div>
+  </div>
+
+  <!-- STEP 2: PAYMENT METHOD -->
+  <div class="step-section" id="step2">
+    <h2 class="step-heading">Select Payment Method</h2>
+    <p class="step-sub">Choose how you will pay for your session. Your selection is recorded with your booking.</p>
+
+    <div class="payment-options">
+      <div class="payment-card" id="card-venmo" onclick="selectPayment('venmo')">
+        <input type="radio" name="payment" value="venmo">
+        <div class="payment-card-check"></div>
+        <div class="payment-card-title">Venmo Prepay</div>
+        <div class="payment-card-desc">Send $120 to <strong style="color:var(--off-white)">@grueny</strong> on Venmo with your name and appointment date. Your session is confirmed once payment is received.</div>
+      </div>
+      <div class="payment-card" id="card-cash" onclick="selectPayment('cash')">
+        <input type="radio" name="payment" value="cash">
+        <div class="payment-card-check"></div>
+        <div class="payment-card-title">Cash Day Of</div>
+        <div class="payment-card-desc">Arrive with $120 exact cash on the day of your session. Subject to the missed session policy. This option may be revoked permanently for no-shows.</div>
+      </div>
+    </div>
+
+    <div class="venmo-note" id="venmoNote">
+      <p>Send <strong>$120</strong> to <strong>@grueny</strong> on Venmo. In the memo, include your <strong>full name</strong> and <strong>appointment date</strong>. Once payment is received, your booking is confirmed. If payment is not received within 24 hours, your slot may be released.</p>
+    </div>
+
+    <button class="btn-proceed" id="proceedBtn" onclick="showCalendar()">Select Your Date &rarr;</button>
+  </div>
+
+  <!-- STEP 3: CALENDAR -->
+  <div class="calendar-section" id="step3">
+    <h2 class="calendar-heading">Select Your Appointment</h2>
+    <p class="calendar-sub">Choose from available times on the first Saturday of the month at Calibrated Strength, Eau Claire.</p>
+    <!-- Cal.com embed — replace YOUR_CALCOM_USERNAME with your actual Cal.com username -->
+    <div id="cal-embed"></div>
+    <script type="text/javascript">
+      (function (C, A, L) {
+        let p = function (a, ar) { a.q.push(ar); };
+        let d = C.document;
+        C.Cal = C.Cal || function () {
+          let cal = C.Cal; let ar = arguments;
+          if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; }
+          if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar); return; }
+          p(cal, ar);
+        };
+      })(window, "https://app.cal.com/embed/embed.js", "init");
+      Cal("init", { origin: "https://app.cal.com" });
+      Cal("inline", {
+        elementOrSelector: "#cal-embed",
+        calLink: "parker-gruenhagen-kchvko/physiotherapy",
+        layout: "month_view"
+      });
+      Cal("ui", {
+        styles: { branding: { brandColor: "#2e8de8" } },
+        hideEventTypeDetails: false,
+        layout: "month_view"
+      });
+    </script>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="refund-policy.html">Booking Policy</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+    </ul>
+    <div>
+      <a href="https://instagram.com/Thegeminicoach" target="_blank" class="ig-link">
+        <svg class="ig-icon" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        @TheGeminiCoach
+      </a>
+      <p class="footer-copy" style="margin-top:0.75rem">&copy; 2026 Gemini Coach. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function openMobileNav() { document.getElementById('mobileNav').classList.add('open'); }
+  function closeMobileNav() { document.getElementById('mobileNav').classList.remove('open'); }
+
+  function toggleAgree() {
+    const cb = document.getElementById('agreeCheck');
+    cb.checked = !cb.checked;
+    handleAgree();
+  }
+
+  function handleAgree() {
+    const checked = document.getElementById('agreeCheck').checked;
+    const step2 = document.getElementById('step2');
+    const ind2 = document.getElementById('step-ind-2');
+    if (checked) {
+      step2.classList.add('visible');
+      ind2.classList.add('active');
+      document.getElementById('step-ind-1').classList.remove('active');
+      document.getElementById('step-ind-1').classList.add('completed');
+      step2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      step2.classList.remove('visible');
+      ind2.classList.remove('active');
+      document.getElementById('step-ind-1').classList.add('active');
+      document.getElementById('step-ind-1').classList.remove('completed');
+      document.getElementById('step3').classList.remove('visible');
+      document.getElementById('step-ind-3').classList.remove('active');
+    }
+  }
+
+  function selectPayment(method) {
+    document.getElementById('card-venmo').classList.remove('selected');
+    document.getElementById('card-cash').classList.remove('selected');
+    document.getElementById('card-' + method).classList.add('selected');
+    const venmoNote = document.getElementById('venmoNote');
+    venmoNote.classList.toggle('visible', method === 'venmo');
+    document.getElementById('proceedBtn').classList.add('visible');
+  }
+
+  function showCalendar() {
+    const cal = document.getElementById('step3');
+    const ind3 = document.getElementById('step-ind-3');
+    cal.classList.add('visible');
+    ind3.classList.add('active');
+    document.getElementById('step-ind-2').classList.remove('active');
+    document.getElementById('step-ind-2').classList.add('completed');
+    cal.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+</script>
+
+</body>
+</html>
