@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cortisol Explained — Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:64px;width:auto;display:block;}
+  .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;margin:0;padding:0;}
+  .nav-links li{list-style:none;margin:0;padding:0;}
+  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--blue-bright);}
+  .nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);}
+  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+  .mobile-nav.open{display:flex;}
+  .mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;}
+  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
+  .article-header{padding:9rem 3rem 4rem;max-width:820px;margin:0 auto;}
+  .article-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .article-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);line-height:1;color:var(--white);margin-bottom:1.5rem;}
+  .article-meta{font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);margin-bottom:2rem;}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin-bottom:3rem;}
+  .article-body{max-width:820px;margin:0 auto;padding:0 3rem 6rem;}
+  .article-body h2{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.35rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--white);margin:3rem 0 1rem;}
+  .article-body p{font-size:1rem;color:var(--gray);line-height:1.9;margin-bottom:1.25rem;}
+  .article-body strong{color:var(--off-white);font-weight:600;}
+  .callout{background:var(--navy-mid);border-left:3px solid var(--blue-bright);padding:1.5rem 1.75rem;margin:2.5rem 0;}
+  .callout p{margin:0;color:var(--off-white);}
+  .related-section{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:5rem 3rem;}
+  .related-inner{max-width:1200px;margin:0 auto;}
+  .related-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .related-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--white);margin-bottom:2.5rem;}
+  .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+  .related-card{background:var(--navy);border:1px solid rgba(30,111,196,0.2);padding:1.75rem;text-decoration:none;color:inherit;transition:border-color 0.2s;}
+  .related-card:hover{border-color:var(--blue-bright);}
+  .related-card-cat{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--blue-light);margin-bottom:0.5rem;}
+  .related-card-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;color:var(--white);line-height:1.35;margin-bottom:1rem;}
+  .related-card-link{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--blue-bright);}
+  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+  .footer-logo img{height:120px;width:auto;display:block;}
+  .footer-links{display:flex;gap:2rem;list-style:none;flex-wrap:wrap;}
+  .footer-links a{color:var(--gray);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;}
+  .footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
+  @media(max-width:900px){nav{padding:1rem 1.5rem;}.nav-links{display:none;}.hamburger{display:flex;}.article-header{padding:8rem 1.5rem 3rem;}.article-body{padding:0 1.5rem 4rem;}.related-section{padding:4rem 1.5rem;}.related-grid{grid-template-columns:1fr;}footer{padding:2rem 1.5rem;}.footer-inner{flex-direction:column;align-items:flex-start;}}
+</style>
+</head>
+<body>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">✕</button>
+  <a href="index.html">Home</a><a href="about.html">About</a><a href="services.html">Services</a><a href="blog.html">Education</a><a href="index.html#contact">Contact</a>
+</div>
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li><li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="blog.html">Education</a></li><li><a href="booking.html">Book Physio</a></li><li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="article-header">
+  <p class="article-cat">Hormones</p>
+  <h1 class="article-title">Cortisol Explained: What It Is, What It Does, and What People Get Wrong</h1>
+  <p class="article-meta">6 min read &nbsp;·&nbsp; Hormones Series</p>
+  <div class="blue-line"></div>
+</div>
+
+<div class="article-body">
+  <p>Cortisol has become a popular scapegoat in wellness culture — blamed for belly fat, muscle loss, fatigue, poor sleep, and nearly every frustrating result in fitness. The reality is more nuanced. Cortisol is not a villain. It is a hormone that serves essential functions, and it only becomes a problem in specific, manageable contexts.</p>
+
+  <h2>What Cortisol Is</h2>
+  <p>Cortisol is a steroid hormone produced by the adrenal glands in response to signals from the hypothalamus and pituitary gland — a regulatory axis known as the HPA (hypothalamic-pituitary-adrenal) axis. It is classified as a glucocorticoid, meaning its primary metabolic effects involve glucose regulation.</p>
+  <p>Cortisol follows a natural diurnal rhythm. It peaks in the early morning — typically around 30 minutes after waking — and gradually declines throughout the day, reaching its lowest point during the early hours of sleep. This pattern regulates energy availability, alertness, and immune function across the day.</p>
+
+  <h2>What Cortisol Does (That Is Useful)</h2>
+  <p>Cortisol's short-term effects are largely adaptive and necessary:</p>
+  <p><strong>Blood glucose regulation:</strong> Cortisol stimulates gluconeogenesis — the production of glucose from non-carbohydrate sources — to maintain blood sugar during periods of fasting, stress, or intense exercise. This keeps the brain and muscles fueled when dietary intake is low or demand is high.</p>
+  <p><strong>Anti-inflammatory action:</strong> In the short term, cortisol suppresses immune and inflammatory responses. This is why synthetic glucocorticoids (like prednisone) are used medically to manage inflammation.</p>
+  <p><strong>Alertness and arousal:</strong> The morning cortisol surge supports wakefulness and cognitive readiness. Chronobiologically, it functions as a natural alarm clock that prepares the body for the demands of the day.</p>
+  <p><strong>Exercise response:</strong> Cortisol rises during intense training to mobilize energy substrates and support performance. This is normal and expected — it does not mean training is harmful.</p>
+
+  <h2>When Cortisol Becomes a Problem</h2>
+  <p>The issues arise when cortisol is chronically elevated — not during an acute stressor, but as a persistent background state due to prolonged psychological stress, poor sleep, overtraining, or caloric restriction.</p>
+  <p><strong>Muscle catabolism:</strong> Chronically elevated cortisol is catabolic. It breaks down muscle protein to supply amino acids for gluconeogenesis. Over time, this undermines training adaptations and reduces lean mass.</p>
+  <p><strong>Visceral fat accumulation:</strong> Cortisol promotes fat storage in the abdominal region, where visceral fat has high cortisol receptor density. Chronic elevation contributes to the pattern of central weight gain commonly associated with chronic stress.</p>
+  <p><strong>Immune suppression:</strong> While short-term anti-inflammatory action is useful, chronic cortisol elevation depresses immune function — making frequent illness a common complaint in overtrained or chronically stressed individuals.</p>
+  <p><strong>Testosterone suppression:</strong> Cortisol and testosterone compete for the same hormonal precursor. Chronic high cortisol shifts production away from testosterone and toward cortisol — an outcome that impairs muscle growth, recovery, libido, and energy.</p>
+
+  <div class="callout">
+    <p>The morning cortisol spike is healthy and desirable. Cortisol elevated from 2 PM through midnight due to chronic stress, poor sleep, or overtraining is a different biological situation entirely. Context matters when interpreting cortisol's role.</p>
+  </div>
+
+  <h2>What Actually Helps</h2>
+  <p>Managing chronic cortisol elevation is largely a function of addressing its root causes. Consistent, quality sleep is the most powerful single intervention — cortisol dysregulation and poor sleep are deeply interrelated. Reducing training volume when recovery capacity is exceeded, managing life stress through deliberate practices, and maintaining adequate calorie and carbohydrate intake (particularly during periods of intense training) all meaningfully influence cortisol dynamics.</p>
+  <p>Supplements marketed as cortisol blockers or adrenal support products are largely unsupported by evidence and often unnecessary when foundational lifestyle variables are addressed.</p>
+
+  <h2>Bottom Line</h2>
+  <p>Cortisol is not something to fear or eliminate — it is something to understand. Acute cortisol responses are normal and functional. Chronic, elevated cortisol driven by sleep deprivation, overtraining, and unmanaged stress is worth addressing — but through lifestyle changes, not supplements. Fix the source, not the symptom.</p>
+</div>
+
+<section class="related-section">
+  <div class="related-inner">
+    <p class="related-label">Continue Reading</p>
+    <h2 class="related-title">Related Articles</h2>
+    <div class="related-grid">
+      <a href="blog-sleep-stress-recovery.html" class="related-card">
+        <p class="related-card-cat">Recovery</p>
+        <p class="related-card-title">Sleep, Stress, and Recovery: The Overlooked Side of Better Results</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-insulin-glucagon.html" class="related-card">
+        <p class="related-card-cat">Hormones</p>
+        <p class="related-card-title">Insulin and Glucagon Explained: Blood Sugar, Energy Balance, and Metabolic Health</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+      <a href="blog-fat-loss-diet-phases.html" class="related-card">
+        <p class="related-card-cat">Fat Loss</p>
+        <p class="related-card-title">Diet Phases Explained: Deficit, Maintenance, and When to Use Each</p>
+        <span class="related-card-link">Read Article &rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <ul class="footer-links">
+      <li><a href="about.html">About</a></li><li><a href="services.html">Services</a></li><li><a href="refund-policy.html">Refund Policy</a></li><li><a href="privacy.html">Privacy</a></li>
+    </ul>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+  </div>
+</footer>
+<script>function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}</script>
+</body>
+</html>
