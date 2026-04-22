@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Onboarding — Gemini Coach</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;}
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:64px;width:auto;display:block;}
+
+  .page-hero{padding:9rem 3rem 4rem;max-width:860px;margin:0 auto;}
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.75rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5rem);line-height:1;color:var(--white);}
+  .page-subtitle{font-size:0.95rem;color:var(--gray);line-height:1.85;max-width:560px;margin-top:1rem;}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin:1.5rem 0;}
+
+  /* ACCESS GATE */
+  .gate-wrap{max-width:500px;margin:0 auto;padding:0 3rem 6rem;}
+  .gate-box{background:var(--navy-mid);border:1px solid rgba(30,111,196,0.3);padding:2.5rem;}
+  .gate-title{font-family:'Bebas Neue',sans-serif;font-size:1.75rem;color:var(--white);margin-bottom:0.5rem;}
+  .gate-sub{font-size:0.9rem;color:var(--gray);line-height:1.7;margin-bottom:1.5rem;}
+  .gate-input{width:100%;background:var(--navy);border:1px solid rgba(30,111,196,0.3);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:1.1rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.9rem 1rem;margin-bottom:1rem;outline:none;}
+  .gate-input:focus{border-color:var(--blue-bright);}
+  .gate-input::placeholder{color:var(--gray);text-transform:none;letter-spacing:0.05em;font-size:0.9rem;}
+  .gate-error{color:#e05c5c;font-family:'Barlow Condensed',sans-serif;font-size:0.8rem;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1rem;display:none;}
+  .btn-primary{display:inline-block;background:var(--blue);color:var(--white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.15em;text-transform:uppercase;padding:1rem 2.5rem;border:2px solid var(--blue-bright);cursor:pointer;transition:all 0.25s;width:100%;text-align:center;}
+  .btn-primary:hover{background:var(--blue-bright);}
+
+  /* FORM */
+  .form-wrap{max-width:860px;margin:0 auto;padding:0 3rem 6rem;display:none;}
+  .form-intro{background:var(--navy-mid);border-left:3px solid var(--blue-bright);padding:1.5rem 1.75rem;margin-bottom:3rem;}
+  .form-intro p{font-size:0.9rem;color:var(--off-white);line-height:1.85;margin:0;}
+
+  .q-section{margin-bottom:3rem;}
+  .q-section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--blue-light);letter-spacing:0.05em;margin-bottom:1.5rem;padding-bottom:0.5rem;border-bottom:1px solid rgba(30,111,196,0.2);}
+  .q-group{margin-bottom:1.75rem;}
+  .q-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--off-white);margin-bottom:0.5rem;display:block;}
+  .q-hint{font-size:0.82rem;color:var(--gray);line-height:1.6;margin-bottom:0.6rem;font-style:italic;}
+  .q-input,
+  .q-select,
+  .q-textarea{width:100%;background:var(--navy);border:1px solid rgba(30,111,196,0.25);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;font-size:0.95rem;padding:0.8rem 1rem;outline:none;transition:border-color 0.2s;}
+  .q-input:focus,.q-select:focus,.q-textarea:focus{border-color:var(--blue-bright);}
+  .q-input::placeholder,.q-textarea::placeholder{color:var(--gray);}
+  .q-textarea{resize:vertical;min-height:100px;}
+  .q-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a9ab5' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;}
+  .q-select option{background:var(--navy-mid);}
+
+  .radio-group{display:flex;flex-direction:column;gap:0.6rem;}
+  .radio-option{display:flex;align-items:center;gap:0.75rem;cursor:pointer;}
+  .radio-option input[type="radio"],.checkbox-option input[type="checkbox"]{accent-color:var(--blue-bright);width:16px;height:16px;cursor:pointer;flex-shrink:0;}
+  .radio-option label,.checkbox-option label{font-size:0.9rem;color:var(--gray);cursor:pointer;line-height:1.4;}
+  .checkbox-group{display:flex;flex-direction:column;gap:0.6rem;}
+  .checkbox-option{display:flex;align-items:flex-start;gap:0.75rem;cursor:pointer;}
+
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+
+  .disclaimer-box{background:rgba(46,141,232,0.06);border:1px solid rgba(46,141,232,0.25);padding:1.75rem 2rem;margin:2rem 0;}
+  .disclaimer-box p{font-size:0.88rem;color:var(--off-white);line-height:1.85;margin-bottom:0.75rem;}
+  .disclaimer-box p:last-child{margin-bottom:0;}
+
+  .submit-row{margin-top:2.5rem;}
+  .submit-btn{background:var(--blue);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.9rem;letter-spacing:0.15em;text-transform:uppercase;padding:1.1rem 3rem;border:2px solid var(--blue-bright);cursor:pointer;transition:background 0.2s;width:100%;}
+  .submit-btn:hover{background:var(--blue-bright);}
+
+  footer{background:var(--navy-mid);border-top:1px solid rgba(30,111,196,0.2);padding:3rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:2rem;}
+  .footer-logo img{height:120px;width:auto;display:block;}
+  .footer-copy{font-size:0.8rem;color:var(--gray);font-family:'Barlow Condensed',sans-serif;}
+
+  @media(max-width:900px){
+    nav{padding:1rem 1.5rem;}
+    .page-hero{padding:8rem 1.5rem 3rem;}
+    .gate-wrap,.form-wrap{padding:0 1.5rem 4rem;}
+    .grid-2{grid-template-columns:1fr;}
+    footer{padding:2rem 1.5rem;}
+    .footer-inner{flex-direction:column;align-items:flex-start;}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+</nav>
+
+<div class="page-hero">
+  <p class="section-label">Nutrition Coaching</p>
+  <h1 class="page-title">Client Onboarding</h1>
+  <div class="blue-line"></div>
+  <p class="page-subtitle">Complete this questionnaire honestly and in full. The more detail you provide, the more precisely your program can be built around you.</p>
+</div>
+
+<!-- ACCESS GATE -->
+<div class="gate-wrap" id="gateWrap">
+  <div class="gate-box">
+    <div class="gate-title">Access Code Required</div>
+    <p class="gate-sub">This form is for paying clients only. Enter the access code provided to you after your payment was confirmed.</p>
+    <input type="text" class="gate-input" id="codeInput" placeholder="Enter your access code" autocomplete="off" onkeydown="if(event.key==='Enter')checkCode()">
+    <div class="gate-error" id="gateError">Incorrect code. Please check with your coach.</div>
+    <button class="btn-primary" onclick="checkCode()">Unlock Questionnaire</button>
+  </div>
+</div>
+
+<!-- QUESTIONNAIRE FORM -->
+<div class="form-wrap" id="formWrap">
+
+  <div class="form-intro">
+    <p>Please answer every question as honestly and precisely as possible. Your answers are strictly confidential — shared only between you and Parker. The quality of your program depends entirely on the quality of your answers.</p>
+  </div>
+
+  <form action="https://formspree.io/f/xjgprbde" method="POST">
+    <input type="hidden" name="form_type" value="Nutrition Onboarding Questionnaire">
+    <!-- Honeypot anti-spam -->
+    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
+    <!-- SECTION 1: ABOUT YOU -->
+    <div class="q-section">
+      <div class="q-section-title">01 — About You</div>
+
+      <div class="grid-2">
+        <div class="q-group">
+          <label class="q-label">Full Name *</label>
+          <input type="text" name="full_name" class="q-input" placeholder="First and last name" required>
+        </div>
+        <div class="q-group">
+          <label class="q-label">Email Address *</label>
+          <input type="email" name="email" class="q-input" placeholder="you@email.com" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="q-group">
+          <label class="q-label">Height *</label>
+          <input type="text" name="height" class="q-input" placeholder="e.g. 5'10&quot;" required>
+        </div>
+        <div class="q-group">
+          <label class="q-label">Current Weight *</label>
+          <input type="text" name="current_weight" class="q-input" placeholder="e.g. 185 lbs" required>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Sex *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="sex" value="Male" required><label>Male</label></label>
+          <label class="radio-option"><input type="radio" name="sex" value="Female"><label>Female</label></label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Progress Photo Comfort *</label>
+        <p class="q-hint">Progress photos are how Parker assesses your physique and calculates your calorie needs. Are you comfortable sharing photos in boxers/spandex/posing trunks (men) or regular underclothing/bikini (women)?</p>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="photo_comfort" value="Yes, comfortable" required><label>Yes, I'm comfortable with this</label></label>
+          <label class="radio-option"><input type="radio" name="photo_comfort" value="Yes but prefer minimal"><label>Yes, but I'd prefer to keep it minimal</label></label>
+          <label class="radio-option"><input type="radio" name="photo_comfort" value="Not comfortable"><label>Not comfortable — I'd like to discuss alternatives</label></label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Any Medical Conditions I Should Know About?</label>
+        <p class="q-hint">Include anything relevant — injuries, diagnoses, medications, hormone conditions, digestive issues, etc.</p>
+        <textarea name="medical_conditions" class="q-textarea" placeholder="If none, write 'None'"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 2: GOALS -->
+    <div class="q-section">
+      <div class="q-section-title">02 — Your Goals</div>
+
+      <div class="q-group">
+        <label class="q-label">Long-Term Goals *</label>
+        <p class="q-hint">Examples: Lose 40 lbs in a year · Add 5–10 lbs of muscle in a year · Increase strength by X over 8+ months · Become a competitor in bodybuilding or powerlifting</p>
+        <textarea name="long_term_goals" class="q-textarea" placeholder="Be specific. The more detail, the better the program." required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Short-Term Goals *</label>
+        <p class="q-hint">Examples: Lose 5–10 lbs this month · Drop 20 lbs in 3 months · Add 10 lbs to my deadlift in the next 6 weeks</p>
+        <textarea name="short_term_goals" class="q-textarea" placeholder="What do you want to accomplish first?" required></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 3: COACHING HISTORY -->
+    <div class="q-section">
+      <div class="q-section-title">03 — Coaching History</div>
+
+      <div class="q-group">
+        <label class="q-label">Have You Hired a Coach Before? *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="previous_coach" value="No" required><label>No, this is my first time</label></label>
+          <label class="radio-option"><input type="radio" name="previous_coach" value="Yes - positive experience"><label>Yes — positive experience</label></label>
+          <label class="radio-option"><input type="radio" name="previous_coach" value="Yes - mixed experience"><label>Yes — mixed experience</label></label>
+          <label class="radio-option"><input type="radio" name="previous_coach" value="Yes - negative experience"><label>Yes — negative experience</label></label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Describe Your Previous Coaching Experience</label>
+        <p class="q-hint">What worked, what didn't, and what you'd want to be different. If none, write 'N/A'.</p>
+        <textarea name="previous_coach_details" class="q-textarea" placeholder="N/A"></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">What Qualities Do You Look for in a Coach? *</label>
+        <p class="q-hint">Examples: Frequent message check-ins · Weekly check-ins only · Hands-off until it's check-in time · Friendly · Direct and no-nonsense · Data-driven</p>
+        <textarea name="coaching_qualities" class="q-textarea" placeholder="Be honest. There are no wrong answers." required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Preferred Check-In Frequency *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="checkin_frequency" value="Weekly" required><label>Weekly</label></label>
+          <label class="radio-option"><input type="radio" name="checkin_frequency" value="Bi-weekly"><label>Bi-weekly</label></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 4: NUTRITION -->
+    <div class="q-section">
+      <div class="q-section-title">04 — Nutrition</div>
+
+      <div class="q-group">
+        <label class="q-label">Have You Dieted Before? *</label>
+        <p class="q-hint">If yes, describe what you did and how it went. If no, write 'No'.</p>
+        <textarea name="diet_history" class="q-textarea" placeholder="e.g. Tried keto for 3 months, lost 15 lbs but couldn't sustain it..." required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">How Educated Are You in Nutrition? *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="nutrition_education" value="Not at all" required><label>Not at all</label></label>
+          <label class="radio-option"><input type="radio" name="nutrition_education" value="Somewhat educated"><label>Somewhat educated</label></label>
+          <label class="radio-option"><input type="radio" name="nutrition_education" value="Smarter than average"><label>Smarter than average</label></label>
+          <label class="radio-option"><input type="radio" name="nutrition_education" value="Very educated"><label>Very educated</label></label>
+          <label class="radio-option"><input type="radio" name="nutrition_education" value="Degree in nutrition"><label>I have a degree in nutrition</label></label>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="q-group">
+          <label class="q-label">Approximate Daily Calorie Intake *</label>
+          <p class="q-hint">Track a day in MyFitnessPal if you're unsure — be honest, don't underestimate.</p>
+          <input type="text" name="daily_calories" class="q-input" placeholder="e.g. ~2,200 kcal" required>
+        </div>
+        <div class="q-group">
+          <label class="q-label">How Many Meals Do You Eat Per Day? *</label>
+          <input type="text" name="meals_per_day" class="q-input" placeholder="e.g. 3" required>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="q-group">
+          <label class="q-label">How Often Do You Snack?</label>
+          <input type="text" name="snacking_frequency" class="q-input" placeholder="e.g. 1–2x daily, mostly at night">
+        </div>
+        <div class="q-group">
+          <label class="q-label">Max Meals Per Day If Needed?</label>
+          <p class="q-hint">How many meals could you manage if Parker wrote them in?</p>
+          <input type="text" name="max_meals" class="q-input" placeholder="e.g. Up to 5">
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Diet Style Preference</label>
+        <p class="q-hint">Parker writes Keto and high-protein diets. The rest is filled with either high-carb or moderate carb/fat. Do you have a preference?</p>
+        <textarea name="diet_preference" class="q-textarea" placeholder="e.g. I prefer higher carbs · I've done Keto before and liked it · No preference, whatever works best"></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">3 Junk Foods You Like *</label>
+        <p class="q-hint">Pick actual foods — not categories like "chips" or "fast food." Be specific.</p>
+        <textarea name="junk_foods" class="q-textarea" placeholder="e.g. Oreos, Dominos pepperoni pizza, Reese's Peanut Butter Cups" required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">3 Healthy Foods You Like *</label>
+        <p class="q-hint">Specific foods and meals — not "fruit" or "vegetables." Name them.</p>
+        <textarea name="healthy_foods" class="q-textarea" placeholder="e.g. Greek yogurt with berries, grilled salmon, cottage cheese" required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">How Detailed Do You Want Your Plan? *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="plan_detail" value="Very detailed" required><label>Very detailed — exact foods, brands, times, and amounts</label></label>
+          <label class="radio-option"><input type="radio" name="plan_detail" value="Moderately detailed"><label>Moderately detailed — meals laid out with flexibility on brands</label></label>
+          <label class="radio-option"><input type="radio" name="plan_detail" value="Macro targets only"><label>Just give me macro targets and I'll figure out the rest</label></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 5: LIFESTYLE -->
+    <div class="q-section">
+      <div class="q-section-title">05 — Lifestyle</div>
+
+      <div class="q-group">
+        <label class="q-label">What Do You Do for Work? *</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="job_activity" value="Sedentary (desk job, minimal movement)" required><label>Sedentary — desk job, minimal movement</label></label>
+          <label class="radio-option"><input type="radio" name="job_activity" value="Lightly active"><label>Lightly active — some walking, on my feet occasionally</label></label>
+          <label class="radio-option"><input type="radio" name="job_activity" value="Active"><label>Active — on my feet most of the day</label></label>
+          <label class="radio-option"><input type="radio" name="job_activity" value="Very active"><label>Very active — physically demanding work all day</label></label>
+        </div>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Daily Routine Constraints</label>
+        <p class="q-hint">Anything Parker needs to plan around — short lunch breaks, shift work, early starts, no cooking at work, etc.</p>
+        <textarea name="routine_constraints" class="q-textarea" placeholder="e.g. I only get a 30-minute lunch break and can't cook at work · I work 6am–3pm shifts · I travel for work 2 weeks a month"></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Alcohol Consumption</label>
+        <p class="q-hint">How often and how much? Be honest — this directly affects your program.</p>
+        <input type="text" name="alcohol" class="q-input" placeholder="e.g. 3–4 beers on weekends only · I don't drink · Daily glass of wine">
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Soda / Energy Drink Consumption</label>
+        <input type="text" name="soda_energy" class="q-input" placeholder="e.g. 1 Monster daily · 2 Diet Cokes a day · None">
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Can You Swap to Diet Sodas / Cut Back on Alcohol If Needed?</label>
+        <div class="radio-group">
+          <label class="radio-option"><input type="radio" name="can_swap" value="Yes"><label>Yes</label></label>
+          <label class="radio-option"><input type="radio" name="can_swap" value="Maybe / partially"><label>Maybe / partially</label></label>
+          <label class="radio-option"><input type="radio" name="can_swap" value="No"><label>No</label></label>
+          <label class="radio-option"><input type="radio" name="can_swap" value="N/A - I don't consume these"><label>N/A — I don't consume these</label></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: TRAINING & CARDIO -->
+    <div class="q-section">
+      <div class="q-section-title">06 — Training &amp; Cardio</div>
+
+      <div class="q-group">
+        <label class="q-label">Do You Currently Do Cardio? *</label>
+        <p class="q-hint">Note: cardio is included in all nutrition programs — this question is about your current habits.</p>
+        <textarea name="cardio" class="q-textarea" placeholder="e.g. Yes — 30 min walk 3x/week · HIIT 2x/week · No cardio currently" required></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Current Supplement Stack</label>
+        <p class="q-hint">List everything you currently take — protein powder, creatine, pre-workout, vitamins, etc.</p>
+        <textarea name="supplements" class="q-textarea" placeholder="e.g. Creatine 5g daily, Whey protein, Vitamin D, Fish oil · None"></textarea>
+      </div>
+
+      <div class="q-group">
+        <label class="q-label">Do You Use PEDs (Performance Enhancing Drugs)?</label>
+        <p class="q-hint">This information is confidential and strictly between you and Parker. It affects how your program is written.</p>
+        <textarea name="peds" class="q-textarea" placeholder="List all compounds and current dosing, or write 'No'"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 7: ANYTHING ELSE -->
+    <div class="q-section">
+      <div class="q-section-title">07 — Anything Else</div>
+
+      <div class="q-group">
+        <label class="q-label">Is There Anything Else Parker Should Know?</label>
+        <p class="q-hint">Family situation, stress levels, sleep quality, history of disordered eating, motivation challenges, past injuries — anything relevant that hasn't been covered.</p>
+        <textarea name="anything_else" class="q-textarea" style="min-height:140px;" placeholder="Use this space freely."></textarea>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="disclaimer-box">
+      <p>By submitting this form you acknowledge the following:</p>
+      <p>Nutrition programs include cardio. That is part of the program and your responsibility to complete.</p>
+      <p>Programs that are finalized and delivered are non-refundable. Parker does not revise single-purchase programs. Only ongoing monthly coaching clients receive revisions, and only as Parker sees fit — not necessarily every week.</p>
+      <p>Your program is built for you. Sharing it with others will not produce the same results.</p>
+      <p>The more honest you are, the better Parker can help you. Your information is never shared with anyone outside of you and Parker.</p>
+    </div>
+
+    <div class="submit-row">
+      <button type="submit" class="submit-btn">Submit Questionnaire &rarr;</button>
+    </div>
+
+  </form>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  function checkCode() {
+    var input = document.getElementById('codeInput').value.trim().toUpperCase();
+    var error = document.getElementById('gateError');
+    if (input === 'GC-NC') {
+      document.getElementById('gateWrap').style.display = 'none';
+      document.getElementById('formWrap').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      error.style.display = 'block';
+      document.getElementById('codeInput').style.borderColor = '#e05c5c';
+    }
+  }
+</script>
+
+</body>
+</html>
