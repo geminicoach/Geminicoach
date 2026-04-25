@@ -4,16 +4,201 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
-<meta http-equiv="refresh" content="0; url=onboarding.html">
-<title>Gemini Coach — Client Onboarding</title>
+<title>Get Started | Gemini Coach</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-  body{margin:0;background:#0a1628;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;}
-  p{color:#8a9ab5;font-size:0.9rem;}
-  a{color:#2e8de8;}
+  :root{--navy:#0a1628;--navy-mid:#0d1f3c;--blue:#1a6fc4;--blue-bright:#2e8de8;--blue-light:#5aaff5;--white:#fff;--off-white:#e8edf5;--gray:#8a9ab5;--dark-gray:#1c2a40;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--navy);color:var(--white);font-family:'Barlow',sans-serif;font-weight:300;min-height:100vh;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(10,22,40,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(30,111,196,0.2);}
+  .nav-logo img{height:64px;width:auto;display:block;}
+  .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center;margin:0;padding:0;}
+  .nav-links a{color:var(--off-white);text-decoration:none;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.12em;text-transform:uppercase;transition:color 0.2s;}
+  .nav-links a:hover{color:var(--blue-bright);}
+  .nav-cta{background:var(--blue);color:var(--white)!important;padding:0.5rem 1.4rem;border:1px solid var(--blue-bright);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{display:block;width:24px;height:2px;background:var(--white);}
+  .mobile-nav{display:none;position:fixed;inset:0;background:rgba(10,22,40,0.98);z-index:999;flex-direction:column;align-items:center;justify-content:center;gap:2rem;}
+  .mobile-nav.open{display:flex;}
+  .mobile-nav a{color:var(--white);text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.1em;}
+  .mobile-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:var(--white);font-size:2rem;cursor:pointer;}
+
+  .page-wrap{max-width:820px;margin:0 auto;padding:10rem 2rem 6rem;}
+
+  .section-label{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:0.85rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--blue-light);margin-bottom:1rem;}
+  .page-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,7vw,5.5rem);line-height:0.95;color:var(--white);margin-bottom:1rem;}
+  .page-title em{font-style:normal;color:var(--blue-bright);}
+  .blue-line{width:60px;height:3px;background:var(--blue-bright);margin:1.5rem 0;}
+  .page-intro{color:var(--gray);font-size:1rem;line-height:1.85;max-width:600px;margin-bottom:3.5rem;}
+
+  /* STEPS */
+  .steps{display:flex;flex-direction:column;gap:2px;margin-bottom:3.5rem;}
+  .step{display:grid;grid-template-columns:56px 1fr;gap:1.5rem;align-items:start;background:var(--dark-gray);border:1px solid rgba(30,111,196,0.18);padding:2rem;}
+  .step-num{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;color:var(--blue-bright);opacity:0.5;line-height:1;padding-top:0.1rem;}
+  .step-content{}
+  .step-title{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--off-white);margin-bottom:0.5rem;}
+  .step-body{font-size:0.9rem;color:var(--gray);line-height:1.75;}
+  .step-body strong{color:var(--off-white);font-weight:600;}
+  .step-body .venmo{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1rem;letter-spacing:0.08em;color:var(--blue-bright);margin:0.5rem 0;}
+  .step-body .note-box{margin-top:0.85rem;background:rgba(46,141,232,0.07);border-left:3px solid var(--blue);padding:0.75rem 1rem;font-size:0.85rem;color:var(--off-white);line-height:1.7;}
+  .step-body .note-box span{display:block;color:var(--gray);font-size:0.8rem;margin-top:0.25rem;}
+
+  /* PACKAGES */
+  .packages-label{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gray);margin-bottom:1rem;}
+  .packages{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:1.25rem;}
+  .pkg{background:rgba(255,255,255,0.03);border:1px solid rgba(30,111,196,0.2);padding:1.25rem 1rem;text-align:center;}
+  .pkg-name{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.7rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--gray);margin-bottom:0.4rem;}
+  .pkg-price{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--white);line-height:1;}
+  .pkg-period{font-size:0.75rem;color:var(--gray);margin-top:0.2rem;}
+  .pkg-note{font-size:0.7rem;color:var(--blue-light);margin-top:0.3rem;font-style:italic;}
+
+  /* DIVIDER */
+  .divider{border:none;border-top:1px solid rgba(30,111,196,0.15);margin:3rem 0;}
+
+  /* ACCESS BOX */
+  .access-box{background:var(--navy-mid);border:1px solid rgba(30,111,196,0.3);padding:2.5rem;text-align:center;}
+  .access-box h2{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--white);margin-bottom:0.75rem;}
+  .access-box p{color:var(--gray);font-size:0.9rem;line-height:1.8;max-width:480px;margin:0 auto 1.5rem;}
+  .btn-primary{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.2em;text-transform:uppercase;padding:0.9rem 2.5rem;background:var(--blue);border:2px solid var(--blue-bright);color:var(--white);text-decoration:none;transition:background 0.2s;}
+  .btn-primary:hover{background:var(--blue-bright);}
+  .access-note{font-size:0.8rem;color:var(--gray);margin-top:0.75rem;}
+
+  footer{background:var(--navy-mid);padding:2.5rem 3rem;border-top:1px solid rgba(30,111,196,0.15);margin-top:5rem;}
+  .footer-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;}
+  .footer-logo img{height:44px;}
+  .footer-copy{color:var(--gray);font-size:0.75rem;}
+
+  @media(max-width:700px){
+    nav{padding:1rem 1.5rem;}
+    .nav-links{display:none;}
+    .hamburger{display:flex;}
+    .page-wrap{padding:8rem 1.5rem 4rem;}
+    .packages{grid-template-columns:1fr;}
+    .step{grid-template-columns:40px 1fr;gap:1rem;padding:1.5rem;}
+  }
 </style>
 </head>
 <body>
-<p>Redirecting… <a href="onboarding.html">Click here if not redirected.</a></p>
-<script>window.location.replace('onboarding.html');</script>
+
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" onclick="closeMobileNav()">&#x2715;</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="services.html">Services</a>
+  <a href="blog.html">Education</a>
+  <a href="booking.html">Book Physio</a>
+  <a href="index.html#contact">Contact</a>
+</div>
+
+<nav>
+  <div class="nav-logo"><a href="index.html"><img src="logo-transparent.png" alt="Gemini Coach"></a></div>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="blog.html">Education</a></li>
+    <li><a href="booking.html">Book Physio</a></li>
+    <li><a href="index.html#contact" class="nav-cta">Work With Me</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileNav()"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="page-wrap">
+
+  <p class="section-label">Nutrition Coaching</p>
+  <h1 class="page-title">Let's Get <em>Started.</em></h1>
+  <div class="blue-line"></div>
+  <p class="page-intro">Ready to commit? Here's exactly what to do. Enrollment takes just a few minutes — select your package, send payment, and you'll receive access to your onboarding questionnaire once confirmed.</p>
+
+  <div class="steps">
+
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-content">
+        <div class="step-title">Choose Your Package</div>
+        <div class="step-body">
+          <p>Select the commitment level that works best for you. All packages include the full suite of coaching services — the difference is length and total investment.</p>
+          <div style="margin-top:1.25rem;">
+            <div class="packages-label">Available Plans</div>
+            <div class="packages">
+              <div class="pkg">
+                <div class="pkg-name">Monthly</div>
+                <div class="pkg-price">$300</div>
+                <div class="pkg-period">per month</div>
+                <div class="pkg-note">2-month minimum</div>
+              </div>
+              <div class="pkg">
+                <div class="pkg-name">6-Month</div>
+                <div class="pkg-price">$1,600</div>
+                <div class="pkg-period">paid in full</div>
+                <div class="pkg-note">~$267/mo — save $200</div>
+              </div>
+              <div class="pkg">
+                <div class="pkg-name">1-Year</div>
+                <div class="pkg-price">$3,000</div>
+                <div class="pkg-period">paid in full</div>
+                <div class="pkg-note">$250/mo — save $600</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-content">
+        <div class="step-title">Send Payment via Venmo</div>
+        <div class="step-body">
+          <p>Send your first payment to:</p>
+          <div class="venmo">@Grueny</div>
+          <p>In the Venmo note, include the following so your enrollment can be confirmed quickly:</p>
+          <div class="note-box">
+            <strong>Full Name</strong><span>The name you'd like on your account</span>
+            <strong style="margin-top:0.6rem;display:block;">Email Address</strong><span>Where you'd like to be contacted</span>
+            <strong style="margin-top:0.6rem;display:block;">Package Selected</strong><span>Monthly, 6-Month, or 1-Year</span>
+          </div>
+          <p style="margin-top:0.85rem;font-size:0.82rem;color:var(--gray);">Example note: <em style="color:var(--off-white);">"Jane Smith — jane@email.com — 6-Month Package"</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-content">
+        <div class="step-title">Receive Your Access Code</div>
+        <div class="step-body">
+          <p>Once payment is confirmed, you'll receive an access code via email. Use it to unlock your personalized onboarding questionnaire below — this is how we build your program from the ground up.</p>
+          <p style="margin-top:0.75rem;font-size:0.82rem;color:var(--gray);">Expect confirmation within 24 hours of payment.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <div class="access-box">
+    <h2>Already Have Your Code?</h2>
+    <p>Enter it on the next page to unlock and complete your onboarding questionnaire. This helps build your custom program before your first check-in.</p>
+    <a href="onboarding.html" class="btn-primary">Access Onboarding Form &rarr;</a>
+    <p class="access-note">You will be prompted to enter your access code on the next page.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo"><img src="logo-transparent.png" alt="Gemini Coach"></div>
+    <p class="footer-copy">&copy; 2026 Gemini Coach. All rights reserved.</p>
+  </div>
+</footer>
+
+<script>
+  function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}
+  function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}
+</script>
 </body>
 </html>
