@@ -492,19 +492,13 @@
   }
 
   .carousel-track {
-    display: flex;
-    gap: 16px;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
+    position: relative;
   }
 
   .service-card {
-    position: relative;
+    position: absolute;
     overflow: hidden;
-    flex: 0 0 calc(33.333% - 11px);
-    aspect-ratio: 3/4;
     cursor: pointer;
-    transition: opacity 0.5s, transform 0.5s;
     border: 1px solid rgba(30,111,196,0.15);
   }
 
@@ -525,12 +519,7 @@
     transition: background 0.4s;
   }
 
-  /* Dim non-center cards */
-  .service-card.dim {
-    opacity: 0.45;
-    transform: scale(0.97);
-  }
-
+  /* Dim non-center cards — opacity/transform handled by JS */
   .service-card.dim::after {
     content: '';
     position: absolute;
@@ -1209,7 +1198,7 @@
       <button class="carousel-arrow prev" onclick="carouselShift(-1)" aria-label="Previous service">&#8592;</button>
       <div class="carousel-viewport">
         <div class="carousel-track" id="carouselTrack">
-          <div class="service-card dim">
+          <div class="service-card">
             <div class="service-card-bg" style="background-image:url('smiling-red-bench.JPG');background-position:center top;"></div>
             <div class="service-card-overlay"></div>
             <div class="service-card-content">
@@ -1239,7 +1228,7 @@
               <a href="booking.html" class="service-cta">Book Now</a>
             </div>
           </div>
-          <div class="service-card dim">
+          <div class="service-card">
             <div class="service-card-bg" style="background-image:url('bw-chest-fly.JPG');background-position:center top;"></div>
             <div class="service-card-overlay"></div>
             <div class="service-card-content">
@@ -1249,7 +1238,7 @@
               <a href="services.html#training" class="service-cta">Inquire Now</a>
             </div>
           </div>
-          <div class="service-card dim">
+          <div class="service-card">
             <div class="service-card-bg" style="background-image:url('josh-ab-thigh-color.JPG');background-position:center center;"></div>
             <div class="service-card-overlay"></div>
             <div class="service-card-content">
@@ -1475,99 +1464,83 @@
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
 
-  // SERVICES CAROUSEL
+  // SERVICES CAROUSEL — ring/wheel layout, no clones, truly infinite
   (function() {
     const track = document.getElementById('carouselTrack');
     const dotsEl = document.getElementById('carouselDots');
     if (!track) return;
 
-    const origCards = Array.from(track.children); // 5 real cards
-    const n = origCards.length;
-
-    // Clone last 2 and prepend, clone first 2 and append for infinite loop
-    // Result: [T_c, Po_c, Ph, N, Phy, T, Po, Ph_c, N_c]  (indices 0-8)
-    const before = [origCards[n-2].cloneNode(true), origCards[n-1].cloneNode(true)];
-    const after  = [origCards[0].cloneNode(true),   origCards[1].cloneNode(true)];
-    before.forEach(c => { c.classList.add('dim'); track.insertBefore(c, track.firstChild); });
-    // re-select firstChild each time since DOM shifted
-    track.insertBefore(before[1], track.firstChild);
-    track.insertBefore(before[0], track.firstChild);
-    // remove the two we just double-inserted (insertBefore above runs twice so redo cleanly)
-
-    // Redo cleanly: clear and rebuild
-    track.innerHTML = '';
-    const clonePre = [origCards[n-2].cloneNode(true), origCards[n-1].cloneNode(true)];
-    const clonePost = [origCards[0].cloneNode(true), origCards[1].cloneNode(true)];
-    [...clonePre, ...origCards, ...clonePost].forEach(c => track.appendChild(c));
-
-    const allCards = Array.from(track.children); // 9 total
-    let current = 3; // Nutrition is index 3 after prepending 2 clones
+    const cards = Array.from(track.children); // 5 real cards, no clones ever
+    const n = cards.length;
+    const GAP = 16;
+    let current = 1; // start on Nutrition (index 1)
     let busy = false;
 
-    function cardWidth() {
-      return allCards[0].getBoundingClientRect().width + 16;
-    }
-
-    function getOffset(idx) {
+    function layout(animate) {
       const vw = track.parentElement.getBoundingClientRect().width;
-      const cw = cardWidth();
-      return idx * cw - (vw / 2 - cw / 2);
-    }
+      const cardW = Math.floor((vw - GAP * 2) / 3);
+      const cardH = Math.floor(cardW * 4 / 3);
+      const centerX = Math.floor(vw / 2 - cardW / 2);
 
-    function applyDim() {
-      allCards.forEach((c, i) => c.classList.toggle('dim', i !== current));
-    }
+      track.style.height = (cardH + 32) + 'px';
 
-    function applyDots() {
-      const realIdx = ((current - 2) % n + n) % n;
+      cards.forEach((card, i) => {
+        // rel = position relative to center: -2, -1, 0, +1, +2
+        let rel = ((i - current) % n + n) % n;
+        if (rel > Math.floor(n / 2)) rel -= n;
+
+        const x = centerX + rel * (cardW + GAP);
+        const visible = Math.abs(rel) <= 1; // only ±1 and center are fully in view
+
+        card.style.transition = animate
+          ? 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s'
+          : 'none';
+        card.style.position = 'absolute';
+        card.style.top = '16px';
+        card.style.left = '0';
+        card.style.width = cardW + 'px';
+        card.style.height = cardH + 'px';
+        card.style.transform = 'translateX(' + x + 'px)' + (rel !== 0 ? ' scale(0.97)' : ' scale(1)');
+        card.style.opacity = rel === 0 ? '1' : visible ? '0.45' : '0';
+        card.style.zIndex = rel === 0 ? '2' : '1';
+        card.classList.toggle('dim', rel !== 0);
+      });
+
       document.querySelectorAll('.carousel-dot').forEach((d, i) => {
-        d.classList.toggle('active', i === realIdx);
+        d.classList.toggle('active', i === current);
       });
     }
 
-    function moveTo(idx, animate) {
-      track.style.transition = animate ? 'transform 0.5s cubic-bezier(0.4,0,0.2,1)' : 'none';
-      track.style.transform = 'translateX(-' + getOffset(idx) + 'px)';
-      current = idx;
-      applyDim();
-      applyDots();
-      if (!animate) requestAnimationFrame(() => { track.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)'; });
+    function go(newIdx, animate) {
+      current = ((newIdx % n) + n) % n;
+      layout(animate);
+      if (animate) setTimeout(() => { busy = false; }, 520);
+      else busy = false;
     }
-
-    // After transition, silently jump from clone to real card
-    track.addEventListener('transitionend', () => {
-      if (current <= 1) moveTo(current + n, false);
-      else if (current >= n + 2) moveTo(current - n, false);
-      busy = false;
-    });
 
     window.carouselShift = function(dir) {
       if (busy) return;
       busy = true;
-      moveTo(current + dir, true);
+      go(current + dir, true);
     };
 
-    // Build dots for 5 real cards
-    origCards.forEach((_, i) => {
+    // Build dots
+    cards.forEach((_, i) => {
       const d = document.createElement('div');
       d.className = 'carousel-dot';
-      d.onclick = () => { if (!busy) { busy = true; moveTo(i + 2, true); } };
+      d.onclick = () => { if (!busy) { busy = true; go(i, true); } };
       dotsEl.appendChild(d);
     });
 
-    // Click a side card to navigate to it
-    allCards.forEach((c, i) => {
-      c.addEventListener('click', function(e) {
-        if (i !== current && !busy) {
-          e.preventDefault();
-          busy = true;
-          moveTo(i, true);
-        }
+    // Click side card to navigate
+    cards.forEach((c, i) => {
+      c.addEventListener('click', e => {
+        if (i !== current && !busy) { e.preventDefault(); busy = true; go(i, true); }
       });
     });
 
-    moveTo(3, false);
-    window.addEventListener('resize', () => moveTo(current, false));
+    go(1, false);
+    window.addEventListener('resize', () => go(current, false));
   })();
 </script>
 </body>
