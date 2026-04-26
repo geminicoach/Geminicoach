@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Parker Gruenhagen | Nutrition Coach & Physiotherapist | Wisconsin</title>
 <meta name="description" content="Online nutrition coaching, physiotherapy, posing coaching, and personal training with Parker Gruenhagen — NPC competitor with nearly a decade of experience. Serving clients worldwide and in-person in Hudson & Eau Claire, WI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.geminicoach.com/">
+<meta property="og:site_name" content="Gemini Coach">
+<meta property="og:title" content="Parker Gruenhagen | Nutrition Coach & Physiotherapist | Wisconsin">
+<meta property="og:description" content="Online nutrition coaching, physiotherapy, posing coaching, and personal training with Parker Gruenhagen — NPC competitor with nearly a decade of experience. Serving clients worldwide and in-person in Hudson & Eau Claire, WI.">
+<meta property="og:image" content="https://www.geminicoach.com/smiling-red-bench.JPG">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Parker Gruenhagen | Nutrition Coach & Physiotherapist | Wisconsin">
+<meta name="twitter:description" content="Online nutrition coaching, physiotherapy, posing coaching, and personal training with Parker Gruenhagen — NPC competitor with nearly a decade of experience. Serving clients worldwide and in-person in Hudson & Eau Claire, WI.">
+<meta name="twitter:image" content="https://www.geminicoach.com/smiling-red-bench.JPG">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -1039,10 +1049,8 @@
     .services-preview { padding: 5rem 0; }
     .services-inner { padding: 0 1.5rem; }
     .carousel-wrap { margin-left: 0; width: 100%; padding: 0 44px; }
-    .service-card { flex: 0 0 calc(72% - 8px); aspect-ratio: 3/4; }
     .carousel-arrow.prev { left: 4px; }
     .carousel-arrow.next { right: 4px; }
-    .service-card.lead .service-card-title { font-size: 2.2rem; }
     .testimonials { padding: 5rem 1.5rem; }
     .testimonials-grid { grid-template-columns: 1fr; }
     .testimonial-card.featured { grid-column: span 1; }
@@ -1055,6 +1063,12 @@
     .footer-inner { flex-direction: column; align-items: flex-start; }
     .contact-strip { flex-direction: column; gap: 1.25rem; text-align: center; padding: 1.5rem; }
     .contact-strip-text { font-size: 1rem; }
+  }
+
+  @media (max-width: 640px) {
+    .carousel-wrap { padding: 0 36px; }
+    .service-cta { opacity: 1 !important; transform: translateY(0) !important; }
+    .service-card-title { font-size: 1.8rem; }
   }
   .contact-strip { background: var(--blue); border-top: 1px solid var(--blue-bright); border-bottom: 1px solid rgba(255,255,255,0.1); padding: 1.25rem 3rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
   .contact-strip-text { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 600; letter-spacing: 0.05em; color: var(--white); }
@@ -1470,27 +1484,27 @@
     const dotsEl = document.getElementById('carouselDots');
     if (!track) return;
 
-    const cards = Array.from(track.children); // 5 real cards, no clones ever
+    const cards = Array.from(track.children);
     const n = cards.length;
     const GAP = 16;
-    let current = 1; // start on Nutrition (index 1)
+    let current = 1;
     let busy = false;
 
     function layout(animate) {
       const vw = track.parentElement.getBoundingClientRect().width;
-      const cardW = Math.floor((vw - GAP * 2) / 3);
+      const mobile = vw < 640;
+      const cardW = mobile ? Math.floor(vw - 32) : Math.floor((vw - GAP * 2) / 3);
       const cardH = Math.floor(cardW * 4 / 3);
       const centerX = Math.floor(vw / 2 - cardW / 2);
 
       track.style.height = (cardH + 32) + 'px';
 
       cards.forEach((card, i) => {
-        // rel = position relative to center: -2, -1, 0, +1, +2
         let rel = ((i - current) % n + n) % n;
         if (rel > Math.floor(n / 2)) rel -= n;
 
         const x = centerX + rel * (cardW + GAP);
-        const visible = Math.abs(rel) <= 1; // only ±1 and center are fully in view
+        const visible = mobile ? false : Math.abs(rel) <= 1;
 
         card.style.transition = animate
           ? 'transform 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.5s'
@@ -1524,7 +1538,6 @@
       go(current + dir, true);
     };
 
-    // Build dots
     cards.forEach((_, i) => {
       const d = document.createElement('div');
       d.className = 'carousel-dot';
@@ -1532,11 +1545,18 @@
       dotsEl.appendChild(d);
     });
 
-    // Click side card to navigate
     cards.forEach((c, i) => {
       c.addEventListener('click', e => {
         if (i !== current && !busy) { e.preventDefault(); busy = true; go(i, true); }
       });
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    track.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40 && !busy) { busy = true; go(current + (dx > 0 ? -1 : 1), true); }
     });
 
     go(1, false);
