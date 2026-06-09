@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sign in — Gemini Education</title>
+  <style>
+    :root { --ink:#1a1a1a; --muted:#666; --line:#e5e5e5; --accent:#1f6feb; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; color: var(--ink);
+           margin: 0; background:#fafafa; display:flex; min-height:100vh;
+           align-items:center; justify-content:center; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:14px;
+            padding:32px; width:100%; max-width:380px; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+    h1 { font-size:20px; margin:0 0 4px; }
+    p.sub { color:var(--muted); margin:0 0 20px; font-size:14px; }
+    label { display:block; font-size:13px; color:var(--muted); margin:14px 0 4px; }
+    input { width:100%; padding:10px 12px; border:1px solid var(--line);
+            border-radius:8px; font-size:15px; }
+    button { width:100%; margin-top:18px; padding:11px; border:0; border-radius:8px;
+             background:var(--accent); color:#fff; font-size:15px; font-weight:600;
+             cursor:pointer; }
+    button.ghost { background:#fff; color:var(--accent); border:1px solid var(--line); margin-top:10px; }
+    .row { display:flex; gap:8px; }
+    .msg { margin-top:14px; font-size:13px; min-height:18px; }
+    .msg.err { color:#c00; } .msg.ok { color:#198754; }
+    .tabs { display:flex; gap:6px; margin-bottom:8px; }
+    .tabs button { width:auto; flex:1; margin:0; background:#f0f0f0; color:var(--ink);
+                   font-weight:500; padding:8px; }
+    .tabs button.active { background:var(--accent); color:#fff; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Gemini Education</h1>
+    <p class="sub">Sign in or create an account to access courses.</p>
+
+    <div class="tabs">
+      <button id="tab-signin" class="active" type="button">Sign in</button>
+      <button id="tab-signup" type="button">Create account</button>
+    </div>
+
+    <form id="form">
+      <div id="name-field" style="display:none;">
+        <label for="name">Full name</label>
+        <input id="name" type="text" autocomplete="name" />
+      </div>
+      <label for="email">Email</label>
+      <input id="email" type="email" autocomplete="email" required />
+      <label for="password">Password</label>
+      <input id="password" type="password" autocomplete="current-password" required minlength="6" />
+      <button id="submit" type="submit">Sign in</button>
+    </form>
+    <button id="magic" class="ghost" type="button">Email me a magic link instead</button>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <script type="module">
+    import { supabase, CONFIG } from "./app.js";
+    import { guard } from "./gate.js"; guard(); // pre-launch curtain
+
+    const params = new URLSearchParams(location.search);
+    const next = params.get("next") || CONFIG.CATALOG_URL;
+    let mode = "signin";
+
+    const $ = (id) => document.getElementById(id);
+    const msg = (text, ok = false) => {
+      $("msg").textContent = text;
+      $("msg").className = "msg " + (ok ? "ok" : "err");
+    };
+
+    function setMode(m) {
+      mode = m;
+      $("tab-signin").classList.toggle("active", m === "signin");
+      $("tab-signup").classList.toggle("active", m === "signup");
+      $("name-field").style.display = m === "signup" ? "block" : "none";
+      $("submit").textContent = m === "signup" ? "Create account" : "Sign in";
+      $("password").autocomplete = m === "signup" ? "new-password" : "current-password";
+      msg("");
+    }
+    $("tab-signin").onclick = () => setMode("signin");
+    $("tab-signup").onclick = () => setMode("signup");
+
+    // Already signed in? Go straight through.
+    supabase.auth.getUser().then(({ data }) => { if (data.user) location.href = next; });
+
+    $("form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = $("email").value.trim();
+      const password = $("password").value;
+      msg("Working…", true);
+      if (mode === "signup") {
+        const { error } = await supabase.auth.signUp({
+          email, password,
+          options: { data: { full_name: $("name").value.trim() } },
+        });
+        if (error) return msg(error.message);
+        msg("Account created. Check your email if confirmation is required.", true);
+        const { data } = await supabase.auth.getSession();
+        if (data.session) location.href = next;
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) return msg(error.message);
+        location.href = next;
+      }
+    });
+
+    $("magic").addEventListener("click", async () => {
+      const email = $("email").value.trim();
+      if (!email) return msg("Enter your email first.");
+      const { error } = await supabase.auth.signInWithOtp({
+        email, options: { emailRedirectTo: location.origin + location.pathname.replace("login.html", "index.html") },
+      });
+      msg(error ? error.message : "Magic link sent — check your email.", !error);
+    });
+  </script>
+</body>
+</html>

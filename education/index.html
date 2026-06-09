@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Course Library — Gemini Education</title>
+  <style>
+    :root { --ink:#15171c; --muted:#6b7280; --line:#e6e9ef; --accent:#1f6feb;
+            --accent-ink:#1858c4; --soft:#eef3fb; --bg:#f7f9fc; }
+    * { box-sizing:border-box; }
+    body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink);
+           margin:0; background:var(--bg); line-height:1.55; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; }
+    nav { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px;
+          padding:13px 22px; background:rgba(255,255,255,.86); backdrop-filter:blur(8px);
+          border-bottom:1px solid var(--line); }
+    .logo { width:26px; height:26px; border-radius:7px;
+            background:conic-gradient(from 210deg,#2f6df6,#7aa7ff,#2f6df6); }
+    nav b { font-size:15px; letter-spacing:.01em; }
+    nav .sp { flex:1; }
+    nav .soon { font-size:12px; color:var(--muted); border:1px solid var(--line);
+                padding:5px 10px; border-radius:99px; }
+    .hero { background:radial-gradient(1200px 400px at 15% -10%, #244a82 0, transparent 60%),
+            linear-gradient(135deg,#0e1a2c,#1d3a5f); background-color:#0f1c30; color:#fff;
+            padding:54px 24px 46px; }
+    .hero .inner { max-width:1000px; margin:0 auto; }
+    .eyebrow { font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; color:#8fb4ef; margin-bottom:14px; }
+    .hero h1 { margin:0 0 12px; font-size:34px; letter-spacing:-.01em; }
+    .hero p { margin:0; color:#bccadd; max-width:560px; font-size:16px; }
+    .wrap { max-width:1000px; margin:0 auto; padding:30px 24px 70px; }
+    .row { display:flex; align-items:baseline; justify-content:space-between; margin:6px 2px 18px; }
+    .row h2 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0; }
+    .row span { font-size:13px; color:var(--muted); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+    .card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--line);
+            border-radius:16px; padding:22px; text-decoration:none; color:inherit;
+            box-shadow:0 1px 2px rgba(16,30,54,.04);
+            transition:border-color .15s, box-shadow .15s, transform .12s; }
+    .card:hover { border-color:#c9d8f3; box-shadow:0 10px 26px rgba(16,40,90,.10); transform:translateY(-3px); }
+    .tag { align-self:flex-start; font-size:11.5px; font-weight:600; letter-spacing:.03em;
+           color:var(--accent-ink); background:var(--soft); padding:4px 10px; border-radius:99px; margin-bottom:14px; }
+    .card h3 { margin:0 0 8px; font-size:19px; letter-spacing:-.01em; }
+    .card p { margin:0 0 18px; color:var(--muted); font-size:14px; flex:1; }
+    .meta { display:flex; gap:8px 16px; flex-wrap:wrap; font-size:12.5px; color:#8a93a3;
+            border-top:1px solid var(--line); padding-top:13px; }
+    .meta b { color:var(--ink); font-weight:600; }
+    .go { margin-top:13px; color:var(--accent); font-size:14px; font-weight:600; }
+    footer { max-width:1000px; margin:0 auto; padding:26px 24px 50px; color:#9aa3b2; font-size:12.5px;
+             border-top:1px solid var(--line); }
+    .empty,.loading { color:var(--muted); padding:46px 0; text-align:center; }
+    @media (max-width:560px){ .hero h1{font-size:27px} .hero{padding:40px 20px 34px} }
+  </style>
+</head>
+<body>
+  <nav><div class="logo"></div><b>Gemini Education</b><div class="sp"></div>
+    <span class="soon">Membership opening soon</span></nav>
+
+  <div class="hero">
+    <div class="inner">
+      <div class="eyebrow" id="eyebrow">Health Science, taught like a coach</div>
+      <h1>Course Library</h1>
+      <p id="tagline"></p>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="row"><h2>Courses</h2><span id="count"></span></div>
+    <div id="grid" class="grid"><div class="loading">Loading courses…</div></div>
+  </div>
+  <footer>© 2026 Gemini Education. Built for general-population learners and new coaches.</footer>
+
+  <script type="module">
+    import { guard } from "./gate.js"; guard(); // pre-launch curtain
+
+    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) =>
+      ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+
+    (async () => {
+      let data;
+      try { data = await (await fetch("content/courses.json")).json(); }
+      catch (e) { document.getElementById("grid").innerHTML =
+        `<div class="empty">Couldn't load the course list.</div>`; return; }
+
+      if (data.site && data.site.tagline) document.getElementById("tagline").textContent = data.site.tagline;
+      const courses = (dat
