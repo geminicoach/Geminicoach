@@ -3,101 +3,161 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Course Library — Gemini Education</title>
+  <title>Gemini Education — Dashboard</title>
   <link rel="icon" href="data:," />
   <style>
     :root { --ink:#15171c; --muted:#6b7280; --line:#e7e9ef; --accent:#1f6feb;
-            --accent-ink:#1858c4; --soft:#eef3fb; --bg:#f7f9fc; }
+            --accent-ink:#1858c4; --soft:#eef3fb; --bg:#f7f9fc; --gold:#b9892b; }
     * { box-sizing:border-box; }
     body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink);
            margin:0; background:var(--bg); line-height:1.55; -webkit-font-smoothing:antialiased; }
+    a { color:inherit; text-decoration:none; }
     nav { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px;
-          padding:13px 22px; background:rgba(255,255,255,.86); backdrop-filter:blur(8px);
+          padding:13px 22px; background:rgba(255,255,255,.88); backdrop-filter:blur(8px);
           border-bottom:1px solid var(--line); }
     .logo { width:26px; height:26px; border-radius:7px;
             background:conic-gradient(from 210deg,#2f6df6,#7aa7ff,#2f6df6); }
     nav b { font-size:15px; } nav .sp { flex:1; }
-    nav .soon { font-size:12px; color:var(--muted); border:1px solid var(--line);
-                padding:5px 10px; border-radius:99px; }
-    .hero { background:radial-gradient(1200px 400px at 15% -10%, #244a82 0, transparent 60%),
+    nav .soon { font-size:12px; color:var(--muted); border:1px solid var(--line); padding:5px 10px; border-radius:99px; }
+    .hero { background:radial-gradient(1200px 420px at 12% -20%, #244a82 0, transparent 60%),
             linear-gradient(135deg,#0e1a2c,#1d3a5f); background-color:#0f1c30; color:#fff;
-            padding:54px 24px 38px; }
-    .hero .inner { max-width:1000px; margin:0 auto; }
-    .eyebrow { font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; color:#8fb4ef; margin-bottom:14px; }
-    .hero h1 { margin:0 0 12px; font-size:34px; letter-spacing:-.01em; }
-    .hero p { margin:0; color:#bccadd; max-width:560px; font-size:16px; }
-    .wrap { max-width:1000px; margin:0 auto; padding:30px 24px 64px; }
-    .row { display:flex; align-items:baseline; justify-content:space-between; margin:6px 2px 18px; }
-    .row h2 { font-size:13px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0; }
-    .row span { font-size:13px; color:var(--muted); }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+            padding:52px 24px 40px; }
+    .hero .inner { max-width:1060px; margin:0 auto; }
+    .eyebrow { font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; color:#8fb4ef; margin-bottom:12px; }
+    .hero h1 { margin:0 0 10px; font-size:32px; letter-spacing:-.01em; }
+    .hero p { margin:0; color:#bccadd; max-width:580px; font-size:16px; }
+    .wrap { max-width:1060px; margin:0 auto; padding:8px 24px 70px; }
+    section.block { margin-top:34px; }
+    .head { display:flex; align-items:baseline; justify-content:space-between; margin:0 2px 14px; }
+    .head h2 { font-size:14px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0; }
+    .head .sub { font-size:13px; color:var(--muted); }
+
+    /* resume strip */
+    .resume { display:flex; align-items:center; justify-content:space-between; gap:16px;
+              background:linear-gradient(135deg,#13243c,#1f4070); color:#fff; border-radius:16px;
+              padding:18px 22px; margin-top:-22px; position:relative; box-shadow:0 10px 30px rgba(16,40,90,.18); }
+    .resume .k { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#9fc0ef; }
+    .resume h3 { margin:3px 0 0; font-size:18px; }
+    .resume a.btn { background:#fff; color:var(--accent-ink); font-weight:600; font-size:14px;
+                    padding:10px 16px; border-radius:9px; white-space:nowrap; }
+
+    /* stacks */
+    .stacks { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:16px; }
+    .stack { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px;
+             box-shadow:0 1px 2px rgba(16,30,54,.04); }
+    .stack .tag { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
+                  color:var(--gold); }
+    .stack h3 { margin:6px 0 6px; font-size:18px; }
+    .stack p { margin:0 0 14px; color:var(--muted); font-size:13.5px; }
+    .steps { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+    .step { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; padding:5px 10px;
+            border-radius:99px; border:1px solid var(--line); background:var(--soft); color:var(--accent-ink); }
+    .step.locked { background:#f4f5f7; color:#9aa3b2; border-color:#edeef1; }
+    .step .c { font-weight:700; }
+    .arrow { color:#c2c8d2; font-size:12px; }
+
+    /* track grids */
+    .track { margin-top:10px; }
+    .track h3 { font-size:16px; margin:18px 2px 10px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
     .card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--line);
-            border-radius:16px; padding:22px; text-decoration:none; color:inherit;
-            box-shadow:0 1px 2px rgba(16,30,54,.04);
+            border-radius:14px; padding:18px; box-shadow:0 1px 2px rgba(16,30,54,.04);
             transition:border-color .15s, box-shadow .15s, transform .12s; }
-    .card:hover { border-color:#c9d8f3; box-shadow:0 10px 26px rgba(16,40,90,.10); transform:translateY(-3px); }
-    .tag { align-self:flex-start; font-size:11.5px; font-weight:600; letter-spacing:.03em;
-           color:var(--accent-ink); background:var(--soft); padding:4px 10px; border-radius:99px; margin-bottom:14px; }
-    .card h3 { margin:0 0 8px; font-size:19px; letter-spacing:-.01em; }
-    .card p { margin:0 0 18px; color:var(--muted); font-size:14px; flex:1; }
-    .meta { display:flex; gap:8px 16px; flex-wrap:wrap; font-size:12.5px; color:#8a93a3;
-            border-top:1px solid var(--line); padding-top:13px; }
-    .meta b { color:var(--ink); font-weight:600; }
-    .go { margin-top:13px; color:var(--accent); font-size:14px; font-weight:600; }
-    footer { max-width:1000px; margin:0 auto; padding:26px 24px 50px; color:#9aa3b2; font-size:12.5px;
-             border-top:1px solid var(--line); }
-    .empty,.loading { color:var(--muted); padding:46px 0; text-align:center; }
-    @media (max-width:560px){ .hero h1{font-size:27px} .hero{padding:40px 20px 34px} }
+    a.card:hover { border-color:#c9d8f3; box-shadow:0 10px 24px rgba(16,40,90,.10); transform:translateY(-2px); }
+    .card .code { font-size:11.5px; font-weight:700; color:var(--accent-ink); }
+    .card h4 { margin:5px 0 7px; font-size:16px; }
+    .card p { margin:0 0 12px; color:var(--muted); font-size:13px; flex:1; }
+    .card .foot { font-size:12.5px; font-weight:600; color:var(--accent); }
+    .card.soon { background:#fafbfc; }
+    .card.soon h4, .card.soon .code { color:#8a93a3; }
+    .card.soon .foot { color:#9aa3b2; font-weight:500; }
+    footer { max-width:1060px; margin:0 auto; padding:26px 24px 50px; color:#9aa3b2; font-size:12.5px; border-top:1px solid var(--line); }
+    @media (max-width:560px){ .hero h1{font-size:26px} .resume{flex-direction:column; align-items:flex-start} }
   </style>
 </head>
 <body>
   <nav><div class="logo"></div><b>Gemini Education</b><div class="sp"></div>
     <span class="soon">Membership opening soon</span></nav>
-  <div class="hero">
-    <div class="inner">
-      <div class="eyebrow">Health Science, taught like a coach</div>
-      <h1>Course Library</h1>
-      <p id="tagline"></p>
-    </div>
-  </div>
+  <div class="hero"><div class="inner">
+    <div class="eyebrow">Health science, taught like a coach</div>
+    <h1>Your learning dashboard</h1>
+    <p id="tagline"></p>
+  </div></div>
+
   <div class="wrap">
-    <div class="row"><h2>Courses</h2><span id="count"></span></div>
-    <div id="grid" class="grid"><div class="loading">Loading courses…</div></div>
+    <div id="resume"></div>
+    <section class="block" id="stacks-block">
+      <div class="head"><h2>Curated builds</h2><span class="sub">Courses that stack, in order</span></div>
+      <div id="stacks" class="stacks"></div>
+    </section>
+    <section class="block">
+      <div class="head"><h2>Browse the library</h2><span id="count" class="sub"></span></div>
+      <div id="tracks"></div>
+    </section>
   </div>
   <footer>© 2026 Gemini Education. Built for general-population learners and new coaches.</footer>
 
-  <!-- pre-launch curtain (plain script: redirect to coming-soon unless unlocked) -->
+  <!-- pre-launch curtain -->
   <script>
-    (function () {
-      var KEY = "gemEduPreviewUnlocked";
-      function unlocked(){ try { return sessionStorage.getItem(KEY) === "yes"; } catch (e) { return false; } }
-      if (!unlocked()) { location.replace("coming-soon.html"); }
+    (function(){ var K="gemEduPreviewUnlocked";
+      function u(){ try{return sessionStorage.getItem(K)==="yes";}catch(e){return false;} }
+      if(!u()) location.replace("coming-soon.html");
     })();
   </script>
-  <!-- course data (plain classic script — no fetch, no modules) -->
   <script src="courses-data.js"></script>
   <script>
-    (function () {
-      function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g, function(m){
-        return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]; }); }
-      var grid = document.getElementById("grid");
-      var data = window.GEMINI_COURSES;
-      if (!data || !data.courses) { grid.innerHTML = '<div class="empty">Couldn\'t load the course list.</div>'; return; }
-      if (data.site && data.site.tagline) document.getElementById("tagline").textContent = data.site.tagline;
-      var courses = data.courses.filter(function (c){ return c.published !== false; });
-      document.getElementById("count").textContent = courses.length + " course" + (courses.length===1?"":"s") + " available";
-      if (!courses.length) { grid.innerHTML = '<div class="empty">No courses published yet — check back soon.</div>'; return; }
-      grid.innerHTML = courses.map(function (c) {
-        return '<a class="card" href="course.html?slug=' + encodeURIComponent(c.slug) + '">'
-          + '<span class="tag">' + esc(c.code) + ' · ' + esc(c.track) + '</span>'
-          + '<h3>' + esc(c.title) + '</h3>'
-          + '<p>' + esc(c.description) + '</p>'
-          + '<div class="meta"><span><b>' + (c.chapters||[]).length + '</b> chapters</span>'
-          + '<span><b>~' + esc(c.minutes_per_chapter||60) + '</b> min each</span>'
-          + (c.level ? '<span>' + esc(c.level) + '</span>' : '') + '</div>'
-          + '<div class="go">Start course →</div></a>';
+  (function(){
+    function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){
+      return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m]; }); }
+    var data = window.GEMINI_COURSES || {};
+    var courses = data.courses || [];
+    var bySlug = {}; courses.forEach(function(c){ bySlug[c.slug]=c; });
+    if (data.site && data.site.tagline) document.getElementById("tagline").textContent = data.site.tagline;
+
+    // --- resume strip (no login; remembers last opened course) ---
+    try {
+      var last = JSON.parse(localStorage.getItem("gemEduLast")||"null");
+      if (last && bySlug[last.slug] && bySlug[last.slug].published) {
+        document.getElementById("resume").innerHTML =
+          '<div class="resume"><div><div class="k">Jump back in</div><h3>'+esc(bySlug[last.slug].title)+'</h3></div>'+
+          '<a class="btn" href="course.html?slug='+encodeURIComponent(last.slug)+'">Resume course →</a></div>';
+      }
+    } catch(e){}
+
+    // --- curated builds ---
+    function stepChip(slug){
+      var c = bySlug[slug]; if(!c) return "";
+      var live = c.published;
+      var inner = '<span class="c">'+esc(c.code)+'</span> '+esc(c.title.split(":")[0]);
+      return live
+        ? '<a class="step" href="course.html?slug='+encodeURIComponent(slug)+'">'+inner+'</a>'
+        : '<span class="step locked" title="Coming soon">'+inner+'</span>';
+    }
+    document.getElementById("stacks").innerHTML = (data.stacks||[]).map(function(s){
+      var steps = s.courses.map(stepChip).join('<span class="arrow">→</span>');
+      return '<div class="stack">'+(s.advanced?'<div class="tag">Advanced build</div>':'<div class="tag">Foundational build</div>')+
+        '<h3>'+esc(s.name)+'</h3><p>'+esc(s.blurb)+'</p><div class="steps">'+steps+'</div></div>';
+    }).join("");
+
+    // --- browse by track ---
+    var pub = courses.filter(function(c){return c.published;}).length;
+    document.getElementById("count").textContent = pub+" of "+courses.length+" courses available";
+    var tracks = data.tracks || [];
+    document.getElementById("tracks").innerHTML = '<div class="track">'+tracks.map(function(t){
+      var list = courses.filter(function(c){ return c.track===t.id; });
+      if(!list.length) return "";
+      var cards = list.map(function(c){
+        if (c.published) {
+          return '<a class="card" href="course.html?slug='+encodeURIComponent(c.slug)+'">'+
+            '<div class="code">'+esc(c.code)+'</div><h4>'+esc(c.title)+'</h4><p>'+esc(c.description)+'</p>'+
+            '<div class="foot">'+((c.chapters||[]).length||"")+' chapters · open →</div></a>';
+        }
+        return '<div class="card soon"><div class="code">'+esc(c.code)+'</div><h4>'+esc(c.title)+'</h4>'+
+          '<p>'+esc(c.description)+'</p><div class="foot">Coming soon</div></div>';
       }).join("");
-    })();
+      return '<h3>'+esc(t.name)+'</h3><div class="grid">'+cards+'</div>';
+    }).join("")+'</div>';
+  })();
   </script>
 </body>
 </html>

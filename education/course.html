@@ -80,14 +80,28 @@
       var c = data.courses.filter(function(x){ return x.slug === slug; })[0];
       if (!c) { hero.innerHTML = '<div class="inner"><h1>Course not found</h1></div>'; body.innerHTML=""; return; }
 
+      // resolve track display name from id
+      var trackName = c.track;
+      (data.tracks||[]).forEach(function(t){ if(t.id===c.track) trackName=t.name; });
+      // remember last opened course for the dashboard "jump back in" strip
+      try { localStorage.setItem("gemEduLast", JSON.stringify({slug:c.slug, title:c.title})); } catch(e){}
+
       document.title = c.title + " — Gemini Education";
       var chs = c.chapters || [];
       hero.innerHTML = '<div class="inner">'
-        + '<div class="kicker">' + esc(c.code) + ' · ' + esc(c.track) + '</div>'
+        + '<div class="kicker">' + esc(c.code) + ' · ' + esc(trackName) + '</div>'
         + '<h1>' + esc(c.title) + '</h1><p>' + esc(c.description) + '</p>'
-        + '<div class="meta"><span><b>' + chs.length + '</b> chapters</span>'
-        + '<span><b>~' + esc(c.minutes_per_chapter||60) + ' min</b> each</span>'
-        + (c.outcomes ? '<span><b>' + esc(c.outcomes) + '</b> learning outcomes</span>' : '') + '</div></div>';
+        + (chs.length ? '<div class="meta"><span><b>' + chs.length + '</b> chapters</span>'
+            + '<span><b>~' + esc(c.minutes_per_chapter||60) + ' min</b> each</span>'
+            + (c.outcomes ? '<span><b>' + esc(c.outcomes) + '</b> learning outcomes</span>' : '') + '</div>' : '')
+        + '</div>';
+
+      if (!chs.length) {
+        body.innerHTML = '<div class="info"><p style="font-size:16px;color:#15171c"><strong>This course is coming soon.</strong></p>'
+          + '<p>It\'s mapped and on the build list. In the meantime, dive into what\'s live from the '
+          + '<a href="index.html" style="color:#1f6feb">dashboard</a>.</p></div>';
+        return;
+      }
 
       var first = chs[0];
       var startBtn = (first && first.reading)
