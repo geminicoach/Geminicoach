@@ -5,82 +5,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gemini Education — Dashboard</title>
   <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root { --ink:#15171c; --muted:#6b7280; --line:#e7e9ef; --accent:#1f6feb;
-            --accent-ink:#1858c4; --soft:#eef3fb; --bg:#f7f9fc; --gold:#b9892b; }
+    :root { --navy:#0a1628; --navy-mid:#0d1f3c; --dark-gray:#1c2a40;
+            --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5;
+            --white:#fff; --off-white:#e8edf5; --gray:#8a9ab5;
+            --panel:#0f2138; --line:#1c3354; }
     * { box-sizing:border-box; }
-    body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; color:var(--ink);
-           margin:0; background:var(--bg); line-height:1.55; -webkit-font-smoothing:antialiased; }
+    body { font-family:'Barlow',system-ui,sans-serif; font-weight:300; color:var(--off-white);
+           margin:0; background:var(--navy); line-height:1.55; -webkit-font-smoothing:antialiased; }
     a { color:inherit; text-decoration:none; }
     nav { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px;
-          padding:13px 22px; background:rgba(255,255,255,.88); backdrop-filter:blur(8px);
-          border-bottom:1px solid var(--line); }
-    .logo { width:26px; height:26px; border-radius:7px;
-            background:conic-gradient(from 210deg,#2f6df6,#7aa7ff,#2f6df6); }
-    nav b { font-size:15px; } nav .sp { flex:1; }
-    nav .soon { font-size:12px; color:var(--muted); border:1px solid var(--line); padding:5px 10px; border-radius:99px; }
-    .hero { background:radial-gradient(1200px 420px at 12% -20%, #244a82 0, transparent 60%),
-            linear-gradient(135deg,#0e1a2c,#1d3a5f); background-color:#0f1c30; color:#fff;
-            padding:52px 24px 40px; }
+          padding:14px 22px; background:rgba(10,22,40,.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
+    .logo { width:26px; height:26px; border-radius:7px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:21px; letter-spacing:.06em; }
+    nav .sp { flex:1; }
+    nav .soon { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:11px; letter-spacing:.12em;
+                text-transform:uppercase; color:var(--gray); border:1px solid var(--line); padding:6px 11px; border-radius:99px; }
+    .hero { background:radial-gradient(1100px 460px at 12% -25%, rgba(46,141,232,.20) 0, transparent 60%),
+            linear-gradient(180deg,#0b1a30,#0a1628); padding:60px 24px 44px; border-bottom:1px solid var(--line); }
     .hero .inner { max-width:1060px; margin:0 auto; }
-    .eyebrow { font-size:12.5px; letter-spacing:.18em; text-transform:uppercase; color:#8fb4ef; margin-bottom:12px; }
-    .hero h1 { margin:0 0 10px; font-size:32px; letter-spacing:-.01em; }
-    .hero p { margin:0; color:#bccadd; max-width:580px; font-size:16px; }
+    .eyebrow { font-family:'Barlow Condensed',sans-serif; font-size:13px; font-weight:600; letter-spacing:.22em;
+               text-transform:uppercase; color:var(--blue-light); margin-bottom:14px; }
+    .hero h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; margin:0 0 10px; font-size:54px; letter-spacing:.02em; line-height:1; color:#fff; }
+    .hero p { margin:0; color:var(--gray); max-width:580px; font-size:16px; }
     .wrap { max-width:1060px; margin:0 auto; padding:8px 24px 70px; }
-    section.block { margin-top:34px; }
-    .head { display:flex; align-items:baseline; justify-content:space-between; margin:0 2px 14px; }
-    .head h2 { font-size:14px; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin:0; }
-    .head .sub { font-size:13px; color:var(--muted); }
+    section.block { margin-top:38px; }
+    .head { display:flex; align-items:baseline; justify-content:space-between; margin:0 2px 16px; }
+    .head h2 { font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; text-transform:uppercase;
+               letter-spacing:.14em; color:var(--off-white); margin:0; }
+    .head .sub { font-size:13px; color:var(--gray); }
 
-    /* resume strip */
     .resume { display:flex; align-items:center; justify-content:space-between; gap:16px;
-              background:linear-gradient(135deg,#13243c,#1f4070); color:#fff; border-radius:16px;
-              padding:18px 22px; margin-top:-22px; position:relative; box-shadow:0 10px 30px rgba(16,40,90,.18); }
-    .resume .k { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#9fc0ef; }
-    .resume h3 { margin:3px 0 0; font-size:18px; }
-    .resume a.btn { background:#fff; color:var(--accent-ink); font-weight:600; font-size:14px;
-                    padding:10px 16px; border-radius:9px; white-space:nowrap; }
+              background:linear-gradient(135deg,#103257,#1a6fc4); border:1px solid #2a72bf; border-radius:14px;
+              padding:18px 22px; margin-top:-24px; position:relative; box-shadow:0 14px 34px rgba(0,0,0,.35); }
+    .resume .k { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:#bfe0ff; }
+    .resume h3 { font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.03em; margin:4px 0 0; font-size:24px; color:#fff; }
+    .resume a.btn { background:#fff; color:#0d2747; font-family:'Barlow Condensed',sans-serif; font-weight:700;
+                    text-transform:uppercase; letter-spacing:.08em; font-size:14px; padding:11px 18px; border-radius:8px; white-space:nowrap; }
 
-    /* stacks */
     .stacks { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:16px; }
-    .stack { background:#fff; border:1px solid var(--line); border-radius:16px; padding:20px;
-             box-shadow:0 1px 2px rgba(16,30,54,.04); }
-    .stack .tag { font-size:11px; font-weight:700; letter-spacing:.05em; text-transform:uppercase;
-                  color:var(--gold); }
-    .stack h3 { margin:6px 0 6px; font-size:18px; }
-    .stack p { margin:0 0 14px; color:var(--muted); font-size:13.5px; }
+    .stack { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px; }
+    .stack .tag { font-family:'Barlow Condensed',sans-serif; font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--blue-light); }
+    .stack h3 { font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.02em; margin:7px 0 6px; font-size:23px; color:#fff; }
+    .stack p { margin:0 0 14px; color:var(--gray); font-size:13.5px; }
     .steps { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
-    .step { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; padding:5px 10px;
-            border-radius:99px; border:1px solid var(--line); background:var(--soft); color:var(--accent-ink); }
-    .step.locked { background:#f4f5f7; color:#9aa3b2; border-color:#edeef1; }
-    .step .c { font-weight:700; }
-    .arrow { color:#c2c8d2; font-size:12px; }
+    .step { display:inline-flex; align-items:center; gap:6px; font-size:12.5px; padding:6px 11px; border-radius:99px;
+            border:1px solid #285089; background:rgba(46,141,232,.12); color:#bfe0ff; }
+    a.step:hover { background:rgba(46,141,232,.25); }
+    .step.locked { background:rgba(255,255,255,.03); color:var(--gray); border-color:var(--line); }
+    .step .c { font-weight:700; color:#fff; }
+    .arrow { color:#3a5680; font-size:12px; }
 
-    /* track grids */
-    .track { margin-top:10px; }
-    .track h3 { font-size:16px; margin:18px 2px 10px; }
+    .track h3 { font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.02em; font-size:24px; margin:22px 2px 12px; color:#fff; }
     .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
-    .card { display:flex; flex-direction:column; background:#fff; border:1px solid var(--line);
-            border-radius:14px; padding:18px; box-shadow:0 1px 2px rgba(16,30,54,.04);
-            transition:border-color .15s, box-shadow .15s, transform .12s; }
-    a.card:hover { border-color:#c9d8f3; box-shadow:0 10px 24px rgba(16,40,90,.10); transform:translateY(-2px); }
-    .card .code { font-size:11.5px; font-weight:700; color:var(--accent-ink); }
-    .card h4 { margin:5px 0 7px; font-size:16px; }
-    .card p { margin:0 0 12px; color:var(--muted); font-size:13px; flex:1; }
-    .card .foot { font-size:12.5px; font-weight:600; color:var(--accent); }
-    .card.soon { background:#fafbfc; }
-    .card.soon h4, .card.soon .code { color:#8a93a3; }
-    .card.soon .foot { color:#9aa3b2; font-weight:500; }
-    footer { max-width:1060px; margin:0 auto; padding:26px 24px 50px; color:#9aa3b2; font-size:12.5px; border-top:1px solid var(--line); }
-    @media (max-width:560px){ .hero h1{font-size:26px} .resume{flex-direction:column; align-items:flex-start} }
+    .card { display:flex; flex-direction:column; background:var(--panel); border:1px solid var(--line); border-radius:14px;
+            padding:18px; transition:border-color .15s, transform .12s; }
+    a.card:hover { border-color:var(--blue); transform:translateY(-2px); }
+    .card .code { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.1em; font-size:12px; color:var(--blue-light); }
+    .card h4 { font-family:'Barlow Condensed',sans-serif; font-weight:600; margin:6px 0 7px; font-size:18px; color:#fff; }
+    .card p { margin:0 0 12px; color:var(--gray); font-size:13px; flex:1; }
+    .card .foot { font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:12px; color:var(--blue-light); }
+    .card.soon { opacity:.55; }
+    .card.soon .foot { color:var(--gray); }
+    footer { max-width:1060px; margin:0 auto; padding:28px 24px 50px; color:var(--gray); font-size:12.5px; border-top:1px solid var(--line); }
+    @media (max-width:560px){ .hero h1{font-size:40px} .resume{flex-direction:column; align-items:flex-start} }
   </style>
 </head>
 <body>
-  <nav><div class="logo"></div><b>Gemini Education</b><div class="sp"></div>
+  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div>
     <span class="soon">Membership opening soon</span></nav>
   <div class="hero"><div class="inner">
     <div class="eyebrow">Health science, taught like a coach</div>
-    <h1>Your learning dashboard</h1>
+    <h1>Your Learning Dashboard</h1>
     <p id="tagline"></p>
   </div></div>
 
