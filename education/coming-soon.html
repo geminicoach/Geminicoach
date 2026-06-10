@@ -4,15 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gemini Education — Coming soon</title>
+  <link rel="icon" href="data:," />
   <style>
-    :root { --ink:#1a1a1a; --muted:#777; --line:#e5e5e5; --accent:#1f6feb; }
+    :root { --accent:#1f6feb; }
     * { box-sizing:border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; color:var(--ink);
-           margin:0; min-height:100vh; display:flex; align-items:center;
-           justify-content:center; background:#0f1115; }
+    body { font-family: system-ui,-apple-system,"Segoe UI",sans-serif; margin:0; min-height:100vh;
+           display:flex; align-items:center; justify-content:center; background:#0f1115; }
     .card { text-align:center; color:#fff; padding:40px; max-width:440px; }
-    .badge { font-size:12px; letter-spacing:.14em; text-transform:uppercase;
-             color:#9aa4b2; margin-bottom:14px; }
+    .badge { font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#9aa4b2; margin-bottom:14px; }
     h1 { font-size:30px; margin:0 0 10px; }
     p { color:#aab2bf; margin:0 0 26px; line-height:1.5; }
     .peek { display:flex; gap:8px; justify-content:center; }
@@ -35,15 +34,19 @@
     <div class="err" id="err"></div>
   </div>
 
-  <script type="module">
-    import { unlock, isUnlocked } from "./gate.js";
-    if (isUnlocked()) location.href = "index.html";
-    const go = () => {
-      if (unlock(document.getElementById("code").value)) location.href = "index.html";
-      else document.getElementById("err").textContent = "Incorrect passcode.";
-    };
-    document.getElementById("go").onclick = go;
-    document.getElementById("code").addEventListener("keydown", (e) => { if (e.key === "Enter") go(); });
+  <script>
+    (function () {
+      var KEY = "gemEduPreviewUnlocked", PASS = "gemini-preview";
+      function unlocked(){ try { return sessionStorage.getItem(KEY) === "yes"; } catch (e) { return false; } }
+      if (unlocked()) { location.replace("index.html"); return; }
+      function go() {
+        var v = document.getElementById("code").value;
+        if (v === PASS) { try { sessionStorage.setItem(KEY, "yes"); } catch (e) {} location.replace("index.html"); }
+        else { document.getElementById("err").textContent = "Incorrect passcode."; }
+      }
+      document.getElementById("go").onclick = go;
+      document.getElementById("code").addEventListener("keydown", function (e){ if (e.key === "Enter") go(); });
+    })();
   </script>
 </body>
 </html>
