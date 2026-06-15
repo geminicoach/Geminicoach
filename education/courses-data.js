@@ -36,7 +36,7 @@ window.GEMINI_COURSES = {
   courses: [
     // ---- Track A: Nutrition Science ----
     {
-      slug: "a1-basics-of-nutrition", code: "A1", track: "A", title: "Basics of Nutrition",
+      slug: "a1-basics-of-nutrition", code: "A1", track: "A", title: "Basics of Nutrition", image: "covers/a1.jpg",
       description: "A true-beginner foundation: food as fuel and building material, energy balance, the macros and micros at a working level, and habits that stick.",
       level: "Foundation", minutes_per_chapter: 60, outcomes: 14, published: true,
       chapters: [
