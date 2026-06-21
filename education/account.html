@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Account — Gemini Education</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0a1628; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5;
+            --white:#fff; --off-white:#e8edf5; --gray:#8a9ab5; --panel:#0f2138; --line:#1c3354; }
+    * { box-sizing:border-box; }
+    body { font-family:'Barlow',system-ui,sans-serif; font-weight:300; color:var(--off-white); margin:0;
+           background:radial-gradient(1100px 520px at 50% -10%, rgba(46,141,232,.16) 0, transparent 60%), var(--navy);
+           min-height:100vh; line-height:1.55; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; }
+    nav { display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); }
+    .logo { width:24px; height:24px; border-radius:6px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
+    nav .sp { flex:1; }
+    nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:14px; letter-spacing:.04em; }
+    .wrap { max-width:440px; margin:0 auto; padding:56px 22px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:30px; }
+    h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:34px; letter-spacing:.02em; margin:0 0 6px; color:#fff; }
+    .sub { color:var(--gray); font-size:14px; margin:0 0 22px; }
+    .tabs { display:flex; gap:6px; margin-bottom:16px; }
+    .tabs button { flex:1; padding:9px; border:1px solid var(--line); background:transparent; color:var(--gray);
+                   font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.08em;
+                   font-size:12.5px; border-radius:8px; cursor:pointer; }
+    .tabs button.active { background:var(--blue); color:#fff; border-color:var(--blue); }
+    label { display:block; font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.1em;
+            font-size:11px; color:var(--gray); margin:14px 0 5px; }
+    input { width:100%; padding:11px 13px; border:1px solid var(--line); background:#0e1f38; color:#fff; border-radius:9px; font-size:15px; font-family:'Barlow',sans-serif; }
+    input::placeholder { color:#67809f; }
+    button.primary { width:100%; margin-top:20px; padding:12px; border:0; border-radius:9px; background:var(--blue); color:#fff;
+                     font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:14px; cursor:pointer; }
+    button.primary:hover { background:var(--blue-bright); }
+    button.ghost { width:100%; margin-top:10px; padding:11px; border:1px solid var(--line); border-radius:9px; background:transparent; color:var(--blue-light);
+                   font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.06em; font-size:12.5px; cursor:pointer; }
+    .msg { margin-top:14px; font-size:13px; min-height:18px; }
+    .msg.err { color:#ff8585; } .msg.ok { color:#7fd1a6; }
+    .acct .who { font-size:14px; color:var(--gray); margin-bottom:18px; }
+    .acct .who b { color:#fff; }
+    .acct .row { display:block; padding:14px 16px; border:1px solid var(--line); border-radius:10px; margin-bottom:10px; color:var(--off-white); }
+    .acct .row .k { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:11px; color:var(--blue-light); }
+    .acct .row .v { font-size:13.5px; color:var(--gray); margin-top:3px; }
+    .acct a.cta { display:inline-block; margin-top:6px; color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; }
+  </style>
+</head>
+<body>
+  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div>
+    <a class="back" href="index.html">← Dashboard</a></nav>
+  <div class="wrap"><div class="card" id="card"><div class="sub">Loading…</div></div></div>
+
+  <!-- pre-launch curtain -->
+  <script>
+    (function(){ var K="gemEduPreviewUnlocked";
+      function u(){ try{return sessionStorage.getItem(K)==="yes";}catch(e){return false;} }
+      if(!u()) location.replace("coming-soon.html");
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="auth.js"></script>
+  <script>
+  (function(){
+    var card = document.getElementById("card");
+    if (!window.GEM || !window.GEM.ready) {
+      card.innerHTML = '<h1>Accounts are warming up</h1><div class="sub">The accounts service is starting (it was idle). Refresh in a minute. If this persists, the database may still be waking.</div>';
+      return;
+    }
+    var esc = function(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];}); };
+    var mode = "signin";
+
+    function renderAuth(){
+      card.innerHTML =
+        '<h1>Your account</h1>'+
+        '<div class="sub">Sign in to track progress, pass course exams, and earn certificates.</div>'+
+        '<div class="tabs"><button id="t-in" class="active">Sign in</button><button id="t-up">Create account</button></div>'+
+        '<div id="nm" style="display:none"><label>Full name</label><input id="name" autocomplete="name"></div>'+
+        '<label>Email</label><input id="email" type="email" autocomplete="email" placeholder="you@email.com">'+
+        '<label>Password</label><input id="pw" type="password" autocomplete="current-password" placeholder="At least 6 characters">'+
+        '<button class="primary" id="go">Sign in</button>'+
+        '<button class="ghost" id="magic">Email me a magic link instead</button>'+
+        '<div class="msg" id="msg"></div>';
+      var $=function(id){return document.getElementById(id);};
+      function setMode(m){ mode=m;
+        $("t-in").classList.toggle("active",m==="signin"); $("t-up").classList.toggle("active",m==="signup");
+        $("nm").style.display = m==="signup"?"block":"none";
+        $("go").textContent = m==="signup"?"Create account":"Sign in";
+        $("pw").autocomplete = m==="signup"?"new-password":"current-password";
+        msg(""); }
+      $("t-in").onclick=function(){setMode("signin");}; $("t-up").onclick=function(){setMode("signup");};
+      function msg(t,ok){ $("msg").textContent=t; $("msg").className="msg "+(ok?"ok":"err"); }
+      $("go").onclick=function(){
+        var email=$("email").value.trim(), pw=$("pw").value;
+        if(!email||!pw){ msg("Enter your email and password."); return; }
+        msg("Working…", true);
+        if(mode==="signup"){
+          GEM.signUp(email,pw,$("name").value.trim()).then(function(r){
+            if(r.error) return msg(r.error.message);
+            if(r.data && r.data.session) renderAccount(r.data.user);
+            else msg("Account created. Check your email if confirmation is required, then sign in.", true);
+          });
+        } else {
+          GEM.signIn(email,pw).then(function(r){
+            if(r.error) return msg(r.error.message);
+            renderAccount(r.data.user);
+          });
+        }
+      };
+      $("magic").onclick=function(){
+        var email=$("email").value.trim(); if(!email){ msg("Enter your email first."); return; }
+        GEM.magicLink(email, location.href).then(function(r){
+          msg(r.error? r.error.message : "Magic link sent. Check your email.", !r.error);
+        });
+      };
+    }
+
+    function renderAccount(user){
+      var name = (user && user.user_metadata && user.user_metadata.full_name) || "";
+      card.className="card acct";
+      card.innerHTML =
+        '<h1>'+(name?esc(name.split(" ")[0]):"Welcome")+'</h1>'+
+        '<div class="who">Signed in as <b>'+esc(user.email)+'</b></div>'+
+        '<div class="row"><div class="k">My courses</div><div class="v">Continue learning and track your progress.</div><a class="cta" href="index.html">Go to dashboard →</a></div>'+
+        '<div class="row"><div class="k">Certificates</div><div class="v">Pass a course exam to earn its certificate. Coming online as exams are added.</div></div>'+
+        '<button class="ghost" id="out">Sign out</button>';
+      document.getElementById("out").onclick=function(){ GEM.signOut().then(function(){ card.className="card"; renderAuth(); }); };
+    }
+
+    GEM.getUser().then(function(u){ if(u) renderAccount(u); else renderAuth(); });
+  })();
+  </script>
+</body>
+</html>
