@@ -39,7 +39,43 @@
       return sb.auth.getUser().then(function (r) { return (r && r.data) ? r.data.user : null; })
         .catch(function () { return null; });
     },
-    onChange: function (cb) { return sb.auth.onAuthStateChange(function (_e, s) { cb(s ? s.user : null); }); }
-    // progress/completion + certificate helpers are added in the next build phase
+    onChange: function (cb) { return sb.auth.onAuthStateChange(function (_e, s) { cb(s ? s.user : null); }); },
+
+    // --- CE: exams + certificates (course_slug based; no FK to static catalog) ---
+    _uid: function () { return sb.auth.getUser().then(function (r) { return (r && r.data && r.data.user) ? r.data.user.id : null; }); },
+
+    recordExamAttempt: function (slug, score, passed, total, correct) {
+      return this._uid().then(function (id) {
+        if (!id) return { error: { message: "Not signed in" } };
+        return sb.from("exam_attempts").insert({
+          user_id: id, course_slug: slug, score: score, passed: !!passed,
+          total_questions: total, correct_count: correct
+        });
+      });
+    },
+    // upsert a certificate (one per user+course). NOTE: hardening TODO — before public
+    // CE launch, move issuance to an Edge Function that verifies a passing exam_attempt,
+    // so a cert can't be created without actually passing.
+    issueCertificate: function (cert) {
+      return this._uid().then(function (id) {
+        if (!id) return { error: { message: "Not signed in" } };
+        cert.user_id = id;
+        return sb.from("certificates").upsert(cert, { onConflict: "user_id,course_slug" }).select();
+      });
+    },
+    getCertificate: function (slug) {
+      return this._uid().then(function (id) {
+        if (!id) return null;
+        return sb.from("certificates").select("*").eq("user_id", id).eq("course_slug", slug)
+          .maybeSingle().then(function (r) { return r.data; });
+      });
+    },
+    listCertificates: function () {
+      return this._uid().then(function (id) {
+        if (!id) return [];
+        return sb.from("certificates").select("*").eq("user_id", id)
+          .order("issued_at", { ascending: false }).then(function (r) { return r.data || []; });
+      });
+    }
   };
 })();

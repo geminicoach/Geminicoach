@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Final Exam — Gemini Education</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0a1628; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5;
+            --white:#fff; --off-white:#e8edf5; --gray:#8a9ab5; --panel:#0f2138; --line:#1c3354;
+            --good:#2ecc71; --bad:#ff8585; }
+    * { box-sizing:border-box; }
+    body { font-family:'Barlow',system-ui,sans-serif; font-weight:300; color:var(--off-white); margin:0;
+           background:var(--navy); line-height:1.55; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; }
+    nav { display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); }
+    .logo { width:24px; height:24px; border-radius:6px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
+    nav .sp { flex:1; } nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:14px; }
+    .wrap { max-width:720px; margin:0 auto; padding:34px 22px 70px; }
+    .kicker { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--blue-light); }
+    h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:38px; letter-spacing:.02em; margin:6px 0 4px; color:#fff; }
+    .meta { color:var(--gray); font-size:13.5px; margin-bottom:8px; }
+    .warn { background:#3a2a10; border:1px solid #6b4f1c; color:#f0cf8a; font-size:12.5px; border-radius:9px; padding:9px 13px; margin:14px 0; }
+    .q { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:18px 20px; margin:14px 0; }
+    .q .qn { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:12px; color:var(--blue-light); }
+    .q h3 { margin:5px 0 12px; font-size:16.5px; color:#fff; font-weight:600; }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border:1px solid var(--line); border-radius:9px; margin-bottom:8px; cursor:pointer; }
+    .opt:hover { border-color:#2a4a78; } .opt input { margin-top:3px; }
+    .opt.correct { border-color:var(--good); background:rgba(46,204,113,.08); }
+    .opt.wrong { border-color:var(--bad); background:rgba(255,133,133,.08); }
+    button.primary { margin-top:8px; padding:13px 24px; border:0; border-radius:9px; background:var(--blue); color:#fff;
+                     font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:15px; cursor:pointer; }
+    button.primary:hover { background:var(--blue-bright); }
+    button.ghost { margin-top:10px; padding:11px 20px; border:1px solid var(--line); border-radius:9px; background:transparent; color:var(--blue-light);
+                   font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.06em; font-size:13px; cursor:pointer; }
+    .result { text-align:center; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:34px; }
+    .result .score { font-family:'Bebas Neue',sans-serif; font-size:64px; line-height:1; color:#fff; }
+    .result .verdict { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.1em; margin-top:6px; }
+    .result .verdict.pass { color:var(--good); } .result .verdict.fail { color:var(--bad); }
+    .result p { color:var(--gray); margin:12px 0 0; }
+    .center { text-align:center; color:var(--gray); padding:40px 0; }
+    .center a { color:var(--blue-light); }
+  </style>
+</head>
+<body>
+  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div><a class="back" href="index.html">← Dashboard</a></nav>
+  <div class="wrap" id="wrap"><div class="center">Loading…</div></div>
+
+  <script>
+    (function(){ var K="gemEduPreviewUnlocked"; function u(){ try{return sessionStorage.getItem(K)==="yes";}catch(e){return false;} } if(!u()) location.replace("coming-soon.html"); })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="auth.js"></script>
+  <script>
+  (function(){
+    var wrap = document.getElementById("wrap");
+    var esc = function(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];}); };
+    var slug = new URLSearchParams(location.search).get("slug");
+    if (!slug) { wrap.innerHTML = '<div class="center">No course specified.</div>'; return; }
+    if (!window.GEM || !window.GEM.ready) { wrap.innerHTML = '<div class="center">Accounts service is starting (it was idle). Refresh in a minute.</div>'; return; }
+
+    function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+    function certNo(slug){ var code=(slug.split("-")[0]||"GEM").toUpperCase(); var r=""; for(var i=0;i<6;i++) r+="0123456789ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*33)]; return "GEM-"+code+"-"+r; }
+
+    // require login
+    window.GEM.getUser().then(function(user){
+      if (!user) {
+        wrap.innerHTML = '<div class="center">You need to be signed in to take the graded exam and earn a certificate.<br><br><a href="account.html">Sign in or create an account →</a></div>';
+        return;
+      }
+      // dynamically load this course's exam data
+      var s = document.createElement("script");
+      s.src = "exams/" + slug + ".js";
+      s.onload = function(){ start(user); };
+      s.onerror = function(){ wrap.innerHTML = '<div class="center">No exam is available for this course yet.</div>'; };
+      document.body.appendChild(s);
+    });
+
+    function start(user){
+      var ex = window.GEM_EXAM;
+      if (!ex || !ex.questions) { wrap.innerHTML = '<div class="center">Exam data is missing.</div>'; return; }
+      var pass = ex.pass_threshold || 80;
+      // build a shuffled run: each question keeps its correct option by value
+      var run = shuffle(ex.questions).map(function(q){
+        var opts = shuffle(q.options.map(function(t,i){ return { t:t, correct:(i===q.answer) }; }));
+        return { q:q.q, opts:opts };
+      });
+
+      function render(){
+        var html = '<div class="kicker">'+esc(ex.title)+' · Final Exam</div>'+
+          '<h1>Final Exam</h1>'+
+          '<div class="meta">Pass mark '+pass+'% · '+run.length+' questions · '+(ex.ceu_value||"")+' CEU on passing</div>'+
+          (ex.placeholder ? '<div class="warn">Draft exam: these are placeholder questions while the course content is being finalized. Scoring, the pass gate, and the certificate all work.</div>' : '');
+        html += run.map(function(r,qi){
+          return '<div class="q"><div class="qn">Question '+(qi+1)+'</div><h3>'+esc(r.q)+'</h3>'+
+            r.opts.map(function(o,oi){
+              return '<label class="opt" data-q="'+qi+'"><input type="radio" name="q'+qi+'" value="'+oi+'"><span>'+esc(o.t)+'</span></label>';
+            }).join("")+'</div>';
+        }).join("");
+        html += '<button class="primary" id="submit">Submit exam</button>';
+        wrap.innerHTML = html;
+        document.getElementById("submit").onclick = grade;
+      }
+
+      function grade(){
+        var correct=0, answered=0;
+        run.forEach(function(r,qi){
+          var sel = document.querySelector('input[name="q'+qi+'"]:checked');
+          if (sel){ answered++; if (r.opts[+sel.value].correct) correct++; }
+        });
+        if (answered < run.length) { if(!confirm("You have unanswered questions. Submit anyway?")) return; }
+        var pct = Math.round((correct/run.length)*100);
+        var passed = pct >= pass;
+        window.GEM.recordExamAttempt(slug, pct, passed, run.length, correct);
+
+        var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
+        var finish = function(){
+          wrap.innerHTML = '<div class="result"><div class="score">'+pct+'%</div>'+
+            '<div class="verdict '+(passed?"pass":"fail")+'">'+(passed?"Passed":"Not yet")+'</div>'+
+            '<p>You answered '+correct+' of '+run.length+' correctly. Pass mark is '+pass+'%.</p>'+
+            (passed
+              ? '<p>Your certificate has been issued.</p><button class="primary" id="cert">View my certificate</button>'
+              : '<p>Review the chapters and try again.</p>')+
+            '<div><button class="ghost" id="again">'+(passed?"Retake":"Try again")+'</button></div>';
+          document.getElementById("again").onclick = render;
+          if (passed) document.getElementById("cert").onclick = function(){ location.href = "certificate.html?slug="+encodeURIComponent(slug); };
+        };
+
+        if (passed) {
+          window.GEM.issueCertificate({
+            certificate_no: certNo(slug), course_slug: slug, course_title: ex.title,
+            learner_name: name, ceu_value: ex.ceu_value || null, contact_hours: ex.contact_hours || null, score: pct
+          }).then(finish, finish);
+        } else { finish(); }
+      }
+
+      render();
+    }
+  })();
+  </script>
+</body>
+</html>
