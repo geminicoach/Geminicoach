@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>There Is No Average Eater: Individualizing for People, Stages, and Patterns</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 8 · Module 4</div>
+    <h1 class="ch-title">There Is No Average Eater</h1>
+    <p class="ch-subtitle">Individualizing the framework for people, stages, and patterns without breaking its logic.</p>
+    <div class="ch-meta">
+      <span>37 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>11 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>he "average person" who shows up in nutrition guidelines is a statistical ghost. The Recommended Dietary Allowance for protein, 0.8 grams per kilogram of body weight, was built to prevent deficiency in a generic healthy adult sitting near the middle of a distribution. But you have never coached the middle of a distribution. You coach a specific human being: a 34-year-old who lifts four times a week, or a 71-year-old who is quietly losing the strength to climb her own stairs, or a pregnant client who went vegan three years ago and is now reading conflicting things online at 2 a.m.</p>
+    <p>For seven chapters we have built a workflow: read the mechanism, find the lever, set a target, plan around real food. That workflow is powerful. But pointed at an "average eater" it serves no one perfectly, because no one is average. This final chapter is the stress test. We bend the framework to the individual, and we watch which threads from earlier chapters suddenly carry the whole load.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The framework was always a starting point, not a ceiling</h2>
+    <p>Here is the most common mistake new coaches make with population guidelines: they treat a floor as if it were a target. The RDA is a floor. It is the intake below which a measurable fraction of healthy people start running into trouble. It is not the intake at which a training adaptation is optimized, a pregnancy is best supported, or an aging body holds onto muscle. Those are different questions, and they have different answers.</p>
+    <p>So the move in this chapter is not to throw out the framework. It is to recognize three forces that pull a real person away from the generic default, and to know which <span class="ch-key">lever</span> each force pulls first. Those forces are training status (baseline versus trained needs), life stage (growth, pregnancy and lactation, older adulthood), and dietary pattern (omnivorous, plant-based, and culturally specific eating). Each one changes the math. Often two or three stack at once, and the needs compound.</p>
+    <p>There is a fourth force that gets treated as soft and optional, and it is the one that actually decides whether any of the other three ever happen: the person's preferences, schedule, culture, and willingness to keep doing the plan. Coaches like to act as if adherence is the client's problem and the numbers are the coach's job. That is backwards. A plan the client will not follow is not a precise plan with a compliance issue. It is a wrong plan, because the right plan for a human being is the best one they will actually execute, week after week, in the life they really live. We will treat that as a real individualization variable, not an afterthought, because it is the difference between coaching that works on paper and coaching that works on people.</p>
+    <p>The mental model for the whole chapter is the <span class="ch-key">baseline-then-deviations</span> approach. You learn the general rule cold first, the one that holds for most people most of the time, and only then do you layer the predictable, named adjustments on top of it for the specific person in front of you. This is not a hedge. It is how every applied science works. A pilot learns standard procedure before learning the dozen situations that change it. You do the same. The baseline is not the enemy of individualization; it is the thing you bend, and you cannot bend a rule you never learned.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn pen-and-watercolour editorial diagram in the style of a researcher's field notebook, showing a single central figure of a generic standing human silhouette, and three arrows pulling outward from it toward three small icon clusters: a dumbbell (training), an hourglass with a small seedling and an elderly cane (life stage), and a plate with grains and a leaf (dietary pattern). Warm earthy palette of ochre, sage green, slate blue, and cream paper. Labels in small italic serif: 'training', 'life stage', 'pattern'. Loose, sketchy linework, no numerical data, no charts." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>One default, three forces pulling it off-center.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Baseline versus trained needs</h2>
+    <p>Start with the lever you already understand best: protein. The general-population reference is 0.8 g/kg/day. The moment someone trains seriously, that number stops being relevant as a target. The joint position paper from the Academy of Nutrition and Dietetics, Dietitians of Canada, and the American College of Sports Medicine puts the working range for athletes at 1.2 to 2.0 g/kg/day, with the higher end reserved for periods of intense training, energy restriction, or deliberate muscle gain (Thomas et al., 2016).</p>
+    <p>Notice the size of that gap. We are talking about more than doubling the reference intake. This is not a rounding error or a supplement-industry talking point. It is a real shift in requirement driven by a real mechanism: training increases the rate of muscle protein turnover, and a higher turnover rate needs a larger amino acid supply to net out positive.</p>
+
+    <h3>Carbohydrate and recovery scale too</h3>
+    <p>Protein gets the headlines, but carbohydrate is the lever most coaches underuse. For a sedentary client, total carbohydrate is mostly a matter of preference and glycemic comfort within an energy budget. For someone training hard, carbohydrate availability becomes a performance and recovery variable, because muscle and liver glycogen are the fuel tank for moderate-to-high intensity work (Thomas et al., 2016). The position paper scales carbohydrate recommendations directly to training volume, from roughly 3 to 5 g/kg/day for light activity up to 8 to 12 g/kg/day for athletes doing multiple hours of hard daily training.</p>
+    <p>Recovery is the third axis. Total energy availability sits underneath everything. If a client is in a deep energy deficit, you cannot out-supplement the consequences: protein gets diverted toward fuel rather than tissue building, hormonal signaling suffers, and adaptation stalls. This is why the position paper treats energy availability as foundational rather than optional (Thomas et al., 2016).</p>
+    <h3>The active person who is not an "athlete"</h3>
+    <p>Most clients are not competitive athletes, and that is exactly where coaches get sloppy. There is a large middle ground between sedentary and elite: the person who lifts three times a week, the recreational runner, the parent who does manual work all day and plays weekend soccer. These people are not at the 8 to 12 g/kg carbohydrate ceiling, but they are also nowhere near the 0.8 g/kg protein floor. The mistake runs in both directions. Coach a moderately active person like a couch potato and you starve their recovery. Coach them like a Tour de France cyclist and you bury them in food they do not need and cannot adhere to. The skill is reading where on the spectrum they actually sit and placing the targets accordingly: protein commonly lands in the 1.4 to 1.8 g/kg range for someone training hard but not at elite volume, with carbohydrate scaled to how much hard work the week actually contains, not to how athletic the person feels.</p>
+    <h3>Fat and hydration do not disappear when training rises</h3>
+    <p>Protein and carbohydrate get the attention because they move the most. Fat and water move less, but they still set hard floors you cannot ignore. Dietary fat should not be crushed to make room for performance carbohydrate, because fat carries the essential fatty acids and the fat-soluble vitamins, and because chronically very low fat intake can blunt the hormonal environment that training depends on. A practical floor of roughly 0.5 to 0.8 g/kg/day of fat keeps those systems supplied while leaving plenty of room to flex carbohydrate up on hard days. Hydration is the quietest lever of all. Sweat losses scale with training volume and heat, and even modest dehydration measurably degrades both strength and endurance performance. For an active person, fluid and electrolyte replacement around training is not a niche concern; it is part of fueling, and it is often the cheapest performance fix available.</p>
+    <p><strong>Coaching translation.</strong> Fueling is not a binary of "athlete versus everyone else." It is a dial. The more hard training in the week, the more you raise protein and carbohydrate to match, the more you protect total energy, and the more hydration and electrolytes start to matter. But you do not pour an athlete's diet onto a hobbyist. You read the actual workload and set the actual numbers, and you keep a floor under fat and water no matter how high the carbohydrate goes.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A sedentary client and a competitive cyclist both weigh 70 kg. Before reading further: roughly how many grams of protein per day would you set as a reasonable starting target for each, and what single piece of information would most change your answer?</p>
+    </aside>
+
+    <p><strong>Coaching translation.</strong> Population defaults are the price of admission, not the goal. When someone trains, you raise protein into the 1.2 to 2.0 g/kg range and match carbohydrate to their actual training load, not to a generic chart. And before you touch any of that, you check that they are eating enough total food to make the adaptation possible in the first place. In practice this means: feed the training, then distribute the protein, then worry about the fine details. Most "I'm not recovering" problems are an energy or total-protein problem wearing a fancier costume.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Life stages: when old levers get sharper teeth</h2>
+    <p>Training status changes the size of your targets. Life stage changes which targets are high-stakes, and it can make a threshold you treated casually in a young healthy adult into the single most important decision you make.</p>
+
+    <h3>Growth: the cost of building</h3>
+    <p>Children and adolescents are net tissue builders by default. They run a positive balance because they are literally constructing a larger body, which raises per-kilogram protein and energy needs relative to a sedentary adult, and makes adequacy of calcium, iron, and total energy genuinely consequential during growth spurts. The coaching lane here is narrow and food-first: support normal growth with a varied diet, never impose energy restriction on a growing child, and refer anything that looks like a clinical feeding or growth concern. We will not pretend to manage pediatric nutrition from a coaching seat.</p>
+
+    <h3>Older adulthood: anabolic resistance and the leucine threshold, now urgent</h3>
+    <p>Back in Chapter 2 we introduced the <span class="ch-key">leucine threshold</span>: the minimum dose of leucine in a meal needed to fully switch on muscle protein synthesis (MPS). In a young adult, this is a useful optimization detail. In an older adult, it becomes a defining clinical reality of healthy aging, because of a phenomenon called <span class="ch-key">anabolic resistance</span>.</p>
+    <p>Anabolic resistance means the muscle of an older person responds less strongly to a given dose of protein and leucine than the muscle of a younger person. A systematic review of the leucine trigger hypothesis confirmed exactly this: the leucine threshold to saturate MPS is effectively higher in older versus younger adults (Zaromskyte et al., 2021). The same meal that maximizes the anabolic response in a 25-year-old can leave a 75-year-old's response submaximal. The signal is muffled, so you have to shout louder.</p>
+    <p>"Shouting louder" has two practical components. First, the total: the PROT-AGE study group recommends 1.0 to 1.2 g/kg/day for healthy older adults, rising to as much as 1.5 g/kg/day for those with acute or chronic illness, well above the 0.8 g/kg RDA (Bauer et al., 2013). Second, the distribution: because each meal needs to clear a higher leucine threshold, spreading protein across meals so that several of them are robustly anabolic matters more in older adults than in anyone else. A day that delivers most of its protein at dinner can leave breakfast and lunch below threshold, wasting anabolic opportunities the older body cannot afford to skip.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration plate, ink-and-wash style on aged cream paper, depicting two stylized cross-sections of skeletal muscle tissue side by side, the left labelled 'younger' and the right labelled 'older', with the right shown slightly less dense and more fibrous. Above each, a small symbolic 'switch' icon: the left switch fully ON and glowing warm amber, the right switch only partially lit, conveying a muffled response to the same input. Muted palette of sepia, amber, slate, and faded teal. Short italic serif labels only: 'younger', 'older'. No numbers, no charts, no graphs." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same input, a muffled signal: anabolic resistance raises the threshold in older muscle.</em></figcaption></figure>
+
+    <p>There is a cruel twist here. Protein is the most satiating macronutrient, and older adults frequently experience reduced appetite, sometimes called the anorexia of aging. So at exactly the life stage when protein needs go up, the appetite for it often goes down (Lonnie et al., 2018). The "Protein for Life" review recommends intakes above 1.2 g/kg/day for adults over 40 while explicitly flagging that protein's appetite-suppressing effect can make those targets hard to hit (Lonnie et al., 2018). This is where a coach earns their keep: not by lecturing, but by engineering protein into forms and timings the client will actually eat.</p>
+    <p>Three other micronutrients climb the priority list in older adulthood: calcium and vitamin D (for bone, and because vitamin D status tends to decline with age and reduced sun exposure) and iron in specific cases. These connect directly to the vitamin risk patterns we mapped in Chapter 5. There, they were a list of who-might-be-low. Here they become concrete planning priorities for a specific person.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>An 80-year-old client eats toast for breakfast, soup for lunch, and a large protein-rich dinner, totaling 1.0 g/kg of protein for the day. The daily total looks acceptable. Why might this distribution still be failing her muscle, and what is the single cheapest change you could make?</p>
+    </aside>
+
+    <h3>Pregnancy and lactation: building two bodies at once</h3>
+    <p>Pregnancy and lactation raise needs across the board: more energy, more protein, and several micronutrients that move from "nice to have" to "actively monitored." This is also a life stage where the coach's lane narrows sharply, because pregnancy carries real clinical stakes and is typically co-managed by an obstetric and dietetic team. The coaching contribution is food-first support of an already-prescribed plan, plus knowing exactly when to step back.</p>
+    <p>What we can say from the evidence: nutrients including protein, iron, vitamin D, calcium, iodine, omega-3 fatty acids, and vitamin B12 require heightened attention during pregnancy and lactation (Sebastiani et al., 2019). For plant-based pregnant clients specifically, the same review concludes that well-planned vegetarian and vegan diets can be considered safe in pregnancy and lactation, but only with deliberate attention to those nutrients, especially B12 and iron (Sebastiani et al., 2019). "Well-planned" is doing enormous work in that sentence, and it is the part a coach can genuinely help build.</p>
+    <p><strong>Coaching translation.</strong> Life stage doesn't add brand-new rules. It takes levers you already know and makes them sharper. For an older client, the leucine threshold and protein distribution stop being optimizations and become the whole game. For a pregnant client, the micronutrient risk list from Chapter 5 becomes a monitoring checklist, and your job is to support the plan a clinician is leading, not to write it.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="adapter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Client Profile Adapter</div>
+    </div>
+    <p class="ch-widget-sub">Start from a 70 kg general-population baseline, then flip individualization switches. Watch the targets and priorities move, and note when a scenario leaves the coaching lane.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Trained athlete</span>
+        <select class="ch-widget-select" data-key="trained"><option value="off">Off</option><option value="on">On</option></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Older adult</span>
+        <select class="ch-widget-select" data-key="older"><option value="off">Off</option><option value="on">On</option></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Pregnant</span>
+        <select class="ch-widget-select" data-key="pregnant"><option value="off">Off</option><option value="on">On</option></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fully plant-based</span>
+        <select class="ch-widget-select" data-key="plant"><option value="off">Off</option><option value="on">On</option></select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Protein target (g/kg)</span>
+        <span class="ch-meter-bar"><span id="ad-bar-protein" style="width:27%"></span></span>
+        <span class="ch-meter-num" id="ad-num-protein">0.8</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Distribution priority</span>
+        <span class="ch-meter-bar"><span id="ad-bar-dist" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="ad-num-dist">Low</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Micronutrient vigilance</span>
+        <span class="ch-meter-bar"><span id="ad-bar-micro" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="ad-num-micro">Low</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ad-notes">Baseline: a healthy sedentary adult. Targets sit at population defaults. Pull a switch to individualize.</p>
+    <p class="ch-widget-sub" id="ad-refer" style="display:none"></p>
+
+    <button class="ch-widget-btn" id="ad-reset">Reset to baseline</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Dietary patterns: the same goals, different bioavailability math</h2>
+    <p>The third force is pattern. An omnivorous, a vegetarian, and a vegan client can all be eating excellent diets, and the Academy of Nutrition and Dietetics is explicit that appropriately planned vegetarian and vegan diets are healthful and nutritionally adequate for all life stages, including pregnancy, lactation, infancy, childhood, adolescence, older adulthood, and for athletes (Melina et al., 2016). The phrase that matters again is "appropriately planned." Pattern does not change your goals. It changes which levers you pull first, because it changes the bioavailability math from Chapter 6.</p>
+
+    <h3>Plant-based eating: predictable risks, solvable problems</h3>
+    <p>The Academy's position paper names the nutrients that need special planning attention in vegetarian and vegan diets: iron, zinc, vitamin B12, calcium, vitamin D, and omega-3 fatty acids (Melina et al., 2016). None of these are reasons to avoid plant-based eating. They are simply the predictable pressure points, and each one connects to a mechanism we have already studied.</p>
+    <p><strong>Vitamin B12</strong> is the non-negotiable. It is essentially absent from plant foods, so a fully vegan diet requires a reliable B12 source from fortified foods or a supplement. This is not a preference; it is a hard requirement, and it is the one place where "just eat a varied diet" is genuinely insufficient.</p>
+    <p><strong>Iron and zinc</strong> bring us back to bioavailability. Plant foods supply non-heme iron, which is absorbed less efficiently than the heme iron in animal products, and that absorption is further reduced by phytate in legumes and whole grains. Hunt's seminal review showed that moving toward a plant-based diet, with less meat and more phytate-containing foods, measurably reduces iron and zinc absorption, and that vegetarians tend to carry lower iron stores (Hunt, 2002). The honest nuance, also from Hunt, is that adverse health effects from this are not consistently demonstrated in people eating varied diets in well-resourced settings, and that our monitoring tools are imperfect (Hunt, 2002). So this is a "plan and monitor" situation, not a "panic" situation.</p>
+    <p>The fixes are concrete and were previewed in Chapter 6. Pairing non-heme iron sources with vitamin C sharply increases absorption. Soaking, sprouting, and fermenting legumes and grains reduces their phytate content. A review on micronutrients in plant-based diets for athletes consolidates exactly these strategies, vitamin C pairing, soaking, and sprouting, as practical ways to improve uptake of iron, zinc, and other minerals from plant sources (Jeromson et al., 2024).</p>
+    <p><strong>Omega-3s</strong> close the loop to Chapter 4. Plant diets supply ALA (from flax, chia, walnuts) but little or no preformed EPA and DHA, and the conversion of ALA to EPA and DHA in the body is limited and inefficient. This is why omega-3 status becomes a central planning question for plant-based eaters, and why an algae-derived EPA/DHA supplement is a reasonable, evidence-aligned tool when intake of preformed long-chain omega-3s is otherwise near zero (Melina et al., 2016; Jeromson et al., 2024).</p>
+
+    <h3>Protein quality: it is not just grams</h3>
+    <p>Back in Chapter 2 we treated protein mostly as a daily gram total, and for an omnivore eating a mix of animal and plant foods, that simplification is fine. For a plant-based client it stops being fine, because plant proteins differ from animal proteins in two ways that actually matter: their amino acid profile and their digestibility. Both feed into a single idea called protein quality, and ignoring it is how a vegan client can hit their gram target on paper and still come up short on the amino acids that drive muscle repair.</p>
+    <p>The formal scoring systems are worth understanding at a working level. The older score is PDCAAS (the protein digestibility corrected amino acid score), and the current reference standard endorsed by the Food and Agriculture Organization is DIAAS (the digestible indispensable amino acid score). Both ask the same basic question: of the essential amino acids a food contains, how many actually survive digestion and get absorbed in a form your body can use to build tissue (Nosworthy et al., 2023). Animal proteins generally score high on both. Many single plant proteins score lower, usually because they are short on one specific essential amino acid (legumes tend to run low on methionine, grains low on lysine) and because plant cell walls and antinutrients like phytate reduce how much of the protein is actually digested.</p>
+    <p>Two honest qualifiers keep this from turning into plant-protein doom. First, DIAAS was designed and validated in ways that arguably understate the quality of cooked, processed, varied plant diets eaten by humans rather than by fast-growing animals, so the scores should be read as a rough guide and not as a verdict (Craddock et al., 2021). Second, the classic fix works: combining complementary plant proteins, the textbook example being legumes plus grains, covers the gaps because the amino acid one source lacks, the other supplies. This does not have to happen in the same meal, only across the day, since the body maintains a free amino acid pool to draw from.</p>
+    <p>For the coach, protein quality translates into three concrete habits for plant-based clients. Aim a little higher on total protein, since lower digestibility means a meaningful fraction of the grams on the label do not land. Build variety on purpose so that legumes, grains, soy, nuts, and seeds cover each other's weak spots across the day. And lean on the genuinely high-quality plant proteins where they exist, soy foods and quinoa among them, which carry more complete amino acid profiles than most single plant sources. None of this makes plant-based eating harder than it needs to be. It just means "120 grams of protein" is a slightly different instruction for a vegan than for an omnivore, and a good coach knows why.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A vegan client eats plenty of lentils and spinach but is fatigued and has low ferritin. Name two changes to how she eats those same iron-containing foods (not what she eats, but how) that would raise the iron she actually absorbs. Then name the one nutrient where food choice alone cannot fix the gap.</p>
+    </aside>
+
+    <h3>Cultural fit: the pattern that gets ignored</h3>
+    <p>Here is where a lot of well-meaning nutrition advice quietly fails. A plan that ignores a client's culture, cuisine, budget, and household is not a more "optimal" plan. It is a plan that will not be followed, which makes it the worst plan. Cultural and personal food patterns are not obstacles to route around. They are the actual medium you are working in.</p>
+    <p>The framework adapts cleanly to this. Every lever we have discussed, protein adequacy and distribution, iron and zinc bioavailability, omega-3 sourcing, B12, calcium, vitamin D, can be hit through countless different cuisines. The job is to find the foods that already live in the client's kitchen and culture that move the relevant lever, not to import a generic "healthy" template from somewhere else. A coach who can raise iron absorption using the foods a client already loves to cook is far more effective than one who hands out a spreadsheet of foods the client will never buy.</p>
+    <p><strong>Coaching translation.</strong> Dietary pattern doesn't change what a body needs. It changes the route you take to get there. For plant-based clients, B12 is mandatory supplementation, iron and zinc are a bioavailability project (vitamin C pairing, soaking, sprouting), and omega-3s usually mean algae-based EPA/DHA. And whatever the pattern, the plan has to fit the human's real life and culture, or it is just a nicely formatted document nobody uses.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="pitfall">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Pattern Pitfall Finder</div>
+    </div>
+    <p class="ch-widget-sub">Pick a dietary pattern and a life stage. The tool flags the nutrients most likely to fall short, then lets you add food sources or pairings to close each gap. The scorecard tracks whether your plan resolves the flagged risks.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Dietary pattern</span>
+        <select class="ch-widget-select" id="pf-pattern">
+          <option value="omnivore">Omnivore</option>
+          <option value="lactoovo">Lacto-ovo vegetarian</option>
+          <option value="vegetarian">Vegetarian (dairy only)</option>
+          <option value="vegan">Vegan</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Life stage</span>
+        <select class="ch-widget-select" id="pf-stage">
+          <option value="adult">Healthy adult</option>
+          <option value="older">Older adult</option>
+          <option value="pregnant">Pregnant / lactating</option>
+          <option value="athlete">Trained athlete</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="pf-gaps"></div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Risks resolved</span>
+        <span class="ch-meter-bar"><span id="pf-bar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="pf-num">0/0</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="pf-verdict">Choose a pattern and stage to see the flagged nutrients.</p>
+
+    <button class="ch-widget-btn" id="pf-check">Check the plan</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Religious and scheduled fasting: the framework still holds</h2>
+    <p>Some of the most common individualization you will meet has nothing to do with athletic goals or life stage. It is a person's faith, their work schedule, or their chosen eating window collapsing the day's intake into a smaller slice of the clock. Ramadan is the clearest example: for roughly a month, observant Muslims take no food or water from dawn to sunset, eating only before dawn and after sunset. Plenty of clients also practice other religious fasts, or simply prefer time-restricted eating because it fits their life. The reflex of an inexperienced coach is to treat any of this as a problem to be solved. It is not a problem. It is a constraint, and the framework adapts to constraints without breaking.</p>
+    <p>Start with what the evidence actually shows, because the fears are usually larger than the reality. A systematic review and meta-analysis of athletes who continued training through Ramadan found that body mass and body fat percentage dropped modestly by the end of the month, while lean body mass did not significantly change, and that the main intake shifts were lower carbohydrate and lower total water rather than a collapse in protein (Trabelsi et al., 2022). Read that carefully: trained people fasting from dawn to dusk did not melt their muscle away. They lost a little fat and water, largely reversible afterward, and the levers that moved were the predictable ones, fluid and carbohydrate timing, not some mysterious metabolic catastrophe.</p>
+    <p>That tells you exactly where to coach. The challenge of a daytime fast is not "can the body survive it," it is "can we still hit the day's protein total, defend hydration, and place fuel intelligently around the eating windows." The protein target does not change because someone is fasting; what changes is that it now has to be delivered across two meals instead of four, which makes protein quality and portion size at each meal more important, not less. Hydration becomes a genuine priority, since the review showed total water intake reliably falls, so front-loading fluids and electrolytes in the pre-dawn and post-sunset windows is one of the highest-value things a coach can suggest. And training is often best scheduled close to the post-sunset meal, so that the hardest work is fueled and refueled rather than performed deep into a depleted, dehydrated state.</p>
+    <p><strong>Coaching translation.</strong> Religious and scheduled fasting do not require a different nutrition framework. They require the same targets routed through a different clock. Keep the protein total and quality, defend hydration hard because it is the first thing to slip, and put the hardest training near a feeding window. And respect that for a fasting client the practice is not negotiable and is not yours to talk them out of. Your job is to make their goals and their fast coexist, not to pick one over the other.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Preference, schedule, and adherence are part of the prescription</h2>
+    <p>This is the individualization variable that textbooks underweight and that good coaches obsess over. A diet has two properties that both matter: how good it is in theory, and how likely the person is to actually do it. New coaches pour all their effort into the first and treat the second as the client's responsibility. The result is technically excellent plans that fail in the real world, which from the client's chair is just failure.</p>
+    <p>Treat preference, schedule, and adherence as real inputs to the plan, not as obstacles to the "correct" answer. A client who hates cooking, works night shifts, travels constantly, or genuinely cannot stomach the food you picked is giving you design constraints, the same way a budget or an allergy is. A plan built around three home-cooked meals a day is the wrong plan for someone who will realistically eat two meals and a couple of convenient snacks, no matter how nutritionally elegant the three-meal version looks. The right plan is the best one that fits the life. Adherence is not the thing that happens after you design the plan. It is one of the things you design the plan around.</p>
+    <p>There is a real performance logic here, not just a motivational one. Consistency over months beats perfection over days, because body composition and health adaptations are slow, cumulative responses to what you do most of the time. A "B-plus" plan followed for a year will outperform an "A-plus" plan abandoned in three weeks, every single time. So when you choose between the theoretically optimal target and the slightly less optimal one the client will actually sustain, the sustainable one is frequently the better coaching decision, because it is the one that will still be running when the slow adaptations finally show up.</p>
+    <p>Practically, this means asking questions most coaches skip. What does your week actually look like. When and where do you really eat. What foods do you genuinely like and keep in the house. What has failed for you before, and why. The answers reshape every target in this chapter. Protein distribution for an older client only works if the breakfast you are adding is one she will eat. The vegan iron strategy only works if it uses foods already in the kitchen. The trained client's carbohydrate plan only works if it survives contact with their commute and their job. Individualizing for the person means individualizing for the life, and the life is mostly schedule, preference, and the hundred small frictions that decide whether a plan gets followed.</p>
+    <p><strong>Coaching translation.</strong> The most accurate macro targets in the world are worthless if the human will not hit them. Design around real preferences, real schedules, and real friction from the start, and bias toward the sustainable version over the theoretically perfect one. A plan the client actually follows for a year is not a compromise. For almost everyone, it is the optimal plan.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Two worked examples</h2>
+    <p>Theory is cheap. Let us run the framework on two real-shaped people and watch the levers move.</p>
+
+    <h3>Worked example 1: the 71-year-old, lightly active, omnivore</h3>
+    <p>Margaret weighs 62 kg. She walks daily, eats a typical Western breakfast (toast, coffee), a light lunch (soup, crackers), and a substantial dinner (chicken or fish, vegetables, rice). She reports she is "eating fine" but has lost grip strength over two years.</p>
+    <p>Read the mechanism: she is in the anabolic-resistance window, so her leucine threshold per meal is effectively elevated (Zaromskyte et al., 2021). Find the lever: total protein and, above all, distribution. Set the target: 1.2 g/kg/day (Bauer et al., 2013), which is about 74 g, ideally split so that at least three meals each clear roughly 25 to 30 g of protein. Plan the food: her dinner is already fine. The failure is breakfast and lunch, which are nearly protein-free and therefore almost certainly below her elevated threshold. The cheapest fixes are adding eggs or Greek yogurt to breakfast and a real protein source to lunch. We also flag vitamin D and calcium for bone, consistent with Chapter 5's risk map, and we keep an eye on appetite, since protein's satiety can make these additions feel like "too much food" (Lonnie et al., 2018). Nothing here leaves the coaching lane.</p>
+
+    <h3>Worked example 2: the 28-year-old vegan, training for a half-marathon</h3>
+    <p>Devi weighs 58 kg, trains five days a week, and has been fully plant-based for four years. She feels her recovery is sluggish and her last run "fell apart" late.</p>
+    <p>Two forces stack here: trained needs and a plant-based pattern. Trained-needs lever: protein at the athlete range, say 1.6 g/kg (about 93 g), and carbohydrate scaled to her training load to keep glycogen topped up, since the late-run fade is a classic fuel-availability story (Thomas et al., 2016). Pattern levers: B12 must come from a supplement or fortified foods, full stop (Melina et al., 2016). Iron is a priority given female athlete status plus plant-based absorption challenges, so we pair her lentils and tofu with vitamin C sources and use soaked or sprouted legumes to cut phytate (Hunt, 2002; Jeromson et al., 2024). Omega-3s: we add algae-based EPA/DHA because her preformed long-chain intake is essentially zero (Jeromson et al., 2024). We recommend she get ferritin checked rather than guessing, which is a referral-adjacent step: we suggest the test, a clinician interprets and treats it.</p>
+    <p>Notice that in both cases we never invented a new principle. We pulled established levers in a different order and at a different intensity for the person in front of us.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The coach's lane, and the off-ramp</h2>
+    <p>Everything in this chapter lives inside one boundary: intelligent, food-first individualization is coaching. Diagnosing and treating disease is not. The line is not blurry, and protecting it protects your clients.</p>
+    <p>You are in your lane when you adjust protein for a healthy older client, build a B12 and iron strategy for a vegan, scale carbohydrate to training, or fit a plan to someone's culture and budget. You are leaving your lane the moment a situation involves a diagnosed condition that requires medical nutrition therapy, a pregnancy that needs clinical management, suspected disordered eating, an eating pattern in a child that worries you, lab values that need interpretation and treatment, or any symptom pattern that could be a medical problem rather than a dietary one. Even the position papers we have cited repeatedly emphasize individualized plans delivered or overseen by qualified clinicians for the higher-stakes scenarios (Thomas et al., 2016; Bauer et al., 2013; Sebastiani et al., 2019).</p>
+    <p>Two off-ramps deserve more than a passing mention, because new coaches routinely walk past them. The first is medical nutrition therapy. Conditions like diabetes, kidney disease, celiac disease, inflammatory bowel disease, and many others require nutrition care that is part of medical treatment, delivered by a registered dietitian or physician, and often coordinated with medication. Adjusting carbohydrate around a client's insulin, or restricting protein for failing kidneys, is not coaching. It is clinical practice, and doing it without the credential can genuinely harm someone. The right move when a client brings a diagnosed condition is to support the plan their clinical team has set, stay inside the general healthy-eating guidance you are qualified to give, and refer every condition-specific decision back to the people licensed to make it.</p>
+    <p>The second, and the one that requires the most care, is disordered eating. Coaches work in close contact with food, weight, and bodies, which means they are often the first person to notice something is wrong, and also, unfortunately, sometimes the person whose plan makes it worse. Warning signs are not subtle once you know to look: rigid food rules paired with intense guilt, a sense of being out of control around eating, secrecy, compensatory behavior like purging or punishing exercise, rapid weight change, or a relationship with food that has clearly stopped being about health and started being about fear. None of that is a coaching problem to fix with better macros. Eating disorders are serious psychiatric conditions with real medical risk, and they require a qualified clinical team. The coach's entire job at that point is to stop coaching the numbers, express concern without judgment, and help the person connect with appropriate professional help. Pushing a stricter plan onto someone showing these signs is one of the few ways a well-meaning coach can do real damage. When in doubt here, refer, and refer early.</p>
+    <p>The professional move is not to know everything. It is to know the edge of your competence and to refer cleanly when you reach it. "This is outside what I do as a coach, and here's who can help" is one of the most valuable sentences in your toolkit. It builds trust, it protects the client, and it protects you.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Sort these four into "coach's lane" or "refer": (a) a healthy 40-year-old wants more protein for general fitness; (b) a client mentions she has been skipping meals and feels out of control around food; (c) a vegan client asks how to absorb more iron from lentils; (d) a client with type 2 diabetes asks you to adjust his medication around meals.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Closing the loop: reasoning from mechanism to a defensible plan</h2>
+    <p>Step back and look at what you can now do. You started this course with food on a plate and a lot of noise about it. You can now take a general framework and bend it, responsibly, to a specific human: an athlete versus a sedentary client, a younger versus an older person, a plant-based versus an omnivorous pattern. And you can say <em>why</em> for every adjustment, tracing it back to a mechanism rather than to a guru or a fear.</p>
+    <p>That is the entire point of this course in one sentence: you reason from mechanism to a defensible plan for a specific person, and you can explain that reasoning plainly, without hype and without fear. No food is "clean" or "dirty." There are smarter sources and weaker ones for a given goal, levers that matter more or less for a given person, and a real human being who has to actually live the plan. When you can hold all three of those at once, you are no longer following nutrition advice. You are doing nutrition.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Appropriately planned vegetarian, including vegan, diets are healthful, nutritionally adequate, and may provide health benefits for the prevention and treatment of certain diseases. These diets are appropriate for all stages of the life cycle.</p>
+    <cite>Melina, Craig, & Levin (2016), Position of the Academy of Nutrition and Dietetics</cite>
+  </blockquote>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Omar, three forces stacked on one plate</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Omar is 52, weighs 82 kg, and lifts weights four mornings a week before work. Eighteen months ago he stopped eating meat for ethical and cultural reasons and now eats a lacto-ovo vegetarian diet built around the dishes he grew up with. During Ramadan he fasts from dawn to sunset. He tells you his lifting numbers have stalled and his energy "falls off a cliff" in the late afternoon at work, and he wants to keep building strength without abandoning either his diet or his fast. He has no diagnosed medical conditions and his last physical was unremarkable.</p>
+    </aside>
+    <p>Omar is not a textbook case. He is three forces stacked on one person: a trained-but-not-elite middle-aged lifter, a vegetarian eating within a specific culture, and, for one month a year, a daytime faster. The temptation is to feel overwhelmed by the combination. The framework dissolves it. You take each force in turn, pull the lever it pulls, and watch the plan assemble itself from pieces you already know.</p>
+    <p>Start with training status. Omar lifts hard four times a week but is not a competitive athlete, so he sits in that active middle ground, not at the floor and not at the elite ceiling. Protein belongs around 1.6 g/kg, roughly 130 g a day, comfortably above the 0.8 g/kg reference and appropriate for someone training for strength (Thomas et al., 2016). Layer age on top: at 52 he is entering the window where anabolic resistance starts to matter, so per-meal distribution and clearing the leucine threshold at each feeding become more important than they would have been at 25 (Zaromskyte et al., 2021). His vegetarian pattern then sharpens the protein question further, because protein quality, not just grams, is now in play. He has eggs and dairy, which are high-quality sources, so his situation is more forgiving than a vegan's, but he still benefits from leaning on those complete proteins and combining legumes with grains across the day to cover amino acid gaps (Nosworthy et al., 2023; Craddock et al., 2021). The same pattern flags iron and B12: lacto-ovo gives him some B12 from dairy and eggs, but iron is still a non-heme bioavailability project, so we pair his lentil and spinach dishes with vitamin C sources and use soaked or sprouted legumes (Hunt, 2002; Jeromson et al., 2024).</p>
+    <p>Now the late-afternoon energy crash, which is the symptom he actually came in with. Outside Ramadan, this reads as a carbohydrate distribution and total-fuel issue: a hard morning lift followed by inadequate refueling leaves him running on empty by mid-afternoon. The fix is scaling carbohydrate to his training load and placing more of it around the morning session and the meal that follows it (Thomas et al., 2016). During Ramadan the same crash has a different cause and a different fix. With eating compressed into pre-dawn and post-sunset windows, the evidence says the things most likely to slip are hydration and carbohydrate, while protein and lean mass hold up if intake is managed (Trabelsi et al., 2022). So for that month we front-load fluids and electrolytes hard in both eating windows, keep his protein total intact across just two meals (which makes the quality and portion of each meal matter more), and schedule his lifting close to the post-sunset meal so the hardest work is fueled rather than performed deep into a fasted, dehydrated state.</p>
+    <p>Notice what did not happen anywhere in Omar's plan. We never told him to eat meat, never asked him to break his fast, never imported a generic template that ignored the food he actually cooks. We took the framework and bent it: trained needs set the protein and carbohydrate, age sharpened distribution, the vegetarian pattern turned protein quality and iron into priorities, and the fast rerouted the same targets through a different clock. Every adjustment traces back to a mechanism, and not one of them left the coaching lane. That is the whole skill of this chapter performed on a single, complicated, completely ordinary human being.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Population guidelines like the 0.8 g/kg protein RDA are deficiency floors, not optimization targets. Training, life stage, and dietary pattern all pull a real person off the generic default.</li>
+      <li>Trained needs raise protein to 1.2 to 2.0 g/kg/day and scale carbohydrate to training load, but total energy availability sits underneath everything (Thomas et al., 2016).</li>
+      <li>In older adults, anabolic resistance raises the per-meal leucine threshold, so both total protein (1.0 to 1.5 g/kg/day) and even distribution across meals become high-stakes, complicated by reduced appetite (Bauer et al., 2013; Zaromskyte et al., 2021; Lonnie et al., 2018).</li>
+      <li>Pregnancy and lactation elevate needs broadly and turn the Chapter 5 micronutrient risk list into a monitoring checklist; well-planned plant-based diets are safe here but demand attention to B12, iron, and more (Sebastiani et al., 2019).</li>
+      <li>Plant-based patterns have predictable, solvable pressure points: B12 requires supplementation or fortification, iron and zinc are a bioavailability project (vitamin C pairing, soaking, sprouting), and omega-3s usually mean algae-based EPA/DHA (Melina et al., 2016; Hunt, 2002; Jeromson et al., 2024).</li>
+      <li>Protein quality, not just grams, matters for plant-based clients: plant proteins score lower on digestibility (DIAAS/PDCAAS) and amino acid completeness, so aim a little higher, build variety, and combine complementary proteins across the day (Nosworthy et al., 2023; Craddock et al., 2021).</li>
+      <li>Religious and scheduled fasting (such as Ramadan) do not require a new framework: trained people who fast through Ramadan lose modest fat and water but largely preserve lean mass, so keep protein total and quality, defend hydration, and time training near a feeding window (Trabelsi et al., 2022).</li>
+      <li>Preference, schedule, and adherence are real individualization inputs, not afterthoughts; the best plan is the best one the client will actually sustain over months.</li>
+      <li>Cultural and personal fit is not a compromise on quality; a plan that does not fit the client's real life will not be followed.</li>
+      <li>The coach's lane is food-first individualization for healthy people. Diagnosed disease, clinical pregnancy management, disordered eating, and lab interpretation are off-ramps to a clinician.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This is the final chapter of the course, so the road ahead is yours. You leave with a reusable workflow, a mechanistic vocabulary, and the judgment to bend the framework to a real person without breaking its logic. Your next move is to practice it on actual humans: build a plan, explain every adjustment from mechanism, and refer the moment you reach the edge of your lane. That habit, repeated, is what turns this knowledge into a craft.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bauer, J., Biolo, G., Cederholm, T., Cesari, M., Cruz-Jentoft, A. J., Morley, J. E., Phillips, S., Sieber, C., Stehle, P., Teta, D., Visvanathan, R., Volpi, E., & Boirie, Y. (2013). Evidence-based recommendations for optimal dietary protein intake in older people: A position paper from the PROT-AGE Study Group. <em>Journal of the American Medical Directors Association, 14</em>(8), 542–559. https://doi.org/10.1016/j.jamda.2013.05.021</p>
+    <p>Craddock, J. C., Genoni, A., Strutt, E. F., &amp; Goldman, D. M. (2021). Limitations with the Digestible Indispensable Amino Acid Score (DIAAS) with special attention to plant-based diets: A review. <em>Current Nutrition Reports, 10</em>(1), 93–98. https://doi.org/10.1007/s13668-020-00348-8</p>
+    <p>Hunt, J. R. (2002). Moving toward a plant-based diet: Are iron and zinc at risk? <em>Nutrition Reviews, 60</em>(5), 127–134. https://pubmed.ncbi.nlm.nih.gov/12030275/</p>
+    <p>Jeromson, S., et al. (2024). Green strength: The role of micronutrients in plant-based diets for athletic performance enhancement. https://pmc.ncbi.nlm.nih.gov/articles/PMC11225853/</p>
+    <p>Lonnie, M., Hooker, E., Brunstrom, J. M., Corfe, B. M., Green, M. A., Watson, A. W., Williams, E. A., Stevenson, E. J., Penson, S., & Johnstone, A. M. (2018). Protein for life: Review of optimal protein intake, sustainable dietary sources and the effect on appetite in ageing adults. <em>Nutrients, 10</em>(3), 360. https://pmc.ncbi.nlm.nih.gov/articles/PMC5872778/</p>
+    <p>Melina, V., Craig, W., & Levin, S. (2016). Position of the Academy of Nutrition and Dietetics: Vegetarian diets. <em>Journal of the Academy of Nutrition and Dietetics, 116</em>(12), 1970–1980. https://doi.org/10.1016/j.jand.2016.09.025</p>
+    <p>Nosworthy, M. G., Medina, G., Lu, Z.-H., &amp; House, J. D. (2023). Plant proteins: Methods of quality assessment and the human health benefits of pulses. <em>Foods, 12</em>(15), 2816. https://doi.org/10.3390/foods12152816</p>
+    <p>Sebastiani, G., Herranz Barbero, A., Borrás-Novell, C., Alsina Casanova, M., Aldecoa-Bilbao, V., Andreu-Fernández, V., Pascual Tutusaus, M., Ferrero Martínez, S., Gómez Roig, M. D., & García-Algar, O. (2019). The effects of vegetarian and vegan diet during pregnancy on the health of mothers and offspring. <em>Nutrients, 11</em>(3), 557. https://doi.org/10.3390/nu11030557</p>
+    <p>Thomas, D. T., Erdman, K. A., & Burke, L. M. (2016). Position of the Academy of Nutrition and Dietetics, Dietitians of Canada, and the American College of Sports Medicine: Nutrition and athletic performance. <em>Journal of the Academy of Nutrition and Dietetics, 116</em>(3), 501–528. https://doi.org/10.1016/j.jand.2015.12.006</p>
+    <p>Trabelsi, K., Ammar, A., Boukhris, O., Glenn, J. M., Clark, C. C. T., Stannard, S. R., Slater, G., &#379;mijewski, P., Driss, T., Ben Saad, H., Chamari, K., &amp; Chtourou, H. (2022). Dietary intake and body composition during Ramadan in athletes: A systematic review and meta-analysis with meta-regression. <em>Journal of the American Nutrition Association, 42</em>(1), 101–122. https://doi.org/10.1080/07315724.2021.2000902</p>
+    <p>Zaromskyte, G., Prokopidis, K., Ioannidis, T., Tipton, K. D., & Witard, O. C. (2021). Evaluating the leucine trigger hypothesis to explain the post-prandial regulation of muscle protein synthesis in young and older adults: A systematic review. <em>Frontiers in Nutrition, 8</em>, 685165. https://doi.org/10.3389/fnut.2021.685165</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 8 of 8</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('adapter');
+    if(!root) return;
+    var selects = root.querySelectorAll('select[data-key]');
+    var bw = 70;
+    function compute(){
+      var s = {};
+      selects.forEach(function(sel){ s[sel.getAttribute('data-key')] = sel.value === 'on'; });
+
+      var protein = 0.8;
+      var dist = 1;   // 1 low, 2 med, 3 high
+      var micro = 1;
+      var notes = [];
+      var refer = [];
+
+      if(s.trained){
+        protein = Math.max(protein, 1.6);
+        notes.push('Trained: protein raised toward 1.2 to 2.0 g/kg and carbohydrate scaled to training load; check total energy availability first (Thomas et al., 2016).');
+      }
+      if(s.older){
+        protein = Math.max(protein, 1.2);
+        dist = 3;
+        micro = Math.max(micro, 2);
+        notes.push('Older adult: anabolic resistance raises the per-meal leucine threshold, so distribution across meals becomes a top priority and protein rises to 1.0 to 1.5 g/kg (Bauer et al., 2013; Zaromskyte et al., 2021). Prioritize vitamin D and calcium.');
+      }
+      if(s.pregnant){
+        protein = Math.max(protein, 1.1);
+        micro = 3;
+        notes.push('Pregnant/lactating: broad increase in needs; iron, vitamin D, calcium, iodine, omega-3s, and B12 move to active monitoring (Sebastiani et al., 2019).');
+        refer.push('pregnancy');
+      }
+      if(s.plant){
+        micro = Math.max(micro, 3);
+        notes.push('Plant-based: B12 requires supplement or fortified foods (mandatory); iron and zinc need vitamin C pairing and soaking/sprouting; omega-3s usually mean algae-based EPA/DHA (Melina et al., 2016; Hunt, 2002; Jeromson et al., 2024).');
+      }
+      if(s.plant && s.pregnant){
+        notes.push('Compounding: a plant-based pregnancy can be safe but only when well planned, with especially close attention to B12 and iron (Sebastiani et al., 2019).');
+      }
+      if(s.older && s.plant){
+        notes.push('Compounding: older + plant-based stacks a higher protein-distribution demand on top of lower-bioavailability plant protein. Spread high-quality plant protein across meals deliberately.');
+      }
+
+      // update meters
+      var pPct = Math.round(Math.min(protein/2.0,1)*100);
+      root.querySelector('#ad-bar-protein').style.width = pPct + '%';
+      root.querySelector('#ad-num-protein').textContent = protein.toFixed(1);
+
+      var distLabel = dist===3?'High':(dist===2?'Medium':'Low');
+      root.querySelector('#ad-bar-dist').style.width = (dist*33) + '%';
+      root.querySelector('#ad-num-dist').textContent = distLabel;
+
+      var microLabel = micro===3?'High':(micro===2?'Medium':'Low');
+      root.querySelector('#ad-bar-micro').style.width = (micro*33) + '%';
+      root.querySelector('#ad-num-micro').textContent = microLabel;
+
+      var notesEl = root.querySelector('#ad-notes');
+      if(notes.length===0){
+        notesEl.textContent = 'Baseline: a healthy sedentary adult. Targets sit at population defaults. Pull a switch to individualize.';
+      } else {
+        notesEl.innerHTML = notes.join(' ');
+      }
+
+      var refEl = root.querySelector('#ad-refer');
+      if(refer.length>0){
+        refEl.style.display = '';
+        refEl.innerHTML = '<strong>Refer to a clinician:</strong> this scenario (pregnancy) exceeds the coaching lane and should be co-managed by an obstetric and dietetic team. Support the prescribed plan; do not write it.';
+      } else {
+        refEl.style.display = 'none';
+      }
+    }
+    selects.forEach(function(sel){ sel.addEventListener('change', compute); });
+    root.querySelector('#ad-reset').addEventListener('click', function(){
+      selects.forEach(function(sel){ sel.value='off'; });
+      compute();
+    });
+    compute();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('pitfall');
+    if(!root) return;
+    var patternSel = root.querySelector('#pf-pattern');
+    var stageSel = root.querySelector('#pf-stage');
+    var gapsEl = root.querySelector('#pf-gaps');
+    var verdictEl = root.querySelector('#pf-verdict');
+
+    // nutrient -> valid fixes (lowercased keywords)
+    var FIX = {
+      b12: {label:'Vitamin B12', fixes:['supplement','fortified','nutritional yeast'], hint:'B12 supplement or reliably fortified foods (mandatory on vegan).'},
+      iron: {label:'Iron (bioavailability)', fixes:['vitamin c','citrus','soak','sprout','pepper','strawberr'], hint:'Pair non-heme iron with vitamin C; soak or sprout legumes/grains to cut phytate.'},
+      zinc: {label:'Zinc (bioavailability)', fixes:['soak','sprout','ferment','pumpkin seed','legume'], hint:'Soaking, sprouting, or fermenting reduces phytate and improves zinc uptake.'},
+      omega3: {label:'Omega-3 (EPA/DHA)', fixes:['algae','algal','fish','salmon','sardine'], hint:'Algae-based EPA/DHA (or fish if eaten); ALA conversion is limited.'},
+      calcium: {label:'Calcium', fixes:['fortified','dairy','yogurt','tofu','kale','almond'], hint:'Fortified plant milk, dairy, calcium-set tofu, or low-oxalate greens.'},
+      vitd: {label:'Vitamin D', fixes:['supplement','fortified','sun','salmon'], hint:'Supplement or fortified foods; status declines with age and low sun.'},
+      protein: {label:'Protein (amount/distribution)', fixes:['legume','tofu','tempeh','egg','yogurt','soy','seitan','distribute','spread'], hint:'Hit total target and spread it across meals (matters most in older adults).'}
+    };
+
+    function risksFor(pattern, stage){
+      var r = [];
+      if(pattern==='vegan'){ r.push('b12','iron','omega3'); }
+      else if(pattern==='vegetarian' || pattern==='lactoovo'){ r.push('iron','omega3'); if(pattern==='vegetarian'){ r.push('b12'); } else { r.push('zinc'); } }
+      else { r.push('vitd'); }
+      // stage layering
+      if(stage==='older'){ if(r.indexOf('protein')<0) r.unshift('protein'); if(r.indexOf('calcium')<0) r.push('calcium'); if(r.indexOf('vitd')<0) r.push('vitd'); }
+      if(stage==='pregnant'){ if(r.indexOf('iron')<0) r.unshift('iron'); if(r.indexOf('b12')<0) r.push('b12'); if(r.indexOf('omega3')<0) r.push('omega3'); }
+      if(stage==='athlete'){ if(r.indexOf('protein')<0) r.unshift('protein'); if(r.indexOf('iron')<0) r.push('iron'); }
+      // dedupe and cap at 3-4
+      var seen={}, out=[];
+      r.forEach(function(k){ if(!seen[k]){ seen[k]=1; out.push(k);} });
+      return out.slice(0,4);
+    }
+
+    function render(){
+      var risks = risksFor(patternSel.value, stageSel.value);
+      gapsEl.innerHTML = '';
+      risks.forEach(function(k){
+        var f = FIX[k];
+        var wrap = document.createElement('div');
+        wrap.className = 'ch-widget-field';
+        wrap.style.display = 'block';
+        var lbl = document.createElement('span');
+        lbl.className = 'ch-widget-fieldlabel';
+        lbl.textContent = 'Flagged: ' + f.label + ' \u2014 ' + f.hint;
+        var inp = document.createElement('input');
+        inp.className = 'ch-widget-select';
+        inp.setAttribute('type','text');
+        inp.setAttribute('data-nutrient', k);
+        inp.setAttribute('placeholder','Add a food source or pairing that closes this gap...');
+        wrap.appendChild(lbl);
+        wrap.appendChild(inp);
+        gapsEl.appendChild(wrap);
+      });
+      root.querySelector('#pf-num').textContent = '0/' + risks.length;
+      root.querySelector('#pf-bar').style.width = '0%';
+      verdictEl.textContent = 'Add a food or pairing to each flagged nutrient, then press Check the plan.';
+    }
+
+    function check(){
+      var inputs = gapsEl.querySelectorAll('input[data-nutrient]');
+      var total = inputs.length, resolved = 0, unresolved = [];
+      inputs.forEach(function(inp){
+        var k = inp.getAttribute('data-nutrient');
+        var val = (inp.value||'').toLowerCase();
+        var ok = FIX[k].fixes.some(function(term){ return val.indexOf(term)>=0; });
+        if(ok){ resolved++; } else { unresolved.push(FIX[k].label); }
+      });
+      root.querySelector('#pf-num').textContent = resolved + '/' + total;
+      root.querySelector('#pf-bar').style.width = (total? Math.round(resolved/total*100):0) + '%';
+      if(total===0){ verdictEl.textContent = 'No flagged nutrients for this combination.'; return; }
+      if(resolved===total){
+        verdictEl.innerHTML = '<strong>Plan resolves every flagged risk.</strong> The pattern is appropriately planned for this life stage.';
+      } else {
+        verdictEl.innerHTML = '<strong>Still open:</strong> ' + unresolved.join(', ') + '. Add a recognized source or pairing for each (see the hint on the field).';
+      }
+    }
+
+    patternSel.addEventListener('change', render);
+    stageSel.addEventListener('change', render);
+    root.querySelector('#pf-check').addEventListener('click', check);
+    render();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
