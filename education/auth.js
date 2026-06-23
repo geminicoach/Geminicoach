@@ -76,6 +76,30 @@
         return sb.from("certificates").select("*").eq("user_id", id)
           .order("issued_at", { ascending: false }).then(function (r) { return r.data || []; });
       });
+    },
+
+    // current session access token (a real Supabase JWT) or null
+    getAccessToken: function () {
+      return sb.auth.getSession().then(function (r) {
+        return (r && r.data && r.data.session) ? r.data.session.access_token : null;
+      }).catch(function () { return null; });
+    },
+
+    // AI grader for free-response answers (and homework). Calls the grade-response
+    // Edge Function, which compares the student answer to the model answer/key points
+    // and returns { score:0-100, feedback, matched:[], missing:[] }.
+    gradeResponse: function (payload) {
+      return this.getAccessToken().then(function (tok) {
+        return fetch(SUPABASE_URL + "/functions/v1/grade-response", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+            "apikey": SUPABASE_KEY,
+            "Authorization": "Bearer " + (tok || SUPABASE_KEY)
+          },
+          body: JSON.stringify(payload || {})
+        }).then(function (r) { return r.json(); });
+      });
     }
   };
 })();
