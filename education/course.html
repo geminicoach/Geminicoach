@@ -20,6 +20,9 @@
     nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
     nav .sp { flex:1; }
     nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; font-size:14px; }
+    nav a.acct { color:#fff; background:var(--blue); font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.04em;
+                 font-size:13px; text-transform:uppercase; padding:7px 13px; border-radius:8px; }
+    nav a.acct:hover { background:var(--blue-bright); }
     .hero { background:radial-gradient(1000px 380px at 12% -20%, rgba(46,141,232,.18) 0, transparent 60%),
             linear-gradient(180deg,#0b1a30,#0a1628); padding:48px 24px 38px; border-bottom:1px solid var(--line); }
     .coverband { width:100%; height:200px; overflow:hidden; border-bottom:1px solid var(--line); }
@@ -50,6 +53,15 @@
     .rt { margin-left:auto; align-self:flex-start; font-size:12px; color:var(--gray); white-space:nowrap; }
     .included { display:flex; gap:8px 22px; flex-wrap:wrap; margin:26px 2px 6px; font-size:13px; color:var(--gray); }
     .included b { color:#fff; }
+    .ce { margin-top:28px; background:linear-gradient(135deg,#103257,#143a63); border:1px solid #2a5285; border-radius:14px; padding:22px 24px; }
+    .ce-h { font-family:'Bebas Neue',sans-serif; font-weight:400; letter-spacing:.03em; font-size:25px; color:#fff; margin-bottom:5px; }
+    .ce p { margin:0 0 15px; color:#bfd3ee; font-size:14px; max-width:620px; }
+    .ce-links { display:flex; gap:10px; flex-wrap:wrap; }
+    .ce-btn { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:14px;
+              padding:11px 18px; border-radius:9px; background:var(--blue); color:#fff; }
+    .ce-btn:hover { background:var(--blue-bright); }
+    .ce-btn.ghost { background:transparent; border:1px solid #3a5e92; color:#bfd3ee; }
+    .ce-btn.ghost:hover { color:#fff; border-color:#5aaff5; }
     footer { max-width:880px; margin:0 auto; padding:24px; color:var(--gray); font-size:12.5px; border-top:1px solid var(--line); }
     .loading { color:var(--gray); padding:36px 0; text-align:center; }
     .info { color:var(--gray); padding:30px 0; max-width:560px; }
@@ -58,6 +70,7 @@
 </head>
 <body>
   <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div>
+    <a class="acct" href="account.html">My account</a>
     <a class="back" href="index.html">← Dashboard</a></nav>
   <div id="hero" class="hero"><div class="inner"><h1>Loading…</h1></div></div>
   <div class="wrap"><div id="body"><div class="loading">Loading…</div></div></div>
@@ -122,7 +135,14 @@
       var nChal = chs.filter(function(x){return x.challenge;}).length;
       var included = '<div class="included"><span><b>' + chs.length + '</b> chapter readings</span>'
         + '<span><b>' + nQuiz + '</b> quizzes</span><span><b>' + nChal + '</b> weekly challenges</span></div>';
-      body.innerHTML = startBtn + list + included;
+      var ce = '<div class="ce"><div class="ce-h">Earn your certificate</div>'
+        + '<p>Work through the chapters, then pass the final exam to earn your certificate of completion. '
+        + 'You need 80% to pass, and you can retake it. You\'ll need a free account so we can save your result.</p>'
+        + '<div class="ce-links">'
+        + '<a class="ce-btn" href="exam.html?slug=' + encodeURIComponent(c.slug) + '">Take the final exam &nbsp;→</a>'
+        + '<a class="ce-btn ghost" href="certificate.html?slug=' + encodeURIComponent(c.slug) + '">My certificate</a>'
+        + '</div></div>';
+      body.innerHTML = startBtn + list + included + ce;
     })();
   </script>
 </body>

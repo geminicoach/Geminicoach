@@ -23,6 +23,9 @@
     nav .sp { flex:1; }
     nav .soon { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:11px; letter-spacing:.12em;
                 text-transform:uppercase; color:var(--gray); border:1px solid var(--line); padding:6px 11px; border-radius:99px; }
+    nav a.navlink { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:13px; letter-spacing:.06em;
+                    text-transform:uppercase; color:#fff; background:var(--blue); padding:7px 14px; border-radius:8px; }
+    nav a.navlink:hover { background:var(--blue-bright); }
     .hero { background:radial-gradient(1100px 460px at 12% -25%, rgba(46,141,232,.20) 0, transparent 60%),
             linear-gradient(180deg,#0b1a30,#0a1628); padding:60px 24px 44px; border-bottom:1px solid var(--line); }
     .hero .inner { max-width:1060px; margin:0 auto; }
@@ -86,6 +89,7 @@
 </head>
 <body>
   <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div>
+    <a class="navlink" id="navacct" href="account.html">Sign in</a>
     <span class="soon">Membership opening soon</span></nav>
   <div class="hero"><div class="inner">
     <div class="eyebrow">Health science, taught like a coach</div>
@@ -191,6 +195,18 @@
       return '<h3>'+esc(t.name)+'</h3><div class="grid">'+cards+'</div>';
     }).join("")+'</div>';
   })();
+  </script>
+  <!-- reflect signed-in state in the nav -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="auth.js"></script>
+  <script>
+    (function(){
+      var el = document.getElementById("navacct");
+      if (!el || !window.GEM || !window.GEM.ready) return;
+      window.GEM.getUser().then(function(u){
+        if (u) { el.textContent = "My account"; el.title = u.email || ""; }
+      });
+    })();
   </script>
 </body>
 </html>
