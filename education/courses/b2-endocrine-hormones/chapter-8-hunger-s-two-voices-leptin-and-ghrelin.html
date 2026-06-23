@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hunger's Two Voices: Leptin and Ghrelin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 8 · Module 3</div>
+  <h1 class="ch-title">Hunger's Two Voices: <em>Leptin and Ghrelin</em></h1>
+  <p class="ch-subtitle">The short-term hunger alarm and the long-term fuel gauge, and why appetite is physiology, not character.</p>
+  <div class="ch-meta">
+    <span>60 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>8 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">I</span>t is 12:45 in the afternoon and your stomach growls on cue. You did not decide to feel hungry. You did not summon it through a failure of discipline. A peptide hormone secreted mostly by the cells lining your stomach climbed steadily over the last hour, crossed into your bloodstream, reached a specific cluster of neurons at the base of your brain, and flipped a switch labeled "go find food." That hormone is ghrelin. Forty minutes after you eat, it will fall, and the urgency will quietly dissolve, not because you talked yourself out of it, but because the chemistry changed.</p>
+  <p>Now zoom out from that single afternoon to the slow background hum of your entire energy reserve. A second hormone, leptin, leaks out of your fat cells in rough proportion to how much fat you are carrying, and it whispers a much slower message to the same brain region: "we have plenty in storage" or "reserves are getting thin." These are the two voices of hunger. One is a stopwatch. The other is a fuel gauge. This chapter is about how they argue, how the brain listens, and what happens when the listening breaks down.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Two timescales, one question</h2>
+  <p>Every regulated system in this course has been built around the same architecture, and by now you should be able to predict the shape of it before I draw it. There is a quantity the body wants to defend, a sensor that reads the current value, and an opposing pair of signals that push the value back toward target whenever it drifts. You met this with blood glucose in Chapter 3: insulin pushes glucose down into storage, glucagon pulls it back up out of storage, and between them they hold a setpoint. Appetite runs on the same logic, with one important twist. The "quantity being defended" is not a single number you can measure with a finger-prick. It is <span class="ch-key">energy balance</span> itself, and it has to be defended across two completely different timescales at once.</p>
+  <p>On the scale of hours, the question is "should I start a meal right now?" That is a fast, twitchy, meal-to-meal decision, and it belongs to ghrelin. On the scale of weeks and months, the question is "do I have enough stored fuel to keep this whole organism running, reproducing, and staying warm?" That is a slow, smoothed, integrated decision, and it belongs to leptin. The genius of the system is that one small region of the brain, the <span class="ch-key">hypothalamus</span>, reads both signals at once and produces a single felt experience we call hunger (Yu & Kim, 2012).</p>
+  <p>Here is the framing that anchors the whole chapter, and I want you to sit with it before we get into mechanism: appetite is a <span class="ch-key">regulated physiological output</span>. It is not a referendum on your willpower. The same way your body temperature is held near 37 degrees by machinery you do not consciously run, your drive to eat is produced by hormones doing their job. This is not an excuse. It is the opposite of an excuse. It is the reason that understanding the machinery gives you actual leverage, where moralizing never could.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Before reading on, predict it: if ghrelin answers "should I start a meal?" on a timescale of hours, what physiological event should make ghrelin <em>fall</em>? And what should make it climb back up?</p>
+  </aside>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial diagram contrasting two timescales of hunger, laid out left to right on warm cream paper. On the left, a small mechanical stopwatch with its hand sweeping, labelled in small italic serif 'ghrelin: hours'; faint sketched curves rise and dip around three small plate icons to suggest meals. On the right, a vintage fuel gauge needle resting between empty and full, labelled 'leptin: weeks'. A single curved arrow from both gauges converges on a simply drawn cross-section of a human brain at the base, labelled 'hypothalamus'. Muted palette of slate blue, ochre, brick red, and ink black; loose confident linework, as if from a physiologist's notebook. No other text, no watermarks, no cropped letters." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Two clocks feeding one decision-maker: the fast meal-timer and the slow fuel gauge converge on the hypothalamus.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>Ghrelin: the voice that says "now"</h2>
+  <p>Ghrelin holds a distinction worth pausing on. Among all the circulating hormones that influence how much you eat, it is the only one known to <em>increase</em> appetite. Everything else in the system, leptin, insulin, the gut hormones released after a meal, pushes toward fullness. Ghrelin alone pushes toward eating. Cummings (2006), in the review that most cleanly laid out its role, calls it the only known <span class="ch-key">orexigenic</span> circulating hormone, orexigenic meaning literally appetite-generating. That makes it special. The "stop eating" side of the ledger is crowded with redundant signals. The "start eating" side has essentially one loud voice, and ghrelin is it.</p>
+  <p>It is produced mainly by cells in the stomach lining, and its behavior across a day is strikingly clean. Ghrelin rises in the one to two hours before each habitual meal, peaks right around the time you would normally eat, and then drops sharply once food arrives in the gut (Cummings, 2006). This is the <span class="ch-key">pre-prandial surge</span>, pre-prandial just meaning "before the meal." If you eat lunch at noon every day for a month, your ghrelin will start climbing around 11 a.m. whether or not anyone rings a bell, because the system has learned the schedule. That detail matters enormously for the practical advice later: ghrelin is partly trained by your habits.</p>
+
+  <h3>What actually shuts ghrelin off</h3>
+  <p>The drop after eating is not instant and it is not driven simply by your stomach stretching. The strongest suppressors of ghrelin are the nutrients themselves arriving in the small intestine, with carbohydrate and protein suppressing it more durably than fat for a given number of calories. This is why a meal of mostly fat can leave you hungry again surprisingly soon, and why protein has a reputation for "keeping you full" that is grounded in real endocrinology rather than diet folklore. The signal that says "now" goes quiet because the body detects real fuel coming in, not because the tank is mechanically full.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>Ghrelin is your meal-timer, and it is partly a creature of habit. If you eat at chaotic, unpredictable times, you get chaotic, unpredictable hunger surges. If you eat at roughly consistent times, ghrelin learns the schedule and stops ambushing you at random. "Eat on a regular rhythm" is not discipline advice. It is signal-shaping advice. In practice, this means a predictable meal pattern often reduces the sense of hunger coming out of nowhere.</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>Leptin: the voice that says "how much we have"</h2>
+  <p>If ghrelin is the stopwatch, leptin is the fuel gauge welded to the dashboard. It is secreted by <span class="ch-key">adipocytes</span>, your fat cells, and the more fat mass you carry, the more leptin circulates. That proportionality is the entire point. Leptin is the brain's way of knowing, without direct access, how much energy is banked in storage (Klok et al., 2006). When fat stores are ample, leptin is high and the hypothalamus reads "reserves full, you can afford to suppress appetite and spend energy freely." When fat stores fall, during prolonged undereating or extended energy deficit, leptin drops, and the brain reads "reserves low, conserve energy and seek food."</p>
+  <p>Notice the timescale. Your fat mass does not swing from meal to meal. It changes over weeks and months. So leptin is a deliberately slow, smoothed signal. It is not trying to time your lunch. It is trying to defend your long-term survival against starvation. This is why leptin's most dramatic effects show up not in the well-fed state but in deficit. When you lose a meaningful amount of fat, leptin falls, and the falling leptin is one of the strongest drivers of the increased hunger and the slowed metabolism that make weight loss so stubborn to maintain. The system is far more aggressive about defending against loss than about preventing gain, an asymmetry that makes brutal sense if you evolved in an environment where famine killed and surplus rarely did.</p>
+
+  <h3>Where the signals actually land</h3>
+  <p>Both hormones converge on the <span class="ch-key">arcuate nucleus</span> of the hypothalamus, a region positioned to sample the blood with unusual directness. There, two opposing neuron populations do the integrating. One set, the NPY/AgRP neurons, drives appetite up. The other set, the POMC/CART neurons, drives appetite down (Yu & Kim, 2012). Leptin and insulin both <em>inhibit</em> the appetite-promoting NPY/AgRP neurons and <em>stimulate</em> the appetite-suppressing POMC neurons. Ghrelin does the reverse, firing up the NPY/AgRP "eat now" population. So the same neural circuit hears all the voices and resolves them into a single output. That output is what you feel as hunger, and it then radiates out to reward and motivation circuits in the limbic system that make food look more or less appealing (Yu & Kim, 2012).</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Two people weigh the same and have eaten the same lunch at the same time. One has noticeably more body fat. Which one likely has higher circulating leptin right now, and does that mean they feel <em>less</em> hungry? Hold that question. The answer is where popular understanding falls apart.</p>
+  </aside>
+</section>
+
+<div class="ch-widget" id="appetite-dial">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Appetite Dial Across a Day</div>
+  </div>
+  <p class="ch-widget-sub">Watch ghrelin spike and fall around meals while leptin holds a slower baseline. Adjust meal timing, sleep, stress, and body-fat setting, then read the blended "felt hunger" the brain actually produces.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Meal pattern</span>
+      <select class="ch-widget-select" id="ad-meals">
+        <option value="regular">3 regular meals (8 / 13 / 19h)</option>
+        <option value="skipfast">Skip breakfast (13 / 19h)</option>
+        <option value="grazing">Grazing / erratic</option>
+        <option value="onemeal">One large evening meal</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Sleep last night</span>
+      <select class="ch-widget-select" id="ad-sleep">
+        <option value="8">8 hours</option>
+        <option value="6">6 hours</option>
+        <option value="4">4 hours (curtailed)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Stress level</span>
+      <select class="ch-widget-select" id="ad-stress">
+        <option value="low">Low</option>
+        <option value="mod">Moderate</option>
+        <option value="high">High</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Body-fat setting</span>
+      <select class="ch-widget-select" id="ad-fat">
+        <option value="low">Lean</option>
+        <option value="mid">Average</option>
+        <option value="high">Higher fat mass</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Time of day</span>
+      <select class="ch-widget-select" id="ad-time">
+        <option value="7">7:00 (waking)</option>
+        <option value="11">11:00 (late morning)</option>
+        <option value="12" selected>12:00 (pre-lunch)</option>
+        <option value="14">14:00 (post-lunch)</option>
+        <option value="18">18:00 (pre-dinner)</option>
+        <option value="22">22:00 (late evening)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Ghrelin (short-term)</span>
+      <span class="ch-meter-bar"><span id="ad-ghr-bar" style="width:60%"></span></span>
+      <span class="ch-meter-num" id="ad-ghr-num">60</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Leptin (long-term)</span>
+      <span class="ch-meter-bar"><span id="ad-lep-bar" style="width:50%"></span></span>
+      <span class="ch-meter-num" id="ad-lep-num">50</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Felt hunger (blended)</span>
+      <span class="ch-meter-bar"><span id="ad-hun-bar" style="width:55%"></span></span>
+      <span class="ch-meter-num" id="ad-hun-num">55</span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="ad-btn">Read the dial</button>
+  <p class="ch-widget-sub" id="ad-readout" style="margin-top:0.75rem;"></p>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>The setpoint, revisited on purpose</h2>
+  <p>I told you in Chapter 3 that the insulin and glucagon pairing was not a one-off fact to memorize but the first clean instance of a general pattern. Here is the second instance, and I want you to feel the symmetry, because that recognition is the whole reason this chapter sits where it does in the course.</p>
+  <p>Insulin and glucagon defend a glucose setpoint: one lowers, one raises, opposed forces holding a target. Leptin and ghrelin defend an energy-balance setpoint: leptin signals surplus and suppresses intake, ghrelin signals the moment to refuel and promotes intake. Opposed forces, holding a target. The variables differ. The architecture is identical. Once you can see one regulated system as an instance of "sensor plus opposing pair plus defended setpoint," you can see all of them, and you stop being surprised by the next one. That transfer is more valuable than any single hormone fact.</p>
+  <p>There is one honest complication worth stating plainly. The energy-balance setpoint is not a fixed number stamped at birth, and it can drift, especially upward, over a lifetime. The body defends wherever the setpoint currently sits much more fiercely on the downside than the upside. This is part of why losing fat and keeping it off is hard in a way that is not explained by motivation. The defended target itself fights back. That is not a moral failing. It is a setpoint doing exactly what setpoints do.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Leptin resistance: where popular understanding breaks</h2>
+  <p>Now we get to the nuance that nearly everyone gets backwards. Logic seems to say: more body fat means more leptin, and leptin suppresses appetite, so people with more fat should feel less hungry and naturally eat less. The system should be self-correcting. Gain fat, leptin rises, appetite falls, problem solved. If that were true, obesity would be nearly impossible.</p>
+  <p>It is not true, and the reason is <span class="ch-key">leptin resistance</span>. In obesity, circulating leptin is indeed high, often very high, a state called hyperleptinemia. But the brain's response to that leptin is blunted. The signal is shouting, and the receiver has turned down the volume. Klok et al. (2006) describe obese patients explicitly as leptin-resistant despite elevated leptin. Obradovic et al. (2021) characterize the consequence bluntly as reduced satiety and over-consumption of nutrients despite high circulating leptin levels. The fuel gauge is reading "full," and the dashboard light that should respond is disconnected.</p>
+
+  <h3>If this sounds familiar, it should</h3>
+  <p>Hold leptin resistance up next to insulin resistance from Chapter 3 and the two are nearly the same shape. In insulin resistance: lots of insulin in the blood, but tissues respond weakly, so the pancreas pumps out even more to get the same effect, and the high insulin itself becomes part of the problem. In leptin resistance: lots of leptin in the blood, but the hypothalamus responds weakly, so the satiety message that should say "enough" stops landing. More hormone, less listening, and a louder signal needed to accomplish what a quiet one used to. That is the universal signature of a <span class="ch-key">resistance</span> state, and you now have two clean examples of it. This is the second consolidation point of the chapter: resistance is a pattern, not a peculiarity of one gland.</p>
+
+  <h3>What "the volume is turned down" means at the cell</h3>
+  <p>For those who want the mechanism, the molecular story is well mapped. Leptin acts through its receptor, LRb, which signals largely via the JAK2/STAT3 pathway to change gene expression in arcuate neurons. In obese states, several brakes get applied to that pathway. SOCS-3, a feedback inhibitor, is upregulated and dampens LRb signaling. Phosphorylation at the Tyr985 site recruits further inhibition. Together these attenuate the leptin signal inside the cell even when leptin outside the cell is abundant (Myers et al., 2008). The arcuate nucleus, the very integration hub we described earlier, is a key site where this attenuation happens. So "the brain stops listening" is not a metaphor for weak character. It is a describable set of intracellular brakes on a specific signaling cascade.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Here is where people get this wrong</div>
+    <p>People assume a heavier person with high leptin must "just not feel hungry" and therefore overeating proves a lack of discipline. The endocrinology says closer to the opposite: the satiety signal is loud but unheard, so the brain can perceive a state of relative need even in the presence of ample stores. The drive is real. The signal is muffled. Calling that a character flaw is both unkind and factually wrong.</p>
+  </aside>
+
+  <h3>Cause, effect, or both?</h3>
+  <p>Honesty requires one more layer, because the field itself is careful here. It is tempting to declare leptin resistance the cause of obesity, but Myers et al. (2010) explicitly warn against assuming that direction. Elevated leptin with reduced signaling is reliably observed in obesity, and it is widely interpreted as leptin resistance, but distinguishing whether the attenuated signaling drives the weight gain or largely results from the obese state is genuinely difficult. The most defensible reading is that leptin resistance is at minimum a powerful contributor to the maintenance of a higher fat mass, helping defend an elevated setpoint, whether or not it lit the fuse. As a coach or an educated learner, you do not need to resolve that debate. You need to respect it, and avoid the overconfident "leaky" claims that fill the wellness internet.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="A two-panel editorial illustration in clean ink-and-wash on pale grey paper, comparing two resistance states side by side, drawn in a calm scientific-plate idiom. Left panel labelled in small serif caps 'INSULIN RESISTANCE': a thick cluster of small key shapes crowding a cell-surface lock, but the lock only partly turning; a faint arrow labelled 'more hormone'. Right panel labelled 'LEPTIN RESISTANCE': abundant signal waves radiating toward a simply drawn brain at lower centre, but a small dial on the brain turned down low, with a faint arrow labelled 'less listening'. A connecting band across the top reads 'more signal, less response' in modest italic serif. Restrained palette of indigo, warm grey, muted amber, ink black. No charts, no numbers, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The same signature in two systems: abundant hormone, attenuated response, a louder signal needed to do the old job.</em></figcaption></figure>
+
+<div class="ch-widget" id="resist-panel">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Resistance Side-by-Side</div>
+  </div>
+  <p class="ch-widget-sub">Raise the body-fat setting and watch leptin climb while the brain's responsiveness shrinks. The parallel insulin curve moves alongside, so you can see one shared pattern, not two separate facts.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Body-fat / adiposity</span>
+      <select class="ch-widget-select" id="rp-fat">
+        <option value="1">Lean, insulin-sensitive</option>
+        <option value="2">Average</option>
+        <option value="3">Higher fat mass</option>
+        <option value="4">Obesity, established</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">View</span>
+      <select class="ch-widget-select" id="rp-view">
+        <option value="both">Both hormones</option>
+        <option value="leptin">Leptin only</option>
+        <option value="insulin">Insulin only</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Circulating leptin</span>
+      <span class="ch-meter-bar"><span id="rp-lep-bar" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="rp-lep-num">30</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Brain leptin response</span>
+      <span class="ch-meter-bar"><span id="rp-lepr-bar" style="width:85%"></span></span>
+      <span class="ch-meter-num" id="rp-lepr-num">85</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Circulating insulin</span>
+      <span class="ch-meter-bar"><span id="rp-ins-bar" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="rp-ins-num">30</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Tissue insulin response</span>
+      <span class="ch-meter-bar"><span id="rp-insr-bar" style="width:85%"></span></span>
+      <span class="ch-meter-num" id="rp-insr-num">85</span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="rp-btn">Name the shared pattern</button>
+  <p class="ch-widget-sub" id="rp-readout" style="margin-top:0.75rem;"></p>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Hunger, sleep, and stress: the levers you actually control</h2>
+  <p>So far the picture might feel a little fatalistic. Setpoints defend themselves, resistance muffles the off-switch, the system is rigged toward eating. But there are real, modifiable inputs that move ghrelin and leptin in your favor, and the cleanest of them is sleep. This is also a preview of the lifestyle chapter coming later, so treat it as a first look at a theme we will develop.</p>
+  <p>The landmark experiment here is Spiegel et al. (2004), a tightly controlled randomized crossover study in healthy young men. The design is what makes it powerful: same people, two conditions, caloric intake and physical activity held constant, only sleep changed. Two nights of sleep restricted to 4 hours, compared with nights of 10 hours, produced a coherent and unwelcome pattern. Leptin fell by about 18 percent. Ghrelin rose by about 28 percent. And subjective hunger climbed by about 24 percent, with the sharpest cravings for calorie-dense, carbohydrate-rich food. Read that combination again. The "you have enough" signal got quieter and the "go eat now" signal got louder, at the same time, from nothing but lost sleep.</p>
+  <p>Because that was a small mechanistic study, you want to know whether it holds in the real world at scale. It does. Taheri et al. (2004) examined 1,024 participants in the Wisconsin Sleep Cohort and found that habitual short sleep duration was associated with reduced leptin, elevated ghrelin, and higher BMI in a general population. The experimental study tells you the direction and the mechanism. The epidemiological study tells you it shows up across ordinary people living ordinary lives. That is exactly the pairing of evidence you should look for before you trust a claim: a controlled trial that establishes causation in a small sample, and a population study that confirms relevance at scale.</p>
+
+  <h3>Stress on the same lever</h3>
+  <p>Stress pushes in a similar direction, partly through overlapping pathways and partly through the behavioral knock-on effects of elevated cortisol and disrupted sleep. Chronic stress tends to nudge appetite hormones and reward circuitry toward seeking energy-dense food, which is why high-stress periods so often coincide with eating that feels out of proportion to actual energy need. We will treat the stress system properly in its own context, but the headline for now is that stress and short sleep are not separate problems. They frequently travel together, and they pull the same appetite levers in the same unhelpful direction.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>If someone is fighting relentless hunger and reaching for the most calorie-dense food they can find, the first question is not "where is your willpower." It is "how are you sleeping." A run of short nights measurably raises ghrelin and lowers leptin, which is exactly the recipe for feeling hungrier and craving denser food. In practice, this means that protecting sleep is appetite management, not a separate wellness nicety. You are not being weak at night. Your hormones were tilted hours earlier.</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>The other direction: energy availability and the lean case</h2>
+  <p>We have spent most of this chapter on surplus and resistance, because that is where most learners and most coaching questions live. But the leptin system reveals its deeper purpose at the other end, in states of low energy availability, and this connects directly back to the energy theme from the thyroid chapter.</p>
+  <p>Remember that leptin is proportional to fat mass, and that the system defends much harder against loss than gain. In individuals who are lean, training hard, or chronically under-eating relative to their expenditure, fat mass and energy availability drop, and leptin falls with them. Falling leptin is read by the hypothalamus as a genuine energy emergency, and the downstream response is broad: increased hunger, but also down-regulation of energy-expensive functions the body deems non-essential under famine conditions. This is part of how the thyroid axis and reproductive function can be suppressed when energy availability stays low for a long time. Leptin is, in effect, one of the body's permission signals: when it is adequate, the body feels it can afford to spend energy on metabolism, heat, and reproduction. When it falls too far, those systems get throttled.</p>
+  <p>For the general learner this matters because it dismantles a tidy myth: that less body fat is always and only better. The leptin system treats very low energy availability as a threat to be defended against, and it will fight you with hunger and with metabolic slowing. For coaches working with people who train hard or eat sparingly, low leptin is a flag worth recognizing, not a trophy. We keep food unmoralized here for the same reason we keep body fat unmoralized: these are signals and setpoints, not verdicts on virtue.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>You now have leptin moving in two opposite real-world situations: high but unheard in obesity, and low and very much heard in chronic energy deficit. In which of these does the leptin signal actually accomplish its evolved job of defending energy stores? What does that tell you about which direction the system was built to fight hardest?</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>A worked example: reading a real morning</h2>
+  <p>Let us put the whole system together on one ordinary person across one ordinary morning, so the abstractions become a story you can trace.</p>
+  <p>It is 7 a.m. and our subject slept four hours after a stressful week. Already the deck is stacked: the short sleep has pushed leptin down and ghrelin up relative to a rested baseline (Spiegel et al., 2004). They skip breakfast because they "are not really a breakfast person," which means no nutrient arrival to suppress ghrelin, so the pre-prandial ghrelin surge that would have come before a habitual breakfast either gets blunted or, more often, the hormone simply keeps climbing toward the next eating opportunity. By 11 a.m., ghrelin is high, leptin is low, and the integrated signal at the arcuate nucleus is reading "find dense food, now." The reward circuitry obliges by making a pastry look spectacular (Yu & Kim, 2012).</p>
+  <p>None of that sequence required a moral failing. It required two short nights, a skipped meal, and a stress load, all of which moved real hormones in the documented directions. Now run the counterfactual. Same person, after a normal night of sleep, with a protein-containing breakfast on a consistent schedule. Ghrelin gets durably suppressed by the nutrients (especially the protein), leptin sits at its rested baseline rather than a sleep-deprived trough, and the 11 a.m. signal is far quieter. Same body, same willpower, completely different felt hunger, because the inputs to a regulated physiological system were different. That is the entire thesis of the chapter in one comparison.</p>
+</section>
+
+<blockquote class="ch-quote">
+  <p>Sleep curtailment in healthy young men is associated with decreased leptin levels, elevated ghrelin levels, and increased hunger and appetite.</p>
+  <cite>Spiegel, Tasali, Penev, and Van Cauter (2004), title of the Annals of Internal Medicine study</cite>
+</blockquote>
+
+<section class="ch-section">
+  <h2>What this does and does not let you conclude</h2>
+  <p>Be careful at the edges, because this is where well-meaning explanations overreach. The appetite hormones explain drives and signals. They do not, by themselves, dictate every bite. The hypothalamic system is integrated with conscious decision-making, food environment, habit, and reward, and people do successfully override hunger signals all the time. The point of understanding the hormones is not to declare behavior helpless. It is to locate effort where it actually pays: shaping the inputs, sleep, meal rhythm, protein, stress, that set the baseline difficulty of the day, rather than relying on raw resistance against a tilted signal.</p>
+  <p>And keep the cause-and-effect humility from the resistance discussion. We can say leptin resistance is real and reliably observed in obesity (Klok et al., 2006; Obradovic et al., 2021). We should not casually claim it is the sole cause of weight gain, because the field itself has not settled that (Myers et al., 2010). Good education holds both the strong claim and the honest uncertainty at once. That is the register you want as a credible coach: confident about the mechanism, careful about the causal story.</p>
+</section>
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>Appetite is governed by an opposing pair on two timescales: ghrelin is the short-term, meal-initiating hunger signal that rises before meals and falls after eating; leptin is the long-term energy-status signal released in proportion to fat mass.</li>
+    <li>This is the same setpoint-and-balance architecture you met with insulin and glucagon. The variables differ, the logic is identical, and recognizing the pattern is the point.</li>
+    <li>Leptin resistance is the central nuance: in obesity, leptin is high but the brain's response is muffled, so the satiety signal stops landing. It mirrors insulin resistance almost exactly: more hormone, less listening, louder signal needed.</li>
+    <li>The mechanism is real and cellular (SOCS-3, Tyr985 attenuation of LRb/STAT3 signaling in the arcuate nucleus), not a metaphor for weak willpower.</li>
+    <li>Short sleep measurably lowers leptin and raises ghrelin and hunger, shown in a controlled crossover study and confirmed in a 1,024-person cohort. Stress pulls the same levers.</li>
+    <li>At the other extreme, low energy availability drops leptin and triggers defense of stores, linking appetite to thyroid and reproductive throttling. Less fat is not always better.</li>
+    <li>Appetite is regulated physiology, not virtue. Understanding the machinery tells you where effort actually pays: shaping the inputs, not battling a tilted signal.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>You now hold two clean instances of the setpoint-and-resistance pattern. Next we turn to the system that has been lurking at the edge of this chapter every time stress moved a hunger signal: cortisol and the stress axis. We will see how a hormone built for short emergencies behaves when the emergency never ends, and how its chronic elevation reaches back into glucose, sleep, and the very appetite signals you just learned to read.</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Cummings, D. E. (2006). Ghrelin and the short- and long-term regulation of appetite and body weight. <em>Physiology &amp; Behavior, 89</em>(1), 71-84. https://doi.org/10.1016/j.physbeh.2006.05.022</p>
+  <p>Klok, M. D., Jakobsdottir, S., &amp; Drent, M. L. (2006). The role of leptin and ghrelin in the regulation of food intake and body weight in humans: A review. <em>Obesity Reviews, 8</em>(1), 21-34. https://doi.org/10.1111/j.1467-789X.2006.00270.x</p>
+  <p>Myers, M. G., Cowley, M. A., &amp; Munzberg, H. (2008). Mechanisms of leptin action and leptin resistance. <em>Annual Review of Physiology, 70</em>, 537-556. https://doi.org/10.1146/annurev.physiol.70.113006.100707</p>
+  <p>Myers, M. G., Leibel, R. L., Seeley, R. J., &amp; Schwartz, M. W. (2010). Obesity and leptin resistance: Distinguishing cause from effect. <em>Trends in Endocrinology &amp; Metabolism, 21</em>(11), 643-651. https://doi.org/10.1016/j.tem.2010.08.002</p>
+  <p>Obradovic, M., Sudar-Milovanovic, E., Soskic, S., Essack, M., Arya, S., Stewart, A. J., Gojobori, T., &amp; Isenovic, E. R. (2021). Leptin and obesity: Role and clinical implication. <em>Frontiers in Endocrinology, 12</em>, 585887. https://doi.org/10.3389/fendo.2021.585887</p>
+  <p>Spiegel, K., Tasali, E., Penev, P., &amp; Van Cauter, E. (2004). Brief communication: Sleep curtailment in healthy young men is associated with decreased leptin levels, elevated ghrelin levels, and increased hunger and appetite. <em>Annals of Internal Medicine, 141</em>(11), 846-850. https://doi.org/10.7326/0003-4819-141-11-200412070-00008</p>
+  <p>Taheri, S., Lin, L., Austin, D., Young, T., &amp; Mignot, E. (2004). Short sleep duration is associated with reduced leptin, elevated ghrelin, and increased body mass index. <em>PLoS Medicine, 1</em>(3), e62. https://doi.org/10.1371/journal.pmed.0010062</p>
+  <p>Yu, J. H., &amp; Kim, M. S. (2012). Molecular mechanisms of appetite regulation. <em>Diabetes &amp; Metabolism Journal, 36</em>(6), 391-398. https://doi.org/10.4093/dmj.2012.36.6.391</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 8 of 12</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('appetite-dial');
+    if(!w) return;
+    var meals = w.querySelector('#ad-meals');
+    var sleep = w.querySelector('#ad-sleep');
+    var stress = w.querySelector('#ad-stress');
+    var fat = w.querySelector('#ad-fat');
+    var time = w.querySelector('#ad-time');
+    var ghrBar = w.querySelector('#ad-ghr-bar'), ghrNum = w.querySelector('#ad-ghr-num');
+    var lepBar = w.querySelector('#ad-lep-bar'), lepNum = w.querySelector('#ad-lep-num');
+    var hunBar = w.querySelector('#ad-hun-bar'), hunNum = w.querySelector('#ad-hun-num');
+    var readout = w.querySelector('#ad-readout');
+    var btn = w.querySelector('#ad-btn');
+
+    function mealTimes(m){
+      if(m==='regular') return [8,13,19];
+      if(m==='skipfast') return [13,19];
+      if(m==='grazing') return [9,11,14,16,18,21];
+      if(m==='onemeal') return [19];
+      return [8,13,19];
+    }
+
+    function ghrelinAt(t, m){
+      // base diurnal: ghrelin builds toward each meal, drops after
+      var times = mealTimes(m);
+      var g = 35; // baseline
+      // rising surge in the ~2h before a meal, sharp drop ~1.5h after
+      var minToNext = 99;
+      for(var i=0;i<times.length;i++){
+        var mt = times[i];
+        var diff = t - mt; // negative = before meal
+        if(diff > 0 && diff < 2){ // just ate
+          g = Math.min(g, 18 + diff*8);
+        }
+        if(diff <= 0 && diff > -2.5){ // building up
+          var rise = 40 + (2.5 + diff) * 16;
+          g = Math.max(g, rise);
+        }
+      }
+      // erratic grazing keeps it jumpy and never fully off
+      if(m==='grazing') g = Math.max(g, 42);
+      // skip breakfast / one meal: long unfed stretches let it climb
+      if(m==='skipfast' && t < 13) g = Math.max(g, 50 + (t-7)*2);
+      if(m==='onemeal' && t < 19) g = Math.max(g, 48 + (t-7)*1.6);
+      return g;
+    }
+
+    function compute(){
+      var t = parseFloat(time.value);
+      var m = meals.value;
+      var g = ghrelinAt(t, m);
+      // sleep effect: short sleep raises ghrelin ~28%
+      var s = sleep.value;
+      if(s==='6') g *= 1.12;
+      if(s==='4') g *= 1.28;
+      // stress nudges ghrelin up
+      if(stress.value==='mod') g *= 1.06;
+      if(stress.value==='high') g *= 1.14;
+      g = Math.max(5, Math.min(100, g));
+
+      // leptin: slow baseline tied to fat mass, lowered by short sleep (~18%)
+      var lep = fat.value==='low'?34: fat.value==='mid'?52:72;
+      if(s==='6') lep *= 0.91;
+      if(s==='4') lep *= 0.82;
+      if(stress.value==='high') lep *= 0.95;
+      lep = Math.max(5, Math.min(100, lep));
+
+      // felt hunger: ghrelin drives it up, leptin restrains it,
+      // but high-fat/leptin-resistant case: leptin restraint is muffled
+      var restraint = lep;
+      if(fat.value==='high') restraint = lep * 0.45; // resistance: signal not heard
+      var hunger = g - restraint*0.45;
+      hunger = Math.max(5, Math.min(100, hunger + 25));
+
+      ghrBar.style.width = Math.round(g)+'%'; ghrNum.textContent = Math.round(g);
+      lepBar.style.width = Math.round(lep)+'%'; lepNum.textContent = Math.round(lep);
+      hunBar.style.width = Math.round(hunger)+'%'; hunNum.textContent = Math.round(hunger);
+
+      var msg = '';
+      if(s==='4') msg += 'Four hours of sleep has pushed ghrelin up and leptin down, the documented Spiegel pattern. ';
+      if(m==='skipfast' && t<13) msg += 'No nutrients have arrived yet, so ghrelin keeps climbing toward the first meal. ';
+      if(fat.value==='high') msg += 'High fat mass means high leptin, but the brain is reading it weakly (resistance), so felt hunger stays elevated despite full stores. ';
+      if(msg==='') msg = 'A rested, regularly-fed state keeps both voices near baseline and felt hunger modest. ';
+      readout.textContent = msg + 'Felt hunger is the blend, not either hormone alone.';
+    }
+
+    [meals,sleep,stress,fat,time].forEach(function(el){ el.addEventListener('change', compute); });
+    btn.addEventListener('click', compute);
+    compute();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('resist-panel');
+    if(!w) return;
+    var fat = w.querySelector('#rp-fat');
+    var view = w.querySelector('#rp-view');
+    var lepBar = w.querySelector('#rp-lep-bar'), lepNum = w.querySelector('#rp-lep-num');
+    var leprBar = w.querySelector('#rp-lepr-bar'), leprNum = w.querySelector('#rp-lepr-num');
+    var insBar = w.querySelector('#rp-ins-bar'), insNum = w.querySelector('#rp-ins-num');
+    var insrBar = w.querySelector('#rp-insr-bar'), insrNum = w.querySelector('#rp-insr-num');
+    var readout = w.querySelector('#rp-readout');
+    var btn = w.querySelector('#rp-btn');
+
+    function compute(){
+      var f = parseInt(fat.value,10);
+      // circulating hormone climbs with adiposity
+      var lep = [0,25,48,72,92][f];
+      var ins = [0,28,46,68,88][f];
+      // response (listening) shrinks with adiposity
+      var lepr = [0,88,68,42,20][f];
+      var insr = [0,90,70,45,24][f];
+
+      var v = view.value;
+      function setMeter(bar,num,val,show){
+        if(show){ bar.style.width = val+'%'; num.textContent = val; bar.parentElement.parentElement.style.opacity = 1; }
+        else { bar.parentElement.parentElement.style.opacity = 0.25; num.textContent = val; bar.style.width = val+'%'; }
+      }
+      setMeter(lepBar,lepNum,lep, v!=='insulin');
+      setMeter(leprBar,leprNum,lepr, v!=='insulin');
+      setMeter(insBar,insNum,ins, v!=='leptin');
+      setMeter(insrBar,insrNum,insr, v!=='leptin');
+
+      var label = ['','Lean and sensitive: modest hormone, strong response. The signal is quiet and fully heard.',
+        'Average: both hormones a touch higher, response still good.',
+        'Higher fat mass: hormone levels climbing, response starting to fall. The first crack of resistance.',
+        'Established obesity: hormone high (hyperleptinemia, hyperinsulinemia), response strongly blunted.'][f];
+      readout.textContent = label + ' Shared pattern: more hormone, less listening, a louder signal needed to do the old job. That is resistance, and it looks the same for leptin and insulin.';
+    }
+    fat.addEventListener('change', compute);
+    view.addEventListener('change', compute);
+    btn.addEventListener('click', compute);
+    compute();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

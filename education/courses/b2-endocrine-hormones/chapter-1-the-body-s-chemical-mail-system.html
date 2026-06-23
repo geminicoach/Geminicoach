@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Body's Chemical Mail System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 1 · Module 1</div>
+  <h1 class="ch-title">The Body's Chemical Mail System</h1>
+  <p class="ch-subtitle">The operating system underneath insulin, thyroid, testosterone, and every hormone you will ever study.</p>
+  <div class="ch-meta">
+    <span>60 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>9 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">P</span>icture two ways of getting an urgent message across a crowded city. The first is a phone call. You dial one specific number, the line connects you to exactly one person, and the conversation happens in a fraction of a second. The second is a radio broadcast. You speak into a transmitter and your voice floods every neighborhood at once, reaching anyone within range. But here is the catch: only the people who own a radio, tuned to your exact frequency, hear a thing. Everyone else goes about their day, deaf to a signal that is physically passing right through them.</p>
+  <p>That contrast is not just a metaphor. It is the single most important idea in this entire course. The phone call is your nervous system. The radio broadcast is your endocrine system. And the radio you have to own to hear the message has a real name in biology: a receptor. Master this one picture and you have the foundation for everything that follows, from why insulin resistance happens to why steroids take hours to work while adrenaline works in seconds.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Two Ways to Send a Message</h2>
+  <p>Your body runs two great communication networks, and they solve the same problem in opposite ways. The problem is coordination. You are made of roughly thirty trillion cells, and they cannot each do whatever they want. When you stand up too fast, your heart has to speed up. When you eat, your gut, liver, and muscles all need to know that fuel is arriving. Something has to carry instructions between cells that may sit on opposite ends of your body.</p>
+  <p>The <span class="ch-key">nervous system</span> is the phone-call network. It is fast, wired, and point-to-point. A neuron fires an electrical signal down a physical cable, the axon, and that signal arrives at one specific destination in milliseconds. When you touch a hot stove, the message from fingertip to spinal cord to muscle travels faster than you can think about it. Precision and speed are the whole point. The wire goes where it goes and nowhere else.</p>
+  <p>The <span class="ch-key">endocrine system</span> is the radio-broadcast network. A gland releases a chemical, a <span class="ch-key">hormone</span>, directly into the bloodstream. From there the molecule travels everywhere your blood goes, which is everywhere. It does not aim. It floods the whole system and trusts that only the right cells are listening. This is slower, often by orders of magnitude, but it has a strength the nervous system lacks: a single broadcast can reach millions of cells across dozens of organs at once, and the message can keep echoing for minutes, hours, or even days.</p>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A two-panel editorial illustration in warm ink-and-watercolour idiom, contrasting two modes of biological signaling. Left panel: a stylized human figure with a single glowing wired pathway running from brain to one hand, drawn like a clean telephone line, captioned 'phone call' in small lowercase serif; only the hand glows. Right panel: the same figure with a small gland in the neck releasing a soft spreading cloud of colored particles that fill the whole bloodstream, captioned 'broadcast' in small lowercase serif; scattered cells throughout the body glow while most stay dim. Muted palette of teal, warm amber, and soft red on cream paper. Composition side by side, rule of thirds, no photorealism, no people's faces in detail, no watermarks." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Two networks, one job: coordinating a body too large to manage cell by cell.</em></figcaption></figure>
+
+  <h3>Why have two systems at all?</h3>
+  <p>Because speed and reach are a tradeoff. If you needed every cell in your body to be individually wired to a control center, the wiring would be impossibly bulky and metabolically expensive. The endocrine system gets around that by using a delivery network you already have, the blood, and outsourcing the addressing problem to the receiving cells. You do not need a wire to every target if the targets can recognize the message themselves.</p>
+  <p>The two systems are not actually rivals. They are deeply intertwined, and later in the course you will see the brain itself act as an endocrine organ through the hypothalamus and pituitary. But for now, hold the clean contrast in your head, because it sets up the question that defines hormone biology.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>If a hormone is dumped into the bloodstream and reaches every cell in your body, how does it manage to change only your liver, or only your bones, while leaving everything else untouched? Hold that question. The answer is the heart of this chapter.</p>
+  </aside>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>What a Hormone Actually Is</h2>
+  <p>Let us pin down the definition, because the everyday use of the word "hormone" is sloppy and you should not be. A <span class="ch-key">hormone</span>, in the classic sense, is a chemical messenger released by a gland into the bloodstream that travels to distant cells and changes their behavior by binding a specific receptor (Melmed et al., 2019). Three features matter in that sentence. It is secreted into circulation. It acts at a distance. And it works through a receptor, not by brute chemical force.</p>
+  <p>That last point is what separates a hormone from a poison. Cyanide also travels in your blood and changes how cells behave, but it does so by jamming machinery indiscriminately. A hormone is the opposite of indiscriminate. It carries an instruction that only the intended audience can read.</p>
+  <p>This is also why dose matters so strangely with hormones. They circulate at vanishingly low concentrations, often in the range of billionths of a gram per milliliter of blood, yet they produce enormous effects. A faint signal commands a loud response. That only works because the receiving cell is not relying on the hormone to do the work directly. The hormone is a key, and the cell already contains the engine. The key just decides whether the engine runs.</p>
+
+  <blockquote class="ch-quote">
+    <p>The specificity of hormone action is determined not by the hormone alone but by the presence of the appropriate receptor in target cells.</p>
+    <cite>Nussey &amp; Whitehead, Endocrinology: An Integrated Approach (2001)</cite>
+  </blockquote>
+
+  <h3>Coaching translation</h3>
+  <p>Here is what this means in plain terms. When people talk about "balancing their hormones," they usually imagine the hormone itself as the thing that matters most. But a hormone is only half of a conversation. The other half is whether your cells are listening, meaning whether they have working receptors and how many. You will meet this idea again and again. A normal hormone level with broken receptors can look exactly like a hormone deficiency. Keep both sides of the conversation in mind from now on.</p>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Receptor Specificity: The Tuning Problem</h2>
+  <p>Now we can answer the question from the callout. A hormone floods the entire bloodstream, but it only changes the cells that carry a matching <span class="ch-key">receptor</span>. A receptor is a protein, shaped so that one particular hormone fits into it the way a key fits a lock. If a cell builds that receptor, it can hear the broadcast. If it does not, the same hormone washes past it doing nothing at all.</p>
+  <p>This is <span class="ch-key">target specificity</span>, and it is worth slowing down on because it overturns an intuition. The address is not written on the envelope. The hormone has no idea where it is going. The addressing happens entirely on the receiving end. A cell decides whether it is a target by choosing whether to display the receptor. Two cells sitting side by side, bathed in the identical hormone concentration, can have completely different responses simply because one carries the receptor and the other does not.</p>
+  <p>Consider thyroid-stimulating hormone, which you will study in depth later. It pours through your whole circulation, passing your muscles, your skin, your kidneys, all of it. But essentially only your thyroid gland responds, because essentially only your thyroid cells display the matching receptor. The instruction reaches everyone. Only one organ is tuned to receive it.</p>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A clean pen-and-ink technical diagram in field-guide style showing the lock-and-key principle of hormone receptors. Center: a single colored hormone molecule shaped like a rounded key. Three cell-surface fragments arranged left to right: the left cell has a matching keyhole receptor and glows softly, the middle and right cells have differently shaped receptors and remain dim. Small lowercase serif labels read 'matching receptor' under the glowing cell and 'no match' under a dim one. Restrained palette of indigo line work, warm amber for the active hormone, soft grey shading on cream paper. Top-down schematic, generous white space, no photorealism, no invented numbers, no watermarks." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same broadcast, different listeners: only the matching receptor turns a signal into a response.</em></figcaption></figure>
+
+  <h3>Here is where people get this wrong</h3>
+  <p>People assume that if a hormone is high in the blood, its effects must be strong everywhere, and if it is low, its effects must be weak everywhere. Not necessarily. The effect at any given tissue depends on how many receptors that tissue is showing, and cells adjust their receptor counts constantly. When a cell is being shouted at by too much hormone for too long, it often pulls receptors off its surface to protect itself, a process called downregulation. The signal is loud, but the listener has turned down the volume. This exact mechanism sits at the center of insulin resistance, which gets its own chapter. File it away now.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Suppose you took a cell that normally ignores a certain hormone and forced it to build that hormone's receptor. What would happen the next time the hormone passed by? Try to answer before you reach the first widget, then test yourself with it.</p>
+  </aside>
+</section>
+
+<div class="ch-widget" id="w-signaling">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Broadcast vs. Phone Call Signaling Simulator</div>
+  </div>
+  <p class="ch-widget-sub">Fire a wired nervous signal, then release a hormone broadcast. Watch which cells respond, and prove to yourself that adding a receptor makes a silent cell suddenly listen.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Signal type</span>
+      <select class="ch-widget-select" id="sig-type">
+        <option value="nerve">Nervous (wired phone call)</option>
+        <option value="hormone">Endocrine (hormone broadcast)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Give cell C a receptor?</span>
+      <select class="ch-widget-select" id="sig-receptor">
+        <option value="no">No receptor</option>
+        <option value="yes">Add matching receptor</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Signal speed</span>
+      <select class="ch-widget-select" id="sig-speed">
+        <option value="fast">Fast</option>
+        <option value="slow">Slow (realistic)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Cell A (has receptor)</span>
+      <span class="ch-meter-bar"><span id="bar-a" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="num-a">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Cell B (no receptor)</span>
+      <span class="ch-meter-bar"><span id="bar-b" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="num-b">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Cell C (you decide)</span>
+      <span class="ch-meter-bar"><span id="bar-c" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="num-c">0</span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="sig-readout">Choose a signal type and press the button.</p>
+  <button class="ch-widget-btn" id="sig-go">Send signal</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Three Families, Sorted by Chemistry</h2>
+  <p>Now we change the question. Instead of asking how hormones are addressed, we ask what they are made of, because structure dictates behavior. Almost every hormone in your body falls into one of three structural families, and once you know a hormone's family you can predict roughly how fast it acts, where its receptor sits, and how long its effects last. This is the single most useful classification in the whole course.</p>
+
+  <h3>Steroid hormones</h3>
+  <p><span class="ch-key">Steroid hormones</span> are built from cholesterol. Cortisol, estradiol, testosterone, and aldosterone all belong here. The defining property is that they are fat-soluble, or lipophilic. Because cell membranes are themselves made of fat, steroids slip straight through the membrane like a drop of oil passing into oil. They do not need to knock on the door. They walk right in.</p>
+  <p>Once inside, a steroid binds a receptor that lives within the cell, often drifting in the cytoplasm or sitting in the nucleus. The hormone-receptor pair then travels to the DNA and acts as a switch on the genes themselves, turning specific genes on or off (Evans, 1988; Aranda &amp; Pascual, 2001). This is the <span class="ch-key">genomic mechanism</span>: the hormone changes which proteins the cell manufactures. Ronald Evans's landmark 1988 work established that steroid and thyroid hormone receptors form a single superfamily of ligand-activated transcription factors, meaning proteins that are switched on by a hormone and then directly regulate gene expression (Evans, 1988).</p>
+  <p>Acting on genes is slow. Building new proteins takes time, often hours. But it is also powerful and long-lasting, because once the cell starts producing a new set of proteins, the effect persists well after the hormone is gone. Slow to start, slow to fade. That is the steroid signature.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>The classic picture is "steroids act only on genes, and only slowly." But recent work complicates this. Mauvais-Jarvis and colleagues (2022) showed that steroids also trigger rapid signaling right at the cell membrane, and that this fast effect can actually amplify the slow genomic one. Why might a cell want both a fast and a slow response to the same hormone?</p>
+  </aside>
+
+  <h3>Peptide and protein hormones</h3>
+  <p><span class="ch-key">Peptide and protein hormones</span> are chains of amino acids, the same building blocks that make all proteins. Insulin, glucagon, growth hormone, and most of the pituitary hormones live here. They are water-soluble, which is convenient for traveling in blood but creates a problem at the target. A water-soluble molecule cannot pass through the fatty cell membrane. It is stuck outside.</p>
+  <p>So peptide hormones do not enter the cell. They knock on the door. The hormone binds a receptor embedded in the cell surface, and that receptor relays the message inward through a relay of internal molecules called <span class="ch-key">second messengers</span>. The hormone never crosses the threshold. It hands its instruction to a doorman, who runs the message inside.</p>
+  <p>The dominant doorman family is the G protein-coupled receptor, or GPCR, a protein that threads back and forth through the membrane seven times. When a hormone binds the outside, the receptor activates a G protein inside, which produces a burst of a second messenger such as cyclic AMP (Liu et al., 2024). This discovery has deep roots: Earl Sutherland won the Nobel Prize in 1971 for discovering cyclic AMP, and Rodbell and Gilman won in 1994 for the G proteins themselves (Liu et al., 2024). Because this is a relay of existing molecules rather than the manufacture of new proteins, it is fast, often producing effects within seconds (Calebiro et al., 2021).</p>
+
+  <h3>Amine hormones</h3>
+  <p><span class="ch-key">Amine hormones</span> are the small odd family, each built by modifying a single amino acid, usually tyrosine. This family contains two members that behave in almost opposite ways, which makes it a useful teaching case. Adrenaline (epinephrine) is water-soluble and acts like a peptide, binding surface receptors and triggering fast second-messenger cascades, which is exactly why a jolt of adrenaline hits you in seconds (Calebiro et al., 2021). Thyroid hormone, by contrast, is fat-soluble and acts like a steroid, entering the cell and working on genes, which is why thyroid effects build slowly over days (Evans, 1988).</p>
+  <p>So the amines remind you of something important: the deepest divide is not really the three names. It is solubility. Fat-soluble hormones get inside and work on genes, slowly and durably. Water-soluble hormones stay outside and work through surface receptors, quickly and briefly. Everything else is detail.</p>
+
+  <figure class="ch-figure" data-image-idx="2" data-prompt="A vintage scientific-illustration plate comparing two hormone mechanisms, drawn as a clean cross-section of a single cell in muted engraving style. Left half: a small fat-soluble hormone passing directly through the lipid membrane, binding an intracellular receptor, and docking on a coiled strand of DNA in the nucleus, with a small lowercase serif label 'genomic, slow'. Right half: a water-soluble hormone binding a seven-pass surface receptor with a relay of small dots cascading inward, labeled 'surface, fast'. Palette of sepia, slate blue, and one warm coral accent on aged cream paper. Symmetrical composition, fine hatching, no invented numbers, no watermarks." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 3</span> <em>The master divide: fat-soluble hormones enter and rewrite gene activity; water-soluble hormones signal from the surface.</em></figcaption></figure>
+
+  <h3>This is why it matters</h3>
+  <p>When you later ask "how fast does this hormone act, and how long does it last," you usually do not need to memorize the answer. You can derive it. Is the hormone fat-soluble and gene-acting, like cortisol or thyroid hormone? Then expect a slow, sustained effect. Is it water-soluble and surface-acting, like insulin or adrenaline? Then expect a fast, shorter effect. The table that follows is not the lesson. The reasoning is the lesson.</p>
+</section>
+
+<div class="ch-widget" id="w-sorter">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Hormone Family Sorter and Action Tracer</div>
+  </div>
+  <p class="ch-widget-sub">Assign each hormone to its structural family. A correct sort traces its mechanism; a wrong one shows you exactly why that mechanism could not work.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Hormone</span>
+      <select class="ch-widget-select" id="sort-hormone">
+        <option value="cortisol">Cortisol</option>
+        <option value="insulin">Insulin</option>
+        <option value="adrenaline">Adrenaline</option>
+        <option value="estradiol">Estradiol</option>
+        <option value="thyroid">Thyroid hormone</option>
+        <option value="glucagon">Glucagon</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Sort into family</span>
+      <select class="ch-widget-select" id="sort-bin">
+        <option value="steroid">Steroid bin</option>
+        <option value="peptide">Peptide / protein bin</option>
+        <option value="amine">Amine bin</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Speed of action</span>
+      <span class="ch-meter-bar"><span id="bar-speed" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="num-speed">, </span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Effect duration</span>
+      <span class="ch-meter-bar"><span id="bar-dur" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="num-dur">, </span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="sort-readout">Pick a hormone and a bin, then trace the action.</p>
+  <button class="ch-widget-btn" id="sort-go">Trace action</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Negative Feedback: The Thermostat Logic</h2>
+  <p>One question remains. If glands keep broadcasting hormones, what stops the broadcast from running out of control? The answer is the regulatory principle that makes the entire endocrine system stable: <span class="ch-key">negative feedback</span>. The output of a system shuts off its own production. It is the same logic as a home thermostat, and the analogy is exact, so it is worth walking through.</p>
+  <p>A thermostat has a target temperature, say 70 degrees. When the room drops below it, the heater switches on. As the room warms, the rising temperature feeds back to the thermostat, and when it reaches the target the heater switches off. The output of the system, heat, is exactly what turns the system off. The result is a temperature that hovers in a narrow band, self-correcting in both directions.</p>
+  <p>Endocrine axes work identically. A gland releases a hormone. The hormone produces its effect, and that effect, or the hormone level itself, feeds back to the gland and tells it to stop secreting. As the hormone does its job, it removes the very signal that called for it. This keeps hormone concentrations clamped within tight ranges despite constant disturbance from food, stress, sleep, and activity (Shi et al., 2025). Computational modeling of endocrine axes confirms that this negative feedback is essentially universal across hormone systems and is the structural reason hormone levels stay within their narrow homeostatic windows (Shi et al., 2025).</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox">
+      <span class="ch-figbox-tag">DIAGRAM</span>
+    </div>
+    <figcaption>
+      <span class="ch-fig-num">Fig. 4</span> The feedback loop: a gland secretes a hormone, the hormone acts on a target, and rising hormone output signals back to the gland to reduce further secretion, holding the level inside a stable band.
+    </figcaption>
+  </figure>
+
+  <h3>The chain version: axes</h3>
+  <p>In real life the loop usually has more than one stage. The classic arrangement is a three-tier chain called an axis. The hypothalamus signals the pituitary, the pituitary signals a downstream gland such as the thyroid or adrenal, and that gland releases the final hormone. The final hormone then feeds all the way back up the chain, suppressing both the pituitary and the hypothalamus. You will draw this exact structure many times, for the thyroid axis, the adrenal stress axis, and the reproductive axis. The drawing changes; the logic never does.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>If you took a steroid hormone as a daily pill, your blood level of that hormone would stay high around the clock. Using thermostat logic, predict what your own gland would do with its production. This is not a trick question, and the answer explains a real and important clinical effect you will study later.</p>
+  </aside>
+
+  <h3>Coaching translation</h3>
+  <p>In practice, this means your body is built to defend a set point, not to be pushed in one direction forever. Flood the system with a hormone from outside and the matching gland quietly powers down, because the feedback loop reads the high level and concludes its job is already done. Most of the dramatic things that go wrong in hormone health, and a fair amount of what supplements and medications do, can be understood as either breaking a feedback loop or fooling it. Learn the loop and you will stop being surprised.</p>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Putting It Together</h2>
+  <p>You now hold four ideas that interlock. First, the endocrine system is a broadcast, not a phone call, slow and body-wide where the nervous system is fast and wired. Second, the broadcast only reaches cells carrying the matching receptor, so specificity lives in the listener, not the message. Third, a hormone's chemical family, really its solubility, predicts whether it acts slowly on genes from the inside or quickly through surface receptors from the outside. Fourth, negative feedback keeps the whole system clamped to a stable set point.</p>
+  <p>None of this is optional later. Receptor specificity returns the moment we explain insulin resistance. The steroid-versus-peptide split organizes the sex hormones and the adrenals. Negative feedback becomes the spine of every axis you will draw. From here on, when you meet a new hormone, you should reflexively ask three questions: which family, where is its receptor, and how does its loop shut off. You can answer most of that from chemistry alone, which is exactly the power this foundation gives you.</p>
+</section>
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>The nervous system is a wired, fast, point-to-point phone call; the endocrine system is a slow, body-wide radio broadcast carried by the blood.</li>
+    <li>A hormone is a chemical messenger secreted into circulation that acts at a distance through a specific receptor, not by brute chemical force, which is why tiny concentrations produce large effects.</li>
+    <li>Specificity is decided by the receiving cell: only cells displaying the matching receptor respond, and cells adjust receptor numbers, which previews insulin resistance.</li>
+    <li>Structure dictates behavior. Fat-soluble hormones (steroids, thyroid hormone) enter cells and act on genes, slowly and durably; water-soluble hormones (peptides, adrenaline) act through surface receptors and second messengers, quickly and briefly.</li>
+    <li>Negative feedback is thermostat logic: a hormone's output suppresses its own production, holding levels in a narrow band and forming the backbone of every endocrine axis.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>Next class we take this operating system and run a single program on it: insulin. You will see receptor specificity become the difference between a healthy response to a meal and insulin resistance, watch a peptide hormone fire its surface cascade in real time, and learn why the body's most familiar metabolic signal is also the one most easily ignored when its listeners turn down the volume.</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Aranda, A., &amp; Pascual, A. (2001). Nuclear hormone receptors and gene expression. <em>Physiological Reviews, 81</em>(3), 1269–1304. https://doi.org/10.1152/physrev.2001.81.3.1269</p>
+  <p>Calebiro, D., Koszegi, Z., Lanoiselée, Y., Miljus, T., &amp; O'Brien, S. (2021). G protein-coupled receptor-G protein interactions: A single-molecule perspective. <em>Physiological Reviews, 101</em>(3), 857–906. https://doi.org/10.1152/physrev.00021.2020</p>
+  <p>Evans, R. M. (1988). The steroid and thyroid hormone receptor superfamily. <em>Science, 240</em>(4854), 889–895. https://pubmed.ncbi.nlm.nih.gov/3283939/</p>
+  <p>Goodman, H. M. (2021). <em>Goodman's basic medical endocrinology</em> (5th ed.). Academic Press.</p>
+  <p>Liu, S., Anderson, P., Wang, Y., &amp; Zhang, L. (2024). G protein-coupled receptors: A century of research and discovery. <em>Circulation Research, 134</em>(8), 1037–1060. https://doi.org/10.1161/circresaha.124.323067</p>
+  <p>Mauvais-Jarvis, F., Lange, C. A., &amp; Levin, E. R. (2022). Membrane-initiated steroid signaling. <em>Endocrine Reviews.</em> https://www.endocrine.org/journals/endocrine-reviews/membrane-initiated-steroid-receptors-signaling</p>
+  <p>Melmed, S., Koenig, R., Rosen, C. J., Auchus, R. J., &amp; Goldfine, A. B. (2019). <em>Williams textbook of endocrinology</em> (14th ed.). Elsevier.</p>
+  <p>Nussey, S. S., &amp; Whitehead, S. A. (2001). <em>Endocrinology: An integrated approach.</em> BIOS Scientific Publishers. https://www.ncbi.nlm.nih.gov/books/NBK22/</p>
+  <p>Shi, Z., Wang, H., Li, J., &amp; Conolly, R. B. (2025). Interference with systemic negative feedback as a potential mechanism for nonmonotonic dose-responses of endocrine-disrupting chemicals. <em>Toxicological Sciences.</em> https://doi.org/10.1093/toxsci/kfaf060</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 1 of 12</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('w-signaling');
+    if(!w) return;
+    var typeSel = w.querySelector('#sig-type');
+    var recSel = w.querySelector('#sig-receptor');
+    var speedSel = w.querySelector('#sig-speed');
+    var go = w.querySelector('#sig-go');
+    var readout = w.querySelector('#sig-readout');
+    var barA = w.querySelector('#bar-a'), barB = w.querySelector('#bar-b'), barC = w.querySelector('#bar-c');
+    var numA = w.querySelector('#num-a'), numB = w.querySelector('#num-b'), numC = w.querySelector('#num-c');
+    var timer = null;
+
+    function reset(){
+      barA.style.width='0%'; barB.style.width='0%'; barC.style.width='0%';
+      numA.textContent='0'; numB.textContent='0'; numC.textContent='0';
+    }
+
+    function animateTo(targets, dur){
+      if(timer){ clearInterval(timer); }
+      var start = Date.now();
+      timer = setInterval(function(){
+        var t = Math.min(1,(Date.now()-start)/dur);
+        function set(bar,num,target){
+          var v = Math.round(target*t);
+          bar.style.width = v + '%';
+          num.textContent = v;
+        }
+        set(barA,numA,targets[0]);
+        set(barB,numB,targets[1]);
+        set(barC,numC,targets[2]);
+        if(t>=1){ clearInterval(timer); timer=null; }
+      },30);
+    }
+
+    go.addEventListener('click', function(){
+      reset();
+      var type = typeSel.value;
+      var hasC = recSel.value === 'yes';
+      var dur = speedSel.value === 'slow' ? 2600 : 700;
+      if(type === 'nerve'){
+        // wired: only the targeted cell A responds, near-instant
+        animateTo([100,0, hasC?0:0], 350);
+        readout.textContent = 'Nervous signal: a single wire reaches Cell A only. Receptors are irrelevant here because the message is delivered point-to-point through a physical connection, and it arrives almost instantly.';
+      } else {
+        // broadcast: reaches all, but only receptor-bearing cells respond
+        animateTo([100, 0, hasC?100:0], dur);
+        if(hasC){
+          readout.textContent = 'Hormone broadcast: the molecule floods every cell. Cell A responds (it has the receptor), Cell B stays silent (no receptor), and Cell C now responds too, because you gave it the matching receptor. Same broadcast, new listener.';
+        } else {
+          readout.textContent = 'Hormone broadcast: the molecule floods every cell, but only Cell A responds. Cell B and Cell C carry no matching receptor, so the identical signal passes straight through them. Specificity lives in the listener.';
+        }
+      }
+    });
+
+    reset();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('w-sorter');
+    if(!w) return;
+    var hSel = w.querySelector('#sort-hormone');
+    var bSel = w.querySelector('#sort-bin');
+    var go = w.querySelector('#sort-go');
+    var readout = w.querySelector('#sort-readout');
+    var barSpeed = w.querySelector('#bar-speed'), barDur = w.querySelector('#bar-dur');
+    var numSpeed = w.querySelector('#num-speed'), numDur = w.querySelector('#num-dur');
+
+    var data = {
+      cortisol:{fam:'steroid', name:'Cortisol'},
+      insulin:{fam:'peptide', name:'Insulin'},
+      adrenaline:{fam:'amine', name:'Adrenaline', acts:'surface'},
+      estradiol:{fam:'steroid', name:'Estradiol'},
+      thyroid:{fam:'amine', name:'Thyroid hormone', acts:'gene'},
+      glucagon:{fam:'peptide', name:'Glucagon'}
+    };
+
+    function setMeters(speed, dur, sLabel, dLabel){
+      barSpeed.style.width = speed + '%';
+      barDur.style.width = dur + '%';
+      numSpeed.textContent = sLabel;
+      numDur.textContent = dLabel;
+    }
+
+    go.addEventListener('click', function(){
+      var h = data[hSel.value];
+      var bin = bSel.value;
+      var correct = h.fam === bin;
+
+      if(!correct){
+        setMeters(0,0,', ',', ');
+        readout.textContent = 'Mismatch. ' + h.name + ' is a ' + h.fam + ' hormone, not a ' + bin + '. The ' + bin + ' mechanism would not work for it because its solubility is wrong for that pathway. Try the ' + h.fam + ' bin and watch the action trace.';
+        return;
+      }
+
+      // correct: trace mechanism, but amine splits by behavior
+      var actsGene;
+      if(h.fam === 'steroid'){ actsGene = true; }
+      else if(h.fam === 'peptide'){ actsGene = false; }
+      else { actsGene = (h.acts === 'gene'); }
+
+      if(actsGene){
+        setMeters(25, 95, 'Slow', 'Long');
+        readout.textContent = 'Correct. ' + h.name + ' is fat-soluble, so it slips through the membrane, binds an intracellular receptor, and docks on DNA to switch genes on or off. Building new proteins is slow to start, but the effect is powerful and long-lasting.';
+      } else {
+        setMeters(95, 30, 'Fast', 'Short');
+        readout.textContent = 'Correct. ' + h.name + ' is water-soluble, so it cannot enter the cell. It binds a surface receptor and triggers a second-messenger cascade inside. No new proteins are built, so the response is fast but comparatively brief.';
+      }
+    });
+
+    setMeters(0,0,', ',', ');
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

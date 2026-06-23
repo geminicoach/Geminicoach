@@ -62,10 +62,20 @@
     .ce-btn:hover { background:var(--blue-bright); }
     .ce-btn.ghost { background:transparent; border:1px solid #3a5e92; color:#bfd3ee; }
     .ce-btn.ghost:hover { color:#fff; border-color:#5aaff5; }
+    .ce-btn.locked { background:rgba(255,255,255,.05); color:var(--gray); border:1px solid var(--line); cursor:not-allowed; }
+    .prog { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 18px; margin-bottom:18px; }
+    .prog-top { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:9px; gap:12px; }
+    .prog-k { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:12px; color:var(--blue-light); }
+    .prog-v { font-size:13px; color:var(--gray); }
+    .bar { height:8px; background:#10243f; border-radius:99px; overflow:hidden; }
+    .fill { height:100%; background:linear-gradient(90deg,var(--blue),var(--blue-bright)); border-radius:99px; transition:width .25s; }
+    .ch.done { border-color:#2a6b46; background:linear-gradient(180deg,rgba(46,204,113,.07),var(--panel)); }
+    .rt .donew { display:flex; align-items:center; gap:6px; margin-top:10px; font-size:12.5px; color:var(--off-white); cursor:pointer; white-space:nowrap; }
+    .rt .donew input { cursor:pointer; width:15px; height:15px; }
     footer { max-width:880px; margin:0 auto; padding:24px; color:var(--gray); font-size:12.5px; border-top:1px solid var(--line); }
     .loading { color:var(--gray); padding:36px 0; text-align:center; }
     .info { color:var(--gray); padding:30px 0; max-width:560px; }
-    @media (max-width:560px){ .hero h1{font-size:32px} .rt{display:none} }
+    @media (max-width:560px){ .hero h1{font-size:32px} .rt .mins{display:none} }
   </style>
 </head>
 <body>
@@ -122,27 +132,74 @@
       var first = chs[0];
       var startBtn = (first && first.reading)
         ? '<a class="start" href="' + esc(first.reading) + '">Start with Chapter 1 &nbsp;→</a>' : '';
+
+      // --- per-chapter completion (saved locally, per course) ---
+      var PKEY = "gemEduProgress:" + c.slug;
+      function getDone(){ try { return JSON.parse(localStorage.getItem(PKEY)||"[]"); } catch(e){ return []; } }
+      function setDone(a){ try { localStorage.setItem(PKEY, JSON.stringify(a)); } catch(e){} }
+      function isDone(pos){ return getDone().indexOf(pos) !== -1; }
+      function markDone(pos){ var a=getDone(); if(a.indexOf(pos)===-1){ a.push(pos); setDone(a); } }
+      function toggleDone(pos){ var a=getDone(); var i=a.indexOf(pos); if(i===-1) a.push(pos); else a.splice(i,1); setDone(a); }
+      function doneCount(){ return chs.filter(function(ch){ return isDone(ch.position); }).length; }
+
       var list = chs.map(function (ch) {
-        return '<div class="ch"><div class="num">' + esc(ch.position) + '</div><div>'
+        var done = isDone(ch.position);
+        return '<div class="ch' + (done?' done':'') + '" data-pos="' + esc(ch.position) + '"><div class="num">' + esc(ch.position) + '</div><div>'
           + '<h3>' + esc(ch.title) + '</h3><p>' + esc(ch.subtitle||"") + '</p>'
           + '<div class="links">'
           + (ch.reading ? '<a class="read" href="' + esc(ch.reading) + '">Read chapter</a>' : '')
           + (ch.quiz ? '<a class="aux" href="' + esc(ch.quiz) + '">Quiz</a>' : '')
           + (ch.challenge ? '<a class="aux" href="' + esc(ch.challenge) + '">Weekly challenge</a>' : '')
-          + '</div></div><div class="rt">~' + esc(ch.minutes||c.minutes_per_chapter||60) + ' min</div></div>';
+          + '</div></div>'
+          + '<div class="rt"><span class="mins">~' + esc(ch.minutes||c.minutes_per_chapter||60) + ' min</span>'
+          + '<label class="donew"><input type="checkbox" class="donecb" data-pos="' + esc(ch.position) + '"' + (done?' checked':'') + '> Done</label>'
+          + '</div></div>';
       }).join("");
+
       var nQuiz = chs.filter(function(x){return x.quiz;}).length;
       var nChal = chs.filter(function(x){return x.challenge;}).length;
       var included = '<div class="included"><span><b>' + chs.length + '</b> chapter readings</span>'
         + '<span><b>' + nQuiz + '</b> quizzes</span><span><b>' + nChal + '</b> weekly challenges</span></div>';
-      var ce = '<div class="ce"><div class="ce-h">Earn your certificate</div>'
-        + '<p>Work through the chapters, then pass the final exam to earn your certificate of completion. '
-        + 'You need 80% to pass, and you can retake it. You\'ll need a free account so we can save your result.</p>'
-        + '<div class="ce-links">'
-        + '<a class="ce-btn" href="exam.html?slug=' + encodeURIComponent(c.slug) + '">Take the final exam &nbsp;→</a>'
-        + '<a class="ce-btn ghost" href="certificate.html?slug=' + encodeURIComponent(c.slug) + '">My certificate</a>'
-        + '</div></div>';
-      body.innerHTML = startBtn + list + included + ce;
+
+      function progressHTML(){
+        var d=doneCount(), n=chs.length, pct=n?Math.round(d/n*100):0;
+        return '<div class="prog"><div class="prog-top"><span class="prog-k">Your progress</span>'
+          + '<span class="prog-v">' + d + ' of ' + n + ' chapters complete</span></div>'
+          + '<div class="bar"><div class="fill" style="width:' + pct + '%"></div></div></div>';
+      }
+      function ceHTML(){
+        var complete = chs.length>0 && doneCount() >= chs.length;
+        var examBtn = complete
+          ? '<a class="ce-btn" href="exam.html?slug=' + encodeURIComponent(c.slug) + '">Take the final exam &nbsp;→</a>'
+          : '<span class="ce-btn locked">Complete all chapters to unlock</span>';
+        return '<div class="ce"><div class="ce-h">Earn your certificate</div>'
+          + '<p>Finish every chapter above, then pass the final exam (80% to pass, retakes allowed) to earn your certificate of completion. A free account saves your result.</p>'
+          + '<div class="ce-links">' + examBtn
+          + '<a class="ce-btn ghost" href="certificate.html?slug=' + encodeURIComponent(c.slug) + '">My certificate</a>'
+          + '</div></div>';
+      }
+
+      body.innerHTML = startBtn + '<div id="prog-slot">' + progressHTML() + '</div>'
+        + list + included + '<div id="ce-slot">' + ceHTML() + '</div>';
+
+      function repaint(){
+        var ps=document.getElementById("prog-slot"); if(ps) ps.innerHTML=progressHTML();
+        var cs=document.getElementById("ce-slot"); if(cs) cs.innerHTML=ceHTML();
+      }
+      body.addEventListener("change", function(e){
+        var t=e.target;
+        if (t && t.classList && t.classList.contains("donecb")){
+          toggleDone(Number(t.getAttribute("data-pos")));
+          var row=t.closest(".ch"); if(row) row.classList.toggle("done", t.checked);
+          repaint();
+        }
+      });
+      body.addEventListener("click", function(e){
+        var a=e.target;
+        if (a && a.classList && a.classList.contains("read")){
+          var row=a.closest(".ch"); if(row) markDone(Number(row.getAttribute("data-pos")));
+        }
+      });
     })();
   </script>
 </body>

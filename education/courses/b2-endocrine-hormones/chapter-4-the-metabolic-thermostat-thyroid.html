@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Metabolic Thermostat: Thyroid</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 4 · Module 2</div>
+    <h1 class="ch-title">The Metabolic Thermostat: <em>Thyroid</em></h1>
+    <p class="ch-subtitle">If insulin manages fuel minute to minute, the thyroid sets the speed of the whole engine.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>icture a building with a single thermostat in the lobby that quietly governs every room. Turn it up and the radiators across all twelve floors get hotter, the fans spin faster, and the whole place hums with activity. Turn it down and everything slows: rooms cool, machinery idles, the building feels sleepy. Your thyroid is that thermostat, except the building is your body and the "rooms" are nearly every cell you own.</p>
+    <p>In the last chapter you watched insulin act like a fuel dispatcher, deciding where glucose goes second by second. The thyroid plays a different game. It does not micromanage individual meals. It sets the <em>baseline tempo</em> of the entire metabolic machine, and it does so on a timescale of days and weeks. This is also your first complete walk up a real hormone axis, the one whose generic template you built in Chapter 2. Everything you practiced there, the three floors and the feedback logic, is about to read a real system.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-watercolour editorial diagram of the human hypothalamus-pituitary-thyroid axis as a vertical three-floor cascade. Top floor: the hypothalamus drawn as a small walnut-shaped structure releasing a labeled arrow 'TRH' downward. Middle floor: the pituitary gland releasing a labeled arrow 'TSH' downward. Bottom floor: a butterfly-shaped thyroid gland at the base of the neck releasing two labeled arrows 'T4' (large) and 'T3' (small). A faint dashed feedback line curves back up from the thyroid to the upper two floors labeled 'negative feedback'. Warm earthy palette of ochre, sage green, and soft slate blue, ink linework with watercolour washes, vertical portrait composition, clean and textbook-like with generous negative space. No watermarks, no cropped letters." data-aspect="portrait"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The thyroid axis as a three-floor cascade with feedback running back up.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Walking up the axis, one floor at a time</h2>
+    <p>Let us build the axis from the top, because the order matters and you will be drawing this from memory by the end.</p>
+    <p>On the top floor sits the <span class="ch-key">hypothalamus</span>. It releases a short signal called <span class="ch-key">TRH</span> (thyrotropin-releasing hormone). TRH travels a very short distance down to the second floor.</p>
+    <p>On the second floor sits the <span class="ch-key">pituitary</span>. When TRH arrives, the pituitary synthesizes and secretes <span class="ch-key">TSH</span> (thyroid-stimulating hormone). TSH enters the general circulation and travels down to the gland itself (Ortiga-Carvalho et al., 2016).</p>
+    <p>On the ground floor sits the <span class="ch-key">thyroid gland</span>, a butterfly-shaped organ wrapped around the front of your windpipe. When TSH knocks on its door, the thyroid produces hormone. Here is the first detail people get wrong: the thyroid does not mostly make the active hormone. It makes mostly <span class="ch-key">T4</span> (thyroxine), with only a small amount of the more active <span class="ch-key">T3</span> (triiodothyronine). In the bloodstream, T4 circulates at roughly one hundred times the concentration of T3 (Ortiga-Carvalho et al., 2016).</p>
+    <p>That ratio is not an accident, and understanding why is the conceptual heart of this chapter.</p>
+
+    <h3>The feedback loop that keeps it stable</h3>
+    <p>Once thyroid hormone is in the blood, it does something elegant: it reaches back up and tells the upper two floors to ease off. Both T3 and T4 exert <span class="ch-key">negative feedback</span> at the hypothalamus and the pituitary, dialing down TRH and TSH (Chiamolera & Wondisford, 2021). This is the same closed loop you drew on the generic axis. When hormone is plentiful, the upper floors quiet down. When hormone runs low, they shout louder. The result is a remarkably stable daily TSH level, a thermostat that holds its setpoint.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: if the thyroid gland suddenly started underperforming, what would happen to TSH? Picture the feedback loop. Less thyroid hormone means less of the "ease off" signal reaching the pituitary, so TSH would climb. Hold that prediction. We will use it as a diagnostic lever shortly.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The conversion step: why the story is not just about the gland</h2>
+    <p>Here is the part that makes thyroid physiology genuinely interesting, and it is the part most casual explanations skip.</p>
+    <p>T4 is largely a <span class="ch-key">storage and transport form</span>. It is the prohormone, the reservoir floating around waiting to be switched on. The active hormone, the one that actually walks into cells and changes their behavior, is T3. So how does T4 become T3? Through a family of enzymes called the <span class="ch-key">deiodinases</span>, which pluck a single iodine atom off T4 to convert it into T3 (Bianco et al., 2002).</p>
+    <p>The critical insight: this conversion happens <em>throughout the body</em>, in the tissues, not just in the gland. Most of the active T3 working in your cells did not arrive from the thyroid already active. It was made locally, on site, by deiodinase enzymes in the liver, kidney, muscle, brain, and elsewhere (Bianco et al., 2002). Two enzymes do the activating: <span class="ch-key">D1</span> and <span class="ch-key">D2</span>, both of which run the T4-to-T3 reaction. A third enzyme, <span class="ch-key">D3</span>, does the opposite. It inactivates thyroid hormone, converting T4 into the metabolically inert molecule called <span class="ch-key">reverse T3</span> (Ortiga-Carvalho et al., 2016).</p>
+    <p>Think of it this way. The gland ships out crates of inactive hormone (T4) to every tissue. Each tissue keeps its own pair of scissors (D2) and decides locally how much to activate. Some tissues can also throw hormone away (D3) when they want to turn the volume down. This means a tissue can tune its own thyroid exposure somewhat independently, which is a far more flexible system than a gland simply broadcasting one finished signal.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Here is what this means in plain terms. Your thyroid status is not just "how much hormone does the gland make." It is also "how well is your body converting the storage form into the active form." Two people can have an identical, healthy-looking gland output and feel very different if one of them is converting poorly. This is why thyroid is a whole-body story, not just a neck story. Keep this in your back pocket, because it explains a lot of confusion you will encounter.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="dimmer-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Metabolic Dimmer Switch</div>
+    </div>
+    <p class="ch-widget-sub">One thyroid dial drives the whole body. Watch metabolic rate, temperature, heart rate, and energy rise and fall together. Then break the conversion step and see what happens.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Gland output (T4 produced)</span>
+        <select class="ch-widget-select" id="dimmer-output">
+          <option value="0.2">Very low</option>
+          <option value="0.5">Low</option>
+          <option value="1" selected>Normal</option>
+          <option value="1.5">High</option>
+          <option value="1.9">Very high</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Tissue T3 conversion (deiodinase)</span>
+        <select class="ch-widget-select" id="dimmer-conv">
+          <option value="1" selected>Normal conversion</option>
+          <option value="0.5">Impaired conversion</option>
+          <option value="0.25">Severely impaired</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Metabolic rate</span>
+        <span class="ch-meter-bar"><span id="dimmer-bar-rate" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="dimmer-num-rate">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Body temperature</span>
+        <span class="ch-meter-bar"><span id="dimmer-bar-temp" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="dimmer-num-temp">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Heart rate</span>
+        <span class="ch-meter-bar"><span id="dimmer-bar-hr" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="dimmer-num-hr">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Energy</span>
+        <span class="ch-meter-bar"><span id="dimmer-bar-energy" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="dimmer-num-energy">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Active T3 reaching cells</span>
+        <span class="ch-meter-bar"><span id="dimmer-bar-t3" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="dimmer-num-t3">50</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="dimmer-reset">Reset to normal</button>
+    <p class="ch-widget-sub" id="dimmer-readout" style="margin-top:14px"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>An amine that behaves like a steroid</h2>
+    <p>Chemically, thyroid hormone is an <span class="ch-key">amine</span>, built from the amino acid tyrosine with iodine atoms bolted on. By that classification you might expect it to act like adrenaline, latching onto receptors on the cell surface and triggering fast, short-lived signals. It does not. Thyroid hormone breaks the rule.</p>
+    <p>Instead, T3 slips inside the cell, travels to the nucleus, and binds <span class="ch-key">nuclear thyroid hormone receptors</span> (the isoforms TRα and TRβ). Bound to DNA, these receptors change which genes get read (Mullur et al., 2014). That is steroid behavior. It is slow, it is broad, and it reshapes the cell's machinery rather than flicking a quick switch. This is exactly why thyroid effects build over days and weeks rather than seconds, and why thyroid problems creep in gradually rather than hitting like a dropped blood sugar.</p>
+    <p>What does T3 actually tell those genes to do? At the broadest level, it sets the cell's <span class="ch-key">basal metabolic rate</span>, the idle speed of its engine. One of its classic targets is the Na/K-ATPase, the membrane pump that constantly shuttles ions and burns a meaningful share of your resting energy (Mullur et al., 2014). Crank up that pump across billions of cells and the whole body's energy expenditure rises. T3 also <em>potentiates adrenergic signaling</em>, meaning it makes tissues more responsive to adrenaline. This is the link between thyroid status and heart rate, and part of why an overactive thyroid feels like running on too much caffeine (Mullur et al., 2014).</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Adrenaline does not change much between a low-thyroid and high-thyroid person. So why does the high-thyroid person have a racing heart? The answer is in the word "potentiates." T3 turns up the gain on the adrenaline signal. Same input, bigger response. Where else in the body might "same input, bigger response" show up when metabolic rate is set high?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Too slow and too fast: the overview picture</h2>
+    <p>Because thyroid touches nearly every cell, the symptoms of a misfiring thyroid are famously diffuse. They read less like a single broken part and more like the whole engine running at the wrong speed. We are going to describe the pattern so you recognize it, not so you diagnose it. That distinction matters and we will hold it firmly.</p>
+
+    <h3>When the system runs too slow: the underactive picture</h3>
+    <p>When thyroid hormone is insufficient, metabolism drags. The classic presentation of <span class="ch-key">hypothyroidism</span> is fatigue, weight gain, cold intolerance, slowed digestion, sluggish mood, and a general sense that everything is operating at half speed (Taylor et al., 2024). It makes sense once you see thyroid as the thermostat: turn the building's heat down and every room cools, every system idles. Cold intolerance is almost a signature, because reduced thermogenesis means less internal heat production. The most common cause is an autoimmune condition called Hashimoto's thyroiditis, in which the immune system gradually impairs the gland (Taylor et al., 2024).</p>
+
+    <h3>When the system runs too fast: the overactive picture</h3>
+    <p>When thyroid hormone is excessive, everything races. <span class="ch-key">Hyperthyroidism</span> typically presents as anxiety, palpitations, unintended weight loss despite a good appetite, heat intolerance, sweating, and loose or frequent stools (Wiersinga et al., 2023). Notice how these are nearly the mirror image of the underactive list. Heat intolerance instead of cold intolerance. Weight loss instead of weight gain. Racing heart instead of sluggishness. The metabolic dimmer is turned up too far. The most common cause is Graves' disease, an autoimmune condition that drives the gland to overproduce, accounting for roughly 70 percent of cases, with toxic nodular goitre making up much of the rest (Wiersinga et al., 2023). Globally, hyperthyroidism affects somewhere between 0.2 and 1.3 percent of people (Wiersinga et al., 2023).</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here is where people get this wrong</div>
+      <p>People love to blame the thyroid for any fatigue or stubborn weight, and they love to self-diagnose from a symptom checklist. But these symptoms overlap with poor sleep, stress, under-eating, depression, and a dozen other things. A symptom pattern is a reason to ask a real question with real testing, not a verdict. The value of understanding the axis is that it tells you what question to ask and where to look. That is education. The diagnosis is a clinician's job, with labs, not a checklist's job.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration plate, ink and muted watercolour, showing a single human figure rendered twice side by side as a comparison of metabolic states, in the style of an old physiology textbook engraving. Left figure tinted cool blue-grey with small icons around it suggesting cold and slowness: a snowflake, a slow clock, a downward arrow. Right figure tinted warm amber-red with icons suggesting heat and speed: a flame, a fast clock, an upward arrow, small beads of sweat. Above the left figure a small serif label 'underactive'; above the right figure a small serif label 'overactive'. Centered, subdued palette of slate blue, warm amber, cream paper background with faint aging. Portrait composition, two figures stacked side by side, generous margins. No watermarks, no cropped letters, no modern clothing." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The two failure modes are near mirror images: everything too slow, or everything too fast.</em></figcaption></figure>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The three-floor logic, now reading a real system</h2>
+    <p>This is the payoff. In Chapter 2 you practiced troubleshooting a generic axis by reading two numbers at once: the <em>signal from above</em> and the <em>output below</em>. The thyroid axis is where that abstract skill becomes a genuine diagnostic inference.</p>
+    <p>Here is the rule, and it follows directly from the feedback loop you already understand. The pituitary's TSH is constantly adjusting itself based on how much thyroid hormone it senses. So TSH is essentially the pituitary's opinion of whether there is enough hormone around. Read it as a complaint meter.</p>
+    <p><strong>Scenario one: high TSH, low thyroid hormone.</strong> The pituitary is shouting (high TSH) but the gland is not delivering (low hormone). The signal from above is loud and clear; the floor below is failing to respond. The problem is at the gland. This is <span class="ch-key">primary hypothyroidism</span> (Taylor et al., 2024). The thermostat is calling for heat, but the furnace is broken.</p>
+    <p><strong>Scenario two: low TSH, low thyroid hormone.</strong> Now both are low. The gland is not delivering, but the pituitary is not even asking. If the gland were simply broken, the pituitary should be shouting. It is not. That points the finger <em>higher up</em>, to the pituitary or hypothalamus failing to send the signal. This is <span class="ch-key">central hypothyroidism</span> (Taylor et al., 2024). The furnace works fine; the thermostat itself is dead.</p>
+    <p>That single inference, low versus high TSH paired with low output, lets you locate where in the axis the problem most likely sits. You practiced it on a nameless generic system. Now it reads a real one. That is the whole point of building the template first.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>An overactive thyroid: what does TSH do? Work it through. The gland is overproducing hormone, so the pituitary senses plenty and stops asking. TSH should be suppressed, near the floor. Indeed, the hallmark of primary hyperthyroidism is low TSH with elevated thyroid hormone (Wiersinga et al., 2023). Same loop, run in reverse.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="detective-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Thyroid Axis Detective</div>
+    </div>
+    <p class="ch-widget-sub">Read the paired numbers. Decide where the problem sits: at the gland, or higher up the axis. The feedback loop will confirm or correct you. This is the Chapter 2 troubleshooter, now reading a real system.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Educational scenario</span>
+        <select class="ch-widget-select" id="det-scenario">
+          <option value="0">Case A: TSH high, thyroid hormone low</option>
+          <option value="1">Case B: TSH low, thyroid hormone low</option>
+          <option value="2">Case C: TSH low, thyroid hormone high</option>
+          <option value="3">Case D: TSH normal, thyroid hormone normal</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your call: where is the problem?</span>
+        <select class="ch-widget-select" id="det-call">
+          <option value="gland">At the gland (lower floor)</option>
+          <option value="higher">Higher up (pituitary / hypothalamus)</option>
+          <option value="gland-over">At the gland, overproducing</option>
+          <option value="none">No problem indicated</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">TSH (signal from above)</span>
+        <span class="ch-meter-bar"><span id="det-bar-tsh" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="det-num-tsh">--</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Thyroid hormone (output)</span>
+        <span class="ch-meter-bar"><span id="det-bar-th" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="det-num-th">--</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="det-check">Check my reasoning</button>
+    <p class="ch-widget-sub" id="det-feedback" style="margin-top:14px"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Thyroid does not work alone</h2>
+    <p>No hormone axis lives in isolation, and thyroid is unusually well connected. Because it sets the metabolic baseline, it leans on and is leaned on by nearly every other system you will study in this course.</p>
+
+    <h3>Cross-talk with insulin and the metabolic receptors</h3>
+    <p>Thyroid hormone modulates how <span class="ch-key">insulin-sensitive</span> you are. T3 ramps up fatty acid oxidation and cholesterol clearance, and it physically interacts with the other big metabolic nuclear receptors, the PPARs and LXR, that govern lipid and glucose handling (Weitzel & Iwen, 2011). When thyroid signaling is disordered, insulin resistance and abnormal blood lipids can follow (Weitzel & Iwen, 2011). So the thyroid chapter and the insulin chapter are not separate stories. They are two players reading from the same metabolic script.</p>
+
+    <h3>Cross-talk with energy availability</h3>
+    <p>This connection is the one worth tattooing on the inside of your eyelids, because it dismantles a popular myth. The thyroid axis responds to <span class="ch-key">energy availability</span>, not just to fat mass. In a randomized controlled trial, Fontana and colleagues (2009) compared two ways of losing the same amount of fat. One group lost fat through caloric restriction; the other lost an equivalent amount through exercise. Only the caloric restriction group showed a meaningful drop in circulating T3. The exercise group did not.</p>
+    <p>Here is the mechanistic punchline. In the caloric restriction group, TSH, T4, and free T4 were all <em>unchanged</em>. Only the active hormone, T3, fell (Fontana et al., 2009). Walk that through the framework you just built. If the gland were being suppressed, you would expect TSH and T4 to move. They did not. The signal from above was steady and the gland's output of the storage form was steady. What changed was the <em>conversion step</em>: less T4 was being turned into active T3 in the tissues. The body, sensing a lower energy intake, quietly turned down its own dimmer by converting less hormone. It is a sensible adaptation to scarcity, and it does not require the gland to fail at all.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">In practice, this means</div>
+      <p>Aggressive, prolonged under-eating can blunt your active thyroid hormone, and it does so largely through the conversion step rather than by breaking the gland. This is part of why very aggressive dieting can leave people feeling cold, flat, and slowed down even when their basic thyroid labs look "normal." The T4 looks fine because the gland is fine. The T3, the part that actually does the work, is what sagged. We will return to this in the lifestyle chapter. For now, file it as a clean, real-world demonstration that thyroid is a whole-body conversion story, not just a gland story.</p>
+    </aside>
+
+    <h3>Cross-talk with stress and sex hormones</h3>
+    <p>Thyroid also interleaves with cortisol and the sex hormones, and the regulation of TSH itself is nudged by inflammatory cytokines, circadian rhythm, and overall energy state (Chiamolera & Wondisford, 2021). You do not need the full map yet. The point is that the thermostat is wired into the rest of the house. When you reach the stress and sex-hormone chapters, you will find thyroid sitting quietly in the background of both.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The thyroid does not decide what you do with this meal. It decides how fast every cell in your body is willing to work, today, this week, this season.</p>
+    <cite>A working summary of thyroid's role</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>Putting it together</h2>
+    <p>Step back and look at what you can now do. You can walk up the axis from hypothalamus to pituitary to gland. You understand that the gland ships mostly the storage form, T4, and that the active form, T3, is largely made on site in your tissues by deiodinase enzymes. You know that thyroid hormone is technically an amine that behaves like a steroid, acting at the gene level to set basal metabolic rate, which is why it touches temperature, heart rate, energy, mood, and digestion all at once. You can recognize the overview patterns of too slow and too fast as near mirror images. And, most powerfully, you can read two numbers, TSH and thyroid output, and locate roughly where in the axis a problem sits. That is the generic troubleshooter from Chapter 2, finally pointed at a real, named system.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The thyroid axis runs hypothalamus (TRH) to pituitary (TSH) to thyroid gland, with thyroid hormone feeding back negatively on both upper floors to hold a stable setpoint.</li>
+      <li>The gland makes mostly T4, the storage and transport form, which circulates at about 100 times the concentration of T3. The active hormone, T3, is largely produced by deiodinase enzymes (D1, D2) in the tissues, while D3 inactivates hormone into reverse T3.</li>
+      <li>Thyroid hormone is an amine that acts like a steroid, binding nuclear receptors (TRα, TRβ) to set each cell's basal metabolic rate, which is why thyroid status reaches temperature, heart rate, energy, mood, and digestion.</li>
+      <li>Underactive (hypothyroid) looks like fatigue, weight gain, cold intolerance, and slowed digestion. Overactive (hyperthyroid) looks like the mirror: anxiety, palpitations, weight loss, and heat intolerance. Recognize the pattern; leave the diagnosis to clinicians and labs.</li>
+      <li>Read the axis with two numbers. High TSH with low output points to a struggling gland (primary). Low TSH with low output points higher up (central). Low TSH with high output points to an overproducing gland.</li>
+      <li>The axis responds to energy availability. Caloric restriction lowers active T3 mainly by reducing T4-to-T3 conversion, with TSH and T4 unchanged, demonstrating that thyroid is a whole-body conversion story, not just a gland story.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Next we leave the metabolic thermostat for the body's alarm system. Cortisol and the stress axis run on the same three-floor template you have now used twice, but they operate on a different clock and answer to a different kind of demand. You will see how a system built for short bursts behaves when it never gets to switch off, and how that chronic activation reaches back into the very thyroid and insulin systems you just studied.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bianco, A. C., Salvatore, D., Gereben, B., Berry, M. J., & Larsen, P. R. (2002). Biochemistry, cellular and molecular biology, and physiological roles of the iodothyronine selenodeiodinases. <em>Endocrine Reviews, 23</em>(1), 38–89. https://doi.org/10.1210/edrv.23.1.0455</p>
+    <p>Chiamolera, M. I., & Wondisford, F. E. (2021). <em>Physiology of the hypothalamic-pituitary-thyroid axis</em>. In Endotext. MDText.com. https://www.ncbi.nlm.nih.gov/books/NBK278958/</p>
+    <p>Fontana, L., Klein, S., & Holloszy, J. O. (2009). Caloric restriction but not exercise-induced reductions in fat mass decrease plasma triiodothyronine concentrations: A randomized controlled trial. <em>Rejuvenation Research, 12</em>(4), 247–258. https://pmc.ncbi.nlm.nih.gov/articles/PMC2649744/</p>
+    <p>Mullur, R., Liu, Y. Y., & Brent, G. A. (2014). Thyroid hormone regulation of metabolism. <em>Physiological Reviews, 94</em>(2), 355–382. https://pmc.ncbi.nlm.nih.gov/articles/PMC3433956/</p>
+    <p>Ortiga-Carvalho, T. M., Chiamolera, M. I., Pazos-Moura, C. C., & Wondisford, F. E. (2016). Hypothalamus-pituitary-thyroid axis. <em>Comprehensive Physiology, 6</em>(3), 1387–1428. https://doi.org/10.1002/cphy.c150027</p>
+    <p>Taylor, P. N., Medici, M. M., Hubalewska-Dydejczyk, A., & Boelaert, K. (2024). Hypothyroidism. <em>The Lancet, 404</em>(10460), 1347–1364. https://doi.org/10.1016/s0140-6736(24)01614-3</p>
+    <p>Weitzel, J. M., & Iwen, K. A. (2011). Coordination of mitochondrial biogenesis by thyroid hormone and crosstalk with nuclear receptor signaling in metabolic regulation. <em>Molecular and Cellular Endocrinology, 342</em>(1–2), 1–7. https://pmc.ncbi.nlm.nih.gov/articles/PMC2831161/</p>
+    <p>Wiersinga, W. M., Poppe, K. G., & Effraimidis, G. (2023). Hyperthyroidism: Aetiology, pathogenesis, diagnosis, management, complications, and prognosis. <em>The Lancet Diabetes & Endocrinology, 11</em>(4), 282–298. https://doi.org/10.1016/s2213-8587(23)00005-0</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 4 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('dimmer-widget');
+    if(!w) return;
+    var outSel = w.querySelector('#dimmer-output');
+    var convSel = w.querySelector('#dimmer-conv');
+    var reset = w.querySelector('#dimmer-reset');
+    var readout = w.querySelector('#dimmer-readout');
+    function clamp(v){ return Math.max(3, Math.min(99, v)); }
+    function setBar(id,num,val){
+      var b = w.querySelector(id); var n = w.querySelector(num);
+      if(b) b.style.width = val + '%';
+      if(n) n.textContent = Math.round(val);
+    }
+    function update(){
+      var out = parseFloat(outSel.value);
+      var conv = parseFloat(convSel.value);
+      // active T3 effect = gland output * conversion efficiency, normalized so normal=50
+      var effect = out * conv; // 1.0 at normal*normal
+      var t3 = clamp(effect * 50);
+      var rate = clamp(effect * 50);
+      var temp = clamp(35 + effect * 30);   // temperature less swingy
+      var hr = clamp(40 + effect * 28);
+      var energy = clamp(effect * 50);
+      setBar('#dimmer-bar-t3','#dimmer-num-t3', t3);
+      setBar('#dimmer-bar-rate','#dimmer-num-rate', rate);
+      setBar('#dimmer-bar-temp','#dimmer-num-temp', temp);
+      setBar('#dimmer-bar-hr','#dimmer-num-hr', hr);
+      setBar('#dimmer-bar-energy','#dimmer-num-energy', energy);
+      var msg = '';
+      if(conv < 1 && out >= 1){
+        msg = 'Notice: the gland output is normal or high, but impaired conversion still drags every gauge down. Normal T4 does not guarantee normal effect if the tissues cannot make T3.';
+      } else if(effect < 0.75){
+        msg = 'The dimmer is turned down. Every system sags together: this is the underactive pattern.';
+      } else if(effect > 1.25){
+        msg = 'The dimmer is turned up. Every system races together: this is the overactive pattern.';
+      } else {
+        msg = 'Balanced. The thermostat is holding a normal metabolic setpoint.';
+      }
+      readout.textContent = msg;
+    }
+    outSel.addEventListener('change', update);
+    convSel.addEventListener('change', update);
+    reset.addEventListener('click', function(){
+      outSel.value = '1'; convSel.value = '1'; update();
+    });
+    update();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('detective-widget');
+    if(!w) return;
+    var scenSel = w.querySelector('#det-scenario');
+    var callSel = w.querySelector('#det-call');
+    var checkBtn = w.querySelector('#det-check');
+    var fb = w.querySelector('#det-feedback');
+    // each scenario: tsh value (0-100), th value, correct answer key, explanation
+    var cases = [
+      { tsh: 88, th: 18, ans: 'gland',
+        ex: 'Correct framing: TSH is high (the pituitary is shouting) but output is low. The signal from above is loud and the floor below is not responding. The problem sits at the gland. This is primary hypothyroidism (Taylor et al., 2024). Just like the generic axis: loud signal, silent output equals a broken lower floor.' },
+      { tsh: 16, th: 18, ans: 'higher',
+        ex: 'Correct framing: both TSH and output are low. If the gland were simply broken, the pituitary should be shouting, but it is quiet. The signal from above is missing, so the problem sits higher up, at the pituitary or hypothalamus. This is central hypothyroidism (Taylor et al., 2024). On the generic axis, this was the upper-floor failure.' },
+      { tsh: 12, th: 86, ans: 'gland-over',
+        ex: 'Correct framing: TSH is suppressed because the gland is overproducing and the pituitary senses plenty, so it stops asking. Low TSH with high output is the hallmark of primary hyperthyroidism (Wiersinga et al., 2023). Same feedback loop, run in reverse.' },
+      { tsh: 50, th: 50, ans: 'none',
+        ex: 'Correct framing: both readouts sit mid-range. The signal from above and the output below are in balance, the feedback loop is holding its setpoint. No axis problem is indicated here.' }
+    ];
+    function render(){
+      var c = cases[parseInt(scenSel.value,10)];
+      var tb = w.querySelector('#det-bar-tsh'), tn = w.querySelector('#det-num-tsh');
+      var hb = w.querySelector('#det-bar-th'), hn = w.querySelector('#det-num-th');
+      tb.style.width = c.tsh + '%'; tn.textContent = c.tsh < 25 ? 'Low' : (c.tsh > 70 ? 'High' : 'Normal');
+      hb.style.width = c.th + '%'; hn.textContent = c.th < 25 ? 'Low' : (c.th > 70 ? 'High' : 'Normal');
+      fb.textContent = '';
+    }
+    function check(){
+      var c = cases[parseInt(scenSel.value,10)];
+      var call = callSel.value;
+      if(call === c.ans){
+        fb.textContent = 'Right. ' + c.ex;
+      } else {
+        fb.textContent = 'Not quite. Re-read the two gauges as the signal from above (TSH) and the output below. ' + c.ex;
+      }
+    }
+    scenSel.addEventListener('change', render);
+    checkBtn.addEventListener('click', check);
+    render();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

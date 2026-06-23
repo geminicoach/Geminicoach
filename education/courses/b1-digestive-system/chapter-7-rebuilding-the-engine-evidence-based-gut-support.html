@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rebuilding the Engine: Evidence-Based Gut Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 7 · Module 4</div>
+    <h1 class="ch-title">Rebuilding the Engine: <em>Evidence-Based Gut Support</em></h1>
+    <p class="ch-subtitle">Four pillars that actually move the needle, and how to tell support from sales pitch.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">I</span>magine someone hands you a car that runs rough. It hesitates, it stalls in traffic, the check-engine light flickers. You could spend four hundred dollars on a bottle of "premium engine optimizer" from a shelf that promises to fix everything. Or you could check whether the thing has fuel, oil, and a functioning spark, and whether the driver has been redlining it for eight months straight. One of these approaches reliably works. The other sells a lot of bottles.</p>
+    <p>The gut is the same. After six chapters of learning how digestion is built and what goes wrong with it, this is the chapter where we ask the practical question: what genuinely helps? The honest answer is less exciting than the marketing and more powerful than most people expect. The biggest levers are unglamorous. They are food, sleep, stress, and a small, carefully chosen set of supportive tools. Get the order right and you fix most of what is fixable. Get it wrong and you spend money rebuilding a system whose foundation is still cracked.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The four pillars, and why order matters</h2>
+    <p>Let us start with the frame, because the frame does most of the work. Gut support organizes cleanly around four pillars that the evidence keeps pointing back to: <span class="ch-key">nutrition</span> that feeds the microbiome and the gut lining, <span class="ch-key">stress regulation</span>, <span class="ch-key">sleep</span>, and <span class="ch-key">selective supportive supplementation</span>. Notice the order. It is not alphabetical and it is not random. It is roughly the order of leverage for a normal person living a normal week.</p>
+    <p>Here is where people get this wrong. They invert the stack. They obsess over which probiotic strain to buy while sleeping five hours a night and eating eight grams of fiber a day. That is like detailing the paint on a car with no oil in the engine. The supplement aisle is the most visible part of gut health because it is the part someone profits from. Visibility is not the same as importance.</p>
+    <p>So we are going to build this chapter from the foundation up. We will revisit the butyrate engine from Chapter 2, because barrier repair is the mechanistic spine that ties all four pillars together. We will turn the gut-brain and stress physiology from Chapter 3 into an actionable lever rather than an interesting fact. And we will treat supplementation last and soberly, sorting the reasonable evidence from the wellness theater.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, rank these four for a generally healthy but stressed, under-slept adult: fiber, sleep, stress practices, a probiotic. Write your order down. We will come back to it, and the second widget in this chapter will test it directly.</p>
+    </aside>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour editorial diagram of four stacked stone foundation blocks forming a pyramid, viewed straight on, in the style of a naturalist's field notebook. From bottom to top the blocks are labeled in small italic serif: 'Nutrition', 'Sleep', 'Stress regulation', and a smaller top block labeled 'Supplements'. The bottom blocks are large and earthy ochre and sage green; the top block is small and pale. Warm overcast lighting, muted earthy palette of clay, moss, and parchment. No watermarks, no cropped letters, no people." data-aspect="portrait"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The support stack: the unglamorous foundations carry the load; supplements sit small at the top.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The butyrate engine returns: barrier repair as the central mechanism</h2>
+    <p>Back in Chapter 2 we met <span class="ch-key">butyrate</span>, the short-chain fatty acid produced when colonic bacteria ferment certain fibers. We called it the gut lining's preferred fuel. Now we put it to work, because almost everything in this chapter routes through barrier repair, and butyrate is the engine that drives that repair.</p>
+    <p>Quick refresher on why the barrier matters. Your gut lining is a single layer of epithelial cells sitting on top of a mucus blanket. That one-cell-thick wall is the entire boundary between the outside world (everything in your gut lumen, including a few trillion bacteria) and your bloodstream. When that wall holds, life is good. When it gets leaky, bacterial components like <span class="ch-key">lipopolysaccharide (LPS)</span> slip through, the immune system reacts, and you get low-grade systemic inflammation. This is the permeability story from Chapters 5 and 6.</p>
+    <h3>What butyrate actually does to the wall</h3>
+    <p>Butyrate is not a vague "good for you" molecule. It has specific, documented jobs. It is the primary energy source for colonocytes, the cells lining your colon, supplying up to seventy percent of their fuel (Liu et al., 2018). A well-fed colonocyte is a colonocyte that can do its job of maintaining the barrier. Beyond fuel, butyrate upregulates <span class="ch-key">MUC2</span>, the gene encoding the main mucin protein, which thickens the protective mucus layer (Liu et al., 2018; Nutrients, 2024). It regulates the tight-junction proteins, Claudin, Occludin, and ZO-1, that act like the grout between your epithelial cells, sealing the gaps. And it acts as a histone deacetylase (HDAC) inhibitor and signals through G-protein-coupled receptors, which is the molecular machinery behind its anti-inflammatory effects (Liu et al., 2018).</p>
+    <p>So when we say "feed the gut lining," this is the literal chain of events: fermentable fiber goes in, bacteria produce butyrate, colonocytes get fuel, mucus thickens, tight junctions tighten, inflammation calms. That is the engine. Every pillar in this chapter either feeds that engine or stops something from breaking it.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The title of the Liu review calls butyrate "a double-edged sword." Why might a molecule this beneficial also be described with caution? Hold that thought; we address the nuance under the supplementation pillar.</p>
+    </aside>
+
+    <h3>Coaching translation</h3>
+    <p>In real life, this means the single most mechanistically grounded thing you can do for your gut barrier is keep your butyrate-producing bacteria fed. They eat fiber. No fiber, no butyrate, no fuel for the wall. You cannot meaningfully shortcut this with a pill that skips the fermentation step, which is exactly why the nutrition pillar comes first. Practical takeaway: before you buy anything, ask whether you are actually feeding the engine that does the repairing.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Pillar one: nutrition for the microbiome and the lining</h2>
+    <p>If butyrate is the engine, fiber is the fuel, and the kind of fiber matters as much as the amount. Let us be precise about what the evidence says, because this is where a lot of confident nonsense lives.</p>
+    <h3>Fiber is not one thing</h3>
+    <p>"Fiber" is a category, not a substance. It includes fermentable fibers your bacteria love (inulin, resistant starch, beta-glucans, pectins) and less-fermentable bulking fibers (cellulose) that mostly add stool mass and speed transit. Both matter, but they do different jobs. The microbiota response to fiber depends on the type, the amount, and the duration of intake (Fu et al., 2022). This is why a single study can look underwhelming: if you give people one fiber for two weeks, you have not given a complex ecosystem enough time or variety to remodel.</p>
+    <p>The bigger picture is striking. Fu and colleagues (2022) frame our modern fiber deficit as a centuries-long decline that has tracked with the rise of metabolic disease. Different fibers selectively feed different microbes, raise microbial diversity, and increase short-chain fatty acid production, all of which connect to lower metabolic disease risk. The headline is not "eat more of one magic fiber." It is "eat more kinds of plants, consistently, over time."</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide plate in vintage scientific illustration style showing a circular arrangement of diverse whole plant foods around the rim: oats, beans, an onion bulb cut in half, a leek, an apple, asparagus spears, barley grains, and a garlic bulb. At the center, a simplified cross-section of a colon wall with a thick wavy mucus layer drawn in pale blue-green and tiny rod-shaped bacteria. Small italic serif labels: 'fermentable fiber' near the foods, 'mucus layer', and 'butyrate' with a small arrow toward the wall. Earthy palette of ochre, moss green, terracotta, and parchment cream, ink linework, soft watercolour fills. No watermarks, no people, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Diverse fermentable plants feed the bacteria that produce butyrate, which fuels and seals the colon wall.</em></figcaption></figure>
+
+    <h3>The fermented-food surprise</h3>
+    <p>Now for one of the most interesting recent findings in this space, because it complicates the simple "just eat fiber" story in a useful way. Wastyk and colleagues (2021) ran a 17-week randomized controlled trial comparing a high-fiber diet against a high-fermented-food diet in healthy adults. The sample was small (n=36), so hold the conclusions loosely, but the design was strong and the results were instructive.</p>
+    <p>The fermented-food group, eating things like yogurt, kefir, kimchi, and other fermented vegetables, showed increased gut microbiota diversity and a decrease in nineteen inflammatory proteins. That is a meaningful, broad anti-inflammatory signal. The high-fiber group, by contrast, did not show a universal increase in diversity over the short term. Instead, fiber altered the microbiome's encoded enzyme function, the metabolic toolkit the bacteria carry (Wastyk et al., 2021).</p>
+    <p>Here is the nuance that matters. This does not mean "fiber failed." It means fiber and fermented foods work on different timelines and through different mechanisms, and seventeen weeks may be too short to see fiber's full diversity payoff in people whose baseline microbiomes were not equipped to use it. The authors raised exactly this point. The practical reading is not "pick one." It is "both, with patience."</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The fiber group's diversity did not jump in 17 weeks, yet the authors did not conclude fiber is useless. What feature of the microbiota, emphasized by Fu et al. (2022), explains why fiber's benefits may need more time and more variety to appear?</p>
+    </aside>
+
+    <h3>Coaching translation</h3>
+    <p>In practice, this means two simple moves cover most of the nutrition pillar. First, raise the number of different plants you eat in a week, not just the grams of one fiber. Variety feeds variety. Second, add fermented foods you will actually keep eating, because the diversity and anti-inflammatory signal is real and fast-acting. Notice what we are not doing: we are not moralizing food as clean or dirty, and we are not chasing a single superfood. The takeaway is range and consistency. A good week of eating beats a perfect bowl of anything.</p>
+    <p>One honest caveat. If someone has significant gut symptoms, ramping fermentable fiber too fast can worsen bloating and discomfort, and certain conditions need a slower, structured approach. That is a place where a coach educates and refers rather than prescribes. We will keep flagging these scope lines throughout.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Pillar two: stress regulation is not a soft extra</h2>
+    <p>Here is the claim, and it is not a wellness platitude: psychological stress physically changes your gut. Not metaphorically. Measurably, at the level of motility, secretion, barrier integrity, and microbial composition. If you treat stress as the optional "nice to have" after the diet stuff, you have misunderstood the physiology.</p>
+    <h3>The wiring, briefly refreshed</h3>
+    <p>From Chapter 3 you know the gut and brain talk through the <span class="ch-key">microbiota-gut-brain axis</span>, using the vagus nerve, the <span class="ch-key">HPA axis</span> (the hormonal stress cascade ending in cortisol), and the <span class="ch-key">sympathetic nervous system (SNS)</span>, the fight-or-flight branch. Leigh and colleagues (2023) reviewed how both acute and chronic stress drive maladaptive changes across this entire axis: altered enteric nervous system circuitry, heightened visceral sensitivity (pain you feel more), compromised barrier function, increased intestinal permeability, and shifts in secretion and motility. Stress is not just felt in the gut. It is enacted on the gut.</p>
+    <h3>The mast-cell mechanism</h3>
+    <p>Let us get concrete about how stress cracks the wall, because the mechanism is satisfyingly specific. Madison and Bailey (2024) describe a chain that runs like this. Psychological stress shifts the microbiota composition, reducing beneficial bacteria and overall diversity. Stress also triggers <span class="ch-key">mast cell degranulation</span> in the gut wall. Mast cells are immune cells loaded with inflammatory mediators; when stress makes them dump their contents, those mediators damage the epithelial lining and compromise barrier integrity. The result is increased permeability, more inflammation, and a documented link to mental health outcomes including depression (Madison & Bailey, 2024).</p>
+    <p>Read that loop again, because it is the whole game. Stress degrades the barrier. A degraded barrier drives inflammation. Inflammation feeds back to the brain and worsens mood and stress. This is a reinforcing loop, not a one-way street, which is exactly why it can feel impossible to break from the inside and exactly why intervening anywhere in the loop helps.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Madison and Bailey describe mast cell degranulation as a direct mechanical insult to the epithelial lining. Why does this make "just manage your stress" a barrier-repair intervention rather than a vague mood tip?</p>
+    </aside>
+    <h3>Coaching translation</h3>
+    <p>This is why it matters: stress regulation belongs in the same category as fiber, not in a separate "lifestyle" bucket you get to skip. You do not need a perfect meditation practice. You need a few reliable downshifts in your day that pull you out of sustained sympathetic activation: slow breathing, a real walk, time without a screen, predictable wind-downs. The point is dose and consistency, not intensity. In practice, this means treating chronic stress as a measurable input to gut repair, and treating "I'm too busy to manage stress" as roughly equivalent to "I'm too busy to fuel the engine." Where stress crosses into clinical anxiety, depression, or trauma, that is firmly beyond a coach's scope and into professional care.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Pillar three: sleep, the overnight repair shift</h2>
+    <p>If stress is the daytime insult, sleep is the overnight repair shift, and skipping it is like firing the maintenance crew. The evidence here has gotten genuinely good, and it is specific enough to be useful.</p>
+    <h3>What sleep loss does to the gut</h3>
+    <p>Sun and colleagues (2023) reviewed how sleep deprivation produces gut microbiota dysbiosis with downstream effects on immune and metabolic systems. The specifics line up uncomfortably well with everything we just covered about the barrier. Following sleep loss, studies document reductions in the tight-junction proteins Claudin, Occludin, and ZO-1, the same grout butyrate works to maintain. Sleep loss reduces goblet cells and MUC2, thinning the protective mucus layer. It reduces SCFA-producing bacteria, which means less butyrate, which means less fuel for the wall. And it increases intestinal permeability and inflammatory bacterial strains (Sun et al., 2023).</p>
+    <p>Look at that list against the butyrate engine. Sleep deprivation attacks nearly every component of barrier repair at once: less mucus, weaker junctions, fewer butyrate producers, more permeability. It is almost the precise inverse of what good nutrition builds. You can eat a beautiful diet and partially undo it by chronically sleeping five hours.</p>
+
+    <figure class="ch-figure" data-image-idx="2" data-prompt="An isometric infographic in muted risograph print style showing a single reinforcing feedback loop as three rounded nodes connected by curved arrows forming a triangle. Top node shows a crescent moon labeled 'sleep'; lower-left node shows a tense knotted line labeled 'stress'; lower-right node shows a simplified gut coil labeled 'digestion'. Arrows flow clockwise with small plus and minus signs along them. Limited palette of dusty blue, warm coral, and soft mustard on cream paper, visible halftone texture. Clean small sans-serif labels only the three words named. No watermarks, no people, no extra text." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 3</span> <em>The reinforcing loop: poor sleep raises stress, which worsens digestion, which disrupts sleep.</em></figcaption></figure>
+
+    <h3>Coaching translation</h3>
+    <p>Here is the honest framing. Sleep is not a soft extra you address after the supplements. For the gut barrier specifically, it may be the highest-leverage single change for an under-slept person, because it is upstream of butyrate production, mucus, and tight junctions simultaneously. In practice, this means if someone is sleeping six hours and asking which probiotic to buy, the answer is almost always "let's find you an extra hour of sleep first." Regular timing, a dark cool room, and a real wind-down beat any bottle on the shelf for this person. Persistent insomnia or sleep apnea, of course, is a medical issue, not a coaching one.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="loopWidget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Sleep-Stress-Gut Feedback Loop</div>
+    </div>
+    <p class="ch-widget-sub">Adjust sleep, stress, and fiber, then watch the downstream effects on motility, barrier integrity, and microbial balance. Try breaking the loop at one point and see what stabilizes the system fastest.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sleep quality</span>
+        <select class="ch-widget-select" id="loopSleep">
+          <option value="2">Poor (5 hrs, broken)</option>
+          <option value="5" selected>Average (6.5 hrs)</option>
+          <option value="9">Strong (7.5+ hrs, regular)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Stress level</span>
+        <select class="ch-widget-select" id="loopStress">
+          <option value="9">High, chronic</option>
+          <option value="5" selected>Moderate</option>
+          <option value="2">Low, well-regulated</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Dietary fiber</span>
+        <select class="ch-widget-select" id="loopFiber">
+          <option value="2">Low (under 12 g/day)</option>
+          <option value="5" selected>Moderate (~20 g/day)</option>
+          <option value="9">High & varied (30+ g/day)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Gut motility balance</span>
+        <span class="ch-meter-bar"><span id="loopMotBar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="loopMotNum">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Barrier integrity</span>
+        <span class="ch-meter-bar"><span id="loopBarBar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="loopBarNum">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Microbial balance</span>
+        <span class="ch-meter-bar"><span id="loopMicBar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="loopMicNum">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Loop stability</span>
+        <span class="ch-meter-bar"><span id="loopStabBar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="loopStabNum">5</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="loopBtn">Read the loop</button>
+    <p class="ch-widget-sub" id="loopReadout" style="margin-top:0.6em"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Pillar four: supportive supplementation, evidence versus hype</h2>
+    <p>Now the part everyone wanted us to start with. We saved it for last on purpose, and we are going to treat it the way it deserves: as a set of tools with specific, limited uses, not as the main event. The job here is to separate what has reasonable evidence from what is overmarketed.</p>
+
+    <h3>Probiotics: real but narrow</h3>
+    <p>Probiotics are the headline act of gut marketing, so let us look at what the better evidence actually shows. Zheng and colleagues (2023) published a meta-analysis of 26 randomized controlled trials (n=1,891) examining whether probiotics fortify intestinal barrier function. The pooled results were genuinely positive: probiotics significantly reduced serum zonulin, endotoxin, and LPS, the markers of a leaky barrier, and increased transepithelial electrical resistance, a direct measure of barrier tightness. They also reduced inflammatory markers (CRP, TNF-alpha, IL-6) and boosted Bifidobacterium and Lactobacillus populations.</p>
+    <p>That is a real signal, and we should say so plainly. But read the authors' own caveat, because it is the responsible part. They note that further high-quality RCTs are still needed for definitive conclusions. Here is why that matters in practice. "Probiotics work" is not a single claim, because probiotics are not a single product. Effects are strain-specific and condition-specific. A strain that fortifies the barrier in an inflamed population may do little measurable for a healthy person with no barrier problem. The meta-analysis tells you the category can fortify a compromised barrier; it does not tell you that any random bottle will help any random person.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Zheng et al. found probiotics reduced zonulin and raised transepithelial resistance, yet still called for more high-quality RCTs. How would you explain to someone why "the meta-analysis was positive" and "we still need better trials" are both true and not a contradiction?</p>
+    </aside>
+
+    <h3>Prebiotics: feeding what you already have</h3>
+    <p>Prebiotics are the fibers and compounds that feed your existing beneficial bacteria, and conceptually they sit closer to the nutrition pillar than to the pill aisle. The logic is sound and ties straight back to the butyrate engine: feed the fermenters, get more SCFAs, support the barrier. The honest framing is that for most people, "prebiotic" is just a more expensive word for "the fermentable fiber you could be getting from food." A prebiotic supplement is a reasonable tool when food intake is genuinely hard to raise, not a substitute for a varied plant-forward diet.</p>
+
+    <h3>Glutamine, butyrate supplements, and the gut-soothers</h3>
+    <p>This is where marketing gets ahead of evidence, so let us be careful and fair. Glutamine is an amino acid that enterocytes use as fuel, and there is a mechanistic rationale for it in barrier support, particularly in specific clinical contexts like critical illness or certain IBS subtypes under medical supervision. For a generally healthy, well-fed person, the case that a glutamine supplement adds meaningful barrier benefit on top of adequate protein and fiber is much weaker. The rationale is real; the routine necessity is not established.</p>
+    <p>Direct butyrate supplements raise the most interesting question, and it brings back that "double-edged sword" from Liu et al. (2018). It is tempting to think: if butyrate repairs the barrier, why not just swallow butyrate and skip the fiber? Two problems. First, the elegance of the natural system is that butyrate is produced where it is needed, in the colon, by fermentation, in a steady local supply. Oral butyrate's delivery to the right place is a real pharmacological challenge. Second, the "double-edged" framing reflects that butyrate's effects are context-dependent, and its relationship with outcomes like obesity is more complicated than "more is always better" (Liu et al., 2018). The clean takeaway: feed the engine that makes butyrate rather than trying to bottle the exhaust.</p>
+
+    <h3>The barrier-repair toolkit, in perspective</h3>
+    <p>The 2024 Nutrients review on intestinal barrier impairment and repair pulls all of this together and lands where we have been landing all chapter. It catalogs the deleterious effects of certain dietary patterns on the barrier, the role of the microbiome and epigenomics in barrier control, and the dietary and microbiota-derived interventions, including butyrate, that restore normal function. Its emphasis on butyrate as a key colonocyte energy source that promotes mucus production is the same message Chapter 2 gave you (Nutrients, 2024). The supplements are real tools. They are also downstream of the foundations, and they work best on a system that is already being fed, slept, and de-stressed.</p>
+
+    <h3>Coaching translation</h3>
+    <p>Here is where people get this wrong, plainly: they buy the supplement to compensate for the foundation they are skipping. That order never works well, because most supplements either feed a system you are not running or repair a wall you keep knocking down. In practice, this means supplements are a sensible layer once the foundations are in place or when there is a specific, evidence-backed reason and ideally professional guidance. A probiotic for a documented barrier or inflammatory issue is reasonable. A shelf of expensive bottles instead of sleep and vegetables is theater. And the line between "supportive supplement" and "I think you have a clinical condition that needs a physician" is a line a coach names and respects, every time.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="stackWidget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Gut-Support Priority Stack</div>
+    </div>
+    <p class="ch-widget-sub">Scenario: a generally healthy adult, mildly bloated and tired, sleeping ~6 hours, stressed at work, eating low fiber, no diagnosed condition. Assign each intervention a priority, then reveal the evidence-weighted ranking.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">More fermentable fiber & varied plants</span>
+        <select class="ch-widget-select" data-key="fiber">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">More & better sleep</span>
+        <select class="ch-widget-select" data-key="sleep">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Daily stress-regulation practice</span>
+        <select class="ch-widget-select" data-key="stress">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fermented foods</span>
+        <select class="ch-widget-select" data-key="ferment">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">A specific probiotic strain</span>
+        <select class="ch-widget-select" data-key="probiotic">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Glutamine / butyrate supplement</span>
+        <select class="ch-widget-select" data-key="glutamine">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Premium "gut healing" stack</span>
+        <select class="ch-widget-select" data-key="premium">
+          <option value="">Rank...</option>
+          <option value="1">1 (highest)</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7 (lowest)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="stackBtn">Reveal evidence-weighted ranking</button>
+    <p class="ch-widget-sub" id="stackReadout" style="margin-top:0.6em"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Putting the four pillars together for a real week</h2>
+    <p>Let us run one worked example to make the priorities concrete, because the whole point of this chapter is translation into a normal week. Take the widget scenario: a healthy adult, bloated and tired, six hours of sleep, work stress, low fiber, no diagnosis.</p>
+    <p>The highest-leverage moves are the ones that hit multiple parts of the butyrate engine at once. Sleep is enormous here because, per Sun et al. (2023), six hours is actively degrading tight junctions, mucus, and SCFA producers simultaneously. Fixing sleep removes a brake on every other intervention. Fiber and fermented foods come next, feeding butyrate production and raising diversity with a fast anti-inflammatory payoff from the fermented side (Wastyk et al., 2021; Fu et al., 2022). A daily stress downshift addresses the mast-cell and HPA pathway that is cracking the barrier from the top down (Leigh et al., 2023; Madison & Bailey, 2024). Only after those are in motion does a targeted probiotic become a sensible add-on, and the premium "healing" stack is mostly money spent on a foundation that is already doing the work.</p>
+    <p>Notice the pattern. The cheap, unglamorous, behavioral interventions occupy the top of the stack precisely because they are upstream, multi-target, and mechanistically tied to the repair engine itself. The expensive, novel, single-target products sit at the bottom. That is not anti-supplement bias. It is just the evidence, read in order of leverage.</p>
+    <blockquote class="ch-quote">
+      <p>Feed the engine that makes the repair molecule. Stop the things that crack the wall overnight and under stress. Then, and only then, consider the targeted tools.</p>
+      <cite>The working logic of evidence-based gut support</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Gut support stacks in order of leverage: nutrition, sleep, stress regulation, then selective supplementation. Inverting that order is the single most common mistake.</li>
+      <li>Butyrate is the mechanistic spine of barrier repair: it fuels colonocytes, upregulates MUC2 mucin, and maintains the Claudin, Occludin, and ZO-1 tight junctions (Liu et al., 2018; Nutrients, 2024).</li>
+      <li>Fiber benefits depend on type, amount, and duration; diversity of plants matters more than grams of one fiber, and effects build over time (Fu et al., 2022).</li>
+      <li>Fermented foods raised microbiota diversity and lowered 19 inflammatory proteins in a 17-week RCT, while fiber reshaped microbial enzyme function on a slower timeline (Wastyk et al., 2021).</li>
+      <li>Stress physically cracks the barrier through mast-cell degranulation and HPA/SNS pathways; it is a repair input, not a soft extra (Leigh et al., 2023; Madison & Bailey, 2024).</li>
+      <li>Sleep deprivation reduces tight-junction proteins, MUC2, goblet cells, and SCFA producers while raising permeability, nearly the inverse of barrier repair (Sun et al., 2023).</li>
+      <li>Probiotics can fortify a compromised barrier (lower zonulin, LPS, CRP; higher transepithelial resistance), but effects are strain- and condition-specific and the authors call for more high-quality trials (Zheng et al., 2023).</li>
+      <li>Feed the engine that makes butyrate rather than trying to bottle the output; supplements are downstream tools that work best on an already-supported system.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You now have the mechanistic and practical core of gut support. In the next chapter we widen the lens to the whole picture: how these pillars integrate into a coherent, sustainable practice, where individual variation changes the playbook, and how to hold all of this with the humility the science demands. We will also sharpen the line between genuine support and the moment to refer out.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Fu, J., Zheng, Y., Gao, Y., & Xu, W. (2022). Dietary fiber intake and gut microbiota in human health. <em>Microorganisms, 10</em>(12), 2507. https://doi.org/10.3390/microorganisms10122507</p>
+    <p>Leigh, S.-J., Uhlig, F., Wilmes, L., Sanchez-Diaz, P., Gheorghe, C. E., Goodson, M. S., Kelley-Loughnane, N., Hyland, N. P., Cryan, J. F., & Clarke, G. (2023). The impact of acute and chronic stress on gastrointestinal physiology and function: A microbiota-gut-brain axis perspective. <em>The Journal of Physiology, 601</em>(20), 4491-4538. https://doi.org/10.1113/JP281951</p>
+    <p>Liu, H., Wang, J., He, T., Becker, S., Zhang, G., Li, D., & Ma, X. (2018). Butyrate: A double-edged sword for health? <em>Advances in Nutrition, 9</em>(1), 21-29. https://doi.org/10.1093/advances/nmx009</p>
+    <p>Madison, A. A., & Bailey, M. T. (2024). Stressed to the core: Inflammation and intestinal permeability link stress-related gut microbiota shifts to mental health outcomes. <em>Biological Psychiatry, 95</em>(4), 339-347. https://doi.org/10.1016/j.biopsych.2023.10.014</p>
+    <p>Nutrients editorial review. (2024). Intestinal barrier impairment, preservation, and repair: An update. <em>Nutrients, 16</em>(20), 3494. https://doi.org/10.3390/nu16203494</p>
+    <p>Sun, J., Fang, D., Wang, Z., & Liu, Y. (2023). Sleep deprivation and gut microbiota dysbiosis: Current understandings and implications. <em>International Journal of Molecular Sciences, 24</em>(11), 9603. https://doi.org/10.3390/ijms24119603</p>
+    <p>Wastyk, H. C., Fragiadakis, G. K., Perelman, D., Dahan, D., Merrill, B. D., Yu, F. B., Topf, M., Gonzalez, C. G., Van Treuren, W., Han, S., Robinson, J. L., Elias, J. E., Sonnenburg, E. D., Gardner, C. D., & Sonnenburg, J. L. (2021). Gut-microbiota-targeted diets modulate human immune status. <em>Cell, 184</em>(16), 4137-4153. https://doi.org/10.1016/j.cell.2021.06.019</p>
+    <p>Zheng, Y., Zhang, Z., Tang, P., Wu, Y., Zhang, A., Li, D., Wang, C.-Z., Wan, J.-Y., Yao, H., & Yuan, C.-S. (2023). Probiotics fortify intestinal barrier function: A systematic review and meta-analysis of randomized trials. <em>Frontiers in Immunology, 14</em>, 1143548. https://doi.org/10.3389/fimmu.2023.1143548</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 7 of 10</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('loopWidget');
+    if(!w) return;
+    var sleepEl = w.querySelector('#loopSleep');
+    var stressEl = w.querySelector('#loopStress');
+    var fiberEl = w.querySelector('#loopFiber');
+    var btn = w.querySelector('#loopBtn');
+    var readout = w.querySelector('#loopReadout');
+
+    function setMeter(barId, numId, val){
+      var v = Math.max(0, Math.min(10, val));
+      var pct = Math.round(v*10);
+      var bar = w.querySelector(barId);
+      var num = w.querySelector(numId);
+      if(bar) bar.style.width = pct + '%';
+      if(num) num.textContent = v.toFixed(1);
+    }
+
+    function compute(){
+      var sleep = parseFloat(sleepEl.value);
+      var stress = parseFloat(stressEl.value); // high value = more stress
+      var fiber = parseFloat(fiberEl.value);
+      var stressGood = 10 - stress; // convert to "good" scale
+
+      // Barrier integrity: butyrate (fiber) + sleep protect junctions/mucus, stress cracks it
+      var barrier = 0.40*fiber + 0.35*sleep + 0.25*stressGood;
+      // Microbial balance: fiber feeds SCFA producers, sleep & low stress preserve diversity
+      var microbe = 0.45*fiber + 0.30*sleep + 0.25*stressGood;
+      // Motility balance: stress and sleep dominate, fiber supports
+      var motility = 0.30*fiber + 0.30*sleep + 0.40*stressGood;
+      // Loop stability: the weakest link drags the system; reinforcing loop
+      var avg = (barrier+microbe+motility)/3;
+      var weakest = Math.min(barrier, microbe, motility);
+      var stability = 0.6*avg + 0.4*weakest;
+
+      setMeter('#loopBarBar','#loopBarNum', barrier);
+      setMeter('#loopMicBar','#loopMicNum', microbe);
+      setMeter('#loopMotBar','#loopMotNum', motility);
+      setMeter('#loopStabBar','#loopStabNum', stability);
+
+      // Find the limiting node
+      var msg = '';
+      if(sleep <= 2){
+        msg = 'Poor sleep is the brake. Sleep loss lowers tight-junction proteins, MUC2, and SCFA producers all at once (Sun et al., 2023), so it drags every meter down. Fixing sleep stabilizes the loop fastest here.';
+      } else if(stress >= 9){
+        msg = 'Chronic stress is cracking the wall from the top down via mast-cell degranulation and the HPA axis (Madison & Bailey, 2024; Leigh et al., 2023). A daily stress downshift is the highest-leverage break point in this configuration.';
+      } else if(fiber <= 2){
+        msg = 'Low fiber starves the butyrate engine, so the barrier and microbial meters lag (Fu et al., 2022; Liu et al., 2018). Feeding the fermenters is the limiting move here.';
+      } else if(sleep >= 9 && stress <= 2 && fiber >= 9){
+        msg = 'All three foundations are strong, so the reinforcing loop now runs in your favor: good sleep lowers stress, low stress aids digestion, and fiber feeds the repair engine. This is the stable state the four pillars are built to reach.';
+      } else {
+        msg = 'A mixed state. The reinforcing loop means the weakest input drags the others, so look at your lowest setting first rather than adding more where you are already strong.';
+      }
+      readout.textContent = msg;
+    }
+
+    btn.addEventListener('click', compute);
+    sleepEl.addEventListener('change', compute);
+    stressEl.addEventListener('change', compute);
+    fiberEl.addEventListener('change', compute);
+    compute();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('stackWidget');
+    if(!w) return;
+    var btn = w.querySelector('#stackBtn');
+    var readout = w.querySelector('#stackReadout');
+    var selects = w.querySelectorAll('select[data-key]');
+
+    // Evidence-weighted ideal ranking for the general, undiagnosed scenario (1=highest)
+    var ideal = {
+      sleep: 1,
+      fiber: 2,
+      ferment: 3,
+      stress: 4,
+      probiotic: 5,
+      glutamine: 6,
+      premium: 7
+    };
+    var labels = {
+      sleep: 'More & better sleep',
+      fiber: 'More fermentable fiber & varied plants',
+      ferment: 'Fermented foods',
+      stress: 'Daily stress-regulation practice',
+      probiotic: 'A specific probiotic strain',
+      glutamine: 'Glutamine / butyrate supplement',
+      premium: 'Premium "gut healing" stack'
+    };
+    var rationale = {
+      sleep: 'Top of the stack: six hours is actively degrading tight junctions, MUC2, and SCFA producers (Sun et al., 2023). Fixing it is upstream of everything.',
+      fiber: 'Feeds the butyrate engine that fuels and seals the wall (Fu et al., 2022; Liu et al., 2018). Cheap, multi-target, foundational.',
+      ferment: 'Raised diversity and lowered 19 inflammatory proteins in 17 weeks (Wastyk et al., 2021). Fast anti-inflammatory payoff.',
+      stress: 'Addresses the mast-cell and HPA pathway cracking the barrier (Madison & Bailey, 2024; Leigh et al., 2023). A real repair input.',
+      probiotic: 'Can fortify a compromised barrier, but effects are strain- and condition-specific and evidence still maturing (Zheng et al., 2023). A targeted add-on, not a foundation.',
+      glutamine: 'Mechanistic rationale exists, but routine benefit in a healthy, well-fed person is not established. Lower priority.',
+      premium: 'Bottom of the stack: mostly money spent on a foundation that the first four pillars already build.'
+    };
+
+    btn.addEventListener('click', function(){
+      var picks = {};
+      var used = {};
+      var missing = false;
+      var dupe = false;
+      selects.forEach(function(s){
+        var k = s.getAttribute('data-key');
+        var v = s.value;
+        if(!v){ missing = true; return; }
+        if(used[v]) dupe = true;
+        used[v] = true;
+        picks[k] = parseInt(v,10);
+      });
+
+      if(missing){
+        readout.textContent = 'Rank all seven interventions first, then reveal the evidence-weighted stack.';
+        return;
+      }
+
+      // Build the ideal order text
+      var order = Object.keys(ideal).sort(function(a,b){return ideal[a]-ideal[b];});
+      var html = '';
+      if(dupe){
+        html += 'Heads up: you reused a rank. Compare your stack against the evidence-weighted order below anyway. ';
+      }
+
+      // Score agreement
+      var diff = 0;
+      order.forEach(function(k){ diff += Math.abs((picks[k]||4) - ideal[k]); });
+
+      var verdict;
+      if(diff <= 4){
+        verdict = 'Strong read. You put the foundational, multi-target habits on top and the novel single-target products at the bottom, which is exactly how the evidence orders leverage.';
+      } else if(diff <= 10){
+        verdict = 'Close, with one or two inversions. Check whether you ranked a supplement above sleep, fiber, or stress; that is the classic place intuition and marketing pull people up the stack.';
+      } else {
+        verdict = 'This is the common trap: novel or expensive supplements ranked above the foundations. The foundations are upstream of the repair engine itself, so they almost always outrank a bottle for an undiagnosed, generally healthy person.';
+      }
+
+      html += verdict + ' Evidence-weighted stack: ';
+      var lines = order.map(function(k, i){
+        return (i+1) + '. ' + labels[k] + ' \u2014 ' + rationale[k];
+      });
+      readout.innerHTML = '<strong>' + html + '</strong><br><br>' + lines.join('<br><br>');
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

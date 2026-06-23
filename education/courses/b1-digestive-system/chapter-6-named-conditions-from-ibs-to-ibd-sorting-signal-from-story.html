@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Named Conditions: From IBS to IBD, Sorting Signal From Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 6 · Module 3</div>
+  <h1 class="ch-title">Named Conditions: From IBS to IBD, Sorting <em>Signal</em> From Story</h1>
+  <p class="ch-subtitle">Why two people can bloat for completely different reasons, and how to tell which story the symptoms are actually telling.</p>
+  <div class="ch-meta">
+    <span>33 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>13 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">T</span>wo people sit across from you describing the same week. Both say they are bloated by mid-afternoon. Both say bread makes it worse. Both have cut out gluten and felt a little better. On the surface, identical. But one of them has a functional gut disorder driven by an oversensitive nervous system, and the other has an autoimmune disease that is slowly flattening the lining of the small intestine and quietly stealing iron and bone density. Same symptom. Radically different machinery. Radically different stakes.</p>
+  <p>This is the single most important habit this chapter is going to drill into you: <em>symptoms are not diagnoses, and the surface rarely reveals the depth.</em> We are going to put names to patterns you have been building toward since Chapter 1, and we are going to do it with a disciplined comparison framework that keeps symptoms, causes, and downstream effects in separate columns. Not so you can diagnose anyone, because you cannot and should not. So that you can think clearly, talk intelligently, and recognize the exact moment something has moved beyond a coach's scope and belongs to a clinician.</p>
+</section>
+
+<section class="ch-section">
+  <h2>The framework before the conditions</h2>
+  <p>Before we name a single condition, we need the lens. Almost every mistake people make with digestive conditions comes from collapsing three different things into one. So we keep them apart, always, in three columns.</p>
+  <p>The <span class="ch-key">symptom</span> is what the person experiences: bloating, reflux, urgency, pain, fatigue. The <span class="ch-key">cause</span> is the underlying mechanism that produces it: a hypersensitive gut-brain axis, a weak valve, an autoimmune attack on tissue. The <span class="ch-key">effect</span> is the downstream consequence if the cause continues unchecked: nutrient deficiency, tissue damage, raised cancer risk, or in many cases, no lasting damage at all. Here is the trap. Symptoms cluster. Many conditions share them. Bloating belongs to nearly everyone in this chapter. But causes diverge sharply, and effects diverge even more. The whole game is refusing to let a shared symptom fool you into assuming a shared cause.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Before reading on: a headache can come from dehydration, eye strain, a hangover, or a brain tumor. The symptom tells you almost nothing about which. Why would gut symptoms be any different?</p>
+  </aside>
+  <p>Keep that headache analogy in your back pocket for the entire chapter. We will move from the common conditions, where the cause is usually functional and the effect is usually discomfort rather than damage, to the less common ones, where the cause involves real inflammation or autoimmunity and the effect can include lasting tissue injury. The ordering is deliberate. Most of what people worry about lives in the first group. Most of what actually requires medical care lives in the second.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide style diagnostic plate in pencil and muted watercolour, showing three vertical columns labeled in small serif italic: 'symptom', 'cause', 'effect'. In the left column, a sketch of a person with a hand on a bloated abdomen. In the middle column, three small contrasting mechanism vignettes stacked: a tangled nerve, a weak valve, a frayed tissue lining. In the right column, three divergent outcomes sketched faintly. Connecting lines fan out from the single symptom to multiple causes, emphasizing one-to-many branching. Warm earthy palette of ochre, sage green, soft slate blue on cream paper, the look of a careful researcher's notebook. No numbers, no data, no extra text beyond the three column labels." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>One symptom can branch to many causes. The art of this chapter is refusing to collapse that fan into a single line.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>IBS: the loud disorder with no visible damage</h2>
+  <p>Irritable bowel syndrome is the most common diagnosis in this chapter, and also the most misunderstood. It is a <span class="ch-key">functional gut disorder</span>, which historically meant "we cannot see anything wrong on a scan or a biopsy, but the gut clearly is not behaving." For decades that definition made IBS sound like a diagnosis of exclusion, a polite way of saying "we do not know." That picture is now out of date, and it is worth understanding why.</p>
+  <p>The modern view, synthesized clearly in the Lancet Gastroenterology &amp; Hepatology review by Holtmann and colleagues (2016), is that IBS is not one mechanism failing. It is several mechanisms that can co-exist within a single patient. The review identifies dysfunction of the <span class="ch-key">gut-brain axis</span>, <span class="ch-key">visceral hypersensitivity</span>, altered gut motility, low-grade immune activation, and shifts in the microbiota. They argue these are not competing theories where only one is right. A single person can have two or three of them operating at once. That is why IBS resists a single tidy explanation, and why a treatment that helps one person does nothing for another.</p>
+  <p>The more contemporary systems-level review by Aggeletopoulou and colleagues (2025) sharpens the molecular picture. It implicates disruptions in the HPA axis, the body's central stress-response system, alongside altered serotonin signaling, bile acid malabsorption, and yes, increased intestinal permeability, all feeding into the two clinical hallmarks: abnormal motility and a gut that hurts more than it should. That phrase, a gut that hurts more than it should, is the core of IBS, and the rest of this section unpacks it.</p>
+  <h3>Subtypes and how IBS is actually diagnosed</h3>
+  <p>IBS is not one uniform experience, and clinicians sort it into subtypes by the dominant change in bowel habit, because the subtype shapes everything about day-to-day management. There are four: IBS with predominant constipation (IBS-C), IBS with predominant diarrhea (IBS-D), the mixed type that swings between both (IBS-M), and an unclassified type (IBS-U) for people whose pattern does not fit cleanly. These are not trivial labels. A meta-analysis by Arif and colleagues (2025) pooling data across 52 countries put the global prevalence of IBS at roughly 14% and found the subtypes split fairly evenly, with IBS-M (mixed) slightly the most common at about 31%, and IBS-C and IBS-D each near 26%. That spread tells you something practical: there is no single "IBS diet" or "IBS protocol," because a person who alternates toward constipation and a person living with urgent diarrhea need almost opposite support.</p>
+  <p>The diagnosis itself runs on what are called the Rome criteria, currently in their fourth edition (Rome IV). In plain terms, the Rome IV definition of IBS is recurrent abdominal pain, on average at least one day per week over the previous three months, associated with two or more of the following: the pain relates to defecation, it comes with a change in how often the person passes stool, or it comes with a change in the form of the stool. The point of having explicit, written criteria is to move IBS away from the old "we could not find anything, so it must be IBS" framing and toward a positive, symptom-based diagnosis a clinician can actually make. That said, the criteria are not perfect. A critical review by Duncanson, Talley, and colleagues (2023) argues that Rome IV is better at capturing severe IBS than milder presentations, and notes that despite strong evidence that IBS symptoms are often tied to eating, a relationship to meals is not even one of the Rome IV criteria. So the framework is a real tool, and it is also still being refined.</p>
+  <p><strong>Coaching translation.</strong> You will hear people throw the word "IBS" around casually, the way they might say "I have a slow metabolism." Two things matter here. First, IBS is a specific, criteria-based clinical diagnosis, not a vibe, and the subtype changes what sensible support looks like. Second, those Rome criteria assume a clinician has already considered and excluded the organic diseases that can imitate IBS. Someone self-applying the label has skipped the most important step, which is exactly the step you are not qualified to perform for them.</p>
+  <h3>Visceral hypersensitivity in plain terms</h3>
+  <p>Here is the everyday translation. Imagine a normal amount of gas distending your intestine. In most people, the nervous system registers it as nothing, background noise, not even conscious. In someone with visceral hypersensitivity, the same physical stretch gets amplified by the gut-brain wiring and arrives in conscious awareness as genuine pain. The gas is not abnormal. The volume knob on the sensory signal is turned up. This is why an IBS patient can have a completely normal-looking gut on every test and still be in real, not imagined, pain. The pain is real. The tissue is fine. Both things are true at once.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>If someone's colonoscopy and bloodwork are all normal but they are clearly suffering, an old-school clinician might say "it's all in your head." Using the concept of visceral hypersensitivity, what is wrong with that dismissal, and what is partly right about it?</p>
+  </aside>
+  <p>The "partly right" is that the brain is genuinely involved, the gut-brain axis is central. The "completely wrong" is the implication that the suffering is fake or chosen. Amplified signaling is a physiological event, not a character flaw. This distinction matters enormously when you talk to people, because the phrase "it's all in your head" has driven countless IBS patients away from care that could actually help them.</p>
+  <p><strong>Coaching translation.</strong> IBS is loud and frightening but, by its nature as a functional disorder, it does not damage tissue, does not raise cancer risk, and does not cause malnutrition. The effect column is discomfort and quality-of-life burden, which can be severe, but not destruction. That is genuinely reassuring news to deliver, and it is also exactly where your scope ends: confirming the diagnosis is a clinician's job, because the entire point of an IBS diagnosis is that the dangerous conditions have been ruled out first. You do not get to assume "it's just IBS." Someone qualified has to earn that conclusion.</p>
+</section>
+
+<section class="ch-section">
+  <h2>GERD: when the valve, not the volume, is the problem</h2>
+  <p>Gastroesophageal reflux disease is a useful contrast to IBS because its cause is mechanical and concrete, almost the opposite of IBS's diffuse, multi-system character. <span class="ch-key">GERD</span> is what happens when stomach contents, including acid, repeatedly flow backward up into the esophagus. The occasional reflux after a large meal is normal physiology. GERD is when it happens often enough, or with enough acid exposure, to produce symptoms or damage.</p>
+  <p>The proximate cause is usually a problem with the <span class="ch-key">lower esophageal sphincter</span>, the ring of muscle that is supposed to stay shut and only open to let food down. When that valve relaxes inappropriately or sits weakened, acid escapes upward into a tube that, unlike the stomach, has no protective lining for it. The classic symptom is heartburn, a burning behind the breastbone, often worse lying down or after eating. Some people get regurgitation, a sour taste, or a chronic cough rather than textbook heartburn, which is part of why GERD gets missed.</p>
+  <p>Worth understanding is why this valve fails in the first place, because the mechanisms point straight at the levers that actually help. The most common one is what physiologists call a transient lower esophageal sphincter relaxation: the sphincter briefly opens when it should not, independent of swallowing. Several things make these inappropriate relaxations more frequent or more consequential. A hiatal hernia, where part of the stomach slides up through the diaphragm, undermines the anatomical backstop that normally reinforces the valve. Raised pressure inside the abdomen, from excess abdominal weight, from a large meal physically distending the stomach, or from lying flat so gravity no longer keeps acid down, pushes contents toward a valve that is already imperfect. Delayed stomach emptying leaves more volume sitting there longer, with more opportunity to reflux. None of this is exotic. It is plumbing and pressure.</p>
+  <p>The symptom picture is broader than most people assume, which is the second reason GERD gets missed for years. Beyond classic heartburn and regurgitation, reflux can show up as a persistent dry cough, hoarseness, a sensation of a lump in the throat, disrupted sleep, or even dental erosion from acid reaching the mouth. These are called the extraesophageal or atypical presentations, and because they do not look like "heartburn," people and sometimes clinicians chase the wrong explanation for a long time. Reflux that reaches the throat and airway is one reason a chronic cough that resists the usual treatments sometimes traces back to the gut rather than the lungs.</p>
+  <p>Notice how cleanly the columns separate here. The symptom is burning and regurgitation. The cause is a mechanical valve failure plus acid exposure. And the effect, if it continues unchecked, is the part people underestimate: chronic acid exposure can inflame the esophagus, and over years can drive cellular changes (a condition called Barrett's esophagus) that modestly raise the risk of esophageal cancer. So GERD differs from IBS in a way that matters: GERD's effect column contains real tissue consequences. The discomfort is the warning, not the whole story.</p>
+  <p><strong>Coaching translation.</strong> GERD responds to genuinely boring, genuinely effective levers, the kind of education that is squarely within scope: not eating a large meal right before lying down, managing the body-weight load on the abdomen, and recognizing personal triggers. But persistent reflux, difficulty swallowing, or any reflux severe enough to wake someone at night is a referral, not a coaching project. The danger with GERD is precisely that the symptom is so common people normalize it for a decade while the effect quietly accumulates.</p>
+</section>
+
+<section class="ch-section">
+  <h2>SIBO: a real condition wrapped in an overdiagnosis problem</h2>
+  <p>Small intestinal bacterial overgrowth, almost always shortened to SIBO, deserves its own section because it sits in a genuinely uncomfortable place: it is a real clinical entity, and it is also one of the most over-applied labels in digestive health. Both of those are true at the same time, and holding both is the whole skill.</p>
+  <p>Start with the biology. Your small intestine is supposed to be relatively sparse in bacteria compared to the colon downstream. <span class="ch-key">SIBO</span> is the situation where bacterial numbers in the small intestine climb abnormally high, or where colon-type bacteria colonize a stretch of small bowel where they do not belong. When that happens, those microbes ferment food before your body has finished absorbing it, and the byproducts (gas among them) can produce bloating, distension, gas, diarrhea, and in more severe cases malabsorption. There are well-established predisposing causes, and they are mostly about something going wrong with the gut's housekeeping. According to PubMed, Rao and Bhagatwala (2019) catalog the major risk factors: proton-pump inhibitors, opioids, prior gastric or bowel surgery, and disorders of motility that slow the gut's natural sweeping action. That last one connects directly to material earlier in this course: the small intestine relies on rhythmic clearing waves to keep bacteria moving downstream, and when that clearing falters, bacteria accumulate where they should not.</p>
+  <p>So SIBO is real, and the mechanism is sound. Now the honest part. The clearest, most authoritative statement on the controversy comes from the American Gastroenterological Association clinical practice update by Quigley, Murray, and Pimentel (2020), and it does not pull its punches. The authors state plainly that the very definition of SIBO "lacks precision and consistency," that its true prevalence is therefore undefined, and that because hydrogen breath testing is so easy to order, SIBO is now diagnosed in people with a wide array of gastrointestinal and even non-gastrointestinal complaints and is increasingly blamed in the popular press for a sprawling list of disorders. In other words, the same panel of expert gastroenterologists who take SIBO seriously also warn directly that it is being stretched far past what the evidence supports.</p>
+  <h3>Why the testing is the weak link</h3>
+  <p>The heart of the overdiagnosis problem is the test. The most direct way to confirm SIBO is to aspirate fluid from the small intestine and culture it, which is invasive and not done casually. So in practice most people are diagnosed with a breath test: you drink a sugar solution (glucose or lactulose), and the test measures hydrogen or methane in your breath over the following hours, on the logic that bacteria fermenting that sugar will produce those gases. The trouble, as Rao and Bhagatwala (2019) and the AGA update both emphasize, is that breath testing has not been fully standardized or validated, results vary with the protocol used, and the symptoms people present with (bloating, gas, diarrhea) do not reliably predict a positive test. A test that is easy to order, hard to interpret, and loosely tied to symptoms is a recipe for both false positives and a label that gets applied too freely.</p>
+  <p>There is one more knot worth naming, because it shows how careful the honest reasoning has to be. SIBO and IBS overlap heavily in their symptoms, and some have proposed that bacterial overgrowth is actually a driver of IBS. The AGA panel addresses this directly and lands on caution: while IBS symptoms have been shown to improve with a poorly absorbed antibiotic, whether that improvement is actually due to eradicating SIBO "warrants further confirmation in randomized controlled trials." That is the sound of experts refusing to overclaim a mechanism even when a treatment seems to work. The treatment helping does not prove the proposed cause was right.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>An antibiotic improves someone's IBS-type symptoms. A clinic markets this as proof the person "had SIBO all along." What is the logical gap between "the treatment helped" and "the proposed cause was correct," and why does that gap matter for how you talk about SIBO?</p>
+  </aside>
+  <p><strong>Coaching translation.</strong> Treat SIBO the same way this chapter treats "leaky gut": split the real phenomenon from the inflated story. Real version, bacteria genuinely overgrowing the small intestine, usually downstream of an identifiable problem like impaired motility or certain medications, with real symptoms. Inflated version, SIBO offered as the secret root cause behind fatigue, brain fog, and almost any complaint, confirmed by a breath test of shaky reliability and treated with open-ended antibiotic or supplement protocols. The evidence honestly supports the first and not the second, and the diagnosis, the testing, and any antibiotic decision sit firmly with a clinician, not with you.</p>
+</section>
+
+<hr class="ch-divider">
+
+<div class="ch-widget" id="matrix-widget">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Condition Comparison Matrix Builder</div>
+  </div>
+  <p class="ch-widget-sub">Assign each tile to a condition's symptom, cause, or effect. The matrix flags where conditions look alike on the surface (shared symptoms) but diverge underneath (different causes).</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Condition</span>
+      <select class="ch-widget-select" id="mw-condition">
+        <option value="ibs">IBS</option>
+        <option value="gerd">GERD</option>
+        <option value="perm">Intestinal permeability</option>
+        <option value="ibd">IBD (Crohn's)</option>
+        <option value="celiac">Celiac disease</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Column</span>
+      <select class="ch-widget-select" id="mw-column">
+        <option value="symptom">Symptom</option>
+        <option value="cause">Cause</option>
+        <option value="effect">Effect</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Tile</span>
+      <select class="ch-widget-select" id="mw-tile"></select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Correct placements</span>
+      <span class="ch-meter-bar"><span id="mw-correct-bar" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="mw-correct-num">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Shared-symptom flags</span>
+      <span class="ch-meter-bar"><span id="mw-share-bar" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="mw-share-num">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Matrix completeness</span>
+      <span class="ch-meter-bar"><span id="mw-done-bar" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="mw-done-num">0%</span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="mw-feedback">Pick a condition, a column, and a tile, then place it. Try the symptom column first across several conditions to see the overlaps light up.</p>
+  <button class="ch-widget-btn" id="mw-place">Place tile</button>
+  <button class="ch-widget-btn" id="mw-export">Download study reference</button>
+</div>
+
+<section class="ch-section">
+  <h2>"Leaky gut": the real phenomenon and the inflated story</h2>
+  <p>Now the hard one, the place this chapter promised to be especially honest. "Leaky gut" is two things wearing the same name, and untangling them is one of the most useful skills you can build as a science-based educator.</p>
+  <p>Thing one is a real, measurable, well-studied physiological phenomenon called <span class="ch-key">increased intestinal permeability</span>. The gut lining is a single layer of cells held together by protein seals called <span class="ch-key">tight junctions</span>. These junctions are not permanently locked; they regulate what passes between cells. Under certain conditions they loosen, and more material crosses the barrier than usual. This is genuine biology. Camilleri's rigorous 2019 review in <em>Gut</em> catalogues exactly how it is measured (sugar probe tests, biopsy assays, endomicroscopy) and documents the "stressed states" that can transiently increase permeability: intense exercise, NSAID use, and pregnancy among them.</p>
+  <p>Thing two is the marketing story. In its popular form, "leaky gut" becomes a master explanation for nearly everything: fatigue, brain fog, joint pain, autoimmune disease, mood disorders, weight gain, all supposedly caused by a leaky barrier letting toxins flood the bloodstream, all supposedly fixable by a specific supplement stack or elimination diet. This version vastly outruns the evidence.</p>
+  <h3>Where the science actually stands</h3>
+  <p>Here is the honest middle ground, and it is genuinely nuanced. Increased permeability is real and measurable. It is clearly <em>associated</em> with several conditions. In inflammatory bowel disease, for example, Michielan and D'Incà (2015) document concrete barrier defects: abnormal tight junctions, a disrupted mucus layer, and increased paracellular permeability. So permeability is not fringe nonsense; in IBD it is part of the established pathology.</p>
+  <p>The problem is the leap from association to causation, and from "a measurable phenomenon exists" to "it is the root cause of your symptoms and this product fixes it." Camilleri (2019) is explicit on this point: the causal direction is frequently unclear. In many conditions, increased permeability may be a <em>consequence</em> of inflammation rather than its trigger. And critically, the review cautions that public-domain "leaky gut" claims require confirmation before anyone endorses the dietary or supplement interventions sold around them. That is a peer-reviewed clinician saying, in print, "slow down."</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Increased permeability is found in IBD patients. Does that prove a leaky barrier caused their disease? What is the alternative explanation, and how would you design a study to tell the two apart?</p>
+  </aside>
+  <p><strong>Coaching translation.</strong> When you hear "leaky gut," your job is not to scoff and not to swallow it whole. It is to split the term in half. Yes, intestinal permeability is real and changes under stress, exercise, and certain drugs. No, that does not validate a $200 supplement protocol marketed as fixing the cause of your fatigue and mood. The phenomenon is real; the all-explaining causal story sold around it is, in the strict sense, unsupported. Treating those as the same thing is exactly the error this whole chapter is built to prevent: mistaking a real surface signal for a confirmed underlying cause.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific illustration plate in the style of an old histology textbook, ink-and-wash with restrained colour, showing a cross-section of the intestinal lining as a single layer of tall columnar epithelial cells sitting on a basement membrane. Between two adjacent cells, draw the protein seal at the top clearly, with a small italic serif label 'tight junction' pointing to it. Show one panel on the left where the seal is closed and tidy, and a paired panel on the right where the same seal is slightly loosened with a gap between cells, labeled in small italic 'increased permeability'. A faint mucus layer drawn above the cells. Muted palette of sepia, dusty rose, and teal on aged cream paper. Only the two quoted labels appear, no other text, no numbers, no arrows beyond the two label leads." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Tight junctions regulate what crosses between cells. They loosen under certain conditions, which is real. The story that this single fact explains all illness is not.</em></figcaption></figure>
+
+<hr class="ch-divider">
+
+<div class="ch-widget" id="claim-widget">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Leaky Gut Claim Checker</div>
+  </div>
+  <p class="ch-widget-sub">Read each claim about intestinal permeability and sort it. Then reveal where the science actually stands. Goal: model how to grade a health claim, not memorize answers.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Your verdict</span>
+      <select class="ch-widget-select" id="cw-verdict">
+        <option value="supported">Supported by evidence</option>
+        <option value="overstated">Overstated</option>
+        <option value="unsupported">Unsupported</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Cards graded correctly</span>
+      <span class="ch-meter-bar"><span id="cw-score-bar" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="cw-score-num">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Progress through deck</span>
+      <span class="ch-meter-bar"><span id="cw-prog-bar" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="cw-prog-num">1/6</span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="cw-card"><strong>Claim:</strong> Intestinal permeability can be measured in humans using sugar probe tests and biopsy assays.</p>
+  <p class="ch-widget-sub" id="cw-reveal"></p>
+  <button class="ch-widget-btn" id="cw-grade">Grade this card</button>
+  <button class="ch-widget-btn" id="cw-next">Next card</button>
+</div>
+
+<section class="ch-section">
+  <h2>IBD and Crohn's: when the immune system attacks the gut</h2>
+  <p>We now cross the line from functional disorders into organic disease, where there is visible, measurable damage. <span class="ch-key">Inflammatory bowel disease</span> is an umbrella for chronic, immune-driven inflammation of the digestive tract, the two main forms being Crohn's disease and ulcerative colitis. This is not a gut that is over-sensing normal signals like IBS. This is a gut that is genuinely inflamed, ulcerated, and damaged by a misdirected immune response.</p>
+  <p>The pathogenesis, as synthesized in the recent multi-omics review by Calvez and colleagues (2025), rests on several converging cornerstones: immune dysregulation (including abnormal macrophage polarization and Th17 cell activation), genetic predisposition, disrupted gut microbiota, and environmental exposures. In other words, IBD is what happens when a susceptible genome, a perturbed microbiome, and environmental triggers combine to make the immune system attack the gut wall. In <span class="ch-key">Crohn's disease</span> specifically, the inflammation can occur anywhere from mouth to anus, often in patchy segments, and it penetrates deep through the full thickness of the bowel wall, which is why it can cause strictures, fistulas, and abscesses.</p>
+  <p><span class="ch-key">Ulcerative colitis</span>, the other main form of IBD, is worth treating as its own disease rather than a footnote to Crohn's, because the pattern of damage is distinct in ways that matter. According to PubMed, the Lancet review by Ungaro, Mehandru, Colombel, and colleagues (2016) describes ulcerative colitis as inflammation that begins in the rectum and extends continuously, without skipped segments, up the colon to a variable extent. And where Crohn's burrows through the entire thickness of the bowel wall, ulcerative colitis is largely confined to the innermost lining, the mucosa. That single difference, continuous and superficial versus patchy and full-thickness, drives much of how the two diseases behave and are managed. Ulcerative colitis classically presents with bloody diarrhea, rectal urgency, and the sensation of needing to pass stool even when the bowel is empty. It shares with Crohn's the same underlying engine the review describes: a combination of genetic predisposition, epithelial barrier defects, a dysregulated immune response, and environmental factors. Both are diagnosed by direct visualization (colonoscopy) plus biopsy, not by symptoms alone, and both carry, over years of uncontrolled inflammation, an elevated risk of colorectal cancer that makes ongoing medical surveillance part of the standard of care.</p>
+  <p>And IBD is not rare or exotic. The landmark Lancet systematic review by Ng and colleagues (2017), covering 147 population-based studies, established IBD as a genuinely global disease: incidence is stabilizing in Western countries but accelerating in newly industrialized nations. This is a serious, prevalent condition, not a curiosity.</p>
+  <h3>The columns diverge sharply here</h3>
+  <p>Watch the framework do its work. The symptom column for Crohn's overlaps heavily with IBS: abdominal pain, altered bowel habits, bloating. This is exactly the overlap that fools people. But the cause column is entirely different (immune-mediated inflammation versus functional hypersensitivity), and the effect column is in a different universe altogether: tissue destruction, bowel obstruction, surgery, nutrient malabsorption, and elevated colorectal cancer risk. Two conditions can produce the same belly pain. Only one of them is eating holes in the bowel wall.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>A person has had "IBS" for years, then develops blood in the stool, unintended weight loss, fever, and nighttime symptoms that wake them. Why should these specific features move the suspicion away from IBS, and what column of our framework do they belong to?</p>
+  </aside>
+  <p>Those features (blood, weight loss, fever, waking at night, anemia) are sometimes called "alarm features" precisely because they signal the effect column of an organic disease, the kind of tissue-level consequences a purely functional disorder does not produce. They are the clearest single example in this chapter of when something is beyond a coach's scope. The moment you hear them, the conversation is not about diet tweaks. It is about getting the person to a clinician promptly.</p>
+  <p><strong>Coaching translation.</strong> IBD is the case that proves why "it's probably just IBS" is dangerous as a default assumption. The overlap in symptoms is real, and the difference in stakes is enormous. You do not need to be able to diagnose Crohn's. You need to recognize that persistent, escalating, or alarm-feature symptoms are not yours to manage, and to say so clearly.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Celiac disease: a true autoimmune response, not a preference</h2>
+  <p>We end with celiac disease because it is the cleanest possible illustration of the gap between surface and depth, and because it is the most consistently misunderstood condition in this entire chapter. Celiac is not a sensitivity, not a fashion, not a milder version of "going gluten-free." It is a genuine <span class="ch-key">autoimmune disease</span> with a precisely defined trigger.</p>
+  <p>The definitive modern review by Caio and colleagues (2019), from the Center for Celiac Research, lays out the mechanism with unusual clarity. In genetically susceptible people, those carrying the HLA-DQ2 or HLA-DQ8 genes, dietary gluten triggers an immune cascade. An enzyme called tissue transglutaminase modifies gluten fragments, the immune system mounts a T-cell response, and that response attacks the lining of the small intestine, producing <span class="ch-key">villous atrophy</span>, the flattening of the finger-like villi that absorb nutrients. The autoimmune target, tissue transglutaminase, is the body's own enzyme. This is autoimmunity in the strict sense: the immune system attacking self-tissue, with gluten as the trigger that sets it off.</p>
+  <p>What makes celiac scientifically remarkable, as D'Avino and colleagues (2021) emphasize, is that it is one of the few autoimmune diseases where both the environmental trigger (gluten) and the required genetic background (HLA-DQ2/DQ8) are well defined. That makes it a model system for understanding autoimmunity in general. It is also not rare: roughly 1% of the global population is affected (Caio et al., 2019), and many cases go undiagnosed for years because the symptoms are so variable.</p>
+  <h3>Why celiac is the framework's masterclass</h3>
+  <p>Run the columns one last time. The symptoms of celiac can include bloating, diarrhea, and abdominal pain, the same surface signs as IBS, GERD complications, and Crohn's. But the symptoms can also be entirely outside the gut: iron-deficiency anemia, osteoporosis, fatigue, neurological symptoms, or in some people almost nothing at all. The cause is a specific gluten-triggered autoimmune attack requiring a specific genetic background. And the effect, if gluten continues, is progressive intestinal damage, malabsorption, nutrient deficiencies, and elevated risk of certain complications. Same bloating as IBS on the surface. An autoimmune disease flattening your intestinal lining underneath.</p>
+  <p>This is also why we draw a hard line between celiac and the non-celiac gluten sensitivity we will examine in Chapter 9. Celiac is diagnosable with specific serology (antibodies to tissue transglutaminase) plus a confirming biopsy showing villous atrophy. It involves measurable autoimmune tissue damage. Non-celiac sensitivity, which is real and which we will treat seriously, does not show that autoimmune signature or that tissue destruction. Lumping them together does a disservice to both. And there is a practical trap embedded here: someone who removes gluten on their own, feels better, and assumes "I must be a little sensitive" may actually have undiagnosed celiac, and by going gluten-free before testing, they make accurate diagnosis far harder. The diagnostic tests rely on the immune response that gluten provokes.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Why is "just try cutting out gluten and see if you feel better" potentially harmful advice for someone who might have celiac, even though gluten is genuinely the trigger?</p>
+  </aside>
+  <p><strong>Coaching translation.</strong> Celiac is the cleanest example of why you never, ever recommend a diagnostic elimination as a shortcut. If celiac is even a possibility, the order of operations matters: testing comes before dietary change, and that means a clinician comes before you do. Once a person has a confirmed celiac diagnosis, strict lifelong gluten avoidance is the treatment, and that is where supportive, educational coaching can genuinely help. But the diagnosis itself is not yours to make or to bypass.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="2" data-prompt="A hand-drawn medical comparison plate in pencil and soft watercolour, two side-by-side panels of the small intestine lining shown at the same magnification. Left panel: healthy tall finger-like projections standing upright and densely packed, with a small italic serif label 'healthy villi'. Right panel: the same surface but flattened and blunted, projections shortened and eroded, labeled in small italic 'villous atrophy'. Warm clinical palette of rose, cream, and muted brick red on pale paper, the register of a careful upper-level textbook plate. Only the two quoted labels appear. No numbers, no extra annotation, no arrows beyond the label leads." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 3</span> <em>In celiac disease, the gluten-triggered immune attack flattens the absorptive villi. The same outward bloating as IBS; an entirely different reality beneath.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>Putting the five side by side</h2>
+  <p>Step back and look at the whole set through the framework. Five conditions, and a remarkable amount of symptom overlap. Bloating appears in nearly all of them. Abdominal pain in most. Altered bowel habits in several. If you tried to diagnose from symptoms alone, you would be lost, which is exactly the point.</p>
+  <p>The cause column is where they separate. IBS is functional, a multi-mechanism gut-brain disorder with no structural damage. GERD is mechanical, a valve and acid problem. Intestinal permeability is a measurable physiological state, real but frequently a consequence rather than a root cause, and badly overhyped. Crohn's is immune-mediated inflammation that destroys the bowel wall. Celiac is gluten-triggered autoimmunity that flattens the intestinal lining. Five surfaces that can look alike; five mechanisms that are not.</p>
+  <p>The effect column is where the stakes separate, and where your sense of scope should sharpen. IBS and uncomplicated GERD largely produce discomfort and reduced quality of life. Untreated GERD, IBD, and celiac all produce real tissue consequences over time: esophageal changes, bowel destruction, intestinal damage and malabsorption. That difference in the effect column is the entire reason the boundary between education and clinical care exists. When the effect column contains tissue damage, the situation belongs to medicine.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Cover the cause and effect columns in your mind and try to assign a single symptom, "chronic bloating," to a condition. You can't, and that's the lesson. Now reverse it: given the effect "villous atrophy and iron-deficiency anemia," how many of the five conditions fit? Why is the effect column so much more diagnostic than the symptom column?</p>
+  </aside>
+  <p>This is the consolidation of everything from Chapters 1 through 5. The anatomy, the motility, the microbiome, the gut-brain axis, the barrier function, all of it now resolves into recognizable real-world patterns. You are not learning these conditions as isolated facts. You are seeing how the systems you already studied can fail in distinct ways that happen to share a noisy surface.</p>
+</section>
+
+<blockquote class="ch-quote">
+  <p>Multiple pathophysiological mechanisms can co-exist within a single patient. The challenge is not finding the one cause; it is recognizing that the surface complaint rarely points cleanly to any single mechanism underneath.</p>
+  <cite>Adapted from the framing of Holtmann et al. (2016), Lancet Gastroenterology &amp; Hepatology</cite>
+</blockquote>
+
+<section class="ch-section">
+  <h2>Sorting signal from story: grading what you read</h2>
+  <p>This chapter is named for a skill, not a list of conditions, and here is the skill stated directly. Most of what people encounter about gut health does not arrive as a peer-reviewed paper. It arrives as a confident claim from a podcast, a supplement page, an influencer, or a well-meaning friend. You do not need a medical degree to grade those claims more carefully than most people do. You need a few habits of mind, and you have been practicing them all chapter.</p>
+  <p>The first habit is the one this whole chapter is built on: ask which column the claim is really making. A claim about a symptom ("bloating means X") is almost always weaker than it sounds, because symptoms branch to many causes. A claim that jumps straight from a symptom to a specific cause to a specific product is usually skipping the hardest part, which is establishing causation. When you hear "your fatigue is caused by a leaky gut, and this protocol fixes it," notice how many unproven links are chained together in one sentence.</p>
+  <p>The second habit is to separate association from causation, the exact distinction that separated real intestinal permeability from the marketing story, and real SIBO biology from the overdiagnosis problem. Two things occurring together does not mean one caused the other, and a phenomenon being measurable does not mean it is the root of someone's illness. Reputable sources are careful about this line. Sources selling something tend to erase it.</p>
+  <p>The third habit is to weigh the source and its incentives. A claim resting on a clinical practice update from a major professional body (the kind of consensus document several of this chapter's references come from) carries different weight than a claim resting on a single testimonial or a study funded by the company selling the cure. Ask: is this a systematic review or expert consensus, or a single small study, or no study at all? Does the person making the claim profit if you believe it? Does the claim acknowledge uncertainty, or does it promise certainty that the actual science does not have? Honest sources, as you saw repeatedly in this chapter, say "this warrants further confirmation" and "the causal direction is unclear." Overclaiming sources never do.</p>
+  <p>The fourth habit is to notice what a claim conveniently leaves out. A pitch built around "leaky gut" or "SIBO" as the hidden cause of everything almost never mentions the alarm features that would send a responsible person to a clinician, and almost never says "but first, rule out the serious organic diseases this could actually be." Silence about red flags is itself a red flag.</p>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>You read a post: "90% of disease starts in the gut, and this 30-day protocol resets it." Run it through the four habits. Which column is it claiming? Is it association or causation? What is the source and its incentive? What does it leave out? You do not need to be a doctor to see what is wrong with it.</p>
+  </aside>
+  <p>None of this makes you a diagnostician, and it is not supposed to. It makes you something genuinely valuable and increasingly rare: a person who can hear a confident health claim and tell the difference between a careful signal and a profitable story. That is the literacy this chapter exists to build.</p>
+</section>
+
+<section class="ch-section">
+  <h2>The boundary, stated plainly</h2>
+  <p>Let me make the scope line as clear as I can, because it is the practical heart of this chapter. As an educator or coach, your role with these conditions is to understand them well enough to discuss them intelligently, to help someone with an existing, confirmed diagnosis navigate sensible day-to-day choices, and above all to recognize when a pattern is beyond your scope.</p>
+  <p>You do not diagnose. You do not tell someone they "probably have IBS." You do not recommend gluten elimination as a test. You do not treat reflux that wakes someone at night with lifestyle tips alone. The presence of alarm features, blood in the stool, unintended weight loss, fever, nighttime symptoms, anemia, progressive or escalating pain, means the conversation stops being educational and becomes a referral. That is not a limitation on your usefulness. It is the most useful thing you can do: knowing the edge of your competence and respecting it builds the kind of trust that makes the rest of your education worth anything.</p>
+  <p>The goal was never to make you a clinician. It was to make you someone who can sort signal from story, who can hear "I'm always bloated and bread makes it worse" and understand that this single sentence could describe five different realities, only some of which are yours to help with, and to know the difference.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Case study: Hana and the gluten-free shortcut</h2>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Case</div>
+    <p>Hana is 29 and has felt off for the better part of a year: bloated most afternoons, tired in a way coffee does not touch, and occasionally crampy after meals. She read several posts linking bloating and fatigue to gluten and to "leaky gut," cut gluten out on her own, and within a couple of weeks felt noticeably better. Encouraged, she added a "gut reset" supplement protocol she found online and started telling friends she is "probably a little gluten sensitive." She has not seen a clinician. Her energy is still not what it used to be, and a recent note from a routine blood draw flagged low iron, which she assumes is unrelated.</p>
+  </aside>
+  <p>Run Hana's situation through the framework and the gaps appear fast. On the surface, her symptoms (bloating, fatigue, cramping) sit squarely in the shared-symptom zone this chapter keeps warning about. They are compatible with IBS. They are also compatible with celiac disease, and the detail that should stop you cold is the iron. Iron-deficiency anemia is one of the classic outside-the-gut presentations of celiac, exactly the kind of effect-column finding that a purely functional disorder like IBS does not produce. Hana has filed it under "unrelated." From inside the framework, it is the single most important clue she has.</p>
+  <p>Here is the trap she has walked into, and it is the precise trap this chapter was built to prevent. By removing gluten before any testing, Hana has made an accurate celiac diagnosis much harder to obtain. The standard tests, the antibody serology and the confirming biopsy, depend on the immune response that gluten provokes. Take gluten away, and that response quiets down, which can turn a true celiac case into falsely reassuring or ambiguous results. She felt better, which feels like an answer, but feeling better on a gluten-free diet does not distinguish celiac from non-celiac sensitivity from coincidence. The relief is real and the diagnostic information is now compromised. Both at once.</p>
+  <p>Notice what is not your role here and what is. It is not your place to tell Hana she has celiac; you cannot know that, and diagnosing it is a clinician's job. It is entirely appropriate to recognize that her picture, gut symptoms plus unexplained iron deficiency plus a self-started elimination diet, is one that belongs in front of a qualified clinician promptly, and to say so plainly. The genuinely useful thing you can offer is the order of operations: testing comes before dietary change, and since she has already removed gluten, that is itself information her clinician needs, because she may be asked about reintroducing gluten under medical supervision before testing. That is the difference between coaching someone toward proper care and accidentally helping them bury the evidence.</p>
+  <p>Hana's story is not unusual, and that is the point. The gluten-free shortcut feels harmless and even health-conscious. Inside the framework, it is a vivid example of how a real surface signal, plus a plausible online story, plus an untested self-diagnosis, can delay the recognition of a serious, treatable autoimmune disease. Sorting signal from story, in Hana's case, could be the thing that gets her the right answer years sooner.</p>
+</section>
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>Always separate symptom, cause, and effect into distinct columns. Symptoms cluster and overlap; causes and effects diverge, and the effect column is where the real stakes and scope boundaries live.</li>
+    <li>IBS is a functional, multi-mechanism gut-brain disorder (visceral hypersensitivity, altered motility, immune and microbiota changes) with real pain but no tissue damage. It is a diagnosis a clinician earns by ruling out organic disease, not a default assumption.</li>
+    <li>GERD is mechanically driven by lower esophageal sphincter dysfunction and acid exposure. Unlike IBS, its effect column includes real tissue consequences over time, which is why chronic reflux is not something to normalize.</li>
+    <li>"Leaky gut" is two things: a real, measurable phenomenon (increased intestinal permeability under stress, exercise, NSAIDs, and in IBD) and an inflated marketing story that treats it as the confirmed root cause of nearly everything. Honor the first; refuse the second.</li>
+    <li>IBD/Crohn's is immune-mediated inflammation that genuinely damages the bowel wall, overlapping with IBS at the surface but radically different underneath. Alarm features (blood, weight loss, fever, nighttime symptoms) are the clearest signal that a situation is beyond a coach's scope.</li>
+    <li>Celiac disease is a true gluten-triggered autoimmune disease (HLA-DQ2/DQ8, tissue transglutaminase, villous atrophy) affecting roughly 1% of people. Never recommend a diagnostic gluten elimination; testing must come before dietary change, which means a clinician comes first.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>We have drawn a hard line between celiac as autoimmune disease and the looser category of food reactions. In the next core chapter we turn to how these conditions are actually investigated and managed in practice, and what genuinely evidence-based support looks like once a diagnosis exists. Then in Chapter 9, our first bonus module, we take up non-celiac gluten and food sensitivities on their own terms: real, increasingly studied, and entirely distinct from the autoimmune disease we separated them from here.</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Aggeletopoulou, I., Papantoniou, K., &amp; Pastras, P. (2025). Unraveling the pathophysiology of irritable bowel syndrome: Mechanisms and insights. <em>International Journal of Molecular Sciences, 26</em>(21), 10598. https://doi.org/10.3390/ijms262110598</p>
+  <p>Arif, T. B., Ali, S. H., Bhojwani, K. D., Sadiq, M., Siddiqui, A. A., Ur-Rahman, A., Khan, M. Z., Hasan, F., &amp; Shahzil, M. (2025). Global prevalence and risk factors of irritable bowel syndrome from 2006 to 2024 using the Rome III and IV criteria: A meta-analysis. <em>European Journal of Gastroenterology &amp; Hepatology, 37</em>(12), 1314–1325. https://doi.org/10.1097/MEG.0000000000002994</p>
+  <p>Caio, G., Volta, U., Sapone, A., Leffler, D. A., De Giorgio, R., Catassi, C., &amp; Fasano, A. (2019). Celiac disease: A comprehensive current review. <em>BMC Medicine, 17</em>(1), 142. https://doi.org/10.1186/s12916-019-1380-z</p>
+  <p>Calvez, V., Puca, P., Di Vincenzo, F., Del Gaudio, A., Bartocci, B., Murgiano, M., Iaccarino, J., Parand, E., Napolitano, D., Pugliese, D., Gasbarrini, A., &amp; Scaldaferri, F. (2025). Novel insights into the pathogenesis of inflammatory bowel diseases. <em>Biomedicines, 13</em>(2), 305. https://doi.org/10.3390/biomedicines13020305</p>
+  <p>Camilleri, M. (2019). Leaky gut: Mechanisms, measurement and clinical implications in humans. <em>Gut, 68</em>(8), 1516–1526. https://doi.org/10.1136/gutjnl-2019-318427</p>
+  <p>D'Avino, P., Serena, G., Kenyon, V., &amp; Fasano, A. (2021). An updated overview on celiac disease: From immuno-pathogenesis and immuno-genetics to therapeutic implications. <em>Expert Review of Clinical Immunology, 17</em>(3), 269–284. https://doi.org/10.1080/1744666X.2021.1880320</p>
+  <p>Duncanson, K., Tikhe, D., Williams, G. M., &amp; Talley, N. J. (2023). Irritable bowel syndrome: Controversies in diagnosis and management. <em>Expert Review of Gastroenterology &amp; Hepatology, 17</em>(7), 649–663. https://doi.org/10.1080/17474124.2023.2223975</p>
+  <p>Holtmann, G. J., Ford, A. C., &amp; Talley, N. J. (2016). Pathophysiology of irritable bowel syndrome. <em>The Lancet Gastroenterology &amp; Hepatology, 1</em>(2), 133–146. https://doi.org/10.1016/S2468-1253(16)30023-1</p>
+  <p>Michielan, A., &amp; D'Incà, R. (2015). Intestinal permeability in inflammatory bowel disease: Pathogenesis, clinical evaluation, and therapy of leaky gut. <em>Mediators of Inflammation, 2015</em>, 628157. https://doi.org/10.1155/2015/628157</p>
+  <p>Quigley, E. M. M., Murray, J. A., &amp; Pimentel, M. (2020). AGA clinical practice update on small intestinal bacterial overgrowth: Expert review. <em>Gastroenterology, 159</em>(4), 1526–1532. https://doi.org/10.1053/j.gastro.2020.06.090</p>
+  <p>Rao, S. S. C., &amp; Bhagatwala, J. (2019). Small intestinal bacterial overgrowth: Clinical features and therapeutic management. <em>Clinical and Translational Gastroenterology, 10</em>(10), e00078. https://doi.org/10.14309/ctg.0000000000000078</p>
+  <p>Ng, S. C., Shi, H. Y., Hamidi, N., Underwood, F. E., Tang, W., Benchimol, E. I., Panaccione, R., Ghosh, S., Wu, J. C. Y., Chan, F. K. L., Sung, J. J. Y., &amp; Kaplan, G. G. (2017). Worldwide incidence and prevalence of inflammatory bowel disease in the 21st century: A systematic review of population-based studies. <em>The Lancet, 390</em>(10114), 2769–2778. https://doi.org/10.1016/S0140-6736(17)32448-0</p>
+  <p>Ungaro, R., Mehandru, S., Allen, P. B., Peyrin-Biroulet, L., &amp; Colombel, J.-F. (2016). Ulcerative colitis. <em>The Lancet, 389</em>(10080), 1756–1770. https://doi.org/10.1016/S0140-6736(16)32126-2</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 6 of 10</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('matrix-widget');
+    if(!root) return;
+    var tiles = {
+      symptom: {
+        ibs: 'Bloating and abdominal pain',
+        gerd: 'Heartburn and regurgitation',
+        perm: 'Often no specific symptom',
+        ibd: 'Pain plus blood in stool',
+        celiac: 'Bloating plus anemia and fatigue'
+      },
+      cause: {
+        ibs: 'Functional gut-brain disorder',
+        gerd: 'Weak lower esophageal sphincter',
+        perm: 'Loosened tight junctions',
+        ibd: 'Immune-mediated inflammation',
+        celiac: 'Gluten-triggered autoimmunity'
+      },
+      effect: {
+        ibs: 'Discomfort, no tissue damage',
+        gerd: 'Esophageal damage over time',
+        perm: 'Often a consequence, not a cause',
+        ibd: 'Bowel wall destruction',
+        celiac: 'Villous atrophy and malabsorption'
+      }
+    };
+    var condSel = root.querySelector('#mw-condition');
+    var colSel = root.querySelector('#mw-column');
+    var tileSel = root.querySelector('#mw-tile');
+    var placeBtn = root.querySelector('#mw-place');
+    var exportBtn = root.querySelector('#mw-export');
+    var feedback = root.querySelector('#mw-feedback');
+    var conds = ['ibs','gerd','perm','ibd','celiac'];
+    var cols = ['symptom','cause','effect'];
+    var placed = {}; // key cond_col -> tileText
+    var totalCells = conds.length * cols.length;
+
+    function buildTileOptions(){
+      var col = colSel.value;
+      tileSel.innerHTML = '';
+      // offer the correct tile plus a couple of decoys from same column
+      var opts = [];
+      conds.forEach(function(c){ opts.push({key:c, text:tiles[col][c]}); });
+      // shuffle lightly
+      opts.forEach(function(o){
+        var op = document.createElement('option');
+        op.value = o.key;
+        op.textContent = o.text;
+        tileSel.appendChild(op);
+      });
+    }
+    colSel.addEventListener('change', buildTileOptions);
+    buildTileOptions();
+
+    function sharedSymptomCount(){
+      // count conditions whose symptom string contains 'Bloating' once placed correctly
+      var n = 0;
+      conds.forEach(function(c){
+        var v = placed[c+'_symptom'];
+        if(v && /Bloating|pain|Pain/.test(v)) n++;
+      });
+      return n;
+    }
+
+    function update(){
+      var correct = 0;
+      Object.keys(placed).forEach(function(k){
+        var parts = k.split('_');
+        var cond = parts[0], col = parts[1];
+        if(placed[k] === tiles[col][cond]) correct++;
+      });
+      var done = Object.keys(placed).length;
+      root.querySelector('#mw-correct-num').textContent = correct;
+      root.querySelector('#mw-correct-bar').style.width = Math.round(correct/totalCells*100) + '%';
+      var shared = sharedSymptomCount();
+      root.querySelector('#mw-share-num').textContent = shared;
+      root.querySelector('#mw-share-bar').style.width = Math.round(shared/5*100) + '%';
+      root.querySelector('#mw-done-num').textContent = Math.round(done/totalCells*100) + '%';
+      root.querySelector('#mw-done-bar').style.width = Math.round(done/totalCells*100) + '%';
+    }
+
+    placeBtn.addEventListener('click', function(){
+      var cond = condSel.value, col = colSel.value;
+      var chosenKey = tileSel.value;
+      var chosenText = tiles[col][chosenKey];
+      placed[cond+'_'+col] = chosenText;
+      var isRight = (chosenKey === cond);
+      if(isRight){
+        if(col === 'symptom' && /Bloating|pain|Pain/.test(chosenText)){
+          feedback.textContent = 'Correct placement. Notice this symptom overlaps with other conditions, which is exactly why the symptom column cannot diagnose. Watch the shared-symptom meter rise.';
+        } else {
+          feedback.textContent = 'Correct placement. The cause and effect columns are where conditions truly separate.';
+        }
+      } else {
+        feedback.textContent = 'That tile belongs to a different condition in this column. Mismatches are common precisely because surface signs look alike. Try again.';
+      }
+      update();
+    });
+
+    exportBtn.addEventListener('click', function(){
+      var lines = ['CONDITION COMPARISON MATRIX, Study Reference',''];
+      conds.forEach(function(c){
+        var label = condSel.querySelector('option[value="'+c+'"]').textContent;
+        lines.push(label.toUpperCase());
+        cols.forEach(function(col){
+          lines.push('  '+col+': '+ tiles[col][c]);
+        });
+        lines.push('');
+      });
+      lines.push('Reminder: symptoms overlap; causes and effects diverge. Education, not diagnosis.');
+      var blob = new Blob([lines.join('\n')], {type:'text/plain'});
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = 'condition-comparison-matrix.txt';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      feedback.textContent = 'Downloaded the completed answer key as a study reference.';
+    });
+
+    update();
+  } catch(e){ /* fail silent */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('claim-widget');
+    if(!root) return;
+    var deck = [
+      {
+        claim: 'Intestinal permeability can be measured in humans using sugar probe tests and biopsy assays.',
+        answer: 'supported',
+        reveal: 'SUPPORTED. Camilleri (2019) catalogues validated methods including sugar probes, biopsy assays, and endomicroscopy. The phenomenon is genuinely measurable.'
+      },
+      {
+        claim: 'Intense exercise, NSAID use, and pregnancy can transiently increase intestinal permeability.',
+        answer: 'supported',
+        reveal: 'SUPPORTED. These "stressed states" are documented in Camilleri (2019) as conditions that can transiently loosen the barrier. Transient is the key word.'
+      },
+      {
+        claim: 'Increased intestinal permeability is part of the established pathology of inflammatory bowel disease.',
+        answer: 'supported',
+        reveal: 'SUPPORTED. Michielan & D\'Incà (2015) document tight-junction abnormalities, mucus-layer disruption, and increased paracellular permeability in IBD.'
+      },
+      {
+        claim: 'A leaky barrier is the confirmed root cause of fatigue, brain fog, and most autoimmune disease.',
+        answer: 'unsupported',
+        reveal: 'UNSUPPORTED. This is the marketing story. Camilleri (2019) notes causal direction is often unclear and that such public-domain claims require confirmation before endorsement. Permeability is frequently a consequence, not the root cause.'
+      },
+      {
+        claim: 'A specific supplement stack can "seal" the gut and thereby resolve unexplained symptoms.',
+        answer: 'unsupported',
+        reveal: 'UNSUPPORTED. No validated evidence supports a generic supplement protocol as a cure for nonspecific symptoms via "sealing" the gut. This sells a real phenomenon as a guaranteed fix.'
+      },
+      {
+        claim: 'Because permeability is measurable, the popular "leaky gut" concept is fully validated as people use it.',
+        answer: 'overstated',
+        reveal: 'OVERSTATED. The phenomenon is real, but the popular concept inflates it into an all-explaining cause. Honor the measurable biology; reject the leap to a master explanation.'
+      }
+    ];
+    var idx = 0, score = 0, graded = false;
+    var verdictSel = root.querySelector('#cw-verdict');
+    var cardEl = root.querySelector('#cw-card');
+    var revealEl = root.querySelector('#cw-reveal');
+    var gradeBtn = root.querySelector('#cw-grade');
+    var nextBtn = root.querySelector('#cw-next');
+
+    function render(){
+      cardEl.innerHTML = '<strong>Claim:</strong> ' + deck[idx].claim;
+      revealEl.textContent = '';
+      graded = false;
+      root.querySelector('#cw-prog-num').textContent = (idx+1) + '/' + deck.length;
+      root.querySelector('#cw-prog-bar').style.width = Math.round((idx+1)/deck.length*100) + '%';
+    }
+    function updateScore(){
+      root.querySelector('#cw-score-num').textContent = score;
+      root.querySelector('#cw-score-bar').style.width = Math.round(score/deck.length*100) + '%';
+    }
+    gradeBtn.addEventListener('click', function(){
+      if(graded) return;
+      graded = true;
+      var pick = verdictSel.value;
+      var right = deck[idx].answer === pick;
+      if(right) score++;
+      var prefix = right ? 'Correct. ' : 'Not quite. ';
+      revealEl.textContent = prefix + deck[idx].reveal;
+      updateScore();
+    });
+    nextBtn.addEventListener('click', function(){
+      idx = (idx + 1) % deck.length;
+      render();
+    });
+    render();
+    updateScore();
+  } catch(e){ /* fail silent */ }
+})();
+</script>
+</body>
+</html>

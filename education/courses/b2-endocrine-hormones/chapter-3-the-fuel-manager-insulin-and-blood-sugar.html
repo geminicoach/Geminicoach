@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fuel Manager: Insulin and Blood Sugar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 3 · Module 2</div>
+    <h1 class="ch-title">The Fuel Manager: <em>Insulin and Blood Sugar</em></h1>
+    <p class="ch-subtitle">How two opposing hormones hold your blood glucose in a narrow band, and why "resistance" almost never means "not enough insulin."</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ou ate breakfast a couple of hours ago. Right now, without you thinking about it, a teaspoon and a half of sugar is dissolved in your entire bloodstream. Not a tablespoon. Not a half-cup. Roughly four to six millimoles per liter, which works out to about four grams of glucose total across five liters of blood. That is the whole budget. Pour a can of soda into that system unmanaged and you would more than double it within minutes.</p>
+    <p>And yet you do not double it, because something is watching the level the way a thermostat watches a room. When glucose climbs, a hormone goes out to pull it back down. When glucose sags, a different hormone goes out to push it back up. The two of them argue all day long, and the result of the argument is the flat, boring, life-sustaining line we call normal blood sugar. This chapter is about that argument, the two hormones having it, and the single most misunderstood word in all of metabolism: resistance.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The setpoint, and why it is so tight</h2>
+    <p>In Chapter 1 you learned the logic of a <span class="ch-key">setpoint</span>: the body picks a target value for some variable and uses feedback loops to defend it. Blood glucose is the cleanest example in the whole endocrine system. The defended band is narrow, roughly 4 to 6 millimolar in a healthy fasted person (Röder et al., 2016). Step outside it in either direction and you have a problem.</p>
+    <p>Too low is the more urgent emergency. Your brain runs almost entirely on glucose and cannot store its own fuel, so a glucose level that drops too far causes confusion, then unconsciousness, then death, fast. Too high is the slower, grinding kind of damage. Chronically elevated glucose glycates proteins, stiffens blood vessels, and injures nerves and kidneys over years. So the body is not being fussy when it holds the line at a teaspoon and a half. It is managing a fuel that is simultaneously essential and corrosive, like keeping exactly enough gasoline in an open bucket to run the engine without burning the garage down.</p>
+    <p>To defend a setpoint you need at least two opposing forces, the same way a thermostat needs both a furnace and an air conditioner. A system with only a furnace can warm a cold room but can never cool a hot one. Glucose control works the same way. <span class="ch-key">Insulin</span> is the force that lowers glucose. <span class="ch-key">Glucagon</span> is the force that raises it. Neither one alone could hold a setpoint. Together they can.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-watercolour editorial diagram of a thermostat metaphor for blood glucose regulation. In the center, a horizontal band labeled 'target 4 to 6 mM' rendered as a calm blue-green channel. Above it, a warm amber arrow pushing the level up labeled 'glucagon'; below it, a cool teal arrow pulling the level down labeled 'insulin'. The two arrows oppose each other across the band. Hand-drawn textbook style, soft paper texture, muted palette of amber, teal, slate grey, cream. No numbers other than the quoted range, no extra text." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Opposing regulators defend a narrow band, the same logic you will meet again with calcium and appetite.</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>Insulin: the "store it" signal</h2>
+    <p>Insulin is a small <span class="ch-key">peptide hormone</span> made by the beta cells of the pancreatic islets. Recall from Chapter 1 that peptide hormones are water-soluble, cannot cross the cell membrane, and therefore must dock on receptors at the cell surface and pass their message inward through a relay. Insulin is the textbook case.</p>
+    <p>When you eat, glucose absorbed from the gut raises blood sugar. Beta cells sense the rise and release insulin into the blood. Insulin then circulates and binds the <span class="ch-key">insulin receptor</span>, a surface receptor with built-in enzyme activity. Binding makes the receptor phosphorylate itself and then phosphorylate a family of relay proteins called insulin receptor substrates (IRS). That kicks off the <span class="ch-key">PI3K-AKT pathway</span>, and one of AKT's most important jobs is to trigger the movement of glucose transporters, specifically GLUT4, from inside the cell up to the surface (Petersen &amp; Shulman, 2018; Pei et al., 2022).</p>
+    <p>Here is the part worth slowing down on. In muscle and fat, the door that lets glucose into the cell is mostly kept locked until insulin says otherwise. GLUT4 transporters sit in little internal storage vesicles. Insulin's signal is what brings them to the surface and inserts them into the membrane, which is when glucose can finally flood in. No insulin signal, no GLUT4 at the door, very little glucose uptake in those tissues. This is why insulin is fairly described as the master "store it and use it" signal. It does several things at once:</p>
+    <ul>
+      <li>It opens muscle and fat cells to glucose uptake by translocating GLUT4.</li>
+      <li>It tells the liver and muscle to take incoming glucose and lock it away as <span class="ch-key">glycogen</span>, a branched storage polymer of glucose.</li>
+      <li>It tells fat tissue to store incoming energy as triglyceride and to stop releasing fat.</li>
+      <li>It tells the liver to stop manufacturing and dumping new glucose, because right now there is plenty.</li>
+    </ul>
+    <p>Notice the theme. Insulin is the hormone of the fed state. Its whole message is: fuel just arrived, take it out of circulation, put it where it belongs.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If GLUT4 transporters are normally held inside muscle and fat cells until insulin brings them to the surface, what would you predict happens to glucose uptake in someone whose cells have stopped responding well to the insulin signal, even though insulin levels are normal or high? Hold that prediction. It is the whole back half of this chapter.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Glucagon: the "release it" signal</h2>
+    <p>Glucagon is insulin's opposite number, also a peptide, made by the alpha cells sitting right next door in the same islets. Where insulin says store, glucagon says release. When you have not eaten for a while and glucose starts to fall, alpha cells secrete glucagon, and glucagon travels straight to the liver with a simple instruction: make glucose available, now (Jiang &amp; Zhang, 2003).</p>
+    <p>The liver answers in two ways. First, <span class="ch-key">glycogenolysis</span>: it breaks down its stored glycogen back into glucose and releases it into the blood. This is the fast response, the savings account you can withdraw from immediately. Second, <span class="ch-key">gluconeogenesis</span>: it manufactures brand-new glucose from non-carbohydrate raw materials such as amino acids and glycerol. This is the slower, more deliberate response for longer fasts. At the same time, glucagon suppresses the storage pathways, glycogen synthesis and glycolysis, so the liver is not building and breaking at once (Jiang &amp; Zhang, 2003).</p>
+    <p>So glucagon is the hormone of the fasted state. Overnight, between meals, during a long gap, glucagon is what keeps that teaspoon and a half of sugar topped up so your brain never browns out. The liver, under glucagon's direction, is essentially running a small glucose factory and a glucose warehouse on your behalf while you sleep.</p>
+
+    <h3>The ratio, not the absolute</h3>
+    <p>Here is a point that trips people up, and it matters for everything that follows. Your blood glucose is not set by insulin alone or glucagon alone. It is set by the <span class="ch-key">insulin-to-glucagon ratio</span>, the balance of the two signals reaching the liver (Jiang &amp; Zhang, 2003; Röder et al., 2016).</p>
+    <p>After a meal, insulin is high and glucagon is low, so the ratio swings toward storage, and the liver soaks up glucose and builds glycogen. In a fast, insulin is low and glucagon is high, so the ratio swings toward release, and the liver hands glucose back out. The liver does not need a separate phone call telling it whether you ate. It reads the ratio of the two hormones in the blood passing through it and acts accordingly. This is opposing-hormone control in its purest form, and you will see the same architecture again with calcium, with appetite, with energy balance. Learn the shape here and the rest of the course gets easier.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>In real life this means you are never in a static "blood sugar" state. You are constantly sliding along a dial between store and release depending on whether fuel recently arrived. A normal post-meal rise in glucose and insulin is not a malfunction. It is the system doing exactly its job. The goal is not to never produce insulin. The goal is for the system to respond crisply, do its work, and settle back down. Hold onto that, because the influencer version of "insulin is the enemy" gets this exactly backwards.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="bsbWidget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Blood Sugar Balancing Act</div>
+    </div>
+    <p class="ch-widget-sub">Trigger an event and watch glucose rise and fall while insulin and glucagon respond. Then dial the receptor sensitivity from sensitive to resistant and run the same meal again.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Event</span>
+        <select class="ch-widget-select" id="bsbEvent">
+          <option value="fasted">Fasted morning (no food)</option>
+          <option value="mixed" selected>Mixed meal (carbs + protein + fat)</option>
+          <option value="sugary">Sugary drink (fast carbs)</option>
+          <option value="walk">Walk after eating</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Receptor sensitivity</span>
+        <select class="ch-widget-select" id="bsbSens">
+          <option value="high">High (very sensitive)</option>
+          <option value="normal" selected>Normal</option>
+          <option value="low">Low (resistant)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Glucose</span>
+        <span class="ch-meter-bar"><span id="bsbGlucoseBar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="bsbGlucoseNum">5.0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Insulin</span>
+        <span class="ch-meter-bar"><span id="bsbInsulinBar" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bsbInsulinNum">2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Glucagon</span>
+        <span class="ch-meter-bar"><span id="bsbGlucagonBar" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="bsbGlucagonNum">4</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak reached</span>
+        <span class="ch-meter-bar"><span id="bsbPeakBar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="bsbPeakNum">5.0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="bsbRun">Run the event</button>
+    <p class="ch-widget-sub" id="bsbReadout" style="margin-top:0.75rem;">Pick an event and a sensitivity level, then run it.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Where the fuel actually goes</h2>
+    <p>When insulin says "store it," there are two destinations, and understanding the difference between them removes a lot of moralizing nonsense about food. Glucose pulled out of the blood goes either into glycogen or, when glycogen is full, into fat. Both are normal, managed storage. Neither is a verdict on your character.</p>
+
+    <h3>Glycogen: the limited, fast-access tank</h3>
+    <p>The first destination is glycogen, stored in two main places. The liver holds roughly 100 grams of glycogen, and crucially the liver can release that glucose back into the blood to feed the whole body, because the liver has the enzyme to do so. Skeletal muscle holds more, on the order of 300 to 500 grams depending on your size and training, but muscle glycogen is selfish. Muscle lacks the enzyme to export glucose back to the bloodstream, so muscle glycogen feeds only that muscle. It is a private fuel reserve, not a public one.</p>
+    <p>The key feature of glycogen is that the tanks are finite. Total capacity is a few hundred grams, a day or so of fuel at most. When the tanks have room, incoming glucose flows in readily and that is the end of the story. When the tanks are already full, glucose has nowhere to go as glycogen, and the overflow gets routed elsewhere.</p>
+
+    <h3>Fat: the large, slow-access reserve</h3>
+    <p>The second destination is fat. When glycogen stores are full and energy is still arriving, the body converts the surplus to triglyceride and stores it in adipose tissue. Unlike glycogen, fat storage is effectively unlimited and it is energy-dense, about nine calories per gram versus four for carbohydrate, and it stores without the heavy water weight glycogen carries. Fat is the body's strategic reserve, built for scarcity that, for most of human history, was a real and recurring threat.</p>
+    <p>This is where people import morality that does not belong in physiology. Storing energy as fat is not the body failing or betraying you. It is the body doing precisely what it evolved to do with surplus fuel. The destination of a given meal's glucose is not determined by whether the food was "clean" or "dirty." It is determined by context: how depleted your glycogen tanks are, and how much energy you are spending. Empty tanks and high demand route fuel toward glycogen and immediate use. Full tanks and low demand route surplus toward fat. Same glucose molecule, different destination, decided by the state of the system, not the virtue of the food.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here's where people get this wrong</div>
+      <p>"Carbs make you fat" is a slogan, not a mechanism. Carbohydrate that lands in depleted muscle and liver glycogen after activity is being topped up, not stored as fat. The same carbohydrate, in someone with full glycogen tanks who is sitting still and in a chronic energy surplus, is more likely to be routed toward fat. The food did not change. The context did. Storage destination is a function of demand and capacity, full stop.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="fuelWidget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Where Does the Fuel Go? Storage Allocator</div>
+    </div>
+    <p class="ch-widget-sub">Set your glycogen tanks and your activity state, then release a glucose load and watch where it routes. The point: destination depends on context, not on the food being "good" or "bad."</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Glycogen tanks</span>
+        <select class="ch-widget-select" id="fuelTanks">
+          <option value="depleted">Depleted (post-exercise)</option>
+          <option value="partial" selected>Partially full</option>
+          <option value="full">Full (topped up, sedentary)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Activity state</span>
+        <select class="ch-widget-select" id="fuelActivity">
+          <option value="high">High demand (active now)</option>
+          <option value="moderate" selected>Moderate</option>
+          <option value="low">Low demand (resting)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Burned now</span>
+        <span class="ch-meter-bar"><span id="fuelBurnBar" style="width:25%"></span></span>
+        <span class="ch-meter-num" id="fuelBurnNum">25%</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Muscle glycogen</span>
+        <span class="ch-meter-bar"><span id="fuelMuscleBar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="fuelMuscleNum">30%</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Liver glycogen</span>
+        <span class="ch-meter-bar"><span id="fuelLiverBar" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="fuelLiverNum">20%</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fat storage</span>
+        <span class="ch-meter-bar"><span id="fuelFatBar" style="width:25%"></span></span>
+        <span class="ch-meter-num" id="fuelFatNum">25%</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="fuelRun">Release the glucose load</button>
+    <p class="ch-widget-sub" id="fuelReadout" style="margin-top:0.75rem;">Set the context and release the load.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Sensitivity versus resistance: the heart of the chapter</h2>
+    <p>Now the centerpiece. If you take one durable idea out of this entire course, make it this one, because it reappears with cortisol, leptin, thyroid, and sex hormones in the chapters ahead.</p>
+    <p><span class="ch-key">Insulin sensitivity</span> describes how strongly your cells respond to a given amount of insulin. A sensitive cell hears a quiet insulin signal and responds fully: GLUT4 goes to the surface, glucose comes in, the job gets done with very little insulin. <span class="ch-key">Insulin resistance</span> is the opposite: the cells have, in effect, turned down the volume on the insulin signal. The same amount of insulin produces a weaker response. To get the glucose moved anyway, the pancreas has to secrete more insulin. The signal has to get louder to accomplish the same work.</p>
+
+    <h3>The single most common misunderstanding</h3>
+    <p>People hear "insulin resistance" and picture a deficiency, as if the body has run out of insulin. For type 2 insulin resistance, that is usually the opposite of the truth. In the resistant state you typically have plenty of insulin. Often you have far more than normal. The problem is not supply. The problem is that the cells have stopped listening, so the pancreas compensates by shouting louder, secreting more and more insulin to drag glucose into reluctant cells (Petersen &amp; Shulman, 2018).</p>
+    <p>This is exactly the receptor specificity and signal-strength logic from Chapter 1, made concrete and consequential. The message is the same molecule. What changes is how loudly it has to be broadcast and how well the receiver picks it up. A resistant person can run high insulin and still struggle to keep glucose down, because each unit of insulin is doing less work. For a while the louder shouting keeps glucose roughly normal, which is why early resistance hides: the glucose looks fine, but only because insulin is running high to force the result. Eventually, if the beta cells can no longer shout loud enough to compensate, glucose starts to climb, and that is the slide toward type 2 diabetes (Röder et al., 2016).</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two people both have a fasting glucose of 5.3 mM, smack in the normal range. Person A holds it there with low insulin. Person B holds it there with insulin running three times as high. Their glucose readings are identical. Are their metabolic situations identical? Why might a single glucose number hide the more important story?</p>
+    </aside>
+
+    <h3>What is actually broken at the molecular level</h3>
+    <p>Resistance is not one defect but a family of them along the signaling relay. The leading integrated model, developed across skeletal muscle, liver, and adipose tissue, links resistance to ectopic lipid, fat accumulating inside tissues where it does not belong, such as inside muscle and liver cells. Lipid intermediates, notably <span class="ch-key">diacylglycerol</span>, activate kinases that phosphorylate the IRS relay proteins on the wrong sites, jamming the handoff from receptor to PI3K (Petersen &amp; Shulman, 2018). The receptor still binds insulin. The downstream relay simply does not pass the message cleanly, so less GLUT4 reaches the surface and less glucose gets in.</p>
+    <p>Other documented failure points include reduced insulin receptor autophosphorylation, accelerated degradation of IRS proteins, suppressed PI3K activity, and negative regulators such as the p85 subunit throttling the pathway (Pei et al., 2022). The common thread is that resistance lives mostly downstream of the receptor, in the relay, which is why you can have normal or high insulin and a normal-looking receptor and still get a blunted response. Overnutrition, a chronic surplus of incoming fuel, drives much of this: it promotes receptor desensitization, IRS degradation, and suppressed PI3K signaling (Yang et al., 2023).</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn pen-and-ink and watercolour textbook diagram comparing two cells side by side, titled 'sensitive' on the left and 'resistant' on the right. Both cells show an insulin molecule docking at a surface receptor labeled 'insulin receptor', an internal relay chain of small linked shapes labeled 'IRS' and 'PI3K-AKT', and glucose-transporter doors labeled 'GLUT4'. On the left cell, the relay is clean and many GLUT4 doors are open at the membrane with glucose flowing in. On the right cell, small fat droplets labeled 'lipid' clog the interior, the relay is broken with a visible gap, and few GLUT4 doors reach the surface so glucose stays outside. Muted clinical palette of slate blue, teal, amber, and cream, soft paper texture, no numbers, labels in small italic serif." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Resistance lives mostly in the relay, downstream of the receptor. The message arrives; the handoff fails.</em></figcaption></figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>In practice this means the question is never just "what is your blood sugar." The deeper question is "how hard is your pancreas working to keep it there." Insulin resistance is the system paying more and more to get the same result, quietly, for years, before the glucose number ever budges. That is why this matters long before anyone gets a diabetes diagnosis. And it is why the fixes are about making the cells listen better, not about avoiding insulin. You want a system that responds to a whisper, not one that needs a scream.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>The levers that actually move sensitivity</h2>
+    <p>Here is the genuinely encouraging part. Insulin sensitivity is not a fixed trait you are stuck with. It is highly responsive to a handful of everyday inputs. None of these are exotic. All of them are supported by primary literature. Let us go through the four that carry the most weight.</p>
+
+    <h3>1. Movement, the most reliable lever</h3>
+    <p>Physical activity improves whole-body insulin sensitivity through several mechanisms, and importantly it works through two partly separate routes. During exercise itself, muscle contraction recruits GLUT4 to the cell surface through an <span class="ch-key">AMPK</span>-driven pathway that does not even require insulin. Your muscles pull glucose out of the blood during activity through a side door that bypasses the insulin signal entirely (Bird &amp; Hawley, 2017). After exercise, a second route kicks in: enhanced AKT-TBC1D4 signaling makes the muscle more responsive to insulin for hours, even up to a day or more.</p>
+    <p>Over the longer term, training increases skeletal muscle capillarization, so more blood and more insulin reach the muscle, and it reduces the intramuscular lipid that drives the diacylglycerol problem we discussed (Bird &amp; Hawley, 2017). The review evidence supports a dose-response relationship: more intensity tends to buy more improvement, though even modest activity helps. A walk after a meal, the event you can trigger in the first widget, is not a gimmick. It engages contraction-mediated glucose uptake exactly when glucose is rising.</p>
+
+    <h3>2. Muscle mass, the bigger tank</h3>
+    <p>Skeletal muscle is the single largest site of insulin-stimulated glucose disposal in the body. More muscle means more GLUT4-bearing tissue available to soak up glucose, which is part of why muscle mass tracks with metabolic health (Paquin et al., 2021). The honest caveat, straight from the literature, is that the precise mechanistic link between building muscle through hypertrophy and improving insulin sensitivity is still only partially understood. Muscle clearly matters as a glucose sink, but resistance training delivers some of its benefit through activity itself, not purely through added size (Paquin et al., 2021). The practical message survives the uncertainty: having and using muscle is metabolically protective.</p>
+
+    <h3>3. Sleep, the lever people ignore</h3>
+    <p>This one surprises people, so let it land. In a landmark line of work, recurrent partial sleep restriction in healthy young adults, the kind of sleep debt millions of people carry voluntarily, produced measurable drops in glucose tolerance and insulin sensitivity, alongside neuroendocrine disruption: lower leptin, higher ghrelin, the hormonal recipe for overeating (Spiegel et al., 2005). The authors argued that chronic short sleep is an underappreciated, independent risk factor for insulin resistance and type 2 diabetes. You can do everything else right and undercut it by sleeping five hours a night. Sleep is not a recovery luxury bolted onto metabolism. It is part of the machinery.</p>
+
+    <h3>4. Meal composition, framed as sources not sins</h3>
+    <p>What you eat shifts sensitivity too, but the useful framing is mechanistic, not moral. At the molecular level, different dietary components do measurably different things (Yang et al., 2023): <span class="ch-key">fructose</span> in large chronic amounts drives hepatic lipogenesis and can disturb gut bacteria, both of which feed into ectopic liver fat; <span class="ch-key">dietary fiber</span> improves sensitivity partly through short-chain fatty acids produced by gut bacteria, the fiber-SCFA-microbiome axis; polyunsaturated fatty acids tend to suppress pro-inflammatory signaling, while a chronic excess of saturated fat tends to push the other way; and amino acids and total energy load matter because sustained overnutrition is itself a primary driver of receptor desensitization (Yang et al., 2023).</p>
+    <p>None of that makes any single food clean or dirty. It makes some patterns, lots of fiber, adequate protein, fat sources weighted toward unsaturated, and an overall energy intake that is not in chronic runaway surplus, more supportive of sensitivity than others. Sources and balance, not virtue and sin.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">A note on trained individuals</div>
+      <p>As a secondary layer worth flagging: well-trained people are often markedly more insulin sensitive than sedentary people, sometimes dramatically so. They tend to carry more muscle, less ectopic lipid, denser muscle capillary networks, and they accumulate the repeated post-exercise sensitivity boost day after day. This is not a separate biology. It is the same four levers, pulled hard and consistently over years. The point for general learners is direction, not athletic comparison: the same inputs that make an athlete sensitive nudge anyone's sensitivity the same way.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Pulling the loop together</h2>
+    <p>Step back and look at the whole system as one loop. You eat. Glucose rises. Beta cells release insulin, the insulin-to-glucagon ratio swings toward storage, GLUT4 doors open, and glucose flows into muscle and liver to be burned or stored as glycogen, with surplus routed to fat when tanks are full and demand is low. Glucose falls back to baseline. Hours later, between meals, glucose drifts down, alpha cells release glucagon, the ratio swings toward release, and the liver hands glucose back out through glycogenolysis and gluconeogenesis. The brain never browns out. The line stays flat.</p>
+    <p>Insulin resistance is what happens when one part of that loop, the cellular response to insulin, gets blunted, usually downstream of the receptor, often driven by ectopic lipid and chronic overnutrition. The pancreas compensates by shouting louder, so for years the glucose looks fine while insulin runs high, until compensation fails and glucose climbs. And the levers that restore the cells' willingness to listen are not mysterious: move, build and use muscle, sleep enough, and eat in a pattern weighted toward fiber, smart fat sources, and an energy intake that is not in chronic excess.</p>
+    <p>That is the pattern this chapter sets, and the next two system chapters will follow it: rigorous physiology first, then the translation into what it means for a real person living a real life. Insulin will not disappear after this chapter. It is a recurring character. When we get to cortisol, leptin, thyroid, and sex hormones, the sensitivity-versus-resistance idea you just built will be load-bearing, because every one of those systems cross-talks with this one.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Insulin resistance is best understood not as too little hormone but as a signal that no longer carries, forcing the pancreas to compensate with ever-greater output to defend the same glucose setpoint.</p>
+    <cite>Synthesized from Petersen &amp; Shulman (2018) and Röder et al. (2016)</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Blood glucose is held in a tight 4 to 6 mM band by two opposing peptide hormones: insulin lowers it, glucagon raises it. Neither alone could defend a setpoint.</li>
+      <li>What the liver does is governed by the insulin-to-glucagon ratio, not by either hormone in isolation. High ratio means store; low ratio means release.</li>
+      <li>Insulin's job is to translocate GLUT4 to the cell surface (via IRS and the PI3K-AKT pathway) and to drive storage as glycogen and, when glycogen is full, as fat.</li>
+      <li>Glycogen is a finite, fast-access tank (liver exports glucose; muscle keeps its own). Fat is the large, slow-access reserve. Storage destination depends on tank fullness and demand, not on food being "good" or "bad."</li>
+      <li>Insulin resistance almost never means low insulin. It usually means high insulin and deaf cells, with the defect mostly downstream of the receptor (ectopic lipid, diacylglycerol jamming IRS signaling).</li>
+      <li>The four levers that genuinely shift sensitivity: movement (AMPK and post-exercise routes), muscle mass (largest glucose sink), sufficient sleep, and meal composition framed as sources and balance.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Next we meet cortisol, the stress hormone, and you will see it does not operate in its own sealed room. Cortisol raises blood glucose and pushes the liver to make more, which means it tugs directly on the loop you just learned. The insulin-resistance idea you built here is exactly what lets us understand how chronic stress and poor sleep nudge the whole fuel-management system toward the deaf-cell state.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bird, S. R., &amp; Hawley, J. A. (2017). Update on the effects of physical activity on insulin sensitivity in humans. <em>BMJ Open Sport &amp; Exercise Medicine, 2</em>(1), e000143. https://doi.org/10.1136/bmjsem-2016-000143</p>
+    <p>Jiang, G., &amp; Zhang, B. B. (2003). Glucagon and regulation of glucose metabolism. <em>American Journal of Physiology-Endocrinology and Metabolism, 284</em>(4), E671–E678. https://doi.org/10.1152/ajpendo.00492.2002</p>
+    <p>Paquin, J., Lagacé, J.-C., Brochu, M., &amp; Dionne, I. J. (2021). Exercising for insulin sensitivity: Is there a mechanistic relationship with quantitative changes in skeletal muscle mass? <em>Frontiers in Physiology, 12</em>, 656909. https://doi.org/10.3389/fphys.2021.656909</p>
+    <p>Pei, X., Han, C., Guo, Y., Xu, S., &amp; Zhang, J. (2022). Current studies on molecular mechanisms of insulin resistance. <em>Journal of Diabetes Research, 2022</em>, 1863429. https://doi.org/10.1155/2022/1863429</p>
+    <p>Petersen, M. C., &amp; Shulman, G. I. (2018). Mechanisms of insulin action and insulin resistance. <em>Physiological Reviews, 98</em>(4), 2133–2223. https://doi.org/10.1152/physrev.00063.2017</p>
+    <p>Röder, P. V., Wu, B., Liu, Y., &amp; Han, W. (2016). Pancreatic regulation of glucose homeostasis. <em>Experimental &amp; Molecular Medicine, 48</em>(3), e219. https://doi.org/10.1038/emm.2016.6</p>
+    <p>Spiegel, K., Knutson, K., Leproult, R., Tasali, E., &amp; Van Cauter, E. (2005). Sleep loss: A novel risk factor for insulin resistance and Type 2 diabetes. <em>Journal of Applied Physiology, 99</em>(5), 2008–2019. https://doi.org/10.1152/japplphysiol.00660.2005</p>
+    <p>Yang, K., Zhang, S., Li, Y., Tan, C., Xu, H., Wang, T., &amp; Wu, J. (2023). Regulation of macronutrients in insulin resistance and glucose homeostasis during type 2 diabetes mellitus. <em>Nutrients, 15</em>(21), 4671. https://pmc.ncbi.nlm.nih.gov/articles/PMC10647592/</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 3 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('bsbWidget');
+    if(!w) return;
+    var eventSel = w.querySelector('#bsbEvent');
+    var sensSel = w.querySelector('#bsbSens');
+    var btn = w.querySelector('#bsbRun');
+    var gBar = w.querySelector('#bsbGlucoseBar'), gNum = w.querySelector('#bsbGlucoseNum');
+    var iBar = w.querySelector('#bsbInsulinBar'), iNum = w.querySelector('#bsbInsulinNum');
+    var cBar = w.querySelector('#bsbGlucagonBar'), cNum = w.querySelector('#bsbGlucagonNum');
+    var pBar = w.querySelector('#bsbPeakBar'), pNum = w.querySelector('#bsbPeakNum');
+    var readout = w.querySelector('#bsbReadout');
+
+    // baseline glucose ~5.0 mM. Glucose meter scaled 3 to 13 mM.
+    function gPct(mM){ return Math.max(0, Math.min(100, (mM-3)/(13-3)*100)); }
+
+    var events = {
+      fasted:  { rise: 0.0, label:'a fasted morning' },
+      mixed:   { rise: 2.4, label:'a mixed meal' },
+      sugary:  { rise: 4.5, label:'a sugary drink' },
+      walk:    { rise: 1.0, label:'a walk after eating' }
+    };
+    var sens = {
+      high:   { spikeMult:0.75, insMult:0.6, label:'high sensitivity' },
+      normal: { spikeMult:1.0,  insMult:1.0, label:'normal sensitivity' },
+      low:    { spikeMult:1.55, insMult:2.6, label:'low sensitivity (resistant)' }
+    };
+
+    function run(){
+      var ev = events[eventSel.value];
+      var s = sens[sensSel.value];
+      var base = 5.0;
+      var peak = base + ev.rise * s.spikeMult;
+      if(eventSel.value==='walk') peak = base + 0.8; // walk blunts spike regardless
+      if(eventSel.value==='fasted') peak = 4.6; // glucagon defends a slightly lower fasted level
+
+      // insulin response (arbitrary units 0-20)
+      var insulin;
+      if(eventSel.value==='fasted'){ insulin = 1.5; }
+      else { insulin = (2 + ev.rise*2.4) * s.insMult; }
+      insulin = Math.min(20, insulin);
+
+      // glucagon: high in fasted, low after carbs
+      var glucagon;
+      if(eventSel.value==='fasted'){ glucagon = 9; }
+      else if(eventSel.value==='walk'){ glucagon = 6; }
+      else { glucagon = Math.max(1.5, 4 - ev.rise); }
+
+      // animate toward peak then settle
+      var settle = (eventSel.value==='fasted') ? 4.6 : base + (peak-base)*(s.spikeMult>1.3?0.25:0.05);
+      gNum.textContent = peak.toFixed(1);
+      gBar.style.width = gPct(peak)+'%';
+      pNum.textContent = peak.toFixed(1);
+      pBar.style.width = gPct(peak)+'%';
+      iNum.textContent = Math.round(insulin);
+      iBar.style.width = (insulin/20*100)+'%';
+      cNum.textContent = Math.round(glucagon);
+      cBar.style.width = (glucagon/12*100)+'%';
+
+      var msg = 'After '+ev.label+' with '+s.label+', glucose peaked near '+peak.toFixed(1)+' mM. ';
+      if(sensSel.value==='low' && (eventSel.value==='mixed'||eventSel.value==='sugary')){
+        msg += 'Notice the higher, longer spike AND the much larger insulin response: the pancreas is shouting louder to get the same job done.';
+      } else if(eventSel.value==='fasted'){
+        msg += 'No food, so insulin stays low and glucagon runs high, holding the line from the liver.';
+      } else if(eventSel.value==='walk'){
+        msg += 'Muscle contraction recruits GLUT4 without much insulin, so the spike stays blunted.';
+      } else {
+        msg += 'Sensitive cells clear the glucose with a modest insulin response and glucose settles back down.';
+      }
+      readout.textContent = msg;
+    }
+    btn.addEventListener('click', run);
+    run();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('fuelWidget');
+    if(!w) return;
+    var tanksSel = w.querySelector('#fuelTanks');
+    var actSel = w.querySelector('#fuelActivity');
+    var btn = w.querySelector('#fuelRun');
+    var burnBar=w.querySelector('#fuelBurnBar'), burnNum=w.querySelector('#fuelBurnNum');
+    var musBar=w.querySelector('#fuelMuscleBar'), musNum=w.querySelector('#fuelMuscleNum');
+    var livBar=w.querySelector('#fuelLiverBar'), livNum=w.querySelector('#fuelLiverNum');
+    var fatBar=w.querySelector('#fuelFatBar'), fatNum=w.querySelector('#fuelFatNum');
+    var readout=w.querySelector('#fuelReadout');
+
+    var tankCapacity = { depleted: 1.0, partial: 0.5, full: 0.05 }; // room available
+    var demand = { high: 1.0, moderate: 0.45, low: 0.12 };
+
+    function run(){
+      var room = tankCapacity[tanksSel.value];
+      var dem = demand[actSel.value];
+
+      // raw weights
+      var burn = dem * 45;            // burned immediately
+      var glycogen = room * 60;       // routed to glycogen if room exists
+      var fatRaw = (1-room) * 50 + (1-dem)*15; // overflow to fat
+
+      var total = burn + glycogen + fatRaw;
+      var burnP = burn/total*100;
+      var glyP = glycogen/total*100;
+      var fatP = fatRaw/total*100;
+
+      // split glycogen between muscle (more) and liver
+      var musP = glyP*0.62;
+      var livP = glyP*0.38;
+
+      function r(x){ return Math.round(x); }
+      burnNum.textContent=r(burnP)+'%'; burnBar.style.width=burnP+'%';
+      musNum.textContent=r(musP)+'%'; musBar.style.width=musP+'%';
+      livNum.textContent=r(livP)+'%'; livBar.style.width=livP+'%';
+      fatNum.textContent=r(fatP)+'%'; fatBar.style.width=fatP+'%';
+
+      var msg='';
+      if(tanksSel.value==='depleted'){
+        msg='Tanks are empty after exercise, so most of this glucose tops up muscle and liver glycogen. Very little routes to fat. Same glucose, context decides.';
+      } else if(tanksSel.value==='full' && actSel.value==='low'){
+        msg='Tanks are full and demand is low, so glycogen has no room and little is being burned. The surplus routes toward fat. This is normal managed storage, not a verdict on the food.';
+      } else {
+        msg='With partly open tanks and moderate demand, the load splits across immediate use, glycogen top-up, and some fat storage. Shift the context and watch the split move.';
+      }
+      readout.textContent=msg;
+    }
+    btn.addEventListener('click', run);
+    run();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
