@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading the Bottle Like a Skeptic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 6 · Module 2</div>
+    <h1 class="ch-title">Reading the Bottle Like a Skeptic</h1>
+    <p class="ch-subtitle">Four questions that dismantle any label and any marketing claim in under a minute.</p>
+    <div class="ch-meta">
+      <span>36 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>11 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ou are standing in the supplement aisle holding two bottles of the same thing. Same active ingredient on the front. One costs nine dollars, the other thirty-four. The expensive one has a gold seal, a longer ingredient list, the word "advanced" in the name, and a panel of testimonials on the back. The cheap one looks plain. Your instinct says the expensive one must be better, because it looks like more thought went into it. That instinct is exactly what the packaging is engineered to produce, and it is wrong often enough that you cannot afford to trust it.</p>
+    <p>This chapter is built around an uncomfortable point: a supplement can pass every test from the earlier chapters, the gap test, the plausibility test, the evidence test, and still fail you on the shelf. The right molecule can be present in a dose too small to do anything. It can be hidden inside a blend so you cannot tell how much you are getting. The claim on the front can be technically legal and functionally meaningless. None of this is visible to a casual reader. All of it is visible to a skeptical one. By the end of this chapter you will be the second kind.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The four questions, and why most products fail one</h2>
+    <p>Whether a supplement actually does anything for you comes down to four conditions, and they are conjunctive, meaning all four have to be true at once. Miss one and the product fails, no matter how good the other three look.</p>
+    <p>Ask, in order: <span class="ch-key">Is it the right ingredient?</span> The specific molecule with credible evidence behind it, not a cousin that shares a name. <span class="ch-key">Is it an effective dose?</span> The amount that produced the effect in studies, not a token sprinkle. <span class="ch-key">Is it a form your body can use?</span> A bioavailable salt, ester, or preparation that actually gets absorbed. And finally, <span class="ch-key">Has something other than the brand verified all of that?</span> An independent lab, not the marketing department.</p>
+    <p>Notice what these four questions are not. They are not "does the bottle look premium," "is there a science-sounding mechanism on the back," "are there five-star reviews," or "is it expensive." Those are the signals your brain wants to use because they are easy to read. The four real questions are harder to read, which is the entire reason marketing leans on the easy signals instead. Most of this chapter is teaching you to read the hard signals fast.</p>
+    <p>This is where the four questions get misused: people treat them as a checklist where three out of four is a passing grade. It is not. A pristine ingredient at a clinical dose in a perfect form, with no independent verification that the bottle actually contains it, is a leap of faith. Multiple analytical studies have now shown that what is printed on the label and what is in the capsule are frequently different things. In one liquid chromatography-mass spectrometry analysis of thirty weight-loss supplements sold online, twenty-five had inaccurate labels (Crawford et al., 2024). The label is a claim, not a measurement. Treat it that way.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A vintage scientific-illustration style plate, pen-and-ink with restrained watercolour wash in muted teal, ochre, and warm grey. A single supplement bottle drawn in cross-section like an anatomical diagram, with four hand-lettered call-out labels pointing to different parts: 'right ingredient', 'effective dose', 'usable form', 'independent check'. Thin ruled leader lines connect each label to the bottle. Aged off-white paper texture, subtle, like a 1900s pharmacopoeia plate. No photorealism, no people, no brand logos." data-aspect="portrait"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The four questions, mapped onto the object you are actually holding.</em></figcaption></figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before you read on, try to name the four questions from memory. If you can only get three, which one slipped, and is it the one you personally tend to skip when you shop?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Who actually checks this stuff before it reaches the shelf</h2>
+    <p>To read a bottle skeptically, you first have to understand what stands between the manufacturer and you, and the honest answer for most supplements is: almost nothing, until after the fact. People assume a supplement on a major retailer's shelf has been vetted the way a prescription drug is, that some agency confirmed it is safe, that it works, and that the bottle contains what the label says. None of those three things is guaranteed. The gap between what consumers believe and how the system works is the single most important piece of context in this chapter, because every trick in the rest of it depends on that gap existing.</p>
+    <h3>The line drawn in 1994</h3>
+    <p>In the United States, dietary supplements are governed by the Dietary Supplement Health and Education Act, passed in 1994 and usually shortened to DSHEA. The law put supplements in a regulatory category of their own, separate from both food and drugs. The practical consequence is the part most people never learn: a supplement does not need approval from the Food and Drug Administration before it is sold, and the manufacturer is not required to submit evidence of safety or effectiveness to any agency in advance. A drug must prove, through controlled trials reviewed by regulators, that it is both safe and effective for its stated use before it can be marketed. A supplement is presumed acceptable until something goes wrong. The burden runs in opposite directions.</p>
+    <p>Under DSHEA, the responsibility for a product being safe, accurately labeled, and truthfully marketed sits with the manufacturer, not with a reviewer who signs off in advance. The company is supposed to hold evidence that its claims are not misleading, but it does not have to show that evidence to anyone before selling, and no one checks the bottle's contents against its label as a condition of sale. This is not a fringe interpretation. According to research indexed in PubMed, a study of physicians found that about one third of doctors did not know supplements require no FDA approval or safety and efficacy data before being marketed, and a similar share wrongly believed regulations were in place to ensure supplement quality (Ashar et al., 2007). If trained physicians misread the system this badly, the average shopper has no chance unless someone spells it out.</p>
+    <h3>Post-market, not pre-market</h3>
+    <p>The FDA is not absent. Its authority simply arrives late. The agency acts mostly after a product is already being sold, and usually only once there is a problem: reports of harm, an inspection that finds contamination, lab testing that uncovers a hidden drug, or marketing that crosses into illegal disease claims. The agency can then issue warning letters, demand recalls, and in serious cases pursue the company. This is a <span class="ch-key">post-market</span> system, reactive by design, as opposed to a <span class="ch-key">pre-market</span> one that screens products before they reach you. With well over fifty thousand products on the market and a small enforcement footprint, the realistic odds that any given questionable bottle has been individually examined by a regulator are low.</p>
+    <p>Two pieces of the framework do bite, and they matter for how you read a label. Manufacturers are required to follow current Good Manufacturing Practices, known as cGMP, which govern how a product is made, handled, and tested for consistency. And the law draws a hard line at <span class="ch-key">disease claims</span>: a supplement may not claim to treat, cure, prevent, or diagnose a disease, because that would make it, legally, an unapproved drug. Both rules are real, and both are enforced after the fact rather than before, through inspections and warning letters. Good Manufacturing Practices govern the process, not whether the formula works, so a product can be made in a flawless facility and still be useless. Keep that distinction. Clean manufacturing and an effective dose are different promises, and a bottle can keep one while breaking the other.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, this means you are the quality-control step. No one upstream of you is guaranteed to have confirmed the dose, the form, or even that the contents match the label. That is not a reason for paranoia, and it is not a claim that all supplements are scams, because many are made carefully by companies that test their own products and tell the truth. It is the reason the rest of this chapter exists. When the system checks products mostly after they sell, the reader who checks before buying is doing the job the system left open. The four questions are how you do that job in under a minute.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Anatomy of a Supplement Facts panel</h2>
+    <p>Every detail in this chapter eventually points at one small box on the back of the bottle: the <span class="ch-key">Supplement Facts panel</span>. It looks like the Nutrition Facts panel on food, and it is required by the same labeling rules, but it carries different information and it is the only legally standardized place where the product has to tell you what is actually inside. Learn to read it in order and most marketing loses its power, because marketing lives on the front of the bottle and the truth, such as it is, lives in this box.</p>
+    <h3>Serving size, the number that scales everything</h3>
+    <p>Read the serving size first, before any ingredient amount, because every number below it is "per serving," and the serving may not be one capsule. If the serving size is three capsules and you read "Vitamin C, 500 mg," that is 500 milligrams across all three, not each. Companies use this constantly: a generous-sounding total amount divided across an oversized serving makes a thin formula look substantial, and it quietly raises how many capsules you must swallow to reach the number on the front. A bottle of ninety capsules at three per serving is a thirty-day supply, not ninety days, which also changes the real price per dose. Serving size is where you anchor every other figure, so anchor it first.</p>
+    <h3>The two columns: amount, and percent Daily Value</h3>
+    <p>For vitamins and minerals, the panel lists an amount, in milligrams or micrograms, and next to it a <span class="ch-key">percent Daily Value</span>, written %DV. The Daily Value is a single reference intake set for the general population, a benchmark for how a serving fits an average day, not a personalized target and not a dose proven to do anything for a specific goal. A label boasting "1,667% DV" of a B vitamin is telling you the serving contains many times the reference intake, which sounds impressive and often means very little, since for several water-soluble vitamins the excess is simply processed and excreted. A high %DV is a statement about quantity relative to a baseline, not evidence of benefit.</p>
+    <p>One detail catches people out for botanicals and many specialty ingredients: they often show an amount with no %DV at all, because no Daily Value has been established for them. When you see "Ashwagandha root extract, 300 mg" with a blank or a dagger symbol where the %DV would be, that is normal and expected, not a violation. The dagger usually points to a footnote reading "Daily Value not established." It is a signal that this ingredient is not a classic nutrient with a government reference intake, so the only thing you can judge it against is the studied dose, which the label will never tell you. The absence of a %DV quietly hands the entire dose question back to you.</p>
+    <h3>Other Ingredients, where the rest of the capsule lives</h3>
+    <p>Below the ruled box sits a line labeled <span class="ch-key">Other Ingredients</span>. This is everything that is not an active component: capsule material, fillers, flow agents like magnesium stearate, binders, sweeteners, dyes, and anti-caking compounds. For most people most of this is unremarkable, the practical machinery of turning a powder into a pill. It earns a glance for two reasons. First, allergens and intolerances hide here, gelatin, soy, dairy derivatives, gluten-containing carriers. Second, an "Other Ingredients" list far longer than the active list can signal a product that is mostly bulk around a small amount of the thing you came for. You are not looking to fear these compounds. You are reading the line to confirm nothing in it is a problem for you, and to sanity-check how much of the capsule is filler.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, reading a panel is a fixed three-step habit. Start at the serving size and hold it in your head, because it scales everything. Move to the active ingredients and read amounts, treating %DV as "relative to an average day" and the absence of %DV as "you must look the dose up yourself." Glance at Other Ingredients for anything you personally react to. Do that and you have extracted everything the panel is legally required to give you, which is exactly the information the front of the bottle is designed to make you skip.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Effective dose versus label dose</h2>
+    <p>The single most common failure is the dose. A product lists an ingredient with real evidence behind it, so your eye says "good, that one works." But "works" was established at a specific amount in specific studies, and the bottle may contain a fraction of that. The molecule is present. The effect is not. This is the gap between the <span class="ch-key">effective dose</span>, the amount that moved an outcome in human trials, and the <span class="ch-key">label dose</span>, the amount the manufacturer chose to include.</p>
+    <p>Why would a company include too little on purpose? Cost and legality. A clinically meaningful dose of many ingredients is expensive per serving, and there is no law requiring that the amount present be the amount that works. The rules govern what you must disclose and what claims you may make, not whether the product is effective. So a company can put a famous ingredient on the front of the bottle, include a trace of it, and sell you the name.</p>
+    <h3>What a "clinical dose" actually means</h3>
+    <p>When a study reports that, say, a given compound improved a sleep or stress measure at 300 milligrams per day, that number is doing a lot of work. It reflects a particular form of the ingredient, a particular dosing schedule, often a particular population, and a particular duration. A product that contains 50 milligrams of the same-named ingredient is not "a smaller version of the studied effect." It is, as far as the evidence goes, an unstudied dose. You cannot assume the benefit scales down linearly to whatever happens to be in the capsule. Below some threshold, the honest description is simply: we do not know that this does anything, and the trial that everyone cites does not apply.</p>
+    <p>This is the difference between a clinically studied dose and what skeptics call <span class="ch-key">fairy dusting</span>: adding a quantity of an ingredient too small to plausibly act, purely so the name can appear on the label and in the marketing. The ingredient is there for the front of the bottle, not for you.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, this means a supplement is only as good as its weakest dose, and you cannot judge the dose by whether the ingredient is "good." You judge it by the number. Before you buy, find the effective dose range from a credible source, then check the per-serving amount on the label, then multiply by how many servings you will actually take per day. If the math does not reach the effective range, the rest of the bottle is decoration. If it sails past the upper safe range, that is its own problem. The widget below lets you run that math and watch a product land below, within, or above where it needs to be.</p>
+  </section>
+
+  <div class="ch-widget" id="dose-calibrator">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Dose Calibrator</div>
+    </div>
+    <p class="ch-widget-sub">Pick an ingredient, set the per-serving amount and how many servings you take, and see where your real daily intake lands. Then flip the proprietary blend toggle and watch the information disappear.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Ingredient (illustrative ranges)</span>
+        <select class="ch-widget-select" id="dc-ingredient">
+          <option value="0">Creatine monohydrate</option>
+          <option value="1">Caffeine (per dose)</option>
+          <option value="2">Magnesium (elemental)</option>
+          <option value="3">Omega-3 EPA+DHA</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Per-serving amount</span>
+        <select class="ch-widget-select" id="dc-amount"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Servings per day</span>
+        <select class="ch-widget-select" id="dc-servings">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Proprietary blend?</span>
+        <select class="ch-widget-select" id="dc-blend">
+          <option value="no">No, amount disclosed</option>
+          <option value="yes">Yes, hidden in a blend</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Your daily intake</span>
+        <span class="ch-meter-bar"><span id="dc-bar-intake" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="dc-num-intake">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Effective floor</span>
+        <span class="ch-meter-bar"><span id="dc-bar-floor" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="dc-num-floor">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Upper safe range</span>
+        <span class="ch-meter-bar"><span id="dc-bar-ceil" style="width:90%"></span></span>
+        <span class="ch-meter-num" id="dc-num-ceil">0</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="dc-verdict" style="font-weight:600;">Set your values and read the verdict.</p>
+    <button class="ch-widget-btn" id="dc-btn">Calculate intake</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Proprietary blends and the disappearing dose</h2>
+    <p>Now the trick gets more sophisticated. Suppose a company knows its doses are too small to defend. The solution is not to fix the doses. The solution is to make the doses unreadable. Enter the <span class="ch-key">proprietary blend</span>: a list of several ingredients grouped under a single brand-named "matrix" or "complex," followed by one total weight for the whole group. You see "Energy & Focus Blend, 1,200 mg," and underneath, the ingredients in order. What you do not see is how the 1,200 milligrams is divided among them.</p>
+    <p>This is not a loophole someone found. It is built into the regulatory framework. Under the Dietary Supplement Health and Education Act, manufacturers may declare a proprietary blend by total weight without disclosing individual amounts, as long as ingredients are listed in descending order by mass. A peer-reviewed analysis co-authored by scientists at the NIH Office of Dietary Supplements and the FDA found that up to 87 percent of supplement labels in the NIH Dietary Supplement Label Database contain ingredients that could legally be listed inside a proprietary blend, and that when amounts are hidden it becomes impossible to calculate your exposure or verify clinical dosing from the label alone (Saldanha et al., 2023). That is the whole point of the structure: it removes the one number you need.</p>
+    <h3>The descending-order tell</h3>
+    <p>Because ingredients must be listed by weight, the order tells you something even when the amounts do not. Whatever is listed first is the largest component of the blend, and whatever is listed last is the smallest. The expensive, active, clinically interesting ingredient is very often near the bottom of the list, behind cheap bulking agents. A blend that opens with an amino acid and a cheap filler and ends with the impressive-sounding compound the product is named after is telling you, in the only language it is required to use, that the named compound is the smallest thing in the jar.</p>
+    <p>Consider a worked example. A pre-workout lists "Thermo Focus Matrix, 2,000 mg" containing, in order, citrulline, beta-alanine, caffeine anhydrous, and a trademarked herbal extract. The studied dose of citrulline alone for its commonly claimed effect is several grams. If citrulline is first in a 2,000 milligram blend, it physically cannot be at its studied dose, because even if it were the entire blend it would fall short, and it is sharing the 2,000 milligrams with three other things. The blend has not hidden a good dose. It has hidden the absence of one.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A label shows "Recovery Complex, 500 mg" listing five ingredients. The marketing centers on the fifth ingredient. What is the maximum possible amount of that fifth ingredient, and what is the realistic amount? What does that tell you about the marketing?</p>
+    </aside>
+    <p>The regulatory-risk framing makes this concrete. A case series analyzing weight-loss supplements sold at military base retailers used a formal risk scorecard and flagged the very presence of the words "proprietary blend, matrix, or complex" on a label as a red flag for consumer risk (Crawford et al., 2024). You do not need to decode the chemistry. The word itself is the signal. When amounts are concealed, the burden of proof has been quietly shifted from the manufacturer onto you, and you have been handed no tools to meet it.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, this means a proprietary blend is a request that you trust the company on the one thing it has chosen not to tell you. Sometimes the blend hides a reasonable formula. You have no way to know which case you are in, and that uncertainty is not your fault to resolve, it is the manufacturer's choice to create. The rational default is to treat a hidden dose as an absent dose until proven otherwise, and to prefer products that print every amount. A company confident in its doses has no reason to hide them.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn editorial illustration in the style of a field-guide diagram, ink line work with flat risograph-style colour in two inks, warm red and slate blue on cream paper. Two supplement 'Supplement Facts' panels shown side by side as stylised drawings, not photos. The left panel labelled 'disclosed' lists three ingredients each with a clear number beside it. The right panel labelled 'proprietary blend' shows the same three ingredients grouped under a single bracket with one total number and question marks where the individual numbers would be. A magnifying glass hovers over the question marks. Hand-lettered small caption at the bottom reads 'same total, missing the part that matters'. No real brand names, no photorealism." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same total weight, two very different amounts of information.</em></figcaption></figure>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Third-party testing: what it verifies and what it does not</h2>
+    <p>So you have learned to distrust the label as a self-reported claim. The natural fix is independent verification, and the industry has an answer: <span class="ch-key">third-party testing</span> seals. NSF Certified for Sport, Informed Sport, USP Verified, and similar marks are genuinely meaningful, but only for a specific and limited set of things, and the gap between what they verify and what consumers think they verify is where a lot of money gets wasted.</p>
+    <h3>What the good seals actually check</h3>
+    <p>Reputable programs test products, often every batch before market release, for three things. <span class="ch-key">Identity</span>: the product contains the ingredients the label says it does. <span class="ch-key">Purity</span>: the product is free of meaningful contamination and, for sport-focused programs, free of banned or doping-related substances below detection limits. <span class="ch-key">Dose accuracy</span>: the amount in the bottle matches the amount on the label (Eckerson et al., 2020). That is a real service, and given the analytical evidence, it is not trivial. Across several mass-spectrometry studies of real products, label inaccuracy is common rather than rare: in an analysis of thirty immune-support supplements, more than half had inaccurate labels, with seventeen listing ingredients that were not detected and nine containing substances that were never declared (Crawford et al., 2022). Third-party testing is the difference between a bottle that probably contains what it claims and a bottle where that is genuinely an open question.</p>
+    <h3>What no seal can tell you</h3>
+    <p>Here is the line people blur. A third-party seal verifies that the contents match the label. It does not verify that the contents work for your goal. NSF and Informed Sport explicitly certify that contents match the label and that banned substances are undetectable, while making no claim that the supplement is effective for the consumer's purpose (Eckerson et al., 2020). The seal is a statement about honesty and cleanliness, not about efficacy. A perfectly certified product can contain a perfectly accurate, perfectly clean, fairy-dusted dose of something that does nothing. The certification confirms the label is true. It does not make a useless formula useful.</p>
+    <p>So the seal sits downstream of your four questions, not above them. It answers question four, has something other than the brand verified the contents, but only for identity, purity, and dose accuracy. It says nothing about questions one through three, whether the right ingredient is present at an effective dose in a usable form. You still have to answer those yourself.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A product carries a legitimate NSF Certified for Sport seal and contains 25 mg of an ingredient whose studied dose is 500 mg. Is the seal lying? What exactly is it certifying, and what is it silent about?</p>
+    </aside>
+    <h3>Seal as substance versus seal as decoration</h3>
+    <p>Not every mark on a bottle is a third-party seal. Many are decorative: "lab tested," "GMP," "doctor formulated," "quality assured," or a graphic that looks like a seal but names no independent organization and links to no public verification database. "Lab tested" with no named lab and no standard is a sentence the company wrote about itself. A real certification names the certifying body and lets you look the product up in that body's registry. If you cannot independently confirm the seal, treat it as artwork.</p>
+    <p>The stakes here are not abstract. A quality-improvement study of FDA warnings from 2007 to 2016 identified 776 dietary supplements adulterated with undeclared, unapproved pharmaceutical ingredients across 146 companies, concentrated in sexual-enhancement, weight-loss, and muscle-building products, with one in five containing more than one hidden drug (Tucker et al., 2018). A narrative review of sport supplements similarly found that between 14 and 50 percent of samples across various analytical studies tested positive for anabolic agents or other prohibited substances, and recommended third-party certified products specifically as the mitigation (Jagim et al., 2023). For these high-risk categories, a legitimate seal is not a nicety. It is the difference between a known product and a coin flip.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, this means you should want a real third-party seal on anything where contamination or label fraud is plausible, especially weight-loss, "energy," sexual-enhancement, muscle-building, and anything sold on hype. But never let the seal answer a question it does not answer. The seal tells you the bottle is honest. Whether an honest bottle is worth taking is still on you, and that judgment runs through the dose, the form, and the evidence, not the sticker.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Contamination, adulteration, and why "natural" is not "safe"</h2>
+    <p>Up to now the failures have been about a product not working: a dose too small, a claim too vague, a blend that hides the math. This is a different failure, and a more serious one, because here the product does something, and the something is not what you signed up for. <span class="ch-key">Contamination</span> means an unwanted substance is present by accident, through poor manufacturing, cross-contact, or a tainted raw material. <span class="ch-key">Adulteration</span> means a substance was added, often deliberately, that is not declared on the label, frequently an actual pharmaceutical drug used to make the product "work" so it sells. Both turn a supplement into a substance you did not consent to take.</p>
+    <h3>The "natural" fallacy, stated plainly</h3>
+    <p>The word "natural" on a label carries no safety guarantee and, in this context, almost no meaning. Plenty of natural substances are biologically active, some are toxic, and "derived from a plant" tells you nothing about dose, purity, or interactions. More to the point, a product labeled natural can still be spiked with a synthetic drug, because the label is a marketing word and the contents are a separate question entirely. Naturalness is a story about origin. Safety is a question about what is in the bottle and at what amount, and the two are not the same conversation.</p>
+    <h3>How bad is the contamination problem</h3>
+    <p>This is not a rare edge case in a few disreputable corners. According to research indexed in PubMed, a quality-improvement analysis of FDA warnings from 2007 to 2016 identified 776 dietary supplements adulterated with undeclared, unapproved pharmaceutical ingredients, spread across 146 companies and concentrated in three categories: sexual enhancement, weight loss, and muscle building, with roughly one in five products containing more than one hidden drug (Tucker et al., 2018). These were not trace impurities. They were real, active prescription-class compounds, hidden in products sold as supplements, including drugs pulled from the market for safety reasons. A separate narrative review of sport supplements found that across various analytical studies, somewhere between 14 and 50 percent of samples tested positive for anabolic agents or other prohibited substances, and it specifically recommended third-party certified products as the mitigation (Jagim et al., 2023).</p>
+    <p>Two patterns fall out of that data and they should shape how you shop. First, risk is not evenly spread. It concentrates in categories that promise dramatic, fast, drug-like results: weight loss, "energy," sexual enhancement, muscle building, anything sold on a transformation. A boring single-ingredient vitamin from a major manufacturer is a very different risk profile from a proprietary "shred matrix" sold on a hype site. Second, the hidden ingredient is often the reason the product seems to work. When a "natural" weight-loss capsule produces a jittery, appetite-killing effect, the unwelcome explanation is sometimes an undeclared stimulant drug, not the botanical on the label.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A "natural" fat-burner gives a noticeably strong, drug-like effect within a day. Why is a fast, powerful response from a botanical supplement a reason for more suspicion, not less? What does the speed and strength of the effect hint at?</p>
+    </aside>
+    <h3>The special stakes for tested athletes</h3>
+    <p>For anyone subject to drug testing, a competitive athlete under an anti-doping code, a service member, certain professions, contamination stops being a vague health worry and becomes a career-level risk. Anti-doping rules almost always operate on <span class="ch-key">strict liability</span>: the athlete is responsible for whatever is in their body, and "the supplement was contaminated and I did not know" is generally not a defense that erases a sanction. A banned substance present at trace levels, from a contaminated product the athlete took in good faith, can still produce a positive test and a ban. The label said nothing. The rules do not care what the label said.</p>
+    <p>This is the precise reason the sport-focused certification programs exist, and it is why for a tested athlete a third-party seal moves from "nice to have" to "non-negotiable." Programs like NSF Certified for Sport and Informed Sport test specifically for the substances on anti-doping banned lists, often batch by batch, so a certified product is one an athlete can take with documented assurance it was screened. It does not make the product effective. It makes it defensible. For a tested population, that distinction can be the difference between a clean career and a years-long ban over a fat-burner that was never declared dangerous.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, contamination flips your default depending on the category. For a plain, single-ingredient product from an established manufacturer, ordinary skepticism is enough. For anything in the high-risk categories, weight loss, energy, sexual enhancement, muscle building, raise the bar hard: demand a real third-party seal or do not buy it, and be most suspicious precisely when an unregulated product produces a strong, fast, drug-like effect, because that is often the signature of something the label forgot to mention. If you are tested for any reason, treat an uncertified product in these categories as a landmine, not a purchase.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Structure-function claims, disease claims, and the disclaimer</h2>
+    <p>The language on a supplement label is not casual. It is engineered to stay on the legal side of a specific line that DSHEA drew, and knowing where that line sits lets you decode almost any claim on sight. The rule is simple to state: a supplement may make a <span class="ch-key">structure-function claim</span>, describing how an ingredient affects the normal structure or function of the body, but it may not make a <span class="ch-key">disease claim</span>, asserting that the product treats, cures, prevents, or mitigates a disease. Cross that line and the product is legally an unapproved drug, which is why honest companies stay carefully on the structure-function side and dishonest ones edge toward disease language without quite saying it.</p>
+    <h3>The two kinds of claim, side by side</h3>
+    <p>"Supports a healthy immune system" is a structure-function claim. It is legal, it requires no FDA approval, and it asserts almost nothing measurable. "Prevents colds and flu" is a disease claim. It is not legal on a supplement without drug approval, and you should essentially never see it on a compliant label. The gap between the two is where marketing does its work: companies want you to hear the disease claim while only writing the structure-function one. "Supports respiratory health" is meant to make you think "stops me getting sick," while the legal text commits to nothing of the kind. Once you can sort any claim into one of these two buckets, you can see what the company is allowed to promise versus what it is nudging you to infer.</p>
+    <p>This matters beyond semantics, because the slide from one to the other is a documented public-health problem. According to research indexed in PubMed, a labeling analysis of supplements marketed during the COVID-19 pandemic for purported treatment found disease claims on 38 percent of online product listings and on 8 percent of physical labels, and warned that disease claims are a significant concern because they may lead consumers to delay seeking real treatment for serious conditions (Jordan et al., 2023). A separate compliance study of shark-cartilage supplements found that nearly half the products had at least one labeling violation, including prohibited disease claims and missing disclaimers (Isaacs &amp; Hellberg, 2019). The line is not theoretical. It is crossed often, especially online, and crossing it is exactly the signal of a product to avoid.</p>
+    <h3>The disclaimer, and what it actually admits</h3>
+    <p>Wherever a supplement makes a structure-function claim, the law requires a specific disclaimer, almost always printed in fine print: "This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease." Read that sentence literally, because it is one of the most honest pieces of text on the entire package. It is the manufacturer, by law, telling you that no regulator vetted the claim and that the product is not a treatment for anything. It is not a red flag. Its absence, where a claim has been made, is the red flag, and it is one of the most common label violations found in compliance studies. A label that makes confident structure-function claims while omitting the required disclaimer is out of compliance, which tells you the company is either careless or willing to bend the rules.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, run every claim through one filter: is this a structure-function claim, vague and legal, or a disease claim, specific and prohibited? If a supplement promises to prevent, treat, or cure a named condition, you are looking at either an illegal label or a clumsy marketer, and either way it earns suspicion rather than trust. Treat "supports" and "promotes" as the weak language it is, expect to see the FDA disclaimer wherever such claims appear, and read its absence as a sign the company does not follow its own rules. The disclaimer is not the company being shifty. It is the one place the label is forced to be straight with you.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Decoding the marketing: four moves to name on sight</h2>
+    <p>The front of the bottle and the brand's website are written by people whose job is to make you feel the four questions have already been answered. They almost never lie outright, because outright lies are actionable. Instead they use a small, repeatable set of rhetorical moves that are technically defensible and functionally misleading. Once you can name them, you cannot unsee them.</p>
+    <h3>The "supports" weasel word</h3>
+    <p>Watch for "supports," "promotes," "helps maintain," "aids," and "may contribute to." These are <span class="ch-key">structure-function claims</span>, and they are deliberately weak. "Supports immune function" does not claim the product improves immunity, prevents illness, or does anything measurable. It claims an association with a desirable bodily process, in language vague enough to be unfalsifiable. Water supports immune function. The verb is doing the work of making you hear "boosts" while the legal text says almost nothing. An observational study of immune-support supplements found that products made broad "support" and "boost" claims that were not backed by ingredient-specific evidence at the doses actually present (Crawford et al., 2022). The claim and the evidence were not connected. The verb was the bridge, and the bridge was made of fog.</p>
+    <h3>The proxy outcome</h3>
+    <p>A <span class="ch-key">proxy claim</span> substitutes something easy to measure for the thing you actually want. You want better sleep, more energy, clearer skin, an effective immune system. Those are hard to demonstrate. So the marketing offers a proxy: "raises antioxidant levels," "increases nitric oxide," "provides 200 percent of your daily Vitamin C." The proxy may be real and still irrelevant, because the link from proxy to outcome is assumed, not shown. A higher blood level of a nutrient is not the same as feeling or functioning better. The proxy is chosen precisely because it is achievable and sounds like the goal, while the goal itself goes unmentioned and unproven.</p>
+    <h3>Borrowed authority</h3>
+    <p><span class="ch-key">Borrowed authority</span> drapes a product in credibility it has not earned. "Backed by science," "clinically studied ingredients," "as seen in," "formulated by experts," a white coat in the photo, a citation to a study that used a different dose, a different form, or a different population than what is in the bottle. The most common version is the studied-ingredient swap: a real trial exists, on the ingredient, at a dose the product does not contain, and the marketing borrows the trial's authority while quietly leaving the dose behind. "Clinically studied" describes the ingredient's history, not this product. An observational survey of 176 skin, hair, and nail supplements found that most made health-related marketing claims while lacking independent testing, frequently using outdated daily values, and that the claims were generally not verified by independent agencies, the FDA, or high-quality randomized trials (Perez-Sanchez et al., 2020). The authority was borrowed. It was never the product's own.</p>
+    <h3>The before-and-after that proves nothing</h3>
+    <p>The <span class="ch-key">before-and-after</span>, the testimonial, the five-star review, and the influencer transformation share one fatal flaw: no control. You see the cases that improved and never the ones that did not. You cannot separate the supplement from the diet change, the sleep, the regression to the mean, the placebo response, the photo lighting, or the fact that the person was paid. A testimonial is an anecdote selected for being flattering. It is evidence of marketing, not of effect. The plural of testimonial is not data.</p>
+    <h3>The coaching translation</h3>
+    <p>In practice, translating marketing back into plain claims is a single habit: every time you read a benefit, ask "what exactly is being asserted, and at what dose was it shown?" Strip "supports" down to "associated, vaguely, with." Treat a proxy as unproven until the real outcome is named. Treat "clinically studied" as a claim about the ingredient's resume, then go check whether this bottle matches the study's dose. And treat before-and-afters as zero evidence, because that is what uncontrolled selected anecdotes are worth. The widget below gives you a label to take apart yourself.</p>
+  </section>
+
+  <div class="ch-widget" id="label-autopsy">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Label Autopsy</div>
+    </div>
+    <p class="ch-widget-sub">Below is a realistic label for a fictional product. Click every element you think is a red flag. When you are done, reveal the answers and see how many you caught.</p>
+
+    <div class="ch-widget-row" id="la-label">
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="'Supports' is a structure-function weasel word. It claims a vague association with a bodily process, not a measurable benefit, and it is legally near-meaningless.">
+        <span class="ch-widget-fieldlabel">Front claim</span>
+        <span>VITALITY MAX, Supports Energy, Focus &amp; Immune Health</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="A proprietary blend hides the individual doses. You are told a total weight only, so you cannot verify any ingredient reaches its effective dose. The word 'matrix' is itself a documented risk flag.">
+        <span class="ch-widget-fieldlabel">Supplement Facts</span>
+        <span>Energy &amp; Focus Matrix ... 1,150 mg (caffeine, taurine, panax ginseng, rhodiola extract)</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="Rhodiola is named in the marketing but listed last in the blend, meaning it is the smallest component by weight, almost certainly below any studied dose. Classic fairy dusting.">
+        <span class="ch-widget-fieldlabel">Featured ingredient</span>
+        <span>NOW WITH CLINICALLY STUDIED RHODIOLA (last in blend)</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="'Lab tested' names no independent organization and points to no public registry. It is a sentence the company wrote about itself, not a third-party certification. No NSF, USP, or Informed Sport mark is present.">
+        <span class="ch-widget-fieldlabel">Quality mark</span>
+        <span>★ LAB TESTED · GMP · DOCTOR FORMULATED ★</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="The serving size is 3 capsules, which inflates the blend's total number. Per capsule the doses are three times smaller. Oversized servings make a thin formula look substantial.">
+        <span class="ch-widget-fieldlabel">Serving size</span>
+        <span>Serving Size: 3 Capsules · 1,150 mg per serving</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="1" data-explain="A before-and-after testimonial has no control group and is selected for being flattering. It is evidence of marketing, not of effect.">
+        <span class="ch-widget-fieldlabel">Back panel</span>
+        <span>"I had so much more energy in 7 days!", verified customer, with before/after photo</span>
+      </div>
+      <div class="ch-widget-field la-item" data-flag="0" data-explain="This is the legally required FDA disclaimer. It is not a red flag, it is a neutral, mandatory statement. Do not penalize a label for honest legal text.">
+        <span class="ch-widget-fieldlabel">Fine print</span>
+        <span>"This statement has not been evaluated by the FDA." (required disclaimer)</span>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Red flags caught</span>
+        <span class="ch-meter-bar"><span id="la-bar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="la-num">0/6</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="la-feedback">Click an element above to flag it. Each flag explains itself.</p>
+    <button class="ch-widget-btn" id="la-btn">Reveal what you missed</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Putting it together: a thirty-second shelf protocol</h2>
+    <p>You now have more tools than you need for a fast decision. Compress them. Pick up the bottle and run this sequence. One, read the front claim and translate it: is it a real, measurable benefit or a "supports" haze over a proxy? Two, find the Supplement Facts and look for the word "blend," "matrix," or "complex." If amounts are hidden, the dose question is unanswerable and you default to skip. Three, if amounts are disclosed, do the dose math: per-serving amount times servings, compared against the effective range you looked up. Four, check the serving size for inflation, then look for a real, verifiable third-party seal, and remember it certifies honesty, not efficacy.</p>
+    <p>If the product clears all four, it has earned a closer look at the evidence from the earlier chapters. If it fails any one, you can put it down without guilt, because a single failure is enough. This is not cynicism. It is literacy. The supplement industry is large, lightly regulated before the fact, and full of honest products sitting next to deceptive ones wearing similar packaging. The only thing that reliably separates them is a reader who knows where to look, and that reader is now you.</p>
+  </section>
+
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>A practical checklist to vet any bottle</h2>
+    <p>The thirty-second protocol is for the aisle. This is the slower version for a product you are seriously considering buying and taking for months, where a few extra minutes is cheap insurance. Run it in order, and stop at the first hard failure, because a single one is enough to put the bottle back.</p>
+    <h3>Before you even pick it up: the category check</h3>
+    <p>Ask what kind of product this is. A single-ingredient staple from an established manufacturer, a vitamin, a mineral, creatine, fish oil, carries low intrinsic risk. A multi-ingredient blend in a high-risk category, weight loss, "energy," sexual enhancement, muscle building, carries high intrinsic risk and contamination becomes a live concern, not a footnote. The category sets how strict the rest of the checklist needs to be. The same missing seal is a shrug on a plain vitamin and a deal-breaker on a fat-burner.</p>
+    <h3>The label pass, in order</h3>
+    <ul>
+      <li><strong>Serving size.</strong> How many capsules is a "serving," and how many servings does the bottle truly contain? Recompute the real price per day and the real daily pill count before anything else, because the serving size scales every number that follows.</li>
+      <li><strong>Blend check.</strong> Scan the Supplement Facts for "blend," "matrix," "complex," or "proprietary." If individual amounts are hidden behind one total weight, the dose question is unanswerable and the product fails by default. The word itself is a documented risk flag.</li>
+      <li><strong>Dose math.</strong> If amounts are disclosed, take the key ingredient, multiply its per-serving amount by servings per day, and compare against the effective range you looked up from a credible source. Below the floor, the bottle is decoration. Far above the safe ceiling is its own problem.</li>
+      <li><strong>Form check.</strong> Confirm the ingredient is in a form the body can actually use, a bioavailable salt, ester, or preparation, not just a name that matches a studied compound. A right ingredient in a poorly absorbed form is a wrong ingredient in slow motion.</li>
+      <li><strong>Claims translation.</strong> Sort the marketing into structure-function (vague, legal) versus disease (specific, prohibited). A disease claim means walk away. Confirm the FDA disclaimer is present wherever structure-function claims are made; its absence signals a company that bends its own rules.</li>
+      <li><strong>Seal check.</strong> Look for a real, verifiable third-party mark, NSF Certified for Sport, Informed Sport, USP Verified, and remember it certifies identity, purity, and dose accuracy, not whether the product works. Treat any unverifiable "lab tested" graphic as artwork. For high-risk categories and any tested athlete, a real seal is mandatory.</li>
+      <li><strong>Evidence on the front.</strong> Treat "clinically studied" as a claim about the ingredient's resume, then verify this bottle matches the studied dose and form. Treat before-and-afters, testimonials, and influencer transformations as zero evidence, because uncontrolled selected anecdotes are worth nothing.</li>
+    </ul>
+    <h3>The final question</h3>
+    <p>If a product survives every line above, one question remains, and it is the one the earlier chapters of this course were built to answer: do you actually have a gap this product fills, and is there credible evidence it helps for your goal? A bottle can be honest, clean, correctly dosed, and properly sealed, and still be something you do not need. Passing this checklist means the product is what it says it is. Whether you should take it at all is a separate decision, and that decision belongs to you, not the label.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: the thirty-four dollar bottle</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Holly, a 29-year-old recreational lifter who competes in a drug-tested powerlifting federation, wants more energy and focus for early-morning training. A popular pre-workout keeps showing up in her feed, promoted by lifters she follows. The front reads "VITALITY MAX, Supports Energy, Focus &amp; Immune Health," with "NOW WITH CLINICALLY STUDIED RHODIOLA" and a row of star icons reading "Lab Tested, GMP, Doctor Formulated." It costs thirty-four dollars. She is about to add it to her cart.</p>
+    </aside>
+    <p>Holly runs the category check first, and it changes everything. This is not a plain single-ingredient staple. It is a multi-ingredient blend in the "energy" category, sold on hype, by a brand she knows only through paid promotion. That places it squarely in the high-risk bucket where contamination and adulteration concentrate, which means the bar for verification is not "nice to have," it is a precondition. And because Holly is tested under an anti-doping code that runs on strict liability, a contaminated product is not just a health question for her. A banned stimulant hidden in an "energy" blend, undeclared on the label, could end her competitive year regardless of her good faith.</p>
+    <p>She turns the bottle over to the Supplement Facts. There it is: "Energy &amp; Focus Matrix, 1,150 mg," listing caffeine, taurine, panax ginseng, and rhodiola extract under a single total weight. The matrix is a proprietary blend, so the individual amounts are hidden, and by the rule she now knows, a hidden dose is treated as an absent dose. Worse, the rhodiola the front of the bottle is named after is listed last, meaning it is the smallest component of the 1,150 milligrams by weight. The marketing leads with "clinically studied rhodiola," but the descending-order rule tells her the rhodiola is almost certainly fairy-dusted, present for the label, not for her. The serving size is three capsules, which inflated that 1,150 number in the first place. On the dose question alone, the product has already failed.</p>
+    <p>The seals do not rescue it. "Lab Tested, GMP, Doctor Formulated" name no independent organization and link to no registry she can check, so by her rule they are decoration, sentences the company wrote about itself. There is no NSF Certified for Sport or Informed Sport mark anywhere on the package, which is the one thing her testing status actually requires. The front claim, "Supports Energy, Focus &amp; Immune Health," is a stack of structure-function weasel words promising nothing measurable, and the influencer promotion is an uncontrolled testimonial, evidence of marketing, not effect. Holly does not need to finish the checklist. The product failed the blend check, failed the seal check for a tested athlete, and sits in the highest-risk category, any one of which is enough.</p>
+    <p>She puts it down without guilt, and that is the point. She did not need lab equipment or a chemistry degree, just the four questions and ninety seconds. In their place she buys a single-ingredient creatine monohydrate and a plain caffeine source, both carrying a verifiable third-party sport seal, both with every dose printed in full. The thirty-four dollar bottle was not expensive because it was better. It was expensive because it was packaged to make her skip the very questions that would have sunk it. Reading the bottle like a skeptic is what let her see that in the aisle, before her money and, for a tested athlete, her competitive standing, were on the line.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The absence of individual ingredient amounts makes it impossible to calculate exposure levels or verify clinical dosing from label information alone.</p>
+    <cite>Saldanha et al. (2023), on proprietary blends</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Four conjunctive questions decide whether a supplement can work: right ingredient, effective dose, usable form, independent verification. Failing any one fails the product.</li>
+      <li>The label dose is a claim, not a measurement, and it is frequently below the effective dose that the cited studies actually used. A famous ingredient at a trace amount is unstudied, not "a little bit of the effect."</li>
+      <li>Proprietary blends legally hide individual amounts behind one total weight. Up to 87 percent of labels could use them, and a hidden dose should be treated as an absent dose. The word "blend," "matrix," or "complex" is itself a documented risk flag.</li>
+      <li>Third-party seals verify identity, purity, and dose accuracy, often batch by batch. They do not verify that the product works for your goal. The seal confirms honesty, not efficacy, and an unverifiable "lab tested" graphic is decoration.</li>
+      <li>Marketing leans on four predictable moves: the "supports" weasel word, the proxy outcome, borrowed authority, and the uncontrolled before-and-after. Name each one and translate it back into what is actually being claimed.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You can now tell whether a product is likely to do anything. The next question is what it might do that you did not want. In the following chapter we turn to risk: contamination, drug interactions, the difference between "natural" and "safe," and how to weigh a modest possible benefit against a real possible harm. Reading the bottle skeptically was the consumer-skills capstone. Reading it for danger is where rational supplementation either protects you or quietly hurts you.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+<p>Ashar, B. H., Rice, T. N., &amp; Sisson, S. D. (2007). Physicians' understanding of the regulation of dietary supplements. <em>Archives of Internal Medicine, 167</em>(9), 966-969. https://doi.org/10.1001/archinte.167.9.966</p>
+    <p>Crawford, C., Avula, B., Lindsey, A. T., Walter, A., Katragunta, K., Khan, I. A., &amp; Deuster, P. A. (2022). Analysis of select dietary supplement products marketed to support or boost the immune system. <em>JAMA Network Open, 5</em>(8), e2226040. https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2794987</p>
+    <p>Crawford, C., Boyd, C., Avula, B., Wang, Y.-H., Khan, I. A., &amp; Deuster, P. A. (2024). Label accuracy of weight loss dietary supplements marketed online with military discounts. <em>JAMA Network Open, 7</em>(5), e249131. https://doi.org/10.1001/jamanetworkopen.2024.9131</p>
+    <p>Crawford, C., Avula, B., Lindsey, A. T., Katragunta, K., Khan, I. A., &amp; Deuster, P. A. (2024). Label accuracy and quality of select weight-loss dietary supplements sold on or near US military bases. <em>Nutrients, 16</em>(24), 4369. https://doi.org/10.3390/nu16244369</p>
+    <p>Eckerson, M. N., et al. (2020). Third-party testing nutritional supplement knowledge, attitudes, and use among an NCAA I collegiate student-athlete population. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7739801/</p>
+    <p>Isaacs, R. B., &amp; Hellberg, R. S. (2019). Shark cartilage supplement labeling practices and compliance with U.S. regulations. <em>Journal of Dietary Supplements, 18</em>(1), 44-56. https://doi.org/10.1080/19390211.2019.1698687</p>
+    <p>Jagim, A. R., Harty, P. S., Erickson, J. L., Tinsley, G. M., Garner, D., &amp; Galpin, A. J. (2023). Prevalence of adulteration in dietary supplements and recommendations for safe supplement practices in sport. <em>Frontiers in Sports and Active Living, 5</em>, 1239121. https://doi.org/10.3389/fspor.2023.1239121</p>
+    <p>Jordan, C. R., Harris, C. M., Miranda, M. I., Kim, D. Y., &amp; Hellberg, R. S. (2023). Labeling compliance and online claims for Ayurvedic herbal supplements on the U.S. market associated with the purported treatment of COVID-19. <em>Food Control, 148</em>, 109673. https://doi.org/10.1016/j.foodcont.2023.109673</p>
+    <p>Perez-Sanchez, A., Barrios, D. M., &amp; Wei, E. X. (2020). Skin, hair, and nail supplements: Marketing and labeling concerns. <em>Cureus, 12</em>(12), e12062. https://doi.org/10.7759/cureus.12062</p>
+    <p>Saldanha, L., et al. (2023). Perspectives on the use of proprietary blends in dietary supplements. <em>The Journal of Nutrition, 153</em>(6), 1565–1572. https://doi.org/10.1016/j.tjnut.2023.03.035</p>
+    <p>Tucker, J., Fischer, T., Upjohn, L., Mazzera, D., &amp; Kumar, M. (2018). Unapproved pharmaceutical ingredients included in dietary supplements associated with US Food and Drug Administration warnings. <em>JAMA Network Open, 1</em>(6), e183337. https://doi.org/10.1001/jamanetworkopen.2018.3337</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 6 of 8</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('dose-calibrator');
+    if(!root) return;
+    // [floor, ceiling, unit, amount options]
+    var data = [
+      {name:'Creatine monohydrate', floor:3000, ceil:5000, unit:'mg', opts:[500,1000,2500,5000]},
+      {name:'Caffeine (per dose)', floor:100, ceil:200, unit:'mg', opts:[25,50,100,200,300]},
+      {name:'Magnesium (elemental)', floor:200, ceil:350, unit:'mg', opts:[50,100,200,350,500]},
+      {name:'Omega-3 EPA+DHA', floor:1000, ceil:3000, unit:'mg', opts:[250,500,1000,2000,3000]}
+    ];
+    var selIng = root.querySelector('#dc-ingredient');
+    var selAmt = root.querySelector('#dc-amount');
+    var selSrv = root.querySelector('#dc-servings');
+    var selBlend = root.querySelector('#dc-blend');
+    var barIn = root.querySelector('#dc-bar-intake');
+    var numIn = root.querySelector('#dc-num-intake');
+    var barFl = root.querySelector('#dc-bar-floor');
+    var numFl = root.querySelector('#dc-num-floor');
+    var barCe = root.querySelector('#dc-bar-ceil');
+    var numCe = root.querySelector('#dc-num-ceil');
+    var verdict = root.querySelector('#dc-verdict');
+
+    function fillAmounts(){
+      var d = data[+selIng.value];
+      selAmt.innerHTML='';
+      d.opts.forEach(function(v){
+        var o=document.createElement('option');
+        o.value=v; o.textContent=v+' '+d.unit;
+        selAmt.appendChild(o);
+      });
+    }
+
+    function calc(){
+      var d = data[+selIng.value];
+      var amt = +selAmt.value;
+      var srv = +selSrv.value;
+      var intake = amt*srv;
+      var scaleMax = d.ceil*1.4;
+      function pct(v){ return Math.max(2,Math.min(100, Math.round(v/scaleMax*100))); }
+      numFl.textContent = d.floor+' '+d.unit;
+      numCe.textContent = d.ceil+' '+d.unit;
+      barFl.style.width = pct(d.floor)+'%';
+      barCe.style.width = pct(d.ceil)+'%';
+
+      if(selBlend.value==='yes'){
+        numIn.textContent = '???';
+        barIn.style.width = '0%';
+        verdict.textContent = 'Hidden in a proprietary blend: the per-ingredient amount is not disclosed, so you cannot tell whether '+srv+' serving(s) reaches the effective floor of '+d.floor+' '+d.unit+'. That uncertainty is the whole trick. Default: treat as absent.';
+        return;
+      }
+      numIn.textContent = intake+' '+d.unit;
+      barIn.style.width = pct(intake)+'%';
+      if(intake < d.floor){
+        verdict.textContent = 'Below the effective floor. At '+intake+' '+d.unit+' per day you are under the '+d.floor+' '+d.unit+' that studies used. The molecule is present, the effect likely is not.';
+      } else if(intake <= d.ceil){
+        verdict.textContent = 'Within the effective range. '+intake+' '+d.unit+' per day lands between the '+d.floor+' floor and the '+d.ceil+' upper range. This is the zone the evidence actually covers.';
+      } else {
+        verdict.textContent = 'Above the upper range. At '+intake+' '+d.unit+' per day you exceed '+d.ceil+' '+d.unit+'. More is not better here, and the upper range exists for a reason.';
+      }
+    }
+
+    selIng.addEventListener('change', function(){ fillAmounts(); calc(); });
+    selAmt.addEventListener('change', calc);
+    selSrv.addEventListener('change', calc);
+    selBlend.addEventListener('change', calc);
+    root.querySelector('#dc-btn').addEventListener('click', calc);
+
+    fillAmounts();
+    calc();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('label-autopsy');
+    if(!root) return;
+    var items = Array.prototype.slice.call(root.querySelectorAll('.la-item'));
+    var bar = root.querySelector('#la-bar');
+    var num = root.querySelector('#la-num');
+    var feedback = root.querySelector('#la-feedback');
+    var btn = root.querySelector('#la-btn');
+    var totalFlags = items.filter(function(i){return i.getAttribute('data-flag')==='1';}).length;
+    var caught = {};
+
+    function update(){
+      var c = Object.keys(caught).length;
+      num.textContent = c+'/'+totalFlags;
+      bar.style.width = Math.round(c/totalFlags*100)+'%';
+    }
+
+    items.forEach(function(item, idx){
+      item.style.cursor='pointer';
+      item.addEventListener('click', function(){
+        var isFlag = item.getAttribute('data-flag')==='1';
+        var ex = item.getAttribute('data-explain');
+        if(isFlag){
+          if(!caught[idx]){
+            caught[idx]=true;
+            item.setAttribute('data-marked','1');
+            update();
+          }
+          feedback.textContent = 'RED FLAG: '+ex;
+        } else {
+          feedback.textContent = 'NOT A FLAG: '+ex;
+        }
+      });
+    });
+
+    btn.addEventListener('click', function(){
+      var missed = items.filter(function(i,idx){ return i.getAttribute('data-flag')==='1' && !caught[idx]; });
+      Object.keys(caught).length;
+      if(missed.length===0){
+        feedback.textContent = 'You caught all '+totalFlags+' red flags. You can dismantle a label faster than the marketing can build one.';
+      } else {
+        var names = missed.map(function(i){ return i.querySelector('.ch-widget-fieldlabel').textContent; });
+        feedback.textContent = 'You missed '+missed.length+': '+names.join(', ')+'. Click each one to read why it is a flag. Remember the FDA disclaimer is NOT a flag, it is required honest text.';
+      }
+      update();
+    });
+
+    update();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

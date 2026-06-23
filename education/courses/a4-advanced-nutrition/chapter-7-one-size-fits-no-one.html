@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Size Fits No One</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 7 · Module 3</div>
+  <h1 class="ch-title">One Size Fits <em>No One</em></h1>
+  <p class="ch-subtitle">How to take the course's general rules and bend them, with reasons, to the actual human in front of you.</p>
+  <div class="ch-meta">
+    <span>38 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>17 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">U</span>p to now this course has handed you rules that sound like commandments. Eat roughly this much protein. Put most of your weight on total daily intake and stop obsessing over the post-workout window. Run a moderate deficit, not a savage one. Those rules are good. They are good because they describe what is true for most people most of the time, and "most people most of the time" is exactly who general guidance is built for.</p>
+  <p>But notice the sleight of hand. A rule built for the average is a rule built for a person who does not exist. Real people are twenty-two or seventy-four. They are mid-luteal phase or postmenopausal. They lift four times a week with five years of training behind them, or they have not done a squat since high school gym class. They eat steak, or they have not touched an animal product in a decade. The defaults were never wrong. They were just defaults. This chapter is about where, and just as much <em>why</em>, the defaults move.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in warm watercolour and ink, showing four distinct human silhouettes arranged left to right as if specimens on a naturalist's page: a lean trained adult mid-stride, an older adult with a walking cane and upright posture, a female figure shown in calm neutral pose, and a figure holding a bowl of legumes and grains. Each figure sits in its own labeled box with a thin sepia border, rule-of-thirds spacing, soft overcast lighting, muted earth tones of ochre, sage, terracotta and slate. Small italic serif captions beneath each box read 'trained', 'aging', 'female', 'plant-based'. No watermarks, no cropped letters, no photorealism." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The defaults were built for an average that no single person occupies.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>Why the Average Hides the Person</h2>
+  <p>Start with the statistic that should make every general recommendation a little nervous. When a study reports that a diet "works," it is almost always reporting a <span class="ch-key">mean</span>, the average change across everyone in the group. A mean is a useful number. It is also a number that, by construction, no single participant has to actually experience. Behind a clean average sits a <span class="ch-key">distribution</span>: some people did far better than the headline, some did nothing, and a few moved in the wrong direction entirely. The average is the center of that spread, not a description of any one human in it.</p>
+  <p>This is not a statistical nicety. It is the whole reason this chapter exists. Run the identical intervention on a hundred people and you do not get a hundred copies of the same result. You get a fan of responses. The technical name for this is <span class="ch-key">interindividual variation</span> in response, and once you have seen how large it can be, you stop reading "this diet lowers blood sugar" as a promise made to you personally and start reading it as a bet with decent odds.</p>
+  <p>The most striking demonstration of how wide that fan can be comes from a controlled feeding study where the meals were not just similar but literally identical. In the PREDICT 1 study, Berry et al. (2020) fed standardized test meals to more than a thousand healthy adults and measured what happened in their blood afterward. The variation between people, eating the exact same food, was enormous: the population spread in the blood-fat (triglyceride) response was about 103 percent, in glucose about 68 percent, and in insulin about 59 percent. Same plate, same portion, wildly different bodies receiving it. If you ever needed proof that "a healthy meal" is a statement about a population and not a prediction about a person, that is it.</p>
+  <p>Here is the coaching translation, because the abstraction matters only if it changes how you act. When a client tells you "I tried that and it did nothing," they are usually not lying, not failing, and not making excuses. They may simply be sitting in the unlucky tail of the distribution for that particular intervention. The job is not to argue with their experience or repeat the population average louder. The job is to treat the general recommendation as a starting hypothesis and then watch what their actual body does with it. The average tells you where to begin. The person tells you where to go.</p>
+
+  <h3>The real sources of variation, in rough order of how much they explain</h3>
+  <p>"People are different" is true and useless. The useful question is <em>which</em> differences move the dial, and roughly how much, so you spend attention where the variance actually lives. The honest hierarchy looks like this.</p>
+  <p><strong>Body size and composition.</strong> The single most boring source of variation is also one of the largest. A 95 kg person with high lean mass and a 55 kg person have different energy needs, different protein needs in absolute grams, and different drug-like responses to a fixed dose of anything, including caffeine. This is why so many recommendations are expressed per kilogram of body weight or per kilogram of fat-free mass rather than as flat numbers: scaling to size removes a big, predictable chunk of the spread before you even look at the interesting biology.</p>
+  <p><strong>Activity and training history.</strong> How much someone moves, and what their tissues have adapted to over years, reshapes how they handle fuel. You already met this in the trained-versus-untrained divide: a trained body responds to the finer dials of timing and dosing that an untrained body shrugs off. Activity also dwarfs most dietary fine-tuning for energy balance, simply because it can swing total expenditure by hundreds of calories a day.</p>
+  <p><strong>Age and sex.</strong> Aging raises the threshold a muscle needs to respond to protein and load, the anabolic resistance covered later in this chapter. Sex differences in hormones shift substrate use, protein needs across the cycle, and the specific nutrients most at risk. These are not small print. They are large, mechanism-backed shifts that this chapter treats in their own right.</p>
+  <p><strong>The gut microbiome.</strong> The community of microbes in the digestive tract turns out to be one of the more powerful person-specific factors in how food is handled, especially for blood fats and blood sugar. In the PREDICT 1 data, person-specific factors including the microbiome explained more of the variance in the blood-fat response to a meal than the meal's own macronutrient content did (Berry et al., 2020). Two people can eat the same fiber and ferment it into very different downstream signals depending on who is living in their gut.</p>
+  <p><strong>Genetics.</strong> Genes matter, but, as the next section spends real time on, usually far less and far less cleanly than the marketing of DNA-diet kits implies. For most everyday nutrition decisions, common genetic variants explain a modest slice of the difference between people, often single-digit percentages, and they rarely override the larger inputs above.</p>
+  <p><strong>Health status and medications.</strong> Insulin resistance, thyroid function, gut disorders, kidney disease, and the drugs used to treat them all bend nutritional reality. A medication that alters appetite, fluid balance, or nutrient absorption can outweigh any diet tweak you might layer on top, which is why "what is this person's health and medication picture" is a question that comes before, not after, the diet plan.</p>
+  <p><strong>Food environment, preferences, and culture.</strong> The last source is the one nutrition science is worst at measuring and real life is most governed by. The most metabolically perfect plan a person will not eat is worth less than a decent plan they will. What is available, affordable, familiar, and culturally meaningful is not a soft add-on to the "real" science. It is the gate every recommendation has to pass through to become a behavior, and behavior is the only thing that produces results.</p>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>When a plan is not working, resist the urge to immediately blame the plan or the person. Walk the list in order of leverage. Is the dose scaled to their size? Is their activity what you assumed? Are age, sex, a health condition, or a medication quietly changing the math? Is the gut a wildcard you have not accounted for? And, the question that catches more failures than all the biology combined, is this even a plan they can live with given their food environment and preferences? Most "non-responses" turn out to live near the top of that list, not in their DNA.</p>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Trained Versus General-Population: When the Details Finally Matter</h2>
+  <p>Back in Chapter 3 you learned a hierarchy. Total energy balance sits at the top. Then macronutrient totals, especially protein. Then food quality and micronutrients. Then, way down near the bottom, the fiddly stuff: <span class="ch-key">nutrient timing</span>, meal frequency, supplement particulars. The lesson was that people waste enormous energy fighting over the bottom of the pyramid while ignoring the top. That lesson still holds. But "near the bottom of the hierarchy" does not mean "irrelevant for everyone." It means the payoff is small, and small payoffs only become worth chasing once the big rocks are already in place and the margins you are competing for have gotten thin.</p>
+  <p>This is the single cleanest way to understand the trained-versus-untrained divide. A beginner has enormous room to grow. Their muscle is so responsive to any reasonable stimulus that the difference between a perfectly timed protein dose and a sloppy one disappears into the noise of all the adaptation happening anyway. A trained individual has spent years harvesting the easy gains. What remains is a narrow band of progress, and in a narrow band, small advantages stop being negligible.</p>
+
+  <h3>What the position stands actually say about timing</h3>
+  <p>The International Society of Sports Nutrition's position stand on nutrient timing is admirably honest about this (Kerksick et al., 2017). Its headline conclusion is the one you already know: total daily protein intake is the primary driver of muscle adaptation, and a pre- or post-exercise dose of roughly 20 to 40 grams of an EAA-rich, leucine-containing protein reliably stimulates <span class="ch-key">muscle protein synthesis</span>. The famous "anabolic window" is far wider than the supplement industry implied. For most people, hitting your protein total across the day is what matters, and whether the shake lands at minute ten or minute ninety is a rounding error.</p>
+  <p>Then comes the qualifier that most readers skim past. The importance of tight timing rises sharply when training sessions are separated by less than roughly four to eight hours. That is not a description of the general population. That is a description of an athlete training twice a day, a competitor in a tournament, someone whose glycogen and amino acid status genuinely has to be restored before the next bout because there isn't time for the leisurely all-day refueling that covers everyone else. The window is real. It is just that almost nobody is standing in the doorway.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Before reading on, predict: in Mori's nitrogen-balance study, which group, trained or untrained, would benefit more from eating immediately after exercise versus six hours later? And what mechanism would explain the difference?</p>
+  </aside>
+
+  <h3>The experiment that makes it concrete</h3>
+  <p>Mori (2014) ran the comparison directly. The design pitted nutrient timing against training status: trained and untrained young men received an identical protein-and-carbohydrate feeding either immediately after resistance exercise (P0) or six hours later (P6), and the outcome was whole-body <span class="ch-key">nitrogen balance</span>, a proxy for net protein accretion. The result is exactly the kind of "it depends, and here's the reason" finding this chapter is built around. The trained men showed significantly higher nitrogen balance with immediate feeding than with delayed feeding. The untrained men did not. Same nutrients, same exercise, opposite practical conclusion, and the variable that flipped it was training history.</p>
+  <p>Why would training status change how the body uses the timing of a meal? Because training remodels the machinery. Chronic resistance exercise upregulates the transporters, the signaling sensitivity, and the metabolic readiness that let a trained muscle capture and use incoming amino acids efficiently in the period right after a session. The trained body is primed to do something with a well-timed meal. The untrained body's response is blunter and slower, so moving the meal around does little. The trained athlete is not following a different set of physical laws. They have simply built a body that responds to the finer dials.</p>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>If you are a general-population learner or you coach them, keep your attention at the top of the hierarchy. Nail the protein total, run a sane deficit or surplus, eat enough whole food, sleep. Timing is the polish you apply after the structure is sound, not the structure itself. The mistake that ruins people is borrowing elite tactics, twice-daily feeding protocols, intra-workout carbs, peri-workout amino acid stacking, and bolting them onto a body that hasn't yet earned the right to care. In practice, this means: chase timing only when you are advanced, only when sessions are close together, and only after the big rocks are already in the jar.</p>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<div class="ch-widget" id="recalibrator">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Recommendation Recalibrator</div>
+  </div>
+  <p class="ch-widget-sub">Start from the general-population defaults, then apply a population filter and watch which numbers move, and read the mechanism that moved them.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Population filter</span>
+      <select class="ch-widget-select" id="rc-filter">
+        <option value="general">General population (baseline)</option>
+        <option value="trained">Trained athlete</option>
+        <option value="older">Older adult (65+)</option>
+        <option value="luteal">Female, luteal phase</option>
+        <option value="menopause">Female, postmenopause</option>
+        <option value="plant">Plant-based eater</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Protein (g/kg/day)</span>
+      <span class="ch-meter-bar"><span id="rc-bar-protein" style="width:40%"></span></span>
+      <span class="ch-meter-num" id="rc-num-protein">1.6</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Timing emphasis</span>
+      <span class="ch-meter-bar"><span id="rc-bar-timing" style="width:20%"></span></span>
+      <span class="ch-meter-num" id="rc-num-timing">Low</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Resistance-training priority</span>
+      <span class="ch-meter-bar"><span id="rc-bar-rt" style="width:50%"></span></span>
+      <span class="ch-meter-num" id="rc-num-rt">Med</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Per-meal protein dose</span>
+      <span class="ch-meter-bar"><span id="rc-bar-dose" style="width:40%"></span></span>
+      <span class="ch-meter-num" id="rc-num-dose">0.3 g/kg</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Energy-availability vigilance</span>
+      <span class="ch-meter-bar"><span id="rc-bar-ea" style="width:35%"></span></span>
+      <span class="ch-meter-num" id="rc-num-ea">Med</span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="rc-explain" style="width:100%"><strong>Baseline.</strong> These are sensible general-population defaults: enough protein to support a recomposition, low fuss about timing, resistance training that matters but does not dominate, and ordinary attention to eating enough.</p>
+
+  <button class="ch-widget-btn" id="rc-apply">Apply filter</button>
+</div>
+
+<section class="ch-section">
+  <h2>Aging: Where Protein and Lifting Stop Being Optional</h2>
+  <p>If there is one population where the defaults shift in a direction almost everyone underestimates, it is the aging body. The standard cultural picture of getting older is a slow, passive fade, muscle quietly leaking away as if by entropy. That picture is wrong in a way that matters enormously, because it implies there is nothing to do. The biology says otherwise.</p>
+  <p>The condition we are talking about is <span class="ch-key">sarcopenia</span>, the age-related loss of muscle mass, strength, and function. It is not cosmetic. Muscle is the organ of independence: it is what lets an older adult rise from a chair, climb stairs, catch themselves in a stumble, and recover from illness without spiraling into frailty. So the question is what actually drives the loss, because that determines what fixes it.</p>
+
+  <h3>Anabolic resistance, not a broken engine</h3>
+  <p>Here is the finding that reframes everything. Breen and Phillips (2011), in a now-seminal mechanistic review, established that age-related muscle loss is <em>not</em> primarily caused by a drop in basal muscle protein synthesis. Older muscle, sitting at rest, builds protein at roughly the same baseline rate as younger muscle. The engine idles fine. The problem appears when you ask the muscle to respond to a stimulus. Give an older muscle a dose of amino acids, or a bout of resistance exercise, and its protein-synthetic response is blunted compared with a young muscle getting the identical input. They named this <span class="ch-key">anabolic resistance</span>: a reduced sensitivity of the muscle's building machinery to the very signals that are supposed to build it.</p>
+  <p>This is genuinely good news disguised as a problem. Anabolic resistance is a turned-down dial, not a severed wire. The signal still gets through. It just needs to be louder. And we know two reliable ways to turn up the volume: give the muscle more of the anabolic signal per exposure, and reawaken its sensitivity with mechanical loading.</p>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A pencil-and-watercolour conceptual diagram in a researcher's-notebook register, depicting 'anabolic resistance' as a metaphor: two identical lamp dimmer dials side by side on aged paper, the left dial labeled in small italic serif 'younger muscle' glowing brightly, the right dial labeled 'older muscle' glowing dimly at the same input position, with a hand turning the right dial further up toward a brighter glow. Annotations sketched in margin: 'more leucine', 'resistance load'. Warm sepia, soft gold light, muted teal accents, shallow staging. No numbers, no charts, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Anabolic resistance is a dimmed dial, not a broken wire. The fix is a louder signal.</em></figcaption></figure>
+
+  <h3>The two interventions, and why they belong together</h3>
+  <p>On protein, the expert consensus has moved decisively above the old RDA of 0.8 g/kg/day. The ESPEN Expert Group (Deutz et al., 2014) recommends that healthy older adults consume at least 1.0 to 1.2 g/kg/day, and 1.2 to 1.5 g/kg/day or more for those who are acutely or chronically ill, with explicit emphasis on combining higher protein intake with exercise. The logic is per-exposure dosing: because the muscle is less sensitive, each meal needs a larger, leucine-rich bolus to push past the higher threshold required to trigger a meaningful synthetic response. Spreading adequate protein across meals, each one large enough to clear that raised bar, beats the common elderly pattern of a protein-poor breakfast and lunch followed by a single modest dinner.</p>
+  <p>But protein alone is not enough, and this is the part people get backward. Rogeri et al. (2021) make the case cleanly: the combination of resistance training and increased protein intake is superior to either intervention alone, because in an older adult with anabolic resistance the muscle protein synthesis driven by resistance training, on its own, is insufficient to sustain a positive net protein balance across the full day. Lifting reopens the muscle's sensitivity to amino acids; the amino acids then have something to act on. Each one props up the other. Deutz et al. (2014) and Rogeri et al. (2021) converge on the same prescription, and the ESPEN group states it plainly: protein nutrition combined with resistance exercise is the optimal strategy for maintaining muscle mass and function with age.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>An 80-year-old eats 1.4 g/kg/day of protein, spread well across the day, but does no resistance training. Based on Rogeri et al. (2021), why is this likely to fall short of preserving muscle, and what single addition would change the trajectory most?</p>
+  </aside>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>For an older adult, the two non-negotiables flip from "nice to have" to "load-bearing." Push protein up toward 1.2 to 1.5 g/kg/day, and make sure each meal carries a real dose rather than a sprinkle, because the threshold to trigger building is higher now. Then add resistance training, because without mechanical load the protein has a muted audience. This is the clearest place in the whole course where a general-population shrug, "eh, protein, lifting, whatever works", is genuinely dangerous. The cost of getting this wrong is measured in lost independence, not lost gains. In practice, this means: if you only do one thing for an aging body, do not pick protein <em>or</em> lifting. Do both, on purpose.</p>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Female-Specific Considerations: Rigor Without Mystification</h2>
+  <p>This topic gets handled two bad ways. One camp ignores sex differences entirely and just scales down the male defaults, as if a woman were a small man. The other camp over-mystifies, treating the menstrual cycle as an unknowable hormonal weather system that makes any planning futile. Both are failures of nerve. The honest position is that there <em>are</em> real, mechanism-backed differences worth respecting, and that they are tractable enough to plan around. Let us treat them with the seriousness they deserve and nothing more.</p>
+
+  <h3>The cycle changes the substrate landscape</h3>
+  <p>The current ISSN position stand on the female athlete (Sims et al., 2023) is the most rigorous synthesis available, and it opens with an important caution: female hormone profiles are not just different from male profiles, they are individually variable and at times unpredictable, which is precisely why the answer is informed flexibility rather than a rigid template. Within that framing, a few patterns are robust enough to act on.</p>
+  <p>Progesterone, which rises in the <span class="ch-key">luteal phase</span> (the roughly two weeks after ovulation), is catabolic with respect to protein. It nudges the body toward breaking protein down for fuel. The practical consequence, per Sims et al. (2023), is that protein needs are not flat across the cycle: the recommendation sits at the upper ranges of general guidelines, roughly 1.8 to 2.2 g/kg/day for active women, with the higher end favored in the luteal phase to offset that progesterone-driven catabolism. Estrogen and progesterone also shift substrate use more broadly, influencing how readily the body taps fat versus carbohydrate and altering thermoregulation and fluid balance enough that hydration strategy is not cycle-neutral either.</p>
+
+  <h3>Life stages, not just months</h3>
+  <p>The same review extends the logic across the lifespan. The peri- and postmenopausal transition removes much of the estrogen that had been quietly supporting bone, muscle, and metabolic flexibility, which raises the stakes on the two interventions from the aging section, protein and resistance training, for women specifically. Dolph et al. (2021) round out the micronutrient picture, flagging iron, vitamin D, and calcium as the deficiencies that recur in female athletes, iron because of menstrual losses, calcium and vitamin D because of their tie to bone health that becomes urgent if energy or estrogen drops. None of this is mysterious. It is endocrinology with practical edges.</p>
+
+  <h3>Energy availability: the issue dressed up as a virtue</h3>
+  <p>Now the most important concept in this section, and the one most often misread. <span class="ch-key">Energy availability</span> (EA) is the dietary energy left over to run your physiology after the energy cost of exercise is subtracted, expressed relative to fat-free mass: roughly (energy intake minus exercise energy expenditure) divided by kilograms of fat-free mass. Dolph et al. (2021) cite a target of around 45 kcal/kg FFM/day for healthy function. When EA falls too low, for too long, the body does not simply get leaner. It starts shutting down processes it deems non-essential.</p>
+  <p>This is the conceptual successor to the old Female Athlete Triad, now expanded by the IOC into <span class="ch-key">Relative Energy Deficiency in Sport (REDs)</span> (Mountjoy et al., 2023). The crucial advance in the 2023 consensus is its Physiological Model: low energy availability is not a binary switch from healthy to sick. It exists on a spectrum from <em>adaptable</em> LEA, which the body can tolerate transiently, to <em>problematic</em> LEA, where the deleterious outcomes accumulate. And those outcomes are systemic: decreases in energy metabolism (the body lowers its own thermostat), reproductive function (disrupted or absent menstruation), musculoskeletal health (bone loss), immunity, and glycogen synthesis. That last one matters even for the performance-obsessed: chronic underfueling sabotages the very fuel system athletes train to optimize.</p>
+  <p>This is the part people most often get backward, and it is a cultural failure as much as a knowledge failure. In a world that moralizes thinness and praises restraint, a low energy availability can look like discipline. It is not discipline. It is a physiological deficit with consequences across multiple organ systems, and the REDs framework exists precisely to name it as a clinical concern rather than an aesthetic achievement. The amenorrhea that some treat as a convenient side effect of "being lean" is one of the body's loudest distress signals.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Two women run the same training load and weigh the same. One eats 300 kcal more per day than the other and has a normal cycle; the other has lost her period over the past four months. Using the REDs Physiological Model, what is happening, and why is "she's just naturally lean" the wrong explanation?</p>
+  </aside>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>You do not need to micromanage a woman's diet by the day of her cycle to do right by her. You need two things. First, keep protein generous, toward the upper end of the range, and recognize the luteal phase as the time the body is a bit more catabolic and a bit hungrier, which is normal and not a willpower failure. Second, treat a lost or disrupted period as a flashing warning light, never as a trophy. If energy availability is chronically low, the fix is not more discipline; it is more food. In practice, this means: feed the training, protect the cycle, and stop confusing a deficit with an accomplishment.</p>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Building Sound Plant-Based Diets</h2>
+  <p>A well-built plant-based diet can fully support health and body-composition goals. A poorly built one cannot. The difference is not luck or some special vegan virtue, it is deliberate design around three variables: protein quantity, protein quality, and a handful of nutrients that the plant kingdom delivers less reliably. Get those right and the outcomes converge with omnivorous diets. Leave them to hope and they drift.</p>
+
+  <h3>The performance data: parity, with one honest catch</h3>
+  <p>Start with the punchline, because it cuts through a lot of noise. A 2023 systematic review by Hernández-Lougedo et al. found no significant differences between vegetarian and omnivore athletes in VO2max, muscle power, sprint performance, body composition, or psychological wellbeing. Plant-based eating is not a performance handicap. But the same review names the catch with precision: the vegetarian athletes consumed significantly more carbohydrate and significantly <em>less</em> protein than their omnivorous counterparts. So performance parity is achievable, and the single variable that has to be managed on purpose is protein. The diet works when you respect that, and underdelivers when you drift into the default lower-protein pattern that plant-based eating tends to produce if left unmanaged.</p>
+
+  <h3>Quality: PDCAAS, DIAAS, and what they really tell you</h3>
+  <p>Protein quality is scored by how well a protein's amino acid profile matches human requirements and how digestible it is. The older metric is <span class="ch-key">PDCAAS</span> (Protein Digestibility-Corrected Amino Acid Score); the more modern and discriminating one is <span class="ch-key">DIAAS</span> (Digestible Indispensable Amino Acid Score). Hertzler et al. (2020), in a thorough systematic review, lay out why most plant proteins score lower than animal proteins: they tend to be limited in one or more <span class="ch-key">essential amino acids</span> (commonly lysine in grains, methionine in legumes) and are often somewhat less digestible owing to fiber and antinutrients.</p>
+  <p>But "lower scoring" is not "inadequate," and this is where the review is genuinely liberating. Hertzler et al. (2020) report that when matched for dose, soy protein produces no significant difference from animal proteins for lean mass or strength gains, and that even rice protein yields body-composition outcomes similar to whey. The amino acids a plant protein is "missing" are not actually absent; they are present in smaller proportion. Which means the gaps are solvable by three levers the review names explicitly: increase the total dose, combine complementary proteins, and use fortified or isolated sources where helpful.</p>
+
+  <h3>Complementarity, demystified</h3>
+  <p>The old folklore said you must combine "incomplete" proteins at the same meal, rice and beans on the same plate or you have wasted them. That precise version is a myth. Your body maintains a pool of free amino acids; complementation that happens across a day works fine. But the underlying nutritional logic is sound and worth keeping: grains tend to be low in lysine and high in methionine, legumes the reverse, so a diet that regularly pairs the two, across meals, not necessarily within a single bite, covers the full essential amino acid spectrum. Add soy, which is a complete protein on its own, and the problem largely dissolves.</p>
+
+  <h3>The nutrients that need a plan</h3>
+  <p>Beyond protein, a few micronutrients are under-delivered by plants and deserve deliberate attention rather than assumption. Vitamin B12 is the non-negotiable one: it is essentially absent from plant foods, so a fully plant-based eater needs a supplement or reliably fortified foods, full stop. Iron from plants is non-heme and less bioavailable, so pairing iron-rich plants with vitamin C and emphasizing legumes, seeds, and greens matters, a concern that compounds with the female-specific iron vulnerability we just covered. Calcium and vitamin D track the bone-health themes from the aging and female sections. Zinc, omega-3s (where algae-derived sources fill the EPA/DHA gap), and iodine round out the short list. None of these is a reason to avoid plant-based eating. Each is a reason to <em>design</em> it.</p>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>A sound plant-based diet is engineered, not wished into being. Three moves cover most of it. One, get enough total protein, which for plant-based eaters usually means consciously aiming a bit higher than you think you need, because the default pattern undershoots. Two, lean on higher-quality sources, soy in its many forms, plus regular legume-and-grain pairings across the day, so the amino acid profile fills in. Three, plan the known gaps: B12 supplemented without exception, plus attention to iron, calcium, vitamin D, omega-3s, zinc, and iodine. Do that and the research says you give up essentially nothing. In practice, this means: build the plan around protein and a short supplement list, and stop treating "plant-based" as either automatically virtuous or automatically deficient. It is whatever you make it.</p>
+  </div>
+</section>
+
+<div class="ch-widget" id="auditor">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Plant-Based Plan Auditor</div>
+  </div>
+  <p class="ch-widget-sub">Build a day of plant-based meals. The auditor checks protein quantity, amino acid complementarity, and the commonly short micronutrients, then suggests food-based fixes. Assumes a 68 kg eater targeting roughly 1.6 g/kg (about 110 g protein).</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Breakfast</span>
+      <select class="ch-widget-select" id="ad-b">
+        <option value="oats">Oats with berries</option>
+        <option value="tofu">Tofu scramble + fortified soy milk</option>
+        <option value="toast">White toast + jam</option>
+        <option value="smoothie">Soy-yogurt + pea-protein smoothie</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Lunch</span>
+      <select class="ch-widget-select" id="ad-l">
+        <option value="salad">Green salad + olive oil</option>
+        <option value="lentil">Lentil + brown rice bowl</option>
+        <option value="tempeh">Tempeh + quinoa + greens</option>
+        <option value="pasta">Pasta + tomato sauce</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Dinner</span>
+      <select class="ch-widget-select" id="ad-d">
+        <option value="stirfry">Veg stir-fry + rice</option>
+        <option value="beanchili">Bean chili + cornbread</option>
+        <option value="tofucurry">Tofu curry + lentils + rice</option>
+        <option value="potato">Baked potato + butter sub</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Snack / extras</span>
+      <select class="ch-widget-select" id="ad-s">
+        <option value="fruit">Fruit</option>
+        <option value="nuts">Mixed nuts + seeds</option>
+        <option value="edamame">Edamame + fortified nutritional yeast</option>
+        <option value="none">Nothing</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Protein quantity</span>
+      <span class="ch-meter-bar"><span id="ad-bar-protein" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="ad-num-protein">0 g</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Amino acid completeness</span>
+      <span class="ch-meter-bar"><span id="ad-bar-aa" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="ad-num-aa">Low</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Iron coverage</span>
+      <span class="ch-meter-bar"><span id="ad-bar-iron" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="ad-num-iron">Low</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Calcium + vit D</span>
+      <span class="ch-meter-bar"><span id="ad-bar-cal" style="width:30%"></span></span>
+      <span class="ch-meter-num" id="ad-num-cal">Low</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">B12 (fortified/supplement)</span>
+      <span class="ch-meter-bar"><span id="ad-bar-b12" style="width:20%"></span></span>
+      <span class="ch-meter-num" id="ad-num-b12">No</span>
+    </div>
+  </div>
+
+  <p class="ch-widget-sub" id="ad-feedback" style="width:100%">Pick a meal in each slot and run the audit to see where the day stands and how to fix any gaps.</p>
+
+  <button class="ch-widget-btn" id="ad-run">Run audit</button>
+</div>
+
+<blockquote class="ch-quote">
+  <p>Total daily protein intake is the primary driver of muscle adaptation. The relevance of narrow nutrient-timing windows is greatest when training sessions are separated by short recovery periods, a circumstance that describes the trained competitor far more than the general exerciser.</p>
+  <cite>Paraphrased from Kerksick et al. (2017), ISSN Position Stand on Nutrient Timing</cite>
+</blockquote>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Nutrigenomics and the DNA-Diet Promise</h2>
+  <p>If individual variation is real, the obvious commercial move is to sell you the source code. Spit in a tube, mail it off, and get back a "personalized" eating plan supposedly written by your genes. The field underneath this is real and called <span class="ch-key">nutrigenomics</span>: the study of how nutrients and genes interact, in both directions, how your genetics shape your response to food, and how food shapes the expression of your genes. The science is legitimate. The consumer products built on top of it routinely promise more than the science can cash.</p>
+  <p>The core problem is a mismatch of scale. Most nutrition-relevant traits are <span class="ch-key">polygenic</span>: shaped by hundreds or thousands of gene variants, each contributing a tiny push, all of it interacting with diet, activity, sleep, stress, and environment. A kit that tests a handful of headline variants and hands you a confident diet is reading three words of a thousand-page book and narrating the plot. To see why the confidence is unearned, look closely at the three genes these products lean on most.</p>
+
+  <h3>FTO: the "obesity gene" that does not pick your diet</h3>
+  <p>FTO is the variant most often dressed up as an obesity gene, and it is genuinely the best-established common variant associated with body weight. Carrying the risk allele nudges average body weight up by a small amount. The leap the marketing makes is from "associated with weight" to "tells you which diet will work for you," and that leap is where the evidence collapses. Livingstone et al. (2016), pooling individual data from eight randomized controlled trials covering 9,563 people, asked the decisive question directly: do FTO carriers lose weight differently depending on the type of intervention? The answer was a clean no. Changes in body weight, BMI, and waist circumference in response to dietary, physical-activity, or drug-based weight-loss programs were not significantly different between FTO genotypes. The encouraging spin the authors themselves drew is the right one: whatever small genetic predisposition the FTO variant confers, it can be counteracted by ordinary diet and activity, and carriers respond to interventions just as well as non-carriers. Knowing your FTO status, in other words, does not tell you which diet to pick. It tells you nothing actionable that a scale and a sane plan would not.</p>
+
+  <h3>MTHFR: a real enzyme, a wildly oversold test</h3>
+  <p>MTHFR codes for an enzyme in folate metabolism, and one common variant (C677T, the one labeled rs1801133) does modestly reduce that enzyme's activity, which can nudge blood levels of an amino acid called homocysteine upward. That much is real biology. The wellness market has inflated it into a sweeping explanation for fatigue, mood, and a long list of complaints, paired with expensive specialized supplements. A large systematic review and meta-analysis by Jin et al. (2018), pooling data from over 114,000 participants, put the variant in its place. The effect of the MTHFR variant on homocysteine is real but has limited penetrance, and, the practical punchline, it is heavily modified by ordinary covariates, with folate intake chief among them. In adequately folate-nourished people the genetic effect largely washes out. The authors wrote their paper explicitly to help clinicians and the public interpret MTHFR results that increasingly arrive from direct-to-consumer testing without any context. The honest takeaway: for the vast majority of people, "I have an MTHFR mutation" is not a diagnosis and not a reason for boutique supplements. It is a common variant whose modest effect adequate dietary folate already manages.</p>
+
+  <h3>CYP1A2: the one place a gene gives a usable hint</h3>
+  <p>Caffeine is metabolized largely by the enzyme CYP1A2, and a common variant sorts people, roughly, into faster and slower caffeine metabolizers. This is the rare case where a single-gene story is coherent enough to be worth mentioning, and even here the position has to be stated carefully. The ISSN position stand on caffeine and exercise performance (Guest et al., 2021) confirms that caffeine reliably improves endurance and a range of performance outcomes at 3 to 6 mg/kg, and that the size of the effect differs between individuals, with that between-person difference attributable in part to genetic variation in caffeine metabolism (CYP1A2) along with habitual intake and other factors. So the gene is part of a real story about why caffeine helps some people more than others, or disturbs some people's sleep and anxiety more than others. What it is not is a necessary test. You can learn your practical caffeine response faster and more reliably by paying attention to how you actually react, dose, timing, sleep, jitter, than by genotyping yourself. The gene names a mechanism. Your own experience measures the outcome, which is what you actually wanted to know.</p>
+
+  <h3>What the DNA-diet trial actually found</h3>
+  <p>The strongest test of the whole premise is not a single gene but a head-to-head trial: does giving people genotype-based diet advice beat giving them ordinary good advice? The Food4Me randomized controlled trial ran exactly this across seven European countries, comparing general dietary advice against personalized advice based on diet, on phenotype, and on genotype (Livingstone et al., 2021). Personalized advice did outperform generic advice for improving diet quality. But the genetic layer was not the hero. The gains came overwhelmingly from personalizing to a person's <em>current diet and measurable characteristics</em>, the things you can see and measure, with the DNA layer adding little beyond that. The lesson generalizes well past this one study: the useful part of "personalization" is paying close attention to the actual person, what they eat now, what their body is doing, what they will sustain. The genome is, for now, a minor and largely redundant contributor to everyday diet decisions.</p>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>Treat DNA-diet kits the way you would treat a horoscope with good production values: occasionally pointed at something real, dressed up as far more certainty than it has earned. The genes these products sell, FTO, MTHFR, CYP1A2, are real, but they either do not change what you should do (FTO), are already handled by an adequate diet (MTHFR), or describe a response you can measure more directly by living your life and paying attention (CYP1A2). If a service promises a diet written by your genome, the accurate translation is that it is reading a few common variants and filling the rest with generic advice you could have gotten for free. Spend the money on food and coaching, not on sequencing.</p>
+  </div>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+  <h2>Personalizing by Glucose: The Strongest Case, and Its Limits</h2>
+  <p>The most serious scientific case for personalization does not come from genetics at all. It comes from watching, in real time, how a specific person's blood sugar responds to specific foods. This is the line of work most worth understanding, because it is genuinely impressive <em>and</em> genuinely oversold, often by the same people.</p>
+
+  <h3>The Zeevi and Segal finding</h3>
+  <p>The landmark study is Zeevi et al. (2015), out of the Segal and Elinav labs. They put continuous glucose monitors on 800 people, logged nearly 47,000 real meals, and confirmed something the population averages had been hiding for decades: the post-meal blood-sugar response to the <em>identical</em> food varies enormously from person to person. The bread that spikes one person barely moves another; one person's gentle food is another person's sugar surge. The standard tool the food world had been using to rank foods, the glycemic index, is a population average, and the variation around it is so large that for any one individual it can be close to useless as a prediction.</p>
+  <p>Then came the part that earned the attention. The team built a machine-learning model that combined blood markers, dietary habits, body measurements, physical activity, and gut microbiome data, and it predicted a given person's response to a given meal far better than carbohydrate counting or the glycemic index could. In a blinded randomized trial, diets designed using the model produced lower post-meal glucose responses than control diets, with consistent shifts in the gut microbiome alongside. This is a real result. It was independently reproduced in a separate American cohort by Mendes-Soares et al. (2019), where the personalized model again outperformed counting carbohydrates or calories. So the core claim is solid: post-meal glucose responses are highly individual, and they can be predicted and improved with person-specific modeling.</p>
+
+  <h3>What it justifies, and what it does not</h3>
+  <p>Now the discipline. It is easy to read "your glucose response is personal" and conclude that everyone needs a continuous glucose monitor and a custom algorithm to eat well. The original research does not support that leap, and several limits keep it honest.</p>
+  <p>First, the outcome that was measured was the post-meal glucose curve, not weight, not body composition, not long-term health, not how anyone felt. A flatter glucose curve is a plausible proxy for some benefits, but a proxy is not the prize. The studies showed they could flatten the curve. They did not show that doing so makes a metabolically healthy person leaner, healthier, or longer-lived. That is a separate question with much weaker evidence.</p>
+  <p>Second, the population mattered. This work is most relevant to people who actually have a glucose problem to solve, those with prediabetes, type 2 diabetes, or clear metabolic dysfunction, where managing post-meal glucose has well-established value. Whether a metabolically healthy person gains anything from chasing a flatter curve is genuinely unsettled. A spike to a normal post-meal level in a healthy person, followed by a normal return to baseline, is the system working, not a problem to be engineered away.</p>
+  <p>Third, the broader PREDICT 1 work (Berry et al., 2020) sharpened the picture and trimmed the hype in the same breath. It confirmed the large person-to-person variation in glucose and blood-fat responses to identical meals, and confirmed the microbiome's heavy influence. But it also quantified how small the <em>genetic</em> contribution to those predictions was, on the order of 9.5 percent for glucose and under 1 percent for blood fats. The takeaway is not "genes run your metabolism." It is the opposite: the predictable part of your food response comes mostly from measurable, modifiable, person-specific factors, not from a fixed genetic script.</p>
+
+  <h3>Continuous glucose monitors for people without diabetes: signal versus marketing</h3>
+  <p>The commercial sequel to this research is the sale of continuous glucose monitors (CGMs) to healthy people as a general wellness and weight-loss tool. The pitch is seductive: see your data, find your spikes, eat accordingly. The reality deserves a colder look.</p>
+  <p>A CGM is a genuinely useful clinical device with a clear job: managing diabetes, where keeping glucose in range materially changes outcomes. For a person without diabetes or prediabetes, the evidentiary case thins out fast. There is little high-quality evidence that wearing a CGM improves health outcomes, body composition, or longevity in metabolically healthy people. What the device reliably does provide is a stream of numbers and the strong human temptation to treat every upward wiggle as a danger. A normal glucose rise after a normal meal is exactly what a healthy pancreas is supposed to produce. Reading that as pathology can push people toward needlessly restrictive eating, the avoidance of perfectly healthy carbohydrate foods like fruit, legumes, and whole grains because they "spike," and a level of food anxiety that is itself a worse outcome than the spike ever was.</p>
+  <p>The honest position is split by population. If you have diabetes or prediabetes, or you are working with a clinician on a real metabolic problem, a CGM can be a powerful feedback tool, and the personalization research above is directly relevant to you. If you are metabolically healthy and simply curious, a CGM is, at best, an expensive curiosity that can teach you a little about your own responses, and at worst a generator of anxiety and false alarms. The marketing sells the device to everyone. The science endorses it for a much narrower group.</p>
+
+  <div class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>The glucose-personalization research is the strongest evidence in this whole chapter that "what works for them may not work for you" is literally true, the same food really does land differently in different bodies. Honor that. But do not let it stampede you, or a client, into wearable-driven micromanagement. If someone has a real glucose problem, measured feedback, including a CGM under appropriate guidance, is gold. If someone is healthy and chasing flat lines on an app, you are usually watching anxiety dressed up as optimization. The skill is matching the intensity of the tool to the size of the actual problem.</p>
+  </div>
+</section>
+
+<blockquote class="ch-quote">
+  <p>We continuously monitored week-long glucose levels in an 800-person cohort, measured responses to 46,898 meals, and found high variability in the response to identical meals, suggesting that universal dietary recommendations may have limited utility.</p>
+  <cite>Zeevi et al. (2015), Personalized Nutrition by Prediction of Glycemic Responses, Cell</cite>
+</blockquote>
+
+<section class="ch-section">
+  <h2>Putting It Together: Calibrating to the Human in Front of You</h2>
+  <p>Step back and notice what every one of these populations had in common. We never threw out a principle. We adjusted a setting, and we could always say which mechanism justified the adjustment. Timing climbed the priority list for the trained athlete because training builds a body that responds to it (Mori, 2014). Protein and lifting became load-bearing for the older adult because anabolic resistance raised the threshold for a response (Breen & Phillips, 2011; Rogeri et al., 2021). Protein crept upward and energy availability became a watch-point for women because of progesterone-driven catabolism and the real systemic costs of underfueling (Sims et al., 2023; Mountjoy et al., 2023). Protein quantity and a short supplement list became the design problem for the plant-based eater because of digestibility and amino acid gaps (Hertzler et al., 2020; Hernández-Lougedo et al., 2023).</p>
+  <p>That is the whole skill. "It depends" is not a cop-out when it arrives with a reason. The two failure modes to avoid are mirror images of each other: applying elite-athlete tactics to a general-population body, where they cost effort and buy nothing, and applying general-population shrugs to a context that genuinely needs care, where the cost can be lost muscle, a lost cycle, or a deficiency. The defaults are your starting point, not your destination. Calibrate them to the person, and always be able to explain the move.</p>
+  <p>One caution has to ride alongside all of this, because individual variation is the most abused idea in nutrition. "What works for them may not work for you" is true. It is also the favorite shield of anyone looking for a reason the basics do not apply to them. The same studies that show large variation in <em>response</em> show something the marketing skips: almost nobody is exempt from the fundamentals. The PREDICT and personalization research found wide individual spread <em>and</em> found that the predictable part of that spread comes from measurable, modifiable factors, not from a special exemption written into someone's biology. So hold both at once. Yes, your body is genuinely yours, and the same plan can land differently on it than on your friend. No, that does not mean energy balance, adequate protein, enough whole food, and consistent training stop applying to you. Variation bends the defaults. It does not delete them.</p>
+  <p>That leaves a clean method, and it is the method this whole course has been building toward. Start from sound general principles, the ones that hold for most people most of the time, because they are your best first guess and they are free. Then individualize through two channels, in this order. First, measured feedback: track what actually happens to the real person, body weight trend, strength, energy, hunger, training quality, and for those with a real metabolic problem, the relevant clinical markers. Let the data, not the marketing, tell you where this person sits in the distribution. Second, the person's life: their food environment, preferences, culture, schedule, and what they will genuinely sustain, because the most elegant plan is worthless if it never becomes a habit. Principles first, then feedback, then the human. That sequence is the entire chapter in three steps.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Case study: Diego and the diet that "stopped working"</h2>
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Case</div>
+    <p>Diego is 41, lifts three times a week, and lost 18 pounds two years ago on a moderate, higher-protein deficit. He has regained 9 of them and is frustrated. A coworker raved about a DNA-diet kit and a glucose monitor, so Diego bought both. The kit flagged an FTO risk variant and an MTHFR variant and recommended a low-carb plan plus a stack of methylated supplements. His CGM shows his blood sugar "spiking" after oatmeal, bananas, and rice, foods he had been eating happily for years. He arrives convinced his genetics explain the regain and that he needs to cut carbs and treat his MTHFR. His bloodwork from a recent physical was entirely normal, including fasting glucose and HbA1c.</p>
+  </aside>
+  <p>Walk Diego's situation down the leverage list from earlier in this chapter and the real story separates cleanly from the marketing. The first question is not genetic, it is behavioral and physical: what changed between the version of Diego who lost 18 pounds and the version who regained 9? Two years, a slow drift of portions back upward, a deficit that quietly became maintenance and then a small surplus. That is the overwhelmingly likely driver, and it sits at the top of the variation hierarchy, body size, intake, and activity, not at the bottom in his DNA. The diet did not "stop working." The diet stopped being run.</p>
+  <p>His FTO result is a textbook case of a finding that feels meaningful and changes nothing. Livingstone et al. (2016) showed across nearly ten thousand people that FTO carriers lose weight just as well on any reasonable intervention as non-carriers, and that the variant's small effect is counteracted by ordinary diet and activity. Diego's FTO status does not call for low-carb. It calls for the same thing his non-carrier coworker needs: a sane deficit he will actually hold. The MTHFR flag is similar. Jin et al. (2018) put that variant's effect in context, modest, heavily dependent on folate status, and largely managed by an adequate diet. With normal bloodwork and a reasonable diet, Diego does not need a boutique supplement stack. He needs to keep eating folate-containing foods, which he already does.</p>
+  <p>The CGM is where Diego is most likely to harm himself, and where the glucose-personalization research has to be read carefully rather than loudly. Yes, Zeevi et al. (2015) and Berry et al. (2020) showed that post-meal glucose responses are genuinely individual, so it is entirely plausible Diego's oatmeal moves his glucose more than it moves someone else's. But the same research, and the broader picture, says two things he is missing. The post-meal rise he is seeing is, on normal bloodwork, almost certainly a healthy pancreas doing its job, not a problem to engineer away. And for a metabolically healthy person, there is little evidence that flattening those curves improves body composition or health at all. His regain is an energy-balance story, not a glucose-curve story. Cutting the oatmeal, banana, and rice he enjoys would attack his adherence, the one thing that actually predicts whether he keeps the weight off, in exchange for a number that was never his problem.</p>
+  <p>So the coaching move with Diego is the method stated plainly. Start from the sound general principle: he regained weight because intake crept past expenditure, and the fix is a modest, protein-adequate deficit built from foods he likes and will sustain, with his three weekly lifting sessions protected to defend his muscle. Then individualize through measured feedback, his body-weight trend over the next several weeks, his strength, his hunger, not through a genome report that does not change the plan or a glucose monitor that is alarming him about healthy foods. The personalization Diego actually needs is the unglamorous kind: attention to his real intake, his real training, and the meals he will genuinely keep eating. The kit and the wearable sold him the feeling of precision. The results will come from the principles, calibrated to the man.</p>
+</section>
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>General-population rules describe an average nobody fully occupies. The skill is knowing which settings shift for a given person, and why.</li>
+    <li>Nutrient timing sits low in the hierarchy for most people, but its payoff rises for trained athletes and when sessions are under roughly four to eight hours apart, because training builds a body that responds to the finer dials (Kerksick et al., 2017; Mori, 2014).</li>
+    <li>Age-related muscle loss stems from anabolic resistance, a blunted response to amino acids and exercise, not a broken baseline. The fix is higher per-meal protein (toward 1.2 to 1.5 g/kg/day) plus resistance training, together, because each amplifies the other (Breen & Phillips, 2011; Deutz et al., 2014; Rogeri et al., 2021).</li>
+    <li>Female considerations are real and tractable: protein toward the upper range (1.8 to 2.2 g/kg/day, higher in the luteal phase), attention to iron, calcium, and vitamin D, and respect for life-stage transitions (Sims et al., 2023; Dolph et al., 2021).</li>
+    <li>Low energy availability is a systemic physiological deficit on a spectrum from adaptable to problematic, not a sign of discipline. A disrupted cycle is a warning light, and the REDs framework names it as such (Mountjoy et al., 2023).</li>
+    <li>Plant-based diets reach full parity for health and performance when designed around three levers: enough total protein, quality and complementarity (soy plus legume-grain pairing across the day), and a planned approach to B12, iron, calcium, vitamin D, omega-3s, zinc, and iodine (Hertzler et al., 2020; Hernández-Lougedo et al., 2023).</li>
+    <li>Population averages hide large individual differences. Fed identical meals, healthy people vary enormously in their blood responses (about 103% for triglyceride, 68% for glucose, 59% for insulin), so a recommendation that "works" describes a distribution, not a promise to any one person (Berry et al., 2020).</li>
+    <li>Variation comes mostly from measurable, modifiable factors, body size and composition, activity, age and sex, the gut microbiome, health status and medications, and food environment, with common genetic variants explaining only a modest slice (Berry et al., 2020).</li>
+    <li>DNA-diet products overpromise. FTO does not predict which diet will work (Livingstone et al., 2016), MTHFR's effect is modest and managed by adequate folate (Jin et al., 2018), and CYP1A2 caffeine response is learned faster by paying attention than by genotyping (Guest et al., 2021). Genotype-based advice added little over personalizing to a person's actual diet in the Food4Me trial (Livingstone et al., 2021).</li>
+    <li>Post-meal glucose responses are genuinely individual and can be predicted and improved with person-specific models (Zeevi et al., 2015; Mendes-Soares et al., 2019), but the measured outcome was the glucose curve, not health or body composition, and the strong evidence applies to people with a real glucose problem, not to metabolically healthy CGM users.</li>
+    <li>"What works for them may not work for you" is true and not an excuse: variation bends the defaults but does not exempt anyone from the fundamentals. The method is to start from sound general principles, then individualize through measured feedback and the person's actual life.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>You can now bend any rule in this course to a real person and defend the bend. Next, we take that adaptive skill and turn it toward the hardest variable of all: behavior over time. Knowing what to do is not the same as doing it across years of ordinary life, stress, travel, and setbacks. Chapter 8 moves from the physiology of eating well to the practice of sustaining it.</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Berry, S. E., Valdes, A. M., Drew, D. A., Asnicar, F., Mazidi, M., Wolf, J.... Spector, T. D. (2020). Human postprandial responses to food and potential for precision nutrition. <em>Nature Medicine, 26</em>(6), 964&ndash;973. https://doi.org/10.1038/s41591-020-0934-0</p>
+  <p>Breen, L., &amp; Phillips, S. M. (2011). Skeletal muscle protein metabolism in the elderly: Interventions to counteract the 'anabolic resistance' of ageing. <em>Nutrition &amp; Metabolism, 8</em>, 68. https://doi.org/10.1186/1743-7075-8-68</p>
+  <p>Deutz, N. E. P., Bauer, J. M., Barazzoni, R., Biolo, G., Boirie, Y., Bosy-Westphal, A.... Calder, P. C. (2014). Protein intake and exercise for optimal muscle function with aging: Recommendations from the ESPEN Expert Group. <em>Clinical Nutrition, 33</em>(6), 929–936. https://doi.org/10.1016/j.clnu.2014.04.007</p>
+  <p>Dolph, R. M., Koltun, K. J., Chumanov, E. E., Sims, S. T., et al. (2021). Recommendations and nutritional considerations for female athletes: Health and performance. <em>Sports Medicine - Open</em>. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8566643/</p>
+  <p>Guest, N. S., VanDusseldorp, T. A., Nelson, M. T., Grgic, J., Schoenfeld, B. J., Jenkins, N. D. M.... Campbell, B. I. (2021). International Society of Sports Nutrition position stand: Caffeine and exercise performance. <em>Journal of the International Society of Sports Nutrition, 18</em>(1), 1. https://doi.org/10.1186/s12970-020-00383-4</p>
+  <p>Hernández-Lougedo, J., Cimadevilla-Pola, E., Pérez-González, M. T., et al. (2023). The relationship between vegetarian diet and sports performance: A systematic review. <em>Nutrients, 15</em>(21), 4703. https://doi.org/10.3390/nu15214703</p>
+  <p>Hertzler, S. R., Lieblein-Boff, J. C., Weiler, M., &amp; Allgeier, C. (2020). Plant proteins: Assessing their nutritional quality and effects on health and physical function. <em>Nutrients, 12</em>(12), 3704. https://doi.org/10.3390/nu12123704</p>
+  <p>Jin, H., Cheng, H., Chen, W., Sheng, X., Levy, M. A., Brown, M. J., &amp; Tian, J. (2018). An evidence-based approach to globally assess the covariate-dependent effect of the MTHFR single nucleotide polymorphism rs1801133 on blood homocysteine: A systematic review and meta-analysis. <em>The American Journal of Clinical Nutrition, 107</em>(5), 817&ndash;825. https://doi.org/10.1093/ajcn/nqy035</p>
+  <p>Kerksick, C. M., Arent, S., Schoenfeld, B. J., Stout, J. R., Campbell, B., Wilborn, C. D.... Antonio, J. (2017). International Society of Sports Nutrition position stand: Nutrient timing. <em>Journal of the International Society of Sports Nutrition, 14</em>, 33. https://doi.org/10.1186/s12970-017-0189-4</p>
+  <p>Livingstone, K. M., Celis-Morales, C., Papandonatos, G. D., Erar, B., Florez, J. C., Jablonski, K. A.... Mathers, J. C. (2016). FTO genotype and weight loss: Systematic review and meta-analysis of 9563 individual participant data from eight randomised controlled trials. <em>BMJ, 354</em>, i4707. https://doi.org/10.1136/bmj.i4707</p>
+  <p>Livingstone, K. M., Celis-Morales, C., Navas-Carretero, S., San-Cristobal, R., Forster, H., Woolhead, C.... Mathers, J. C. (2021). Personalised nutrition advice reduces intake of discretionary foods and beverages: Findings from the Food4Me randomised controlled trial. <em>International Journal of Behavioral Nutrition and Physical Activity, 18</em>(1), 70. https://doi.org/10.1186/s12966-021-01136-5</p>
+  <p>Mori, H. (2014). Effect of timing of protein and carbohydrate intake after resistance exercise on nitrogen balance in trained and untrained young men. <em>Journal of Physiological Anthropology, 33</em>, 24. https://doi.org/10.1186/1880-6805-33-24</p>
+  <p>Mendes-Soares, H., Raveh-Sadka, T., Azulay, S., Ben-Shlomo, Y., Cohen, Y., Ofek, T.... Nelson, H. (2019). Model of personalized postprandial glycemic response to food developed for an Israeli cohort predicts responses in Midwestern American individuals. <em>The American Journal of Clinical Nutrition, 110</em>(1), 63&ndash;75. https://doi.org/10.1093/ajcn/nqz028</p>
+  <p>Mountjoy, M., Ackerman, K. E., Bailey, D. M., Burke, L. M., Constantini, N., Hackney, A. C.... Erdener, U. (2023). 2023 International Olympic Committee's (IOC) consensus statement on Relative Energy Deficiency in Sport (REDs). <em>British Journal of Sports Medicine, 57</em>(17), 1073–1097. https://doi.org/10.1136/bjsports-2023-106994</p>
+  <p>Rogeri, P. S., Zanella, R., Jr., Martins, G. L., Garcia, M. D. A., Leite, G., Lugaresi, R.... Lancha, A. H., Jr. (2021). Strategies to prevent sarcopenia in the aging process: Role of protein intake and exercise. <em>Nutrients, 14</em>(1), 52. https://doi.org/10.3390/nu14010052</p>
+  <p>Sims, S. T., Kerksick, C. M., Smith-Ryan, A. E., Janse de Jonge, X. A. K., Hirsch, K. R., Arent, S. M.... Antonio, J. (2023). International Society of Sports Nutrition position stand: Nutritional concerns of the female athlete. <em>Journal of the International Society of Sports Nutrition, 20</em>(1), 2204066. https://doi.org/10.1080/15502783.2023.2204066</p>
+  <p>Zeevi, D., Korem, T., Zmora, N., Israeli, D., Rothschild, D., Weinberger, A.... Segal, E. (2015). Personalized nutrition by prediction of glycemic responses. <em>Cell, 163</em>(5), 1079&ndash;1094. https://doi.org/10.1016/j.cell.2015.11.001</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 7 of 8</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('recalibrator');
+    if(!root) return;
+    var filter = root.querySelector('#rc-filter');
+    var btn = root.querySelector('#rc-apply');
+    var data = {
+      general: {
+        protein:[1.6,40], timing:['Low',20], rt:['Med',50], dose:['0.3 g/kg',40], ea:['Med',35],
+        text:'<strong>Baseline.</strong> Sensible general-population defaults: enough protein to support recomposition, low fuss about timing, resistance training that matters but does not dominate, and ordinary attention to eating enough.'
+      },
+      trained: {
+        protein:[1.8,52], timing:['High',85], rt:['High',88], dose:['0.4 g/kg',55], ea:['High',70],
+        text:'<strong>Trained athlete.</strong> Timing climbs sharply, especially with sessions under 4 to 8 hours apart, because chronic training builds machinery that captures well-timed amino acids efficiently (Mori, 2014; Kerksick et al., 2017). Protein and per-meal dose edge up; energy-availability vigilance rises because training load is high.'
+      },
+      older: {
+        protein:[1.4,62], timing:['Low',22], rt:['Very high',96], dose:['0.4 g/kg',62], ea:['Med',40],
+        text:'<strong>Older adult.</strong> Per-meal dose and total protein rise (toward 1.2 to 1.5 g/kg/day) to overcome anabolic resistance, the raised threshold for a synthetic response (Breen &amp; Phillips, 2011; Deutz et al., 2014). Resistance training becomes the top priority because it reawakens muscle sensitivity; protein alone is insufficient (Rogeri et al., 2021).'
+      },
+      luteal: {
+        protein:[2.0,70], timing:['Med',45], rt:['Med',55], dose:['0.35 g/kg',48], ea:['High',75],
+        text:'<strong>Female, luteal phase.</strong> Protein moves to the upper range (1.8 to 2.2 g/kg/day, higher end here) to offset progesterone-driven catabolism, and appetite often rises, which is normal (Sims et al., 2023). Energy-availability vigilance is high because chronically underfueling this phase carries real systemic costs.'
+      },
+      menopause: {
+        protein:[1.9,66], timing:['Low',25], rt:['Very high',92], dose:['0.4 g/kg',58], ea:['Med',45],
+        text:'<strong>Female, postmenopause.</strong> Falling estrogen removes support for muscle and bone, so protein and resistance training rise in priority, echoing the aging logic with a female-specific edge (Sims et al., 2023). Attention to calcium and vitamin D becomes important for bone (Dolph et al., 2021).'
+      },
+      plant: {
+        protein:[1.8,52], timing:['Low',22], rt:['Med',50], dose:['0.4 g/kg',55], ea:['Med',40],
+        text:'<strong>Plant-based eater.</strong> Total protein is consciously nudged higher because plant proteins are somewhat less digestible and the default pattern undershoots (Hernández-Lougedo et al., 2023). Per-meal dose rises and emphasis falls on quality and complementarity (soy plus legume-grain pairing), with B12 supplemented without exception (Hertzler et al., 2020).'
+      }
+    };
+    function apply(){
+      var d = data[filter.value];
+      root.querySelector('#rc-num-protein').textContent = d.protein[0];
+      root.querySelector('#rc-bar-protein').style.width = d.protein[1] + '%';
+      root.querySelector('#rc-num-timing').textContent = d.timing[0];
+      root.querySelector('#rc-bar-timing').style.width = d.timing[1] + '%';
+      root.querySelector('#rc-num-rt').textContent = d.rt[0];
+      root.querySelector('#rc-bar-rt').style.width = d.rt[1] + '%';
+      root.querySelector('#rc-num-dose').textContent = d.dose[0];
+      root.querySelector('#rc-bar-dose').style.width = d.dose[1] + '%';
+      root.querySelector('#rc-num-ea').textContent = d.ea[0];
+      root.querySelector('#rc-bar-ea').style.width = d.ea[1] + '%';
+      root.querySelector('#rc-explain').innerHTML = d.text;
+    }
+    btn.addEventListener('click', apply);
+    filter.addEventListener('change', apply);
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('auditor');
+    if(!root) return;
+    var bm = root.querySelector('#ad-b');
+    var lm = root.querySelector('#ad-l');
+    var dm = root.querySelector('#ad-d');
+    var sm = root.querySelector('#ad-s');
+    var btn = root.querySelector('#ad-run');
+    // each food: protein g, grain-flag, legume-flag, soy-complete-flag, iron, calD, b12
+    var foods = {
+      oats:{p:8,grain:1,legume:0,soy:0,iron:1,cal:0,b12:0},
+      tofu:{p:24,grain:0,legume:0,soy:1,iron:1,cal:1,b12:1},
+      toast:{p:5,grain:1,legume:0,soy:0,iron:0,cal:0,b12:0},
+      smoothie:{p:26,grain:0,legume:1,soy:1,iron:0,cal:1,b12:1},
+      salad:{p:3,grain:0,legume:0,soy:0,iron:1,cal:0,b12:0},
+      lentil:{p:20,grain:1,legume:1,soy:0,iron:2,cal:0,b12:0},
+      tempeh:{p:28,grain:1,legume:0,soy:1,iron:1,cal:1,b12:0},
+      pasta:{p:10,grain:1,legume:0,soy:0,iron:0,cal:0,b12:0},
+      stirfry:{p:8,grain:1,legume:0,soy:0,iron:1,cal:0,b12:0},
+      beanchili:{p:22,grain:1,legume:1,soy:0,iron:2,cal:0,b12:0},
+      tofucurry:{p:30,grain:1,legume:1,soy:1,iron:2,cal:1,b12:0},
+      potato:{p:5,grain:0,legume:0,soy:0,iron:1,cal:0,b12:0},
+      fruit:{p:1,grain:0,legume:0,soy:0,iron:0,cal:0,b12:0},
+      nuts:{p:8,grain:0,legume:0,soy:0,iron:1,cal:1,b12:0},
+      edamame:{p:17,grain:0,legume:1,soy:1,iron:1,cal:0,b12:1},
+      none:{p:0,grain:0,legume:0,soy:0,iron:0,cal:0,b12:0}
+    };
+    function lvl(v,a,b){ return v>=b?'High':(v>=a?'Med':'Low'); }
+    function run(){
+      var sel = [foods[bm.value],foods[lm.value],foods[dm.value],foods[sm.value]];
+      var p=0,grain=0,legume=0,soy=0,iron=0,cal=0,b12=0;
+      sel.forEach(function(f){p+=f.p;grain+=f.grain;legume+=f.legume;soy+=f.soy;iron+=f.iron;cal+=f.cal;b12+=f.b12;});
+      // protein vs 110 target
+      var pPct = Math.min(100, Math.round(p/110*100));
+      root.querySelector('#ad-num-protein').textContent = p + ' g';
+      root.querySelector('#ad-bar-protein').style.width = Math.max(8,pPct) + '%';
+      // amino completeness: soy present OR both grain & legume present
+      var aaScore = soy>0 ? (grain>0&&legume>0?100:80) : (grain>0&&legume>0?75:35);
+      var aaLabel = aaScore>=80?'High':(aaScore>=60?'Med':'Low');
+      root.querySelector('#ad-num-aa').textContent = aaLabel;
+      root.querySelector('#ad-bar-aa').style.width = aaScore + '%';
+      // iron
+      var ironPct = Math.min(100, iron*22+10);
+      root.querySelector('#ad-num-iron').textContent = lvl(iron,3,5);
+      root.querySelector('#ad-bar-iron').style.width = ironPct + '%';
+      // calcium+D
+      var calPct = Math.min(100, cal*30+10);
+      root.querySelector('#ad-num-cal').textContent = lvl(cal,2,3);
+      root.querySelector('#ad-bar-cal').style.width = calPct + '%';
+      // b12
+      root.querySelector('#ad-num-b12').textContent = b12>0?'Covered':'No';
+      root.querySelector('#ad-bar-b12').style.width = (b12>0?90:18) + '%';
+
+      var msgs = [];
+      if(p<90){ msgs.push('Protein is short of the ~110 g target. Swap a low-protein slot for tofu, tempeh, lentils, edamame, or a soy/pea protein source. Plant-based defaults undershoot protein unless you push it deliberately (Hernandez-Lougedo et al., 2023).'); }
+      else if(p<110){ msgs.push('Protein is close but a touch under target. One more legume or soy portion closes the gap.'); }
+      else { msgs.push('Protein quantity is on target. Good.'); }
+      if(aaScore<60){ msgs.push('Amino acid profile is thin: you are leaning on grains without legumes or soy. Pair a grain with a legume across the day, or add a complete soy source, to cover lysine and methionine (Hertzler et al., 2020).'); }
+      else if(aaScore<80){ msgs.push('Complementarity is acceptable via grain-plus-legume pairing, but adding soy would make it robust.'); }
+      else { msgs.push('Amino acid completeness is solid (soy and/or strong grain-legume pairing).'); }
+      if(iron<3){ msgs.push('Iron coverage is low. Add lentils, beans, tofu, seeds, or greens, and pair with a vitamin C source to boost non-heme absorption (Dolph et al., 2021).'); }
+      if(cal<2){ msgs.push('Calcium and vitamin D are low. Use fortified soy milk/yogurt, tofu set with calcium, or fortified foods.'); }
+      if(b12===0){ msgs.push('No reliable B12 source today. B12 is essentially absent from plant foods, so add a supplement or fortified foods without exception (Hertzler et al., 2020).'); }
+      root.querySelector('#ad-feedback').innerHTML = '<strong>Audit:</strong> ' + msgs.join(' ');
+    }
+    btn.addEventListener('click', run);
+    [bm,lm,dm,sm].forEach(function(s){ s.addEventListener('change', run); });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

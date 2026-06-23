@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test, Don't Guess</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 4 · Module 2</div>
+    <h1 class="ch-title">Test, Don't Guess</h1>
+    <p class="ch-subtitle">Iron, B12, and vitamin D are the supplements where measuring beats guessing, because both deficiency and excess carry real costs.</p>
+    <div class="ch-meta">
+      <span>37 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>12 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ou are tired. Not dramatically, not in a way that sends you to a doctor, just the ordinary grinding fatigue of a person who sleeps a little too little and works a little too hard. A friend mentions iron. You remember a headline about iron and energy. You are standing in front of a wall of supplements, and there is a bottle of ferrous sulfate, and it is eleven dollars, and you think: why not, just in case.</p>
+    <p>This chapter is about why that exact move, "I feel tired so I'll take iron," is one of the clearest mistakes in the entire supplement landscape. Not because iron is dangerous in some mystical way, but because the thing you are guessing at can be measured, and the cost of guessing wrong runs in both directions. Iron is the textbook case where more is not better. And once you understand the logic of iron, you have the template for the two other nutrients where the smart move is to measure first: vitamin B12 and vitamin D.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The hinge of the course</h2>
+    <p>Back in Chapter 1 we drew a line between two completely different reasons to take a supplement. <span class="ch-key">Baseline use</span> is the stuff you take to cover a known, structural gap in a normal diet, low-risk, broadly sensible, no testing required. <span class="ch-key">Targeted supplementation</span> is something else entirely: you take a specific nutrient because you have a specific reason to believe you are short on it, and ideally because a measurement confirmed it.</p>
+    <p>This chapter takes that distinction and makes it concrete. Iron, B12, and vitamin D are the three nutrients where the discipline of "test, don't guess" earns its keep. They share a structure that most supplements do not have, and that structure is the whole point. Get this structure into your bones and the final chapter, where we build an actual personal stack, becomes mostly a matter of bookkeeping.</p>
+
+    <h3>What makes a nutrient a "test first" nutrient</h3>
+    <p>Most of the supplements on that store wall do not need testing. Creatine either helps your training or it does not, and taking it when you do not need it costs you a few dollars, not your health. The "test first" category is narrow and it is defined by three features stacked on top of each other.</p>
+    <p>First, <span class="ch-key">asymmetry of consequence</span>: being low matters and being high also matters. The deficiency hurts you and so does the excess. Second, <span class="ch-key">identifiable risk groups</span>: the people likely to be deficient are not random; you can name them in advance from diet, life stage, and physiology. Third, <span class="ch-key">a real biomarker</span>: there is a blood test that actually tracks your status well enough to turn the question into a number. When all three are present, guessing is not just imprecise, it is reckless, because you can be wrong in a way that does damage and you had a cheaper, better option sitting right there.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on, try to name the three features that put a nutrient into the "measure first" category. Then ask: which of those three features does creatine lack? That gap is exactly why creatine is a "just try it" supplement and iron is not.</p>
+    </aside>
+  </section>
+
+  
+  <section class="ch-section">
+    <h2>"Normal" is not the same as "optimal," and a lab flag is not a diagnosis</h2>
+    <p>Before we walk through the three nutrients one at a time, we need to settle the single most misunderstood object in this entire subject: the reference range printed beside your result. People read a lab report the way they read a pass/fail exam. The number is inside the range, so they relax. The number is flagged, so they panic. Both reactions misread what the range actually is, and that misreading is responsible for a large share of bad supplement decisions in both directions, the person who supplements something they do not need and the person who ignores a real problem because nothing got flagged.</p>
+    <p>Start with where the range comes from. A standard <span class="ch-key">reference interval</span> is a statistical description, not a health target. Labs build it by measuring a large group of presumed-healthy people and then drawing lines around the middle 95 percent of those results, conventionally cutting off the bottom 2.5 percent and the top 2.5 percent. The International Federation of Clinical Chemistry committee that oversees this work is explicit that population-based reference intervals describe the typical spread of values in a healthy community, so a result outside the interval does not by itself mean disease; it means the value is unusual for that population and may warrant a closer look (Ozarda et al., 2018). Read that sentence twice. The reference range answers the question "is this number common?" It does not directly answer "is this number good for you?"</p>
+    <p>That distinction has a name. The IFCC review separates the descriptive reference interval from the <span class="ch-key">clinical decision limit</span>, which is a fundamentally different kind of line. A decision limit is set deliberately at the value where the risk of a specific bad outcome climbs, or where a particular diagnosis becomes likely, and it is anchored to evidence about consequences and interventions rather than to the spread of a healthy crowd (Ozarda et al., 2018). The cholesterol and HbA1c cutoffs your clinician uses are decision limits in this sense; they were chosen because outcomes change on either side of them. Most micronutrient "ranges," by contrast, are descriptive intervals. So when a ferritin or a B12 sits at the very bottom of its printed range, "technically normal" can still mean "near the edge of the population and quite possibly short for you," because the lower bound was drawn by statistics, not by a study of where symptoms begin.</p>
+    <p>There is a further wrinkle that keeps people humble. Reference ranges are population-specific and method-specific. They shift with the analyzer a lab uses, with the assay's calibration, and with the demographics of the reference group. Two labs can return the same true biological value and flag it differently because their intervals were built on different machines and different populations. This is not sloppiness; it is the unavoidable nature of a statistical range. The practical upshot for a supplement decision is that a single result sitting just inside or just outside a boundary is weak evidence on its own. Trends over time, the size of the gap from the boundary, and the clinical picture all matter more than which side of an arbitrary statistical line you landed on.</p>
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Treat the reference range as a crowd, not a verdict. "In range" means you resemble most healthy people on that test; it does not certify that you are thriving, and it does not license a supplement. "Out of range" means you are unusual for that population and the result deserves a second look with a clinician, not an immediate Amazon order. The supplement-marketing trick is to invent an "optimal range" that is conveniently narrower than the real one and then sell you the product that moves your number into it. Be suspicious of any "optimal" target that arrives attached to a thing for sale.</p>
+    </div>
+
+    <h3>What a basic panel actually tells you, and what it does not</h3>
+    <p>A lot of people order a broad panel hoping it will hand them a supplement plan. It will not, but it does earn its place for a narrower job: it screens the cheap, common, high-yield questions so you can stop guessing about them. A routine <span class="ch-key">complete blood count</span> describes your red and white cells and platelets, and a metabolic panel covers kidney and liver markers, electrolytes, and glucose. These are genuinely useful as a first pass, and a CBC can hint at a nutrient problem; for example, unusually large red cells can flag the kind of anemia that B12 or folate deficiency produces, while unusually small red cells can point toward iron deficiency. But "hint" is the operative word. The basic panel is a smoke detector, not a diagnosis. It tells you where to look closer, and notably it can read completely normal while a real, fixable deficiency is brewing underneath, which is the exact failure mode we will see with both iron and B12.</p>
+    <p>Two nutrients deserve a brief honest mention here because people expect them on a panel and the testing picture is messier than they assume. <span class="ch-key">Folate</span> matters alongside B12, because the two are entangled in the same metabolic pathway and a folate shortfall produces the same large-red-cell anemia. Serum folate is easy to order, but it swings with your last few meals and is hard to interpret in isolation, which is part of why it is usually read together with B12 rather than alone. <span class="ch-key">Magnesium</span> is the one people most often want to test and is the one a blood test serves worst: the large majority of body magnesium lives inside cells and in bone, so serum magnesium can look reassuringly normal while tissue stores are low. That mismatch between an easy blood number and the real internal status is a recurring theme of this chapter, and magnesium is its clearest example of a nutrient where a normal serum value should not be over-read.</p>
+  </section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour editorial diagram in the style of a researcher's field notebook, showing three nutrient symbols arranged left to right on a warm cream page: a small iron filing or nail labelled 'iron', a simple red crystalline molecule labelled 'B12', and a sun-disc labelled 'vitamin D'. Above all three runs a hand-lettered banner reading 'TEST, DON'T GUESS' in confident serif capitals. Beneath each symbol, a tidy ink checklist with three ticked boxes labelled 'consequence', 'risk group', and 'biomarker'. Muted earthy palette of rust orange, deep red, ochre yellow, and slate grey ink on cream. Loose hand-drawn linework, no photographic realism, no people." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> The three nutrients that share the "measure first" structure: real consequences at both ends, nameable risk groups, and a usable biomarker.</figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Iron: the textbook case for why more is not better</h2>
+    <p>Iron is the nutrient that teaches the whole lesson, so we spend the most time here. Your body uses iron to carry oxygen in hemoglobin, to run mitochondrial energy production, and to support dozens of enzymes. When you are short, the symptoms are exactly the vague ones people self-diagnose with: fatigue, poor exercise tolerance, brain fog, cold hands, hair shedding. That overlap is the trap. The symptoms of "I'm short on iron" and the symptoms of "I'm a busy stressed person who sleeps badly" are nearly identical, and only one of them is fixed by a pill.</p>
+
+    <h3>Deficiency is common, and it starts before anemia</h3>
+    <p>Iron deficiency is the most common nutritional deficiency in the world. The 2021 Lancet seminar by Pasricha and colleagues frames it as a global burden affecting children, premenopausal women, and large populations in low- and middle-income countries, and it makes a point that matters enormously for how you think about testing: clinical and functional impairment can occur <em>before</em> you ever become anemic (Pasricha et al., 2021).</p>
+    <p>This is the concept of <span class="ch-key">iron deficiency without anemia</span>, and Cappellini, Musallam, and Taher (2020) argue it is at least twice as common as iron deficiency anemia and is routinely missed. Here is the mechanism in plain terms. Your body stores iron, mostly as ferritin, like a savings account. When iron intake falls short, you spend down the savings account first. Your hemoglobin, the working iron in your blood, stays normal for a long time because the stores are quietly covering the shortfall. By the time hemoglobin actually drops and a standard blood count flags "anemia," you have been running on empty stores, sometimes for months. Fatigue and reduced exercise capacity can show up during that empty-stores phase, while the basic complete blood count still reads normal (Cappellini et al., 2020).</p>
+    <p>This is why the biomarker matters so much. A complete blood count alone can tell you you are fine when you are not. <span class="ch-key">Serum ferritin</span>, which reflects your stored iron, is the single most useful first-line measurement, and it is the marker both Pasricha et al. (2021) and Cappellini et al. (2020) center their diagnostic reasoning on. The catch is that ferritin is also an acute-phase reactant, meaning inflammation, infection, or recent hard training can push it up and mask a true deficiency, which is why clinicians often pair it with transferrin saturation. You do not need to interpret these yourself. You need to understand that the right answer to "am I low on iron" is a number from a lab, not a feeling at a store shelf.</p>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Fatigue is the most unreliable diagnostic signal you own. It is the body's check-engine light: it tells you something might be off, not what. "I feel tired, so I'll take iron" treats a one-bit signal as if it pointed at a specific cause. The honest version is "I feel tired, so I'll get my ferritin checked." One of those is a guess. The other is a decision.</p>
+    </div>
+
+    <h3>Who is actually at risk</h3>
+    <p>The whole point of targeted supplementation is that risk is not random. You can build a profile. The clearest at-risk groups for iron are:</p>
+    <p><strong>Menstruating individuals.</strong> Regular menstrual blood loss is the single largest predictable iron drain in an otherwise healthy population. Heavy menstrual bleeding raises the risk substantially. This is the group where iron deficiency is genuinely common, and it is the group most likely to benefit from actually testing rather than assuming.</p>
+    <p><strong>Certain athletes, especially endurance athletes.</strong> Trained endurance athletes can develop iron deficiency through a combination of mechanisms: foot-strike hemolysis, losses through sweat and the gut, and notably an exercise-induced rise in the hormone hepcidin that temporarily reduces iron absorption after hard sessions. This is the secondary "trained individual" layer worth flagging: a high training load is a legitimate risk factor, but it still does not justify blind supplementation, it justifies testing.</p>
+    <p><strong>People with low dietary iron intake or impaired absorption.</strong> Plant-based eaters get non-heme iron, which is absorbed less efficiently than the heme iron in meat, so intake has to be higher to land in the same place. Gastrointestinal conditions, frequent blood donation, and pregnancy also raise demand or losses.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two people both feel tired. One is a 24-year-old with heavy periods who recently went vegetarian. The other is a 40-year-old man with normal energy needs and a varied diet. Same symptom, wildly different pretest probability. Why does that difference change whether testing is the smart move, before a single drop of blood is drawn?</p>
+    </aside>
+
+    <h3>The other end of the curve: iron overload</h3>
+    <p>Here is where iron stops being like every other nutrient. With most supplements, taking some you do not need is simply wasted money. With iron, the excess has teeth. The body has no efficient route to excrete excess iron. Intake is regulated at absorption, and once iron is in, getting it out is slow and limited. So if you keep pushing iron in past what you need, it accumulates.</p>
+    <p>The StatPearls clinical reference by Ong and colleagues (2025) lays out the spectrum, from acute supplemental overdose, which is a genuine poisoning emergency and a leading cause of pediatric toxic ingestion, to chronic overload. The mechanism is the part worth understanding. Excess unshielded iron is a powerful catalyst for the formation of <span class="ch-key">reactive oxygen species</span>. Free iron drives reactions that generate highly damaging radicals, producing oxidative stress that injures cells. Over time, iron deposits in and damages the liver, the heart, and endocrine glands, contributing to dysfunction in each (Ong et al., 2025).</p>
+    <p>Most healthy people supplementing modestly will not march into clinical iron overload from a standard dose. But the asymmetry is real, and there is a specific landmine: a meaningful number of people carry genetic variants for hereditary hemochromatosis, a condition of excessive iron absorption, and they often do not know it. For someone with that genetic predisposition, casually adding iron "just in case" is pouring water into a tub that already cannot drain. This is precisely the person who should never be guessing.</p>
+
+    <blockquote class="ch-quote">
+      <p>Iron deficiency without anaemia is at least twice as prevalent as iron deficiency anaemia, yet it is frequently overlooked, while at the same time empirical iron supplementation without confirmed deficiency carries its own risks. The answer to both problems is measurement.</p>
+      <cite>Paraphrasing Cappellini, Musallam, & Taher (2020)</cite>
+    </blockquote>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Think of iron status as a bathtub with a wide-open faucet and a nearly clogged drain. Deficiency means the water is too low. The fix is not to blast the faucet wide open forever; it is to add water until the level is right, then ease off. People who supplement iron blindly leave the faucet running. The body cannot dump the overflow fast, so it pools, and pooled free iron is chemically corrosive. That is the entire argument against "just in case" iron in one image.</p>
+    </div>
+  </section>
+
+  
+  <section class="ch-section">
+    <h2>How training and supplements move the iron number you are reading</h2>
+    <p>A measurement is only as good as your understanding of what shifts it, and iron is the nutrient where this matters most, because the two markers people rely on can both be nudged by things that have nothing to do with your actual stores. If you draw blood at the wrong moment, you can be handed a number that points the opposite direction from the truth. So it is worth understanding the two main ways that everyday life, and especially hard training, distorts the iron picture.</p>
+    <p>The first distortion is inflammation acting on ferritin. Ferritin is your stored-iron marker, but it is also an <span class="ch-key">acute-phase reactant</span>, meaning it rises during inflammation, infection, and the days after strenuous exercise regardless of how much iron you actually have banked. A hard race or a viral cold can inflate ferritin enough to drag a genuinely depleted person back up into the "normal" range, hiding the very deficiency you were testing for. This is why a single ferritin drawn the morning after a brutal session is an unreliable witness, and why clinicians who work with athletes often retest after a few easy days or pair ferritin with a marker that inflammation does not lift the same way, such as transferrin saturation. The narrative review of anemia in sport by Damian and colleagues (2021) catalogues exactly this: in athletes, hemoglobin is pushed around by training-driven swings in plasma volume, ferritin is pushed around by inflammation, and the usual cutoffs were never built for sport-specific physiology, so isolated values are easy to misread (Damian et al., 2021).</p>
+    <p>The second distortion is subtler and more interesting, because it is a real biological mechanism rather than a measurement artifact, and it explains why hard training can <em>cause</em> iron trouble rather than just confuse the test. Intense, prolonged exercise raises the inflammatory signal interleukin-6, which in turn drives up the iron-regulating hormone <span class="ch-key">hepcidin</span>. Hepcidin is the body's master valve on iron entry: when it goes up, it clamps down on how much iron you absorb from food and how much you can mobilize from stores. A controlled study in trained collegiate runners measured this directly. After a prolonged run, plasma hepcidin rose by roughly half compared with a rest day, and fractional absorption of a dietary iron dose fell by about a third, with the inflammatory cytokine interleukin-6 rising in step (Barney et al., 2022). The practical reading is striking: train hard, and for a window afterward your gut literally takes up less of the iron on your plate. Stack that day after day in a heavy training block and you have a slow, self-inflicted drain that no amount of staring at symptoms will reveal.</p>
+    <p>This is the secondary "trained athlete" layer the earlier risk profile flagged, now with its mechanism exposed. The female-athlete iron review by Pedlar and colleagues (2017) pulls these threads together into a clinical caution that is the whole spirit of this chapter: because hemoglobin reflects plasma-volume shifts, ferritin reflects inflammation, and sport-specific normative data are scarce, iron status in athletes should be characterized over time and in context, not declared from one snapshot, and the goal is to steer between deficiency on one side and overload on the other rather than to blindly load iron (Pedlar et al., 2017). Note the symmetry with everything you have already learned: even in the population most prone to running low, the answer is still careful measurement and context, not a reflexive supplement.</p>
+    <p>Supplements move these numbers too, which matters for anyone interpreting a follow-up test. Start oral iron and ferritin and transferrin saturation climb over weeks, which is the signal you are looking for, but a recent dose can also transiently bump a same-day reading, so timing the retest away from the most recent pill gives a cleaner picture. The broader lesson generalizes past iron: whenever you supplement a nutrient and then test it, you are partly measuring the pill, so interpreting a post-supplement number without accounting for the supplement is its own kind of guessing.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>An endurance runner gets a ferritin test the morning after a hard 20-mile effort and the number comes back comfortably mid-range, so she concludes her iron is fine. Name the two separate reasons that reassuring number might be lying to her, one a measurement artifact and one a real physiological drain. What single change to <em>when</em> she tests would sharpen the answer?</p>
+    </aside>
+  </section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn editorial illustration on warm cream paper of a U-shaped risk curve sketched as if in a scientist's notebook margin. The horizontal axis is labelled 'iron status' with a small word 'deficient' at the far left and 'excess' at the far right and 'optimal' centred at the bottom of the valley; the vertical axis labelled 'risk' with no numerical ticks. The curve dips low and safe in a shaded green valley in the middle and rises into shaded rust-red danger zones at both ends. A small ink marker sits in the green valley with a dotted arrow pushing it rightward toward the red excess zone, labelled 'supplement without testing'. Loose pen-and-ink and watercolour wash, rust orange, deep red, sage green, slate grey on cream, no photographic realism, no people." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> The iron "Goldilocks" curve: harm rises at both the deficient and excess ends, and untested supplementation can push a safe person rightward into danger.</figcaption></figure>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="iron-curve">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Iron Goldilocks Curve</div>
+    </div>
+    <p class="ch-widget-sub">Drag the marker along the iron-status axis. Both ends carry harm; the middle is optimal. Then toggle the untested-supplement arrow and watch it shove a safe person toward excess.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Iron status position</span>
+        <input type="range" min="0" max="100" value="50" class="ch-widget-select" id="iron-slider">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Untested "just in case" supplement</span>
+        <select class="ch-widget-select" id="iron-toggle">
+          <option value="off">Off</option>
+          <option value="on">On (adds iron blindly)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Position</span>
+        <span class="ch-meter-bar"><span id="iron-pos-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="iron-pos-num">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Risk level</span>
+        <span class="ch-meter-bar"><span id="iron-risk-bar" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="iron-risk-num">1</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="iron-readout" style="font-weight:600;">You are in the optimal zone. Risk is low. Supplementing here adds nothing and risks pushing you rightward.</p>
+
+    <button class="ch-widget-btn" id="iron-reset">Reset to optimal</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>B12: the deficiency you can predict from a diet and an age</h2>
+    <p>Vitamin B12 follows the same "test first" logic as iron but with a different cast of characters and a gentler excess story. B12 is essential for red blood cell formation, DNA synthesis, and the maintenance of the nervous system. Deficiency produces two signature kinds of damage: <span class="ch-key">megaloblastic anemia</span>, where red cells are made large and dysfunctional, and <span class="ch-key">neurological injury</span>, including peripheral neuropathy that can become irreversible if it goes on long enough (White, 2022).</p>
+    <p>That neurological piece is what raises the stakes. With iron, the deficiency is mostly reversible once corrected. With B12, prolonged deficiency can leave permanent nerve damage, and notably the nerve damage does not always wait for the anemia to announce itself. That decoupling is why "wait until you feel really bad" is a poor strategy for B12.</p>
+
+    <h3>Who should test, and why diet is destiny here</h3>
+    <p>There are two clean at-risk groups, and they are predictable enough that B12 is almost the purest example of profile-based risk.</p>
+    <p><strong>People on plant-based diets.</strong> B12 is essentially absent from plant foods; it is produced by microorganisms and reaches us through animal products or fortification. The 2024 review by Hannibal and colleagues is blunt on this point: unsupplemented plant-based diets consistently fail to meet the estimated average requirement for B12 (Hannibal et al., 2024). White (2022) extends the warning even to plant-<em>predominant</em> eaters, noting that B12 deficiency is common not just in vegans but in lacto-ovo vegetarians too, because the dairy and egg contribution is often not enough to reliably cover requirements. This is not a fringe worry; it is the expected outcome of removing the main dietary source and not replacing it.</p>
+    <p><strong>Older adults.</strong> Here the problem is not intake but absorption. Extracting B12 from food requires stomach acid to free it from proteins and a substance called intrinsic factor to absorb it. With age, atrophic gastritis and reduced stomach acid become common, and certain medications, including long-term acid suppressants and metformin, further impair absorption. So an older adult can eat plenty of B12 and still fall short because the machinery to absorb it has worn down.</p>
+
+    <h3>How status is actually assessed</h3>
+    <p>Here is a methodological wrinkle that matters. Total serum B12, the standard cheap test, is a mediocre marker on its own. It can read "normal" while a person is functionally deficient, because it measures total circulating B12 rather than the fraction that is actually metabolically available. Hannibal et al. (2024) conclude that reliably detecting deficiency takes a combination of at least two biomarkers: <span class="ch-key">holotranscobalamin</span> (holo-TC, the bioavailable fraction) and <span class="ch-key">methylmalonic acid</span> (MMA, which rises when B12 is functionally insufficient at the tissue level). White (2022) offers a practical clinical anchor: a serum B12 below roughly 300 pg/mL, or confirmatory MMA and holotranscobalamin testing, should prompt action.</p>
+    <p>Notice the parallel to iron. In both cases the obvious cheap blood test, complete blood count for iron, total B12 for B12, can give false reassurance, and the more informative picture comes from a functional marker, ferritin and transferrin saturation for iron, holo-TC and MMA for B12. This is a recurring theme of measurement done well: the easy number is not always the honest number.</p>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>B12 is where the "test, don't guess" rule has a sensible exception worth naming honestly. For a committed plant-based eater, the pretest probability of inadequate intake is so high that the reviews recommend supplementing as the default, because the source is simply missing from the plate (Hannibal et al., 2024; White, 2022). In practice this means: if you eat plant-based, a modest B12 supplement is reasonable insurance, and testing becomes the tool for confirming you are actually replete and catching absorption problems, not for deciding whether B12 is on your radar at all. The diet already put it on your radar.</p>
+    </div>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Why is total serum B12 a "false friend" the way a normal complete blood count is for iron? Both can read normal while something is genuinely wrong underneath. What does that tell you about trusting whichever test happens to be cheapest and most available?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="risk-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Risk Profile Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Build a profile from real risk factors. Watch iron, B12, and vitamin D move between "low priority" and "worth testing." Change one attribute and see how a single factor reshapes the picture.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Diet pattern</span>
+        <select class="ch-widget-select" id="rs-diet">
+          <option value="omni">Omnivore, varied</option>
+          <option value="veg">Vegetarian (lacto-ovo)</option>
+          <option value="plant">Fully plant-based</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Life stage / age</span>
+        <select class="ch-widget-select" id="rs-age">
+          <option value="young">Adult, under 50</option>
+          <option value="older">Adult, 75 or older</option>
+          <option value="pregnant">Pregnant</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Menstruation</span>
+        <select class="ch-widget-select" id="rs-mens">
+          <option value="none">None / not applicable</option>
+          <option value="regular">Regular periods</option>
+          <option value="heavy">Heavy menstrual bleeding</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Training load</span>
+        <select class="ch-widget-select" id="rs-train">
+          <option value="low">Light / general activity</option>
+          <option value="high">High-volume endurance</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sun exposure</span>
+        <select class="ch-widget-select" id="rs-sun">
+          <option value="good">Regular outdoor sun</option>
+          <option value="low">Mostly indoors / covered / high latitude</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Iron</span>
+        <span class="ch-meter-bar"><span id="rs-iron-bar" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="rs-iron-num">low</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">B12</span>
+        <span class="ch-meter-bar"><span id="rs-b12-bar" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="rs-b12-num">low</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Vitamin D</span>
+        <span class="ch-meter-bar"><span id="rs-vd-bar" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="rs-vd-num">low</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rs-readout" style="font-weight:600;">A varied-diet adult with regular sun and light activity: all three stay low priority. Testing here would be anxiety, not strategy.</p>
+
+    <button class="ch-widget-btn" id="rs-reset">Reset profile</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Vitamin D, revisited through the testing lens</h2>
+    <p>We met vitamin D in Chapter 2 as the broad-insufficiency story: a nutrient many people are low in, partly because we make it in skin from sunlight and many of us do not get enough exposure. Now we look at it through the specific lens of this chapter, and vitamin D turns out to be the most interesting and the most contested of the three. It is the case where the experts genuinely disagree about whether you should test at all, and understanding that disagreement is more educational than any single answer.</p>
+
+    <h3>The biomarker is settled; the threshold is not</h3>
+    <p>The accepted measure of vitamin D status is serum <span class="ch-key">25-hydroxyvitamin D</span>, written 25(OH)D. On that, the field agrees, though Giustina and colleagues (2024) note ongoing assay standardization problems that make comparing results across labs harder than it should be. Amrein et al. (2020) summarize the deficiency thresholds in wide use: 25(OH)D below 50 nmol/L is commonly taken as the cutoff for skeletal outcomes, with deficiency defined still lower in some frameworks. So far this looks just like iron and B12: clear marker, defined cutoffs.</p>
+    <p>The problem is what those numbers actually predict. Amrein et al. (2020) make the uncomfortable point that large intervention trials have largely failed to show clear benefit from supplementing people who are already replete. In other words, low 25(OH)D reliably tracks status, but pushing a non-deficient person's number higher with supplements has not delivered the disease-prevention payoffs many expected.</p>
+
+    <h3>Two guidelines, one disagreement worth understanding</h3>
+    <p>This is where two major 2024 documents pull in instructive directions. The Endocrine Society clinical practice guideline by Demay and colleagues (2024), built on GRADE methodology and a systematic review of randomized trials, recommends <em>against</em> routine 25(OH)D testing in the general population. Their reasoning is precise: no outcome-specific benefit threshold has been identified, so a screening number does not tell you what to do. Instead they endorse empiric supplementation, supplementing without testing, for a few defined groups where trials suggest benefit: children and adolescents aged 1 to 18, adults 75 and older, pregnant women, and people with prediabetes (Demay et al., 2024).</p>
+    <p>Sit with how counterintuitive that is in a chapter called "Test, Don't Guess." For vitamin D, the most rigorous guideline says: in defined high-benefit groups, skip the test and just supplement a modest dose, because the test result would not change the decision and would not predict the outcome. The international consensus from Giustina et al. (2024) lands in a compatible place, arguing against general-population screening while supporting targeted testing of genuinely high-risk individuals, those with malabsorption, certain bone or metabolic conditions, and other specific clinical reasons.</p>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Here is where people get vitamin D wrong: they treat the test as the goal. The test is only useful if the number changes what you do. For iron, a ferritin result genuinely changes the decision, because both too little and too much matter. For vitamin D in the general population, a modest 25(OH)D number often does not change the sensible move, which is a moderate maintenance dose, and the guideline reflects that. In practice this means: vitamin D is the nutrient where targeted, no-test supplementation for defined groups can be the rational choice, and broad screening of healthy people is exactly the random anxiety this chapter is trying to talk you out of.</p>
+    </div>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A measurement is only worth taking if the result could change your decision. Walk through each of the three nutrients and ask: under what circumstance would the test result actually change what I do? Notice that iron passes this test most cleanly, B12 passes it in a qualified way, and general-population vitamin D often fails it.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>The four ways supplementing blind goes wrong</h2>
+    <p>So far the case against guessing has been built nutrient by nutrient. Step back and the failures of blind supplementation fall into four distinct shapes. Naming them separately matters, because they fail for different reasons and a person can talk themselves out of one while walking straight into another.</p>
+    <p><strong>Overshooting.</strong> This is the simplest. You take more of something than your body can use or safely hold, and the surplus stops being neutral. Iron is the headline example because the body has no efficient exit route for it, so excess accumulates and the free, unshielded fraction catalyzes reactive oxygen species that injure tissue over time (Ong et al., 2025). The principle is broader than iron, though. The fat-soluble vitamins, vitamin D among them, are stored rather than freely flushed, so very high sustained intakes can build up in a way the water-soluble vitamins mostly do not. "More is better" is not a law of nutrition; for the stored nutrients it is closer to the opposite.</p>
+    <p><strong>Toxicity.</strong> Overshooting is about gradual accumulation; toxicity is the sharper, dose-dependent harm at the top of the curve. Acute iron poisoning is a genuine medical emergency and one of the more common serious toxic ingestions in young children, which is why iron supplements carry the warnings they do (Ong et al., 2025). Vitamin D toxicity, while uncommon, is real at sustained megadoses and works largely by driving blood calcium too high. The unifying idea is that for these nutrients there is a ceiling, and the distance between "helpful" and "harmful" is smaller than the supplement aisle implies. A nutrient having a floor you can fall through does not mean it lacks a ceiling you can hit.</p>
+    <p><strong>Masking.</strong> This one is quieter and arguably the most dangerous, because the harm is hidden by an apparent fix. The classic case is supplementing folate while a B12 deficiency goes unaddressed. Both deficiencies produce the same large-cell anemia, and a generous folate intake can correct that blood picture, switching off the most visible warning sign, while the B12 problem keeps silently damaging nerves underneath. You feel reassured by a normalized blood count even as the irreversible injury continues. Masking is the reason "I took a supplement and my numbers looked better" is not the same as "I fixed the problem." A treated symptom is not always a treated cause.</p>
+    <p><strong>Opportunity cost and false security.</strong> The last failure has no toxic mechanism at all, which is why people dismiss it, but it is probably the most common. Reaching for a bottle answers a vague worry with a satisfying action, and that satisfaction can quietly substitute for finding out what is actually wrong. The genuinely tired person who takes iron "just in case" and feels productive for having done something may not pursue the thyroid problem, the sleep disorder, or the depression that was the real driver. The supplement did not poison them. It just bought a comfortable feeling of having acted, and that feeling delayed the question that mattered. Guessing has a cost even when the substance is harmless.</p>
+
+    <h3>A sensible test-first decision flow</h3>
+    <p>Put the whole discipline into a sequence you can actually run. It is four questions, asked in order, and it resolves most real situations without any heroics.</p>
+    <p><strong>Question one: do I belong to a nameable risk group for this nutrient?</strong> Build the profile honestly from diet pattern, life stage and age, physiology including menstruation and pregnancy, training load, medications, and sun exposure. If the answer is a clean no, you are usually finished. The "just in case" impulse has nothing to stand on, and the right move is to put the bottle down and spend the attention elsewhere. Most healthy people, most of the time, end here.</p>
+    <p><strong>Question two: if I am in a risk group, would a test result actually change what I do?</strong> This is the hinge of the entire chapter. A measurement is only worth taking when its result could move your decision. For iron the answer is almost always yes, because both ends carry real harm and the result genuinely steers you. For B12 in a committed plant-based eater, the diet has already made part of the decision, so the test shifts from "should I act" to "confirm I am replete and catch absorption failure." For vitamin D in an otherwise healthy adult, a modest result frequently would not change the sensible maintenance approach, which is why the most rigorous guidance steers defined groups toward empiric supplementation rather than universal screening (Demay et al., 2024).</p>
+    <p><strong>Question three: if testing is warranted, am I getting the right test, not just the cheapest one?</strong> The easy number can be the falsely reassuring number. For iron, a complete blood count alone can read normal while stores are empty, so ferritin, read with awareness of inflammation and ideally paired with transferrin saturation, is the better first-line marker. For B12, total serum B12 can mislead, so functional markers like holotranscobalamin and methylmalonic acid give the honest picture when the cheap test is ambiguous. Order the question, not the bargain.</p>
+    <p><strong>Question four: act, then re-measure in context, not in panic.</strong> If you supplement, give it time, retest away from the most recent dose and away from acute inflammation or a hard training day, and judge the trend rather than a single boundary-hugging value. Then stop when the job is done, especially for the nutrients that accumulate. The goal of treating a deficiency is to refill the tank and ease off, not to leave the faucet running forever.</p>
+    <p>That four-step flow is unglamorous on purpose. It will not make you feel as decisive as grabbing a bottle off the shelf, and it will often end with "do nothing and reassess," which the supplement industry has no incentive to sell you. But it is the difference between a guess wearing the costume of action and an actual decision you can defend.</p>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>Notice that two of the four failure modes, masking and false security, have no toxicity at all. That is the part people miss. They reassure themselves that a given supplement "can't hurt," and on a pure-poisoning basis they are sometimes right. But "it won't poison me" was never the only question. The real questions are whether it hides a problem you needed to see and whether it lets you stop looking for the true cause. A harmless pill can still cost you the answer. That is why the framework is built around whether testing changes your decision, not merely around whether the substance is dangerous.</p>
+    </div>
+  </section>
+
+  <section class="ch-section">
+    <h2>Three nutrients, three different shapes of "measure first"</h2>
+    <p>It would be tidy if all three nutrients followed identical rules. They do not, and the differences are the actual lesson. Let us line them up.</p>
+    <p><strong>Iron</strong> is the purest "test, don't guess." Symmetric harm at both ends, an excretion system that cannot dump excess, a usable biomarker in ferritin, and a hidden-risk population, undiagnosed hemochromatosis carriers, for whom blind supplementation is genuinely hazardous. Here, testing converts a dangerous guess into a safe decision. If you remember one rule from this chapter, make it this one: do not supplement iron on the strength of fatigue alone.</p>
+    <p><strong>B12</strong> is "test, but for plant-based eaters the diet already made part of the decision." The deficiency can cause irreversible neurological damage, the at-risk groups are highly predictable from diet and age, the cheap test misleads, and the excess risk is low. So the rational move blends supplementation as default insurance for high-risk diets with testing to confirm repletion and catch absorption failures, especially in older adults.</p>
+    <p><strong>Vitamin D</strong> is "for most healthy people, neither test nor stress, just consider a modest maintenance dose, and reserve testing for defined high-risk clinical situations." The biomarker is agreed but its predictive value for outcomes is weak in replete people, so the most rigorous guideline recommends empiric supplementation for specific groups and against routine screening of everyone else.</p>
+    <p>The unifying principle survives all three differences: <span class="ch-key">a measurement is worth taking only when the result would change your action.</span> Iron clears that bar emphatically. B12 clears it in a qualified way. General-population vitamin D often does not, which is why "test everyone" is not the answer there. Testing is not virtue. Testing is a tool, and like any tool it is only smart when it is pointed at a question whose answer matters.</p>
+
+    <blockquote class="ch-quote">
+      <p>Do not screen the whole population for vitamin D; identify and supplement the groups in whom benefit has actually been demonstrated.</p>
+      <cite>Paraphrasing the converging logic of Demay et al. (2024) and Giustina et al. (2024)</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>Putting the discipline to work</h2>
+    <p>Targeted supplementation in practice is a short sequence of questions, run in order. First, do I belong to a nameable risk group for this nutrient, based on diet, life stage, physiology, and exposure? If no, you are usually done; the "just in case" impulse has nothing to stand on. If yes, second: is there a biomarker whose result would change what I do? For iron, yes, almost always. For B12 in a plant-based eater, often the decision is already made and the test confirms. For vitamin D in a healthy adult, frequently the result would not change the modest maintenance approach. Third: if testing is warranted, get the right test, not just the cheapest one, because the easy number can be the false-reassuring number.</p>
+    <p>That sequence is the entire discipline. It is unglamorous and it is the opposite of the supplement-wall impulse, which runs: feel a symptom, buy a bottle, hope. The supplement-wall impulse is a guess dressed up as action. The sequence above is how a guess becomes a decision. The final chapter, where you assemble an actual personal stack, leans almost entirely on your ability to run this sequence cleanly, separating the baseline items that need no testing from the targeted items that do.</p>
+
+    <div class="ch-callout">
+      <div class="ch-callout-label">Coaching translation</div>
+      <p>This is why it matters: the supplement industry profits from the guess. "Tired? Take iron" sells bottles. The honest framework sells fewer bottles and protects you better. You are not being asked to test everything obsessively, which is just anxiety with a copay. You are being asked to test the specific things where the result changes the decision, and to skip the rest with a clear conscience. That is what separates a thoughtful self-directed health practice, or a competent coach, from someone shoveling pills at a feeling.</p>
+    </div>
+  </section>
+
+  <section class="ch-section">
+    <h2>Case study: the runner who took iron because she felt tired</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Simone is 29, trains for half-marathons on a fairly high running volume, and shifted to a mostly plant-based diet eighteen months ago. Over the past two months she has felt flat: workouts that used to feel easy now feel heavy, she is foggy at her desk by mid-afternoon, and her hands run cold. A teammate mentions iron, she remembers a podcast about athletes and low iron, and she buys a high-dose iron supplement and starts taking it daily. Three weeks in she feels marginally better, decides it worked, and keeps going. She has never had a blood test.</p>
+    </aside>
+    <p>Run Simone through this chapter and almost every move she made is the move it warns against, even though her instinct that something is off is probably correct. Her symptoms, fatigue, reduced exercise tolerance, fog, and cold hands, are exactly the vague, low-specificity signals that point at a dozen possible causes and diagnose none of them. She treated that one-bit "something is wrong" signal as if it spelled out "iron," and bought a bottle on the strength of a feeling. The honest version of her thought was never "I feel tired, so I'll take iron." It was "I feel tired, so I'll get my iron status measured," because she sits squarely in not one but two nameable risk groups.</p>
+    <p>And that is the genuinely tricky part of her case: her risk profile is real, so testing was clearly warranted, which makes skipping it worse, not more forgivable. She is a high-volume endurance athlete, where hard sessions raise hepcidin and blunt iron absorption for a window afterward, a documented drain that can quietly accumulate across a training block (Barney et al., 2022; Pedlar et al., 2017). She is also a menstruating woman on a mostly plant-based diet, combining a predictable monthly iron loss with a switch to less-absorbable non-heme iron. On B12 she has a separate, overlapping exposure, because a plant-based diet removes the main dietary source, and unsupplemented plant-based eating reliably falls short of requirement (Hannibal et al., 2024). Two of her symptoms, the fatigue and the fog, are equally consistent with low iron and with low B12. She had strong reasons to measure and she measured nothing.</p>
+    <p>Her "it worked" conclusion is exactly the false-security trap dressed up as evidence. A three-week mood lift after starting a pill is weak proof of anything; expectation alone produces it, and even if her iron were genuinely low, a real correction in stores takes longer than three weeks to register and would show up as a rising ferritin, not a vibe. Meanwhile she has walked into two of the four blind-supplementation failure modes at once. She is overshooting on iron, taking a high dose with no confirmed deficiency and no knowledge of whether she carries a hemochromatosis variant that would make blind loading genuinely hazardous. And she is masking on B12: if part of her fatigue and fog is an early B12 problem, the iron does nothing for it while she feels reassured enough to stop investigating, and B12 nerve damage is the kind that does not always reverse.</p>
+    <p>The chapter's four-step flow rewrites her path without any drama. She is plainly in a risk group, so question one says test. A result would clearly change her decision across both iron and B12, so question two says test for real. The right tests are the informative ones, ferritin read with awareness that her hard training inflates it, ideally drawn after a couple of easy days and paired with transferrin saturation, alongside B12 with functional confirmation if the basic number is ambiguous. Then she acts on what the numbers actually say, supplements only what is genuinely low, at a sensible dose, and retests to confirm she has refilled rather than overshot. Same starting symptom, same correct hunch that something is wrong, completely different and defensible process. Simone did not need more conviction. She needed a blood draw before the bottle.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The "measure first" category is narrow and defined by three stacked features: real harm at both deficiency and excess, predictable at-risk groups, and a usable biomarker. Iron, B12, and vitamin D share this structure; most supplements do not.</li>
+      <li>Iron is the textbook case that more is not better. The body cannot efficiently excrete excess iron, and free iron drives reactive oxygen species and organ damage, so blind supplementation can push a safe person toward harm (Ong et al., 2025).</li>
+      <li>Iron deficiency can cause fatigue before anemia appears, so a normal complete blood count is not reassurance; ferritin is the better first-line marker (Pasricha et al., 2021; Cappellini et al., 2020).</li>
+      <li>"I feel tired, so I'll take iron" is the wrong move; "I feel tired, so I'll check my ferritin" is the right one. Fatigue is a one-bit signal, not a diagnosis.</li>
+      <li>B12 deficiency is predictable from diet and age. Plant-based and even plant-predominant diets routinely fall short, and older adults lose absorption capacity; reliable detection often needs holo-TC and MMA, not total serum B12 alone (Hannibal et al., 2024; White, 2022).</li>
+      <li>For vitamin D, the biomarker 25(OH)D is agreed but its outcome-predictive value in replete people is weak. The rigorous guidance recommends empiric supplementation for defined groups and against routine general-population screening (Demay et al., 2024; Giustina et al., 2024; Amrein et al., 2020).</li>
+      <li>The unifying rule: a measurement is worth taking only when its result would change your action. Testing is a tool, not a virtue.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You now have the test-driven discipline that the rest of the course was building toward. In the final chapter we assemble it all into a real personal supplement stack: separating the low-risk baseline items that need no testing from the targeted items that do, deciding what stays, what goes, and what gets a blood test before it earns a place on your shelf. Everything you just learned about iron, B12, and vitamin D becomes a working checklist.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Amrein, K., Scherkl, M., Hoffmann, M., Neuwersch-Sommeregger, S., Köstenberger, M., Tmava Berisha, A., Martucci, G., Pilz, S., &amp; Malle, O. (2020). Vitamin D deficiency 2.0: An update on the current status worldwide. <em>European Journal of Clinical Nutrition, 74</em>(11), 1498–1513. https://doi.org/10.1038/s41430-020-0558-y</p>
+    <p>Barney, D. E., Ippolito, J. R., Berryman, C. E., &amp; Hennigar, S. R. (2022). A prolonged bout of running increases hepcidin and decreases dietary iron absorption in trained female and male runners. <em>The Journal of Nutrition, 152</em>(9), 2039–2047. https://doi.org/10.1093/jn/nxac129</p>
+    <p>Cappellini, M. D., Musallam, K. M., &amp; Taher, A. T. (2020). Iron deficiency without anaemia: A diagnosis that matters. <em>Internal and Emergency Medicine, 15</em>(1), 1–11. https://pmc.ncbi.nlm.nih.gov/articles/PMC8002799/</p>
+    <p>Damian, M.-T., Vulturar, R., Login, C. C., Damian, L., Chis, A., &amp; Bojan, A. (2021). Anemia in sports: A narrative review. <em>Life, 11</em>(9), 987. https://doi.org/10.3390/life11090987</p>
+    <p>Demay, M. B., Pittas, A. G., Bikle, D. D., Diab, D. L., Kiely, M. E., Lazaretti-Castro, M., Manson, J. E., Murad, M. H., Powers, S. K., Rao, S. D., Scragg, R., Tayek, J. A., Valent, A. M., Walsh, J. M. E., &amp; McCartney, C. R. (2024). Vitamin D for the prevention of disease: An Endocrine Society clinical practice guideline. <em>The Journal of Clinical Endocrinology &amp; Metabolism, 109</em>(8), 1907–1947. https://doi.org/10.1210/clinem/dgae290</p>
+    <p>Giustina, A., Bilezikian, J. P., Adler, R. A., Banfi, G., Bikle, D. D., Binkley, N. C., Bollerslev, J., Bouillon, R., Brandi, M. L., Casanueva, F. F., di Filippo, L., Donini, L. M., Ebeling, P. R., Fuleihan, G. E.-H., Fassio, A., Frara, S., Jones, G., Marcocci, C., Martineau, A. R., … Holick, M. F. (2024). Consensus statement on vitamin D status assessment and supplementation: Whys, whens, and hows. <em>Endocrine Reviews, 45</em>(5), 625–654. https://doi.org/10.1210/endrev/bnae009</p>
+    <p>Hannibal, L., Theimer, J., Wingert, V., &amp; Klotz, K. (2024). Vitamin B<sub>12</sub> status and supplementation in plant-based diets. <em>Nutrition and Metabolic Insights, 17</em>. https://doi.org/10.1177/03795721241227233</p>
+    <p>Ozarda, Y., Sikaris, K., Streichert, T., &amp; Macri, J. (2018). Distinguishing reference intervals and clinical decision limits: A review by the IFCC Committee on Reference Intervals and Decision Limits. <em>Critical Reviews in Clinical Laboratory Sciences, 55</em>(6), 420–431. https://doi.org/10.1080/10408363.2018.1482256</p>
+    <p>Ong, S. Y. K., Dolai, S., Wang, J., et al. (2025). <em>Iron overload and toxicity.</em> StatPearls. StatPearls Publishing. https://www.ncbi.nlm.nih.gov/books/NBK526131/</p>
+    <p>Pedlar, C. R., Brugnara, C., Bruinvels, G., &amp; Burden, R. (2017). Iron balance and iron supplementation for the female athlete: A practical approach. <em>European Journal of Sport Science, 18</em>(2), 295–305. https://doi.org/10.1080/17461391.2017.1416178</p>
+    <p>Pasricha, S.-R., Tye-Din, J., Muckenthaler, M. U., &amp; Swinkels, D. W. (2021). Iron deficiency. <em>The Lancet, 397</em>(10270), 233–248. https://doi.org/10.1016/s0140-6736(20)32594-0</p>
+    <p>White, N. D. (2022). Vitamin B12 and plant-predominant diets. <em>American Journal of Lifestyle Medicine, 16</em>(4), 466–468. https://pmc.ncbi.nlm.nih.gov/articles/PMC9189588/</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 4 of 5</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('iron-curve');
+    if(!root) return;
+    var slider = root.querySelector('#iron-slider');
+    var toggle = root.querySelector('#iron-toggle');
+    var posBar = root.querySelector('#iron-pos-bar');
+    var posNum = root.querySelector('#iron-pos-num');
+    var riskBar = root.querySelector('#iron-risk-bar');
+    var riskNum = root.querySelector('#iron-risk-num');
+    var readout = root.querySelector('#iron-readout');
+    var resetBtn = root.querySelector('#iron-reset');
+
+    function riskAt(p){
+      // U-shape: center 50 is optimal, ends are high risk
+      var d = Math.abs(p - 50) / 50; // 0 at center, 1 at ends
+      return Math.round(5 + 95 * (d*d));
+    }
+
+    function describe(p){
+      if(p < 22) return "Deficient zone. Fatigue, poor exercise tolerance, and impaired oxygen transport. This is where testing-confirmed iron actually helps.";
+      if(p < 40) return "Mild shortfall, stores running low. A ferritin test would settle whether to act. Symptoms can appear before anemia.";
+      if(p <= 60) return "Optimal zone. Risk is low. Supplementing here adds nothing and risks pushing you rightward.";
+      if(p <= 78) return "Above optimal. No benefit from more iron, and the body cannot dump the excess quickly.";
+      return "Excess zone. Free iron drives reactive oxygen species and oxidative stress, damaging liver, heart, and endocrine glands.";
+    }
+
+    function render(){
+      var p = parseInt(slider.value, 10);
+      if(toggle.value === 'on'){
+        p = Math.min(100, p + 30);
+      }
+      var r = riskAt(p);
+      posBar.style.width = p + '%';
+      posNum.textContent = p;
+      riskBar.style.width = r + '%';
+      riskNum.textContent = Math.max(1, Math.round(r/10));
+      var txt = describe(p);
+      if(toggle.value === 'on' && p >= 78){
+        txt = "The untested supplement just shoved you into the excess danger zone. You added iron you did not need, and there is no fast exit. " + txt;
+      } else if(toggle.value === 'on'){
+        txt = "Blind supplement applied (+30). " + txt;
+      }
+      readout.textContent = txt;
+    }
+
+    slider.addEventListener('input', render);
+    toggle.addEventListener('change', render);
+    resetBtn.addEventListener('click', function(){
+      slider.value = 50;
+      toggle.value = 'off';
+      render();
+    });
+    render();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('risk-sorter');
+    if(!root) return;
+    var diet = root.querySelector('#rs-diet');
+    var age = root.querySelector('#rs-age');
+    var mens = root.querySelector('#rs-mens');
+    var train = root.querySelector('#rs-train');
+    var sun = root.querySelector('#rs-sun');
+    var ironBar = root.querySelector('#rs-iron-bar');
+    var ironNum = root.querySelector('#rs-iron-num');
+    var b12Bar = root.querySelector('#rs-b12-bar');
+    var b12Num = root.querySelector('#rs-b12-num');
+    var vdBar = root.querySelector('#rs-vd-bar');
+    var vdNum = root.querySelector('#rs-vd-num');
+    var readout = root.querySelector('#rs-readout');
+    var resetBtn = root.querySelector('#rs-reset');
+
+    function level(score){
+      if(score >= 55) return 'TEST';
+      if(score >= 30) return 'watch';
+      return 'low';
+    }
+
+    function compute(){
+      var iron = 10, b12 = 10, vd = 10;
+
+      // Iron
+      if(mens.value === 'regular') iron += 35;
+      if(mens.value === 'heavy') iron += 55;
+      if(train.value === 'high') iron += 25;
+      if(diet.value === 'veg') iron += 15;
+      if(diet.value === 'plant') iron += 25;
+      if(age.value === 'pregnant') iron += 35;
+
+      // B12
+      if(diet.value === 'veg') b12 += 40;
+      if(diet.value === 'plant') b12 += 60;
+      if(age.value === 'older') b12 += 45;
+      if(age.value === 'pregnant') b12 += 15;
+
+      // Vitamin D
+      if(sun.value === 'low') vd += 35;
+      if(age.value === 'older') vd += 30;
+      if(age.value === 'pregnant') vd += 25;
+
+      iron = Math.min(100, iron);
+      b12 = Math.min(100, b12);
+      vd = Math.min(100, vd);
+
+      ironBar.style.width = iron + '%';
+      b12Bar.style.width = b12 + '%';
+      vdBar.style.width = vd + '%';
+      ironNum.textContent = level(iron);
+      b12Num.textContent = level(b12);
+      vdNum.textContent = level(vd);
+
+      var msgs = [];
+      if(level(iron) === 'TEST') msgs.push("Iron has moved into the worth-testing zone: check ferritin before supplementing, never on the strength of fatigue alone.");
+      if(level(b12) === 'TEST') msgs.push("B12 is now worth acting on: a plant-based or older-adult profile makes inadequacy likely, so a modest supplement plus confirmatory testing is rational.");
+      if(level(vd) === 'TEST'){
+        if(age.value === 'older' || age.value === 'pregnant'){
+          msgs.push("Vitamin D: this is a defined high-benefit group where guidelines support empiric supplementation, often without routine screening.");
+        } else {
+          msgs.push("Vitamin D: low sun exposure raises status risk, though for healthy adults a modest maintenance dose is usually the move rather than broad screening.");
+        }
+      }
+      if(msgs.length === 0){
+        readout.textContent = "All three stay low priority for this profile. Testing here would be anxiety, not strategy. The 'just in case' impulse has nothing to stand on.";
+      } else {
+        readout.textContent = msgs.join(' ');
+      }
+    }
+
+    [diet, age, mens, train, sun].forEach(function(el){
+      el.addEventListener('change', compute);
+    });
+    resetBtn.addEventListener('click', function(){
+      diet.value = 'omni';
+      age.value = 'young';
+      mens.value = 'none';
+      train.value = 'low';
+      sun.value = 'good';
+      compute();
+    });
+    compute();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Deficits, Surpluses, and the Math of Change</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 2 · Module 1</div>
+  <h1 class="ch-title">Deficits, Surpluses, and the <em>Math of Change</em></h1>
+  <p class="ch-subtitle">How to set the size of an energy imbalance, respect the physiology, and pick a rate of change your body and your life can actually support.</p>
+  <div class="ch-meta">
+    <span>35 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>10 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">T</span>wo people start the same diet on the same Monday. Both want to lose twenty pounds. The first decides to do it fast: a brutal deficit, half the food, daily cardio, the whole thing wrapped up by spring. The second decides to do it slow: a modest trim, more protein, lifting three days a week, no drama. Eight weeks later the scale tells a tidy little lie. The fast dieter is down fourteen pounds, the slow dieter only nine. If you stopped the clock there, you would crown the wrong winner.</p>
+  <p>Because the scale measures weight, and weight is not the goal. Run a body-composition scan on those two people and the story flips. The slow dieter lost almost all fat and even nudged a little muscle upward. The fast dieter lost fat too, but bled off a meaningful chunk of lean tissue, slowed down a metabolism that was already trying to defend itself, and is now white-knuckling hunger so intense that the wheels are about to come off. Same goal. Same starting weight. Completely different physiology, because they answered one question differently: how hard should I push?</p>
+</section>
+
+<section class="ch-section">
+  <h2>From "why it stalls" to "how to plan"</h2>
+  <p>In Chapter 1 you met a body that fights back. You learned that energy balance is not a fixed ledger, that <span class="ch-key">adaptive thermogenesis</span> trims your expenditure as you eat less, that hunger hormones ramp up, that non-exercise movement quietly falls, and that a "stall" is usually your physiology doing exactly what it evolved to do. That chapter was diagnosis. This chapter is strategy.</p>
+  <p>The reframe is the whole point. Most people walk into a fat-loss or muscle-gain attempt asking "what is the best diet?" That question is almost useless, because it treats the plan as a product you buy rather than a rate you choose. The better question, the one a competent coach actually asks, is: <em>what rate of change does this body and this life realistically support?</em> Everything downstream, the size of the deficit, the size of a surplus, whether you can chase fat loss and muscle gain at once, how long before you need a break, falls out of that single decision about pace.</p>
+  <p>So we are going to do the math of change honestly. Not transformation-photo math, where someone "lost 30 pounds in 6 weeks" and forgot to mention the water, the muscle, and the rebound. Real math, anchored to what controlled studies actually report, with worked examples you can defend mechanistically. By the end you will be able to sketch the skeleton of a body-composition plan and explain every number in it.</p>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A two-panel editorial watercolour-and-ink illustration contrasting two approaches to weight change, painted in warm earthy ochres and muted teal. Left panel: a steep downhill slope where a small figure slides fast, with cracks and crumbling edges suggesting instability. Right panel: a gentle, steady incline where a figure walks deliberately, the ground solid beneath them. A simple curved arrow links the panels. Small hand-lettered serif labels: 'fast' over the left panel, 'steady' over the right panel. Loose painterly texture, sketchbook margins visible, no numerical data, no charts." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The same destination reached two ways. Speed and preservation pull against each other.</em></figcaption></figure>
+</section>
+
+<section class="ch-section">
+  <h2>The central tension: speed versus preservation</h2>
+  <p>One idea organizes this entire chapter, and every recommendation hangs off it. There is a trade-off between <span class="ch-key">speed of fat loss</span> and <span class="ch-key">preservation of lean mass and sanity</span>, and the size of your energy imbalance is the dial that sets where you land on it.</p>
+  <p>Push the deficit harder and you do get faster scale movement. You also pay for it on three separate bills:</p>
+  <p><strong>You sacrifice more lean mass.</strong> When energy is scarce, the body is more willing to break down muscle protein for fuel and less willing to build new tissue. The deeper the hole, the more of your weight loss comes from tissue you actually wanted to keep.</p>
+  <p><strong>You drive harder adaptation.</strong> The aggressive deficit you read about in Chapter 1 does not just lower the calories on the plate, it provokes a stronger defensive response: more hormonal pushback, more fatigue, more unconscious reduction in daily movement. A bigger deficit on paper is partly eaten by a bigger adaptation in practice.</p>
+  <p><strong>You crush adherence.</strong> This is the bill people pretend they will not have to pay. Hunger, irritability, food preoccupation, poor sleep, and the social cost of eating very little are not character flaws. They are predictable outputs of a steep deficit, and they are the single most common reason diets fail. The most physiologically optimal plan in the world is worthless if you abandon it in week three.</p>
+  <p>Now the other side. A gentle deficit preserves muscle, blunts the adaptive response, and stays livable, but it asks for patience, and patience is in short supply. So the art is not "go slow" or "go fast" as a slogan. The art is matching the size of the imbalance to the person: how much fat they carry, how trained they are, how much time and tolerance they have, and what they are actually trying to accomplish.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Before reading on, predict: if two people lose the exact same total weight, one slowly and one quickly, which one ends up leaner (more muscle, less fat) at the same scale weight, and why? Hold your answer. We will test it against a real elite-athlete trial in a few minutes.</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>The math that lies: the 3,500-calorie rule and the dynamic model</h2>
+  <p>Before we size a single deficit, we have to dismantle the most repeated number in dieting. You have heard it: a pound of fat holds about 3,500 calories, so to lose a pound a week you run a deficit of 500 calories a day, and the rest is arithmetic. The energy content is roughly right. The arithmetic is where it falls apart, and understanding exactly how it fails is the difference between a dieter who panics at week eight and one who expected the slowdown and planned around it.</p>
+  <p>The 3,500-calorie rule is a <span class="ch-key">static model</span>. It assumes your daily energy expenditure stays fixed while you shrink, so the same 500-calorie gap keeps carving off the same pound every week, in a straight line, forever. Project it out and a 500-calorie daily deficit predicts a 52-pound loss in a year and well over 100 pounds in two. Nobody loses weight like that, and the static model is the reason so many people feel like failures when reality refuses to match the spreadsheet.</p>
+  <p>The flaw traces straight back to Chapter 1. Expenditure is not a fixed number. As you lose weight, you become a smaller organism that costs less to run. There is less tissue to maintain, so resting metabolism falls. You carry less mass through every step, so the energy cost of moving drops. Digesting a smaller intake burns fewer calories. And on top of those mechanical reductions sits the <span class="ch-key">adaptive thermogenesis</span> you already met: an extra defensive trimming of expenditure beyond what your new size alone would explain. The practical result is that the gap between intake and expenditure narrows on its own as you lose. The deficit you set on paper quietly shrinks in the body, week after week, because the expenditure side of the equation keeps drifting down to meet your reduced intake.</p>
+  <p>This is why real fat loss is a <span class="ch-key">curve, not a line</span>. Loss is fastest at the beginning, when the gap is widest, and it decelerates as expenditure falls toward intake. Eventually, if intake holds steady, expenditure drifts all the way down to meet it and weight settles at a new plateau. The plateau is not a malfunction and it is not, in most cases, a failure of willpower. It is the predicted endpoint of holding a fixed intake while a dynamic system adapts around it.</p>
+
+  <h3>What the dynamic model actually predicts</h3>
+  <p>The honest replacement for the 3,500-calorie rule is a <span class="ch-key">dynamic model</span>, one that updates expenditure as body size and composition change. Hall and colleagues (2011) built exactly this: a validated mathematical model of adult metabolism that simulates how expenditure adapts during weight loss, packaged into a public tool many clinicians now use in place of the old rule. Three of its conclusions are worth carrying with you.</p>
+  <p>First, the body's response to an intake change is <em>slow</em>. The model estimates a half-time of roughly one year, meaning it takes about a year to travel halfway from your starting weight to the new steady weight that a given intake implies, and longer still to arrive. The familiar "I changed my diet and stalled after a few months" is not a stall in any failure sense. It is the early, fast part of a long approach toward a new equilibrium.</p>
+  <p>Second, the better-known rule of thumb that emerges from these dynamics is closer to <span class="ch-key">10 calories per pound</span> than to a fixed 3,500. Roughly speaking, each pound of weight you lose lowers your daily maintenance requirement by about 10 calories. Lose 20 pounds and your maintenance has fallen by something on the order of 200 calories a day, so the deficit that started the journey has shrunk by that much without your changing a thing on the plate. To keep losing, you eventually have to cut further or move more, because the body you are now feeding is genuinely cheaper to run.</p>
+  <p>Third, adiposity changes the size of the response. People carrying more body fat lose more weight for the same intake change, and take longer to reach their new steady state, than leaner people do. This dovetails with the scaling principle in the next section: more stored fuel both licenses a larger deficit and shapes how the whole trajectory unfolds.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">The common mistake</div>
+    <p>People read the slowdown as proof the diet "stopped working" and respond by slashing calories further in frustration, which deepens the adaptive response and the adherence cost at the same time. The curve was never going to be a line. Expect deceleration, build it into the plan, and treat a genuine multi-week plateau as a signal to either accept the new weight, take a structured break, or make one deliberate adjustment, not as evidence that your body is broken.</p>
+  </aside>
+
+  <p>None of this means calories do not matter. They are still the thing you are manipulating. It means the relationship between a calorie deficit and pounds on the scale is not fixed, and any plan built on the static 3,500 rule will overpredict loss and manufacture disappointment on a schedule. The rest of this chapter assumes the dynamic picture: a deficit is a starting hypothesis whose effect fades as the body adapts, which is precisely why we will keep insisting on a feedback loop rather than a one-time calculation.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Scaling the deficit to body-fat level</h2>
+  <p>Here is the first concrete principle. <span class="ch-key">The amount of fat you carry buys you license to push harder.</span> A person with a lot of stored fat has, quite literally, more available fuel. Their body can cover a larger daily deficit out of fat reserves, so a steeper cut takes a smaller proportional bite out of lean tissue. A very lean person has the opposite problem: with little fat to draw on, an aggressive deficit forces the body to look elsewhere for energy, and "elsewhere" includes muscle.</p>
+  <p>This is why a single deficit recommendation in raw calories is a mistake. Five hundred calories a day is a gentle nudge for someone with substantial body fat and a savage cut for a lean athlete. The fix is to think in <span class="ch-key">percentage of bodyweight lost per week</span>, which automatically scales the deficit to the person.</p>
+
+  <h3>A practical scaling ladder</h3>
+  <p>Use rate of loss as the lever, then back into the calories. As a working framework drawn from the literature and applied practice:</p>
+  <p><strong>Higher body fat (roughly above 25% for men, 32% for women):</strong> you can target around 1.0% of bodyweight per week, sometimes a touch more early on. The fat stores can fund it, and the bigger absolute deficit is tolerable because you are eating more total food to begin with.</p>
+  <p><strong>Moderate body fat:</strong> aim for about 0.5 to 0.75% of bodyweight per week. This is the sweet spot for most general-population dieters who want to look and feel better without losing the muscle they have.</p>
+  <p><strong>Lower body fat (lean, visible muscle, chasing the last bit):</strong> drop to roughly 0.5% per week or less. The leaner you get, the more the body defends what is left, and the more a steep deficit costs you in lean mass. Patience stops being optional.</p>
+
+  <p>The single most useful experiment on this question comes from Garthe and colleagues (2011), who took elite athletes already lifting four times a week and split them into two weight-loss rates: a slow group at about 0.7% of bodyweight per week and a fast group at about 1.4% per week. Both groups lost a similar amount of total weight. But the composition of that loss diverged sharply. The slow group <em>increased</em> lean body mass by 2.1% while losing fat. The fast group's lean mass did not change at all, and it actually lost less fat in proportion (a 31% reduction in fat mass for the slow group versus 21% for the fast group). The authors' conclusion was blunt: athletes who want to preserve or build lean mass should target around 0.7% of bodyweight per week.</p>
+  <p>Read that again, because it answers the prediction from the callout. Same total weight lost, but the slower dieter ended up with more muscle and less fat at the finish line. Speed did not just fail to help, it actively traded away the thing they were training for.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Coaching translation</div>
+    <p>In real life this means: pick your weekly rate first, not your calories. If you weigh 200 pounds and carry moderate body fat, a target of about 0.5 to 0.75% per week is roughly 1.0 to 1.5 pounds a week. That points you toward a deficit of about 500 to 750 calories a day. Notice we worked from the rate to the calories, not the other way around. The rate is the decision that respects the physiology. The calorie number is just bookkeeping.</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>Worked example: setting Maria's deficit</h2>
+  <p>Let us make this concrete. Maria is 30, weighs 175 pounds (about 79 kg), and carries roughly 30% body fat. She is generally healthy, sleeps poorly during the week, sits at a desk, and has started lifting twice a week. She wants to lose fat and keep, or even build, a little muscle.</p>
+  <p><strong>Step 1, choose a rate.</strong> Maria is on the higher end of body fat, which buys her some license, but she is a near-beginner lifter who would benefit enormously from preserving and building lean tissue. We split the difference and target about 0.75% of bodyweight per week. That is roughly 1.3 pounds (about 0.6 kg) per week.</p>
+  <p><strong>Step 2, convert to a deficit.</strong> Losing about 1.3 pounds of mostly fat per week corresponds to a daily deficit in the neighborhood of 600 to 650 calories. We will not pretend this number is exact, because adaptation will move it, but it is the starting estimate.</p>
+  <p><strong>Step 3, set protein before touching anything else.</strong> We will justify the number in the next section, but Maria's protein target lands around 1.6 to 2.0 grams per kilogram of bodyweight, call it roughly 130 to 150 grams a day. This is the muscle-preservation insurance policy, and it is non-negotiable in a deficit.</p>
+  <p><strong>Step 4, build in the feedback loop.</strong> Maria does not "trust the calculator." She tracks weekly average bodyweight, and if after two to three weeks she is losing meaningfully faster or slower than 0.75%, she adjusts intake. Chapter 1 told you the body adapts, so the plan has to adapt back. The deficit is a hypothesis, not a contract.</p>
+  <p>Keep that example in view, because the next widget lets you turn Maria's dial yourself and watch all three bills come due at once.</p>
+</section>
+
+<hr class="ch-divider">
+
+<div class="ch-widget" id="deficit-widget">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Deficit Trade-off Slider</div>
+  </div>
+  <p class="ch-widget-sub">Set the size of the daily deficit and watch fat loss, lean-mass loss, and the hunger/adherence index respond together. Then toggle higher protein and watch the lean-loss gauge change.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Daily deficit</span>
+      <select class="ch-widget-select" id="dw-deficit">
+        <option value="250">250 kcal (gentle)</option>
+        <option value="500" selected>500 kcal (moderate)</option>
+        <option value="750">750 kcal (aggressive)</option>
+        <option value="1000">1000 kcal (steep)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Protein intake</span>
+      <select class="ch-widget-select" id="dw-protein">
+        <option value="low" selected>Standard (~1.0 g/kg)</option>
+        <option value="high">Higher (~2.0+ g/kg) + lifting</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Weekly fat loss</span>
+      <span class="ch-meter-bar"><span id="dw-fat-bar" style="width:38%"></span></span>
+      <span class="ch-meter-num" id="dw-fat-num">0.75</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Weekly lean loss</span>
+      <span class="ch-meter-bar"><span id="dw-lean-bar" style="width:42%"></span></span>
+      <span class="ch-meter-num" id="dw-lean-num">0.25</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Hunger / adherence strain</span>
+      <span class="ch-meter-bar"><span id="dw-hunger-bar" style="width:45%"></span></span>
+      <span class="ch-meter-num" id="dw-hunger-num">45</span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="dw-btn">Recalculate trade-off</button>
+  <p class="ch-widget-sub" id="dw-verdict">A 500 kcal deficit at standard protein: about 1 lb total loss per week, but a quarter of it is lean tissue. Toggle higher protein to see that bill shrink.</p>
+</div>
+
+<section class="ch-section">
+  <h2>Muscle preservation: protein is the load-bearing wall</h2>
+  <p>You just watched the higher-protein toggle blunt the lean-loss gauge. That was not a UI flourish. It is one of the most reproducible findings in the nutrition literature, and it is the single most powerful lever you have for changing <em>what kind</em> of weight you lose.</p>
+  <p>The mechanism is straightforward. In a deficit, the body is in net tissue breakdown more of the time. Dietary protein does two things to fight that: it supplies amino acids that act as a building signal and a raw material for muscle protein synthesis, and it is the most satiating of the three macronutrients, which quietly helps adherence. Resistance training provides the "use it or lose it" signal that tells the body the muscle is worth keeping. Protein and lifting together are the muscle-preservation system. Neither works nearly as well alone.</p>
+
+  <h3>How much protein, and why the usual number is too low</h3>
+  <p>The general-population recommendation of around 0.8 grams per kilogram of bodyweight is a floor for not becoming deficient, not a target for preserving muscle while dieting. The relevant evidence points much higher.</p>
+  <p>Morton and colleagues (2017) pooled 49 randomized trials in a meta-analysis and found that protein supplementation meaningfully enhanced gains in fat-free mass and strength during resistance training, with the dose-response benefit plateauing around 1.6 grams per kilogram of bodyweight per day (with the upper confidence bound reaching roughly 2.2 g/kg). That is in people who are <em>not</em> dieting. The moment you restrict energy, the requirement climbs, because protein now has to defend tissue against a catabolic tide, not just build it under favorable conditions.</p>
+  <p>Helms and colleagues (2014) reviewed studies of energy-restricted, resistance-trained, relatively lean individuals and concluded that protein needs in that population are likely 2.3 to 3.1 grams per kilogram of <em>fat-free</em> mass, scaling upward with both the severity of the deficit and the leanness of the person. Two things in that sentence matter. First, the recommendation is keyed to fat-free mass, not total bodyweight, which is the more sensible reference once someone is lean. Second, leanness itself independently raises the requirement. The less fat you have to burn, the more protein you need to protect the muscle.</p>
+  <p>The most recent and rigorous synthesis, Refalo and colleagues (2025), used Bayesian meta-regression across 29 studies and found a greater than 97% probability of a linear dose-response relationship between daily protein and favorable fat-free-mass changes during energy restriction. The relationship was strongest when protein was scaled to fat-free mass, in interventions longer than four weeks, in men, and, again, at lower body-fat percentages. "Linear" is the key word: within the studied range, more protein kept producing more lean-mass protection, especially for leaner people in longer cuts.</p>
+
+  <h3>The proof-of-principle study you should know by name</h3>
+  <p>If you remember one experiment from this chapter, make it Longland and colleagues (2016). Young men were put into a severe deficit, roughly 40% below maintenance, and made to perform high-volume resistance and anaerobic exercise. One group ate 1.2 grams of protein per kilogram per day, the other ate 2.4 grams per kilogram per day. After four weeks, the higher-protein group <em>gained</em> 1.2 kilograms of lean body mass while losing fat. The lower-protein group did not gain lean mass.</p>
+  <p>That result should land as genuinely surprising. These men were eating 40% below maintenance, deep in a deficit, and the high-protein group still built muscle while losing fat. That is recomposition under aggressive caloric restriction, and it tells you that the "rules" about deficits are really rules about deficits <em>at inadequate protein with no training stimulus</em>. Change those two inputs and the rules bend.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">The common mistake</div>
+    <p>They treat protein as one nice-to-have macro among three, and they obsess over carbs and fat ratios instead. During a deficit the protein number is the most important number on the page after total calories. Set it first. For general-population dieters, somewhere around 1.6 to 2.0 g/kg of bodyweight is a strong, evidence-aligned target. The leaner and more trained you get, the more you push toward the upper end and start keying it to fat-free mass.</p>
+  </aside>
+
+  <h3>It is not only protein: training volume matters too</h3>
+  <p>Protein answers "what to feed the muscle." Training answers "why keep the muscle." Roth and colleagues (2022) reviewed 15 studies in lean, drug-free, resistance-trained athletes who were dieting on high-protein intakes, and asked whether training volume affected lean-mass retention. Programs using higher resistance-training volume, roughly ten or more weekly sets per muscle group, were associated with low-to-no lean-mass loss. Even more interesting, <em>increasing</em> training volume across the diet, rather than letting it slide as energy and motivation dropped, was associated with better lean-mass retention, an effect that looked particularly pronounced in female athletes.</p>
+  <p>This cuts against intuition. When you are tired and underfed, the instinct is to train less. The data suggest that maintaining, or even progressively raising, the muscle-retention signal is part of how lean people hold onto tissue. You do not have to out-train the diet. You do have to keep telling the body, clearly and repeatedly, that the muscle is still in use.</p>
+</section>
+
+<section class="ch-section">
+  <h2>The surplus side: gaining muscle without burying it in fat</h2>
+  <p>Everything so far has been about subtraction. Flip the sign. To <em>build</em> muscle, most people need a modest energy surplus, because constructing new tissue takes raw materials and the process is more efficient when fuel is plentiful. But the word that matters is <span class="ch-key">modest</span>, and this is where the old "bulking" culture went badly wrong.</p>
+  <p>The reasoning error is seductive: if a small surplus builds muscle, a big surplus should build more, faster. It does not. The rate at which you can synthesize new muscle is capped by physiology, by training stimulus, by hormones, by how much actual muscle protein you can assemble per week. Once you have supplied enough surplus energy to support that ceiling, every additional calorie does not become extra muscle. It becomes fat. A large surplus does not accelerate muscle gain. It just changes the fat-to-muscle ratio of the weight you put on, for the worse.</p>
+  <p>Morton and colleagues' (2017) plateau is relevant here too. In a surplus with adequate training, protein benefits flatten around 1.6 g/kg, and the same diminishing-returns logic applies to total energy. A practical surplus for most people is small, on the order of 5 to 15% above maintenance, often just 200 to 350 calories a day. That is enough to fund muscle growth without much fat spillover. The payoff for restraint is that you spend less time, later, dieting the excess fat back off.</p>
+  <p>And here is the part that should change how you think about gaining: muscle is built <em>slowly</em>, far more slowly than fat is lost. We will put real numbers on that in the rates section. But the upshot is that you cannot rush a surplus into faster results, you can only rush it into a fatter result. The honest play is a small surplus, enough protein, hard training, and patience.</p>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration style cross-section diagram in muted sepia, brick-red and slate-blue ink, showing the concept of muscle protein synthesis as a 'building site'. Foreground: a stylized cutaway of a muscle fiber being assembled brick by brick, with a small stack of surplus 'bricks' (amino acids) beside it labelled in tiny serif italic 'protein'. Background: a faint overflow pile of unused material drifting off to one side labelled 'stored as fat'. Composition is a clean left-to-right process, textbook plate aesthetic with hand-drawn hatching, no numbers, no charts, no people." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>A surplus supplies the bricks. Past a point, extra bricks do not raise the wall faster; they pile up as fat.</em></figcaption></figure>
+</section>
+
+<section class="ch-section">
+  <h2>Body recomposition: who actually gets it</h2>
+  <p>Now the headline event. <span class="ch-key">Body recomposition</span> is losing fat and gaining muscle at the same time. For decades the conventional wisdom said it was impossible, or possible only for untrained beginners, because building muscle "needs" a surplus and losing fat "needs" a deficit, and you cannot be in both at once. That framing confuses whole-body energy balance with the energy state of a single tissue. The body can pull energy out of fat stores to help fund muscle construction. So the two processes are not mutually exclusive. They are just hard to run simultaneously, and they get harder under specific conditions.</p>
+  <p>Barakat and colleagues (2020) reviewed the evidence and reached a conclusion that overturned the old belief: recomposition is not limited to the untrained or the obese. They identified numerous chronic randomized trials showing simultaneous fat loss and muscle gain even in <em>resistance-trained</em> individuals. The two factors that consistently enabled it were progressive resistance training and evidence-based nutrition, especially high protein intake above 2.0 g/kg per day. Longland's 40%-deficit study, where trained-enough young men gained 1.2 kg of lean mass while cutting hard, is exactly this phenomenon in action.</p>
+
+  <h3>The four dials that decide your recomp potential</h3>
+  <p>Recomposition exists on a spectrum, from "easy and dramatic" to "technically possible but glacially slow." Where you land depends mostly on four things:</p>
+  <p><strong>Training age.</strong> The single biggest factor. True beginners have an enormous untapped capacity to build muscle, the so-called "newbie gains," and that capacity is strong enough to overcome a deficit. The more trained you are, the smaller your remaining muscle-building runway, and the harder it is to build while also losing fat.</p>
+  <p><strong>Body-fat level.</strong> Higher body fat means more available fuel to power muscle growth during a deficit, which makes recomp easier. Very lean individuals have little stored energy to spare, so the body resists building and losing at once.</p>
+  <p><strong>Detraining status.</strong> Someone returning after a layoff carries "muscle memory." Previously built muscle comes back unusually fast through the recovery of lost myonuclei and motor patterns, so returners often recomp dramatically even if they are not technically beginners.</p>
+  <p><strong>Protein adequacy.</strong> The enabling nutrient. Without sufficient protein and a training stimulus, recomposition stalls regardless of the other three factors. Adequate protein is the permission slip that lets the other dials matter.</p>
+
+  <p>Stack the favorable end of all four, an untrained or returning person with higher body fat eating ample protein and training hard, and recomposition is not just possible, it is the expected outcome. Stack the unfavorable end, a lean, well-trained, long-time lifter, and the smart move is usually to stop trying to do both at once. For that person a dedicated cut or a dedicated, modest gain is more efficient than a recomp that crawls.</p>
+</section>
+
+<hr class="ch-divider">
+
+<div class="ch-widget" id="recomp-widget">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Recomp Eligibility Explorer</div>
+  </div>
+  <p class="ch-widget-sub">Build a profile and see where you land on the recomposition-potential spectrum, with the reasoning. Change any input and watch which factors move the marker most.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Training age</span>
+      <select class="ch-widget-select" id="rw-training">
+        <option value="3" selected>Beginner (&lt;1 yr)</option>
+        <option value="2">Intermediate (1–3 yr)</option>
+        <option value="1">Advanced (3+ yr)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Body-fat level</span>
+      <select class="ch-widget-select" id="rw-bf">
+        <option value="3" selected>Higher</option>
+        <option value="2">Moderate</option>
+        <option value="1">Lower / lean</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Returning from layoff?</span>
+      <select class="ch-widget-select" id="rw-return">
+        <option value="0" selected>No</option>
+        <option value="1">Yes</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Protein adequate?</span>
+      <select class="ch-widget-select" id="rw-protein">
+        <option value="1" selected>Yes (&gt;1.6 g/kg + lifting)</option>
+        <option value="0">No</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Recomposition potential</span>
+      <span class="ch-meter-bar"><span id="rw-bar" style="width:90%"></span></span>
+      <span class="ch-meter-num" id="rw-num">90</span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="rw-btn">Evaluate profile</button>
+  <p class="ch-widget-sub" id="rw-verdict">High potential. A beginner with higher body fat and adequate protein is the textbook recomposition case. Expect simultaneous fat loss and muscle gain.</p>
+</div>
+
+<section class="ch-section">
+  <h2>Realistic rates of change</h2>
+  <p>This is the section that pops the most balloons, so let us be precise and a little merciless. Fat is lost far faster than muscle is built. The two clocks run on completely different time scales, and ignoring that is the root of most disappointment.</p>
+
+  <h3>Fat loss</h3>
+  <p>We already set the framework: target a weekly rate as a percentage of bodyweight, roughly 0.5 to 1.0% per week depending on body fat and training status. For a 175-pound person that is somewhere between about 0.9 and 1.75 pounds per week. The upper end is for higher body fat early in a diet. The lower end is for leaner individuals protecting muscle. Faster than about 1% per week and you are increasingly buying speed with lean mass and adherence, exactly as Garthe's fast group demonstrated.</p>
+
+  <h3>Muscle gain</h3>
+  <p>Here is where expectations need surgery. Realistic <em>muscle</em> gain, not scale weight, is measured in small fractions of a pound per week, and it slows dramatically with training age. A rough, widely used framework:</p>
+  <p><strong>First year of serious training:</strong> a beginner man might gain on the order of 1 to 1.5% of bodyweight per month in muscle. A beginner woman gains roughly half that in absolute terms, though the proportional story is similar.</p>
+  <p><strong>Second to third year:</strong> the rate roughly halves.</p>
+  <p><strong>Advanced (multiple years of consistent, well-run training):</strong> it halves again, down to fractions of a pound of genuine muscle per month, sometimes barely measurable over a year.</p>
+  <p>Notice the brutal asymmetry. A beginner might build a pound of muscle in a couple of weeks. An advanced lifter might need months for the same pound. Meanwhile both can lose a pound of fat in a single good week. This asymmetry is precisely why recomposition is realistic for beginners and a slow grind for the advanced: the muscle-building clock simply runs faster when there is more untapped potential to build.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">This is why it matters</div>
+    <p>If your "transformation" mental model is built on six-week before-and-after photos, you have been trained to expect muscle to arrive at the speed of fat loss. It does not. When the scale barely moves during a careful gain or recomp, that is not failure, that is what success looks like at the muscle-building time scale. Judge a gaining phase in months, not weeks, and judge it with measurements and strength logs, not the mirror on a bad day.</p>
+  </aside>
+
+  <h3>The deficit-shrinks-gains caveat</h3>
+  <p>One more piece of evidence ties the rates back to the deficit decision. Murphy and Koehler (2021) ran a meta-analysis and meta-regression on what energy deficits do to resistance-training adaptations. Two findings matter. First, energy deficits significantly impaired gains in lean mass (effect size around −0.57) but did <em>not</em> significantly impair strength gains. You can keep getting stronger in a deficit even when building new muscle is hard, which is reassuring for anyone who has to diet. Second, and this is the practical gem, the impairment of lean-mass gains got worse as the deficit got bigger, and their model predicted that a deficit of around 500 calories per day was enough to fully blunt lean-mass accrual.</p>
+  <p>Put that next to everything else. A deficit around 500 calories a day, the very number a moderate dieter often lands on, is roughly the line past which building new muscle becomes very difficult for the average trained person. Below that line, recomposition has room to happen. Above it, you are increasingly in "preserve, do not build" territory. That single number is one of the most useful anchors in this entire chapter for deciding whether to attempt a recomp or commit to a dedicated phase.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Structuring time: diet breaks and phase length</h2>
+  <p>A plan is not just a deficit, it is a deficit with an exit strategy. Chapter 1 taught you that adaptation accumulates the longer you diet: expenditure drifts down, hunger drifts up, and the psychological load compounds. That means a long continuous deficit faces diminishing returns and rising risk of collapse. The structural answer is to break the diet into manageable blocks.</p>
+  <p>A common, defensible structure is to run a deficit for roughly 6 to 12 weeks, then deliberately raise intake back to maintenance for one to two weeks. This is a <span class="ch-key">diet break</span>, and it is not cheating or backsliding. The purpose is to give the adaptive responses a chance to partially reverse: a planned period at maintenance can ease the hormonal and psychological pressure and restore some adherence capacity before the next deficit block. You will not "undo" your fat loss in a structured maintenance week; you are eating at maintenance, by definition not gaining fat, while spending the week recovering tolerance.</p>
+  <p>How long a deficit block before a break depends, again, on the person. Higher body fat and a gentler deficit can sustain longer blocks. Leaner individuals and steeper deficits should break sooner, because they hit the adaptation and adherence walls faster. The leaner you are, the more the diet costs you per week, and the more often you should be programming relief.</p>
+
+  <h3>Refeeds: the shorter, carb-focused cousin</h3>
+  <p>A <span class="ch-key">refeed</span> is a briefer version of the same idea, usually a single day or two of raising intake to around maintenance, with most of the added calories coming from carbohydrate. The logic is partly hormonal and partly practical. Raising carbohydrate and total energy for a short window nudges some of the signals that fall during a sustained diet, and the deliberate, scheduled nature of it can take pressure off the constant restraint that wears dieters down. A refeed is best understood as a smaller lever than a full diet break: shorter, more frequent, and aimed as much at psychological and training capacity as at metabolism. The evidence that planned refeeds dramatically rescue metabolic rate is modest, so the honest framing is that they are a structured tool for sustainability and training quality, not a metabolic cheat code.</p>
+
+  <h3>Evidence that planned breaks can help: the MATADOR study</h3>
+  <p>The strongest controlled test of this logic is the aptly named MATADOR trial by Byrne and colleagues (2018), whose acronym stands for Minimising Adaptive Thermogenesis And Deactivating Obesity Rebound. Fifty-one men with obesity were assigned either to a continuous diet, sixteen straight weeks at about 67% of their maintenance intake, or to an intermittent version that delivered the same total amount of dieting in two-week blocks alternating with two-week periods of eating at maintenance, stretched across thirty weeks. Both groups did the same amount of actual restriction. They simply arranged it differently in time.</p>
+  <p>The intermittent group lost more. They finished with greater total weight loss (about 14 kg versus 9 kg) and greater fat loss, while losing a similar amount of lean mass. After adjusting for the change in body composition, their drop in resting energy expenditure was significantly smaller, which is the result the study was designed to find: interrupting a deficit with planned periods at maintenance appeared to blunt the metabolic adaptation that otherwise accumulates. Notice what this does not say. It does not say eat more to lose more in some magical sense. It says that the same total deficit, broken into blocks with maintenance rests between them, was more efficient per unit of dieting than the same deficit run continuously. That is a strong argument for structuring time rather than gritting through one long, unbroken cut.</p>
+  <p>Two cautions keep this honest. The participants were men with obesity, so the magnitude may not transfer cleanly to lean dieters or to women, and the intermittent arm took nearly twice as long in calendar time to deliver the same dieting. The lesson is not that everyone must use two-week blocks. It is that planned periods at maintenance, woven into a long fat-loss effort, are a legitimate and evidence-supported way to fight adaptation and protect adherence.</p>
+
+  <h3>Reverse dieting: easing out, not crashing out</h3>
+  <p>Breaks live inside a diet. <span class="ch-key">Reverse dieting</span> is about how you leave one. When a fat-loss phase ends, the temptation is to snap back to old eating overnight. The problem is that you are exiting at a suppressed expenditure, with hunger signals still elevated, so a sudden return to high intake can drive rapid fat regain. Reverse dieting is the gradual, deliberate alternative: raise calories in small increments over several weeks, letting expenditure and appetite recalibrate while you monitor the scale, so you settle at a higher maintenance intake without a sharp rebound.</p>
+  <p>Two clarifications matter, because reverse dieting gets oversold. It does not "stoke" the metabolism into something larger than your body size warrants; expenditure recovers toward what your current mass and activity support, not beyond it. And the regain risk after a diet is driven by the same adaptive biology from Chapter 1, the elevated hunger and reduced expenditure that persist for a while after weight loss, which is exactly why a controlled exit beats an abrupt one. Treat reverse dieting as a careful transition out of a deficit and a way to find your true maintenance, not as a separate magic phase.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Why does a gentle deficit let you go longer between diet breaks than an aggressive one, even though both eventually need a break? Think in terms of how fast each one accumulates adaptation and adherence debt. The answer is the whole argument for matching pace to the person.</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>Assembling the skeleton of a plan</h2>
+  <p>You now have every piece. Here is the decision sequence, in order, that turns Chapter 1's physiology into a defensible plan.</p>
+  <p><strong>1. Name the goal honestly.</strong> Fat loss, muscle gain, or recomposition. Use the four dials to decide whether recomp is realistic or whether a dedicated phase is smarter. Lean and advanced? Pick one direction at a time. Beginner, returning, or higher body fat with good protein? Recomp is on the table.</p>
+  <p><strong>2. Choose a rate, not a calorie number.</strong> Fat loss: 0.5 to 1.0% of bodyweight per week, scaled to body fat and training status. Muscle gain: a modest 5 to 15% surplus, expecting small monthly gains. Let the rate dictate the deficit or surplus, then verify against your weekly trend and adjust as adaptation moves the target.</p>
+  <p><strong>3. Set protein first among the macros.</strong> Roughly 1.6 to 2.0 g/kg of bodyweight for general dieters, pushing toward 2.3 to 3.1 g/kg of fat-free mass for lean, trained individuals in deeper deficits. This is your muscle-preservation insurance.</p>
+  <p><strong>4. Train to protect or build.</strong> Resistance training is the signal that the muscle is worth keeping. Maintain or progressively increase volume through a diet rather than letting it decay.</p>
+  <p><strong>5. Build in the exit.</strong> Plan deficit blocks of 6 to 12 weeks with diet breaks at maintenance, sooner for leaner people and steeper deficits.</p>
+  <p>That is the skeleton. Every number on it is defensible from the physiology and the evidence, and not one of them came from a transformation photo. The plan is not "the best diet." It is a rate of change that this body and this life can support, with protein and training protecting the tissue you care about while the deficit does its work.</p>
+</section>
+
+<blockquote class="ch-quote">
+  <p>Both groups lost a similar amount of total body weight, but lean body mass increased by 2.1% in the slow group while remaining unchanged in the fast group.</p>
+  <cite>Garthe et al. (2011), on slow versus fast weight loss in elite athletes</cite>
+</blockquote>
+
+<section class="ch-section">
+<h2>Case study: the dieter who kept slashing calories</h2>
+<aside class="ch-callout">
+  <div class="ch-callout-label">Case</div>
+  <p>Sasha is 38, 168 pounds, around 33% body fat, and has lifted casually on and off for years. She starts a fat-loss push by cutting straight to a 1,000-calorie daily deficit, because the calculator told her that meant two pounds a week. The first three weeks are thrilling: nearly seven pounds gone. Then it slows. Weeks four through six bring barely a pound each. By week eight the scale has stalled for ten days, so she does the only thing that has ever seemed to work and cuts another 250 calories. Now she is exhausted, ravenous, sleeping badly, skipping her lifting sessions because she has no energy, and the scale still will not move. She is convinced her metabolism is "broken."</p>
+</aside>
+<p>Run Sasha through this chapter and almost nothing here is a surprise; it is the static model meeting a dynamic body. Her first error was sizing the deficit by calories instead of by rate. A 1,000-calorie deficit on a 168-pound woman is roughly 1.2% of bodyweight per week, well past the 0.5 to 0.75% her moderate body fat and muscle-preservation goals call for. The early seven pounds were real but partly water and glycogen, and they set an expectation the body was never going to sustain. The 3,500-calorie arithmetic promised her a straight line. She got the curve that everyone gets.</p>
+<p>The deceleration she read as failure was the dynamic model working exactly as Hall and colleagues (2011) describe. As she lost weight she became a cheaper body to run, her maintenance fell by roughly 10 calories for every pound shed, and her aggressive deficit provoked a strong adaptive response on top of that. The gap between intake and expenditure narrowed on its own, so the same eating produced less and less loss. Her instinct, cut deeper, attacked the symptom and worsened the cause: a bigger deficit drives harder adaptation, more hunger, and the collapse in daily movement and training that was now eating whatever deficit remained.</p>
+<p>The lean-mass picture is the quiet damage. Skipping her lifting removed the one signal telling her body the muscle was worth keeping, and at a steep deficit with training gone, a meaningful share of her lost weight was lean tissue rather than fat, the same trade Garthe and colleagues (2011) documented in their fast group. Murphy and Koehler (2021) put a number on the boundary she blew past: a deficit near 500 calories a day is roughly where new muscle gain stalls, and she was running double that with no training stimulus at all.</p>
+<p>The fix is not more discipline, which is precisely where Sasha was heading. It is to rebuild the plan around rate and recovery. Raise intake to a deficit nearer 0.5 to 0.75% per week, which for her is closer to a 500 to 600-calorie gap. Set protein first, around 1.6 to 2.0 grams per kilogram, and put the lifting back as non-negotiable. Then, because she has been grinding a hard deficit for two months, take a structured diet break at maintenance for a week or two to let the adaptive responses ease, exactly the logic the MATADOR trial supports. She will lose more total fat, and keep more muscle, going slower and resting on purpose than she ever did by cutting harder. Same goal, opposite method, opposite result.</p>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>The core trade-off is speed versus preservation. A bigger deficit loses weight faster but sacrifices more lean mass, drives harder adaptation, and crushes adherence. Choose the rate first; the calories are bookkeeping.</li>
+    <li>Scale the deficit to body fat. Roughly 0.5 to 1.0% of bodyweight lost per week, with higher body fat licensing the upper end and leanness demanding the lower end. Garthe (2011) showed the slow group kept and built muscle while the fast group did not.</li>
+    <li>Protein is the load-bearing wall in a deficit. Aim for about 1.6 to 2.0 g/kg of bodyweight, scaling toward 2.3 to 3.1 g/kg of fat-free mass for lean, trained dieters (Helms, 2014; Refalo, 2025). Longland (2016) showed muscle gain even in a 40% deficit at high protein.</li>
+    <li>Keep a modest surplus when gaining. Past the muscle-building ceiling, extra calories become fat, not muscle. Small surplus, ample protein, hard training, patience.</li>
+    <li>Recomposition is real but conditional. Training age, body-fat level, returning-from-layoff status, and protein adequacy decide your potential (Barakat, 2020). It is easy for beginners, returners, and higher-body-fat individuals, and slow for the lean and advanced.</li>
+    <li>Respect the rate asymmetry. Fat is lost in pounds per week; muscle is built in small fractions of a pound per week, slowing sharply with training age. A deficit near 500 kcal/day roughly blunts new muscle gain (Murphy & Koehler, 2021), even though strength can still improve.</li>
+    <li>Structure time. Run deficit blocks of 6 to 12 weeks with planned diet breaks at maintenance, sooner for leaner people on steeper deficits.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>You can now set the size and shape of an energy imbalance and defend every choice. But we have said almost nothing about <em>when</em> you eat, or what the food is made of beyond protein. Next we step into the timing and diet-style debates: meal frequency, nutrient timing, fasting windows, and the low-carb-versus-low-fat arguments. We will ask which of these actually move body composition once calories and protein are controlled, and which are sophisticated-sounding distractions. The pace you chose in this chapter is the foundation. Now we decide how to arrange the meals on top of it.</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Barakat, C., Pearson, J., Escalante, G., Campbell, B., & De Souza, E. O. (2020). Body recomposition: Can trained individuals build muscle and lose fat at the same time? <em>Strength and Conditioning Journal, 42</em>(5), 7–21. https://doi.org/10.1519/SSC.0000000000000584</p>
+  <p>Byrne, N. M., Sainsbury, A., King, N. A., Hills, A. P., & Wood, R. E. (2018). Intermittent energy restriction improves weight loss efficiency in obese men: The MATADOR study. <em>International Journal of Obesity, 42</em>(2), 129–138. https://doi.org/10.1038/ijo.2017.206</p>
+  <p>Garthe, I., Raastad, T., Refsnes, P. E., Koivisto, A., & Sundgot-Borgen, J. (2011). Effect of two different weight-loss rates on body composition and strength and power-related performance in elite athletes. <em>International Journal of Sport Nutrition and Exercise Metabolism, 21</em>(2), 97–104. https://doi.org/10.1123/ijsnem.21.2.97</p>
+  <p>Hall, K. D., Sacks, G., Chandramohan, D., Chow, C. C., Wang, Y. C., Gortmaker, S. L., & Swinburn, B. A. (2011). Quantification of the effect of energy imbalance on bodyweight. <em>The Lancet, 378</em>(9793), 826–837. https://doi.org/10.1016/S0140-6736(11)60812-X</p>
+  <p>Helms, E. R., Zinn, C., Rowlands, D. S., & Brown, S. R. (2014). A systematic review of dietary protein during caloric restriction in resistance trained lean athletes: A case for higher intakes. <em>International Journal of Sport Nutrition and Exercise Metabolism, 24</em>(2), 127–138. https://doi.org/10.1123/ijsnem.2013-0054</p>
+  <p>Longland, T. M., Oikawa, S. Y., Mitchell, C. J., Devries, M. C., & Phillips, S. M. (2016). Higher compared with lower dietary protein during an energy deficit combined with intense exercise promotes greater lean mass gain and fat mass loss: A randomized trial. <em>The American Journal of Clinical Nutrition, 103</em>(3), 738–746. https://doi.org/10.3945/ajcn.115.119339</p>
+  <p>Morton, R. W., Murphy, K. T., McKellar, S. R., Schoenfeld, B. J., Henselmans, M., Helms, E., Aragon, A. A., Devries, M. C., Banfield, L., Krieger, J. W., & Phillips, S. M. (2018). A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. <em>British Journal of Sports Medicine, 52</em>(6), 376–384. https://doi.org/10.1136/bjsports-2017-097608</p>
+  <p>Murphy, C., & Koehler, K. (2021). Energy deficiency impairs resistance training gains in lean mass but not strength: A meta-analysis and meta-regression. <em>Scandinavian Journal of Medicine & Science in Sports, 32</em>(1), 125–137. https://doi.org/10.1111/sms.14075</p>
+  <p>Refalo, M. C., Helms, E. R., Robinson, Z. P., Hamilton, D. L., & Fyfe, J. J. (2025). Effect of dietary protein on fat-free mass in energy restricted, resistance-trained individuals: An updated systematic review with meta-regression. <em>Strength and Conditioning Journal</em>. Advance online publication. https://doi.org/10.1519/SSC.0000000000000888</p>
+  <p>Roth, C., Schoenfeld, B. J., & Behringer, M. (2022). Lean mass sparing in resistance-trained athletes during caloric restriction: The role of resistance training volume. <em>European Journal of Applied Physiology, 122</em>(5), 1129–1151. https://doi.org/10.1007/s00421-022-04896-5</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 2 of 8</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('deficit-widget');
+    if(!root) return;
+    var defSel = root.querySelector('#dw-deficit');
+    var protSel = root.querySelector('#dw-protein');
+    var fatBar = root.querySelector('#dw-fat-bar');
+    var fatNum = root.querySelector('#dw-fat-num');
+    var leanBar = root.querySelector('#dw-lean-bar');
+    var leanNum = root.querySelector('#dw-lean-num');
+    var hungBar = root.querySelector('#dw-hunger-bar');
+    var hungNum = root.querySelector('#dw-hunger-num');
+    var verdict = root.querySelector('#dw-verdict');
+    var btn = root.querySelector('#dw-btn');
+
+    function update(){
+      var deficit = parseFloat(defSel.value);
+      var highProtein = protSel.value === 'high';
+      // total weekly loss in lb (approx 3500 kcal per lb)
+      var totalLoss = deficit * 7 / 3500;
+      // lean fraction rises with deficit size; protein blunts it
+      // baseline lean fraction at 250 ~0.12, scaling up
+      var leanFrac = 0.10 + (deficit - 250) / 750 * 0.30; // 0.10 at 250 -> 0.40 at 1000
+      if(highProtein){ leanFrac = leanFrac * 0.45; } // protein + lifting cuts lean loss sharply
+      var leanLoss = totalLoss * leanFrac;
+      var fatLoss = totalLoss - leanLoss;
+      // hunger index 0-100, rises with deficit, slight relief from protein satiety
+      var hunger = 18 + (deficit - 250) / 750 * 70;
+      if(highProtein){ hunger -= 8; }
+      hunger = Math.max(5, Math.min(100, hunger));
+
+      fatNum.textContent = fatLoss.toFixed(2);
+      leanNum.textContent = leanLoss.toFixed(2);
+      hungNum.textContent = Math.round(hunger);
+
+      fatBar.style.width = Math.min(100, fatLoss / 2.0 * 100) + '%';
+      leanBar.style.width = Math.min(100, leanLoss / 0.6 * 100) + '%';
+      hungBar.style.width = hunger + '%';
+
+      var msg = 'A ' + deficit + ' kcal deficit at ' + (highProtein ? 'higher protein with lifting' : 'standard protein') +
+        ': about ' + totalLoss.toFixed(1) + ' lb total loss per week, of which roughly ' + leanLoss.toFixed(2) +
+        ' lb is lean tissue.';
+      if(highProtein){
+        msg += ' Protein and training are visibly protecting muscle, the lean bar drops.';
+      } else if(deficit >= 750){
+        msg += ' At this depth a large share of the loss is muscle and the hunger strain is high. Add protein and lifting, or ease the deficit.';
+      } else {
+        msg += ' Toggle higher protein to watch the lean-loss bill shrink.';
+      }
+      verdict.textContent = msg;
+    }
+
+    defSel.addEventListener('change', update);
+    protSel.addEventListener('change', update);
+    btn.addEventListener('click', update);
+    update();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('recomp-widget');
+    if(!root) return;
+    var trainSel = root.querySelector('#rw-training');
+    var bfSel = root.querySelector('#rw-bf');
+    var retSel = root.querySelector('#rw-return');
+    var protSel = root.querySelector('#rw-protein');
+    var bar = root.querySelector('#rw-bar');
+    var num = root.querySelector('#rw-num');
+    var verdict = root.querySelector('#rw-verdict');
+    var btn = root.querySelector('#rw-btn');
+
+    function update(){
+      var train = parseInt(trainSel.value, 10); // 1-3
+      var bf = parseInt(bfSel.value, 10); // 1-3
+      var ret = parseInt(retSel.value, 10); // 0-1
+      var prot = parseInt(protSel.value, 10); // 0-1
+
+      // base from training age and body fat
+      var score = (train / 3) * 45 + (bf / 3) * 30;
+      // returning from layoff adds muscle-memory boost
+      score += ret * 18;
+      // protein is a gate: inadequate protein caps potential hard
+      if(prot === 1){ score += 7; } else { score = score * 0.45; }
+      score = Math.max(4, Math.min(98, Math.round(score)));
+
+      num.textContent = score;
+      bar.style.width = score + '%';
+
+      var msg;
+      if(prot === 0){
+        msg = 'Protein is inadequate, which is the limiting factor. Without enough protein and a training stimulus, recomposition stalls regardless of the other dials. Fix protein first.';
+      } else if(score >= 75){
+        msg = 'High potential. This profile has plenty of muscle-building runway and the fuel to power it during a deficit. Expect simultaneous fat loss and muscle gain. Run a recomp.';
+      } else if(score >= 45){
+        msg = 'Moderate potential. Recomposition is realistic but slower. Keep protein high, train hard, and judge progress in months. A small deficit or near-maintenance intake works well here.';
+      } else {
+        msg = 'Low potential. Lean and well-trained, with little remaining runway. Trying to build and cut at once will crawl. A dedicated cut or a modest, dedicated gain is the smarter, faster play.';
+      }
+      verdict.textContent = msg;
+    }
+
+    trainSel.addEventListener('change', update);
+    bfSel.addEventListener('change', update);
+    retSel.addEventListener('change', update);
+    protSel.addEventListener('change', update);
+    btn.addEventListener('click', update);
+    update();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

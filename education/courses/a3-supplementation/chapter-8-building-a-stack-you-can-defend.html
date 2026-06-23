@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Building a Stack You Can Defend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 8 · Module 4</div>
+    <h1 class="ch-title">Building a Stack You Can <em>Defend</em></h1>
+    <p class="ch-subtitle">Turning eight weeks of reasoning into one repeatable process that ends in a short, justified plan or an honest "nothing."</p>
+    <div class="ch-meta">
+      <span>33 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>icture two bathroom cabinets. The first belongs to someone who reads a lot of supplement content: fourteen bottles, three of them duplicates of the same nutrient under different brand names, two that expired during the previous administration, and one whose purpose the owner can no longer remember. The second belongs to someone who went through the exact process you are about to learn: two bottles, maybe three, each one chosen because a real gap was identified, food could not close it conveniently, the evidence held up for the actual goal, the dose was effective, and nothing in the mix was fighting with anything else.</p>
+    <p>The second cabinet is not the impressive one because it is bigger or more sophisticated. It is impressive because every item in it can survive a hard question. The owner can tell you, in one sentence, why each thing is there and what would have to change for it to come out. That sentence, repeated for every bottle, is the whole skill. Collecting supplements is easy and anyone can do it. Defending each one, and being willing to throw out the ones that cannot be defended, is the work.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The capstone is a process, not a product</h2>
+    <p>Everything in this course has been pointing here. You learned to read evidence quality, to tell a real deficiency from a marketing-manufactured one, to assess products at the shelf, and to screen for risk and interactions. This chapter does not add a new fact. It assembles the facts you already have into a single pipeline you can run on any real person, including yourself.</p>
+    <p>The reason this matters is that the supplement market is built to sell you the opposite skill. It trains you to think in <span class="ch-key">products</span>: this powder for focus, that capsule for sleep, this blend for "gut health." A product list is fragile. The moment the evidence shifts, or a new ingredient gets hyped, your list is obsolete and you are back to guessing. A <span class="ch-key">process</span> is portable. The specific supplements that pass your filters in 2025 will be partly different in 2030, but the filters themselves do not expire.</p>
+    <p>This is exactly the gap the research describes between why people actually take supplements and why the evidence says they should. In a nationally representative analysis of nearly twelve thousand US adults, the most common motivations were to "improve" overall health, reported by 45 percent, and to "maintain" health, reported by 33 percent, while correcting an identified dietary deficiency barely registered as a driver, and fewer than a quarter of supplement use was recommended by a physician (Bailey et al., 2013). A later analysis of more than twelve thousand NHANES participants found the same pattern persisting: over 70 percent took more than one supplement daily, roughly 40 percent had done so for five or more years, and only 26.9 percent were following a healthcare provider's recommendation (Liu et al., 2024).</p>
+    <p>Read those numbers again. The dominant reason people take supplements is a vague, goal-less "for my health," sustained for years, without a specific gap in mind and usually without professional input. That is the behavior this chapter is designed to replace.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, picture your own cabinet or a friend's. For each item, can you finish this sentence in one breath: "This is here because ___, and I would remove it if ___"? Every item that fails that test is a candidate for what we do at the end of this chapter.</p>
+    </aside>
+
+    <h3>The coaching translation</h3>
+    <p>In practice, this means you stop asking "what should I take?" and start asking "what is actually missing, and is a supplement the right tool to fix it?" Those are completely different questions. The first one always has an answer the market is happy to sell you. The second one frequently answers itself with "nothing," and that is a successful outcome, not a failed shopping trip.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The pipeline, end to end</h2>
+    <p>Here is the full decision sequence. It runs in order, and order matters, because each stage is allowed to stop the process. If a stage kills a candidate, you do not get to override it because the supplement sounds good. The gates are the point.</p>
+
+    <h3>Stage 1 · Identify a real gap</h3>
+    <p>A gap is a genuine shortfall created by diet, life stage, or context, not a generic wish to feel better. The four places real gaps come from are: <span class="ch-key">dietary pattern</span> (what you do and do not eat), <span class="ch-key">life stage</span> (pregnancy, aging, growth), <span class="ch-key">context</span> (sun exposure, geography, medication, illness), and <span class="ch-key">measured status</span> (a blood test that shows a true low). Notice that "I saw a video about it" is not on the list.</p>
+    <p>This is also where you decide whether testing is warranted, the judgment you built in Chapter 4. Some gaps are confidently predictable from the pattern alone. A person eating zero animal products will run low on B12 eventually, full stop, because there is no meaningful plant source. You do not need a test to know the gap exists, though a test can confirm severity. Other gaps are invisible without measurement. Vitamin D and ferritin are the classic examples: you genuinely cannot eyeball them, and guessing in either direction causes problems.</p>
+
+    <h3>Stage 2 · Try to close it with food first</h3>
+    <p>The default answer to a real gap is food, not a bottle. The sports nutrition literature has converged on a memorable phrase for this: <span class="ch-key">"food first, but not always food only"</span> (Close et al., 2022). The "food first" half is the default because whole foods deliver nutrients in a matrix, with cofactors, fiber, and satiety that an isolated capsule does not replicate, and because food is harder to overdose. The "not always food only" half is the honest exception clause.</p>
+    <p>Close and colleagues lay out specific, evidence-based reasons a food-only approach can legitimately fail: when the required dose is impractically large to eat, when the nutrient is poorly available from accessible foods, when a clinical deficiency needs faster correction than diet allows, when a person's energy intake is too restricted to fit the nutrient in, when food access or appetite is genuinely limited, or when the active compound simply is not present in food at a useful dose. If one of those clauses applies, you move forward. If none of them applies, you fix the diet and you are done. No bottle required.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A clean pen-and-ink and watercolour technical diagram of a vertical decision pipeline, drawn as if in a careful researcher's notebook. Five stacked stages connected by downward arrows, each stage a labelled box in muted slate-blue ink with warm ochre accents on a cream paper background. Top to bottom the boxes read, in small neat serif capitals: 'IDENTIFY A REAL GAP', 'FOOD FIRST', 'EVIDENCE FOR THE GOAL', 'QUALITY AND DOSE', 'SCREEN THE WHOLE STACK'. A small side-branch arrow off each box loops back upward with a tiny tag reading 'STOP'. Hand-drawn, restrained, no shading gradients, no people, no extra ornament." data-aspect="portrait"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The pipeline runs top to bottom; any stage is allowed to end it.</em></figcaption></figure>
+
+    <h3>Stage 3 · Demand adequate evidence for the actual goal</h3>
+    <p>This stage is where most influencer stacks die. A supplement does not earn a place because it has evidence for <em>something</em>. It earns a place because it has adequate evidence for <em>your</em> goal, in <em>your</em> population, at a <em>realistic</em> dose. This is the discipline from Chapters 2, 3, and 5: evidence is goal-specific and population-specific, and you do not get to borrow a finding from one context and assume it transfers to another.</p>
+    <p>The IOC consensus statement on dietary supplements is useful here even for non-athletes, because its framework is general. It insists that a complete nutritional assessment must come before any supplement decision, and it sorts supplements by function, managing a deficiency, providing convenient energy or nutrients, delivering a direct benefit, or supporting training indirectly, while stating plainly that appropriate use can benefit health and inappropriate use can cause harm (Maughan et al., 2018). Translated for everyday life: match the supplement to the function you actually need, and check that the evidence for that function is real and not transplanted from an unrelated outcome.</p>
+
+    <h3>Stage 4 · Verify quality and effective dose at the shelf</h3>
+    <p>A supplement with perfect evidence is useless if the product in your hand contains a quarter of the labeled dose, a different form than the one that was studied, or contaminants. This is Chapter 6 standing guard. Third-party testing, the studied form of the nutrient, and a dose that matches the trials, not a "fairy dusting" sprinkle designed to put an ingredient on the label, are non-negotiable. A candidate that passes the evidence gate can still fail right here, at the point of purchase.</p>
+
+    <h3>Stage 5 · Screen the whole stack for risk and interactions</h3>
+    <p>The final gate looks at the stack as a system, not as a pile of individually fine items. This is Chapter 7. The interaction risk is real and routinely underappreciated, especially as the stack grows and especially in people on medication. A comprehensive review of supplement-drug interactions in older adults notes that nearly 91 percent of older adults take at least one medication while supplement use is simultaneously widespread, and that providers frequently overlook the resulting interactions, leading to preventable harm (Reyes et al., 2025). The lesson generalizes: every addition has to be checked against everything else already in the stack and against any medication, every time.</p>
+
+    <h3>The coaching translation</h3>
+    <p>The most common mistake is running the pipeline backwards. People start at the bottle, fall in love with it, and then go looking for a gap to justify it. Run it forward. Gap, then food, then evidence, then product, then interaction screen. If a candidate cannot make it through all five gates in that order, it does not go in the cabinet. That is not deprivation. That is the system working.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Two tiers inside the stack: baseline versus test-first</h2>
+    <p>Once the pipeline becomes second nature, a useful pattern emerges from it. The items that survive the five gates do not all survive for the same reason, and they do not all carry the same burden of proof before you act. They sort cleanly into two tiers, and keeping the tiers separate is most of what keeps a stack honest.</p>
+    <p>The first tier is the <span class="ch-key">low-risk baseline</span>: a small number of items that can be reasonable for a wide range of people without an individual blood test first, because the gap is either common and predictable or the item is so well tolerated that the cost of being wrong is trivial. The second tier is <span class="ch-key">test-first targeted</span>: items you should not take blind, where the right dose depends on a measured number and where guessing in the wrong direction causes real harm. The mistake the market trains is treating every supplement as if it were tier one, something you can just add because it might help. Most of the supplements that cause trouble are tier-two items being used like tier-one items.</p>
+
+    <h3>The low-risk baseline tier</h3>
+    <p>A short list of items can clear the gates for many people without an individual workup, because either the deficiency is widespread or the safety margin is enormous. <strong>Creatine monohydrate</strong> is the cleanest example of a tolerability-driven baseline item. The ISSN position stand reviewed short- and long-term use and concluded that supplementation up to 30 grams per day for five years is safe and well tolerated in healthy people and in patient populations from infants to the elderly, with a habitual intake near 3 grams per day plausibly beneficial across the lifespan (Kreider et al., 2017). The gap is real for most people because dietary creatine comes mainly from meat and fish and typical intakes sit below saturation, food-only rarely closes it efficiently, the evidence for strength and high-intensity performance is among the most robust in the field, the effective dose and the form are settled, and the risk is low. It clears all five gates for a large slice of the population, which is why it lives in tier one.</p>
+    <p><strong>Adequate protein</strong> belongs here too, even though it is a food component rather than a pill, because the same logic applies: when whole-food intake falls short of the target, a protein powder is a convenient, low-risk way to close a gap that is common in older adults, restricted dieters, and high-volume trainees. <strong>Vitamin D</strong> and <strong>omega-3</strong> sit at the soft edge of this tier, baseline-eligible only when the context makes the gap plausible, low sun exposure and high latitude for vitamin D, little or no oily fish for omega-3. They are genuinely tier-one for the indoor, northern, fish-avoiding person and genuinely unnecessary for the person who is already covered. The honest position is that they are baseline by context, not baseline by default.</p>
+
+    <h3>The test-first targeted tier</h3>
+    <p><strong>Iron</strong> is the defining tier-two item, and the reason is the entire argument for testing. Iron deficiency is common enough to matter and supplementing it corrects a real problem, but iron is also a nutrient the body cannot easily excrete, and unneeded supplementation can drive iron overload with genuine consequences in susceptible people. You cannot eyeball ferritin, and the cost of guessing wrong runs in both directions: leave a real deficiency untreated and you carry fatigue and impaired performance; supplement a normal or high level and you risk loading a metal the body has no good way to dump. So iron is never a "might as well" addition. It is measured, then dosed, then re-measured, or it does not go in.</p>
+    <p><strong>Vitamin B12</strong> is a more nuanced tier-two case. For a strict plant-based eater the gap is so predictable that you can act on the pattern without a test, which is why it sat in tier one for that profile earlier in this chapter. For everyone else, a B12 supplement should answer to a reason, a measured low, a malabsorption risk, a relevant medication, rather than a vague sense that more is better. The same is true for most isolated nutrients that are not vitamin D, creatine, or omega-3: the default is to find the number first, because adding a targeted nutrient without a target is exactly the goal-less supplementation the whole framework exists to prevent.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Sort your own cabinet into the two tiers right now. For every item, ask one question: would a reasonable clinician be comfortable with you taking this without seeing a blood test? If yes, it is plausibly tier one. If no, and you are taking it anyway without a number behind it, you have found a tier-two item being used like a tier-one item, and that is the single most common defect in real-world stacks.</p>
+    </aside>
+
+    <h3>The coaching translation</h3>
+    <p>In practice, the two-tier split gives you a fast triage before you even open the full pipeline. A candidate that is widely safe and addresses a common, predictable gap can move quickly. A candidate that needs a measured number to be dosed correctly, or that carries real downside when taken without a deficiency, has to wait for the test. Confusing the two is how people end up taking iron they do not need and skipping the blood draw that would have told them so.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="stackBuilder">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Stack Builder Workbench</div>
+    </div>
+    <p class="ch-widget-sub">Pick a profile, then add a candidate supplement. The tool runs it through the five gates and tells you whether it earns a place, plus the one-line justification you would have to give.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Person profile</span>
+        <select class="ch-widget-select" id="sbProfile">
+          <option value="plant">Plant-based eater</option>
+          <option value="stress">High-stress poor sleeper</option>
+          <option value="older">Older adult (72), on medication</option>
+          <option value="general">Busy general-population person</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Candidate supplement</span>
+        <select class="ch-widget-select" id="sbSupp">
+          <option value="b12">Vitamin B12</option>
+          <option value="d">Vitamin D</option>
+          <option value="omega">Algae omega-3 (EPA/DHA)</option>
+          <option value="iron">Iron</option>
+          <option value="mag">Magnesium</option>
+          <option value="melatonin">Melatonin (low dose)</option>
+          <option value="multi">Greens / multivitamin blend</option>
+          <option value="ashwa">Ashwagandha</option>
+          <option value="creatine">Creatine</option>
+          <option value="testbooster">"Testosterone support" blend</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Real gap</span>
+        <span class="ch-meter-bar"><span id="sbBarGap" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sbNumGap">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Food can't close it</span>
+        <span class="ch-meter-bar"><span id="sbBarFood" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sbNumFood">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Evidence for goal</span>
+        <span class="ch-meter-bar"><span id="sbBarEv" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sbNumEv">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Quality / dose feasible</span>
+        <span class="ch-meter-bar"><span id="sbBarQ" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sbNumQ">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Passes risk screen</span>
+        <span class="ch-meter-bar"><span id="sbBarR" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sbNumR">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="sbRun">Run the pipeline</button>
+    <p class="ch-widget-sub" id="sbVerdict" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Four profiles, one process, four different answers</h2>
+    <p>The strongest proof that this is a process and not a product list is that the same five gates, run honestly, produce completely different stacks for different people. Nobody's correct stack is universal, because nobody's gaps are universal. Let us walk four everyday profiles all the way through.</p>
+
+    <h3>Profile 1 · The plant-based eater</h3>
+    <p>A well-designed plant-based diet can be nutritionally complete. A poorly designed one creates real, clinically relevant deficiencies. That distinction is the whole game. Plotnikoff and colleagues turn the known vulnerabilities of plant-based eating, B12, iron, calcium, zinc, vitamin D, essential fatty acids, and protein, into seven practical assessment questions precisely because the gaps are predictable but not guaranteed (Plotnikoff et al., 2023).</p>
+    <p>Run the pipeline. <strong>B12</strong> is the clearest case in all of nutrition: there is no reliable plant source, so food-first genuinely fails, the evidence for supplementation is overwhelming, the dose is trivial and cheap, and the risk is negligible. B12 goes in, no hesitation. <strong>Algae-based omega-3</strong> is a reasonable add because the conversion of plant ALA to EPA and DHA is limited and food-only often does not close it; it passes, with weaker urgency than B12. <strong>Iron and vitamin D</strong> are the "test, don't guess" items: flag them, measure them, and only add if the number is genuinely low, because supplementing iron blind carries real risk. <strong>A greens blend</strong> fails the evidence gate for any specific goal and adds nothing the rest of the stack hasn't already covered. The defensible plant-based stack is short: B12 reliably, omega-3 reasonably, iron and D only if tested low.</p>
+
+    <h3>Profile 2 · The high-stress poor sleeper</h3>
+    <p>This is the profile most exposed to marketing, because stress and sleep are where the "feel better" supplement industry makes its money. Run the pipeline and most of it collapses. The first and largest interventions are not supplements at all: sleep timing, light exposure, caffeine cutoff, alcohol, and stimulation before bed do more than any capsule. A pipeline that takes Stage 1 seriously forces you to confront whether the "gap" is a nutrient shortfall or a behavior problem wearing a nutrient costume.</p>
+    <p>Where supplements survive: <strong>magnesium</strong> can be reasonable if dietary intake is genuinely low, which is common, and the risk is low; it passes as a modest, conditional add. <strong>Low-dose melatonin</strong> is a legitimate, evidence-supported tool for specific circadian problems, not a nightly sedative, and it passes only when matched to the right use. <strong>Ashwagandha</strong> has some evidence for stress markers but demands the quality and dose checks be taken seriously and an interaction screen for thyroid and sedative medications. The honest finished stack here is small, and the largest lever, behavior, is free.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide style comparison plate in warm watercolour and ink on cream paper, showing four small labelled supplement cabinets side by side, each containing a different number of amber bottles. Left to right the cabinets hold 3, 3, 4, and 1 bottles respectively. Small neat serif labels beneath each: 'PLANT-BASED', 'POOR SLEEPER', 'OLDER ADULT', 'GENERAL'. Restrained earthy palette of ochre, sage green, slate blue. The visual point is that each cabinet differs in contents and count. No numbers on the bottles, no brand names, no text on the bottles themselves, no people." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same process, four honest outputs. None of them is the "right" stack for anyone else.</em></figcaption></figure>
+
+    <h3>Profile 3 · The older adult on medication</h3>
+    <p>This profile changes the math in two directions at once. The gaps are more likely to be real, and the interaction risk is much higher. A PRISMA-compliant systematic review of 37 studies in adults aged 65 and over identified six nutrients of genuine public-health concern from dietary inadequacy: vitamin D, thiamin, riboflavin, calcium, magnesium, and selenium, and tied these shortfalls to functional decline, frailty, and loss of independent living (ter Borg et al., 2015). So the food-first and gap stages will legitimately flag more candidates here than in a younger person.</p>
+    <p>But Stage 5 gets heavier at exactly the same time. Reyes and colleagues document that nearly 91 percent of older adults take at least one medication, and that supplement-drug interactions are widespread and routinely missed (Reyes et al., 2025). And there is a communication failure layered on top: a Swiss survey of older primary-care patients found 70 percent were taking at least one supplement, but in 60 percent of cases the GP was unaware of at least one supplement the patient was using, and patients were largely unwilling to stop any of them (Lüthold et al., 2024). For this profile, vitamin D is often defensible, calcium and magnesium are worth assessing, but every single item must clear an interaction screen and be disclosed to the prescriber. The pipeline does not just allow more here; it demands more.</p>
+
+    <h3>Profile 4 · The busy general-population person</h3>
+    <p>This is the profile the entire market is aimed at, and it is the one where the honest answer is most often "very little, possibly nothing." A person eating a reasonably varied diet, getting some sun, not pregnant, not on a restrictive pattern, not elderly, simply does not have many predictable gaps. Run the pipeline honestly and most candidates die at Stage 1, because there is no real gap, or at Stage 3, because the evidence does not support the "improve my health" goal that motivated the purchase in the first place.</p>
+    <p>What might survive: <strong>vitamin D</strong> if sun exposure and latitude make a shortfall plausible, ideally confirmed by a test. That may be the entire list. And that is not a failure of the framework; it is the framework succeeding. The Bailey and Liu data showed that this exact profile, the "improve and maintain" general user, is taking the most supplements with the least justification (Bailey et al., 2013; Liu et al., 2024). The correct, defensible output for many busy general-population people is a near-empty cabinet and a clear explanation of why.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The plant-based eater and the general-population person both ran the identical five-gate process. One ended with three justified items, the other with zero or one. Which difference produced that gap, the process or the person's context? If your answer is "the context," you have understood the chapter.</p>
+    </aside>
+
+    <h3>The coaching translation</h3>
+    <p>There is no universal stack, and anyone selling one is selling you a product, not a process. Your gaps are yours. The plant-based eater's defensible B12 is not your defensible B12 unless you share the gap. In practice, this means the right first move is never "what's the best supplement?" It is "what is my actual context, and what does the pipeline say about it?"</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Three realistic profiles, reasoned out loud</h2>
+    <p>The four profiles above were drawn broadly. Here are three sharper, more specific people, the kind who actually walk up and ask. The point is not to memorize their stacks. It is to watch the reasoning run, because the reasoning is the transferable part. Treat each of these as a worked example, not a prescription: change one detail about the person and the output changes with it.</p>
+
+    <h3>The indoor desk worker</h3>
+    <p>Start with the context, because context is Stage 1. This person commutes in the dark half the year, works under fluorescent light, eats a reasonably varied omnivore diet, and gets little direct midday sun on skin. Run the gates. A general multivitamin dies at Stage 3, because there is no specific goal it serves and the large trials of broad multivitamins in healthy adults do not support a meaningful "improve my health" effect. A greens powder dies at the same gate for the same reason. <strong>Vitamin D</strong> is the one candidate with a plausible, context-driven gap: minimal sun plus higher latitude makes a low level genuinely likely, so this is the case for a test, and if the number is low, a modest dose that brings it into range. <strong>Omega-3</strong> is worth a single honest question, does this person eat oily fish? If the answer is essentially never, a modest dose is defensible to cover a likely shortfall; if they eat fish twice a week, it is unnecessary. Note what happened: the entire defensible stack for a healthy indoor worker is, at most, vitamin D confirmed by a test and maybe omega-3 by diet history. Everything else the market aims at this exact person fails at the gate.</p>
+
+    <h3>The vegan lifter</h3>
+    <p>This profile stacks two contexts that each create gaps, a fully plant-based diet and a real training demand, so more candidates legitimately survive than for most people. The known vulnerabilities of plant-based eating are predictable enough that they have been turned into structured assessment questions covering B12, iron, calcium, zinc, vitamin D, essential fatty acids, and protein (Plotnikoff et al., 2023). Run the gates. <strong>B12</strong> is automatic: no reliable plant source, overwhelming evidence, trivial dose, negligible risk, in it goes. <strong>Creatine</strong> is unusually well justified here, because dietary creatine comes from meat and fish and a vegan eats essentially none, so the baseline gap is larger than in an omnivore, and the performance evidence and safety record are strong (Kreider et al., 2017). For a plant-based lifter, creatine is close to a default. <strong>Algae omega-3</strong> is reasonable given limited ALA-to-EPA/DHA conversion and no dietary fish. <strong>A protein supplement</strong> is a convenience tool, defensible when whole-food plant protein is not hitting the daily target around training, and unnecessary when it is. <strong>Iron, zinc, and vitamin D</strong> are the test-first items: plausible gaps on this diet, but measured before dosing, because iron in particular is not a blind addition. The vegan lifter ends with a genuinely longer stack than most people, and every item still traces back to a specific gap.</p>
+
+    <h3>The masters-age athlete</h3>
+    <p>Now combine aging physiology with a real performance goal and, often, one or two medications. Aging itself shifts several gaps toward "more likely real," with vitamin D, calcium, magnesium and others flagged as nutrients of genuine inadequacy in community-dwelling older adults (ter Borg et al., 2015), and the anabolic resistance of older muscle raises the practical protein target. Run the gates. <strong>Protein</strong> moves up in priority, because hitting a higher daily target matters more for preserving muscle with age, and a supplement is a low-risk way to close the gap on days food falls short. <strong>Creatine</strong> is well supported for strength and lean mass and is documented as safe across the lifespan including in the elderly (Kreider et al., 2017), so it is a defensible baseline item for this athlete. <strong>Vitamin D</strong> is frequently justified and worth testing. <strong>Calcium and magnesium</strong> are worth assessing against actual dietary intake rather than adding reflexively. But Stage 5 gets heavier here than anywhere else: supplement-drug interactions are widespread and routinely missed in older adults, the majority of whom take at least one medication (Reyes et al., 2025), and prescribers are frequently unaware of the supplements their patients use (Lüthold et al., 2024). So for this profile, every item must clear an interaction screen and be disclosed to the prescriber, no exceptions. The masters athlete's stack is reasoned the same way as everyone else's; it simply carries a larger gap list and a much heavier risk screen at the same time.</p>
+
+    <h3>The coaching translation</h3>
+    <p>Lay the three side by side and the lesson is hard to miss. The desk worker ends with almost nothing, the vegan lifter with a genuinely long but fully justified list, the masters athlete with a medium list under heavy interaction scrutiny. Same five gates, three different outputs, and not one of them is transferable to the others. When someone hands you their stack and asks what they should add, the honest first question is never about the supplement. It is "who are you, and what does the pipeline actually say about your context?"</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The discipline nobody markets: review and prune</h2>
+    <p>Building a stack is the easy half. Keeping it honest over time is the half that separates competence from accumulation. A stack is not a monument; it is a hypothesis. You built it to close specific gaps under specific conditions, and conditions change. The gap you supplemented two years ago may be closed. The medication you started last month may now interact with something that was fine before. The supplement you added on decent evidence may have been undermined by a better study since.</p>
+    <p>So the review is built into the process, not bolted on. Three moves:</p>
+    <p><strong>Re-test the gap.</strong> For anything you supplement on the basis of a measurement, vitamin D, iron, B12 in some cases, you re-measure on a sensible schedule. If the number has normalized and the underlying cause is resolved, the justification is gone, and so is the supplement. A gap that has closed is no longer a reason to take anything.</p>
+    <p><strong>Remove what no longer earns its place.</strong> The Swiss study showed the hard part of this is not knowing what to cut, it is the willingness to cut, because patients were largely unwilling to deprescribe even supplements doing nothing for them (Lüthold et al., 2024). The authors' conclusion is blunt and correct: supplements not contributing to health should be considered for discontinuation. Removal is a skill, and it requires fighting your own attachment to a bottle you have taken for years.</p>
+    <p><strong>Resist the constant pull to add.</strong> The market never stops marketing. There will always be a new ingredient, a new podcast claim, a new "stack" from someone you admire. The default should be skepticism, not curiosity-driven addition. A new candidate must pass all five gates exactly like every other item. Novelty is not a gate. Hype is not a gate.</p>
+    <p>The reframe that makes this stick is simple. In a world that measures sophistication by the size of the stack, real competence looks like subtraction. The person who can confidently remove four items and explain why understands more than the person who just added a fifth. Pruning, not collecting, is the mark of someone who actually gets it.</p>
+
+    <blockquote class="ch-quote">
+      <p>A complete nutritional assessment must precede any decision to supplement; appropriate use can benefit the athlete, whereas inappropriate use can be harmful.</p>
+      <cite>Adapted from Maughan et al., IOC Consensus Statement (2018)</cite>
+    </blockquote>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The one-sentence defense, and the skeptical colleague</h2>
+    <p>The title of this chapter promises a stack you can defend, so it is worth being concrete about what defending actually looks like. Imagine a sharp, skeptical colleague, a pharmacist, a physician, a well-read training partner, who points at each bottle and asks a single question: "Why is that one there?" If you cannot answer in one clean sentence per item, the item is not defended. It is just present.</p>
+    <p>A defensible answer has a fixed shape, because it is the pipeline compressed into a sentence. It names the gap, states why food did not close it, points to evidence for the actual goal, and ends with the condition that would remove it. "Vitamin D is here because my measured level was low at the end of winter with minimal sun, food and sunlight were not closing it, the dose is set to bring me into range, and I will retest and stop if it normalizes and my exposure improves." That sentence survives a hard question because every clause maps to a gate, and the final clause, the exit condition, is what separates a reasoned choice from a habit. An item you cannot describe an exit condition for is an item you are taking on momentum.</p>
+
+    <h3>Steelmanning the cut</h3>
+    <p>Defending a stack is not only about justifying what stays. It is equally about justifying what you removed, and that is harder, because removal has no marketing behind it. The strongest version of the skill is being able to argue the other side and then still cut. Take a daily multivitamin in a healthy adult. The steelman for keeping it is real: it is cheap, it is low-risk, and it provides an "insurance" feeling. Now run it through the gates honestly. There is no specific identified gap, the broad-population evidence for an "improve my health" outcome is weak, and the item exists to soothe an anxiety rather than to close a measured shortfall. The cut is correct, and being able to state the best case for keeping it before you cut it is what makes the cut credible to a skeptic instead of dogmatic.</p>
+    <p>The same discipline applies to the null result. Large, well-run trials in general populations have repeatedly failed to show benefit for supplements that sound like obvious wins. The VITAL trial randomized nearly 26,000 generally healthy US adults to omega-3 or placebo and found no reduction in major cardiovascular events or invasive cancer over a median of more than five years (Manson et al., 2018). That does not mean omega-3 is useless for everyone; it means that adding it to an unselected, already-adequate population to "prevent disease" is not supported, which is exactly the goal-less, gap-less use the framework rejects. A defensible omega-3 recommendation is tied to a real dietary gap in a specific person, not to a population-level promise the trials did not deliver.</p>
+
+    <h3>When the honest answer is "the effect might be expectation"</h3>
+    <p>A skeptical colleague will sometimes push on the hardest point: "How do you know it is doing anything, and not just that you expect it to?" This is a fair question and a defensible stack has an answer for it. For tier-one items chosen to close a measured or clearly predictable gap, the justification does not rest on how you feel; it rests on the gap and the evidence, and a normalized retest confirms it objectively. For items justified mainly by subjective "I feel better," the honest position is humility: expectation is a real and powerful effect, the felt benefit may not be the molecule, and the correct response is to hold those items to a higher bar, not to defend them harder. A stack you can defend is one where the load-bearing items lean on measured gaps and real evidence, and the feel-based items are labeled honestly as the weakest part of the structure.</p>
+
+    <h3>The coaching translation</h3>
+    <p>In practice, the skeptical-colleague test is the single best audit you can run on your own cabinet. Go bottle by bottle and say the one sentence out loud. If it comes out clean, gap, food, evidence, dose, exit condition, the item stays. If you find yourself reaching, padding, or appealing to a vague sense that it probably helps, you have located something to cut. The goal is not to win the argument with the skeptic. The goal is to have already had that argument with yourself, item by item, before anyone else asks.</p>
+  </section>
+
+  <div class="ch-widget" id="justifyCut">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Justify or Cut Challenge</div>
+    </div>
+    <p class="ch-widget-sub">You inherited a ten-product "influencer stack." For each item, decide: keep it (only if it can clear the gates) or cut it. The tool scores whether your call matches the framework, and counts how lean you got.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Assume this person is</span>
+        <select class="ch-widget-select" id="jcContext">
+          <option value="general">A healthy general-population adult</option>
+          <option value="plant">A plant-based eater</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Item to judge</span>
+        <select class="ch-widget-select" id="jcItem">
+          <option value="multivitamin">Daily multivitamin</option>
+          <option value="greens">Greens powder</option>
+          <option value="d">Vitamin D</option>
+          <option value="b12">Vitamin B12</option>
+          <option value="bcaa">BCAA capsules</option>
+          <option value="detox">Liver "detox" blend</option>
+          <option value="testbooster">Testosterone booster</option>
+          <option value="collagen">Collagen for "glow"</option>
+          <option value="probiotic">Broad probiotic, no indication</option>
+          <option value="omega">Omega-3</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your call</span>
+        <select class="ch-widget-select" id="jcCall">
+          <option value="keep">Keep (it clears the gates)</option>
+          <option value="cut">Cut (it fails a gate)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Correct calls</span>
+        <span class="ch-meter-bar"><span id="jcBarScore" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="jcNumScore">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Items judged</span>
+        <span class="ch-meter-bar"><span id="jcBarSeen" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="jcNumSeen">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Stack remaining</span>
+        <span class="ch-meter-bar"><span id="jcBarKept" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="jcNumKept">10</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="jcSubmit">Submit my call</button>
+    <p class="ch-widget-sub" id="jcFeedback" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Putting it together on a real person</h2>
+    <p>Take any person who walks up to you, including the one in the mirror. The portable framework is now a sequence of questions you can ask out loud:</p>
+    <p>What is your actual diet, life stage, and context, and does any of that predict a real gap? For the gaps that are invisible, will we test rather than guess? For the gaps that are real, can food close them conveniently, and if not, which of the legitimate food-only exception clauses applies? For each remaining candidate, is there adequate evidence for <em>this</em> goal in <em>this</em> population at a realistic dose? Can we get a quality product at an effective dose? And does the finished stack survive an interaction and risk screen against everything else, including medication?</p>
+    <p>Whatever survives all of that is your defensible stack, and it might be three items or it might be zero. The honest "you don't need anything, and here is exactly why" is just as valid an output as a list, and for a lot of people it is the correct one. That is not a cop-out. It is the hardest and most honest answer the market will never give you, because there is nothing to sell at the end of it.</p>
+    <p>The supplements that pass these gates will change as the evidence evolves. New ingredients will arrive, old ones will be downgraded, doses will be refined. None of that threatens what you built here, because you did not memorize a list. You learned the reasoning that generates the list. That reasoning is the thing you keep.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Case study: the inherited cabinet</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Naomi is 41, a mostly plant-based eater who lifts three times a week and works a desk job in a northern city. Over two years she accumulated a cabinet from podcasts and friends: a daily multivitamin, a greens powder, a broad-spectrum probiotic with no particular reason, a "testosterone support" blend a coworker swore by, collagen for skin, a high-dose iron she started because she felt tired, B12, algae omega-3, creatine, and vitamin D. Ten bottles. She takes them all most mornings, is not sure which are doing anything, and recently started a thyroid medication. She asks one question: which of these should I actually keep?</p>
+    </aside>
+    <p>Run Naomi through the pipeline and the cabinet sorts itself quickly, because the framework does not care how she acquired anything. It only asks whether each item can clear the five gates for her specific context. Start with the easy keeps. <strong>B12</strong> clears every gate: a plant-based diet has no reliable source, the evidence is overwhelming, the dose is trivial, the risk negligible. <strong>Creatine</strong> is unusually well justified for her, because as a plant-based lifter she eats essentially no dietary creatine, the performance evidence is strong, and it is documented as safe long term (Kreider et al., 2017). <strong>Algae omega-3</strong> is reasonable given no dietary fish. These three are defensible on the pattern alone.</p>
+    <p>Now the test-first tier. Her <strong>iron</strong> is the most important item in the cabinet to get right, and it is also the most dangerous as currently used. She started it blind, because she "felt tired," which is exactly the move the framework forbids. Fatigue is not a measurement, and iron is not a nutrient to add on a hunch, because the body cannot easily shed an excess. Her iron does not earn a keep or a cut yet; it earns a blood draw. If ferritin is genuinely low, it stays at a measured dose with a planned retest. If it is normal or high, it comes out immediately. Her <strong>vitamin D</strong> is in the same category but lower-stakes: northern latitude and a desk job make a low level plausible, so test and dose to range. These are decisions waiting on numbers, not on feelings.</p>
+    <p>The cuts are where the real work is, because each one fights an attachment. The <strong>multivitamin</strong> and <strong>greens powder</strong> fail Stage 3: no specific gap, no goal-specific evidence, redundant with the justified items. The <strong>collagen</strong> for "glow" and the <strong>probiotic</strong> with no indication fail the same gate, an effect she hopes for is not evidence for a goal. The <strong>"testosterone support" blend</strong> is the clearest cut of all and now the most urgent, because Naomi just started a thyroid medication, and an unscreened proprietary blend in a person newly on medication is precisely the Stage 5 interaction risk that is widespread and routinely missed (Reyes et al., 2025). It comes out, and the rest of her stack must be disclosed to whoever prescribed the thyroid drug (Lüthold et al., 2024).</p>
+    <p>Naomi's defensible cabinet is shorter and better reasoned than the one she walked in with: B12, creatine, and algae omega-3 kept outright; iron and vitamin D pending a test that will confirm or remove them; everything else cut, with the testosterone blend cut first for safety. She went from ten bottles she could not explain to, at most, five she can defend in one sentence each. That subtraction is not a smaller life. It is the whole skill of this course, run once, on a real cabinet.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The deliverable of this course is a repeatable five-gate pipeline, not a product list: identify a real gap, try food first, demand evidence for the actual goal, verify quality and effective dose, then screen the whole stack for risk and interactions.</li>
+      <li>Each gate can stop a candidate, and order matters. Run the pipeline forward from gap to bottle, never backward from a bottle you already like.</li>
+      <li>The dominant real-world reason people supplement, a vague "improve or maintain my health," is precisely the goal-less motivation the framework is designed to replace (Bailey et al., 2013; Liu et al., 2024).</li>
+      <li>There is no universal stack. The same process produces three justified items for a plant-based eater, a small conditional stack for a poor sleeper, a heavily interaction-screened stack for an older adult, and often near-zero for a healthy general-population person.</li>
+      <li>"Food first, but not always food only": food is the default, with specific evidence-based clauses for when a supplement is genuinely warranted (Close et al., 2022).</li>
+      <li>Review is part of the process: re-test gaps, remove what no longer earns its place, and resist the constant pull to add. Pruning, not collecting, is the mark of competence (Lüthold et al., 2024).</li>
+      <li>"You don't need anything, and here is why" is a complete, defensible, and frequently correct output.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You now hold the whole framework. What remains is practice on messy, real cases where the gaps are ambiguous, the person is on five medications, or the diet is changing month to month. The reasoning does not change; only the inputs do. Take this pipeline into the world, run it on actual people, and let the honest answers, including the short and empty ones, be the proof that you understood the point.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bailey, R. L., Gahche, J. J., Miller, P. E., Thomas, P. R., & Dwyer, J. T. (2013). Why US adults use dietary supplements. <em>JAMA Internal Medicine, 173</em>(5), 355–361. https://doi.org/10.1001/jamainternmed.2013.2299</p>
+    <p>Close, G. L., Kasper, A. M., Walsh, N. P., & Maughan, R. J. (2022). "Food first but not always food only": Recommendations for using dietary supplements in sport. <em>International Journal of Sport Nutrition and Exercise Metabolism, 32</em>(5), 371–386. https://doi.org/10.1123/ijsnem.2021-0335</p>
+    <p>Kreider, R. B., Kalman, D. S., Antonio, J., Ziegenfuss, T. N., Wildman, R., Collins, R., Candow, D. G., Kleiner, S. M., Almada, A. L., & Lopez, H. L. (2017). International Society of Sports Nutrition position stand: Safety and efficacy of creatine supplementation in exercise, sport, and medicine. <em>Journal of the International Society of Sports Nutrition, 14</em>, 18. https://doi.org/10.1186/s12970-017-0173-z</p>
+    <p>Liu, L., Chen, X., Liu, Y., & Zhang, Y. (2024). Quantity, duration, adherence, and reasons for dietary supplement use among adults: Results from NHANES 2011–2018. <em>Nutrients, 16</em>(12), 1830. https://doi.org/10.3390/nu16121830</p>
+    <p>Lüthold, R. V., Jungo, K. T., Weir, K. R., Cateau, D., & Streit, S. (2024). Exploring GP and patient attitudes towards the use and deprescribing of dietary supplements: A survey study in Switzerland. <em>BMC Primary Care, 25</em>, 351. https://doi.org/10.1186/s12875-024-02605-z</p>
+    <p>Manson, J. E., Cook, N. R., Lee, I.-M., Christen, W., Bassuk, S. S., Mora, S., Gibson, H., Albert, C. M., Gordon, D., Copeland, T., D'Agostino, D., Friedenberg, G., Ridge, C., Bubes, V., Giovannucci, E. L., Willett, W. C., & Buring, J. E. (2018). Marine n-3 fatty acids and prevention of cardiovascular disease and cancer. <em>New England Journal of Medicine, 380</em>(1), 23–32. https://doi.org/10.1056/NEJMoa1811403</p>
+    <p>Maughan, R. J., Burke, L. M., Dvorak, J., Larson-Meyer, D. E., Peeling, P., Phillips, S. M., Rawson, E. S., Walsh, N. P., Garthe, I., Geyer, H., Meeusen, R., van Loon, L. J. C., Shirreffs, S. M., Spriet, L. L., Stuart, M., Vernec, A., Currell, K., Ali, V. M., Budgett, R. G., … Engebretsen, L. (2018). IOC consensus statement: Dietary supplements and the high-performance athlete. <em>British Journal of Sports Medicine, 52</em>(7), 439–455. https://doi.org/10.1136/bjsports-2018-099027</p>
+    <p>Plotnikoff, G. A., Dobberstein, L., & Raatz, S. (2023). Nutritional assessment of the symptomatic patient on a plant-based diet: Seven key questions. <em>Nutrients, 15</em>(6), 1387. https://pmc.ncbi.nlm.nih.gov/articles/PMC10056340/</p>
+    <p>Reyes, N., et al. (2025). Pharmacological interactions between nutritional supplements and prescription medications in older adults: A comprehensive review. https://pmc.ncbi.nlm.nih.gov/articles/PMC12526737/</p>
+    <p>ter Borg, S., Verlaan, S., Hemsworth, J., Mijnarends, D. M., Schols, J. M. G. A., Luiking, Y. C., & de Groot, L. C. P. G. M. (2015). Micronutrient intakes and potential inadequacies of community-dwelling older adults: A systematic review. <em>British Journal of Nutrition, 113</em>(8), 1195–1206. https://doi.org/10.1017/s0007114515000203</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 8 of 8</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('stackBuilder');
+    if(!root) return;
+    // scores 0-10 per gate per profile/supp; verdict logic
+    var data = {
+      plant: {
+        b12:    {g:10,f:10,e:10,q:10,r:10, v:"PASS. No plant B12 source, food-first genuinely fails, evidence overwhelming, trivial dose, negligible risk. Justification: 'Closes an unavoidable dietary gap.'"},
+        d:      {g:6,f:7,e:8,q:9,r:8, v:"CONDITIONAL. Flag for testing. Add only if measured low. Justification: 'Confirmed low status, food-first impractical.'"},
+        omega:  {g:7,f:6,e:7,q:8,r:9, v:"PASS (weaker). ALA-to-EPA/DHA conversion is limited; algae omega-3 reasonably closes it. Justification: 'Poor food availability of long-chain omega-3.'"},
+        iron:   {g:5,f:6,e:7,q:7,r:3, v:"TEST FIRST. Do not add blind; supplementing iron without a confirmed low carries real risk. Justification only valid if ferritin is low."},
+        mag:    {g:4,f:8,e:4,q:7,r:8, v:"USUALLY CUT. Often closeable with food; weak goal-specific evidence here. Fails the evidence gate without a real shortfall."},
+        melatonin:{g:1,f:2,e:5,q:7,r:7, v:"CUT for this profile. No relevant gap. Wrong tool for a plant-based eater with no sleep complaint."},
+        multi:  {g:2,f:3,e:2,q:5,r:6, v:"CUT. Fails the evidence gate for any specific goal and duplicates targeted items. Greens/multi blends are shotguns, not tools."},
+        ashwa:  {g:1,f:2,e:4,q:5,r:5, v:"CUT. No gap in this profile; this is a goal looking for a problem."},
+        creatine:{g:3,f:4,e:7,q:8,r:8, v:"OPTIONAL, goal-dependent. Defensible only if a strength/performance goal exists; not a default for a plant-based eater per se."},
+        testbooster:{g:0,f:0,e:1,q:3,r:4, v:"CUT. No real gap, no credible evidence for the goal. This dies at Gate 1 and Gate 3."}
+      },
+      stress: {
+        b12:    {g:2,f:3,e:3,q:9,r:9, v:"CUT unless diet warrants it. Stress and sleep are not a B12 gap. Wrong tool."},
+        d:      {g:5,f:6,e:6,q:9,r:8, v:"CONDITIONAL. Test first; defensible only if low. Not a sleep fix."},
+        omega:  {g:3,f:4,e:4,q:8,r:9, v:"WEAK. No specific gap for this profile; behavior changes outrank it."},
+        iron:   {g:2,f:3,e:3,q:6,r:3, v:"TEST ONLY. Fatigue is not proof of low iron. Do not guess."},
+        mag:    {g:6,f:5,e:6,q:8,r:8, v:"CONDITIONAL PASS. Reasonable if dietary intake is genuinely low; low risk. Justification: 'Plausible shortfall, modest support, low risk.'"},
+        melatonin:{g:7,f:8,e:7,q:8,r:7, v:"PASS for the right use. Low-dose, circadian-targeted, not a nightly sedative. Justification: 'Matched to a specific timing problem.'"},
+        multi:  {g:1,f:2,e:2,q:5,r:6, v:"CUT. No goal-specific evidence; a blend cannot fix behavior."},
+        ashwa:  {g:5,f:5,e:6,q:6,r:5, v:"CONDITIONAL. Some evidence for stress markers, but verify quality/dose and screen thyroid and sedative interactions first."},
+        creatine:{g:2,f:3,e:5,q:8,r:8, v:"CUT for this goal. Not a stress or sleep tool."},
+        testbooster:{g:0,f:0,e:1,q:3,r:4, v:"CUT. No gap, no credible evidence. Dies immediately."}
+      },
+      older: {
+        b12:    {g:7,f:6,e:8,q:9,r:7, v:"OFTEN PASS. Absorption declines with age; defensible, but disclose to prescriber and screen interactions."},
+        d:      {g:8,f:6,e:8,q:9,r:7, v:"USUALLY PASS. Vitamin D is a flagged nutrient of concern in older adults. Justification: 'High-prevalence inadequacy, food-first hard.' Screen interactions."},
+        omega:  {g:5,f:5,e:6,q:8,r:5, v:"CONDITIONAL. Reasonable, but screen against anticoagulants before adding."},
+        iron:   {g:4,f:5,e:6,q:7,r:2, v:"TEST AND SCREEN. High interaction and overload risk in older adults. Never blind."},
+        mag:    {g:6,f:5,e:6,q:8,r:5, v:"ASSESS. Flagged nutrient of concern, but screen against medications (this gate is heavier here)."},
+        melatonin:{g:5,f:6,e:6,q:7,r:5, v:"CONDITIONAL. Possible for circadian issues, but interaction and sedation risk rise with polypharmacy."},
+        multi:  {g:3,f:4,e:3,q:5,r:5, v:"USUALLY CUT. Shotgun approach; target the specific flagged nutrients instead and screen each."},
+        ashwa:  {g:2,f:3,e:4,q:5,r:3, v:"CUT. Weak gap, and interaction risk with medication makes this hard to defend."},
+        creatine:{g:4,f:4,e:6,q:8,r:6, v:"OPTIONAL. Some evidence for muscle/function in aging, but disclose and screen renal status."},
+        testbooster:{g:0,f:0,e:1,q:3,r:2, v:"CUT. No gap, no evidence, and high interaction exposure. Fails every meaningful gate."}
+      },
+      general: {
+        b12:    {g:2,f:3,e:3,q:9,r:9, v:"CUT. A varied omnivorous diet covers this. No gap, no reason."},
+        d:      {g:6,f:6,e:7,q:9,r:8, v:"CONDITIONAL. Defensible if sun/latitude make a shortfall plausible; ideally test. This may be the entire list."},
+        omega:  {g:3,f:5,e:5,q:8,r:9, v:"WEAK. If you eat fish, no gap. Optional at best."},
+        iron:   {g:2,f:4,e:4,q:7,r:3, v:"TEST ONLY. No reason to guess in a healthy general-population person."},
+        mag:    {g:3,f:6,e:4,q:8,r:8, v:"USUALLY CUT. Closeable with food for most; weak goal-specific case."},
+        melatonin:{g:1,f:3,e:5,q:7,r:7, v:"CUT. No sleep gap stated; wrong tool for a generic 'improve health' goal."},
+        multi:  {g:2,f:3,e:2,q:5,r:6, v:"CUT. This is the classic goal-less 'improve/maintain' purchase the evidence does not support."},
+        ashwa:  {g:1,f:2,e:4,q:5,r:5, v:"CUT. No gap, no goal. A solution looking for a problem."},
+        creatine:{g:3,f:4,e:7,q:8,r:8, v:"OPTIONAL. Only defensible if a real performance goal exists; not a default."},
+        testbooster:{g:0,f:0,e:1,q:3,r:4, v:"CUT. No gap, no credible evidence. The market's purest hype product."}
+      }
+    };
+    function setBar(barId,numId,val){
+      var b=document.getElementById(barId), n=document.getElementById(numId);
+      if(b) b.style.width=(val*10)+'%';
+      if(n) n.textContent=val;
+    }
+    document.getElementById('sbRun').addEventListener('click',function(){
+      var p=document.getElementById('sbProfile').value;
+      var s=document.getElementById('sbSupp').value;
+      var d=data[p][s];
+      setBar('sbBarGap','sbNumGap',d.g);
+      setBar('sbBarFood','sbNumFood',d.f);
+      setBar('sbBarEv','sbNumEv',d.e);
+      setBar('sbBarQ','sbNumQ',d.q);
+      setBar('sbBarR','sbNumR',d.r);
+      document.getElementById('sbVerdict').textContent=d.v;
+    });
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root=document.getElementById('justifyCut');
+    if(!root) return;
+    // correct call: keep or cut, per context
+    var ans = {
+      general: {
+        multivitamin:'cut', greens:'cut', d:'keep', b12:'cut', bcaa:'cut',
+        detox:'cut', testbooster:'cut', collagen:'cut', probiotic:'cut', omega:'cut'
+      },
+      plant: {
+        multivitamin:'cut', greens:'cut', d:'keep', b12:'keep', bcaa:'cut',
+        detox:'cut', testbooster:'cut', collagen:'cut', probiotic:'cut', omega:'keep'
+      }
+    };
+    var why = {
+      multivitamin:"Fails the evidence gate for any specific goal; a shotgun blend, not a tool.",
+      greens:"No goal-specific evidence; duplicates real food and targeted items.",
+      d:"Defensible when a shortfall is plausible and ideally tested; often the one survivor.",
+      b12:"Only a keeper when the diet actually creates the gap (plant-based). Otherwise cut.",
+      bcaa:"Redundant with adequate protein; fails the gap and evidence gates.",
+      detox:"No real gap, no credible evidence. The liver is not waiting on a capsule.",
+      testbooster:"No gap, no credible evidence for the goal. Pure hype.",
+      collagen:"Weak goal-specific evidence for 'glow'; fails Gate 3 for most.",
+      probiotic:"With no indication, there is no gap and no matched goal. Cut.",
+      omega:"A keeper for plant-based eaters (poor food availability); optional otherwise."
+    };
+    var seen={}, score=0, count=0, kept=10;
+    function pct(v,max){return Math.round((v/max)*100);}
+    document.getElementById('jcSubmit').addEventListener('click',function(){
+      var ctx=document.getElementById('jcContext').value;
+      var item=document.getElementById('jcItem').value;
+      var call=document.getElementById('jcCall').value;
+      var key=ctx+'|'+item;
+      var correct=ans[ctx][item];
+      if(!seen[key]){
+        seen[key]=true;
+        count++;
+        if(call===correct) score++;
+        if(correct==='cut' && call==='cut') kept--;
+        if(correct==='keep' && call==='cut') kept--; // cutting still shrinks displayed stack
+      }
+      var right = (call===correct);
+      var msg = (right?"Correct. ":"Not quite. ")+
+        "The framework says "+(correct==='keep'?"KEEP":"CUT")+" here. "+why[item];
+      document.getElementById('jcFeedback').textContent=msg;
+      var b=document.getElementById('jcBarScore'); if(b) b.style.width=(count?pct(score,count):0)+'%';
+      document.getElementById('jcNumScore').textContent=score;
+      var b2=document.getElementById('jcBarSeen'); if(b2) b2.style.width=pct(count,10)+'%';
+      document.getElementById('jcNumSeen').textContent=count;
+      if(kept<0) kept=0;
+      var b3=document.getElementById('jcBarKept'); if(b3) b3.style.width=pct(kept,10)+'%';
+      document.getElementById('jcNumKept').textContent=kept;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

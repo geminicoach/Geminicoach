@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When You Eat: Signal Versus Noise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 3 · Module 1</div>
+    <h1 class="ch-title">When You Eat: <em>Signal Versus Noise</em></h1>
+    <p class="ch-subtitle">Meal timing is real, mostly small, and badly oversold. Here is how to tell the difference.</p>
+    <div class="ch-meta">
+      <span>34 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>14 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>icture two people leaving the gym. The first sprints to the locker room, hands shaking, to slam a protein shake before an imaginary thirty-minute timer expires. The second showers, drives home, talks to a roommate, and eats a normal dinner an hour later. The supplement industry has trained us to believe the first person made a meaningful choice and the second person threw away their workout. The honest answer, supported by a decade of careful research, is that their results over the next year will be nearly identical, provided one thing holds true: they both ate enough total food and enough total protein across the day.</p>
+    <p>That sentence is the whole chapter. Everything that follows is the evidence behind it, the places where timing genuinely does earn a small return, and a discipline you will use for the rest of this course: the difference between a mechanism that exists and an outcome that matters.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Mechanism Is Not Outcome</h2>
+    <p>Let's start with the single most useful idea in nutrition science, because it explains almost every piece of bad advice you will ever hear. A <span class="ch-key">mechanism</span> is a real biological process: insulin moves glucose and amino acids into cells, resistance exercise sensitizes muscle to protein, blood flow to muscle rises after training. An <span class="ch-key">outcome</span> is what actually happens to a person over weeks and months: they gain muscle, lose fat, feel better, perform well. These are not the same thing, and the gap between them is where the noise lives.</p>
+    <p>Here is the trap. A mechanism is easy to demonstrate in a lab. You can measure insulin rising after a meal. You can measure muscle protein synthesis spiking in the hours after training. Because these are measurable and real, it is tempting to assume that nudging them with precise timing will reshape your body. But a measurable spike in a four-hour window is not the same as a measurable difference in muscle on your frame a year later. The body is buffered, redundant, and forgiving. It integrates inputs over long stretches of time. A mechanism tells you something <em>can</em> happen. Only an outcome study tells you whether it <em>does</em>, and by how much.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on, try to state the difference between a mechanism and an outcome in your own words, and name one nutrition claim you have heard that confuses the two. Keep that answer in mind. We will return to insulin specifically, the most abused mechanism in the field.</p>
+    </aside>
+    <p>This is why it matters: the entire timing industry is built on real mechanisms that have been quietly upgraded into decisive outcomes without the evidence to justify the promotion. Insulin's role in nutrient uptake is real. The claim that meal timing dramatically reshapes body composition for a general-population learner is mostly overstated. Both of those statements can be true at once, and once you can hold them together, you have outgrown most of what gets sold to you.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial diagram contrasting two concepts side by side on aged cream paper. On the left, a tight close-up sketch of a single spark or spike labelled 'mechanism' in small italic serif, drawn as a brief sharp peak. On the right, a long gentle hill labelled 'outcome' in small italic serif, drawn as a broad slow curve stretching across months. A faint dotted bracket links them with a small handwritten note 'not the same thing'. Muted palette of ink black, ochre, sage green, and a single warm rust accent. Composition balanced left to right, generous white space, the feel of a thoughtful researcher's notebook margin. No numerical axes, no ticks, no charts." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>A spike you can measure in hours is not a difference you can see in a year.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The Hierarchy of Impact</h2>
+    <p>If you want to organize your attention sensibly, you need a ranking. Not everything in nutrition matters equally, and pretending it does is how people end up exhausted, anxious, and no leaner. Think of it as a house. The foundation has to be poured before the furniture placement means anything. Here is the hierarchy for body composition, from foundation to finish trim:</p>
+    <h3>1. Total energy intake</h3>
+    <p>Whether you are in a surplus, deficit, or at maintenance over time determines whether you gain or lose mass at all. This is the foundation. No timing trick overrides it. If total intake is wrong, nothing downstream can save the outcome.</p>
+    <h3>2. Total protein (and overall macronutrient adequacy)</h3>
+    <p>Within a given energy balance, total daily protein is the strongest lever on how much of a gain is muscle and how much of a loss spares muscle. The largest meta-analysis on the subject, pooling 49 randomized trials in 1,863 people, found that resistance-training gains in fat-free mass kept improving with protein intake up to roughly <span class="ch-key">1.62 g/kg/day</span>, then plateaued (Morton et al., 2017). Below that you are leaving muscle on the table. Above it, more protein buys you nothing extra for hypertrophy.</p>
+    <h3>3. Distribution and meal frequency</h3>
+    <p>How you spread protein across the day is a genuine but second-order effect. It can be worth doing. It cannot rescue a broken foundation. We will spend real time here because it is the one timing variable with decent outcome evidence behind it.</p>
+    <h3>4. Peri-workout timing (the "anabolic window")</h3>
+    <p>The hour or so around training. Real mechanism, small and soft outcome for most people. Matters more for athletes training fasted or twice a day, far less for the general population.</p>
+    <h3>5. Supplement timing</h3>
+    <p>Whether you take creatine at 8 a.m. or 8 p.m., whether your caffeine lands fifteen minutes earlier. For body composition, this is the placement of a decorative vase. It is the bottom of the hierarchy for a reason.</p>
+    <p><strong>Coaching translation:</strong> spend your attention from the top down. Most people invert this. They obsess over item four and item five while never once tracking item one or item two. That is fussing over furniture in a house with no foundation. In practice, this means: if you only ever fix two things, fix your total and your protein, and you have captured something like ninety percent of the available result.</p>
+  </section>
+
+  <div class="ch-widget" id="hierarchy-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Impact Hierarchy Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Rank these five variables from most to least impactful for body composition, then reveal the evidence-based ranking with effect magnitudes.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 1 (most impactful)</span>
+        <select class="ch-widget-select" data-slot="0"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 2</span>
+        <select class="ch-widget-select" data-slot="1"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 3</span>
+        <select class="ch-widget-select" data-slot="2"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 4</span>
+        <select class="ch-widget-select" data-slot="3"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 5 (least impactful)</span>
+        <select class="ch-widget-select" data-slot="4"></select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters" id="hierarchy-meters"></div>
+
+    <button class="ch-widget-btn" id="hierarchy-btn">Reveal evidence-based ranking</button>
+    <p class="ch-widget-sub" id="hierarchy-note"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Anabolic Window Is Wider and Softer Than You Were Told</h2>
+    <p>The "<span class="ch-key">anabolic window</span>" is the idea that there is a narrow post-workout period, often cited as thirty minutes, during which you must consume protein and carbohydrate or forfeit your gains. It is one of the most successful marketing constructs in the history of supplements, because it manufactures urgency, and urgency sells powder.</p>
+    <p>The science tells a calmer story. Aragon and Schoenfeld (2013), in a review that reset the field, pointed out that nearly all the evidence for a critical immediate-feeding window came from studies in which subjects trained <em>fasted</em>. If you train on an empty stomach, then yes, getting protein in afterward matters more, because you have been in a catabolic state with no incoming amino acids. But most people do not train fasted. They ate at some point in the hours before training, and that pre-exercise meal is still being digested and releasing amino acids into the blood during and after the session. When a pre-workout meal is present, the urgency of slamming something the instant you rack the last set largely evaporates.</p>
+    <p>How wide is the window, really? The International Society of Sports Nutrition position stand, authored by nineteen researchers, concluded that muscle remains sensitized to protein for at least <span class="ch-key">twenty-four hours</span> after a resistance session (Kerksick et al., 2017). Twenty-four hours. Not thirty minutes. The deadline you were sold is off by a factor of roughly forty-eight. The position stand places total daily protein in the range of 1.4 to 2.0 g/kg/day as a higher priority than any specific timing for body-composition outcomes.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Why does the presence of a pre-workout meal change the importance of a post-workout meal? Think in terms of amino acids in the bloodstream, not in terms of a clock. If you can answer this, you understand why the window is soft.</p>
+    </aside>
+    <p><strong>Coaching translation:</strong> if someone asks whether they "have to" eat right after training, the honest answer is no, not for general health or ordinary training goals. Eat a normal protein-containing meal within a few hours on either side of your session and you have captured the effect. The window is real, but it is a barn door, not a keyhole. The exception worth naming: if you genuinely trained fasted, or you are training again later the same day, getting protein in sooner does carry a small real benefit. That is the secondary layer for trained or high-frequency individuals, not a rule for everyone.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration plate on warm parchment showing a wide barn door standing open beside a tiny keyhole, drawn in pen-and-ink with soft watercolour washes. The barn door is labelled in small italic serif 'protein-sensitive period' and the keyhole is labelled 'the 30-minute myth', with the barn door clearly far larger. A thin horizontal band beneath suggests the passage of time as a gentle sweep, with three small generic sun-position marks meaning morning, midday, evening, no numbers. Palette of sepia, faded teal, straw yellow, and ink. Calm, editorial, field-guide register. No charts, no numeric axes." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The opportunity to feed trained muscle is a barn door, not a keyhole.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Fasted Training and the One Place the Window Tightens</h2>
+    <p>The window earns its reputation in exactly one circumstance, so it is worth understanding that circumstance properly rather than treating it as a universal law. When you train fasted, you arrive at the session with low circulating amino acids and an empty gut. Resistance exercise on top of that fasted state raises the rate at which muscle protein is broken down, and with no incoming amino acids to offset it, you sit in a net-negative protein balance for the duration of the session and beyond. Feeding protein afterward flips that balance from breakdown toward building. The post-exercise meal is doing real work here, because it is the first amino acid delivery the muscle has seen in many hours.</p>
+    <p>Contrast that with the far more common scenario. You ate a protein-containing meal two or three hours before training. That meal is still elevating your blood amino acids while you lift and for a couple of hours afterward, because mixed-meal protein digests and trickles into the circulation slowly. You were never in the deep catabolic hole that fasted training creates, so the urgency to feed immediately after the last set is much lower. The amino acids are already on station. This is the mechanism behind a sentence in the International Society of Sports Nutrition position stand that often gets overlooked: the size and timing of the pre-exercise meal may determine how much a post-exercise meal even matters (Kerksick et al., 2017).</p>
+    <p>So the honest rule has a condition attached. If you train fasted, get a 20 to 40 gram dose of protein in reasonably soon afterward, because for you the window is meaningfully tighter and the benefit is real. If you ate beforehand, your next normal meal within a few hours is plenty. The window did not vanish. It simply opens wide for the fed lifter and narrows for the fasted one, which is precisely what you would predict once you stop thinking about a clock and start thinking about amino acid availability in the blood.</p>
+    <p><strong>Coaching translation:</strong> the practical question is not whether you trained, it is whether you trained on empty. A person doing fasted morning workouts and a person eating lunch before an afternoon session have genuinely different post-workout needs, and a one-size rule serves neither. Match the urgency of the post-workout meal to how depleted you actually were going in. That is the whole adjustment, and it covers almost everyone.</p>
+  </section>
+
+
+
+  <section class="ch-section">
+    <h2>Peri-Workout Timing for Endurance and Two-a-Days: Where Carbohydrate Actually Has a Clock</h2>
+    <p>Everything so far has been about protein and muscle. Carbohydrate timing is a separate question, and it is the one place where a genuine, time-sensitive feeding window survives scrutiny. The difference is the fuel it governs. Muscle protein synthesis responds to amino acids over a slow, day-long arc. Muscle glycogen, the stored carbohydrate your muscles burn during hard exercise, can be drained in a single long session and has to be physically rebuilt before the next one. When the next hard session is close, the speed of that rebuild stops being academic.</p>
+    <p>Here is the mechanism. Prolonged or high-intensity exercise depletes muscle glycogen. Immediately after exercise the muscle is unusually primed to take glucose up and pack it back into storage: the glucose transporter GLUT4 is still active at the membrane, blood flow to the muscle is elevated, and the enzyme glycogen synthase is in a more active state. This heightened sensitivity fades over the following hours. So if you have very little time to refuel, the early post-exercise period is the most efficient time to deliver carbohydrate. The International Society of Sports Nutrition position stand puts numbers on it: when rapid restoration is required, meaning under roughly four hours until the next bout, aggressive refeeding of about 1.2 grams of carbohydrate per kilogram of body weight per hour, favoring high-glycemic sources, maximizes the resynthesis rate (Kerksick et al., 2017). For an 80 kilogram athlete that is close to 100 grams of carbohydrate per hour during the recovery window.</p>
+    <p>But notice the condition that makes the clock matter: a short turnaround. This is the critical caveat that separates signal from noise. Parkin and colleagues (1997) tested it directly. They had endurance-trained cyclists complete an exhausting ride, then fed them high-glycemic carbohydrate either immediately or with a two-hour delay, and measured muscle glycogen at 8 and 24 hours. When enough total carbohydrate was eaten across the full recovery period, the two-hour delay made no difference to glycogen levels by 8 or 24 hours. The early window only buys you a faster rebuild; it does not buy you a bigger one. If you have a full day before your next session, total carbohydrate intake is what refills the tank, and the hour you start filling it is close to irrelevant.</p>
+    <h3>When the clock genuinely matters</h3>
+    <p>This is why peri-workout carbohydrate timing is a real exception rather than recycled hype. It applies to a specific set of people. The endurance athlete doing two sessions in one day, a morning ride and an evening run, has only a handful of hours to restock glycogen, so front-loading carbohydrate the moment the first session ends is a legitimate performance decision. The same is true for an athlete in a tournament with multiple events in a day, or a two-a-day training camp. For these people the post-exercise hours are not a marketing fiction; they are a measurable head start on a rebuild that has a hard deadline.</p>
+    <p>For the recreational lifter or the person training once a day with a normal day of eating before the next session, none of this applies. You have twenty-some hours and several meals to refill glycogen, and the timing of the first bite within that span does not move the outcome. The carbohydrate window is real physiology, but it is built for tight schedules, not for the person whose next workout is tomorrow.</p>
+    <p><strong>Coaching translation:</strong> ask one question before you worry about post-workout carbohydrate timing: when is my next hard session? If the answer is "in a few hours," refuel aggressively and soon, because the rebuild has a deadline and the early window is genuinely faster. If the answer is "tomorrow," eat enough total carbohydrate across the day and stop watching the clock. Most people are in the second group and have been sold the first group's rules.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The Per-Meal Ceiling: How Much Protein Can One Sitting Use?</h2>
+    <p>Now to the variable that earns its keep. Total protein matters most, but the way you split it across the day has a genuine, repeatable effect, and understanding why starts with a single elegant study.</p>
+    <p>Witard and colleagues (2014) fed resistance-trained young men, averaging about 80 kg, four different doses of whey protein after a leg workout: 0, 10, 20, or 40 grams. They then measured myofibrillar muscle protein synthesis, the building of the contractile machinery of muscle. The result became foundational. Myofibrillar MPS rose with dose up to <span class="ch-key">20 grams</span> and then flattened. The 40-gram dose produced essentially no additional muscle-building response over the 20-gram dose. The surplus amino acids were largely oxidized for energy or shunted toward urea, not packed into muscle.</p>
+    <p>This is the <span class="ch-key">per-meal ceiling</span>, sometimes called the muscle-full effect. There is a dose beyond which a single feeding cannot push protein synthesis higher, at least not proportionally. For a roughly 80 kg trained person at rest or after a single-muscle-group session, that ceiling sits in the neighborhood of 20 to 25 grams of fast-digesting whey.</p>
+    <p>But do not over-apply the number. Schoenfeld and Aragon (2018) reviewed the per-meal threshold and argued, sensibly, that the strict "20 to 25 grams and not a gram more" reading is too rigid. The Witard study used isolated whey, which digests fast, and trained only the legs. A mixed meal with slower-digesting protein, fat, and fiber empties from the stomach more gradually, drip-feeding amino acids over a longer window. A whole-body workout recruits more tissue and may raise the demand. Their practical recommendation scales to body size: aim for roughly <span class="ch-key">0.4 g/kg per meal</span>, spread across at least four meals, to comfortably clear the 1.6 g/kg/day total that the outcome literature points to. For an 80 kg person that is about 32 grams a meal, four times a day, totaling 128 grams. The ceiling is real, but it is a soft shoulder, not a hard wall, and it rises with the size of the person and the slowness of the meal.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If a single large dose of protein has diminishing returns, what does that predict about eating 100 grams of your daily protein in one giant dinner versus splitting it across the day? Make the prediction before you read the next section, where it gets tested directly.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Distribution: The One Timing Lever With Outcome Evidence</h2>
+    <p>The per-meal ceiling makes a prediction: if a single sitting can only use so much, then pooling all your protein into one meal should waste some of it, while spreading it should keep muscle protein synthesis topped up across the day. Two studies tested exactly this, and they repay a close look because they move us from mechanism to outcome.</p>
+    <h3>The mechanism study: Areta (2013)</h3>
+    <p>Areta and colleagues (2013) held total protein constant at 80 grams and fed it over a 12-hour recovery period from resistance exercise in three patterns: eight small 10-gram servings every 90 minutes, four moderate 20-gram servings every 3 hours, or two large 40-gram servings every 6 hours. Same total, three rhythms. The winner was the moderate pattern: <span class="ch-key">20 grams every 3 hours</span> produced the highest sustained myofibrillar protein synthesis. The frequent tiny doses never crossed the threshold to fully stimulate synthesis, and the two big doses overshot the ceiling and wasted the excess. This is the per-meal ceiling logic playing out across a whole day. The optimum is moderate doses at moderate intervals.</p>
+    <h3>The outcome study: Yasuda (2020)</h3>
+    <p>The Areta study measured a mechanism, synthesis rates over 12 hours. The skeptic in you should ask: does that translate into actual muscle on the body over months? Yasuda and colleagues (2020) ran the test that answers it. Over 12 weeks, with total daily protein held equivalent between groups, they compared young men eating an evenly distributed protein pattern across three meals against the typical Western pattern that skews protein heavily toward dinner with a thin breakfast. The <span class="ch-key">evenly distributed group gained more lean tissue</span>. Same total protein, better distribution, better outcome, confirmed over a real training block rather than a single afternoon in a lab.</p>
+    <p>This is the rare case where a mechanism (the per-meal ceiling) predicted an outcome (more muscle) and the outcome study delivered. The earlier protein-timing meta-analysis by Schoenfeld et al. (2013) is consistent with this: when they pooled trials on the narrow peri-workout window, the apparent timing benefit disappeared after controlling for total protein, because the studies that fed protein near training were often simply feeding <em>more</em> protein overall. Distribution across the day is a different, more durable effect than the post-workout window, and it survives the controls.</p>
+    <p><strong>Coaching translation:</strong> the practical rule that falls out of all this is gentle and easy to live with. Get most of your meals to contain a solid serving of protein, roughly 0.4 g/kg, instead of starving yourself of protein all day and dumping it all at dinner. You do not need eight feedings or a 3 a.m. shake. Three to five protein-containing meals comfortably captures the distribution benefit. And remember the size of this effect: it is real and worth doing, but it is a refinement on top of a correct total, not a substitute for one. Total still wins.</p>
+  </section>
+
+  <div class="ch-widget" id="distribution-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Protein Distribution Lab</div>
+    </div>
+    <p class="ch-widget-sub">A fixed daily total of 140 g protein, split across the meals you choose. Watch how the modeled muscle-protein-synthesis response across the day changes, and where doses overshoot the per-meal ceiling.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Number of meals</span>
+        <select class="ch-widget-select" id="dist-meals">
+          <option value="1">1 meal</option>
+          <option value="2">2 meals</option>
+          <option value="3">3 meals</option>
+          <option value="4" selected>4 meals</option>
+          <option value="5">5 meals</option>
+          <option value="6">6 meals</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Body weight (sets the ceiling)</span>
+        <select class="ch-widget-select" id="dist-bw">
+          <option value="60">60 kg</option>
+          <option value="70">70 kg</option>
+          <option value="80" selected>80 kg</option>
+          <option value="90">90 kg</option>
+          <option value="100">100 kg</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters" id="dist-meters"></div>
+
+    <button class="ch-widget-btn" id="dist-btn">Model the MPS response</button>
+    <p class="ch-widget-sub" id="dist-note"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>When Eating Actually Feels Good: Rhythm, Sleep, and Digestion</h2>
+    <p>So far we have talked about timing as if the only goal were muscle. For most of you, and for most of the people a coach works with, the goal is broader: stable energy, decent training, good sleep, and a normal life. Timing matters here too, but through different channels, and they are worth naming because this is where timing has its most honest everyday payoff.</p>
+    <h3>Digestion and training comfort</h3>
+    <p>A large, fatty, high-fiber meal eaten thirty minutes before a hard session sits in your gut and makes you miserable. This is not a metabolic effect on muscle, it is mechanical and gastric. The practical move is obvious: leave more time after big meals before training, or keep the pre-training meal smaller and lower in fat and fiber. This is timing advice that actually changes how you feel today, which is more than the anabolic window can claim for most people.</p>
+    <h3>Sleep and the late meal</h3>
+    <p>Eating a very large meal immediately before lying down can disrupt sleep through reflux and thermogenic discomfort for some people, while others sleep fine. There is no universal rule here, and the moralizing about "eating after 8 p.m." is not supported as a fat-loss mechanism. What governs fat balance is total intake over time, not the clock on the wall. If a modest evening meal helps you sleep and stops you raiding the kitchen at midnight, that is a perfectly good reason to eat it, and it has nothing to do with a metabolic penalty for late calories, because there isn't one for the general population.</p>
+    <h3>Daily rhythm and adherence</h3>
+    <p>Underneath all timing research sits a plain fact: the best meal schedule is the one you will actually follow. A distribution pattern that fights your work, your family, and your hunger will lose to a slightly less optimal pattern that fits your life, every time, because adherence compounds and a single perfect day does not. Timing's largest real-world effect for most people runs through sustainability, not through a four-hour synthesis curve.</p>
+    <p><strong>Coaching translation:</strong> use timing to make eating feel good and stay consistent, not to chase a tiny anabolic edge you will never measure. Eat in a rhythm that keeps your energy stable, your training comfortable, and your sleep intact. That is timing working for you. Everything else is at the margins.</p>
+  </section>
+
+
+  <section class="ch-section">
+    <h2>Meal Frequency and the "Stoke the Metabolic Fire" Myth</h2>
+    <p>Few timing ideas have been more durable, or more wrong, than the claim that eating small, frequent meals "stokes the metabolic fire" and burns more calories than eating the same food in fewer, larger meals. The image is appealing: keep the furnace fed and it roars; let it go cold between meals and it sputters. It even has a mechanism people can point to, the thermic effect of food, the energy cost of digesting and processing what you eat. Surely more eating events means more of that cost?</p>
+    <p>The arithmetic kills it. The thermic effect of food is proportional to the total amount and type of food you eat, not to how many sittings you divide it into. Eat 2,000 calories as six meals or as three, and the thermic cost is essentially identical, because you processed the same 2,000 calories either way. Splitting a fixed amount of food into more pieces does not create new digestive work; it just chops the same work into smaller chunks. The "metabolic fire" framing confuses the number of feedings with the size of the meal, and the body only cares about the latter.</p>
+    <p>The outcome evidence matches the arithmetic. A meta-analysis by Schoenfeld, Aragon, and Krieger (2015) pooled the controlled experimental research on eating frequency and body composition. The initial pooled result hinted at a small benefit of higher frequency for fat-free mass and fat loss, but a sensitivity analysis revealed that the entire positive signal was driven by a single outlier study. Remove that one trial, and the effect collapsed. Their conclusion was appropriately deflating: under controlled conditions, with total intake held constant, meal frequency has no meaningful independent effect on body composition. The observational studies that originally suggested frequent eaters are leaner almost certainly reflect reverse causation and confounding, which is a trap we will examine closely in the breakfast section.</p>
+    <p>This does not mean frequency is irrelevant to your life. It means frequency does not change your metabolic rate. The position stand on nutrient timing reached the same place from the appetite angle: changing meal frequency has limited impact on weight and body composition, but it can favorably affect hunger and satiety for some people (Kerksick et al., 2017). Some people feel steadier and control intake better on three square meals; others do better grazing across five. That is a real and useful difference, but it runs entirely through appetite and adherence, not through a faster furnace.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If the thermic effect of food is proportional to total intake, predict what happens to total daily energy expenditure when a person switches from three meals to six while keeping calories constant. Then ask why so many people still believe the opposite. The answer to the second question is mostly about who was selling the idea.</p>
+    </aside>
+    <p><strong>Coaching translation:</strong> pick the number of meals that keeps you full, fueled, and consistent, and ignore anyone who tells you a specific count speeds up your metabolism. It does not. Three meals, four, or six are all fine; the right number is the one you can repeat without fighting your hunger. Frequency is an adherence tool, not a fat-loss lever.</p>
+  </section>
+
+
+  <section class="ch-section">
+    <h2>Breakfast, and the Trap That Catches Almost Everyone</h2>
+    <p>You have heard that breakfast is the most important meal of the day, that skipping it slows your metabolism, and that breakfast eaters are leaner and healthier. The leanness part is even true in the data. Large population surveys consistently find that people who eat breakfast tend to weigh less and have better health markers than people who skip it. The conclusion drawn from this, repeated for decades, is that eating breakfast causes those outcomes. That conclusion is the single best teaching example of the most important error in all of nutrition: confusing correlation with causation.</p>
+    <p>Walk through why the observation is real but the causal claim is shaky. People who eat a sit-down breakfast are not a random sample of humanity. On average they are more likely to have stable schedules, less likely to be shift workers, more likely to exercise, less likely to smoke, and more likely to follow a dozen other health-protective habits at the same time. Breakfast eating is a marker of an organized, health-attentive lifestyle. When you compare breakfast eaters to skippers, you are not isolating breakfast; you are comparing two whole clusters of behavior. The leanness might be coming from any of the other habits that travel with breakfast, or from the lifestyle that produces all of them together. Observational data cannot separate these. It was never designed to.</p>
+    <p>The only way to isolate the effect of breakfast itself is to take similar people and randomly assign some to eat it and some to skip it, then watch what happens. When researchers do exactly that, the causal story falls apart. A systematic review and meta-analysis of randomized controlled trials by Sievert and colleagues (2019), published in the BMJ, pooled the trials that assigned adults to eat or skip breakfast. The result ran opposite to the folklore. Participants assigned to eat breakfast consumed about 260 more calories per day overall, and there was a small difference in body weight that actually favored the breakfast skippers, on the order of half a kilogram. Eating breakfast did not lower total daily intake by curbing later hunger, and it did not cause weight loss. If anything, adding breakfast added calories.</p>
+    <p>Read the finding carefully, because it is easy to overshoot in the other direction. This does not prove breakfast is bad, and it does not mean you should skip it. It means breakfast is not a metabolic obligation, and skipping it does not slow your metabolism or sabotage fat loss. Whether you eat in the morning is a question of preference, hunger, and how it fits your protein distribution across the day, not a question of obeying a metabolic rule that turns out not to exist. The observational studies were measuring the lifestyle, not the meal.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>An observational study finds that people who take vitamin supplements live longer. Before concluding the vitamins are responsible, name three other things that might be true of supplement-takers as a group. Now apply the same skepticism to every "eaters of X are healthier" headline you have ever seen. This is the habit that protects you for the rest of your life.</p>
+    </aside>
+    <p><strong>Coaching translation:</strong> eat breakfast if you are hungry in the morning, if it helps you hit your protein target across the day, or if you simply like it. Skip it if you would rather have those calories later, and feel no guilt about it. Either way, the scale responds to your total intake and your protein distribution, not to the clock on your first meal. And the deeper lesson outlives breakfast: when something is true in a population survey but reverses in a randomized trial, trust the trial.</p>
+  </section>
+
+
+  <section class="ch-section">
+    <h2>Pre-Sleep Protein: A Small, Real Exception</h2>
+    <p>If most timing is noise, pre-sleep protein is one of the few claims that has held up under direct testing, and it is worth understanding why it survived when the anabolic window shrank. The concern it addresses is genuine: overnight is the longest stretch most people go without eating, and during that fast, muscle protein synthesis runs at a low idle while breakdown continues. The question is whether feeding protein right before sleep can keep synthesis elevated through the night instead of letting it coast.</p>
+    <p>Res and colleagues (2012) tested it cleanly. They had young men perform an evening resistance session, fed everyone standard recovery nutrition afterward, and then, 30 minutes before sleep, gave half of them 40 grams of casein and the other half a placebo. Using labeled amino acid tracers, they tracked digestion and muscle protein synthesis through the night. The casein was digested and absorbed normally during sleep, raised circulating amino acids through the night, and increased whole-body protein synthesis and overnight muscle protein synthesis rates compared with placebo. Casein is the protein of choice here for a reason: it clots in the stomach and digests slowly, drip-feeding amino acids over hours, which is exactly the profile you want for a long overnight fast.</p>
+    <p>An acute spike in overnight synthesis is a mechanism, though, and you already know to ask the next question: does it build measurable muscle over time? Snijders and colleagues (2015) ran the longer test. Over 12 weeks of resistance training, young men took either a nightly pre-sleep drink containing about 28 grams of protein or a non-caloric placebo. The pre-sleep protein group gained more muscle strength and greater quadriceps cross-sectional area, with larger increases in type II muscle fiber size. The mechanism translated into an outcome over a real training block.</p>
+    <p>Keep the size of this in perspective. The pre-sleep protein groups in these trials were also taking in more total daily protein than the placebo groups, so part of the benefit is simply the well-established effect of higher total protein, the lever from the top of the hierarchy. Pre-sleep timing is best understood not as a separate magic trick but as a convenient way to add a high-quality protein feeding and to extend protein distribution across the overnight gap, which is otherwise the longest unfed stretch of your day. It fits neatly under the one timing variable with real support: distribution.</p>
+    <p><strong>Coaching translation:</strong> if you train and you are trying to build or preserve muscle, a slow-digesting protein source before bed, think a casein shake, Greek yogurt, or cottage cheese, is a reasonable, evidence-supported habit. It is not mandatory and it is not dramatic. Treat it as the last protein feeding of your distribution plan rather than a special anabolic event, and only bother once your total protein and overall distribution are already handled. It is a refinement on a solid base, not a substitute for one.</p>
+  </section>
+
+
+  <section class="ch-section">
+    <h2>Chrononutrition: A Real Frontier, Honestly Labeled</h2>
+    <p>There is one area of timing research that deserves to be taken seriously precisely because it is still unsettled, and intellectual honesty means neither dismissing it as hype nor overselling it as settled science. This is chrononutrition: the study of how the body's internal clock, the circadian system, interacts with when we eat. Your metabolism is not the same machine at 8 a.m. and 11 p.m. Insulin sensitivity, the thermic effect of food, and the hormones that govern hunger all follow a daily rhythm, and that rhythm is, in general, tuned for processing food earlier in the day rather than late at night.</p>
+    <p>The most compelling human evidence comes from a study design that cleanly separates timing from total intake. Sutton and colleagues (2018) ran a controlled crossover trial in men with prediabetes, using early time-restricted feeding: participants ate all their food within a six-hour window finishing in the mid-afternoon, then later did a control schedule with a normal twelve-hour eating window. The total amount of food was matched and body weight was held constant, so any difference could not be attributed to eating less or losing weight. Even with weight held steady, the early-eating schedule improved insulin sensitivity, beta-cell responsiveness, blood pressure, and oxidative stress. Eating in alignment with the morning-favoring circadian rhythm produced metabolic benefits independent of weight change.</p>
+    <p>That is a genuinely interesting result, and it points at something real: the timing of food across the 24-hour cycle may influence metabolic health through the circadian system, not just through total calories. It is part of why a very large, late-night meal sits poorly for many people and why heavily back-loading the day's intake may be metabolically suboptimal for some.</p>
+    <p>Now the limits, because this is exactly the kind of emerging area where it is tempting to race ahead of the data. The Sutton trial was small, short, conducted only in men with prediabetes, and measured metabolic markers rather than long-term body composition or hard health outcomes. We do not yet know how large these effects are in the general population, how durable they are, whether they hold for people without metabolic dysfunction, or how much of the broader time-restricted-eating literature reflects circadian biology versus the simpler fact that a shorter eating window often leads people to eat less. Chrononutrition is a real and active frontier, and the foundational claim of this chapter still stands at the front of it: total intake and protein adequacy remain the signal, and circadian timing is a promising but still-developing refinement, not an established lever you should reorganize your life around today.</p>
+    <p><strong>Coaching translation:</strong> there is reasonable evidence that pushing the bulk of your food earlier in the day, rather than eating most of it late at night, may carry a modest metabolic benefit for some people. If shifting your meals earlier fits your life, it is a sensible low-cost experiment. But do not mistake a promising frontier for a proven prescription. Get your total and your protein right first; treat morning-weighted eating as an optional refinement to test, not a rule you have failed if you break.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>To maximize anabolism, protein should be consumed at a target of 0.4 g/kg/meal across a minimum of four meals to reach a minimum of 1.6 g/kg/day.</p>
+    <cite>Schoenfeld & Aragon (2018), on distribution as a refinement of an adequate total</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>Putting the Hierarchy Back Together</h2>
+    <p>Step back and look at what the evidence actually supports, ranked by the size of the effect rather than the volume of the marketing. Total energy intake decides the direction you move. Total protein, up to about 1.6 g/kg/day, decides how much of that movement is muscle (Morton et al., 2017). Distribution across roughly four meals adds a real, modest refinement that shows up in 12-week outcomes (Yasuda et al., 2020). The peri-workout window is wide and forgiving for anyone who isn't training fasted (Aragon & Schoenfeld, 2013; Kerksick et al., 2017). And supplement timing, for body composition, is the trim on the house.</p>
+    <p>Notice that every level of this hierarchy involves a real mechanism. Insulin really does drive nutrient uptake. The window really does exist. Synthesis really does respond to dose and rhythm. None of that is fake. The skill you are building is not cynicism, it is calibration: holding onto the mechanism while refusing to inflate it into an outcome it cannot support. That calibration is the through-line for the rest of this course. You will meet it again with metabolism, with supplements, with every "this one thing changes everything" claim you encounter.</p>
+    <p>People still invert this, one last time worth naming: they spend their finite attention from the bottom of the hierarchy up, polishing the trim while the foundation cracks. Spend it from the top down. Fix the total. Hit the protein. Spread it reasonably. Eat around training in a way that feels good. Then, and only then, if you are a competitive athlete chasing the last one percent, worry about the window. For everyone else, the window can stay open. You have a life to live and a foundation that holds.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Case study: Felix and the four o'clock shake</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Felix is 32, weighs about 82 kg, and lifts four mornings a week before work, fasted, because that is the only time he has. He has read the supplement marketing and runs his life around it: a protein shake slammed within ten minutes of his last set, a hard rule against eating "carbs at night," skipped breakfast on the theory that it keeps his metabolism sharp, and six small meals a day to "keep the fire stoked." Despite two years of consistent training he has barely added muscle. When he logs his food honestly for a week, the picture is clear: his total daily protein averages about 95 grams, dumped mostly into a large dinner, with thin, low-protein meals scattered through the rest of the day.</p>
+    </aside>
+    <p>Run Felix through the hierarchy from the top and the diagnosis writes itself. His total protein, at roughly 1.16 g/kg, sits well below the 1.6 g/kg/day where fat-free mass gains plateau (Morton et al., 2017). That is the foundation crack, and no amount of timing precision downstream can paper over it. He has spent two years obsessing over items four and five of the impact hierarchy, the post-workout shake and the meal-frequency schedule, while item two, total protein, was quietly under-built the whole time. He optimized the trim on a house with a weak frame.</p>
+    <p>Now layer in distribution, the one timing variable that actually earns its place. Felix skews his protein heavily toward dinner, the exact pattern that lost to even distribution over 12 weeks at matched totals (Yasuda et al., 2020). His thin daytime meals rarely clear the per-meal threshold of roughly 0.4 g/kg, about 33 grams for him, so muscle protein synthesis is never properly stimulated until the evening, and then a single oversized dose overshoots the ceiling and wastes the excess (Witard et al., 2014; Schoenfeld & Aragon, 2018). The fix is not more discipline around the clock; it is restructuring the same eating into four meals of roughly 33 grams of protein each, which simultaneously raises his total toward 1.6 g/kg and spreads it the way the outcome data favors.</p>
+    <p>The rituals he is most attached to turn out to be the parts that do not matter. His six small meals do nothing for his metabolic rate; frequency has no independent effect on body composition once total intake is fixed (Schoenfeld et al., 2015). Skipping breakfast neither helps nor hurts his metabolism; it just removes one of the protein-feeding slots he badly needs, so for him a protein-rich breakfast is useful, not because mornings are magic but because it adds a feeding to a distribution that was too sparse (Sievert et al., 2019). And the ban on evening carbohydrate is backwards: late carbohydrate carries no metabolic penalty for fat balance, and as a fasted morning trainer he is one of the few people for whom the post-workout window is genuinely tighter, so the shake he obsesses over is one of the few timing habits he should keep.</p>
+    <p>The instructive part is that Felix is not lazy or undisciplined. He is meticulous, just meticulous about the bottom of the hierarchy. Move his attention up one level, fix the total and the distribution, keep the one timing habit (post-fasted-training protein) that applies to his specific situation, and drop the three that do not (six meals, no night carbs, mandatory breakfast-skipping), and his results over the next training block will change more than they did in the previous two years, with less fuss rather than more.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A mechanism existing in a lab does not mean it produces a meaningful outcome in a person over months. The gap between the two is where most bad nutrition advice lives.</li>
+      <li>The hierarchy of impact for body composition, top to bottom: total energy, then total protein, then distribution, then peri-workout timing, then supplement timing.</li>
+      <li>Total protein gains in fat-free mass plateau around 1.62 g/kg/day; more protein past that buys nothing for hypertrophy (Morton et al., 2017).</li>
+      <li>The anabolic window is wide. Muscle stays sensitized to protein for at least 24 hours after training, and the urgency of immediate feeding largely depends on whether you trained fasted (Aragon & Schoenfeld, 2013; Kerksick et al., 2017).</li>
+      <li>A single feeding has a soft per-meal ceiling near 0.4 g/kg; protein beyond it in one sitting is largely oxidized rather than built into muscle (Witard et al., 2014; Schoenfeld & Aragon, 2018).</li>
+      <li>Distribution is the timing lever with real outcome evidence: even spreading across about four meals beat dinner-skewed intake over 12 weeks at equal totals (Areta et al., 2013; Yasuda et al., 2020).</li>
+      <li>For general wellbeing, timing's biggest honest payoff is comfort, sleep, and adherence, not a measurable anabolic edge.</li>
+      <li>Carbohydrate timing has a genuine clock, but only on a short turnaround. When the next hard session is under about four hours away, fast refeeding (around 1.2 g/kg/h) speeds glycogen rebuild; with a full day to recover, total carbohydrate is what matters and the early window does not (Parkin et al., 1997; Kerksick et al., 2017).</li>
+      <li>Meal frequency does not "stoke the metabolic fire." Once total intake is fixed, the number of meals has no meaningful independent effect on body composition; it is an appetite and adherence tool, not a metabolic lever (Schoenfeld et al., 2015).</li>
+      <li>Breakfast is the textbook correlation-versus-causation trap. Observational data link breakfast to leanness, but randomized trials show eating breakfast adds calories and does not cause weight loss (Sievert et al., 2019). When a population survey and a randomized trial disagree, trust the trial.</li>
+      <li>Pre-sleep protein is a small real exception: slow-digesting casein before bed raises overnight muscle protein synthesis and, over 12 weeks, added muscle and strength, partly by extending protein distribution across the overnight fast (Res et al., 2012; Snijders et al., 2015).</li>
+      <li>Chrononutrition is a promising frontier, not a settled rule. Eating earlier in alignment with circadian rhythm improved metabolic markers independent of weight in a small prediabetes trial (Sutton et al., 2018), but total intake and protein adequacy remain the signal.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have ranked timing honestly and met the mechanism-versus-outcome discipline that will follow you for the rest of the course. Next we turn that same skeptical lens on the engine itself: metabolism. You will learn why "slow metabolism" is mostly a story people tell themselves, how adaptive thermogenesis genuinely bends the rules during dieting, and where the real, modifiable levers of daily energy expenditure actually sit.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Aragon, A. A., &amp; Schoenfeld, B. J. (2013). Nutrient timing revisited: Is there a post-exercise anabolic window? <em>Journal of the International Society of Sports Nutrition, 10</em>(1), 5. https://doi.org/10.1186/1550-2783-10-5</p>
+    <p>Areta, J. L., Burke, L. M., Ross, M. L., Camera, D. M., West, D. W. D., Broad, E. M., Jeacocke, N. A., Moore, D. R., Stellingwerff, T., Phillips, S. M., Hawley, J. A., &amp; Coffey, V. G. (2013). Timing and distribution of protein ingestion during prolonged recovery from resistance exercise alters myofibrillar protein synthesis. <em>The Journal of Physiology, 591</em>(9), 2319–2331. https://doi.org/10.1113/jphysiol.2012.244897</p>
+    <p>Kerksick, C. M., Arent, S., Schoenfeld, B. J., Stout, J. R., Campbell, B., Wilborn, C. D., Taylor, L., Kalman, D., Smith-Ryan, A. E., Kreider, R. B., Willoughby, D., Arciero, P. J., VanDusseldorp, T. A., Ormsbee, M. J., Wildman, R., Greenwood, M., Ziegenfuss, T. N., Aragon, A. A., &amp; Antonio, J. (2017). International Society of Sports Nutrition position stand: Nutrient timing. <em>Journal of the International Society of Sports Nutrition, 14</em>(1), 33. https://doi.org/10.1186/s12970-017-0189-4</p>
+    <p>Morton, R. W., Murphy, K. T., McKellar, S. R., Schoenfeld, B. J., Henselmans, M., Helms, E., Aragon, A. A., Devries, M. C., Banfield, L., Krieger, J. W., &amp; Phillips, S. M. (2018). A systematic review, meta-analysis and meta-regression of the effect of protein supplementation on resistance training-induced gains in muscle mass and strength in healthy adults. <em>British Journal of Sports Medicine, 52</em>(6), 376–384. https://doi.org/10.1136/bjsports-2017-097608</p>
+    <p>Parkin, J. A. M., Carey, M. F., Martin, I. K., Stojanovska, L., &amp; Febbraio, M. A. (1997). Muscle glycogen storage following prolonged exercise: Effect of timing of ingestion of high glycemic index food. <em>Medicine &amp; Science in Sports &amp; Exercise, 29</em>(2), 220&#8211;224. https://doi.org/10.1097/00005768-199702000-00009</p>
+    <p>Res, P. T., Groen, B., Pennings, B., Beelen, M., Wallis, G. A., Gijsen, A. P., Senden, J. M. G., &amp; van Loon, L. J. C. (2012). Protein ingestion before sleep improves postexercise overnight recovery. <em>Medicine &amp; Science in Sports &amp; Exercise, 44</em>(8), 1560&#8211;1569. https://doi.org/10.1249/MSS.0b013e31824cc363</p>
+    <p>Schoenfeld, B. J., &amp; Aragon, A. A. (2018). How much protein can the body use in a single meal for muscle-building? Implications for daily protein distribution. <em>Journal of the International Society of Sports Nutrition, 15</em>(1), 10. https://doi.org/10.1186/s12970-018-0215-1</p>
+    <p>Schoenfeld, B. J., Aragon, A. A., &amp; Krieger, J. W. (2015). Effects of meal frequency on weight loss and body composition: A meta-analysis. <em>Nutrition Reviews, 73</em>(2), 69&#8211;82. https://doi.org/10.1093/nutrit/nuu017</p>
+    <p>Schoenfeld, B. J., Aragon, A. A., &amp; Krieger, J. W. (2013). The effect of protein timing on muscle strength and hypertrophy: A meta-analysis. <em>Journal of the International Society of Sports Nutrition, 10</em>(1), 53. https://doi.org/10.1186/1550-2783-10-53</p>
+    <p>Sievert, K., Hussain, S. M., Page, M. J., Wang, Y., Hughes, H. J., Malek, M., &amp; Cicuttini, F. M. (2019). Effect of breakfast on weight and energy intake: Systematic review and meta-analysis of randomised controlled trials. <em>BMJ, 364</em>, l42. https://doi.org/10.1136/bmj.l42</p>
+    <p>Snijders, T., Res, P. T., Smeets, J. S. J., van Vliet, S., van Kranenburg, J., Maase, K., Kies, A. K., Verdijk, L. B., &amp; van Loon, L. J. C. (2015). Protein ingestion before sleep increases muscle mass and strength gains during prolonged resistance-type exercise training in healthy young men. <em>The Journal of Nutrition, 145</em>(6), 1178&#8211;1184. https://doi.org/10.3945/jn.114.208371</p>
+    <p>Sutton, E. F., Beyl, R., Early, K. S., Cefalu, W. T., Ravussin, E., &amp; Peterson, C. M. (2018). Early time-restricted feeding improves insulin sensitivity, blood pressure, and oxidative stress even without weight loss in men with prediabetes. <em>Cell Metabolism, 27</em>(6), 1212&#8211;1221.e3. https://doi.org/10.1016/j.cmet.2018.04.010</p>
+    <p>Witard, O. C., Jackman, S. R., Breen, L., Smith, K., Selby, A., &amp; Tipton, K. D. (2014). Myofibrillar muscle protein synthesis rates subsequent to a meal in response to increasing doses of whey protein at rest and after resistance exercise. <em>The American Journal of Clinical Nutrition, 99</em>(1), 86–95. https://doi.org/10.3945/ajcn.112.055517</p>
+    <p>Yasuda, J., Tomita, T., Arimitsu, T., &amp; Fujita, S. (2020). Evenly distributed protein intake over 3 meals augments resistance exercise–induced muscle hypertrophy in healthy young men. <em>The Journal of Nutrition, 150</em>(7), 1845–1851. https://doi.org/10.1093/jn/nxaa101</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 3 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('hierarchy-widget');
+    if(!root) return;
+    var items = [
+      {key:'total', label:'Total calories', impact:95, note:'Foundation. Decides whether you gain or lose mass at all. No timing trick overrides energy balance.'},
+      {key:'protein', label:'Total protein', impact:80, note:'Sets how much of that change is muscle. Gains plateau near 1.62 g/kg/day (Morton et al., 2017).'},
+      {key:'dist', label:'Protein distribution / meal frequency', impact:45, note:'Real, modest refinement. Even spread beat dinner-skewed intake over 12 weeks (Yasuda et al., 2020).'},
+      {key:'periworkout', label:'Peri-workout timing', impact:25, note:'Wide, soft window. Matters mainly if you train fasted or twice daily (Aragon & Schoenfeld, 2013).'},
+      {key:'supp', label:'Supplement timing', impact:8, note:'The decorative trim. Near-zero effect on body composition for the general population.'}
+    ];
+    var correct = ['total','protein','dist','periworkout','supp'];
+    var selects = root.querySelectorAll('.ch-widget-select');
+    var meters = document.getElementById('hierarchy-meters');
+    var btn = document.getElementById('hierarchy-btn');
+    var noteEl = document.getElementById('hierarchy-note');
+
+    function optionsHtml(sel){
+      var h = '<option value="">, choose, </option>';
+      items.forEach(function(it){ h += '<option value="'+it.key+'">'+it.label+'</option>'; });
+      return h;
+    }
+    selects.forEach(function(s){ s.innerHTML = optionsHtml(); });
+
+    function byKey(k){ for(var i=0;i<items.length;i++){ if(items[i].key===k) return items[i]; } return null; }
+
+    btn.addEventListener('click', function(){
+      // grade user attempt
+      var picks = [];
+      selects.forEach(function(s){ picks.push(s.value); });
+      var score = 0;
+      for(var i=0;i<correct.length;i++){ if(picks[i]===correct[i]) score++; }
+
+      // animate to correct ranking
+      meters.innerHTML = '';
+      correct.forEach(function(k){
+        var it = byKey(k);
+        var row = document.createElement('div');
+        row.className = 'ch-meter';
+        row.innerHTML = '<span class="ch-meter-label">'+it.label+'</span>'+
+          '<span class="ch-meter-bar"><span style="width:0%"></span></span>'+
+          '<span class="ch-meter-num">'+it.impact+'</span>';
+        meters.appendChild(row);
+        var fill = row.querySelector('.ch-meter-bar > span');
+        setTimeout(function(){ fill.style.width = it.impact + '%'; }, 60);
+      });
+
+      var msg = 'You placed ' + score + ' of 5 in the evidence-based order. ';
+      msg += 'The bars show relative magnitude, not exact percentages: total intake and protein dominate, distribution is a real refinement, and timing of the workout meal and supplements sit at the margins. Spend your attention top-down.';
+      noteEl.textContent = msg;
+    });
+  } catch(e){ /* fail quietly */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('distribution-widget');
+    if(!root) return;
+    var mealsSel = document.getElementById('dist-meals');
+    var bwSel = document.getElementById('dist-bw');
+    var meters = document.getElementById('dist-meters');
+    var btn = document.getElementById('dist-btn');
+    var noteEl = document.getElementById('dist-note');
+    var TOTAL = 140; // fixed daily protein in grams
+
+    function render(){
+      var meals = parseInt(mealsSel.value,10);
+      var bw = parseInt(bwSel.value,10);
+      var ceiling = 0.4 * bw; // grams per meal that fully stimulates MPS
+      var perMeal = TOTAL / meals;
+
+      // effective protein per meal usable for MPS = min(perMeal, ceiling), with soft shoulder
+      // model MPS contribution per meal: rises toward ceiling then saturates
+      function mpsResponse(dose){
+        // saturating curve, max 100 at ceiling, mild diminishing past ceiling
+        var x = dose / ceiling;
+        if(x <= 1) return 100 * (1 - Math.exp(-2.3*x)); // approaches ~90 at ceiling
+        // past ceiling: tiny extra then flat
+        return 100 * (1 - Math.exp(-2.3)) + Math.min(8, 8*(1-Math.exp(-(x-1))));
+      }
+
+      meters.innerHTML = '';
+      var totalMps = 0;
+      for(var i=0;i<meals;i++){
+        var r = mpsResponse(perMeal);
+        totalMps += r;
+        var pct = Math.max(2, Math.min(100, Math.round(r)));
+        var row = document.createElement('div');
+        row.className = 'ch-meter';
+        row.innerHTML = '<span class="ch-meter-label">Meal '+(i+1)+' · '+perMeal.toFixed(0)+'g</span>'+
+          '<span class="ch-meter-bar"><span style="width:0%"></span></span>'+
+          '<span class="ch-meter-num">'+pct+'</span>';
+        meters.appendChild(row);
+        (function(fillEl,p){ setTimeout(function(){ fillEl.style.width = p+'%'; },50); })(row.querySelector('.ch-meter-bar > span'), pct);
+      }
+
+      // build coaching note
+      var msg = 'Total still wins: every scenario here delivers the same 140 g/day. ';
+      if(perMeal > ceiling * 1.25){
+        msg += 'At ' + perMeal.toFixed(0) + 'g per meal you are well past the ~' + ceiling.toFixed(0) + 'g per-meal ceiling for an ' + bw + ' kg person, so each sitting saturates and the surplus is largely oxidized (Witard et al., 2014). Fewer, larger doses leave long gaps with synthesis idling.';
+      } else if(perMeal < ceiling * 0.55){
+        msg += 'At ' + perMeal.toFixed(0) + 'g per meal each dose sits below the ~' + ceiling.toFixed(0) + 'g threshold needed to fully switch on synthesis, so several feedings undershoot. Very frequent tiny doses were the weakest pattern in Areta et al. (2013).';
+      } else {
+        msg += 'At ' + perMeal.toFixed(0) + 'g per meal you are near the ~' + ceiling.toFixed(0) + 'g (0.4 g/kg) target, keeping synthesis topped up across the day without waste. This moderate-dose, moderate-frequency pattern is the sweet spot (Areta et al., 2013; Schoenfeld & Aragon, 2018).';
+      }
+      noteEl.textContent = msg;
+    }
+
+    btn.addEventListener('click', render);
+    mealsSel.addEventListener('change', render);
+    bwSel.addEventListener('change', render);
+    render();
+  } catch(e){ /* fail quietly */ }
+})();
+</script>
+</body>
+</html>
