@@ -66,6 +66,14 @@ On top of the per-chapter quiz + weekly challenge from ClassBuild, each chapter 
 (Not doing: separate further-reading lists / public answer keys — per PJ. Rubrics live with the case assignment for the grader.)
 Status: B1 homework COMPLETE (2026-06-23). 30 files: 10 worksheets, 10 case assignments (each with a hidden machine-readable AI-grader rubric + visible self-check rubric), 10 cheat-sheets. All themed to match chapters, 0 em-dashes/entities, 0 ClassBuild, print-friendly. Case clients are unique across the course: Jordan, Andre, Wesley, Marcus, Carla, Mara, Priya, Hassan, Maya, Pearl.
 CE-grade rule (learned from Ch1 review): NO glib one-word-answer exercises. Every applied/scope item must require reasoning (name the mechanism / red flag / boundary) plus the actual in-scope response. Scope of practice is treated as a real competency. Worksheet "Part F" is the model.
+
+AUDIENCE & FRAMING STANDARD (LOCKED 2026-06-23 — applies to ALL courses, author this way from the start):
+The reader is a LEARNER, not assumed to be a coach with clients. The audience includes lay learners, coaches, AND credentialed clinicians (e.g. RDs taking it for their own CE). So:
+- Default to "you," a learner. Do NOT frame as "you, the coach, and your client." At most one optional "if you coach clients..." aside.
+- Scope of practice = the LINE between general education and clinical care, plus "work within your role, whatever it is." Standard boundary line: "This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician."
+- Red-flag symptoms are "signs that warrant medical evaluation" (health literacy), never a triage/diagnosis exercise. Never imply the learner diagnoses a named condition.
+- Boundary callout label is "Where education ends" (not "Coaching boundary").
+- B1 was retro-fitted to this on 2026-06-23 across all 10 chapters' boundary callouts + 30 homework files (0 em-dashes, 0 "client"/"Coaching boundary" in chapters/homework). KNOWN REMAINDER: the ClassBuild quiz + weekly-challenge files still contain 8 stray "client" mentions (1 each in 8 files); reframe those if full consistency is wanted.
 STILL TO DO for B1 publish: wire the homework into the catalog/course page (courses-data.js chapter entries currently have reading/quiz/challenge fields only; add worksheet/case/cheatsheet fields + render them in course.html), build the chapters[] array, add cover image, set published:true.
 
 ## EXAM BANK (B1) — DONE 2026-06-23
