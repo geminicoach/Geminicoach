@@ -3,24 +3,23 @@
 
    *** PLACEHOLDER QUESTIONS *** — the CLASSBUILD / REVISION thread replaces these
    with the real, content-locked final exam once A1's chapters are tonally final.
-   The engine (random draw, AI grading, pass gate, certificate) works against
-   whatever lives here.
 
    FORMAT
    - Exam meta: contact_hours, ceu_value, pass_threshold, draw_mc, placeholder.
    - draw_mc: how many multiple-choice questions to randomly draw per attempt
      (from the MC pool below). Leave unset to use all of them.
    - Multiple choice:  { q, options:[...], answer:<index of correct option>, points?:1 }
-   - Written (AI-graded): { type:"free", q, model:"model answer", key_points:[...], points?:2 }
-       The grader compares the student's answer to `model` + `key_points` semantically
-       (thesis/idea match, not word-for-word) via the grade-response Edge Function. */
+   - Written (AI-graded) questions are PARKED for now (grader disabled until we circle
+     back and set ANTHROPIC_API_KEY). The engine still supports them — to re-enable,
+     add objects like { type:"free", q, model, key_points:[...], points } to this array.
+     Nothing else needs to change. See BUILD-STATUS.md. */
 window.GEM_EXAM = {
   slug: "a1-basics-of-nutrition",
   title: "Basics of Nutrition",
   contact_hours: 8,        // structured learning hours
   ceu_value: 0.8,          // NASM: 0.1 CEU per hour
   pass_threshold: 80,      // percent required to pass (NASM-aligned)
-  draw_mc: 12,             // draw 12 random MC per attempt (+ all written questions)
+  draw_mc: 12,             // draw 12 random MC per attempt
   placeholder: true,       // flag so the UI warns this is a draft exam
   questions: [
     { q: "What are the two simultaneous jobs every food does?",
@@ -54,27 +53,6 @@ window.GEM_EXAM = {
     { q: "Why is 'calories out' more than just exercise?",
       options: ["Most energy is spent on basic functions like breathing, circulation, and digestion", "Exercise is the only thing that burns calories", "Calories out only counts steps", "The body burns no energy at rest"], answer: 0 },
     { q: "The most practical first habit for a true beginner is usually to:",
-      options: ["Build awareness of what and how much they currently eat", "Cut out an entire food group", "Count every micronutrient", "Train for a marathon"], answer: 0 },
-
-    { type: "free",
-      q: "In your own words, explain why two meals with the same calorie count can affect the body differently. Reference both of food's jobs.",
-      model: "Calories measure only energy, but food also acts as building material. Two meals with equal calories can differ in their macronutrient makeup (protein, carbohydrate, fat), in how quickly they release energy into the bloodstream, and in the nutrients and fiber they provide. So one meal might give steady energy and support tissue repair while another spikes and crashes blood sugar and leaves you hungry sooner.",
-      key_points: [
-        "Calories measure energy only; food also serves as building material",
-        "Macronutrient composition (protein/carb/fat) differs",
-        "Speed of energy release / effect on blood sugar and satiety",
-        "Nutrient and fiber content affects the body beyond the calorie number"
-      ],
-      points: 3 },
-    { type: "free",
-      q: "A client eats plenty of calories but is told they have a nutrient deficiency. Explain how that is possible, and define what an 'essential nutrient' is.",
-      model: "Calories are not the same as nutrients. Someone can eat enough total energy yet miss specific vitamins, minerals, or other nutrients their body needs. An essential nutrient is one the body cannot make on its own (or cannot make enough of), so it must come from the diet — if the diet lacks it, a deficiency develops even with adequate calories.",
-      key_points: [
-        "Calories (energy) are distinct from micronutrients",
-        "You can over-consume calories yet under-consume specific nutrients",
-        "Essential = body cannot synthesize it (or not enough), must come from diet",
-        "Deficiency can occur despite adequate total food intake"
-      ],
-      points: 3 }
+      options: ["Build awareness of what and how much they currently eat", "Cut out an entire food group", "Count every micronutrient", "Train for a marathon"], answer: 0 }
   ]
 };
