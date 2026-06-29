@@ -1,0 +1,28 @@
+name: Supabase keep-alive
+
+# Keeps the Supabase FREE-tier project awake so it never auto-pauses from
+# inactivity (free projects pause after ~7 days with no requests). This sends a
+# lightweight REST request on a schedule, so the project stays active with zero
+# manual input and zero cost. Same pattern we used for the other dashboards.
+#
+# No secrets needed: the publishable (anon) key below is already public in
+# education/auth.js and is safe in the open (row-level security protects data).
+
+on:
+  schedule:
+    - cron: "0 12 */2 * *"   # every 2 days at 12:00 UTC (well inside the ~7-day window)
+  workflow_dispatch: {}        # lets you run it manually from the Actions tab to test
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST (counts as activity)
+        run: |
+          code=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "https://btnqyetimebksqxxvqxl.supabase.co/rest/v1/certificates?select=course_slug&limit=1" \
+            -H "apikey: sb_publishable_hnDaEyTkttG2Q4yF_YmDpw_tWYcY7c4" \
+            -H "Authorization: Bearer sb_publishable_hnDaEyTkttG2Q4yF_YmDpw_tWYcY7c4")
+          echo "Supabase responded HTTP $code"
+          # 200 (rows filtered by RLS) is success; any HTTP response still counts as activity.
+          if [ "$code" = "000" ]; then echo "No response from Supabase"; exit 1; fi

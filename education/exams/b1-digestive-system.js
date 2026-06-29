@@ -1,15 +1,17 @@
 /* Gemini Education: B1 (The Digestive System) FINAL EXAM, interim live version.
-   The current exam.html engine renders multiple-choice and free-response only, so this
-   file ships the 18 MC items (drawn 12 per attempt, options shuffled, 80% to pass).
-   The FULL bank (matching, multi-select, word-bank, write-ins) is in b1-digestive-system.full.js,
-   ready to go live when the portal thread upgrades the engine. Schema: education/EXAM-SPEC.md. */
+   The current exam.html engine renders multiple-choice and free-response only. This file
+   ships the 18 MC items plus 6 true/false items (rendered as 2-option MC),
+   drawing 20 per attempt with options shuffled, 80% to pass. 24 in the pool so attempts rotate.
+   The FULL bank (matching, word-bank, multi-select, write-ins; 43 items) is in
+   b1-digestive-system.full.js, ready to go live when the PORTAL thread upgrades the engine
+   to render those types + the write-in appeal grader. Schema: education/EXAM-SPEC.md. */
 window.GEM_EXAM = {
   slug: "b1-digestive-system",
   title: "The Digestive System",
   contact_hours: 10,
   ceu_value: 1.0,
   pass_threshold: 80,
-  draw_mc: 12,
+  draw_mc: 20,
   placeholder: false,
   questions: [
     {
@@ -281,6 +283,84 @@ window.GEM_EXAM = {
       "answer": 2,
       "points": 1,
       "explanation": "PPIs can reduce B12, non-heme iron, magnesium, and some calcium. The coach may notice the pattern and route to a prescriber or pharmacist, but never advises stopping or changing the dose; rebound acid hypersecretion is real and tapering is clinical."
+    },
+    {
+      "id": "b1-c2-tf-1",
+      "chapter": 2,
+      "type": "mc",
+      "q": "Probiotics are live microbes that are swallowed and that mostly pass through transiently, rarely permanently recolonizing the gut, so feeding the resident microbes with fermentable fiber is generally a higher-leverage strategy.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "points": 1,
+      "explanation": "The chapter states probiotics are mostly transient and rarely recolonize, while feeding existing residents (prebiotic fiber) offers higher leverage."
+    },
+    {
+      "id": "b1-c3-tf-1",
+      "chapter": 3,
+      "type": "mc",
+      "q": "The vagus nerve carries traffic in roughly equal proportions in both directions, with signaling from the brain to the gut slightly outweighing signaling from the gut to the brain.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 1,
+      "points": 1,
+      "explanation": "Vagal traffic is roughly 80 percent afferent (gut to brain) and 20 percent efferent (brain to gut); it is mostly an upload, not balanced."
+    },
+    {
+      "id": "b1-c5-tf-2",
+      "chapter": 5,
+      "type": "mc",
+      "q": "Because volume of gas is a strong and reliable predictor of how bloated a person feels, the most effective target for bloating is always to get the gas out.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 1,
+      "points": 1,
+      "explanation": "Volume is a poor predictor of bloating. Bloating rides on three legs: fermentation load, gas transport and motility, and visceral sensitivity. Handling and sensitivity matter more than raw volume, so \"get the gas out\" is the wrong target."
+    },
+    {
+      "id": "b1-c6-tf-1",
+      "chapter": 6,
+      "type": "mc",
+      "q": "Increased intestinal permeability (\"leaky gut\") is a real, measurable phenomenon, but it is often a consequence of inflammation rather than the single root cause of nearly every condition.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "points": 1,
+      "explanation": "The chapter splits leaky gut in half: the real version is increased permeability via loosened tight junctions, measurable and raised by stress, exercise, NSAIDs, and IBD. The inflated marketing version casts it as the root cause of almost everything; in reality it is often a consequence of inflammation, and association is not causation."
+    },
+    {
+      "id": "b1-c9-tf-1",
+      "chapter": 9,
+      "type": "mc",
+      "q": "Allergy, intolerance, and sensitivity are three points on a single severity scale, with allergy simply being the most severe version of the same reaction.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 1,
+      "points": 1,
+      "explanation": "They are different mechanisms, not one mechanism running at different speeds. The branch point is whether the immune system is involved (allergy yes, intolerance no), with sensitivity a mixed and often uncertain category."
+    },
+    {
+      "id": "b1-c10-tf-2",
+      "chapter": 10,
+      "type": "mc",
+      "q": "Because the colon does not develop tolerance to opioids, opioid-induced constipation tends to persist rather than resolve on its own.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 0,
+      "points": 1,
+      "explanation": "Opioids bind mu-opioid receptors in the enteric nervous system, slowing transit and cutting secretion. The colon does not develop tolerance, so constipation persists and often needs medical management; the coach supports fiber, fluids, and movement and refers."
     }
   ]
 };
