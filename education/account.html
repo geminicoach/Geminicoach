@@ -46,6 +46,11 @@
     .acct .row .k { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:11px; color:var(--blue-light); }
     .acct .row .v { font-size:13.5px; color:var(--gray); margin-top:3px; }
     .acct a.cta { display:inline-block; margin-top:6px; color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; }
+    .acct a.certitem { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:10px 12px; margin-top:8px;
+                       border:1px solid var(--line); border-radius:9px; color:var(--off-white); }
+    .acct a.certitem:hover { border-color:var(--blue); }
+    .acct .certitem .ct { font-weight:600; color:#fff; font-size:13.5px; }
+    .acct .certitem .cd { font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; color:var(--blue-light); font-size:12px; white-space:nowrap; }
   </style>
 </head>
 <body>
@@ -124,9 +129,24 @@
         '<h1>'+(name?esc(name.split(" ")[0]):"Welcome")+'</h1>'+
         '<div class="who">Signed in as <b>'+esc(user.email)+'</b></div>'+
         '<div class="row"><div class="k">My courses</div><div class="v">Continue learning and track your progress.</div><a class="cta" href="index.html">Go to dashboard →</a></div>'+
-        '<div class="row"><div class="k">Certificates</div><div class="v">Pass a course exam to earn its certificate. Coming online as exams are added.</div></div>'+
+        '<div class="row"><div class="k">My certificates</div><div class="v" id="certlist">Loading…</div></div>'+
         '<button class="ghost" id="out">Sign out</button>';
       document.getElementById("out").onclick=function(){ GEM.signOut().then(function(){ card.className="card"; renderAuth(); }); };
+
+      // load earned certificates
+      if (GEM.listCertificates) {
+        GEM.listCertificates().then(function(list){
+          var el=document.getElementById("certlist"); if(!el) return;
+          if(!list || !list.length){ el.textContent="No certificates yet. Pass a course's final exam to earn one."; return; }
+          el.innerHTML = list.map(function(c){
+            var d = c.issued_at ? new Date(c.issued_at).toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"}) : "";
+            var meta = (c.ceu_value!=null?(esc(c.ceu_value)+" CEU · "):"")+esc(d);
+            return '<a class="certitem" href="certificate.html?slug='+encodeURIComponent(c.course_slug)+'">'+
+                   '<span class="ct">'+esc(c.course_title||c.course_slug)+'</span>'+
+                   '<span class="cd">'+meta+'</span></a>';
+          }).join("");
+        }, function(){ var el=document.getElementById("certlist"); if(el) el.textContent="Couldn't load certificates right now."; });
+      }
     }
 
     GEM.getUser().then(function(u){ if(u) renderAccount(u); else renderAuth(); });
