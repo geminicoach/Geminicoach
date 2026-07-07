@@ -100,6 +100,27 @@
           body: JSON.stringify(payload || {})
         }).then(function (r) { return r.json(); });
       });
+    },
+
+    // fetch a course's exam questions WITHOUT answers (the server draws the set)
+    getExam: function (slug) {
+      return this.getAccessToken().then(function (tok) {
+        return fetch(SUPABASE_URL + "/functions/v1/exam?slug=" + encodeURIComponent(slug), {
+          headers: { "apikey": SUPABASE_KEY, "Authorization": "Bearer " + (tok || SUPABASE_KEY) }
+        }).then(function (r) { return r.json(); });
+      });
+    },
+
+    // submit answers; the SERVER grades them, records the attempt, and issues the
+    // certificate on pass. The browser never sees the answer key or writes the tables.
+    submitExam: function (slug, answers) {
+      return this.getAccessToken().then(function (tok) {
+        return fetch(SUPABASE_URL + "/functions/v1/exam", {
+          method: "POST",
+          headers: { "content-type": "application/json", "apikey": SUPABASE_KEY, "Authorization": "Bearer " + (tok || SUPABASE_KEY) },
+          body: JSON.stringify({ slug: slug, answers: answers || [] })
+        }).then(function (r) { return r.json(); });
+      });
     }
   };
 })();

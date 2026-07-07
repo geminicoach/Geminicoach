@@ -23,17 +23,15 @@
     .kicker { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--blue-light); }
     h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:38px; letter-spacing:.02em; margin:6px 0 4px; color:#fff; }
     .meta { color:var(--gray); font-size:13.5px; margin-bottom:8px; }
-    .warn { background:#3a2a10; border:1px solid #6b4f1c; color:#f0cf8a; font-size:12.5px; border-radius:9px; padding:9px 13px; margin:14px 0; }
     .q { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:18px 20px; margin:14px 0; }
     .q .qn { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.08em; text-transform:uppercase; font-size:12px; color:var(--blue-light); }
     .q h3 { margin:5px 0 12px; font-size:16.5px; color:#fff; font-weight:600; }
     .opt { display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border:1px solid var(--line); border-radius:9px; margin-bottom:8px; cursor:pointer; }
     .opt:hover { border-color:#2a4a78; } .opt input { margin-top:3px; }
-    .opt.correct { border-color:var(--good); background:rgba(46,204,113,.08); }
-    .opt.wrong { border-color:var(--bad); background:rgba(255,133,133,.08); }
     button.primary { margin-top:8px; padding:13px 24px; border:0; border-radius:9px; background:var(--blue); color:#fff;
                      font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.08em; font-size:15px; cursor:pointer; }
     button.primary:hover { background:var(--blue-bright); }
+    button.primary:disabled { opacity:.6; cursor:default; }
     button.ghost { margin-top:10px; padding:11px 20px; border:1px solid var(--line); border-radius:9px; background:transparent; color:var(--blue-light);
                    font-family:'Barlow Condensed',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.06em; font-size:13px; cursor:pointer; }
     .result { text-align:center; background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:34px; }
@@ -46,11 +44,7 @@
     textarea.free { width:100%; background:#0c1d33; border:1px solid var(--line); border-radius:9px; color:var(--off-white);
                     font-family:'Barlow',sans-serif; font-size:14px; padding:11px 13px; resize:vertical; }
     textarea.free:focus { outline:none; border-color:var(--blue-bright); }
-    .fb { text-align:left; margin-top:22px; border-top:1px solid var(--line); padding-top:16px; }
-    .fb-h { font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.1em; font-size:12px; color:var(--blue-light); margin-bottom:10px; }
-    .fb-item { display:flex; gap:12px; align-items:flex-start; background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:11px 13px; margin-bottom:8px; }
-    .fb-s { font-family:'Bebas Neue',sans-serif; font-size:22px; color:#fff; flex:0 0 auto; min-width:48px; }
-    .fb-t { color:var(--gray); font-size:13.5px; }
+    .emsg { color:var(--bad); margin-top:10px; min-height:16px; font-size:13px; }
   </style>
 </head>
 <body>
@@ -71,13 +65,14 @@
     if (!slug) { wrap.innerHTML = '<div class="center">No course specified.</div>'; return; }
     if (!window.GEM || !window.GEM.ready) { wrap.innerHTML = '<div class="center">Accounts service is starting (it was idle). Refresh in a minute.</div>'; return; }
 
-    // --- tester bypass: ?dev=gemini-dev sets a local flag (?dev=off clears it); some emails always bypass ---
+    // tester bypass: ?dev=gemini-dev sets a local flag (?dev=off clears it); some emails always bypass the completion gate
     (function(){ var d=new URLSearchParams(location.search).get("dev");
       try { if(d==="gemini-dev") localStorage.setItem("gemEduDev","1"); else if(d==="off") localStorage.removeItem("gemEduDev"); } catch(e){} })();
     function devFlag(){ try { return localStorage.getItem("gemEduDev")==="1"; } catch(e){ return false; } }
     var BYPASS_EMAILS = ["parker.gemini.coach@gmail.com"];
     function isBypassUser(user){ return devFlag() || (user && user.email && BYPASS_EMAILS.indexOf(user.email.toLowerCase())!==-1); }
 
+    // soft (client) completion gate — the real integrity anchor is the server-graded exam
     function courseComplete(slug){
       try {
         var data = window.GEMINI_COURSES || {};
@@ -88,10 +83,6 @@
       } catch(e){ return true; }
     }
 
-    function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
-    function certNo(slug){ var code=(slug.split("-")[0]||"GEM").toUpperCase(); var r=""; for(var i=0;i<6;i++) r+="0123456789ABCDEFGHJKMNPQRSTUVWXYZ"[Math.floor(Math.random()*33)]; return "GEM-"+code+"-"+r; }
-
-    // require login
     window.GEM.getUser().then(function(user){
       if (!user) {
         wrap.innerHTML = '<div class="center">You need to be signed in to take the graded exam and earn a certificate.<br><br><a href="account.html">Sign in or create an account →</a></div>';
@@ -101,114 +92,81 @@
         wrap.innerHTML = '<div class="center">Finish all the chapters in this course before taking the final exam.<br><br><a href="course.html?slug='+encodeURIComponent(slug)+'">Back to the course →</a></div>';
         return;
       }
-      // dynamically load this course's exam data
-      var s = document.createElement("script");
-      s.src = "exams/" + slug + ".js";
-      s.onload = function(){ start(user); };
-      s.onerror = function(){ wrap.innerHTML = '<div class="center">No exam is available for this course yet.</div>'; };
-      document.body.appendChild(s);
+      window.GEM.getExam(slug).then(function(ex){
+        if (!ex || ex.error || !ex.questions) {
+          wrap.innerHTML = '<div class="center">'+esc((ex&&ex.error)||"No exam is available for this course yet.")+'</div>';
+          return;
+        }
+        start(user, ex);
+      }, function(){ wrap.innerHTML = '<div class="center">Couldn\'t load the exam. Refresh in a minute.</div>'; });
     });
 
-    function start(user){
-      var ex = window.GEM_EXAM;
-      if (!ex || !ex.questions) { wrap.innerHTML = '<div class="center">Exam data is missing.</div>'; return; }
+    function start(user, ex){
+      var run = ex.questions;          // drawn + shuffled by the server; contains NO answer key
       var pass = ex.pass_threshold || 80;
-
-      // split MC vs free-response; draw a random MC subset per attempt, keep all written questions
-      var mcAll = ex.questions.filter(function(q){ return q.type !== "free"; });
-      var frAll = ex.questions.filter(function(q){ return q.type === "free"; });
-      var drawMc = (ex.draw_mc && ex.draw_mc < mcAll.length) ? ex.draw_mc : mcAll.length;
-      var pickedMc = shuffle(mcAll).slice(0, drawMc);
-      var run = shuffle(pickedMc.concat(frAll)).map(function(q){
-        if (q.type === "free") {
-          return { type:"free", q:q.q, model:(q.model||q.model_answer||""), key_points:(q.key_points||[]), points:(q.points||2) };
-        }
-        var opts = shuffle(q.options.map(function(t,i){ return { t:t, correct:(i===q.answer) }; }));
-        return { type:"mc", q:q.q, opts:opts, points:(q.points||1) };
-      });
 
       function render(){
         var nFree = run.filter(function(r){ return r.type==="free"; }).length;
         var html = '<div class="kicker">'+esc(ex.title)+' · Final Exam</div>'+
           '<h1>Final Exam</h1>'+
-          '<div class="meta">Pass mark '+pass+'% · '+run.length+' questions'+(nFree?(' ('+nFree+' written)'):'')+' · '+(ex.ceu_value||"")+' CEU on passing</div>'+
-          (ex.placeholder ? '<div class="warn">Draft exam: placeholder questions while the course content is finalized. Scoring, AI grading of written answers, the pass gate, and the certificate all work.</div>' : '');
+          '<div class="meta">Pass mark '+pass+'% · '+run.length+' questions'+(nFree?(' ('+nFree+' written)'):'')+' · '+(ex.ceu_value||"")+' CEU on passing</div>';
         html += run.map(function(r,qi){
           if (r.type === "free") {
             return '<div class="q"><div class="qn">Question '+(qi+1)+' · Written</div><h3>'+esc(r.q)+'</h3>'+
-              '<textarea class="free" data-q="'+qi+'" rows="5" placeholder="Write your answer in a few sentences…"></textarea></div>';
+              '<textarea class="free" data-id="'+esc(r.id)+'" rows="5" placeholder="Write your answer in a few sentences…"></textarea></div>';
           }
           return '<div class="q"><div class="qn">Question '+(qi+1)+'</div><h3>'+esc(r.q)+'</h3>'+
-            r.opts.map(function(o,oi){
-              return '<label class="opt" data-q="'+qi+'"><input type="radio" name="q'+qi+'" value="'+oi+'"><span>'+esc(o.t)+'</span></label>';
+            r.options.map(function(o){
+              return '<label class="opt"><input type="radio" name="'+esc(r.id)+'" value="'+esc(o.id)+'"><span>'+esc(o.text)+'</span></label>';
             }).join("")+'</div>';
         }).join("");
-        html += '<button class="primary" id="submit">Submit exam</button>';
+        html += '<button class="primary" id="submit">Submit exam</button><div class="emsg" id="emsg"></div>';
         wrap.innerHTML = html;
-        document.getElementById("submit").onclick = grade;
+        document.getElementById("submit").onclick = submit;
       }
 
-      function grade(){
+      function submit(){
         var btn = document.getElementById("submit");
-        var totalPoints = 0, earned = 0, answered = 0, freeTasks = [];
-        run.forEach(function(r,qi){
-          totalPoints += r.points;
-          if (r.type === "mc") {
-            var sel = document.querySelector('input[name="q'+qi+'"]:checked');
-            if (sel) { answered++; if (r.opts[+sel.value].correct) earned += r.points; }
+        var answers = [], answered = 0;
+        run.forEach(function(r){
+          if (r.type === "free") {
+            var ta = document.querySelector('textarea[data-id="'+r.id+'"]');
+            var val = ta ? ta.value.trim() : "";
+            if (val) answered++;
+            answers.push({ id:r.id, text:val });
           } else {
-            var ta = document.querySelector('textarea[data-q="'+qi+'"]');
-            var ans = ta ? ta.value.trim() : "";
-            if (ans) answered++;
-            freeTasks.push({ qi:qi, r:r, ans:ans });
+            var sel = document.querySelector('input[name="'+r.id+'"]:checked');
+            if (sel) { answered++; answers.push({ id:r.id, choice:sel.value }); }
           }
         });
         if (answered < run.length) { if(!confirm("You have unanswered questions. Submit anyway?")) return; }
-
-        btn.disabled = true; btn.textContent = freeTasks.length ? "Grading written answers…" : "Scoring…";
-
-        var feedback = {};
-        var jobs = freeTasks.map(function(t){
-          if (!t.ans) { feedback[t.qi] = { score:0, feedback:"No answer provided." }; return Promise.resolve(); }
-          return window.GEM.gradeResponse({
-            question: t.r.q, model_answer: t.r.model, key_points: t.r.key_points, student_answer: t.ans
-          }).then(function(res){
-            if (res && typeof res.score === "number") { earned += t.r.points * (res.score/100); feedback[t.qi] = res; }
-            else { feedback[t.qi] = { score:0, feedback:(res && res.error) ? res.error : "Could not grade this answer." }; }
-          }, function(){ feedback[t.qi] = { score:0, feedback:"Could not reach the grader." }; });
+        btn.disabled = true; btn.textContent = "Submitting…";
+        window.GEM.submitExam(slug, answers).then(function(res){
+          if (!res || res.error) {
+            document.getElementById("emsg").textContent = (res && res.error) ? res.error : "Something went wrong. Try again.";
+            btn.disabled = false; btn.textContent = "Submit exam";
+            return;
+          }
+          showResult(res);
+        }, function(){
+          document.getElementById("emsg").textContent = "Couldn't reach the grader. Try again.";
+          btn.disabled = false; btn.textContent = "Submit exam";
         });
+      }
 
-        Promise.all(jobs).then(function(){
-          var pct = totalPoints ? Math.round((earned/totalPoints)*100) : 0;
-          var passed = pct >= pass;
-          window.GEM.recordExamAttempt(slug, pct, passed, run.length, Math.round(earned));
-          var name = (user.user_metadata && user.user_metadata.full_name) || user.email;
-
-          var fb = freeTasks.length ? ('<div class="fb"><div class="fb-h">Feedback on your written answers</div>'+
-            freeTasks.map(function(t){ var f=feedback[t.qi]||{};
-              return '<div class="fb-item"><div class="fb-s">'+(typeof f.score==="number"?(f.score+'%'):'—')+'</div><div class="fb-t">'+esc(f.feedback||"")+'</div></div>';
-            }).join("")+'</div>') : '';
-
-          var finish = function(){
-            wrap.innerHTML = '<div class="result"><div class="score">'+pct+'%</div>'+
-              '<div class="verdict '+(passed?"pass":"fail")+'">'+(passed?"Passed":"Not yet")+'</div>'+
-              '<p>Weighted across '+run.length+' questions. Pass mark is '+pass+'%.</p>'+
-              (passed
-                ? '<p>Your certificate has been issued.</p><button class="primary" id="cert">View my certificate</button>'
-                : '<p>Review the chapters and try again.</p>')+
-              '<div><button class="ghost" id="again">'+(passed?"Retake":"Try again")+'</button></div>'+
-              fb+'</div>';
-            document.getElementById("again").onclick = render;
-            if (passed) document.getElementById("cert").onclick = function(){ location.href = "certificate.html?slug="+encodeURIComponent(slug); };
-          };
-
-          if (passed) {
-            window.GEM.issueCertificate({
-              certificate_no: certNo(slug), course_slug: slug, course_title: ex.title,
-              learner_name: name, ceu_value: ex.ceu_value || null, contact_hours: ex.contact_hours || null, score: pct
-            }).then(finish, finish);
-          } else { finish(); }
-        });
+      function showResult(res){
+        var pct = res.score, passed = res.passed;
+        wrap.innerHTML = '<div class="result"><div class="score">'+pct+'%</div>'+
+          '<div class="verdict '+(passed?"pass":"fail")+'">'+(passed?"Passed":"Not yet")+'</div>'+
+          '<p>You got '+res.correct+' of '+res.total+' right. Pass mark is '+(res.pass_threshold||pass)+'%.</p>'+
+          (passed
+            ? '<p>Your certificate has been issued.</p><button class="primary" id="cert">View my certificate</button>'
+            : '<p>Review the chapters and try again.</p>')+
+          '<div><button class="ghost" id="again">'+(passed?"Retake":"Try again")+'</button></div></div>';
+        document.getElementById("again").onclick = function(){
+          window.GEM.getExam(slug).then(function(ex2){ if (ex2 && ex2.questions) { run = ex2.questions; } render(); }, render);
+        };
+        if (passed) document.getElementById("cert").onclick = function(){ location.href = "certificate.html?slug="+encodeURIComponent(slug); };
       }
 
       render();
