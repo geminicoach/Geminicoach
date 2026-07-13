@@ -58,7 +58,16 @@ Goal: bring B2 + A1-A4 to B1 parity (expanded chapters + homework + exam bank, a
 - ◐ A4 (Advanced Nutrition) PARTIAL — session limit hit mid-build. DONE: Ch3 (all 3), Ch1 worksheet+case, Ch2 worksheet, Ch4 worksheet (7 files, some possibly unverified/incomplete from cutoff). REMAINING for A4:
     - Homework to finish: Ch1 cheat-sheet; Ch2 case+cheat-sheet; Ch4 case+cheat-sheet; Ch5, Ch6, Ch7, Ch8 all 3 each. (17 files) — verify the 7 partial ones are complete too. Case names used so far: Ch1 Omar, Ch3 Chris; assign Ch2 Bella, Ch4 Fatima, Ch5 Leon, Ch6 Rae, Ch7 Sil, Ch8 Dom. localStorage gemHw:a4:caseN.
     - A4 exam bank: author (2 fragments Ch1-4 + Ch5-8, ~40Q), assemble to exams/a4-advanced-nutrition.js interim + .full.js (contact_hours 8, ceu 0.8, title "Advanced Nutrition"). A4 slugs: 1 the-body-that-fights-back, 2 deficits-surpluses-and-the-math-of-change, 3 when-you-eat-signal-versus-noise, 4 keto-fasting-flexible-what-actually-drives-results, 5 the-chemical-messengers-of-hunger-and-fullness, 6 the-ecosystem-inside-you, 7 one-size-fits-no-one, 8 how-to-read-nutrition-science-without-getting-fooled.
-- REMEMBER: everything this whole run is UNCOMMITTED. Push needed. And homework-link wiring in courses-data.js (worksheet/caseAssignment/cheatsheet fields per chapter) is pending for ALL courses (portal thread).
+- ✅ A4 (Advanced Nutrition) COMPLETE: 24 homework (cases Omar/Bella/Chris/Fatima/Leon/Rae/Sil/Dom) + exam (exams/a4-advanced-nutrition.js interim 22 MC+TF draw16, + .full.js 40).
+
+## PROGRAM COMPLETE (all 6 courses at parity)
+A1, A2, A3, A4, B1, B2 all have: CE-depth chapters + full homework (worksheet + case-assignment + cheat-sheet per chapter, role-neutral, gem-theme-paper.css branded, hidden grader rubrics) + exam bank (interim MC+TF live .js + full all-types .full.js). Exam files present for all 6 slugs.
+
+### TWO cross-cutting items remain (NOT content — both are handoffs):
+1. GIT PUSH: this entire multi-session run is UNCOMMITTED. `git add education/` then commit + push (clear .git/index.lock first if needed).
+2. PORTAL THREAD: (a) wire homework links into courses-data.js — add worksheet/caseAssignment/cheatsheet fields to every chapter entry across all 6 courses so links render on course pages; (b) upgrade exam.html to render the new question types (matching / multi-select / word-bank / write-in) + rotation + the write-in first-pass grader & appeal workflow, then swap each course's *.full.js in for the interim MC+TF *.js. Spec: EXAM-SPEC.md.
+
+### Optional follow-up (consistency): A-track CHAPTERS (A1-A4) were authored pre-role-neutral-standard; their prose may still contain some coach/client framing. Their homework is role-neutral. A role-neutral sweep of A1-A4 chapter prose would complete total consistency (B1 + B2 chapters are already role-neutral).
 Homework build pattern = B1's: worksheet (applied parts + CE-grade "Scope of Practice" section, role-neutral), case-assignment (role-neutral "Consider [Name]..." scenario + free-response + visible rubric + hidden machine-readable AI-grader rubric comment + unique localStorage key), cheat-sheet (one-page reference). Add the gem-theme-paper.css link to each. Then exam bank per EXAM-SPEC.md (full .full.js + interim MC/TF .js) and wire into courses-data.js + catalog.
 | B3 | Cortisol & the Stress-Hormone System | ? | Stage 0 — not yet generated in ClassBuild |
 | B4 | Reading Your Bloodwork | ? | Stage 0 — not yet generated |
