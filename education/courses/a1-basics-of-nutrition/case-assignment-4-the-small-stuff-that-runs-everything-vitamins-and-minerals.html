@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 4: The Small Stuff That Runs Everything</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: a1-basics-of-nutrition | chapter: 4 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    Lucia is eating adequate calories on a proud, mostly plant-based diet, yet her cluster of symptoms,
+    fatigue that sleep does not fix, breathlessness on exertion, cold intolerance, and falling endurance,
+    points at oxygen delivery, and therefore at iron. Her risk factors stack: she menstruates and loses iron
+    monthly, she is an endurance athlete losing small amounts through sweat, gut, and red-cell breakdown, and
+    she eats little or no meat, so she relies entirely on less-absorbable non-heme iron, made worse if tea or
+    coffee with meals adds tannins that cut uptake. A second nutrient, vitamin B12, is worth flagging because
+    it is found almost only in animal foods and the liver reserve draws down silently for years. A responsible
+    response explains the mechanism, offers food-first, mechanism-aware moves (pair non-heme iron with vitamin C,
+    move tea and coffee between meals, add a reliable B12 source), and states clearly that a suspected deficiency
+    must be confirmed by a clinician with lab testing rather than self-diagnosed, and that iron in particular is a
+    mineral where excess is harmful, so the dose is guided by testing, not self-prescribed. DO NOT diagnose.
+  rubric_points:
+    - links the symptom cluster to oxygen delivery and identifies iron as the likely nutrient (25)
+    - explains the non-heme iron mechanism and the stacked risk factors (menstruation, endurance, plant-based) (25)
+    - flags vitamin B12 as a second at-risk nutrient with the slow-reserve reasoning (15)
+    - gives food-first, mechanism-aware suggestions within scope (vitamin C pairing, tea/coffee timing, B12 source) (20)
+    - states that deficiency needs lab confirmation and a clinician, that supplements are not treatments to self-prescribe, and does not diagnose (15)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; A1 Basics of Nutrition</div>
+  <h1>Chapter 4: Reason Through a Real Complaint</h1>
+  <p class="sub">Use the micronutrient chapter to explain a real complaint, in plain language, within the bounds of general education.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 25 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Lucia, 29</div>
+    Consider Lucia, who took up distance running two years ago and now trains for half marathons. Eighteen months ago she shifted to a mostly plant-based diet she is genuinely proud of: lentils, tofu, beans, oats, leafy greens, lots of vegetables, plenty of variety, and, on paper, plenty of calories. For the last few months something has been off. Her easy runs feel hard, her race times have slipped, she is breathless on hills that used to be routine, she feels cold when her colleagues are comfortable, and she is tired in a way that sleep does not fix. She has not changed her training or her sleep, and eating more has not helped. She often has tea or coffee with meals. She wonders: "I am doing everything right, so why do I feel worse?"
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Explain, mechanically, what her symptom cluster points to. Which body function is failing, which nutrient sits at the center of it, and how do you know from the pattern of symptoms?</li>
+    <li>Account for why <i>this diet in particular</i>, the one she is proud of, is ironically the mechanism. Bring in non-heme iron, her stacked risk factors, and how tea or coffee with meals fits in.</li>
+    <li>Name one other nutrient worth flagging that travels with this dietary pattern, and explain why its large reserve makes it easy to miss until it surfaces.</li>
+    <li>Give food-first, mechanism-aware suggestions within scope, then state clearly where general education ends and clinical care begins, including why the correction should be guided by testing rather than self-prescribed.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating understanding and plain-language communication, not diagnosing. A responsible response explains the mechanism, identifies what warrants professional evaluation, and does not diagnose or prescribe. A suspected deficiency is confirmed with lab testing, and correcting it, especially with supplements, which carry real toxicity risk, is a clinician's job. Iron in particular is a mineral where excess is harmful, so the dose is guided by testing, not guessed.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Links the symptom cluster (fatigue, breathlessness, cold intolerance, falling endurance) to oxygen delivery and identifies iron as the likely nutrient.</li>
+      <li>Explains the non-heme iron mechanism and the stacked risk factors: menstruation, endurance training, and a mostly plant-based diet, with tea or coffee cutting uptake.</li>
+      <li>Flags vitamin B12 as a second at-risk nutrient and uses the large-liver-reserve reasoning to explain why it stays silent.</li>
+      <li>Offers food-first, mechanism-aware suggestions within scope: pair non-heme iron with vitamin C, move tea and coffee between meals, add a reliable B12 source.</li>
+      <li>States that a suspected deficiency needs lab confirmation and a clinician, that supplements are not treatments to self-prescribe, and does not diagnose.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; A1 Basics of Nutrition &middot; Chapter 4 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:a1:case4', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:a1:case4'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>

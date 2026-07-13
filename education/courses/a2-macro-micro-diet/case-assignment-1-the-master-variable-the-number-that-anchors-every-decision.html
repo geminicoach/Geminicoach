@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 1: The Master Variable</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: a2-macro-micro-diet | chapter: 1 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    Raj's problem is a misread number, not a broken metabolism. An online calculator returns a
+    population-level estimate of maintenance, not a measured fact; his desk job means low NEAT, and the
+    tool's activity factor almost certainly assumed more daily movement than he actually does, so his true
+    maintenance is likely below 2,600 and his "500 kcal deficit" at 2,100 is really much smaller. On top of
+    that, honest, unconscious under-logging shrinks the real deficit further, and daily scale swings of a
+    kilo or more (water, glycogen, gut contents, sleep, stress) hide the underlying trend. The responsible
+    fix is to stop slashing intake and instead verify real maintenance first: hold a steady intake, track a
+    7-day rolling average over two to three weeks, and read the trend plus hunger, energy, and performance.
+    A responsible response explains the mechanism, stays within general education, and DOES NOT diagnose;
+    it flags that a history of disordered eating or unexplained symptoms warrant professional evaluation.
+  rubric_points:
+    - identifies the calculator output as a starting hypothesis, not a verified fact, and names activity-factor / NEAT error (25)
+    - explains honest under-reporting on the food side shrinking the real deficit (20)
+    - separates daily scale noise from the real trend and names the 7-day rolling average over 2 to 4 weeks (25)
+    - recommends verifying real maintenance first rather than cutting harder, and reads energy/hunger/performance too (15)
+    - stays within general education, identifies what warrants professional evaluation, and does not diagnose (15)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; A2 Macro &amp; Micro Diet</div>
+  <h1>Chapter 1: When the Math Keeps Lying</h1>
+  <p class="sub">Take the master variable and use it to explain, in plain language, why a diligent person's numbers are not adding up, within the bounds of general education.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 20 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Raj, 38</div>
+    Consider Raj, who wants to lose fat and likes to do things properly. He found a calorie calculator online, entered his stats, and it told him his maintenance was 2,600 kcal. He set himself a clean 500 kcal deficit at 2,100 kcal, started logging everything in an app, and waited for the promised half-kilogram a week. Three weeks in, his weight had barely moved, and the daily number bounced more than a kilogram in either direction, so he could not even tell what was happening. He works a desk job, has been sleeping poorly through a busy stretch, and is diligent about his log. "I am eating 2,100 calories," he says. "The math says I should be losing. Either the math is broken or I am."
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Explain why the 2,600 kcal figure from the calculator is a starting hypothesis rather than a verified fact, and name the input most likely to have inflated it for someone with Raj's day.</li>
+    <li>Account for why his logged 2,100 kcal might not be the deficit he thinks it is, using what the chapter says about self-reported intake.</li>
+    <li>Explain why his scale bounces more than a kilogram day to day, and describe how he should read the signal instead of reacting to any single morning.</li>
+    <li>Recommend a responsible next step, and state clearly where general education ends and clinical care begins.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating understanding and plain-language communication, not diagnosing. A responsible response explains the mechanism, identifies what if anything warrants professional evaluation (for example a history of disordered eating or unexplained symptoms), and does not diagnose. Diagnosis and treatment belong to a qualified clinician.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Identifies the calculator output as a population estimate and starting hypothesis, not a verified fact, and names the activity factor / low NEAT as the likely inflation.</li>
+      <li>Explains that honest, unconscious under-logging shrinks the real deficit, so the true gap is smaller than 500 kcal.</li>
+      <li>Separates daily scale noise (water, glycogen, gut contents, sleep, stress) from the underlying trend, and names the 7-day rolling average read over two to four weeks.</li>
+      <li>Recommends verifying real maintenance first (steady intake, trend reading) rather than cutting harder, and checks hunger, energy, and performance alongside the scale.</li>
+      <li>Stays within general education, identifies what warrants professional evaluation, and does not diagnose.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; A2 Macro &amp; Micro Diet &middot; Chapter 1 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:a2:case1', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:a2:case1'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>

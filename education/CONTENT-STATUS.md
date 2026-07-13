@@ -43,7 +43,23 @@ Direct, declarative, no-fluff; confident and plain; calls out marketing/fads/myt
 | A3 | Supplementation | 8 | ✅ Published |
 | A4 | Advanced Nutrition | 8 | ✅ Published |
 | B1 | The Digestive System | 10 | Stages 2-5 done (expanded, voice-swept, homework built + QC'd). Needs 6 publish (wire homework + chapters[] + cover) |
-| B2 | Endocrine / Hormones 101 | 12 | Stage 1 done (intake-clean, raw). Needs 2 expand → 3 → 4 → 5 → 6 |
+| B2 | Endocrine / Hormones 101 | 12 | ✅ Chapters EXPANDED to CE depth (2026, role-neutral, branded, verified citations, 2 widgets each). Personas: Ch1 Colin, Ch2 Farah, Ch3 Ibrahim, Ch4 Lena, Ch5 Simone, Ch6 Diego, Ch7 Aisha, Ch8 Nate, Ch9 Bex, Ch10 Rafael, Ch11 Talia, Ch12 Grant. (Ch7 ~6,050w, slightly light.) STILL NEEDS: 36 homework files + exam bank. B2 is already published live by portal thread. |
+
+### FULL-PARITY PROGRAM (in progress — autonomous)
+Goal: bring B2 + A1-A4 to B1 parity (expanded chapters + homework + exam bank, all role-neutral + brand-linked). AESTHETIC: every new file must link the brand skin AFTER its inline style — chapters `<link rel="stylesheet" href="../../gem-theme-chapter.css">`, homework (worksheet/case/cheat-sheet) `<link rel="stylesheet" href="../../gem-theme-paper.css">`.
+- ✅ B2 chapters expanded (12).
+- ✅ B2 homework (36 files: 12 worksheet/case/cheat-sheet, branded via gem-theme-paper.css, role-neutral, hidden grader rubrics, localStorage gemHw:b2:caseN, 0 em-dash). Case clients: Dana, Owen, Rosa, Kenji, Bianca, Tariq, Noor, Victor, Elise, Sam, Gwen, Hugo.
+- ✅ B2 exam bank: exams/b2-endocrine-hormones.js (interim 24 MC+TF, draw 20) + .full.js (43 all-types). exam.html auto-loads by slug, works now.
+- ☐ WIRING (portal thread): add worksheet/caseAssignment/cheatsheet fields to B2's 12 chapter entries in courses-data.js so homework links show on the course page (same fields B1 uses). B2 exam needs no wiring (auto-loaded by slug). Also add these homework fields to B1 if the portal thread's courses-data.js rebuild dropped them.
+- ✅ A1 homework (24, branded, role-neutral; cases Ben/Mira/Sean/Lucia/Cole/Nora/Wes/Tessa) + real exam (exams/a1-basics-of-nutrition.js interim 22 MC+TF draw16, +.full.js 40; placeholder replaced). Wiring: add homework fields to A1 chapter entries in courses-data.js (portal thread).
+  NOTE: A-track CHAPTERS were authored pre-role-neutral-standard and may still contain coach/client framing in prose; homework is role-neutral. A full role-neutral sweep of A1-A4 chapters is a possible follow-up for total consistency (not done).
+- ✅ A2 homework (24, cases Raj/Ellie/Marco/Sana/Dev/Kira/Jonah/Anya) + exam (exams/a2-macro-micro-diet.js interim + .full.js 40). Wiring → portal thread.
+- ✅ A3 homework (24, cases Hank/Mel/Ravi/Jade/Tom/Lea/Kwan/Ruth) + exam (exams/a3-supplementation.js interim + .full.js 40). Wiring → portal thread.
+- ◐ A4 (Advanced Nutrition) PARTIAL — session limit hit mid-build. DONE: Ch3 (all 3), Ch1 worksheet+case, Ch2 worksheet, Ch4 worksheet (7 files, some possibly unverified/incomplete from cutoff). REMAINING for A4:
+    - Homework to finish: Ch1 cheat-sheet; Ch2 case+cheat-sheet; Ch4 case+cheat-sheet; Ch5, Ch6, Ch7, Ch8 all 3 each. (17 files) — verify the 7 partial ones are complete too. Case names used so far: Ch1 Omar, Ch3 Chris; assign Ch2 Bella, Ch4 Fatima, Ch5 Leon, Ch6 Rae, Ch7 Sil, Ch8 Dom. localStorage gemHw:a4:caseN.
+    - A4 exam bank: author (2 fragments Ch1-4 + Ch5-8, ~40Q), assemble to exams/a4-advanced-nutrition.js interim + .full.js (contact_hours 8, ceu 0.8, title "Advanced Nutrition"). A4 slugs: 1 the-body-that-fights-back, 2 deficits-surpluses-and-the-math-of-change, 3 when-you-eat-signal-versus-noise, 4 keto-fasting-flexible-what-actually-drives-results, 5 the-chemical-messengers-of-hunger-and-fullness, 6 the-ecosystem-inside-you, 7 one-size-fits-no-one, 8 how-to-read-nutrition-science-without-getting-fooled.
+- REMEMBER: everything this whole run is UNCOMMITTED. Push needed. And homework-link wiring in courses-data.js (worksheet/caseAssignment/cheatsheet fields per chapter) is pending for ALL courses (portal thread).
+Homework build pattern = B1's: worksheet (applied parts + CE-grade "Scope of Practice" section, role-neutral), case-assignment (role-neutral "Consider [Name]..." scenario + free-response + visible rubric + hidden machine-readable AI-grader rubric comment + unique localStorage key), cheat-sheet (one-page reference). Add the gem-theme-paper.css link to each. Then exam bank per EXAM-SPEC.md (full .full.js + interim MC/TF .js) and wire into courses-data.js + catalog.
 | B3 | Cortisol & the Stress-Hormone System | ? | Stage 0 — not yet generated in ClassBuild |
 | B4 | Reading Your Bloodwork | ? | Stage 0 — not yet generated |
 | B5 | Nervous System I: Foundations | ? | Stage 0 — not yet generated |

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 4: Test, Don't Guess</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: a3-supplementation | chapter: 4 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    Jade's fatigue is a one-bit, low-specificity signal, not a diagnosis, so "I feel tired, so I'll take iron" is
+    a guess wearing the costume of action. She sits in more than one nameable risk group (menstruating, mostly
+    plant-based, higher training load), which makes testing clearly warranted rather than optional, and it also
+    means both iron and B12 are live possibilities that a bottle of iron alone cannot resolve. A normal complete
+    blood count would not rule out iron deficiency because ferritin can be depleted before hemoglobin falls, and
+    total serum B12 can read normal while she is functionally deficient, so the informative tests (ferritin read
+    with awareness of training-driven inflammation, ideally paired with transferrin saturation, plus functional
+    B12 markers where ambiguous) matter more than the cheapest one. Starting high-dose iron blind risks overshooting
+    (the body cannot dump excess, and an undiagnosed hemochromatosis variant would make loading hazardous) and
+    masking a possible B12 problem while a three-week mood lift gives false security. A responsible response explains
+    this reasoning, points her to a blood draw before the bottle, and DOES NOT diagnose her, interpret a specific
+    result, or set a dose, which belong to a qualified clinician.
+  rubric_points:
+    - frames fatigue as a nonspecific signal and testing, not a bottle, as the right next step (20)
+    - builds Jade's risk profile and explains why it makes testing warranted rather than optional (20)
+    - explains why a normal CBC and a normal total B12 can both mislead, and names the more informative tests (25)
+    - identifies at least two blind-supplementation failure modes at play (overshooting, masking, false security) (20)
+    - stays within scope: does not diagnose, interpret a specific result, or prescribe a dose (15)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; A3 Supplementation</div>
+  <h1>Chapter 4: Reason Through a "Just In Case" Bottle</h1>
+  <p class="sub">Take the "test, don't guess" discipline and use it to reason through a real supplement decision, in plain language, within the bounds of general education.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 25 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Jade, 27</div>
+    Consider Jade, who trains for road races on a fairly high running volume and moved to a mostly plant-based diet about a year ago. For the past couple of months she has felt flat: sessions that used to feel easy now feel heavy, she is foggy by mid-afternoon, and her hands run cold. A teammate mentions iron, she remembers a podcast about athletes and low iron, and she buys a high-dose iron supplement and starts taking it daily. Three weeks in she feels a little better, decides it worked, and plans to keep going. She has never had a blood test. She asks you: "Sounds like I nailed it, right?"
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Explain why "I feel tired, so I'll take iron" is a guess rather than a decision, and what the honest version of that thought would be.</li>
+    <li>Build Jade's risk profile from the details given, and explain why her real risk factors make testing more clearly warranted, not less, and why iron is not the only nutrient in play.</li>
+    <li>Explain why a normal complete blood count would not settle the iron question and why a normal total serum B12 would not settle the B12 question, and name the more informative tests without interpreting any specific number.</li>
+    <li>Identify which of the four blind-supplementation failure modes Jade has walked into, and state clearly where general education ends and clinical care (ordering and reading labs, setting a dose) begins.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating understanding and plain-language communication, not diagnosing or prescribing. A responsible response explains the reasoning, points to testing where it would change the decision, and identifies what warrants professional evaluation. Ordering and interpreting lab tests and setting a dose from a result belong to a qualified clinician; a learner does not diagnose from labs.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Frames fatigue as a nonspecific one-bit signal, and testing rather than a bottle as the right next step.</li>
+      <li>Builds Jade's risk profile (menstruating, mostly plant-based, high training load) and explains why it makes testing warranted rather than optional.</li>
+      <li>Explains why a normal complete blood count and a normal total serum B12 can both mislead, and names the more informative tests (ferritin read with awareness of inflammation, transferrin saturation, functional B12 markers).</li>
+      <li>Identifies at least two blind-supplementation failure modes at play (overshooting iron, masking a possible B12 problem, false security from a three-week lift).</li>
+      <li>Stays within scope: does not diagnose, interpret a specific result, or prescribe a dose.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; A3 Supplementation &middot; Chapter 4 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:a3:case4', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:a3:case4'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 8: Building a Stack You Can Defend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: a3-supplementation | chapter: 8 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    A defensible stack for Ruth is not built by justifying the bottles she inherited; it is built by
+    running the five-gate pipeline forward from her actual diet, life stage, and context. Most inherited
+    items fail Gate 3 (no goal-specific gap, no evidence for the actual goal), so the correct move is to
+    cut them, not defend them. A few candidates are test-first: iron and vitamin D must answer to a
+    measured number before acting, and B12 answers to a reason. Because Ruth is older and on medication,
+    Gate 5 (interaction screen) carries extra weight, and the stack must be assessed as a system. The honest
+    output may be "very little, pending testing," which is a complete and defensible answer. Interpreting
+    lab values, setting doses, and clearing supplement-drug interactions belong to a qualified clinician;
+    the learner explains the reasoning and refers, and DOES NOT diagnose or prescribe.
+  rubric_points:
+    - runs the five gates forward from gap to bottle rather than backward from the inherited items (25)
+    - identifies that most inherited items die at Gate 3 for lack of a goal-specific gap and evidence (20)
+    - separates baseline from test-first, and flags iron/vitamin D as needing a measured number (20)
+    - gives Gate 5 extra weight because she is older and on medication (interaction screen as a system) (20)
+    - states where education ends: refers dose/lab/interaction decisions to a clinician, does not diagnose (15)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; A3 Supplementation</div>
+  <h1>Chapter 8: Defend or Prune an Inherited Cabinet</h1>
+  <p class="sub">Take the five-gate pipeline and run it on a real, messy cabinet, ending in a short justified plan or an honest "very little," within the bounds of general education.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 25 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Ruth, 58</div>
+    Consider Ruth, who eats a reasonably varied omnivore diet, walks most days, and takes one prescription medication for blood pressure. Over the past two years she inherited a cabinet from podcasts and a well-meaning friend: a daily multivitamin, a greens powder, a broad-spectrum probiotic she cannot name a reason for, a "stress support" blend, fish oil, iron she started on her own because she "felt a bit tired," vitamin D, and a B12 tablet. She is not looking for a longer list. She asks a single, honest question: "Which of these actually earn a place, and which should come out?"
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Run the five-gate pipeline forward on Ruth's situation. Explain what each gate is checking, and why starting from the bottles she already owns is the wrong direction.</li>
+    <li>Sort her items into the low-risk baseline tier and the test-first targeted tier. Say which items need a measured number before anyone acts, and which of her current items she is taking without that number.</li>
+    <li>Because Ruth is older and on a medication, explain why the final gate, screening the whole stack for risk and interactions, carries more weight here than it would for a healthy twenty-five-year-old.</li>
+    <li>State Ruth's defensible outcome: the short list that earns a place, or the honest "very little, pending a test," with a one-sentence defense for anything you keep. Then state clearly where general education ends and clinical care begins.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating the reasoning and plain-language communication, not diagnosing, interpreting Ruth's labs, setting her doses, or clearing her interactions. A responsible response runs the gates, points anything clinical toward a qualified clinician, and does not prescribe. Interpreting a ferritin result, deciding an iron dose, and confirming that a supplement is safe alongside a prescription medication belong to a qualified clinician.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Runs the five gates forward from gap to bottle, not backward from the inherited items.</li>
+      <li>Identifies that most inherited items (multivitamin, greens, unindicated probiotic, "stress support," collagen-type add-ons) die at Gate 3 for lack of a goal-specific gap and goal-specific evidence.</li>
+      <li>Separates baseline from test-first, and flags iron and vitamin D as items that need a measured number; notes the self-started iron on "feeling tired" as the move the framework forbids.</li>
+      <li>Gives the interaction screen extra weight because Ruth is older and on medication, and assesses the stack as a system rather than item by item.</li>
+      <li>Ends with a defensible outcome (short list or honest "very little, pending testing"), and refers dose, lab interpretation, and interaction decisions to a clinician without diagnosing.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; A3 Supplementation &middot; Chapter 8 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:a3:case8', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:a3:case8'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>
