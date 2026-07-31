@@ -95,9 +95,7 @@
   /* SHOP GRID */
   .shop-section { padding: 5rem 3rem 4rem; }
   .shop-inner { max-width: 1200px; margin: 0 auto; }
-  .shop-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-  }
+  .shop-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
   .product-card {
     background: var(--dark-gray);
     border: 1px solid rgba(30,111,196,0.15);
@@ -105,25 +103,23 @@
     transition: border-color 0.3s, transform 0.3s;
   }
   .product-card:hover { border-color: var(--blue); transform: translateY(-3px); }
+
   .product-img-wrap {
-    background: #f4f6fa; position: relative; overflow: hidden;
-    aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+    background: #f4f6fa; padding: 1.1rem;
+    display: flex; align-items: center; justify-content: center;
   }
-  .product-img-wrap img {
-    width: 100%; height: 100%; object-fit: contain; padding: 1.2rem;
-    transition: opacity 0.25s;
-  }
+  /* the stack shrink-wraps the garment; logo overlays by percentage of the garment */
+  .garment-stack { position: relative; display: block; width: 100%; line-height: 0; }
+  .garment-stack .garment { display: block; width: 100%; height: auto; }
+  .garment-stack .logo { position: absolute; height: auto; pointer-events: none; }
+
   .product-body { padding: 1.5rem 1.5rem 1.75rem; display: flex; flex-direction: column; gap: 0.75rem; flex: 1; }
   .product-name {
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
     font-size: 1.05rem; letter-spacing: 0.03em; text-transform: uppercase;
     color: var(--white); line-height: 1.15;
   }
-  .product-price {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; line-height: 1;
-    color: var(--blue-light);
-  }
-  .product-price small { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gray); vertical-align:middle; margin-left:0.4rem; }
+  .product-price { font-family: 'Bebas Neue', sans-serif; font-size: 1.9rem; line-height: 1; color: var(--blue-light); }
   .color-row { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
   .color-label { font-family:'Barlow Condensed',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray); }
   .color-select {
@@ -256,7 +252,7 @@
     </div>
   </div>
   <div class="disclaimer reveal">
-    <strong style="color:var(--off-white);">Heads up:</strong> Pricing and availability are managed on the UNR Made store and may change. The &ldquo;Shop This&rdquo; button on each item takes you to that exact product to select your size and complete checkout.
+    <strong style="color:var(--off-white);">Heads up:</strong> Pricing and colorways are managed on the UNR Made store and may change. The &ldquo;Shop This&rdquo; button on each item takes you to that product to pick your size and color and complete checkout.
   </div>
 </section>
 
@@ -296,125 +292,83 @@
   function openMobileNav(){document.getElementById('mobileNav').classList.add('open');}
   function closeMobileNav(){document.getElementById('mobileNav').classList.remove('open');}
 
-  // --- Product catalog (pulled from the live UNR Made store) ---
   var BASE = 'https://gear.unrmade.com/GeminiCoach/shop/product-detail/';
+
+  // Decorated-mockup data captured from the live UNR store: garment image + logo art + placement (% of garment)
+  var ART = {
+    "itc-hoodie":     { g:"https://cdn.inksoft.com/images/products/18594/products/ITC-IND5000P/Classic_Navy/front/Original.png", l:"https://cdn.inksoft.com/images/Embroidery/rendered/18594/jamesunmktgcom/OR-1411257-Gemini-CC-6w-100358.png", x:39.18, y:29.99, w:20.63 },
+    "champion-hoodie":{ g:"https://cdn.inksoft.com/images/products/756/products/S700/Navy/front/Original.jpg", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/9w437h_CC_Gemini_Blue-5C77B6-610.png", x:34.19, y:34.44, w:30.62 },
+    "track-jacket":   { g:"https://cdn.inksoft.com/images/products/18594/products/JST90/Black_Black/front/Original.png", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/35w169h_LC_Gemini_White.png", x:58.31, y:37.81, w:10.48 },
+    "muscle-tank":    { g:"https://cdn.inksoft.com/images/products/18594/products/NL3633/Black/front/Original.png", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/9w663h_CC_Gemini_DarkGrey-53565A.png", x:36.0, y:29.17, w:28.25 },
+    "cropped-tank":   { g:"https://cdn.inksoft.com/images/products/756/products/BC6682/AthlHthr/front/Original.png", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/7w516h_CC_Gemini_Black.png", x:36.13, y:31.63, w:26.73 },
+    "cvc-tee":        { g:"https://cdn.inksoft.com/images/products/756/products/NL6210/Black/front/Original.jpg", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/9w663h_CC_Gemini_Navy-041E42-282.png", x:36.45, y:26.17, w:29.24 },
+    "sweatpant":      { g:"https://cdn.inksoft.com/images/products/sps/sanmar/PC90P/athletic_heather/back_23310_23310_23324/Original.jpg", l:"https://cdn.inksoft.com/UserArt/18594/jamesunmktgcom/11w152h_CB_Gemini_Navy-041E42-28.png", x:67.2, y:28.87, w:6.01 },
+    "cap112":         { g:"https://cdn.inksoft.com/images/products/18594/products/112/Navy/front/Original.png", l:"https://cdn.inksoft.com/images/Embroidery/rendered/18594/jamesunmktgcom/OR-1411256-Gemini1.png", x:30.67, y:35.94, w:19.66 },
+    "cap168":         { g:"https://cdn.inksoft.com/images/products/18594/products/168/Navy/front/Original.png", l:"https://cdn.inksoft.com/images/Embroidery/rendered/18594/jamesunmktgcom/OR-1411256-Gemini1.png", x:33.23, y:39.95, w:20.05 },
+    "knit-cap":       { g:"https://cdn.inksoft.com/images/products/756/products/CP90/Athletic_Oxford/front/Original.jpg", l:"https://cdn.inksoft.com/images/Embroidery/rendered/18594/jamesunmktgcom/OR-1411256-Gemini1-100362.png", x:32.46, y:50.12, w:35.27 }
+  };
+
   var products = [
-    { name: "Independent Trading Co. Legend Heavyweight Hoodie", price: "$67.50", colors: [
-      { c:"Classic Navy", id:"1008093", img:"https://cdn.inksoft.com/images/products/18594/products/ITC-IND5000P/Classic_Navy/front/500.png" },
-      { c:"Grey Heather", id:"1008092", img:"https://cdn.inksoft.com/images/products/18594/products/ITC-IND5000P/Grey_Heather/front/500.png" },
-      { c:"Black", id:"1008091", img:"https://cdn.inksoft.com/images/products/18594/products/ITC-IND5000P/Black/front/500.png" }
-    ]},
-    { name: "Champion Eco Fleece Pullover Hoodie", price: "$50.25", colors: [
-      { c:"Navy", id:"1008089", img:"https://cdn.inksoft.com/images/products/756/products/S700/Navy/front/500.png" },
-      { c:"Silver Grey", id:"1008088", img:"https://cdn.inksoft.com/images/products/756/products/S700/SilverGrey/front/500.png" },
-      { c:"Black", id:"1008087", img:"https://cdn.inksoft.com/images/products/756/products/S700/Black/front/500.png" }
-    ]},
-    { name: "Sport-Tek Tricot Track Jacket", price: "$50.00", note:"More colors on the store", colors: [
-      { c:"Black", id:"1008082", img:"https://cdn.inksoft.com/images/products/18594/products/JST90/Black_Black/front/500.png" }
-    ]},
-    { name: "Next Level Cotton Muscle Tank", price: "$19.50", colors: [
-      { c:"Black", id:"1008102", img:"https://cdn.inksoft.com/images/products/18594/products/NL3633/Black/front/500.png" },
-      { c:"Black / Heather", id:"1008101", img:"https://cdn.inksoft.com/images/products/18594/products/NL3633/Blk_HtGray/front/500.png" },
-      { c:"Midnight Navy", id:"1008099", img:"https://cdn.inksoft.com/images/products/18594/products/NL3633/MdntNavy/front/500.png" },
-      { c:"Royal", id:"1008098", img:"https://cdn.inksoft.com/images/products/18594/products/NL3633/Royal/front/500.png" },
-      { c:"Tahiti Blue", id:"1008097", img:"https://cdn.inksoft.com/images/products/18594/products/NL3633/TahitiBlue/front/500.png" },
-      { c:"Heather Gray", id:"1008113", img:"https://cdn.inksoft.com/images/products/sps/sanmar/NL3633/heather_gray/front_24342_24764_26036/500.png" }
-    ]},
-    { name: "BELLA+CANVAS Women's Racerback Cropped Tank", price: "$20.00", colors: [
-      { c:"Athletic Heather", id:"1008105", img:"https://cdn.inksoft.com/images/products/756/products/BC6682/AthlHthr/front/500.png" },
-      { c:"Heather Navy", id:"1008106", img:"https://cdn.inksoft.com/images/products/756/products/BC6682/HthrNavy/front/500.png" },
-      { c:"Heather True Royal", id:"1008104", img:"https://cdn.inksoft.com/images/products/756/products/BC6682/HthrTRRoy/front/500.png" },
-      { c:"Heather Dusty Blue", id:"1008107", img:"https://cdn.inksoft.com/images/products/756/products/BC6682/HtDustyBl/front/500.png" },
-      { c:"Solid Black Blend", id:"1008108", img:"https://cdn.inksoft.com/images/products/756/products/BC6682/Sld_Blk_Blnd/front/500.png" }
-    ]},
-    { name: "Next Level Unisex CVC Tee", price: "$21.75", note:"More colors on the store", colors: [
-      { c:"Black", id:"1008094", img:"https://cdn.inksoft.com/images/products/756/products/NL6210/Black/front/500.png" }
-    ]},
-    { name: "Port & Co. Essential Fleece Sweatpant", price: "$32.50", note:"More colors on the store", colors: [
-      { c:"Athletic Heather", id:"1008206", img:"https://cdn.inksoft.com/images/products/sps/sanmar/PC90P/athletic_heather/front_35722_35755_35552/500.png" }
-    ]},
-    { name: "Richardson Trucker Cap 112", price: "$25.75", colors: [
-      { c:"Navy", id:"1008112", img:"https://cdn.inksoft.com/images/products/18594/products/112/Navy/front/500.png" }
-    ]},
-    { name: "Richardson 7-Panel Trucker 168", price: "$27.50", colors: [
-      { c:"Navy", id:"1008111", img:"https://cdn.inksoft.com/images/products/18594/products/168/Navy/front/500.png" }
-    ]},
-    { name: "Knit Cap", price: "$15.25", colors: [
-      { c:"Grey", id:"1008084", img:"https://cdn.inksoft.com/images/products/756/products/CP90/Athletic_Oxford/front/500.png" },
-      { c:"Royal Blue", id:"1008085", img:"https://cdn.inksoft.com/images/products/756/products/CP90/Athletic_Royal/front/500.png" },
-      { c:"Black", id:"1008086", img:"https://cdn.inksoft.com/images/products/756/products/CP90/Black/front/500.png" }
-    ]}
+    { key:"itc-hoodie", name:"Independent Trading Co. Legend Heavyweight Hoodie", price:"$67.50", colors:[
+      {c:"Classic Navy",id:"1008093"},{c:"Grey Heather",id:"1008092"},{c:"Black",id:"1008091"} ]},
+    { key:"champion-hoodie", name:"Champion Eco Fleece Pullover Hoodie", price:"$50.25", colors:[
+      {c:"Navy",id:"1008089"},{c:"Silver Grey",id:"1008088"},{c:"Black",id:"1008087"} ]},
+    { key:"track-jacket", name:"Sport-Tek Tricot Track Jacket", price:"$50.00", note:"More colors on the store", colors:[
+      {c:"Black",id:"1008082"} ]},
+    { key:"muscle-tank", name:"Next Level Cotton Muscle Tank", price:"$19.50", colors:[
+      {c:"Black",id:"1008102"},{c:"Black / Heather",id:"1008101"},{c:"Midnight Navy",id:"1008099"},{c:"Royal",id:"1008098"},{c:"Tahiti Blue",id:"1008097"},{c:"Heather Gray",id:"1008113"} ]},
+    { key:"cropped-tank", name:"BELLA+CANVAS Women's Racerback Cropped Tank", price:"$20.00", colors:[
+      {c:"Athletic Heather",id:"1008105"},{c:"Heather Navy",id:"1008106"},{c:"Heather True Royal",id:"1008104"},{c:"Heather Dusty Blue",id:"1008107"},{c:"Solid Black Blend",id:"1008108"} ]},
+    { key:"cvc-tee", name:"Next Level Unisex CVC Tee", price:"$21.75", note:"More colors on the store", colors:[
+      {c:"Black",id:"1008094"} ]},
+    { key:"sweatpant", name:"Port & Co. Essential Fleece Sweatpant", price:"$32.50", note:"More colors on the store", colors:[
+      {c:"Athletic Heather",id:"1008206"} ]},
+    { key:"cap112", name:"Richardson Trucker Cap 112", price:"$25.75", colors:[ {c:"Navy",id:"1008112"} ]},
+    { key:"cap168", name:"Richardson 7-Panel Trucker 168", price:"$27.50", colors:[ {c:"Navy",id:"1008111"} ]},
+    { key:"knit-cap", name:"Knit Cap", price:"$15.25", colors:[
+      {c:"Grey",id:"1008084"},{c:"Royal Blue",id:"1008085"},{c:"Black",id:"1008086"} ]}
   ];
 
-  function buildCard(p, idx){
-    var multi = p.colors.length > 1;
+  function buildCard(p){
+    var art = ART[p.key];
     var first = p.colors[0];
     var card = document.createElement('div');
     card.className = 'product-card reveal';
 
-    var imgWrap = document.createElement('div');
-    imgWrap.className = 'product-img-wrap';
-    var img = document.createElement('img');
-    img.src = first.img;
-    img.alt = 'Gemini Coach ' + p.name + ' — ' + first.c;
-    img.loading = 'lazy';
-    imgWrap.appendChild(img);
+    // image: garment with the GIC logo overlaid at the store's exact placement
+    var wrap = document.createElement('div'); wrap.className = 'product-img-wrap';
+    var stack = document.createElement('div'); stack.className = 'garment-stack';
+    var gimg = document.createElement('img'); gimg.className='garment'; gimg.src = art.g; gimg.alt = 'Gemini Coach ' + p.name; gimg.loading='lazy';
+    var limg = document.createElement('img'); limg.className='logo'; limg.src = art.l; limg.alt=''; limg.loading='lazy';
+    limg.style.left = art.x + '%'; limg.style.top = art.y + '%'; limg.style.width = art.w + '%';
+    stack.appendChild(gimg); stack.appendChild(limg); wrap.appendChild(stack);
 
-    var body = document.createElement('div');
-    body.className = 'product-body';
+    var body = document.createElement('div'); body.className = 'product-body';
+    var name = document.createElement('div'); name.className='product-name'; name.textContent = p.name;
+    var price = document.createElement('div'); price.className='product-price'; price.textContent = p.price;
 
-    var name = document.createElement('div');
-    name.className = 'product-name';
-    name.textContent = p.name;
+    var colorRow = document.createElement('div'); colorRow.className='color-row';
+    var cta = document.createElement('a'); cta.className='card-cta'; cta.target='_blank'; cta.rel='noopener';
+    cta.href = BASE + first.id; cta.textContent = 'Shop This';
 
-    var price = document.createElement('div');
-    price.className = 'product-price';
-    price.innerHTML = p.price;
-
-    var colorRow = document.createElement('div');
-    colorRow.className = 'color-row';
-    var cta = document.createElement('a');
-    cta.className = 'card-cta';
-    cta.target = '_blank'; cta.rel = 'noopener';
-    cta.href = BASE + first.id;
-    cta.textContent = 'Shop This';
-
-    if (multi) {
-      var lbl = document.createElement('span');
-      lbl.className = 'color-label'; lbl.textContent = 'Color';
-      var sel = document.createElement('select');
-      sel.className = 'color-select';
-      p.colors.forEach(function(col, i){
-        var opt = document.createElement('option');
-        opt.value = i; opt.textContent = col.c;
-        sel.appendChild(opt);
-      });
-      sel.addEventListener('change', function(){
-        var col = p.colors[this.value];
-        img.style.opacity = 0;
-        setTimeout(function(){ img.src = col.img; img.alt = 'Gemini Coach ' + p.name + ' — ' + col.c; img.style.opacity = 1; }, 120);
-        cta.href = BASE + col.id;
-      });
-      colorRow.appendChild(lbl);
-      colorRow.appendChild(sel);
+    if (p.colors.length > 1) {
+      var lbl = document.createElement('span'); lbl.className='color-label'; lbl.textContent='Color';
+      var sel = document.createElement('select'); sel.className='color-select';
+      p.colors.forEach(function(col,i){ var o=document.createElement('option'); o.value=i; o.textContent=col.c; sel.appendChild(o); });
+      sel.addEventListener('change', function(){ cta.href = BASE + p.colors[this.value].id; });
+      colorRow.appendChild(lbl); colorRow.appendChild(sel);
     } else {
-      var sc = document.createElement('span');
-      sc.className = 'single-color';
-      sc.textContent = p.note ? p.note : first.c;
+      var sc = document.createElement('span'); sc.className='single-color'; sc.textContent = p.note ? p.note : first.c;
       colorRow.appendChild(sc);
     }
 
-    body.appendChild(name);
-    body.appendChild(price);
-    body.appendChild(colorRow);
-    body.appendChild(cta);
-    card.appendChild(imgWrap);
-    card.appendChild(body);
+    body.appendChild(name); body.appendChild(price); body.appendChild(colorRow); body.appendChild(cta);
+    card.appendChild(wrap); card.appendChild(body);
     return card;
   }
 
   var grid = document.getElementById('shopGrid');
-  products.forEach(function(p, i){ grid.appendChild(buildCard(p, i)); });
+  products.forEach(function(p){ grid.appendChild(buildCard(p)); });
 
   var reveals=document.querySelectorAll('.reveal');
   var observer=new IntersectionObserver(function(entries){
