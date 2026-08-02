@@ -26,7 +26,7 @@ window.GEM_EXAM = {
       "id": "a1-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A client is discouraged because the scale is up two pounds after three days of consistent eating and training. Based on the chapter, the most accurate response is that:",
+      "q": "A person is discouraged because the scale is up two pounds after three days of consistent eating and training. Based on the chapter, the most accurate response is that:",
       "options": [
         "the two pounds are almost certainly new body fat that must be dieted off",
         "muscle weighs less than fat, so the gain proves the training is not working",
@@ -157,7 +157,7 @@ window.GEM_EXAM = {
       "id": "a1-c2-free-1",
       "chapter": 2,
       "type": "free",
-      "q": "A client says they plan to lose fat by simply 'eating a lot less and running more every day.' Using the chapter's model of energy expenditure, explain at least two reasons this plan can stall, and describe a more sustainable approach.",
+      "q": "A person says they plan to lose fat by simply 'eating a lot less and running more every day.' Using the chapter's model of energy expenditure, explain at least two reasons this plan can stall, and describe a more sustainable approach.",
       "model": "Expenditure is dynamic, not a fixed number you set at the gym, so it pushes back against big cuts. First, metabolic adaptation: when intake drops sharply, BMR, NEAT, and metabolic efficiency all drift downward to defend the body's current state, which shows up as a plateau rather than a failure. Second, constrained expenditure means that at high activity total burn tends to plateau instead of climbing forever, and you cannot out-train the fork, since a single reward food can outweigh a workout. A more sustainable approach uses a moderate deficit rather than a crash, protects NEAT (walking, standing, chores) and keeps protein high and resistance training in to preserve lean mass and defend BMR, and judges progress by the bodyweight trend over two to four weeks. Signs like unexplained weight change or disordered eating warrant referral to a qualified clinician.",
       "key_points": [
         "Expenditure is dynamic and pushes back; it is not a fixed number",
@@ -508,7 +508,7 @@ window.GEM_EXAM = {
       "id": "a1-c6-free-1",
       "chapter": 6,
       "type": "free",
-      "q": "A client says they 'have no willpower' because their cravings for sweet, dense food spike hardest on days after poor sleep and heavy stress. Using the appetite regulator, explain what is likely happening physiologically, then outline a role-appropriate approach that changes the inputs rather than relying on willpower. Note when this situation would warrant referral.",
+      "q": "A person says they 'have no willpower' because their cravings for sweet, dense food spike hardest on days after poor sleep and heavy stress. Using the appetite regulator, explain what is likely happening physiologically, then outline a role-appropriate approach that changes the inputs rather than relying on willpower. Note when this situation would warrant referral.",
       "model": "Poor sleep and chronic stress are shifting the appetite regulator, not revealing a character flaw. Two nights of short sleep lower leptin and raise ghrelin, so the body reads a false energy emergency and pushes cravings toward dense, sweet food. Chronic stress raises cortisol, which biases the reward system toward palatable, hedonic eating, and the same fatigue lowers spontaneous movement (NEAT), so intake rises while expenditure falls. Willpower is a poor long-term plan because it fatigues across the day while the regulator pushes steadily, which is why the fix is to change the inputs. A role-appropriate approach protects sleep first because it is invisible on a food log, builds meals around protein and viscous fiber and uses high-volume, low-energy-density foods to raise fullness per calorie, manages chronic stressors, and engineers the food environment so the easy choice is the helpful one. Referral to a qualified professional is warranted if there are signs of disordered eating, such as recurring loss of control around food, purging, severe restriction, or marked unexplained weight change. Work within your role and avoid diagnosing.",
       "key_points": [
         "Short sleep lowers leptin and raises ghrelin, creating a false energy emergency and cravings for dense, sweet food",
@@ -550,7 +550,7 @@ window.GEM_EXAM = {
       "id": "a1-c7-mc-1",
       "chapter": 7,
       "type": "mc",
-      "q": "A beginner client insists that everyone must drink exactly eight glasses of water a day. The most accurate coaching response is:",
+      "q": "A beginner person insists that everyone must drink exactly eight glasses of water a day. The most accurate educational response is:",
       "options": [
         "Eight glasses is the scientifically required minimum for all adults",
         "Coffee and tea do not count because they are dehydrating",
@@ -565,7 +565,7 @@ window.GEM_EXAM = {
       "id": "a1-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "Which single dietary change most directly improves the sodium-to-potassium balance for a typical client eating a Western diet?",
+      "q": "Which single dietary change most directly improves the sodium-to-potassium balance for a typical person eating a Western diet?",
       "options": [
         "Adding a high-dose electrolyte supplement",
         "Removing every trace of salt from cooking",

@@ -29,7 +29,7 @@ window.GEM_EXAM = {
       "id": "b2-c1-tf-1",
       "chapter": 1,
       "type": "tf",
-      "q": "A clinician measures a patient's total cortisol as normal, but the patient still shows signs consistent with low hormone activity; because only the free fraction reaches receptors, a normal total value can still mislead when carrier-protein binding is high.",
+      "q": "A clinician measures a person's total cortisol as normal, but the person still shows signs consistent with low hormone activity; because only the free fraction reaches receptors, a normal total value can still mislead when carrier-protein binding is high.",
       "answer": true,
       "points": 1,
       "explanation": "Only the free (unbound) fraction acts at receptors, so a total measurement can misrepresent the biologically active amount."
@@ -55,7 +55,7 @@ window.GEM_EXAM = {
       "id": "b2-c2-mc-1",
       "chapter": 2,
       "type": "mc",
-      "q": "A clinician finds a patient has low thyroid hormone output together with a low TSH. Using the two-number logic of the axis, where does this pattern localize the problem?",
+      "q": "A clinician finds a person has low thyroid hormone output together with a low TSH. Using the two-number logic of the axis, where does this pattern localize the problem?",
       "options": [
         "The thyroid gland itself (primary problem)",
         "The target tissue receptors for thyroid hormone",
@@ -206,7 +206,7 @@ window.GEM_EXAM = {
       "id": "b2-c4-mc-1",
       "chapter": 4,
       "type": "mc",
-      "q": "A clinician notes that under-eating and illness can lower a patient's active T3 while TSH and T4 stay essentially unchanged. Which mechanism from the chapter best explains this?",
+      "q": "A clinician notes that under-eating and illness can lower a person's active T3 while TSH and T4 stay essentially unchanged. Which mechanism from the chapter best explains this?",
       "options": [
         "Tissue deiodinase activity is a tunable dial, so conversion of T4 to T3 can fall independently of the upper axis",
         "The thyroid stops secreting T4 during illness",
@@ -262,7 +262,7 @@ window.GEM_EXAM = {
       "id": "b2-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client brings a four-point salivary cortisol curve from a wellness lab and says it proves he has adrenal fatigue and needs supplements to refill his depleted glands. Which response is best grounded in the chapter?",
+      "q": "A person brings a four-point salivary cortisol curve from a wellness lab and says it proves he has adrenal fatigue and needs supplements to refill his depleted glands. Which response is best grounded in the chapter?",
       "options": [
         "The curve confirms the adrenal glands are running empty, so a rest-and-refill protocol is appropriate.",
         "Adrenal fatigue is not a recognized diagnosis; that curve mostly captures normal diurnal rhythm noise, and genuine adrenal disease is diagnosed by a clinician with tests such as an ACTH stimulation test.",
@@ -318,7 +318,7 @@ window.GEM_EXAM = {
       "id": "b2-c6-mc-2",
       "chapter": 6,
       "type": "mc",
-      "q": "A coach sees only a male client's total testosterone value and wonders what it tells him about estradiol. Which statement is best grounded in the chapter?",
+      "q": "An educator sees only a male person's total testosterone value and wonders what it tells him about estradiol. Which statement is best grounded in the chapter?",
       "options": [
         "Estradiol is a female-only hormone and is irrelevant to male physiology.",
         "Men synthesize estradiol directly in the pituitary, independent of testosterone.",
@@ -399,8 +399,8 @@ window.GEM_EXAM = {
       "id": "b2-c7-free-1",
       "chapter": 7,
       "type": "free",
-      "q": "A client tells you he plans to take a clinician-unprescribed aromatase inhibitor to crush his estrogen and maximize testosterone, believing this will boost his libido and training gains. Using the evidence in the chapter, explain why this single-hormone thinking is flawed and what the evidence actually shows, then frame the situation appropriately for your role.",
-      "model": "Libido and skeletal health depend on both testosterone and estradiol, which travel together because estradiol is aromatized from testosterone. In the Finkelstein trial, testosterone was restored in all men, yet blocking estradiol still reduced sexual desire, and aromatase-deficient men show low libido despite high testosterone. Estradiol is also essential for bone: about 85 percent of a man's circulating estrogen is locally aromatized, and suppressing it opens a resorption-formation gap that silently weakens the skeleton. So crushing estradiol saws off the branch he is sitting on. The honest framing is balance, not more-is-better, and any decision to start, stop, or adjust hormone-affecting medication belongs with a qualified clinician, not with me in a coaching role.",
+      "q": "A person tells you he plans to take a clinician-unprescribed aromatase inhibitor to crush his estrogen and maximize testosterone, believing this will boost his libido and training gains. Using the evidence in the chapter, explain why this single-hormone thinking is flawed and what the evidence actually shows, then frame the situation appropriately for your role.",
+      "model": "Libido and skeletal health depend on both testosterone and estradiol, which travel together because estradiol is aromatized from testosterone. In the Finkelstein trial, testosterone was restored in all men, yet blocking estradiol still reduced sexual desire, and aromatase-deficient men show low libido despite high testosterone. Estradiol is also essential for bone: about 85 percent of a man's circulating estrogen is locally aromatized, and suppressing it opens a resorption-formation gap that silently weakens the skeleton. So crushing estradiol saws off the branch he is sitting on. The honest framing is balance, not more-is-better, and any decision to start, stop, or adjust hormone-affecting medication belongs with a qualified clinician, not with me in an educational role.",
       "key_points": [
         "Testosterone and estradiol both matter and travel together because estradiol is aromatized from testosterone",
         "Finkelstein trial: blocking estradiol cut desire even when testosterone was restored",
@@ -451,9 +451,9 @@ window.GEM_EXAM = {
       "id": "b2-c8-mc-2",
       "chapter": 8,
       "type": "mc",
-      "q": "A year after successful diet-induced weight loss, a client reports persistent, elevated hunger and blames a lack of willpower. Which explanation is best grounded in the chapter?",
+      "q": "A year after successful diet-induced weight loss, a person reports persistent, elevated hunger and blames a lack of willpower. Which explanation is best grounded in the chapter?",
       "options": [
-        "The client simply lost motivation, and the hunger has no physiological basis.",
+        "The person simply lost motivation, and the hunger has no physiological basis.",
         "A leptin supplement would have corrected the hunger by refilling a deficiency.",
         "The thyroid began overproducing hormone, which raised appetite.",
         "Leptin stayed low and ghrelin stayed elevated long after the loss, reflecting the body's asymmetric defense of its setpoint against fat loss."
@@ -553,7 +553,7 @@ window.GEM_EXAM = {
       "id": "b2-c10-mc-1",
       "chapter": 10,
       "type": "mc",
-      "q": "A clinician-diagnosed patient with chronically elevated cortisol has normal fasting glucose but clearly elevated fasting insulin. Which cross-talk route best explains this pairing?",
+      "q": "A clinician-diagnosed person with chronically elevated cortisol has normal fasting glucose but clearly elevated fasting insulin. Which cross-talk route best explains this pairing?",
       "options": [
         "Cortisol directly increased pancreatic insulin production as its primary action, unrelated to the tissues",
         "Cortisol lowered insulin sensitivity in muscle, liver, and fat, so the pancreas compensates with more insulin to hold glucose normal",
@@ -629,7 +629,7 @@ window.GEM_EXAM = {
       "id": "b2-c11-mc-1",
       "chapter": 11,
       "type": "mc",
-      "q": "A client sleeping about five hours a night reports sudden ravenous appetite despite eating enough calories. Which sleep readout best accounts for this?",
+      "q": "A person sleeping about five hours a night reports sudden ravenous appetite despite eating enough calories. Which sleep readout best accounts for this?",
       "options": [
         "Short sleep raised testosterone, which drove hunger upward",
         "Short sleep improved insulin sensitivity, which increased appetite",
@@ -725,7 +725,7 @@ window.GEM_EXAM = {
       "id": "b2-c12-mc-1",
       "chapter": 12,
       "type": "mc",
-      "q": "During an acute illness a patient's thyroid setpoint drops and outputs fall, then recover as they heal. Which concept best frames this as adaptation rather than disease?",
+      "q": "During an acute illness a person's thyroid setpoint drops and outputs fall, then recover as they heal. Which concept best frames this as adaptation rather than disease?",
       "options": [
         "Homeostasis, because the body defended a single fixed number throughout",
         "Negative feedback failure, because the axis lost its ability to shut itself down",

@@ -8,7 +8,7 @@ window.GEM_EXAM = {
       "id": "a3-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client with no identified shortfall asks whether they should start a general daily supplement 'just to be safe.' Applying the Gap Principle, what default does the framework set?",
+      "q": "A person with no identified shortfall asks whether they should start a general daily supplement 'just to be safe.' Applying the Gap Principle, what default does the framework set?",
       "options": [
         "Probably take it, since most supplements rarely cause harm",
         "Probably skip it, unless a real shortfall exists that food cannot close more reliably first",
@@ -23,12 +23,12 @@ window.GEM_EXAM = {
       "id": "a3-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A marketer tells a client whose status is completely normal that they are 'leaving performance on the table.' Which reading of the claim is this, and what is its usual tell?",
+      "q": "A marketer tells a person whose status is completely normal that they are 'leaving performance on the table.' Which reading of the claim is this, and what is its usual tell?",
       "options": [
         "Deficiency, because correcting a true clinical shortfall is treatment",
         "Insufficiency, because it reflects a population odds nudge below a threshold",
         "Optimized, because normal status is repackaged as a gap and it usually has no anchored number",
-        "Manufactured, because there is a defined requirement the client is short of"
+        "Manufactured, because there is a defined requirement the person is short of"
       ],
       "answer": 2,
       "points": 1,
@@ -76,8 +76,8 @@ window.GEM_EXAM = {
       "id": "a3-c1-free-1",
       "chapter": 1,
       "type": "free",
-      "q": "A client says they take eight different supplements because 'it can't hurt.' Using the chapter's framework, explain why that reasoning is usually wrong and outline how you would walk them through the gap question while staying within a coaching, non-clinical role.",
-      "model": "The phrase 'it can't hurt' is the signature of having skipped the gap question. Nutrients have upper limits, and overlapping products can stack past them, so more is not automatically safer; every supplement also carries a cost in money and attention. I would reverse the backward pattern (hear, buy, then invent a reason) and run the gates: is there a real gap, and is it a deficiency, insufficiency, or a manufactured claim; can the client's actual diet close it (food first); is this a baseline or targeted decision; and is the compound, dose, and ceiling supported. I would note the six inputs that shape any answer (diet, sun, training load, life stage, medications, measured status). I would stay in my role: I do not diagnose, prescribe, or treat, and a suspected deficiency, alarm symptoms, or a drug-nutrient interaction is a reason to refer to a qualified clinician.",
+      "q": "A person says they take eight different supplements because 'it can't hurt.' Using the chapter's framework, explain why that reasoning is usually wrong and outline how you would walk them through the gap question while staying within an educational, non-clinical role.",
+      "model": "The phrase 'it can't hurt' is the signature of having skipped the gap question. Nutrients have upper limits, and overlapping products can stack past them, so more is not automatically safer; every supplement also carries a cost in money and attention. I would reverse the backward pattern (hear, buy, then invent a reason) and run the gates: is there a real gap, and is it a deficiency, insufficiency, or a manufactured claim; can the person's actual diet close it (food first); is this a baseline or targeted decision; and is the compound, dose, and ceiling supported. I would note the six inputs that shape any answer (diet, sun, training load, life stage, medications, measured status). I would stay in my role: I do not diagnose, prescribe, or treat, and a suspected deficiency, alarm symptoms, or a drug-nutrient interaction is a reason to refer to a qualified clinician.",
       "key_points": [
         "'It can't hurt' signals the gap question was skipped",
         "Nutrients have upper limits and overlapping products can stack past them",
@@ -144,7 +144,7 @@ window.GEM_EXAM = {
       "id": "a3-c2-multi-1",
       "chapter": 2,
       "type": "multi",
-      "q": "A client wants to choose an omega-3 product. Which statements match the chapter's guidance on source, dose, and evidence?",
+      "q": "A person wants to choose an omega-3 product. Which statements match the chapter's guidance on source, dose, and evidence?",
       "options": [
         "EPA and DHA are the active marine forms, available from fish or algae",
         "Algae-sourced omega-3 is bioequivalent to fish oil",
@@ -204,7 +204,7 @@ window.GEM_EXAM = {
       "id": "a3-c3-mc-1",
       "chapter": 3,
       "type": "mc",
-      "q": "A client already eating well asks whether adding more protein scoops will keep increasing training benefit. Near what intake does the added-protein training benefit plateau?",
+      "q": "A person already eating well asks whether adding more protein scoops will keep increasing training benefit. Near what intake does the added-protein training benefit plateau?",
       "options": [
         "About 0.8 g/kg/day",
         "About 1.2 g/kg/day",
@@ -219,7 +219,7 @@ window.GEM_EXAM = {
       "id": "a3-c3-mc-2",
       "chapter": 3,
       "type": "mc",
-      "q": "A well-fed client eating ample complete protein asks about BCAAs and glutamine. What does the mechanistic screen conclude before any trial is even consulted?",
+      "q": "A well-fed person eating ample complete protein asks about BCAAs and glutamine. What does the mechanistic screen conclude before any trial is even consulted?",
       "options": [
         "They are essential add-ons required for muscle growth",
         "They are redundant by definition, because complete protein already supplies them",
@@ -363,7 +363,7 @@ window.GEM_EXAM = {
       "id": "a3-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client recovering from a course of antibiotics shows you a probiotic labeled \"50 billion CFU, 12 strains, clinically studied\" and asks if it will prevent the diarrhea she had last time. What is the best reasoning to offer?",
+      "q": "A person recovering from a course of antibiotics shows you a probiotic labeled \"50 billion CFU, 12 strains, clinically studied\" and asks if it will prevent the diarrhea she had last time. What is the best reasoning to offer?",
       "options": [
         "The high CFU count and strain number make it a strong, evidence-based choice for any gut problem",
         "Benefit lives at the strain-and-outcome level, so look for a named strain such as S. boulardii or L. rhamnosus GG shown at a matching dose for antibiotic-associated diarrhea",
@@ -378,7 +378,7 @@ window.GEM_EXAM = {
       "id": "a3-c5-mc-2",
       "chapter": 5,
       "type": "mc",
-      "q": "A client jumped from about 12 g to 30 g of fiber in two days and now has bloating and cramping. Which interpretation is most accurate?",
+      "q": "A person jumped from about 12 g to 30 g of fiber in two days and now has bloating and cramping. Which interpretation is most accurate?",
       "options": [
         "The fiber product is defective and she should switch brands",
         "She is intolerant to fiber and should stop and rely on a supplement instead",
@@ -546,7 +546,7 @@ window.GEM_EXAM = {
       "id": "a3-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "A client on warfarin adds high-dose vitamin E and fish oil to feel healthier. How is this best described?",
+      "q": "A person on warfarin adds high-dose vitamin E and fish oil to feel healthier. How is this best described?",
       "options": [
         "A pharmacodynamic interaction that adds to bleeding risk, so the full list of everything taken should go to a clinician or pharmacist",
         "A pharmacokinetic interaction that speeds warfarin clearance and weakens it",
@@ -626,7 +626,7 @@ window.GEM_EXAM = {
       "id": "a3-c8-mc-2",
       "chapter": 8,
       "type": "mc",
-      "q": "A colleague wants to start a 65-year-old client on iron \"for energy\" with no blood work. What is the best response?",
+      "q": "A colleague wants to start a 65-year-old person on iron \"for energy\" with no blood work. What is the best response?",
       "options": [
         "Iron is a baseline low-risk item, so no test is needed before starting",
         "Iron is a test-first nutrient: excess is real harm with no exit route, so a measured number and a clinician belong before any dosing",
@@ -692,15 +692,15 @@ window.GEM_EXAM = {
       "id": "a3-c8-free-1",
       "chapter": 8,
       "type": "free",
-      "q": "A 68-year-old client on warfarin and two other medications asks you to help build a supplement stack \"to boost energy and immunity.\" Walk through how you would reason using the five-gate process, and state where your role ends.",
-      "model": "I would run the five gates in order. Gate one, real gap: \"boost energy and immunity\" is a wish to feel better, not a measured shortfall, so I would ask what is actually missing from diet, life stage, or a documented number rather than starting from the goal. Gate two, food first: whatever gap emerges, food is the default answer, and a bottle earns a place only when a specific exception makes food-only fail. Gate three, evidence for the goal: any candidate needs adequate evidence for this goal, this older population, at a realistic dose, and most hyped energy and immunity products die here. Gate four, quality and dose: anything that survives must be third-party tested, in the studied form, at a trial-matched dose. Gate five, screen the stack: this is decisive here because the client is on warfarin plus two other drugs. The interaction risk surface grows geometrically, warfarin has a narrow therapeutic index, and items like vitamin E or fish oil add to bleeding risk. My role ends at interpreting labs, dosing test-first nutrients, and clearing supplement-drug interactions, which are clinical decisions. The control measure is to have the client bring the full list of everything taken, by name and dose, to a qualified clinician or pharmacist.",
+      "q": "A 68-year-old person on warfarin and two other medications asks you to help build a supplement stack \"to boost energy and immunity.\" Walk through how you would reason using the five-gate process, and state where your role ends.",
+      "model": "I would run the five gates in order. Gate one, real gap: \"boost energy and immunity\" is a wish to feel better, not a measured shortfall, so I would ask what is actually missing from diet, life stage, or a documented number rather than starting from the goal. Gate two, food first: whatever gap emerges, food is the default answer, and a bottle earns a place only when a specific exception makes food-only fail. Gate three, evidence for the goal: any candidate needs adequate evidence for this goal, this older population, at a realistic dose, and most hyped energy and immunity products die here. Gate four, quality and dose: anything that survives must be third-party tested, in the studied form, at a trial-matched dose. Gate five, screen the stack: this is decisive here because the person is on warfarin plus two other drugs. The interaction risk surface grows geometrically, warfarin has a narrow therapeutic index, and items like vitamin E or fish oil add to bleeding risk. My role ends at interpreting labs, dosing test-first nutrients, and clearing supplement-drug interactions, which are clinical decisions. The control measure is to have the person bring the full list of everything taken, by name and dose, to a qualified clinician or pharmacist.",
       "key_points": [
         "Gate one: energy and immunity are wishes, not measured gaps; identify what is actually missing and whether a supplement is the right tool",
         "Gate two: food first is the default; a bottle earns its place only through a specific exception",
         "Gate three: evidence must match the actual goal, the older population, and a realistic dose, and most hyped items die here",
         "Gate four: require third-party testing, the studied form, and a trial-matched dose",
         "Gate five: screen the whole stack, noting the geometric growth of interaction pairs, warfarin's narrow therapeutic index, and additive bleeding risk from items like vitamin E or fish oil",
-        "State the role boundary: interpreting labs, dosing, and clearing interactions belong to a clinician or pharmacist, and the client should disclose the full list by name and dose"
+        "State the role boundary: interpreting labs, dosing, and clearing interactions belong to a clinician or pharmacist, and the person should disclose the full list by name and dose"
       ],
       "rubric": {
         "pass_threshold": 70,

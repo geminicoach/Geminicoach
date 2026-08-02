@@ -7,7 +7,7 @@ window.GEM_EXAM = {
       "id": "a4-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client ten weeks into a steady deficit sees fat loss stall despite an unchanged food log. Which component of adaptive thermogenesis is usually the largest and most invisible contributor to the closing energy gap?",
+      "q": "A person ten weeks into a steady deficit sees fat loss stall despite an unchanged food log. Which component of adaptive thermogenesis is usually the largest and most invisible contributor to the closing energy gap?",
       "options": [
         "Resting metabolic rate crashing by 800 kcal/day",
         "Non-exercise activity thermogenesis falling a few hundred calories below awareness",
@@ -22,7 +22,7 @@ window.GEM_EXAM = {
       "id": "a4-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "Why does the chapter argue that a slower, more patient deficit is not merely gentler but actually more effective per unit of fat kept off?",
+      "q": "Why does the chapter argue that a slower, more person deficit is not merely gentler but actually more effective per unit of fat kept off?",
       "options": [
         "It raises the thermic effect of food above its normal 10 percent share",
         "It converts reverse-T3 back into active T3 within days",
@@ -52,7 +52,7 @@ window.GEM_EXAM = {
       "id": "a4-c2-mc-4",
       "chapter": 2,
       "type": "mc",
-      "q": "A lean client wants to keep as much muscle as possible while cutting. Following the chapter's rate-first logic, which prescription best fits?",
+      "q": "A lean person wants to keep as much muscle as possible while cutting. Following the chapter's rate-first logic, which prescription best fits?",
       "options": [
         "A 1.4 percent/week loss rate with protein at 0.8 g/kg to avoid excess",
         "A fixed 500 kcal/day cut regardless of bodyweight, protein optional",
@@ -127,7 +127,7 @@ window.GEM_EXAM = {
       "id": "a4-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client on a sustained calorie deficit reports that hunger has grown louder and that the same meals now feel less satisfying. Which hormonal shift best explains both changes at once?",
+      "q": "A person on a sustained calorie deficit reports that hunger has grown louder and that the same meals now feel less satisfying. Which hormonal shift best explains both changes at once?",
       "options": [
         "Falling leptin, which simultaneously amplifies hunger drive and blunts satiety signaling in the hypothalamus",
         "Rising leptin, which sharpens the reward value of food",

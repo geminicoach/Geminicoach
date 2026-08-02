@@ -7,7 +7,7 @@ window.GEM_EXAM = {
       "id": "a3-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client with no identified shortfall asks whether they should start a general daily supplement 'just to be safe.' Applying the Gap Principle, what default does the framework set?",
+      "q": "A person with no identified shortfall asks whether they should start a general daily supplement 'just to be safe.' Applying the Gap Principle, what default does the framework set?",
       "options": [
         "Probably take it, since most supplements rarely cause harm",
         "Probably skip it, unless a real shortfall exists that food cannot close more reliably first",
@@ -22,12 +22,12 @@ window.GEM_EXAM = {
       "id": "a3-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A marketer tells a client whose status is completely normal that they are 'leaving performance on the table.' Which reading of the claim is this, and what is its usual tell?",
+      "q": "A marketer tells a person whose status is completely normal that they are 'leaving performance on the table.' Which reading of the claim is this, and what is its usual tell?",
       "options": [
         "Deficiency, because correcting a true clinical shortfall is treatment",
         "Insufficiency, because it reflects a population odds nudge below a threshold",
         "Optimized, because normal status is repackaged as a gap and it usually has no anchored number",
-        "Manufactured, because there is a defined requirement the client is short of"
+        "Manufactured, because there is a defined requirement the person is short of"
       ],
       "answer": 2,
       "points": 1,
@@ -67,7 +67,7 @@ window.GEM_EXAM = {
       "id": "a3-c3-mc-1",
       "chapter": 3,
       "type": "mc",
-      "q": "A client already eating well asks whether adding more protein scoops will keep increasing training benefit. Near what intake does the added-protein training benefit plateau?",
+      "q": "A person already eating well asks whether adding more protein scoops will keep increasing training benefit. Near what intake does the added-protein training benefit plateau?",
       "options": [
         "About 0.8 g/kg/day",
         "About 1.2 g/kg/day",
@@ -82,7 +82,7 @@ window.GEM_EXAM = {
       "id": "a3-c3-mc-2",
       "chapter": 3,
       "type": "mc",
-      "q": "A well-fed client eating ample complete protein asks about BCAAs and glutamine. What does the mechanistic screen conclude before any trial is even consulted?",
+      "q": "A well-fed person eating ample complete protein asks about BCAAs and glutamine. What does the mechanistic screen conclude before any trial is even consulted?",
       "options": [
         "They are essential add-ons required for muscle growth",
         "They are redundant by definition, because complete protein already supplies them",
@@ -127,7 +127,7 @@ window.GEM_EXAM = {
       "id": "a3-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client recovering from a course of antibiotics shows you a probiotic labeled \"50 billion CFU, 12 strains, clinically studied\" and asks if it will prevent the diarrhea she had last time. What is the best reasoning to offer?",
+      "q": "A person recovering from a course of antibiotics shows you a probiotic labeled \"50 billion CFU, 12 strains, clinically studied\" and asks if it will prevent the diarrhea she had last time. What is the best reasoning to offer?",
       "options": [
         "The high CFU count and strain number make it a strong, evidence-based choice for any gut problem",
         "Benefit lives at the strain-and-outcome level, so look for a named strain such as S. boulardii or L. rhamnosus GG shown at a matching dose for antibiotic-associated diarrhea",
@@ -142,7 +142,7 @@ window.GEM_EXAM = {
       "id": "a3-c5-mc-2",
       "chapter": 5,
       "type": "mc",
-      "q": "A client jumped from about 12 g to 30 g of fiber in two days and now has bloating and cramping. Which interpretation is most accurate?",
+      "q": "A person jumped from about 12 g to 30 g of fiber in two days and now has bloating and cramping. Which interpretation is most accurate?",
       "options": [
         "The fiber product is defective and she should switch brands",
         "She is intolerant to fiber and should stop and rely on a supplement instead",
@@ -202,7 +202,7 @@ window.GEM_EXAM = {
       "id": "a3-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "A client on warfarin adds high-dose vitamin E and fish oil to feel healthier. How is this best described?",
+      "q": "A person on warfarin adds high-dose vitamin E and fish oil to feel healthier. How is this best described?",
       "options": [
         "A pharmacodynamic interaction that adds to bleeding risk, so the full list of everything taken should go to a clinician or pharmacist",
         "A pharmacokinetic interaction that speeds warfarin clearance and weakens it",
@@ -232,7 +232,7 @@ window.GEM_EXAM = {
       "id": "a3-c8-mc-2",
       "chapter": 8,
       "type": "mc",
-      "q": "A colleague wants to start a 65-year-old client on iron \"for energy\" with no blood work. What is the best response?",
+      "q": "A colleague wants to start a 65-year-old person on iron \"for energy\" with no blood work. What is the best response?",
       "options": [
         "Iron is a baseline low-risk item, so no test is needed before starting",
         "Iron is a test-first nutrient: excess is real harm with no exit route, so a measured number and a clinician belong before any dosing",

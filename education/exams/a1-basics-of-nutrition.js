@@ -25,7 +25,7 @@ window.GEM_EXAM = {
       "id": "a1-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A client is discouraged because the scale is up two pounds after three days of consistent eating and training. Based on the chapter, the most accurate response is that:",
+      "q": "A person is discouraged because the scale is up two pounds after three days of consistent eating and training. Based on the chapter, the most accurate response is that:",
       "options": [
         "the two pounds are almost certainly new body fat that must be dieted off",
         "muscle weighs less than fat, so the gain proves the training is not working",
@@ -190,7 +190,7 @@ window.GEM_EXAM = {
       "id": "a1-c7-mc-1",
       "chapter": 7,
       "type": "mc",
-      "q": "A beginner client insists that everyone must drink exactly eight glasses of water a day. The most accurate coaching response is:",
+      "q": "A beginner person insists that everyone must drink exactly eight glasses of water a day. The most accurate educational response is:",
       "options": [
         "Eight glasses is the scientifically required minimum for all adults",
         "Coffee and tea do not count because they are dehydrating",
@@ -205,7 +205,7 @@ window.GEM_EXAM = {
       "id": "a1-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "Which single dietary change most directly improves the sodium-to-potassium balance for a typical client eating a Western diet?",
+      "q": "Which single dietary change most directly improves the sodium-to-potassium balance for a typical person eating a Western diet?",
       "options": [
         "Adding a high-dose electrolyte supplement",
         "Removing every trace of salt from cooking",

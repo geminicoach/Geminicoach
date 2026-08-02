@@ -8,7 +8,7 @@ window.GEM_EXAM = {
       "id": "a4-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client ten weeks into a steady deficit sees fat loss stall despite an unchanged food log. Which component of adaptive thermogenesis is usually the largest and most invisible contributor to the closing energy gap?",
+      "q": "A person ten weeks into a steady deficit sees fat loss stall despite an unchanged food log. Which component of adaptive thermogenesis is usually the largest and most invisible contributor to the closing energy gap?",
       "options": [
         "Resting metabolic rate crashing by 800 kcal/day",
         "Non-exercise activity thermogenesis falling a few hundred calories below awareness",
@@ -23,7 +23,7 @@ window.GEM_EXAM = {
       "id": "a4-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "Why does the chapter argue that a slower, more patient deficit is not merely gentler but actually more effective per unit of fat kept off?",
+      "q": "Why does the chapter argue that a slower, more person deficit is not merely gentler but actually more effective per unit of fat kept off?",
       "options": [
         "It raises the thermic effect of food above its normal 10 percent share",
         "It converts reverse-T3 back into active T3 within days",
@@ -108,7 +108,7 @@ window.GEM_EXAM = {
       "id": "a4-c2-mc-4",
       "chapter": 2,
       "type": "mc",
-      "q": "A lean client wants to keep as much muscle as possible while cutting. Following the chapter's rate-first logic, which prescription best fits?",
+      "q": "A lean person wants to keep as much muscle as possible while cutting. Following the chapter's rate-first logic, which prescription best fits?",
       "options": [
         "A 1.4 percent/week loss rate with protein at 0.8 g/kg to avoid excess",
         "A fixed 500 kcal/day cut regardless of bodyweight, protein optional",
@@ -320,7 +320,7 @@ window.GEM_EXAM = {
       "id": "a4-c4-free-1",
       "chapter": 4,
       "type": "free",
-      "q": "Two clients ask you to settle a bet: 'Is keto better than fasting for fat loss?' Using the shared-mechanism model and the role of adherence, explain why this is the wrong question and what you would ask instead.",
+      "q": "Two people ask you to settle a bet: 'Is keto better than fasting for fat loss?' Using the shared-mechanism model and the role of adherence, explain why this is the wrong question and what you would ask instead.",
       "model": "Both keto and fasting are just delivery systems for the same two things that actually drive fat loss: a sustained energy deficit and adequate protein. Neither escapes energy-balance accounting, so once calories and protein are matched their fat-loss differences shrink toward nothing (Cioffi found no meaningful IF advantage; DIETFITS found low-carb versus low-fat a wash). What separates diets in practice is not the branded mechanism but the four real levers: food preference, satiety, social and schedule fit, and sustainability. Adherence, not diet name, predicts long-term loss (A TO Z study). So the better question is not 'which diet is superior in the abstract' but 'better for what outcome, for whom, and which one can this specific person actually stick to,' since the diet you follow beats the better diet you abandon.",
       "key_points": [
         "Both diets are delivery systems for the same shared mechanism: energy deficit plus adequate protein",
@@ -356,7 +356,7 @@ window.GEM_EXAM = {
       "id": "a4-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client on a sustained calorie deficit reports that hunger has grown louder and that the same meals now feel less satisfying. Which hormonal shift best explains both changes at once?",
+      "q": "A person on a sustained calorie deficit reports that hunger has grown louder and that the same meals now feel less satisfying. Which hormonal shift best explains both changes at once?",
       "options": [
         "Falling leptin, which simultaneously amplifies hunger drive and blunts satiety signaling in the hypothalamus",
         "Rising leptin, which sharpens the reward value of food",
@@ -417,7 +417,7 @@ window.GEM_EXAM = {
       "id": "a4-c5-free-1",
       "chapter": 5,
       "type": "free",
-      "q": "A client who has lost significant weight says they still feel intensely hungry, crave highly palatable foods in the evening even after eating enough to meet their needs, and asks whether they should start a GLP-1 medication. Using the chapter's framework, explain what is likely happening physiologically and how you would respond within an educator or coach role.",
+      "q": "A person who has lost significant weight says they still feel intensely hungry, crave highly palatable foods in the evening even after eating enough to meet their needs, and asks whether they should start a GLP-1 medication. Using the chapter's framework, explain what is likely happening physiologically and how you would respond within an educator role.",
       "model": "After meaningful weight loss, leptin falls and the hypothalamus reads that fall as a threat, so homeostatic hunger gets louder and satiety gets quieter while adaptive thermogenesis trims expenditure. That is the body defending its fat stores, not weak willpower. Separately, the hedonic (reward-based) appetite can override physical fullness for engineered, energy-dense foods, which is why someone can be full and still want dessert. The practical move is to interpret hunger as a signal and manage the environment (protein and high-volume, high-fiber foods, sleep, stress, and reducing exposure to hyper-palatable cues) rather than just resisting harder. On the medication question, GLP-1 and other weight-loss drugs are prescribed and managed by a qualified clinician; the right response is to explain the mechanism, validate that the hunger is real and physiological, and refer the decision to their clinician while staying within scope.",
       "key_points": [
         "Weight loss lowers leptin, which increases homeostatic hunger and reduces satiety as the body defends fat stores",
@@ -425,7 +425,7 @@ window.GEM_EXAM = {
         "Hedonic (reward-based) appetite can override physical fullness for highly palatable food",
         "Environment management (protein, food volume, fiber, sleep, stress) is more effective than willpower alone",
         "Hunger is a signal to interpret, not a moral failure",
-        "GLP-1 and weight-loss medications are decisions for a qualified clinician, not the educator or coach"
+        "GLP-1 and weight-loss medications are decisions for a qualified clinician, not the educator"
       ],
       "rubric": {
         "pass_threshold": 70,

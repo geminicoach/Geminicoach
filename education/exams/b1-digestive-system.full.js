@@ -24,7 +24,7 @@ window.GEM_EXAM = {
       "id": "b1-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client asks why the small intestine, rather than the stomach, is described as the main site of nutrient uptake. Which structural feature best explains the small intestine's absorptive capacity?",
+      "q": "A person asks why the small intestine, rather than the stomach, is described as the main site of nutrient uptake. Which structural feature best explains the small intestine's absorptive capacity?",
       "options": [
         "Its thick muscular wall churns food more forcefully than the stomach",
         "Folds, villi, and microvilli multiply its surface area enormously",
@@ -77,7 +77,7 @@ window.GEM_EXAM = {
       "id": "b1-c2-mc-1",
       "chapter": 2,
       "type": "mc",
-      "q": "A client takes a fiber supplement marketed for regularity but sees no change in symptoms tied to fermentation. Which distinction best explains why a fiber supplement is not automatically microbiome food?",
+      "q": "A person takes a fiber supplement marketed for regularity but sees no change in symptoms tied to fermentation. Which distinction best explains why a fiber supplement is not automatically microbiome food?",
       "options": [
         "Fermentability, not solubility, drives the microbial biology, and not all fiber is fermentable",
         "All soluble fiber is non-fermentable and only adds bulk",
@@ -116,7 +116,7 @@ window.GEM_EXAM = {
       "id": "b1-c2-free-1",
       "chapter": 2,
       "type": "free",
-      "q": "A client shares an at-home stool test report that assigns them a low microbiome score and recommends a specific probiotic product to fix it. Within a coaching scope, explain how you would respond: address the science of microbiome variation and the limits of such tests, what genuinely higher-leverage guidance you can offer, and where the clinical boundary lies.",
+      "q": "A person shares an at-home stool test report that assigns them a low microbiome score and recommends a specific probiotic product to fix it. Within an educational scope, explain how you would respond: address the science of microbiome variation and the limits of such tests, what genuinely higher-leverage guidance you can offer, and where the clinical boundary lies.",
       "model": "I would explain that there is no single ideal microbiome and that individual variation is large, so a score that grades you against an ideal overstates what the science supports. Much mechanism comes from mouse and germ-free models and many human findings are correlational, so the direction of cause is often unclear; be skeptical of tests that score you and then sell the fix. Higher-leverage guidance is to feed the residents you already have by gradually building fiber variety from fermentable sources (inulin, pectin, resistant starch, beta-glucan) and adding fermented foods, since swallowed probiotics are mostly transient and rarely recolonize. I would stay in scope by educating on the fiber to fermentation to butyrate mechanism and not interpreting the test as a diagnosis, and I would refer red flags such as bloody stool, persistent or severe pain, unexplained weight loss, or suspected inflammatory bowel disease to a qualified clinician.",
       "key_points": [
         "There is no single ideal microbiome and variation is large; score-and-sell tests are not well supported and much evidence is correlational or from animal models",
@@ -135,7 +135,7 @@ window.GEM_EXAM = {
             "weight": 30
           },
           {
-            "desc": "Maintains the coaching boundary: educate not diagnose, and refers named red flags to a clinician",
+            "desc": "Maintains the educational boundary: educate not diagnose, and refers named red flags to a clinician",
             "weight": 30
           }
         ]
@@ -147,7 +147,7 @@ window.GEM_EXAM = {
       "id": "b1-c3-mc-1",
       "chapter": 3,
       "type": "mc",
-      "q": "A client read online that gut-made serotonin directly lifts mood. Based on the chapter, what is the most accurate correction?",
+      "q": "A person read online that gut-made serotonin directly lifts mood. Based on the chapter, what is the most accurate correction?",
       "options": [
         "Gut serotonin is the same pool that the brain uses for mood",
         "The gut makes almost no serotonin, so the claim is backwards",
@@ -203,7 +203,7 @@ window.GEM_EXAM = {
       "id": "b1-c4-mc-2",
       "chapter": 4,
       "type": "mc",
-      "q": "A client with greasy, floating, foul-smelling stools and weight loss asks what such a pattern can indicate. Which condition does the chapter associate with this hallmark of steatorrhea?",
+      "q": "A person with greasy, floating, foul-smelling stools and weight loss asks what such a pattern can indicate. Which condition does the chapter associate with this hallmark of steatorrhea?",
       "options": [
         "Lactose intolerance from a single missing brush border enzyme",
         "Acid reflux from a leaking valve",
@@ -212,7 +212,7 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "Steatorrhea (greasy, floating, foul stools plus weight loss) is the hallmark of exocrine pancreatic insufficiency; note this is educate-and-refer, not a coaching diagnosis."
+      "explanation": "Steatorrhea (greasy, floating, foul stools plus weight loss) is the hallmark of exocrine pancreatic insufficiency; note this is educate-and-refer, not an educational diagnosis."
     },
     {
       "id": "b1-c4-multi-1",
@@ -268,7 +268,7 @@ window.GEM_EXAM = {
       "id": "b1-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client reports their belly looks visibly distended after meals, but a careful history suggests they are not eating unusual amounts. Based on the chapter's mechanism for distension, what is the best framing to offer?",
+      "q": "A person reports their belly looks visibly distended after meals, but a careful history suggests they are not eating unusual amounts. Based on the chapter's mechanism for distension, what is the best framing to offer?",
       "options": [
         "The visible bulge reliably reflects the actual volume of gas trapped in the gut, so reducing gas is the priority",
         "Visible girth and internal gas volume are only loosely coupled; a shape change in the muscular container (abdominophrenic dyssynergia) can produce the bulge",
@@ -283,7 +283,7 @@ window.GEM_EXAM = {
       "id": "b1-c5-mc-2",
       "chapter": 5,
       "type": "mc",
-      "q": "A client says antacids relieve their occasional heartburn, and concludes this proves they make too much stomach acid. Reading the signal backwards, what does the relief actually demonstrate?",
+      "q": "A person says antacids relieve their occasional heartburn, and concludes this proves they make too much stomach acid. Reading the signal backwards, what does the relief actually demonstrate?",
       "options": [
         "That the stomach is overproducing acid and the factory needs to be slowed",
         "That the person has GERD and should start a long-term acid-suppression plan",
@@ -298,7 +298,7 @@ window.GEM_EXAM = {
       "id": "b1-c5-mc-3",
       "chapter": 5,
       "type": "mc",
-      "q": "Two clients both report watery diarrhea. The chapter (per Keely and Barrett, 2022, and Camilleri and colleagues, 2017) stresses that this single complaint can arise from distinct physiologies. Which pairing correctly separates them?",
+      "q": "Two people both report watery diarrhea. The chapter (per Keely and Barrett, 2022, and Camilleri and colleagues, 2017) stresses that this single complaint can arise from distinct physiologies. Which pairing correctly separates them?",
       "options": [
         "Fast transit leaving too little time to reabsorb water versus active secretion of chloride and water into the lumen",
         "Too much fiber versus too little fiber, with no other mechanism involved",
@@ -343,7 +343,7 @@ window.GEM_EXAM = {
       "id": "b1-c6-mc-4",
       "chapter": 6,
       "type": "mc",
-      "q": "A new client states matter-of-factly, \"I have IBS, it flares whenever I eat.\" They have never seen a clinician. What is the most appropriate coaching response within scope?",
+      "q": "A new person states matter-of-factly, \"I have IBS, it flares whenever I eat.\" They have never seen a clinician. What is the most appropriate educational response within scope?",
       "options": [
         "Agree that it is probably IBS and start an IBS-specific food plan right away",
         "Tell them it is likely SIBO instead and suggest a breath test",
@@ -352,13 +352,13 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "IBS is a positive, criteria-based clinical diagnosis (Rome IV) that presumes a clinician has considered and excluded organic mimics. A self-applied label skips that step, which the coach is not qualified to perform. Educate and refer; do not say someone probably has IBS or start an IBS plan on a self-label."
+      "explanation": "IBS is a positive, criteria-based clinical diagnosis (Rome IV) that presumes a clinician has considered and excluded organic mimics. A self-applied label skips that step, which the educator is not qualified to perform. Educate and refer; do not say someone probably has IBS or start an IBS plan on a self-label."
     },
     {
       "id": "b1-c6-mc-5",
       "chapter": 6,
       "type": "mc",
-      "q": "A client suspects they have celiac disease and asks whether they should try cutting out gluten for a month to see if they feel better. What is the correct, in-scope guidance?",
+      "q": "A person suspects they have celiac disease and asks whether they should try cutting out gluten for a month to see if they feel better. What is the correct, in-scope guidance?",
       "options": [
         "Yes, a diagnostic gluten elimination is the simplest way to confirm celiac at home",
         "No; testing (serology plus confirming biopsy) must come first, while still eating gluten, so a clinician should be seen before any gluten change",
@@ -367,7 +367,7 @@ window.GEM_EXAM = {
       ],
       "answer": 1,
       "points": 1,
-      "explanation": "Celiac is diagnosed by serology plus a confirming biopsy, which must happen before gluten is removed, because removing gluten first can mask the disease and invalidate testing. A coach should never suggest a diagnostic gluten elimination; testing, and therefore a clinician, comes first."
+      "explanation": "Celiac is diagnosed by serology plus a confirming biopsy, which must happen before gluten is removed, because removing gluten first can mask the disease and invalidate testing. An educator should never suggest a diagnostic gluten elimination; testing, and therefore a clinician, comes first."
     },
     {
       "id": "b1-c6-tf-1",
@@ -411,7 +411,7 @@ window.GEM_EXAM = {
       "id": "b1-c7-mc-6",
       "chapter": 7,
       "type": "mc",
-      "q": "A client sleeping five and a half hours a night asks which probiotic to buy to repair their gut barrier. Using the chapter's order of leverage and the Sun and colleagues (2023) findings on sleep loss, what is the highest-leverage response?",
+      "q": "A person sleeping five and a half hours a night asks which probiotic to buy to repair their gut barrier. Using the chapter's order of leverage and the Sun and colleagues (2023) findings on sleep loss, what is the highest-leverage response?",
       "options": [
         "Recommend the most expensive multi-strain probiotic, since barrier repair starts with supplements",
         "Suggest a butyrate supplement to bottle the molecule directly and skip the foundations",
@@ -484,8 +484,8 @@ window.GEM_EXAM = {
       "id": "b1-c7-free-1",
       "chapter": 7,
       "type": "free",
-      "q": "A client shows you a premium supplement marketed to \"heal your leaky gut and cure bloating,\" featuring a \"proprietary blend\" with no named strains or doses and citing a single mouse study. Using the chapter's framework, explain how you would help them evaluate this claim and what your scope-of-practice boundaries are. Address the kind of claim being made, the quality of the evidence, and what you can and cannot do as a coach.",
-      "model": "I would walk the client through the three-question filter rather than give a verdict. First, what kind of claim is it: words like \"heal\" and \"cure\" are medical claims a supplement may not legitimately make and are a red flag, while \"supports\" would be a vague structure-function phrase. Second, what is the evidence: a single mouse study stretched into a human headline is weak evidence, and a \"proprietary blend\" with no named strain or dose means I cannot match strain, dose, and population to this person, so by the standard that no named strain equals no claim worth believing, there is nothing here to trust. I would contrast that with the stronger tiers, such as the Zheng (2023) meta-analysis of human RCTs or the Wastyk (2021) fermented-foods trial with its caveats stated. Third, who benefits: loud marketing tends to track thin evidence, while the free foundations (nutrition, sleep, stress, hydration, movement) have the strongest support and no ad budget. On scope, I would be explicit that supplements are not treatments, that I educate and weigh claims but do not diagnose or treat, that I would steer them toward the foundations first, and that I would advise checking with a provider before starting or stacking supplements. Crucially, \"leaky gut\" and \"bloating\" framed as a disease to be cured, and any persistent symptoms, pain, blood, or unexplained weight loss, belong to a physician, not a coaching plan. I would never promise a cure.",
+      "q": "A person shows you a premium supplement marketed to \"heal your leaky gut and cure bloating,\" featuring a \"proprietary blend\" with no named strains or doses and citing a single mouse study. Using the chapter's framework, explain how you would help them evaluate this claim and what your scope-of-practice boundaries are. Address the kind of claim being made, the quality of the evidence, and what you can and cannot do as an educator.",
+      "model": "I would walk the person through the three-question filter rather than give a verdict. First, what kind of claim is it: words like \"heal\" and \"cure\" are medical claims a supplement may not legitimately make and are a red flag, while \"supports\" would be a vague structure-function phrase. Second, what is the evidence: a single mouse study stretched into a human headline is weak evidence, and a \"proprietary blend\" with no named strain or dose means I cannot match strain, dose, and population to this person, so by the standard that no named strain equals no claim worth believing, there is nothing here to trust. I would contrast that with the stronger tiers, such as the Zheng (2023) meta-analysis of human RCTs or the Wastyk (2021) fermented-foods trial with its caveats stated. Third, who benefits: loud marketing tends to track thin evidence, while the free foundations (nutrition, sleep, stress, hydration, movement) have the strongest support and no ad budget. On scope, I would be explicit that supplements are not treatments, that I educate and weigh claims but do not diagnose or treat, that I would steer them toward the foundations first, and that I would advise checking with a provider before starting or stacking supplements. Crucially, \"leaky gut\" and \"bloating\" framed as a disease to be cured, and any persistent symptoms, pain, blood, or unexplained weight loss, belong to a physician, not an educational plan. I would never promise a cure.",
       "key_points": [
         "Identifies \"heal\"/\"cure\" as illegitimate medical claims and a red flag, versus vague \"supports\" structure-function language",
         "Flags weak evidence: a single mouse study stretched to a human headline, and a proprietary blend with no named strain or dose (no strain named, no claim worth believing)",
@@ -526,7 +526,7 @@ window.GEM_EXAM = {
       "id": "b1-c8-mc-1",
       "chapter": 8,
       "type": "mc",
-      "q": "A client takes a large iron supplement with a cup of strong tea right after a meal and wonders why their iron status has not improved. Based on the chapter, which combination best explains the poor non-heme iron uptake?",
+      "q": "A person takes a large iron supplement with a cup of strong tea right after a meal and wonders why their iron status has not improved. Based on the chapter, which combination best explains the poor non-heme iron uptake?",
       "options": [
         "Tea polyphenols and the timing of a large dose with food both inhibit non-heme iron at the duodenum",
         "Iron is absorbed in the terminal ileum, so meal timing is irrelevant",
@@ -556,7 +556,7 @@ window.GEM_EXAM = {
       "id": "b1-c8-mc-3",
       "chapter": 8,
       "type": "mc",
-      "q": "A client splits their magnesium into smaller doses across the day rather than one large dose. Which absorption principle does this strategy use?",
+      "q": "A person splits their magnesium into smaller doses across the day rather than one large dose. Which absorption principle does this strategy use?",
       "options": [
         "Paracellular transport is faster for small volumes",
         "Bile is only available in small amounts at a time",
@@ -632,7 +632,7 @@ window.GEM_EXAM = {
       "id": "b1-c9-mc-5",
       "chapter": 9,
       "type": "mc",
-      "q": "A client reports that even a trace of peanut causes hives and lip swelling within minutes. According to the chapter, the single most important thing a coach should do is:",
+      "q": "A person reports that even a trace of peanut causes hives and lip swelling within minutes. According to the chapter, the single most important thing an educator should do is:",
       "options": [
         "Run a structured elimination and reintroduction to confirm the food",
         "Suggest an at-home IgG panel to map the reaction",
@@ -641,7 +641,7 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "Fast, trace-triggered reactions like hives and lip swelling point to an IgE-mediated allergy, a medical condition. The coach refers to an allergist and never advises an eat-it-to-test approach; this can risk anaphylaxis."
+      "explanation": "Fast, trace-triggered reactions like hives and lip swelling point to an IgE-mediated allergy, a medical condition. The educator refers to an allergist and never advises an eat-it-to-test approach; this can risk anaphylaxis."
     },
     {
       "id": "b1-c9-multi-2",
@@ -694,8 +694,8 @@ window.GEM_EXAM = {
       "id": "b1-c9-free-1",
       "chapter": 9,
       "type": "free",
-      "q": "A client says they feel bloated and foggy a day or two after eating bread and asks you to help them figure out what is wrong. Explain how you would respond within a coach's scope. Address the allergy versus intolerance versus sensitivity branch point, why certain tests are or are not valid, the celiac testing trap, and where you must refer rather than diagnose.",
-      "model": "I would start from the branch point: is the immune system involved? Delayed bloat and fog with a weak link to a specific food fit the sensitivity category, but I cannot diagnose. Before removing anything, I would encourage ruling out mimics first, especially celiac disease (an autoimmune condition, not an allergy or sensitivity), because going gluten-free before testing makes celiac impossible to diagnose later, which is the celiac trap. I would explain that IgG panels, hair analysis, and similar tests are not valid because they measure exposure or fail under blinding; valid tools are IgE or skin-prick for allergy and a hydrogen breath test for carbohydrate intolerance, both ordered by a clinician. Within my lane, I can teach mechanisms, protect overall nutrition, and support a properly run elimination and reintroduction ideally with a dietitian. I would refer anything immune or uncertain to a physician or allergist, and I would treat any throat tightening, hives, or trouble breathing as a possible anaphylaxis emergency. I would never tell the client to test a reaction by eating a suspected allergen, and I would never diagnose.",
+      "q": "A person says they feel bloated and foggy a day or two after eating bread and asks you to help them figure out what is wrong. Explain how you would respond within an educator's scope. Address the allergy versus intolerance versus sensitivity branch point, why certain tests are or are not valid, the celiac testing trap, and where you must refer rather than diagnose.",
+      "model": "I would start from the branch point: is the immune system involved? Delayed bloat and fog with a weak link to a specific food fit the sensitivity category, but I cannot diagnose. Before removing anything, I would encourage ruling out mimics first, especially celiac disease (an autoimmune condition, not an allergy or sensitivity), because going gluten-free before testing makes celiac impossible to diagnose later, which is the celiac trap. I would explain that IgG panels, hair analysis, and similar tests are not valid because they measure exposure or fail under blinding; valid tools are IgE or skin-prick for allergy and a hydrogen breath test for carbohydrate intolerance, both ordered by a clinician. Within my lane, I can teach mechanisms, protect overall nutrition, and support a properly run elimination and reintroduction ideally with a dietitian. I would refer anything immune or uncertain to a physician or allergist, and I would treat any throat tightening, hives, or trouble breathing as a possible anaphylaxis emergency. I would never tell the person to test a reaction by eating a suspected allergen, and I would never diagnose.",
       "key_points": [
         "Applies the immune-involvement branch point to classify the situation",
         "Recommends ruling out mimics such as celiac while still eating the suspect food",
@@ -720,7 +720,7 @@ window.GEM_EXAM = {
             "weight": 20
           },
           {
-            "desc": "Keeps clear coaching boundaries: refers, does not diagnose, never tests an allergen by eating it",
+            "desc": "Keeps clear educational boundaries: refers, does not diagnose, never tests an allergen by eating it",
             "weight": 25
           },
           {
@@ -736,7 +736,7 @@ window.GEM_EXAM = {
       "id": "b1-c10-mc-6",
       "chapter": 10,
       "type": "mc",
-      "q": "A client on a long-term PPI mentions new fatigue and asks if they should just stop the drug to fix their nutrient levels. Based on the chapter, the coach's correct response is to:",
+      "q": "A person on a long-term PPI mentions new fatigue and asks if they should just stop the drug to fix their nutrient levels. Based on the chapter, the educator's correct response is to:",
       "options": [
         "Agree, since stopping the PPI will quickly restore B12 and iron",
         "Tell them to halve the dose to reduce nutrient losses",
@@ -745,7 +745,7 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "PPIs can reduce B12, non-heme iron, magnesium, and some calcium. The coach may notice the pattern and route to a prescriber or pharmacist, but never advises stopping or changing the dose; rebound acid hypersecretion is real and tapering is clinical."
+      "explanation": "PPIs can reduce B12, non-heme iron, magnesium, and some calcium. The educator may notice the pattern and route to a prescriber or pharmacist, but never advises stopping or changing the dose; rebound acid hypersecretion is real and tapering is clinical."
     },
     {
       "id": "b1-c10-tf-2",
@@ -754,7 +754,7 @@ window.GEM_EXAM = {
       "q": "Because the colon does not develop tolerance to opioids, opioid-induced constipation tends to persist rather than resolve on its own.",
       "answer": true,
       "points": 1,
-      "explanation": "Opioids bind mu-opioid receptors in the enteric nervous system, slowing transit and cutting secretion. The colon does not develop tolerance, so constipation persists and often needs medical management; the coach supports fiber, fluids, and movement and refers."
+      "explanation": "Opioids bind mu-opioid receptors in the enteric nervous system, slowing transit and cutting secretion. The colon does not develop tolerance, so constipation persists and often needs medical management; the educator supports fiber, fluids, and movement and refers."
     },
     {
       "id": "b1-c10-match-2",

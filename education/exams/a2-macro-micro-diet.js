@@ -23,7 +23,7 @@ window.GEM_EXAM = {
       "id": "a2-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A client held a genuine 500 kcal deficit and lost weight, but after several weeks the scale trend flattens despite unchanged adherence. Which chapter concept best explains the stall?",
+      "q": "A person held a genuine 500 kcal deficit and lost weight, but after several weeks the scale trend flattens despite unchanged adherence. Which chapter concept best explains the stall?",
       "options": [
         "Metabolic adaptation: RMR, NEAT, and TEF all drift down, so the effective deficit shrinks toward zero",
         "The 7,700 kcal-per-kg conversion stops applying once weight is lost",
@@ -38,7 +38,7 @@ window.GEM_EXAM = {
       "id": "a2-c2-mc-1",
       "chapter": 2,
       "type": "mc",
-      "q": "A 72-year-old client eats about 20 g of quality protein per meal, the dose that maximizes MPS in young adults, yet is slowly losing muscle. What is the most defensible adjustment?",
+      "q": "A 72-year-old person eats about 20 g of quality protein per meal, the dose that maximizes MPS in young adults, yet is slowly losing muscle. What is the most defensible adjustment?",
       "options": [
         "Add a between-meals BCAA supplement to top up leucine",
         "Raise each meal to about 30 g protein (roughly 2.8 g leucine) to overcome anabolic resistance",
@@ -98,7 +98,7 @@ window.GEM_EXAM = {
       "id": "a2-c4-mc-1",
       "chapter": 4,
       "type": "mc",
-      "q": "A client's diet sits near a 15:1 omega-6 to omega-3 ratio and you want to move toward 4:1 or lower. Which approach fits the chapter's reasoning?",
+      "q": "A person's diet sits near a 15:1 omega-6 to omega-3 ratio and you want to move toward 4:1 or lower. Which approach fits the chapter's reasoning?",
       "options": [
         "Aggressively eliminate all omega-6 seed oils from the diet",
         "Add omega-3 sources such as fatty fish rather than merely torching omega-6",
@@ -113,7 +113,7 @@ window.GEM_EXAM = {
       "id": "a2-c4-mc-2",
       "chapter": 4,
       "type": "mc",
-      "q": "A client orders a strictly fat-free salad to save calories. Based on the chapter, what is the main nutritional cost of removing all fat from that meal?",
+      "q": "A person orders a strictly fat-free salad to save calories. Based on the chapter, what is the main nutritional cost of removing all fat from that meal?",
       "options": [
         "Most of the vitamin C in the vegetables is destroyed",
         "The fat-soluble vitamins A, D, E, K and carotenoids go largely unabsorbed",
@@ -128,7 +128,7 @@ window.GEM_EXAM = {
       "id": "a2-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client eats an extremely low-fat diet for two years and now shows early night-vision trouble and dry eyes. Which mechanism best explains why these fat-soluble vitamin signs took so long to appear despite the ongoing low intake?",
+      "q": "A person eats an extremely low-fat diet for two years and now shows early night-vision trouble and dry eyes. Which mechanism best explains why these fat-soluble vitamin signs took so long to appear despite the ongoing low intake?",
       "options": [
         "Fat-soluble vitamins are stored in the liver and fat, so body reserves buffer intake gaps for months to years",
         "Fat-soluble vitamins wash out daily, so signs only appear once the kidneys are overwhelmed",
@@ -158,7 +158,7 @@ window.GEM_EXAM = {
       "id": "a2-c6-mc-1",
       "chapter": 6,
       "type": "mc",
-      "q": "A plant-based client wants to maximize iron from a lentil-and-spinach meal. Which single change would most improve non-heme iron absorption at that meal?",
+      "q": "A plant-based person wants to maximize iron from a lentil-and-spinach meal. Which single change would most improve non-heme iron absorption at that meal?",
       "options": [
         "Drink a strong cup of tea or coffee alongside the meal",
         "Take a high-dose calcium supplement with the meal",
@@ -188,7 +188,7 @@ window.GEM_EXAM = {
       "id": "a2-c7-mc-1",
       "chapter": 7,
       "type": "mc",
-      "q": "Using the remainder method for a 75 kg client at 2,000 kcal with protein locked at 135 g and fat at a floor of 53 g, roughly how many grams of carbohydrate remain? (Protein and carbohydrate about 4 kcal/g, fat about 9 kcal/g.)",
+      "q": "Using the remainder method for a 75 kg person at 2,000 kcal with protein locked at 135 g and fat at a floor of 53 g, roughly how many grams of carbohydrate remain? (Protein and carbohydrate about 4 kcal/g, fat about 9 kcal/g.)",
       "options": [
         "About 90 g",
         "About 175 g",
@@ -203,7 +203,7 @@ window.GEM_EXAM = {
       "id": "a2-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "A client cuts from 2,000 to 1,600 kcal for fat loss. Following the priority order for setting macros, which macro should absorb almost all of that 400 kcal reduction?",
+      "q": "A person cuts from 2,000 to 1,600 kcal for fat loss. Following the priority order for setting macros, which macro should absorb almost all of that 400 kcal reduction?",
       "options": [
         "Protein, which should be dropped first to save calories",
         "Fat, which should fall well below its floor during a cut",

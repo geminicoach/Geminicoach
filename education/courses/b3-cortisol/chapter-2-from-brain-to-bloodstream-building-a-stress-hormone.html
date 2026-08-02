@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From Brain to Bloodstream: Building a Stress Hormone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 2 &middot; Module 1</div>
+    <h1 class="ch-title">From Brain to Bloodstream: Building a <em>Stress Hormone</em></h1>
+    <p class="ch-subtitle">How three organs, one molecule of cholesterol, and a single feedback loop turn a stressor into cortisol.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> car swerves into your lane. Before you have consciously named the danger, a structure the size of an almond deep in your brain has already fired, a pea-sized gland beneath it has released a second messenger into a private blood supply, and two walnut-shaped glands sitting on top of your kidneys have begun stripping molecules off cholesterol to manufacture a hormone from scratch. Within minutes that hormone is circulating in every vessel you own, unlocking glucose, sharpening attention, and, crucially, carrying a message back to the brain that started the whole thing: <em>enough, stand down.</em></p>
+    <p>This is the machine we are opening today. Not a metaphor for stress, but the literal, physical assembly line that converts a perceived threat into a measurable molecule. By the end of this chapter you will be able to draw it from the top down, name what travels between each stage, and, most importantly, explain the one feedback loop that governs everything else in this course. That loop is the reason a healthy stress response has an ending rather than a runaway climb, and it is the reason so many popular claims about cortisol fall apart the moment you understand the wiring.</p>
+    <p>To keep the anatomy tethered to something human, we will follow one learner named Reuben. Reuben is 38, works long and irregular hours, and enrolled in this course after months of feeling what he described as wired and tired at the same time. He ordered an at-home saliva cortisol kit, spat into four little tubes across a day, and received a printout with a jagged line and a phrase he did not understand. A forum told him the line meant his adrenals were burning out. Reuben is not a patient here and he is not anyone's client. He is a learner trying to make sense of his own body, and we follow him because his confusion is precisely the confusion this chapter is built to dissolve. Every time his story appears, treat it as a place to test whether the mechanism you just learned actually explains what he is seeing. It will, and the people who sold him the interpretation never understood the machine as well as you are about to.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A vintage scientific-plate illustration, ink-and-watercolour on warm cream paper, showing a vertical cutaway of the human hypothalamic–pituitary–adrenal axis as a three-stage cascade. At top, a stylised cross-section of the brain highlighting a small labelled region 'hypothalamus'; a short stalk descends to a rounded gland labelled 'pituitary'; a long arrow travels down the body to a walnut-shaped gland perched atop a kidney, labelled 'adrenal'. Thin descending arrows connect the three, each with a small parcel icon labelled in order 'CRH', 'ACTH', 'cortisol'. Muted palette of sepia, dusty teal, ochre, and faded brick red. Labels set in small italic serif. Clean anatomical accuracy, no people, no watermarks, no cropped letters." data-aspect="portrait"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The axis runs top to bottom: brain, gland, gland. Three organs, three signals.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Why a Chain, Not a Single Gland</h2>
+    <p>If the body simply needed cortisol on demand, evolution could have built one organ that senses stress and secretes the hormone directly. Instead the response is relayed through three separate structures, the <span class="ch-key">hypothalamus</span>, the <span class="ch-key">anterior pituitary</span>, and the <span class="ch-key">adrenal cortex</span>, in a sequence known as the <span class="ch-key">HPA axis</span> (hypothalamic-pituitary-adrenal axis). The extra links look inefficient at first glance. They are not. They buy the system two things a single gland could never provide: amplification and fine control. Smith and Vale (2006) describe this three-tier arrangement as the central coordinating pathway of the mammalian stress response, and its layered design is the reason the same hardware can whisper or shout.</p>
+    <p>Amplification comes from the fact that each stage speaks in larger numbers than the last. A modest pulse of hypothalamic hormone triggers a larger pituitary release, which in turn drives a still larger adrenal output. A whisper at the top becomes a shout at the bottom, so a small, cheap signal from the brain can command a large, expensive metabolic response from the body without the brain having to generate that much signal itself. Fine control comes from the fact that a multi-step chain offers several places to intervene. Each junction is a point where the signal can be dialed up, damped, delayed, or shut off, and each responds to its own set of inputs. As Lightman, Birnie, and Conway-Campbell (2020) emphasize in their review of axis dynamics, this architecture is exactly what allows one system to produce either a steady trickle of hormone or sharp, rhythmic bursts depending on how hard the top of the chain is driven.</p>
+    <p>There is a third advantage worth naming, because it will matter when we get to disease. A chain lets different inputs enter at different levels. The brain can feed emotional and anticipatory stress in at the top, through the hypothalamus. The body can feed in physical signals like blood pressure, blood sugar, and inflammation at lower points. And the whole assembly can be modulated by the daily clock, by prior stress, and by the hormone's own downstream product. Spencer and Deak (2017) make the point that studying the axis at only one level is misleading precisely because control is distributed across all of them. A number measured at the bottom, cortisol in the blood or saliva, is the output of everything happening above it, which is the first hint of why a single test result is so easy to misread.</p>
+    <p>There is a useful way to hold all of this at once. Think of the axis less as a switch and more as a relay of messengers, each handing off to the next and each able to modulate the handoff. The brain decides whether to sound the alarm and how loudly. The pituitary decides how much of that alarm to broadcast to the body. The adrenal cortex decides how much hormone to actually build in response. Because three different tissues each hold a piece of the decision, the final output reflects a negotiation rather than a single command, and that distributed decision-making is exactly what makes the response both powerful and difficult to hijack with a simple intervention. It is also why, when Reuben imagined he could fix his stress by targeting one link with one product, he was misreading a system that no single link controls on its own.</p>
+
+    <h3>Stage 1: The Hypothalamus Releases CRH</h3>
+    <p>The cascade begins in a specific cluster of neurons: the <span class="ch-key">paraventricular nucleus</span> (PVN) of the hypothalamus. When these neurons register a stressor, whether physical, psychological, or metabolic, they secrete <span class="ch-key">corticotropin-releasing hormone</span> (CRH). CRH is the master switch of the entire axis. Smith and Vale (2006) call it the principal regulator, the molecule that translates a signal arriving from many different brain regions into a single command the endocrine system can act on. Fear circuits, pain pathways, low blood sugar sensors, and the circadian clock all converge on these neurons, and their combined vote decides how much CRH gets released.</p>
+    <p>What happens next is a small anatomical masterpiece. CRH does not travel through the general circulation the way most hormones do. It is released into a tiny, dedicated portal blood system, the hypophyseal portal vessels, that runs the short distance from the base of the hypothalamus to the pituitary just below it. This private plumbing means CRH arrives at high concentration exactly where it is needed and essentially nowhere else. If CRH were dumped into the whole bloodstream, it would be diluted into irrelevance before it reached the pituitary, and it would leak effects across the rest of the body. The portal system solves both problems at once. It is the first of several places in this chapter where anatomy itself enforces specificity, and it is a good reminder that in physiology, geography is often function.</p>
+    <p>The PVN neurons rarely act alone. Under stronger or more sustained stress they co-release a second peptide, arginine vasopressin (AVP), alongside CRH. AVP is a comparatively weak trigger on its own, but it sharply potentiates CRH, so the two together produce a bigger pituitary response than either would separately. This co-secretion is one of the reasons the axis can grade its output so finely: it is not simply on or off but tunable, with the brain adjusting the CRH-to-AVP mix to shape how hard it leans on the next stage.</p>
+
+    <h3>Stage 2: The Pituitary Answers with ACTH</h3>
+    <p>CRH binds receptors on <span class="ch-key">corticotroph</span> cells in the anterior pituitary. These cells respond by manufacturing and cleaving a large precursor protein called <span class="ch-key">proopiomelanocortin</span> (POMC). POMC is a striking molecule because it is a single chain that can be cut into several different active fragments depending on which enzymes process it. In the corticotroph, the relevant product is <span class="ch-key">adrenocorticotropic hormone</span> (ACTH), which is released into the general bloodstream. Now, for the first time in the cascade, the signal goes systemic. ACTH circulates throughout the entire body, but it has one principal address: the adrenal cortex.</p>
+    <p>Two features of this stage will pay off later. First, because ACTH is carved from POMC, and POMC synthesis is something the brain can regulate up or down, this is a natural control point. Turn down POMC production and you turn down ACTH regardless of what the adrenal glands are capable of. Second, ACTH is a comparatively short-lived molecule with a half-life of roughly ten minutes, which means the adrenal glands are not receiving a constant hum but a series of pulses that fade quickly unless renewed. That built-in decay is part of what makes the whole axis rhythmic rather than steady, a point we will return to when we discuss ultradian pulses. For now, hold onto the image of ACTH as a repeated shout that must be shouted again to stay heard.</p>
+    <p>When ACTH reaches the adrenal cortex, it binds a specific receptor, the melanocortin-2 receptor (MC2R), on the surface of the steroid-producing cells. This is the moment the systemic signal is finally read at the target. Binding sets off a chain of intracellular events that both switches on the machinery of hormone production immediately and, over longer exposure, increases the gland's capacity to produce. In other words, ACTH does not just place today's order; sustained ACTH also expands the factory, which is why chronically high ACTH enlarges the adrenal cortex and why a shortage of ACTH lets it shrink.</p>
+
+    <h3>Stage 3: The Adrenal Cortex Builds Cortisol</h3>
+    <p>Here the message stops being a relay and becomes a manufacturing order. This is the single most important thing to understand about the bottom of the axis, and it is the fact almost every cortisol myth quietly ignores. Unlike CRH and ACTH, which are peptide hormones that can be pre-made and stored in vesicles ready for instant release, cortisol is a steroid and cannot be stockpiled in any meaningful quantity. It has to be <em>made</em>, synthesized on demand from cholesterol through a multi-enzyme pathway, every time it is needed. There is no warehouse of finished cortisol waiting to ship.</p>
+    <p>This is why there is a built-in delay of minutes between a stressor and peak cortisol. The factory has to actually run. Catecholamines like adrenaline, which the adrenal <em>medulla</em> stores pre-made and can dump in seconds, give you the instant jolt of the fight-or-flight moment. Cortisol arrives a beat later because it is being assembled while you wait. Understanding this timing difference resolves a common confusion: the racing heart of acute stress and the sustained metabolic support of the same episode are two different chemical systems operating on two different clocks, and cortisol is deliberately the slower, longer-acting one.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: if you injected a healthy person with ACTH, which hormone would rise first, and which structure would you expect to remain unchanged? Now reverse it. What happens downstream if you block ACTH but leave CRH intact, and what happens to the size of the adrenal cortex over weeks if ACTH stays blocked?</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>The popular idea that adrenals can be depleted or run dry like a battery leans on the assumption that cortisol is a stored supply that gets used up. It is not. Cortisol is built to order from cholesterol on every occasion, and healthy adrenal glands do not exhaust a reserve because there is no reserve to exhaust. Genuine failure of the adrenal cortex is a specific, diagnosable medical condition with a clear mechanism, not a gradual draining of a tank. Keep the manufacturing model in mind and the depletion story stops making chemical sense.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Adrenal Cortex as a Layered Factory</h2>
+    <p>To understand where cortisol actually comes from, picture the adrenal cortex not as a single room but as a factory with three floors stacked from the outside in. Each floor, properly called a <em>zone</em>, expresses a different set of enzymes, and because enzymes determine what chemistry is possible, each floor rolls out a different product. This is the insight at the heart of Miller and Auchus's (2011) canonical review of human steroidogenesis: zonal identity <em>is</em> enzymatic identity. Same raw material arrives on every floor, but the tools installed on each floor decide what can be built there.</p>
+    <p>That principle is worth pausing on because it generalizes. Throughout endocrinology, a cell's output is set less by what it receives than by what it is equipped to do with what it receives. The adrenal cortex is the cleanest teaching example of this rule anywhere in the body, three adjacent tissues fed by the same blood supply and the same cholesterol, producing three different classes of hormone purely because they carry different enzymatic toolkits. If you understand the adrenal cortex, you understand a design pattern the whole endocrine system reuses.</p>
+
+    <h3>The Three Floors</h3>
+    <p>The outermost layer, the <span class="ch-key">zona glomerulosa</span>, sits just under the adrenal capsule and lacks the enzyme P450c17 (CYP17). Without that enzyme the floor cannot make cortisol at all. Instead it specializes in <span class="ch-key">aldosterone</span>, the mineralocorticoid that manages sodium retention and, through it, blood volume and blood pressure. Notably, this floor answers to a largely different boss. Aldosterone output is governed mainly by the renin-angiotensin system and by potassium levels rather than by ACTH, which is why blood pressure regulation can run somewhat independently of the stress axis even though both hormones come from the same gland.</p>
+    <p>The middle and largest layer, the <span class="ch-key">zona fasciculata</span>, expresses P450c17 and is the true cortisol plant. This is the floor ACTH is shouting at, and it is the floor that will occupy most of this course. Its cells are arranged in long columns packed with lipid droplets of stored cholesterol, the raw material staged and ready, which is a nice visual reminder that what the gland stockpiles is the ingredient, not the finished hormone.</p>
+    <p>The innermost layer, the <span class="ch-key">zona reticularis</span>, tilts its chemistry toward the adrenal androgens <span class="ch-key">DHEA</span> and its sulfated form DHEA-S. These are weak androgens in their own right but serve as precursors the body can convert into more potent sex steroids in other tissues. A modern reappraisal by Kater, Giorgi, and Costa-Barbosa (2022) adds nuance to this tidy three-floor picture. The zones are not perfectly sealed off from one another, alternative or backdoor pathways exist, and the fasciculata can run additional routes under ACTH control. But for our purposes the headline holds firmly: different floors, different products, one shared raw material.</p>
+
+    <p>One structural detail ties the three floors together. Blood enters the adrenal cortex at the outside and drains inward toward the center, a centripetal flow, so hormones made in the outer zones wash over the inner zones on their way out of the gland. This means the zona reticularis sits downstream of a cortisol-rich current arriving from the fasciculata, and that local exposure helps shape what the innermost floor does. The zones are stacked in the order they are for a reason, and the plumbing between them is part of the design rather than an accident of how the tissue happens to be packed. When you picture the factory, picture the conveyor of blood running from the loading dock on the outside to the core, carrying each floor's output past the floors below it.</p>
+
+    <h3>The Steroidogenic Pathway: From Cholesterol to Cortisol</h3>
+    <p>Every steroid hormone in the body, cortisol, aldosterone, testosterone, and estrogen alike, begins as the same humble molecule: <span class="ch-key">cholesterol</span>. This is worth sitting with, because it reframes cholesterol from a dietary villain into the universal starting block for an entire class of signaling molecules. The cell sources that cholesterol from several places, from circulating lipoproteins taken up from the blood and from its own internal stores in those lipid droplets, and stages it for conversion.</p>
+    <p>The first committed step is also the rate-limiting one, and it is elegantly gated. Cholesterol is not water-soluble and cannot simply drift to where it is needed inside the cell. It must be actively ferried across the mitochondrial membrane by the <span class="ch-key">StAR protein</span> (steroidogenic acute regulatory protein). Only once StAR has delivered cholesterol to the inner mitochondrial membrane can the enzyme <span class="ch-key">P450scc</span> (CYP11A1) cleave its side chain to produce <span class="ch-key">pregnenolone</span>. This is the pathway's front door, and it is the step ACTH most directly accelerates, largely by rapidly boosting StAR activity. Slow the front door and everything downstream slows with it; open it and the whole line speeds up. This single controlled step is how a signal arriving at the cell surface gets translated into more hormone within minutes.</p>
+    <p>From pregnenolone, a relay of cytochrome P450 enzymes and 3-beta-HSD isoforms shapes the molecule stage by stage, like stations on an assembly line each performing one specific modification. In the zona fasciculata, P450c17 adds a 17-hydroxyl group, then CYP21 (21-hydroxylase) and CYP11B1 (11-beta-hydroxylase) complete the sequence, converting 11-deoxycortisol into finished <span class="ch-key">cortisol</span>. Change which enzymes a cell expresses and you change the endpoint, which is exactly why the glomerulosa, lacking P450c17, arrives at aldosterone instead of cortisol from the very same pregnenolone. The pathway is less a single road than a branching one, and enzyme availability throws the switches at each fork.</p>
+    <p>This branching structure is not a curiosity. It is the reason a single enzyme defect can reroute the entire output of the gland, and it is the reason the same starting material can produce hormones with completely different jobs. When you can see the pathway as a set of switches rather than a straight line, a whole category of clinical conditions becomes reasoned rather than memorized, as the next callout shows.</p>
+
+    <blockquote class="ch-quote">
+      <p>The conversion of cholesterol to pregnenolone by the cholesterol side-chain cleavage enzyme, P450scc, is the first, rate-limiting, and hormonally regulated step in the synthesis of all steroid hormones.</p>
+      <cite>Miller &amp; Auchus (2011), <em>Endocrine Reviews</em></cite>
+    </blockquote>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Congenital adrenal hyperplasia most often involves a defect in 21-hydroxylase (CYP21). Using the factory logic above, predict the chain of events: cortisol synthesis is blocked, so cortisol falls; the brain, sensing low cortisol, shouts louder with CRH and ACTH; that extra ACTH drives the factory harder, but the blocked step means precursors pile up upstream and get shunted down the open branch toward androgens. You have just reasoned your way through a real clinical condition purely from the pathway diagram, without memorizing a single fact about it.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="An isometric infographic in the idiom of a hand-drawn field-guide plate, depicting the adrenal cortex as a three-storey cutaway factory building. From outer to inner, three clearly separated horizontal floors are labelled in small italic serif: top floor 'zona glomerulosa', large middle floor 'zona fasciculata', bottom floor 'zona reticularis'. A single raw-material chute labelled 'cholesterol' feeds in from the side. Small product parcels leave each floor by conveyor: top floor parcel 'aldosterone', middle floor parcel 'cortisol', bottom floor parcel 'DHEA'. Warm industrial palette of ochre, rust, slate blue, and cream, soft top-down key light. Clean, uncluttered, no people, no watermarks, no cropped letters, no more than six labels." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same raw material, three floors, three products. Enzyme expression decides what leaves each floor.</em></figcaption></figure>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Watching the Signal Travel</h2>
+    <p>Before we get to the feedback loop that governs everything, it helps to see the forward cascade in motion. The tracer below lets you apply a stressor and watch CRH climb first, ACTH follow, and cortisol rise last, with the characteristic staggered delay you would expect from a manufactured hormone at the end of the line. Then it lets you cut a link. Severing the chain at each level produces a distinct signature, and learning to read those signatures is exactly how clinicians localize a problem to the hypothalamus, the pituitary, or the adrenal gland. Run it a few times before reading on, and notice especially what happens to the levels above a broken link versus below it.</p>
+  </section>
+
+  <div class="ch-widget" id="hpa-tracer">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">HPA Axis Signal Tracer</div>
+    </div>
+    <p class="ch-widget-sub">Apply a stressor and watch CRH, then ACTH, then cortisol propagate down the chain. Sever a link or disable feedback to see the consequences.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sever a link</span>
+        <select class="ch-widget-select" id="tr-sever">
+          <option value="none">None, intact chain</option>
+          <option value="crh">Block CRH (hypothalamus)</option>
+          <option value="acth">Block ACTH (pituitary)</option>
+          <option value="cort">Block cortisol synthesis (adrenal)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Negative feedback</span>
+        <select class="ch-widget-select" id="tr-feedback">
+          <option value="on">On, cortisol brakes itself</option>
+          <option value="off">Off, brake disabled</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">CRH</span>
+        <span class="ch-meter-bar"><span id="tr-bar-crh" style="width:5%"></span></span>
+        <span class="ch-meter-num" id="tr-num-crh">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">ACTH</span>
+        <span class="ch-meter-bar"><span id="tr-bar-acth" style="width:5%"></span></span>
+        <span class="ch-meter-num" id="tr-num-acth">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cortisol</span>
+        <span class="ch-meter-bar"><span id="tr-bar-cort" style="width:8%"></span></span>
+        <span class="ch-meter-num" id="tr-num-cort">8</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="tr-go">Apply stressor</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>The Heart of the Course: Negative Feedback</h2>
+    <p>Here is the single idea that everything else in this course rests on. Cortisol does not just do its job in the periphery and disappear. It circles back to the brain and the pituitary and <em>shuts down its own production</em>. Rising cortisol inhibits CRH release from the hypothalamus and ACTH release from the pituitary, so the very product of the axis becomes the signal that ends the axis's activity. This is <span class="ch-key">negative feedback</span>, a self-limiting loop, and it is why a normal stress response is a spike followed by a return to baseline rather than an endless climb. The output regulates the input. If you remember nothing else structural from this chapter, remember that the machine is built to turn itself off.</p>
+    <p>The formal framework for understanding this loop was laid down four decades ago by Keller-Wood and Dallman (1984) in their foundational review. Their key contribution was recognizing that feedback is not a single event but operates across <em>multiple time domains</em>. There is <strong>fast feedback</strong>, on the order of seconds to minutes, which is far too quick to involve building new proteins and must therefore work through some non-genomic mechanism. There is <strong>intermediate feedback</strong>. And there is <strong>slow feedback</strong>, over hours, which depends on the glucocorticoid receptor entering the nucleus and changing which genes are transcribed. Crucially, they showed that corticosteroids act at more than one site, at the brain, the hypothalamus, and the pituitary, rather than braking at a single point. The axis, in other words, has several brakes operating on several timescales at several locations, which is what lets it be both responsive and stable.</p>
+
+    <h3>How the Brake Actually Works</h3>
+    <p>The slow, genomic arm is the one most textbooks describe. Cortisol, being fat-soluble, slips across the cell membrane, binds the <span class="ch-key">glucocorticoid receptor</span> (GR) in the cytoplasm, and the receptor-hormone complex travels to the nucleus, where it suppresses transcription of the POMC gene in the pituitary and the CRH gene in the hypothalamus (Gjerstad et al., 2018). Fewer messenger orders get written, so over the following hours production winds down. This arm is powerful and durable, but it is slow by design, because rewriting a cell's protein output is not something you want happening on a hair trigger.</p>
+    <p>The fast arm is more surprising and mechanistically elegant, and it is where a lot of modern research has focused. Tasker and Herman (2011) describe how glucocorticoids act on <em>membrane-associated</em> receptors on PVN neurons to trigger, within seconds, the local synthesis of <span class="ch-key">endocannabinoids</span>. These endocannabinoids then travel backward across the synapse, a retrograde signal, and suppress the excitatory input that was driving the CRH neurons to fire. Read that mechanism carefully, because it is beautifully indirect: cortisol does not simply silence the neurons, it tells them to stop listening to the signal telling them to keep firing. And it does this long before any new gene could possibly be transcribed. The axis thus has a quick tap on the brakes and a slow, sustained brake pressure working together.</p>
+    <p>Why bother with two systems? Because a threat unfolds in real time. If the only available brake took hours to engage, cortisol would keep climbing throughout an acute episode and overshoot badly before the slow brake finally caught up, and runaway glucocorticoid exposure is itself damaging. The fast endocannabinoid brake caps the peak in the moment; the slow genomic brake brings the whole system back to baseline afterward and keeps it there. One handles the emergency, the other handles the recovery. Together they explain the shape of a healthy response: a controlled rise, a capped peak, and a reliable return.</p>
+
+    <h3>Ultradian Pulses: Feedback Sculpts a Rhythm</h3>
+    <p>Feedback does not only turn the axis off. It also shapes its <em>texture</em> even at rest. Cortisol is not secreted as a smooth stream but in discrete pulses roughly every hour, an <span class="ch-key">ultradian rhythm</span> riding beneath the larger daily cycle. Gjerstad et al. (2018) and Lightman et al. (2020) argue that this pulsing emerges naturally from the very delay we have been describing between ACTH driving cortisol up and cortisol feeding back to shut ACTH down. The loop drives, cortisol overshoots, feedback suppresses, the signal decays, suppression lifts, and the cycle repeats. A feedback loop with a built-in time lag does not settle to a flat line; it oscillates. The pulses are not noise or sloppiness. They are the mathematical consequence of a well-designed loop.</p>
+    <p>The receptors matter here too, and this detail will return in later chapters on testing and dysregulation. The body reads cortisol through two different receptors with different sensitivities. The high-affinity <span class="ch-key">mineralocorticoid receptor</span> (MR) is largely occupied even at low, baseline cortisol levels, so it tracks the quiet trough of the rhythm. The lower-affinity GR is recruited only as cortisol climbs, so it comes online during peaks and stress. This two-receptor system lets the same loop manage both gentle baseline oscillation and full-blown stress shutdown with the same hormone, simply by which receptor is doing the reading at a given level. Pulsatility also matters for the message itself: a target cell exposed to crisp hourly pulses switches on a different set of genes than one bathed in a flat, unchanging level, even if the total dose is identical. The rhythm is information, not just delivery.</p>
+    <p>It helps to name the quantity the loop is defending. Engineers would call it a set point, the target value a feedback system works to hold, and the HPA axis behaves as though it has one that shifts predictably across the day and rises temporarily during a genuine challenge. A healthy axis does not pin cortisol to a single fixed number. It defends a moving target, letting cortisol climb when demand is real and returning it to the appropriate baseline for that time of day once the demand passes. This reframing pays off later, because when subsequent chapters describe dysregulation, they are almost always describing one of three specific failures of this defended target: a set point that has drifted away from where it should sit, a return to baseline that has become sluggish, or a sensor that no longer reads the signal accurately. Each is a distinct way the same loop can go wrong, and holding the idea of a defended, moving target in mind is what lets you tell them apart rather than lumping them together as vague imbalance.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Suppose a medication weakened the glucocorticoid receptor, the sensor the slow brake depends on. Trace the consequences through the loop: with a dull sensor, how high would cortisol have to climb before the brain registered enough to back off, and what would that do to the peak and to the baseline the system settles at? You are now reasoning about the mechanism behind chronic dysregulation, which the second widget lets you watch directly.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="thermostat">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Feedback Loop Thermostat</div>
+    </div>
+    <p class="ch-widget-sub">Set a stress input and watch cortisol rise, feed back to suppress CRH/ACTH, and settle at a new set point. Weaken the feedback receptor to see overshoot and instability, a preview of chronic dysregulation.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Stress input</span>
+        <select class="ch-widget-select" id="th-input">
+          <option value="1">Low</option>
+          <option value="2" selected>Moderate</option>
+          <option value="3">High</option>
+          <option value="4">Extreme</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Feedback receptor sensitivity</span>
+        <select class="ch-widget-select" id="th-sens">
+          <option value="1">Normal, healthy brake</option>
+          <option value="0.5">Weakened brake</option>
+          <option value="0.2">Severely impaired brake</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Drive (CRH/ACTH)</span>
+        <span class="ch-meter-bar"><span id="th-bar-drive" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="th-num-drive">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cortisol</span>
+        <span class="ch-meter-bar"><span id="th-bar-cort" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="th-num-cort">15</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak overshoot</span>
+        <span class="ch-meter-bar"><span id="th-bar-peak" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="th-num-peak">15</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="th-go">Run simulation</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Getting Around the Body: Free Versus Bound Cortisol</h2>
+    <p>We have built the molecule and learned how the axis governs it. Now the hormone has to travel, and here is a detail that seems minor but will become one of the most practically important ideas in the entire course: <strong>most of the cortisol in your blood is not free to do anything.</strong> Cortisol is a steroid, fat-soluble and poorly dissolved in watery plasma, so the body ships it bound to carrier proteins the way you would ship a delicate item packed in a crate. Only the item outside the crate can be used. The item inside the crate is inventory in transit.</p>
+    <p>Cizza and Rother (2012) give us the quantitative benchmarks. Under normal, non-stressed conditions, roughly <strong>80 to 90 percent</strong> of circulating cortisol is bound to <span class="ch-key">cortisol-binding globulin</span> (CBG, also called transcortin), about <strong>10 to 15 percent</strong> is loosely bound to albumin, and only about <strong>5 to 10 percent</strong> circulates as <span class="ch-key">free cortisol</span>. That small free fraction is the only part that can cross cell membranes, bind receptors, and actually exert an effect. The bound cortisol is a reservoir; the free cortisol is the currency. This distinction sounds academic until you realize that a lab test can measure the reservoir, the currency, or both, and will report a different number depending on which it captures.</p>
+    <p>The albumin-bound fraction deserves a note of its own, because it changes how you should picture the blood. Albumin binds cortisol loosely and reversibly, so that pool trades quickly with the free fraction and acts as a rapidly available buffer, topping up free cortisol the instant a tissue pulls some out of circulation. The blood is therefore best pictured not as a fixed split between locked-away hormone and free hormone but as a dynamic equilibrium: a large, tightly held CBG reserve, a smaller, loosely held albumin pool that exchanges freely, and the small active fraction that the whole arrangement exists to regulate. Shift any of the binding proteins and the equilibrium resets. That is one more reason a raw total number, taken by itself, needs context before it means anything at all.</p>
+
+    <h3>CBG Is Not a Passive Truck</h3>
+    <p>It would be tempting to treat CBG as inert packaging, a dumb truck that hauls cortisol around. Chan, Carrell, Zhou, and Read (2013) show it is nothing of the sort. CBG binds cortisol with high affinity but low capacity, and, importantly, that affinity is not fixed. It shifts with glycosylation, with body temperature, and with conformational changes triggered by an enzyme called neutrophil elastase at sites of inflammation. Their most striking demonstration is thermal: as body temperature rises toward the range of a fever, CBG's grip loosens and free cortisol rises sharply, roughly doubling for every couple of degrees of temperature increase. On top of that, when CBG's reactive loop is cleaved by elastase at an inflamed site, its affinity drops and it releases a burst of extra cortisol precisely there.</p>
+    <p>Read those two mechanisms together and something clever emerges. A fever or a patch of inflamed tissue can locally release extra active cortisol exactly where and when it is needed, without the brain issuing a single new order and without changing total cortisol at all. The carrier is not just packaging; it is part of the control system, a distributed release mechanism that responds to local conditions. This is a second, quieter layer of regulation sitting underneath the loud HPA-axis loop we spent the chapter building, and it is a reason that the amount of active hormone at a given tissue is not always predictable from a central measurement.</p>
+
+    <h3>The Tissue-Level Volume Knob</h3>
+    <p>Even after cortisol reaches a tissue, the amount that actually acts there is adjusted one last time, locally, by a pair of enzymes called 11-beta-hydroxysteroid dehydrogenases. Type 1 (11-beta-HSD1), abundant in the liver and in fat, regenerates active cortisol from its inactive partner cortisone, effectively turning the local volume up. Type 2 (11-beta-HSD2), concentrated in the kidney, does the opposite: it converts cortisol into cortisone and so shields the mineralocorticoid receptor, which would otherwise bind cortisol nearly as avidly as it binds aldosterone. Without that protection, the flood of cortisol passing through the kidney would masquerade as an aldosterone signal and wreak havoc on sodium and blood pressure.</p>
+    <p>Stack these controls up and a clean principle emerges. The active cortisol signal a given cell experiences is set by three nested layers: how much the axis manufactures, how much CBG lets go free in the blood, and how much the tissue's own enzymes amplify or inactivate the hormone on arrival. This is why two tissues bathed in the exact same blood can experience very different cortisol exposure, and why any single systemic measurement, however carefully taken, can never fully capture what an individual organ is seeing. It also underlines the theme running through this entire chapter: a signal this powerful is regulated at every stage from synthesis to the moment of action, because nothing this consequential is left unregulated at any link in the chain.</p>
+
+    <h3>Why This Will Matter for Every Cortisol Test</h3>
+    <p>Hold onto the free-versus-bound distinction, because it explains a puzzle we will confront head-on in later chapters: why blood, saliva, and urine tests report different numbers for the same person on the same day. Standard blood assays typically measure <em>total</em> cortisol, free plus bound, so they move whenever CBG levels move. Estrogen, for instance, raises CBG, which is why pregnancy and estrogen-containing contraceptives can substantially raise total blood cortisol without the active free fraction rising at all. Saliva, by contrast, reflects free cortisol, because only the unbound hormone crosses into the salivary glands. Urinary measures capture free cortisol filtered by the kidney over a span of time. Three windows, three answers, one hormone.</p>
+    <p>This is not a flaw in the tests. Each is measuring something real; they are simply measuring different things. The confusion arises when someone treats them as interchangeable and compares a saliva number to a blood reference range, or reads a high total cortisol as proof of a stress problem when it is really a CBG effect. This kind of mismatch is a major reason so many people misread their own lab results, and it is a major reason the adrenal fatigue story took hold in the first place, as we will see in detail later. For now, the lesson is simply that the question is never how much cortisol is present in the abstract, but how much of which fraction, measured in which fluid, and read against which reference.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A popular move is to take an at-home saliva result, hold it against a blood-test reference range found online, and conclude that because the numbers disagree, something must be broken. But saliva measures free cortisol and most blood assays measure total cortisol. Those are different quantities with different reference ranges, so comparing one directly against the other is a units error, not a discovery. It is like declaring one car faster than another because its speedometer reads a bigger number, without noticing one is in miles per hour and the other in kilometers per hour.</p>
+    </aside>
+
+    <p>Reuben's printout is a case in point, and now you can read it more carefully than he could. His kit measured salivary cortisol, which is the free fraction, sampled at four points across the day. The jagged line he was told meant burnout was, in fact, just the ordinary shape of a daily rhythm: higher after waking and tapering toward night, delivered in the pulses we discussed. He had been comparing that free-cortisol curve, at least in spirit, against numbers and language borrowed from a different kind of measurement, and against a depletion model that the manufacturing biology does not support. Nothing in a single saliva profile can diagnose an exhausted gland, because there is no gland-exhaustion mechanism to diagnose. What Reuben needed was not a supplement to fix a broken axis. He needed the framework you have just built to see that the axis in front of him was, most likely, doing exactly what a working axis does.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A blood test shows markedly elevated total cortisol in someone who has recently started an estrogen-containing medication. Estrogen raises CBG. Has this person's <em>active</em> cortisol necessarily risen at all? What single distinction from this section lets you answer without alarm, and why does confirming what is actually going on still belong to a qualified clinician rather than to a course reader working from one number?</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where Education Ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician. Everything in this chapter is meant to help you read claims critically and ask better questions, not to interpret a lab result as a verdict about health. Reuben's printout is a teaching object here, not a diagnosis, and the honest next step for anyone genuinely worried about their own results is a conversation with a professional who can order the right test, in the right fluid, and read it in full clinical context.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Putting the Machine Back Together</h2>
+    <p>Trace the whole line once more, now that every part has a name. A stressor, physical or psychological, excites PVN neurons in the hypothalamus, which release CRH, sometimes alongside AVP, into the private pituitary portal system. CRH drives corticotrophs in the anterior pituitary to cleave POMC and release ACTH into the general circulation. ACTH travels the body but reads out only at the melanocortin-2 receptor on the zona fasciculata of the adrenal cortex, where it accelerates the rate-limiting, StAR-gated conversion of cholesterol to pregnenolone. The fasciculata's enzyme set then carries pregnenolone stage by stage all the way to cortisol, a hormone manufactured on demand rather than pulled from storage.</p>
+    <p>Cortisol then travels, mostly bound to CBG with a small active free fraction, to target tissues throughout the body, where its effects can be locally amplified by temperature and inflammation loosening CBG's grip. And then, having done its work, cortisol turns around and shuts the whole thing off: fast, within seconds, through endocannabinoid signaling that quiets the hypothalamus, and slow, over hours, through genomic suppression of the CRH and POMC genes. The same loop, running gently and rhythmically at rest, produces the hourly ultradian pulses that give the resting axis its texture.</p>
+    <p>That last clause is the one to memorize. Amplification down the chain gives the response its power; feedback up the chain gives it an ending. A healthy stress response is defined not by how high cortisol goes but by how reliably it comes back down and by whether its rhythm stays intact. Every remaining chapter, the daily circadian rhythm, the divergence of healthy stress from chronic stress, the correct interpretation of a test, and the careful dismantling of the adrenal fatigue myth, is ultimately a story about this loop working, being overridden, or being misread. Reuben's confusion was the last of those three. Yours, from here on, need not be.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The HPA axis is a three-organ relay: hypothalamus (CRH) to anterior pituitary (ACTH) to adrenal cortex (cortisol). The extra steps buy amplification and multiple points of fine control, and inputs can enter at different levels.</li>
+      <li>CRH travels a private portal route to the pituitary; ACTH goes systemic but reads out mainly at the MC2R on the adrenal cortex; cortisol is manufactured on demand from cholesterol, not stored, which is why there is a minutes-long delay and why glands cannot be drained.</li>
+      <li>The adrenal cortex is a three-floor factory: zona glomerulosa (aldosterone), zona fasciculata (cortisol), zona reticularis (DHEA). Enzyme expression, especially the presence or absence of P450c17, decides each floor's product.</li>
+      <li>All steroids start from cholesterol; the StAR-assisted, P450scc-catalyzed conversion to pregnenolone is the rate-limiting first step and ACTH's main lever. Downstream enzymes act like assembly stations, and a single missing station reroutes the whole line.</li>
+      <li>Negative feedback is the core idea: cortisol suppresses CRH and ACTH through a fast non-genomic brake (endocannabinoids, seconds) and a slow genomic brake (GR-mediated, hours). The built-in delay in this loop is also what produces the hourly ultradian pulses.</li>
+      <li>Only about 5 to 10 percent of blood cortisol is free and active; 80 to 90 percent is bound to CBG. CBG actively modulates the free fraction with temperature and inflammation, which is why blood, saliva, and urine tests report different numbers and must not be read interchangeably.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You now have the wiring diagram. Next we set it in motion across a full day. Cortisol does not sit still at a baseline but rises and falls on a predictable circadian curve, peaking before you wake and ebbing toward midnight, all sculpted by the same feedback loop and ultradian pulses you just met. Chapter 3 asks what the clock is for, how it is set, and what a genuinely healthy rhythm looks like, so that later we can recognize a broken one for what it is rather than mistaking a normal curve for a problem the way Reuben did.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Chan, W. L., Carrell, R. W., Zhou, A., &amp; Read, R. J. (2013). How changes in affinity of corticosteroid-binding globulin modulate free cortisol concentration. <em>The Journal of Clinical Endocrinology &amp; Metabolism, 98</em>(8), 3315-3322. https://doi.org/10.1210/jc.2012-4280</p>
+    <p>Cizza, G., &amp; Rother, K. I. (2012). Cortisol binding globulin: More than just a carrier? <em>The Journal of Clinical Endocrinology &amp; Metabolism, 97</em>(1), 77-80. https://doi.org/10.1210/jc.2011-3090</p>
+    <p>Gjerstad, J. K., Lightman, S. L., &amp; Spiga, F. (2018). Role of glucocorticoid negative feedback in the regulation of HPA axis pulsatility. <em>Stress, 21</em>(5), 403-416. https://doi.org/10.1080/10253890.2018.1470238</p>
+    <p>Kater, C. E., Giorgi, R. B., &amp; Costa-Barbosa, F. A. (2022). Classic and current concepts in adrenal steroidogenesis: A reappraisal. <em>Archives of Endocrinology and Metabolism, 66</em>(1), 77-87. https://doi.org/10.20945/2359-3997000000438</p>
+    <p>Keller-Wood, M. E., &amp; Dallman, M. F. (1984). Corticosteroid inhibition of ACTH secretion. <em>Endocrine Reviews, 5</em>(1), 1-24. https://doi.org/10.1210/edrv-5-1-1</p>
+    <p>Lightman, S. L., Birnie, M. T., &amp; Conway-Campbell, B. L. (2020). Dynamics of ACTH and cortisol secretion and implications for disease. <em>Endocrine Reviews, 41</em>(3), 470-490. https://doi.org/10.1210/endrev/bnaa002</p>
+    <p>Miller, W. L., &amp; Auchus, R. J. (2011). The molecular biology, biochemistry, and physiology of human steroidogenesis and its disorders. <em>Endocrine Reviews, 32</em>(1), 81-151. https://doi.org/10.1210/er.2010-0013</p>
+    <p>Smith, S. M., &amp; Vale, W. W. (2006). The role of the hypothalamic-pituitary-adrenal axis in neuroendocrine responses to stress. <em>Dialogues in Clinical Neuroscience, 8</em>(4), 383-395. https://doi.org/10.31887/DCNS.2006.8.4/ssmith</p>
+    <p>Spencer, R. L., &amp; Deak, T. (2017). A users guide to HPA axis research. <em>Physiology &amp; Behavior, 178</em>, 43-65. https://doi.org/10.1016/j.physbeh.2016.11.014</p>
+    <p>Tasker, J. G., &amp; Herman, J. P. (2011). Mechanisms of rapid glucocorticoid feedback inhibition of the hypothalamic-pituitary-adrenal axis. <em>Stress, 14</em>(4), 398-406. https://doi.org/10.3109/10253890.2011.586446</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 2 of 8</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('hpa-tracer');
+    if(!root) return;
+    var sever = root.querySelector('#tr-sever');
+    var fb = root.querySelector('#tr-feedback');
+    var btn = root.querySelector('#tr-go');
+    var barCrh = root.querySelector('#tr-bar-crh'), numCrh = root.querySelector('#tr-num-crh');
+    var barActh = root.querySelector('#tr-bar-acth'), numActh = root.querySelector('#tr-num-acth');
+    var barCort = root.querySelector('#tr-bar-cort'), numCort = root.querySelector('#tr-num-cort');
+    var timer = null;
+
+    function set(bar,num,val){
+      val = Math.max(0, Math.min(100, Math.round(val)));
+      bar.style.width = val + '%';
+      num.textContent = val;
+    }
+
+    function run(){
+      if(timer){ clearInterval(timer); timer = null; }
+      var sv = sever.value, feedback = fb.value === 'on';
+      var t = 0;
+      var crh = 5, acth = 5, cort = 8;
+      set(barCrh,numCrh,crh); set(barActh,numActh,acth); set(barCort,numCort,cort);
+      btn.disabled = true;
+      timer = setInterval(function(){
+        t += 1;
+        // CRH climbs first unless CRH blocked
+        var crhTarget = (sv === 'crh') ? 0 : 90;
+        // feedback lowers CRH once cortisol high
+        if(feedback && cort > 55) crhTarget = (sv==='crh')?0: Math.max(15, 90 - (cort-55)*1.6);
+        crh += (crhTarget - crh) * 0.35;
+
+        // ACTH follows CRH unless ACTH blocked
+        var acthDrive = (sv === 'acth' || sv === 'crh') ? (sv==='acth'?0:0) : crh;
+        if(sv === 'acth') acthDrive = 0;
+        else if(sv === 'crh') acthDrive = 0;
+        else acthDrive = crh * 1.02;
+        if(feedback && cort > 55 && sv!=='acth') acthDrive = Math.max(10, acthDrive - (cort-55)*1.5);
+        // slight delay
+        if(t >= 2) acth += (acthDrive - acth) * 0.30;
+
+        // cortisol follows ACTH unless synthesis blocked
+        var cortDrive;
+        if(sv === 'cort') cortDrive = 0;
+        else cortDrive = acth * 1.05;
+        if(t >= 4) cort += (cortDrive - cort) * 0.22;
+        // if no feedback, allow runaway
+        if(!feedback && sv==='none' && cort > 90) cort += 1.5;
+
+        set(barCrh,numCrh,crh); set(barActh,numActh,acth); set(barCort,numCort,cort);
+
+        if(t > 26){
+          clearInterval(timer); timer = null; btn.disabled = false;
+        }
+      }, 130);
+    }
+    btn.addEventListener('click', run);
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('thermostat');
+    if(!root) return;
+    var inp = root.querySelector('#th-input');
+    var sens = root.querySelector('#th-sens');
+    var btn = root.querySelector('#th-go');
+    var barDrive = root.querySelector('#th-bar-drive'), numDrive = root.querySelector('#th-num-drive');
+    var barCort = root.querySelector('#th-bar-cort'), numCort = root.querySelector('#th-num-cort');
+    var barPeak = root.querySelector('#th-bar-peak'), numPeak = root.querySelector('#th-num-peak');
+    var timer = null;
+
+    function set(bar,num,val){
+      val = Math.max(0, Math.min(100, Math.round(val)));
+      bar.style.width = val + '%';
+      num.textContent = val;
+    }
+
+    function run(){
+      if(timer){ clearInterval(timer); timer = null; }
+      var stress = parseFloat(inp.value);      // 1..4
+      var k = parseFloat(sens.value);          // feedback gain 0.2..1
+      var baseDrive = 10 + stress * 16;        // input sets the drive setpoint
+      var drive = 20, cort = 15, peak = 15;
+      var t = 0;
+      btn.disabled = true;
+      set(barDrive,numDrive,drive); set(barCort,numCort,cort); set(barPeak,numPeak,peak);
+      timer = setInterval(function(){
+        t += 1;
+        // cortisol chases drive with a delay
+        cort += (drive * 0.95 - cort) * 0.28;
+        // feedback: cortisol suppresses drive, scaled by receptor sensitivity k
+        var feedbackForce = k * (cort - 30) * 0.9;
+        drive += (baseDrive - feedbackForce - drive) * 0.30;
+        if(drive < 0) drive = 0;
+        if(cort > peak) peak = cort;
+        set(barDrive,numDrive,drive); set(barCort,numCort,cort); set(barPeak,numPeak,peak);
+        if(t > 34){ clearInterval(timer); timer = null; btn.disabled = false; }
+      }, 120);
+    }
+    btn.addEventListener('click', run);
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+</body>
+</html>

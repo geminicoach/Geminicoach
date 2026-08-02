@@ -23,7 +23,7 @@ window.GEM_EXAM = {
       "id": "a2-c1-mc-2",
       "chapter": 1,
       "type": "mc",
-      "q": "A client held a genuine 500 kcal deficit and lost weight, but after several weeks the scale trend flattens despite unchanged adherence. Which chapter concept best explains the stall?",
+      "q": "A person held a genuine 500 kcal deficit and lost weight, but after several weeks the scale trend flattens despite unchanged adherence. Which chapter concept best explains the stall?",
       "options": [
         "Metabolic adaptation: RMR, NEAT, and TEF all drift down, so the effective deficit shrinks toward zero",
         "The 7,700 kcal-per-kg conversion stops applying once weight is lost",
@@ -92,7 +92,7 @@ window.GEM_EXAM = {
       "id": "a2-c2-mc-1",
       "chapter": 2,
       "type": "mc",
-      "q": "A 72-year-old client eats about 20 g of quality protein per meal, the dose that maximizes MPS in young adults, yet is slowly losing muscle. What is the most defensible adjustment?",
+      "q": "A 72-year-old person eats about 20 g of quality protein per meal, the dose that maximizes MPS in young adults, yet is slowly losing muscle. What is the most defensible adjustment?",
       "options": [
         "Add a between-meals BCAA supplement to top up leucine",
         "Raise each meal to about 30 g protein (roughly 2.8 g leucine) to overcome anabolic resistance",
@@ -148,10 +148,10 @@ window.GEM_EXAM = {
       "id": "a2-c2-free-1",
       "chapter": 2,
       "type": "free",
-      "q": "A recreationally active 70 kg client wants to lose fat while preserving muscle. Using the chapter, explain how you would set a daily protein target and structure it across the day, and justify why protein specifically helps protect lean mass in a calorie deficit.",
-      "model": "Set total protein first, around 1.6 to 2.2 g/kg/day, which for a 70 kg client is roughly 112 to 154 g/day; 0.8 g/kg is only a floor and lean-mass gains level off near 1.6 g/kg. Distribute it across 3 to 4 meals, each built on a complete protein source that clears the per-meal leucine threshold (about 20 g for younger adults, about 30 g and 2.8 g leucine for older adults), because roughly 20 g every few hours beats one large bolus or many tiny doses. Protein protects lean mass in a deficit for several reasons: it is the dieter's anchor with the highest thermic effect and the strongest satiety, and adequate intake plus resistance training keeps muscle protein synthesis winning against breakdown so the body spares muscle instead of cannibalizing it for amino acids. Get total right first; distribution is the finishing move.",
+      "q": "A recreationally active 70 kg person wants to lose fat while preserving muscle. Using the chapter, explain how you would set a daily protein target and structure it across the day, and justify why protein specifically helps protect lean mass in a calorie deficit.",
+      "model": "Set total protein first, around 1.6 to 2.2 g/kg/day, which for a 70 kg person is roughly 112 to 154 g/day; 0.8 g/kg is only a floor and lean-mass gains level off near 1.6 g/kg. Distribute it across 3 to 4 meals, each built on a complete protein source that clears the per-meal leucine threshold (about 20 g for younger adults, about 30 g and 2.8 g leucine for older adults), because roughly 20 g every few hours beats one large bolus or many tiny doses. Protein protects lean mass in a deficit for several reasons: it is the dieter's anchor with the highest thermic effect and the strongest satiety, and adequate intake plus resistance training keeps muscle protein synthesis winning against breakdown so the body spares muscle instead of cannibalizing it for amino acids. Get total right first; distribution is the finishing move.",
       "key_points": [
-        "Total protein target of about 1.6 to 2.2 g/kg/day (roughly 112 to 154 g for a 70 kg client)",
+        "Total protein target of about 1.6 to 2.2 g/kg/day (roughly 112 to 154 g for a 70 kg person)",
         "0.8 g/kg is only a floor; lean-mass benefit plateaus near 1.6 g/kg",
         "Distribute across 3 to 4 meals, each clearing the per-meal leucine threshold (about 20 g, more for older adults)",
         "Even distribution beats a single large bolus or many tiny doses",
@@ -162,7 +162,7 @@ window.GEM_EXAM = {
         "pass_threshold": 70,
         "points": [
           {
-            "desc": "States a defensible total protein target in g/kg and converts it for a 70 kg client",
+            "desc": "States a defensible total protein target in g/kg and converts it for a 70 kg person",
             "weight": 30
           },
           {
@@ -264,7 +264,7 @@ window.GEM_EXAM = {
       "id": "a2-c4-mc-1",
       "chapter": 4,
       "type": "mc",
-      "q": "A client's diet sits near a 15:1 omega-6 to omega-3 ratio and you want to move toward 4:1 or lower. Which approach fits the chapter's reasoning?",
+      "q": "A person's diet sits near a 15:1 omega-6 to omega-3 ratio and you want to move toward 4:1 or lower. Which approach fits the chapter's reasoning?",
       "options": [
         "Aggressively eliminate all omega-6 seed oils from the diet",
         "Add omega-3 sources such as fatty fish rather than merely torching omega-6",
@@ -279,7 +279,7 @@ window.GEM_EXAM = {
       "id": "a2-c4-mc-2",
       "chapter": 4,
       "type": "mc",
-      "q": "A client orders a strictly fat-free salad to save calories. Based on the chapter, what is the main nutritional cost of removing all fat from that meal?",
+      "q": "A person orders a strictly fat-free salad to save calories. Based on the chapter, what is the main nutritional cost of removing all fat from that meal?",
       "options": [
         "Most of the vitamin C in the vegetables is destroyed",
         "The fat-soluble vitamins A, D, E, K and carotenoids go largely unabsorbed",
@@ -357,7 +357,7 @@ window.GEM_EXAM = {
       "id": "a2-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client eats an extremely low-fat diet for two years and now shows early night-vision trouble and dry eyes. Which mechanism best explains why these fat-soluble vitamin signs took so long to appear despite the ongoing low intake?",
+      "q": "A person eats an extremely low-fat diet for two years and now shows early night-vision trouble and dry eyes. Which mechanism best explains why these fat-soluble vitamin signs took so long to appear despite the ongoing low intake?",
       "options": [
         "Fat-soluble vitamins are stored in the liver and fat, so body reserves buffer intake gaps for months to years",
         "Fat-soluble vitamins wash out daily, so signs only appear once the kidneys are overwhelmed",
@@ -438,7 +438,7 @@ window.GEM_EXAM = {
       "id": "a2-c6-mc-1",
       "chapter": 6,
       "type": "mc",
-      "q": "A plant-based client wants to maximize iron from a lentil-and-spinach meal. Which single change would most improve non-heme iron absorption at that meal?",
+      "q": "A plant-based person wants to maximize iron from a lentil-and-spinach meal. Which single change would most improve non-heme iron absorption at that meal?",
       "options": [
         "Drink a strong cup of tea or coffee alongside the meal",
         "Take a high-dose calcium supplement with the meal",
@@ -506,7 +506,7 @@ window.GEM_EXAM = {
       "id": "a2-c7-mc-1",
       "chapter": 7,
       "type": "mc",
-      "q": "Using the remainder method for a 75 kg client at 2,000 kcal with protein locked at 135 g and fat at a floor of 53 g, roughly how many grams of carbohydrate remain? (Protein and carbohydrate about 4 kcal/g, fat about 9 kcal/g.)",
+      "q": "Using the remainder method for a 75 kg person at 2,000 kcal with protein locked at 135 g and fat at a floor of 53 g, roughly how many grams of carbohydrate remain? (Protein and carbohydrate about 4 kcal/g, fat about 9 kcal/g.)",
       "options": [
         "About 90 g",
         "About 175 g",
@@ -521,7 +521,7 @@ window.GEM_EXAM = {
       "id": "a2-c7-mc-2",
       "chapter": 7,
       "type": "mc",
-      "q": "A client cuts from 2,000 to 1,600 kcal for fat loss. Following the priority order for setting macros, which macro should absorb almost all of that 400 kcal reduction?",
+      "q": "A person cuts from 2,000 to 1,600 kcal for fat loss. Following the priority order for setting macros, which macro should absorb almost all of that 400 kcal reduction?",
       "options": [
         "Protein, which should be dropped first to save calories",
         "Fat, which should fall well below its floor during a cut",
@@ -570,8 +570,8 @@ window.GEM_EXAM = {
       "id": "a2-c7-free-1",
       "chapter": 7,
       "type": "free",
-      "q": "A new client is overwhelmed by tracking and has abandoned two previous diets. Walk through how you would take them from a calorie target to a plate they will actually follow, using the four-step logic (size the goal, set macros in priority order, build the plate, engineer adherence) and explain why the least demanding tracking method that still gives needed feedback is the right call.",
-      "model": "Start by sizing the goal from maintenance: for fat loss a moderate deficit of about 15 to 25 percent (often 300 to 600 kcal) that defends lean mass, treating the target as a starting hypothesis to check against the scale and mirror over two to four weeks. Then set macros in priority order: protein first at about 1.6 to 2.2 g/kg for satiety and lean mass, fat to a floor of about 0.5 to 0.8 g/kg for hormones and vitamin absorption, and carbohydrate as the remainder. Build the plate with a protein anchor at every meal (about 25 to 45 g), fiber and water to lower energy density, and a deliberate slice reserved for enjoyment. Because this client is overwhelmed and has quit before, pick the least demanding tracking method that still gives the feedback the goal needs, likely hand portions or habit-based rules rather than weigh-and-log, since consistency is the active ingredient and a plan not followed is the wrong plan. Frame deviations as data points, avoid clean-versus-cheat language, and refer out if a diagnosed condition or possible eating disorder appears.",
+      "q": "A new person is overwhelmed by tracking and has abandoned two previous diets. Walk through how you would take them from a calorie target to a plate they will actually follow, using the four-step logic (size the goal, set macros in priority order, build the plate, engineer adherence) and explain why the least demanding tracking method that still gives needed feedback is the right call.",
+      "model": "Start by sizing the goal from maintenance: for fat loss a moderate deficit of about 15 to 25 percent (often 300 to 600 kcal) that defends lean mass, treating the target as a starting hypothesis to check against the scale and mirror over two to four weeks. Then set macros in priority order: protein first at about 1.6 to 2.2 g/kg for satiety and lean mass, fat to a floor of about 0.5 to 0.8 g/kg for hormones and vitamin absorption, and carbohydrate as the remainder. Build the plate with a protein anchor at every meal (about 25 to 45 g), fiber and water to lower energy density, and a deliberate slice reserved for enjoyment. Because this person is overwhelmed and has quit before, pick the least demanding tracking method that still gives the feedback the goal needs, likely hand portions or habit-based rules rather than weigh-and-log, since consistency is the active ingredient and a plan not followed is the wrong plan. Frame deviations as data points, avoid clean-versus-cheat language, and refer out if a diagnosed condition or possible eating disorder appears.",
       "key_points": [
         "Size the goal from maintenance with a moderate deficit and treat it as a hypothesis checked over 2 to 4 weeks",
         "Set macros in priority order: protein first, fat to a floor, carbohydrate as remainder, stated as ranges",
@@ -641,13 +641,13 @@ window.GEM_EXAM = {
       "id": "a2-c8-multi-1",
       "chapter": 8,
       "type": "multi",
-      "q": "Which situations are clear off-ramps that warrant referral to a qualified clinician rather than food-first individualization by a coach? Select all that apply.",
+      "q": "Which situations are clear off-ramps that warrant referral to a qualified clinician rather than food-first individualization by an educator? Select all that apply.",
       "options": [
         "Diagnosed diabetes, kidney disease, celiac, or IBD needing medical nutrition therapy",
         "A healthy recreational lifter wanting to raise daily protein",
         "Clinical pregnancy",
         "Suspected disordered eating",
-        "Interpreting a client's blood lab values"
+        "Interpreting a person's blood lab values"
       ],
       "answers": [
         0,
@@ -669,7 +669,7 @@ window.GEM_EXAM = {
         "Life stage",
         "Dietary pattern and bioavailability",
         "Adherence, preference, and friction",
-        "The client's astrological sign"
+        "The person's astrological sign"
       ],
       "answers": [
         0,

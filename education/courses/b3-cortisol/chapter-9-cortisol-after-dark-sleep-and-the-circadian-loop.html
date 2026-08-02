@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cortisol After Dark: Sleep and the Circadian Loop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 9 · Module 3</div>
+    <h1 class="ch-title">Cortisol After Dark: Sleep and the Circadian Loop</h1>
+    <p class="ch-subtitle">How the nighttime trough and deep sleep hold each other up — and what happens when the loop breaks.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">I</span>t is 2:14 a.m. You have been horizontal for three hours. Your body is heavy, your eyes ache, and every part of you wants sleep — yet your mind is racing, your heart feels slightly too fast, and some low electrical hum keeps you just above the threshold of unconsciousness. You are exhausted. You are also, somehow, alert. This paradoxical state — <span class="ch-key">tired but wired</span> — is one of the most common complaints in the modern world, and it is not a psychological quirk. It is a signature. It is what an out-of-place cortisol curve feels like from the inside.</p>
+    <p>Back in Chapter 3 we drew the diurnal rhythm — the sharp morning peak, the long slide across the day, the deep nighttime trough — and we treated it mostly as a fact of physiology to be described. This chapter closes that loop. We will show that the rhythm is not merely <em>correlated</em> with when you sleep; it is mechanically fused to it. Sleep and cortisol regulate each other, minute by minute, in a reciprocal circuit that can run beautifully or spiral into dysfunction. And once you see the circuit clearly, the 2 a.m. paradox stops being mysterious.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Revisiting the diurnal curve — this time as a two-way street</h2>
+    <p>Recall the basic waveform. Circulating cortisol reaches its nadir in the first half of the night, begins climbing in the pre-dawn hours, and peaks 30–45 minutes after awakening in what we called the <span class="ch-key">cortisol awakening response</span>. From that morning high it declines across the day, punctuated by ultradian pulses roughly every 60–90 minutes, until it bottoms out again the following night. In Chapter 3 the driver of this rhythm was the <span class="ch-key">suprachiasmatic nucleus</span> (SCN), the hypothalamic master clock entrained by light, projecting through a multisynaptic pathway to the adrenal cortex.</p>
+    <p>That account is correct but incomplete. It treats the sleep-wake cycle as a downstream consequence of the clock — the SCN sets the time, cortisol follows, and sleep happens to occur during the trough. The reality is bidirectional. Oster and colleagues (2017), in their comprehensive <em>Endocrine Reviews</em> synthesis, describe the 24-hour glucocorticoid waveform as the product of at least three interacting inputs: the SCN-driven circadian program, the ultradian pulse generator, and the acute modulation imposed by <em>sleep and behavior themselves</em>. Sleep is not a passenger on the cortisol curve. It is one of the hands on the wheel.</p>
+    <p>The evidence for this is elegant and old. Buckley and Schatzberg (2005), reviewing normal HPA physiology in the <em>Journal of Clinical Endocrinology &amp; Metabolism</em>, catalog the moment-to-moment couplings: the onset of sleep — specifically slow-wave sleep — actively <em>inhibits</em> cortisol secretion, while awakenings and the transition out of sleep <em>stimulate</em> it. Balbo and colleagues (2010) put it plainly: sleep onset is associated with a short-term inhibition of cortisol release, whereas sleep offset and nocturnal awakenings trigger pulses. If you shift a person's sleep period by several hours, the cortisol rhythm partially follows the sleep — not just the clock. The waveform we memorized is a negotiated settlement between the SCN and behavior, and behavior gets a vote.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If cortisol were driven <em>only</em> by the SCN clock and not at all by sleep, what would you predict happens to the cortisol curve on the first night of a person's transatlantic flight — and how does the actual "sleep gets a vote" model change that prediction?</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-watercolour scientific diagram, textbook idiom, showing two overlaid rhythms across a 24-hour horizontal timeline from 'midnight' on the left to 'midnight' on the right. Upper trace: a smooth cortisol curve, warm amber, with a low trough in the first half of the night, a steep pre-dawn rise, a sharp morning peak labelled 'awakening response', and a gradual daytime decline. Lower trace: a sleep hypnogram in cool slate-blue showing descending steps into deep sleep early in the night and lighter stages toward morning. Thin dotted vertical connector lines link the cortisol trough to the deepest sleep and the cortisol rise to sleep offset. Muted cream background, three-colour palette of amber, slate-blue, and soft grey. Small clean serif labels only: 'cortisol', 'sleep depth', 'midnight', 'noon'. No numerical axis ticks, no people, no watermarks." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The diurnal cortisol curve and the night's sleep architecture, aligned on a single clock.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The nighttime trough and the architecture of deep sleep</h2>
+    <p>Why does it matter, functionally, that cortisol bottoms out at night? Because the trough is <em>permissive</em>. Low glucocorticoid tone is a precondition for the sleep stage that does the body's heaviest restorative work: <span class="ch-key">slow-wave sleep</span> (SWS), the deep, delta-dominated stage concentrated in the first third of the night — precisely the window in which cortisol is lowest.</p>
+    <p>The relationship is causal in both directions and can be demonstrated experimentally. Buckley and Schatzberg (2005) detail the mechanisms by which cortisol — and its upstream driver, corticotropin-releasing hormone (CRH) — suppress slow-wave sleep. CRH is not merely a hormone-release signal; centrally, it is an <span class="ch-key">alerting peptide</span>. Infusing CRH or cortisol into healthy sleepers shifts sleep architecture away from deep SWS and toward lighter, more fragmented stages and increased wakefulness. Conversely, when the SWS-rich early night proceeds normally, it holds cortisol down. The trough and the deep sleep are not two things that happen to coincide; they are two faces of the same physiological state — a quiescent HPA axis and a quiescent, restorative brain.</p>
+    <p>This is why the direction of the morning rise makes teleological sense. The pre-waking climb in cortisol is not an accident of the clock; it is, in part, a wake-up signal. Rising CRH and cortisol help lighten sleep, mobilize glucose, and prepare the cardiovascular system for the upright, active day. A well-formed diurnal curve is therefore doing two jobs at once: its low nighttime phase <em>licenses</em> deep sleep, and its rising morning phase <em>ends</em> it. Sleep and cortisol are running the same daily program from opposite ends.</p>
+
+    <h3>What "permissive" means in practice</h3>
+    <p>Consider the worked contrast. In a healthy young sleeper, evening cortisol falls to near-undetectable levels around habitual bedtime; SWS dominates the first two cycles; nocturnal awakenings are brief and cortisol stays suppressed through them. Now hold everything else constant and lift evening cortisol — through stress, a late intense workout, or an infusion in the lab. SWS shrinks. Awakenings lengthen. The sleeper spends more of the night in the shallow stages from which it is easy to surface into full wakefulness. Nothing about the person's "sleepiness" has changed; the drive to sleep is intact. What has changed is that the permissive hormonal environment has been withdrawn. That is the physiology of lying in bed exhausted and unable to drop.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-loop">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Sleep–Cortisol Feedback Loop</div>
+    </div>
+    <p class="ch-widget-sub">Perturb one side of the loop — inject an evening stressor, delay bedtime, or add a night shift — then advance the days and watch how the disturbance propagates and reinforces itself across both the cortisol curve and sleep quality.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Perturbation</span>
+        <select class="ch-widget-select" id="loop-perturb">
+          <option value="none">None (healthy baseline)</option>
+          <option value="stress">Evening stressor (↑ evening cortisol)</option>
+          <option value="delay">Delayed bedtime (−2.5 h sleep)</option>
+          <option value="shift">Night shift (sleep in daylight)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Simulated day</span>
+        <select class="ch-widget-select" id="loop-day">
+          <option value="0">Day 1</option>
+          <option value="1">Day 2</option>
+          <option value="2">Day 3</option>
+          <option value="3">Day 4</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Evening cortisol</span>
+        <span class="ch-meter-bar"><span id="loop-m1" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="loop-n1">15</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Deep (slow-wave) sleep</span>
+        <span class="ch-meter-bar"><span id="loop-m2" style="width:85%"></span></span>
+        <span class="ch-meter-num" id="loop-n2">85</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Nighttime awakenings</span>
+        <span class="ch-meter-bar"><span id="loop-m3" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="loop-n3">10</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Morning rhythm amplitude</span>
+        <span class="ch-meter-bar"><span id="loop-m4" style="width:90%"></span></span>
+        <span class="ch-meter-num" id="loop-n4">90</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="loop-btn">Advance the loop</button>
+    <p class="ch-widget-sub" id="loop-readout">Baseline: low evening cortisol permits abundant deep sleep, few awakenings, and a crisp morning rhythm. Select a perturbation and advance the days to watch the spiral.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>The other direction: sleep loss raises cortisol</h2>
+    <p>We have established that cortisol shapes sleep. The reverse arrow — that disturbed or insufficient sleep raises cortisol — is what closes the loop into a true circuit, and it is supported by two of the most influential experiments in the field.</p>
+    <p>The first is Leproult, Copinschi, Buxton, and Van Cauter (1997). They subjected healthy young men to acute partial and total sleep deprivation and tracked 32-hour cortisol profiles. The finding was subtle but mechanistically decisive: sleep loss did not spike cortisol randomly, it <em>delayed the axis's recovery from its early-morning circadian stimulation</em>. The consequence appeared later — cortisol levels the <em>following evening</em> were elevated, and the rate of decline from the daytime peak was slowed. The authors interpreted this as an impairment of the negative glucocorticoid feedback loop: a night of short sleep leaves the HPA axis less able to shut itself off the next day. In the language of the previous chapters, sleep loss blunts the "off switch."</p>
+    <p>Now trace the implication. Elevated evening cortisol is exactly the perturbation we said suppresses slow-wave sleep. So one bad night raises the next evening's cortisol; that cortisol degrades the next night's deep sleep; that degraded sleep raises the following evening's cortisol again. Leproult's study provides the missing arrow that turns two independent phenomena into a self-reinforcing loop.</p>
+
+    <h3>From acute to chronic: the sleep-debt experiment</h3>
+    <p>Spiegel, Leproult, and Van Cauter (1999) took the acute finding into the domain of chronic restriction — the domain most people actually live in. Eleven healthy young men were restricted to four hours of sleep per night for six consecutive nights, then allowed twelve hours for six recovery nights. The results, published in <em>The Lancet</em>, were striking: during the sleep-debt period, glucose tolerance deteriorated markedly, thyrotropin concentrations fell, sympathovagal balance shifted toward sympathetic dominance, and the evening cortisol pattern was altered in the now-familiar direction — elevated when it should be falling. The authors were the first to frame the metabolic reading explicitly: sleep debt, they argued, could increase <span class="ch-key">allostatic load</span> and facilitate the development of obesity, insulin resistance, and hypertension.</p>
+    <p>This is the hinge that connects the present chapter to Chapter 6. There we described how chronically elevated cortisol drives gluconeogenesis, promotes central adiposity, and antagonizes insulin. Spiegel's study shows that <em>sleep restriction alone</em> reproduces a slice of that picture — and it does so partly through the cortisol pathway we have been tracing. Poor sleep and elevated cortisol are not two separate roads to metabolic disease. They are the same road, traveled in both directions.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Leproult (1997) found elevated cortisol the <em>evening after</em> sleep loss, not immediately upon waking. Why does the timing of that elevation — evening rather than morning — make it especially damaging to the following night's sleep architecture?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Insomnia as hyperarousal: which came first?</h2>
+    <p>If the loop is real, then chronic insomnia should look like a state of persistent HPA activation, not just a state of "not sleeping." Vgontzas and colleagues (2001) tested this directly. They compared 24-hour ACTH and cortisol secretion in patients with chronic insomnia against matched normal sleepers. Across the full <span class="ch-key">nyctohemeral</span> cycle — the complete day-and-night period — insomniacs secreted more ACTH and more cortisol. The excess was not evenly distributed: the largest elevations appeared in the evening and the first half of the night, exactly the window in which cortisol should be at its nadir and deep sleep should be at its height.</p>
+    <p>Two further details make the study pivotal. First, there was a dose-response relationship: the insomniacs with the greatest <em>objective</em> sleep disturbance secreted the most cortisol. Second, and most provocatively, the authors argued that this pattern is consistent with a disorder of <span class="ch-key">central nervous system hyperarousal</span> — and that HPA overactivity may be not merely a consequence of poor sleep but a partial <em>cause</em> of it. Buckley and Schatzberg (2005) reach a compatible conclusion, suggesting HPA hyperactivity may be causally upstream of insomnia in at least a subset of patients.</p>
+    <p>This reframes the clinical picture in a way worth pausing on. The lay model of insomnia is "I can't sleep, so I'm stressed." The physiology suggests the arrow often runs the other way as well: a hyperactive stress axis raises the arousal floor so high that sleep cannot consolidate, which further activates the axis. The tired-but-wired sensation from our opening is the subjective correlate of a brain sitting in an evening cortisol bath it should not be in. Note carefully what this means for the reader's role: recognizing this pattern is educational insight, not a diagnosis. Chronic insomnia is a clinical condition, and the appropriate move is to understand the physiology and refer, never to treat.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="An editorial conceptual illustration in a moody risograph print style, two ink colours plus paper white. A person lies flat on their back in bed at night, eyes open, rendered in cool slate-blue, exhausted and heavy. Above and around their head, in warm burnt-orange, a tangle of electric, jittery lines and small lightning-like sparks suggests overactivation and alertness — a visual metaphor for 'tired but wired'. A small bedside clock reads a late hour with hands only, no numerals. Grainy risograph texture, high contrast, limited palette of slate-blue, burnt-orange, and cream. No text labels, no watermarks, no logos." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>"Tired but wired": exhaustion and hyperarousal occupying the same body at the same hour.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>When the clock and the calendar disagree: circadian desynchrony</h2>
+    <p>So far the perturbations have been about the <em>amount</em> and <em>quality</em> of sleep. Shift work and jet lag introduce a different and arguably more severe insult: they attack the <em>timing</em>. In these conditions the SCN and its cortisol output remain on their old schedule while behavior — sleeping, eating, working, light exposure — is forcibly moved. The internal clock and the external calendar fall out of register. This is <span class="ch-key">circadian misalignment</span>, and its consequences have been quantified with unusual precision.</p>
+    <p>The landmark demonstration is Scheer, Hilton, Mantzoros, and Shea (2009), a forced-desynchrony protocol published in <em>PNAS</em>. Subjects were placed on a schedule in which their sleep and meals occurred roughly twelve hours out of phase from their habitual times — a controlled laboratory model of the disorientation of night-shift rotation or a transmeridian flight halfway around the world. The results were dramatic. Circadian misalignment <em>completely reversed</em> the cortisol rhythm. It raised postprandial glucose by about 6% and insulin by roughly 22%, indicating a sharp drop in insulin sensitivity. It decreased leptin by about 17%, a change that would be expected to increase hunger. Mean arterial pressure rose, and sleep efficiency fell by about 20%. Three of the subjects, the authors noted, exhibited postprandial glucose responses in the range considered pre-diabetic — after only ten days of misalignment.</p>
+    <p>The crucial methodological point is what the forced-desynchrony design isolated. Because the protocol controlled sleep duration, these metabolic derangements were attributable to <em>misalignment itself</em>, largely independent of sleep loss. In other words: even if a shift worker sleeps a full eight hours, the fact that those hours fall at the biologically wrong time inflicts measurable metabolic and cardiovascular cost. Timing is not a minor variable layered on top of quantity — it is an independent axis of harm.</p>
+
+    <h3>Cortisol as a zeitgeber, and why re-entrainment is slow</h3>
+    <p>Oster and colleagues (2017) add the mechanistic why. The SCN does not directly run every clock in the body; it coordinates a hierarchy of <span class="ch-key">peripheral clocks</span> in the liver, pancreas, adipose tissue, and muscle. And glucocorticoids are one of the master's chief messengers to the periphery — cortisol itself acts as a <span class="ch-key">zeitgeber</span>, a time-giver, resetting peripheral clocks to match the SCN. When behavior shifts abruptly, the light-entrained SCN moves slowly (roughly an hour per day), and the cortisol signal it sends is now in conflict with the timing signals coming from meals and activity. The periphery receives contradictory instructions. Metabolic tissues that expected the "morning" cortisol pulse to prime them for glucose disposal instead receive it while the person is trying to sleep, and receive their food at a time the liver's clock has designated for fasting. Desynchrony, in this view, is not one clock being wrong — it is many clocks disagreeing.</p>
+    <p>This is why jet lag lingers and why rotating shift workers rarely fully adapt. Re-entrainment is limited by the slow pace at which the SCN can be dragged by light, and by the fact that peripheral clocks re-entrain at different rates. For several days after a large phase shift, the body operates as an orchestra whose sections are playing the same piece at different bars.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-clock">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Shift-Work Clock Desynchronizer</div>
+    </div>
+    <p class="ch-widget-sub">Shift the behavioral schedule to simulate a night shift or a long-haul flight, then advance the days. The internal cortisol clock lags behind and slowly re-entrains (~1 h/day), while the readouts track how alertness and metabolic strain fare during the misaligned window.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Behavioral shift</span>
+        <select class="ch-widget-select" id="clock-shift">
+          <option value="0">Aligned (no shift)</option>
+          <option value="8">Night shift (+8 h)</option>
+          <option value="12">Full reversal (+12 h)</option>
+          <option value="-9">Eastward flight (−9 h)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Days since shift</span>
+        <select class="ch-widget-select" id="clock-days">
+          <option value="0">Day 0</option>
+          <option value="1">Day 1</option>
+          <option value="3">Day 3</option>
+          <option value="6">Day 6</option>
+          <option value="10">Day 10</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Internal–external misalignment</span>
+        <span class="ch-meter-bar"><span id="clock-m1" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="clock-n1">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Daytime alertness</span>
+        <span class="ch-meter-bar"><span id="clock-m2" style="width:95%"></span></span>
+        <span class="ch-meter-num" id="clock-n2">95</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Metabolic strain</span>
+        <span class="ch-meter-bar"><span id="clock-m3" style="width:5%"></span></span>
+        <span class="ch-meter-num" id="clock-n3">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sleep efficiency</span>
+        <span class="ch-meter-bar"><span id="clock-m4" style="width:95%"></span></span>
+        <span class="ch-meter-num" id="clock-n4">95</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="clock-btn">Re-entrain a day</button>
+    <p class="ch-widget-sub" id="clock-readout">Aligned: internal cortisol clock and behavior agree. Introduce a shift to watch the internal rhythm lag and drag itself back roughly one hour per day.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>The tired-but-wired loop, drawn as a whole</h2>
+    <p>We can now assemble the full circuit that opened the chapter. Start anywhere on the ring — the loop has no privileged entry point, which is exactly what makes it self-sustaining.</p>
+    <p>A stressful day leaves evening cortisol elevated. Elevated evening cortisol and central CRH tone raise the arousal floor and suppress slow-wave sleep, so the night is shallow and fragmented (Buckley &amp; Schatzberg, 2005; Balbo et al., 2010). Fragmented, insufficient sleep impairs the next day's negative feedback, so cortisol recovers slowly and is again elevated the following evening (Leproult et al., 1997). That evening's elevation degrades the next night — and around it goes. Layer chronic insomnia's baseline hyperarousal on top (Vgontzas et al., 2001), or a shift-work schedule that keeps the cortisol rhythm reversed (Scheer et al., 2009), and the loop acquires a floor it cannot easily fall below.</p>
+    <p>The subjective experience of standing inside this loop is precisely "tired but wired." The homeostatic sleep drive — the pressure to sleep that builds with hours awake — is high, hence <em>tired</em>. But the HPA/arousal system is running an evening program that belongs to the morning, hence <em>wired</em>. Two systems that should agree about the time of day are giving opposite reports, and the person lies in bed as the disputed territory.</p>
+
+    <h3>Worked example: three nights in the life of a rotating shift</h3>
+    <p>Consider a nurse rotating onto a week of night shifts. <strong>Night 1:</strong> she works through the biological night; her SCN-driven cortisol trough occurs while she is awake and active, and her attempt to sleep the next morning coincides with the pre-programmed cortisol rise — sleep is short and light, efficiency low (Scheer et al., 2009). <strong>Day 2 evening:</strong> the previous morning's truncated sleep has blunted her feedback, so as she arrives at work her cortisol, instead of being suppressed for the coming sleep window, is running high (Leproult et al., 1997). <strong>Night 3:</strong> her glucose tolerance during her nighttime meal is measurably worse — the misaligned insulin response predicted by the desynchrony literature (Spiegel et al., 1999; Scheer et al., 2009) — and her daytime sleep remains fragmented. Nothing here requires that she is "not trying" to sleep or "eating badly." The insult is structural: her clocks disagree, and cortisol is the loudest voice in the argument.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The loop "has no privileged entry point." Pick two different entry points — an acute evening stressor versus a forced schedule shift — and describe how the <em>same</em> downstream state (elevated evening cortisol, degraded deep sleep) is reached by different first steps. Why does this matter for how you'd frame the problem when educating a client?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Sleep as allostatic load — cause and symptom at once</h2>
+    <p>The final integrative move belongs to Bruce McEwen, the originator of the allostatic-load framework we met in earlier chapters. In his 2006 <em>Metabolism</em> review, McEwen argues that chronic sleep deprivation should be classified not as a lifestyle inconvenience but as a genuine <span class="ch-key">neurobiologic and physiologic stressor</span> — a source of allostatic load in its own right. The evidence he assembles is the by-now-familiar constellation: chronic sleep deprivation raises evening cortisol, elevates proinflammatory cytokines, increases blood glucose and insulin, and shifts autonomic balance toward sympathetic dominance. These are not transient adjustments; they are wear-and-tear that accumulates across the brain, immune system, and metabolic organs.</p>
+    <p>The conceptual payoff is that sleep disruption sits on <em>both</em> sides of the allostatic ledger. It is a <em>cause</em> of load — poor sleep pushes cortisol, glucose, and inflammation in the damaging direction. And it is a <em>symptom</em> of load — a stress-activated HPA axis fragments sleep in the first place. This dual position is exactly what we should expect of a node embedded in a reciprocal loop. It also explains why sleep is such a high-leverage target: intervening on it can, in principle, damp the entire circuit, whereas ignoring it lets every other stressor compound.</p>
+    <p>Which is the real lesson of this chapter, and the reason it is placed where it is in the course. In Chapters 1 through 8 we studied the HPA axis, glucocorticoid feedback, metabolic downstream effects, and allostatic load as if they were separable topics. They are not. Sleep is the tissue that binds them into one network. A properly low nighttime cortisol is not passive downtime waiting for the day to resume — it is a load-bearing pillar of the entire regulatory architecture. Remove it, and the systems we studied one at a time begin to fail together.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Sleep loss is a chronic stressor to which the brain and body adapt in ways that carry a hidden cost — the wear and tear of allostatic load.</p>
+    <cite>Adapted from McEwen (2006), <em>Metabolism</em></cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The cortisol–sleep relationship is <strong>reciprocal</strong>, not one-directional: the SCN clock, ultradian pulses, and sleep/behavior all shape the 24-hour cortisol waveform (Oster et al., 2017).</li>
+      <li>The <strong>nighttime cortisol trough is permissive for slow-wave sleep</strong>; centrally, CRH and cortisol act as alerting signals that suppress deep sleep, so low nighttime cortisol and deep sleep are two faces of the same quiescent state (Buckley &amp; Schatzberg, 2005; Balbo et al., 2010).</li>
+      <li>Sleep loss impairs the HPA axis's negative feedback, raising cortisol the <strong>following evening</strong> — the arrow that closes two phenomena into a self-reinforcing loop (Leproult et al., 1997).</li>
+      <li>Chronic insomnia is associated with 24-hour HPA activation with peak excess in the evening and early night, consistent with <strong>CNS hyperarousal</strong> that may be partly causal, not merely consequential (Vgontzas et al., 2001).</li>
+      <li>Circadian <strong>misalignment</strong> reverses the cortisol rhythm and worsens glucose, insulin, leptin, and blood pressure independent of sleep loss — timing is its own axis of harm (Scheer et al., 2009).</li>
+      <li>Sleep restriction reproduces cortisol-driven metabolic derangements (impaired glucose tolerance), linking this loop directly to the metabolic disease risk of Chapter 6 (Spiegel et al., 1999).</li>
+      <li>Chronic sleep disruption is <strong>both a cause and a symptom</strong> of HPA dysregulation — a load-bearing pillar of allostatic regulation, not passive downtime (McEwen, 2006).</li>
+      <li>This is educational physiology: recognize the pattern, educate, and <strong>refer</strong>. Insomnia and shift-work disorder are clinical conditions to be identified and handed off, not diagnosed or treated.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have now seen the network operating against itself. In the next chapter we turn the question around: if sleep, feeding, light, and stress can push the cortisol system out of balance, can the same levers be used deliberately to <em>support</em> it? We move from mechanism to modulation — examining the evidence for behavioral inputs that stabilize the diurnal curve, and drawing the sharp line between educating on those inputs and the clinical work that lies beyond our scope.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Balbo, M., Leproult, R., &amp; Van Cauter, E. (2010). Impact of sleep and its disturbances on hypothalamo-pituitary-adrenal axis activity. <em>International Journal of Endocrinology, 2010</em>, 759234. https://doi.org/10.1155/2010/759234</p>
+    <p>Buckley, T. M., &amp; Schatzberg, A. F. (2005). On the interactions of the hypothalamic-pituitary-adrenal (HPA) axis and sleep: Normal HPA axis activity and circadian rhythm, exemplary sleep disorders. <em>Journal of Clinical Endocrinology &amp; Metabolism, 90</em>(5), 3106–3114. https://doi.org/10.1210/jc.2004-1056</p>
+    <p>Leproult, R., Copinschi, G., Buxton, O., &amp; Van Cauter, E. (1997). Sleep loss results in an elevation of cortisol levels the next evening. <em>Sleep, 20</em>(10), 865–870. https://doi.org/10.1093/sleep/20.10.865</p>
+    <p>McEwen, B. S. (2006). Sleep deprivation as a neurobiologic and physiologic stressor: Allostasis and allostatic load. <em>Metabolism, 55</em>(Suppl. 2), S20–S23. https://doi.org/10.1016/j.metabol.2006.07.008</p>
+    <p>Oster, H., Challet, E., Ott, V., Arvat, E., de Kloet, E. R., Dijk, D.-J., Lightman, S., Vgontzas, A., &amp; Van Cauter, E. (2017). The functional and clinical significance of the 24-hour rhythm of circulating glucocorticoids. <em>Endocrine Reviews, 38</em>(1), 3–45. https://doi.org/10.1210/er.2015-1080</p>
+    <p>Scheer, F. A. J. L., Hilton, M. F., Mantzoros, C. S., &amp; Shea, S. A. (2009). Adverse metabolic and cardiovascular consequences of circadian misalignment. <em>Proceedings of the National Academy of Sciences, 106</em>(11), 4453–4458. https://doi.org/10.1073/pnas.0808180106</p>
+    <p>Spiegel, K., Leproult, R., &amp; Van Cauter, E. (1999). Impact of sleep debt on metabolic and endocrine function. <em>The Lancet, 354</em>(9188), 1435–1439. https://doi.org/10.1016/S0140-6736(99)01376-8</p>
+    <p>Vgontzas, A. N., Bixler, E. O., Lin, H.-M., Prolo, P., Mastorakos, G., Vela-Bueno, A., Kales, A., &amp; Chrousos, G. P. (2001). Chronic insomnia is associated with nyctohemeral activation of the hypothalamic-pituitary-adrenal axis: Clinical implications. <em>Journal of Clinical Endocrinology &amp; Metabolism, 86</em>(8), 3787–3794. https://doi.org/10.1210/jcem.86.8.7778</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 9 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-loop');
+    if(!root) return;
+    var perturb = root.querySelector('#loop-perturb');
+    var daySel = root.querySelector('#loop-day');
+    var btn = root.querySelector('#loop-btn');
+    var readout = root.querySelector('#loop-readout');
+
+    // baseline values: eveningCortisol, deepSleep, awakenings, amplitude
+    var base = {ec:15, ds:85, aw:10, amp:90};
+
+    // per-day escalation factor by perturbation type
+    var models = {
+      none:   {ec:0,  ds:0,  aw:0,  amp:0,  msg:"Baseline: low evening cortisol permits abundant deep sleep, few awakenings, and a crisp morning rhythm."},
+      stress: {ec:16, ds:-13, aw:14, amp:-9, msg:"Evening stressor: elevated evening cortisol suppresses slow-wave sleep and fragments the night, which blunts next-day feedback and keeps the next evening high — the spiral tightens each day."},
+      delay:  {ec:12, ds:-10, aw:10, amp:-7, msg:"Delayed bedtime: lost deep-sleep opportunity impairs glucocorticoid negative feedback, raising the following evening's cortisol (Leproult et al., 1997) and degrading the next night."},
+      shift:  {ec:20, ds:-16, aw:18, amp:-13, msg:"Night shift: the cortisol rhythm is now reversed relative to the sleep attempt; daytime sleep collapses while the axis runs an evening program at the wrong time (Scheer et al., 2009)."}
+    };
+
+    function clamp(v){ return Math.max(2, Math.min(100, Math.round(v))); }
+
+    function render(){
+      var p = perturb.value;
+      var d = parseInt(daySel.value,10); // 0..3
+      var m = models[p];
+      var f = d; // days elapsed
+      // diminishing but accumulating spiral
+      var accel = f===0 ? 0 : (f + (f>1? (f-1)*0.4 : 0));
+      var ec = clamp(base.ec + m.ec*accel);
+      var ds = clamp(base.ds + m.ds*accel);
+      var aw = clamp(base.aw + m.aw*accel);
+      var amp = clamp(base.amp + m.amp*accel);
+
+      set('#loop-m1','#loop-n1',ec);
+      set('#loop-m2','#loop-n2',ds);
+      set('#loop-m3','#loop-n3',aw);
+      set('#loop-m4','#loop-n4',amp);
+
+      var tag = (p==='none') ? m.msg :
+        m.msg + " (Simulated day " + (d+1) + ".)";
+      readout.textContent = tag;
+    }
+
+    function set(barSel,numSel,val){
+      root.querySelector(barSel).style.width = val + "%";
+      root.querySelector(numSel).textContent = val;
+    }
+
+    btn.addEventListener('click', function(){
+      var d = parseInt(daySel.value,10);
+      d = (d+1) % 4;
+      daySel.value = String(d);
+      render();
+    });
+    perturb.addEventListener('change', render);
+    daySel.addEventListener('change', render);
+    render();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-clock');
+    if(!root) return;
+    var shiftSel = root.querySelector('#clock-shift');
+    var daysSel = root.querySelector('#clock-days');
+    var btn = root.querySelector('#clock-btn');
+    var readout = root.querySelector('#clock-readout');
+
+    function clamp(v){ return Math.max(2, Math.min(100, Math.round(v))); }
+
+    function render(){
+      var shift = parseInt(shiftSel.value,10); // hours of behavioral shift
+      var days = parseInt(daysSel.value,10);
+      var mag = Math.abs(shift);
+      // internal clock re-entrains ~1 h/day
+      var remaining = Math.max(0, mag - days*1.0);
+      // misalignment as percentage of a 12h max
+      var misalign = clamp((remaining/12)*100);
+
+      // alertness drops with misalignment; recovers as it shrinks
+      var alert = clamp(95 - misalign*0.75);
+      // metabolic strain rises steeply with misalignment (Scheer 2009)
+      var strain = clamp(5 + misalign*0.85);
+      // sleep efficiency falls ~20% at full misalignment
+      var sleepEff = clamp(95 - misalign*0.55);
+
+      set('#clock-m1','#clock-n1',misalign);
+      set('#clock-m2','#clock-n2',alert);
+      set('#clock-m3','#clock-n3',strain);
+      set('#clock-m4','#clock-n4',sleepEff);
+
+      var msg;
+      if(shift===0){
+        msg = "Aligned: internal cortisol clock and behavior agree. Alertness high, metabolic strain minimal, sleep consolidated.";
+      } else if(remaining <= 0.5){
+        msg = "Re-entrained: after " + days + " days the internal cortisol rhythm has caught up to the new " + (shift>0?"+":"") + shift + " h schedule. Strain has largely resolved.";
+      } else {
+        msg = "Misaligned by ~" + remaining.toFixed(1) + " h on day " + days + ": the cortisol rhythm still lags the behavioral schedule. Reversed cortisol timing raises glucose and insulin and drops sleep efficiency (Scheer et al., 2009); the SCN drags back only ~1 h/day.";
+      }
+      readout.textContent = msg;
+    }
+
+    function set(barSel,numSel,val){
+      root.querySelector(barSel).style.width = val + "%";
+      root.querySelector(numSel).textContent = val;
+    }
+
+    btn.addEventListener('click', function(){
+      var order = [0,1,3,6,10];
+      var cur = parseInt(daysSel.value,10);
+      var idx = order.indexOf(cur);
+      idx = (idx+1) % order.length;
+      daysSel.value = String(order[idx]);
+      render();
+    });
+    shiftSel.addEventListener('change', render);
+    daysSel.addEventListener('change', render);
+    render();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

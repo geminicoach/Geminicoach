@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Built for the Sprint: The Beautiful Logic of Acute Stress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '\2013 '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 4 · Module 2</div>
+    <h1 class="ch-title">Built for the Sprint: The Beautiful Logic of <em>Acute</em> Stress</h1>
+    <p class="ch-subtitle">Before we study what goes wrong, we owe the stress response an honest look at everything it gets right.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> zebra grazes on the Serengeti. The grass is good, the morning is warm, and its physiology is doing what physiology does best when nothing is wrong. It is digesting breakfast, repairing yesterday's small tissue damage, patrolling for infection, laying down bone and muscle, and, in season, investing in the next generation. Then a shape detonates out of the tall grass. A lioness. In the time it takes you to read this sentence, the zebra's entire internal economy is rewritten. Digestion halts mid-process. Heart rate climbs toward its ceiling. Fuel floods the bloodstream. Pupils widen, pain dims, and the animal explodes into a flat sprint across the plain.</p>
+    <p>Ninety seconds later it is over. The zebra either escaped or it did not. If it escaped, something remarkable happens next, and it is the thing this entire course is built to help you appreciate. The zebra stops. It shakes. And within a few minutes, its body begins dismantling the emergency and going back to breakfast. This chapter is about that ninety seconds, and about why the machinery that produced it is one of the most elegant pieces of biological engineering we know of. It is also, quietly, about why so many people who feel that same machinery fire in their own bodies conclude that something is broken, when in fact the opposite is true.</p>
+    <p>Meet Malik, a learner who signed up for this course carrying exactly that suspicion. A few weeks ago a delivery van ran a red light half a car length in front of him. He stamped the brakes, missed the collision by a margin he still cannot quite believe, and pulled over shaking. His heart hammered. His hands trembled. His mouth went dry, and for a good ten minutes after the danger had passed he felt jittery and slightly sick. What alarmed Malik was not the near miss. It was his own reaction to it, which struck him as excessive, as if his body had overreacted to a threat that was already gone. He came to this course half convinced that his stress response is too sensitive, too big, out of proportion. By the end of this chapter you will be able to explain to Malik, precisely and kindly, why almost everything he experienced in that pulled-over car was his physiology performing exactly as designed. Malik is not a patient here and he is not a case to be solved. He is a stand-in for a very common misreading, and following his confusion is a good way to test your own understanding as it forms.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Two arms, two timescales</h2>
+    <p>We have spent the previous chapters treating cortisol as the protagonist of this course, and it is. But cortisol never works alone, and in a genuine emergency it is not even the first responder. The acute stress response is executed by <span class="ch-key">two distinct but coordinated arms</span>, and the single most useful thing you can learn today is how they differ in speed. Get the timing straight and most of the confusion around stress physiology, including Malik's, resolves on its own.</p>
+    <p>The first arm is the <span class="ch-key">sympathetic-adrenal-medullary (SAM) axis</span>. When the brain registers danger, and here the threat-detecting circuits centered on the amygdala do the work, it fires down the sympathetic nervous system directly. Signals reach the <em>adrenal medulla</em>, the core of the adrenal gland, and trigger the release of <span class="ch-key">catecholamines</span>: adrenaline, also called epinephrine, and noradrenaline, also called norepinephrine. This is a neural pathway, and neural pathways are fast. Adrenaline is in circulation within <em>seconds</em>. This is the surge you feel, the pounding chest, the jolt of alertness, the dry mouth, before you have consciously identified what startled you (Ulrich-Lai &amp; Herman, 2009). Notice that the amygdala starts the alarm before the thinking parts of the brain have finished analyzing the scene. That ordering is deliberate. In a real emergency the cost of a false alarm is a wasted burst of adrenaline, while the cost of hesitating is death. Evolution priced those two errors and built a system that would rather flinch at a stick than freeze at a snake.</p>
+    <p>This is worth pausing on, because it is the direct answer to Malik's worry. His hands were already shaking before his conscious mind had caught up with what the van had done. He experienced that as an overreaction. In fact it was the SAM axis doing precisely its job, which is to convert the merest flicker of threat into a body ready to act, and to do it faster than deliberate thought can. The system is not asking permission. It is not waiting for a considered risk assessment. By the time Malik could have reasoned his way to <em>brake now</em>, the braking was already underway, because catecholamines had put his muscles and attention on a war footing in the first few hundred milliseconds. What felt to him like his body betraying him with an excessive response was, mechanically, the reason he still had a car to pull over.</p>
+    <p>The second arm is the one this course is named for: the <span class="ch-key">hypothalamic-pituitary-adrenal (HPA) axis</span>. Here the signaling is hormonal rather than purely neural, and it runs a relay. The hypothalamus releases <em>corticotropin-releasing hormone</em> (CRH), often alongside arginine vasopressin. CRH travels a short distance to the anterior pituitary, which secretes <em>adrenocorticotropic hormone</em> (ACTH) into the bloodstream. ACTH reaches the <em>adrenal cortex</em>, the outer layer of the same gland, which manufactures and releases <span class="ch-key">cortisol</span>. Because this is a multi-step hormonal cascade, it is slower. Cortisol rises over <em>minutes</em>, peaks around fifteen to thirty minutes into a stressor, and clears over the following hour or two (Tsigos &amp; Chrousos, 2002; Chrousos, 2009). Where the SAM axis is a hard-wired electrical relay, the HPA axis is a chain of chemical messengers passed hand to hand, and each hand-off costs time.</p>
+    <p>That difference in wiring is the whole point. A neural signal travels as an electrical impulse down a dedicated line and acts in the instant it arrives. A hormonal signal has to be synthesized, released into the blood, carried to a distant gland, bound by a receptor, and translated into the manufacture of yet another hormone, three times over, before cortisol ever reaches its targets. You would not build a fire alarm that way. But you would build a recovery-and-resupply system that way, because that system does not need to be instantaneous. It needs to be sustained, and it needs to reach every tissue at once. The body did not choose between speed and reach. It built one arm for each.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour anatomical diagram, in the register of a vintage physiology textbook plate, showing two parallel signalling pathways from the brain to the adrenal gland. On the left, a fast neural pathway drawn as a bold dark line descending the spinal cord to the adrenal medulla, labelled 'SAM, seconds' in small serif type. On the right, a slower multi-step hormonal cascade drawn as a chain of three linked glands (hypothalamus, pituitary, adrenal cortex) connected by dotted arrows, labelled 'HPA, minutes'. Warm earthy palette of sepia, ochre, muted teal, and cream. Clean cream background, minimal shading, three or four labels only, no numbers. No watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The two arms diverge in speed: a fast neural surge and a slower hormonal cascade.</em></figcaption></figure>
+
+    <p>Why build two systems? Because a good emergency response needs both a sprinter and a marathoner. Adrenaline is the sprinter. It converts intention into action almost instantly, but catecholamines are cleared from the blood in a matter of minutes and cannot sustain a prolonged effort on their own. Cortisol is the marathoner. It arrives late, but it stays, and it does something adrenaline cannot. It reorganizes the body's <em>metabolism</em> and <em>gene expression</em> to keep fuel flowing and to keep the whole response coherent over the duration of the crisis (Sapolsky et al., 2000). The two arms are not redundant. They are a division of labor across time, and understanding that division is the key that unlocks the rest of the chapter.</p>
+    <p>Joëls and Baram (2009) describe this temporal layering vividly. They call the stress response a "neuro-symphony," a set of mediators, each with its own onset and its own duration, that come in and drop out at different points like instruments in an orchestra. Catecholamines and CRH act within seconds and fade quickly. Rapid, non-genomic cortisol effects arrive within minutes. The slower, genomic effects of cortisol, the ones that change which proteins a cell manufactures, unfold over the following hours and can outlast the stressor itself, shaping how the brain consolidates what just happened. The response is not a single switch thrown and released. It is a scored piece of music with a beginning, a swell, and a resolution, and the timing of each part is as important as its presence.</p>
+    <p>Now return to Malik's ten minutes of feeling shaky in the pulled-over car. Two things were happening at once, on two clocks. His catecholamines had spiked almost instantly and were already being cleared, which is why the sharpest edge of the reaction began to soften. Meanwhile his cortisol, launched at the same moment, was still climbing toward its peak fifteen to thirty minutes out, which is why the low buzz of arousal lingered well after the van was gone. He was not overreacting to a threat that had passed. He was watching the fast arm switch off and the slow arm still ramping up, exactly the staggered timing the two-arm design produces. The persistence he found alarming is a signature of the system working, not failing.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>You slam on your brakes to avoid a collision. By the time your heart is racing, which hormone is already at work, and which one has barely begun to be manufactured? Which system explains why you still feel shaky ten minutes after the near miss, long after the danger has passed? If you can answer both, you have understood the two-arm design well enough to explain it to someone who thinks their body is malfunctioning.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-timeline">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Emergency Response Timeline</div>
+    </div>
+    <p class="ch-widget-sub">Scrub from the moment of threat to two hours later. Watch the fast adrenaline spike and the slower cortisol wave, and see which body systems are switched up or down at each instant.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Time since threat</span>
+        <input class="ch-widget-select" type="range" id="tl-slider" min="0" max="120" value="0" step="1">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Reading at</span>
+        <select class="ch-widget-select" id="tl-readout" disabled><option id="tl-time">0 seconds</option></select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Adrenaline (SAM)</span>
+        <span class="ch-meter-bar"><span id="tl-adr" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tl-adr-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cortisol (HPA)</span>
+        <span class="ch-meter-bar"><span id="tl-cort" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tl-cort-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">▲ Heart &amp; blood pressure</span>
+        <span class="ch-meter-bar"><span id="tl-hr" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tl-hr-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">▲ Blood glucose</span>
+        <span class="ch-meter-bar"><span id="tl-glu" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tl-glu-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">▲ Alertness &amp; focus</span>
+        <span class="ch-meter-bar"><span id="tl-alert" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tl-alert-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">▼ Digestion</span>
+        <span class="ch-meter-bar"><span id="tl-dig" style="width:100%"></span></span>
+        <span class="ch-meter-num" id="tl-dig-n">10</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">▼ Reproductive drive</span>
+        <span class="ch-meter-bar"><span id="tl-rep" style="width:100%"></span></span>
+        <span class="ch-meter-num" id="tl-rep-n">10</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="tl-play">▶ Play the whole event</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>What cortisol actually does in a crisis</h2>
+    <p>Here is where we must correct a popular misconception. Cortisol is frequently described as the hormone that causes stress, as though it were an agent of harm dispatched to punish you. That framing gets the biology backward. In an acute emergency, cortisol's actions are overwhelmingly <span class="ch-key">adaptive</span>, and each one solves a specific problem the emergency creates. The useful way to read cortisol's job description is not as a list of effects but as a list of problems and their answers. Take them one at a time, and pair each action with the crisis it exists to solve.</p>
+
+    <h3>1. Mobilizing energy</h3>
+    <p>A sprint costs fuel, and it costs it immediately. Cortisol's signature metabolic action is to <span class="ch-key">raise circulating glucose</span>. It does this in three coordinated ways. It promotes <em>gluconeogenesis</em> in the liver, the manufacture of new glucose from amino acids and other precursors. It mobilizes fatty acids from adipose tissue, freeing an alternative fuel so that glucose can be reserved for the tissues that depend on it most. And it makes peripheral tissues transiently more resistant to insulin, so that the glucose it liberates is not swept out of the blood and stored, but left available for the organs that need it in a chase: skeletal muscle and the brain (Sapolsky et al., 2000; Tsigos &amp; Chrousos, 2002). <strong>The problem it solves:</strong> muscles cannot contract without fuel, and a brain starved of glucose cannot plan an escape. Notice how much of this is about <em>routing</em>, not just production. The body is not only making fuel. It is deciding who gets to spend it, and in an emergency the answer is the muscles and the brain, everyone else can wait.</p>
+    <p>That third mechanism, transient insulin resistance, deserves a flag now because it will return later as a central figure in the chronic-stress chapters. During a ninety-second sprint, making your fat cells and idle muscle briefly deaf to insulin is a stroke of genius. It walls off the glucose supply for the organs that will decide whether you live. Hold that fact. The very same insulin resistance, sustained for weeks and months rather than seconds, is a well-trodden road toward metabolic disease. The mechanism does not change. Only its duration does. This is the first of several places in this chapter where you will meet a hero that becomes a villain simply by refusing to leave.</p>
+
+    <h3>2. Supporting the cardiovascular surge</h3>
+    <p>Adrenaline drives heart rate and blood pressure up, but here we meet one of the most important and counterintuitive ideas in the whole field. Many of cortisol's effects are <span class="ch-key">permissive</span> rather than directly stimulatory. Cortisol does not itself raise blood pressure so much as it <em>enables</em> catecholamines to do so effectively. Without adequate glucocorticoid signaling in the background, the vasculature responds poorly to adrenaline, which is one reason people with too little cortisol can slide into low blood pressure and shock under stress. Sapolsky and colleagues (2000) organized cortisol's actions into four modes, and the framework is worth learning by name because it reshapes how you think about the hormone. Their four categories are <span class="ch-key">permissive</span>, <span class="ch-key">suppressive</span>, <span class="ch-key">stimulatory</span>, and <span class="ch-key">preparative</span>.</p>
+    <p>The distinctions matter. A <em>permissive</em> action is one where baseline cortisol, present before the stressor even begins, sets the stage so that other systems can respond fully when the alarm sounds. A <em>stimulatory</em> action is one where the stress-level surge of cortisol actively pushes a response higher. A <em>suppressive</em> action is one where cortisol restrains a response, often to keep it from overshooting into self-damage. And a <em>preparative</em> action is one where today's cortisol tunes the body's response to <em>tomorrow's</em> stressor, an investment in future readiness rather than a response to the present. Sapolsky and colleagues built this taxonomy precisely to capture the fact that cortisol is less a lone actor than a stage manager, priming, coordinating, and reining in the responses of other systems rather than shouting a single instruction. <strong>The problem it solves:</strong> fuel is useless if the pump cannot deliver it to working muscle, and a response that is not held in check can become as dangerous as the threat it answers.</p>
+
+    <h3>3. Sharpening the mind</h3>
+    <p>Acute stress mediators enhance <span class="ch-key">arousal, vigilance, and focused attention</span>, and they blunt pain through stress-induced analgesia. A zebra with a torn flank should not stop to nurse the wound while the lion closes. The pain can wait; the wound will still be there in ten minutes, if there is a ten minutes. Cortisol and the locus ceruleus noradrenaline system together tune the brain toward the here-and-now threat, narrowing the spotlight of attention onto what matters and dimming everything that does not. They also strengthen certain forms of memory consolidation, so the animal remembers <em>where the danger was</em> and gives that patch of grass a wide berth next time (Herman et al., 2011; Tsigos &amp; Chrousos, 2002). <strong>The problem it solves:</strong> survival requires that every cognitive resource point at the threat, that injury not be disabling in the crucial moment, and that the lesson of a near miss be filed away where it can be recalled fast.</p>
+    <p>This is another piece of Malik's puzzle. He remembers the van's near miss with a vividness that unsettles him. He can replay the color of it, the angle, the sound of his own tires. That searing clarity is not a symptom of trauma running amok. It is stress-enhanced memory consolidation doing what it evolved to do, stamping a survival-relevant event into memory so hard that he will never again drift casually through that intersection. The system is not tormenting him. It is teaching him, in the only language evolution trusts for lessons that matter: an emotionally charged memory he cannot easily shake.</p>
+
+    <h3>4. Dampening the non-essential</h3>
+    <p>This is the action learners most often misread as pathological. In an emergency, cortisol suppresses processes that carry no survival value in the next few minutes. Digestion slows. Growth pathways are inhibited. Reproductive physiology is dialed down. And over the following hours, inflammatory and immune activity is restrained (Herman et al., 2011; Chrousos, 2009). Read in isolation, the sentence "cortisol suppresses immunity" sounds like a bug, a self-defeating flaw in an otherwise clever system. In context, it is a feature, and a subtle one, which we are about to see is more nuanced than the textbooks long claimed. But first, sit with the logic of the dampening itself. Every one of these suppressed functions is a long-horizon investment: digesting a meal pays off over hours, building tissue over days, producing offspring over months. None of them helps you survive the next ninety seconds, and all of them cost energy. In a genuine emergency, defunding them is not neglect. It is triage.</p>
+    <p>Step back from the four actions and notice that they are not four separate tricks bolted together. They are one coordinated program, and cortisol is what keeps them coordinated. Energy is mobilized, but only after the cardiovascular system has been primed to deliver it. Attention is sharpened onto the threat at the same moment that pain is dialed down so the threat can be dealt with. The non-urgent systems are throttled back precisely to free the resources that the urgent ones are now spending. Each action assumes the others. That is why it is more accurate to describe cortisol as a conductor than as a cause. A cause pushes one lever. A conductor makes sure every section of the orchestra comes in on time, at the right volume, and stops on cue. The moment you see the acute stress response as a single integrated performance rather than a pile of separate effects, its logic becomes almost impossible to mistake for malfunction. Which brings us to the organizing metaphor of this entire course.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Cortisol makes tissues transiently insulin-resistant during a stressor so that glucose is spared for muscle and brain. That is adaptive when a lion is chasing you. Hold onto this fact, because in a few chapters it will reappear as one of the villains of chronic stress. Why might the <em>same</em> mechanism be brilliant in a ninety-second sprint and corrosive in a traffic jam that lasts an hour, or a job that lasts a decade?</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common belief holds that because cortisol suppresses digestion, immunity, and reproduction, it must be doing harm to those systems, so keeping cortisol low must protect them. This reads a wartime rationing order as if it were sabotage. During a real emergency, briefly defunding the non-urgent systems is exactly what keeps you alive to use them later. The harm does not come from the act of dampening. It comes from a dampening that never lifts, which is a problem of duration, not of the mechanism itself.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The immune plot twist: acute stress is not immunosuppressive</h2>
+    <p>Before we cement the story, a crucial nuance that the older textbooks got wrong. It is tempting to say "stress suppresses immunity," full stop, and to file that under cortisol's list of harms. But Firdaus Dhabhar's work forces a more precise account, and it turns out to be one of the most elegant confirmations of the acute-versus-chronic distinction we will meet anywhere in this course.</p>
+    <p>Dhabhar (2014) demonstrated that <span class="ch-key">short-term stress, lasting minutes to hours, actually enhances immune function</span> rather than blunting it. Acute stress mediators mobilize leukocytes, redistributing immune cells such as neutrophils and natural killer cells out of storage and into the bloodstream, the skin, and the other tissues where a wound is most likely to occur. Think about the situation from the body's point of view. The archetypal acute stressor for most of vertebrate history was a physical confrontation: teeth, claws, a fall, a fight. That is precisely the situation in which your skin is about to be breached and bacteria are about to be introduced directly into your tissues. So the emergency that might get you clawed is the same emergency in which you would most want your immune defenses staged forward at the body's frontiers, pre-positioned at the likely site of the breach before it even happens. That is what acute stress does. It is not a lapse in immune protection. It is immune protection deployed forward, ahead of the wound.</p>
+    <p>This is what Sapolsky and colleagues (2000) would call a <em>preparative</em> action: the stressor tunes the immune system for a threat that has not yet materialized. Dhabhar goes further and calls acute stress "one of nature's fundamental survival mechanisms," a phrase worth sitting with given how thoroughly the single word "stress" has been demonized in popular culture. The acute immune surge is not a side effect to be tolerated. It is a designed advantage, and it is one of the clearest pieces of evidence that the acute stress response evolved to protect the organism, not to wear it down.</p>
+    <p>The suppression everyone associates with cortisol is real. But it belongs to a different timescale. It is the <em>chronic</em>, sustained elevation of glucocorticoids that dysregulates and blunts immune function, shifting the system toward a less protective and sometimes self-damaging posture. Acute stress and chronic stress do not differ merely in degree. They can produce <strong>opposite</strong> effects on the very same system. Short-term stress mobilizes and sharpens immunity; long-term stress suppresses and derails it. Keep this pairing in your pocket, because it is the single cleanest illustration of the thesis this whole chapter is building toward. Same hormone, same target tissue, opposite outcome, and the only variable that changed is how long the signal stayed switched on.</p>
+    <p>The mechanism of the reversal is instructive, because it shows how a good design fails gracefully at first and then catastrophically. Under acute stress, immune cells are redeployed forward and the inflammatory response is briefly tuned for a likely wound. Under chronic stress, the picture shifts. Dhabhar (2014) describes a move away from the cell-mediated defenses that fight viruses and cancer and toward a different, less protective posture, alongside a general blunting of immune regulation. The forward deployment that made sense for a single confrontation becomes a standing mobilization that the body cannot sustain, and the restraint that once kept inflammation from overshooting begins to fail in the other direction. None of this is visible in the acute response, which looks flawless. It only emerges when the response is asked to do for months what it was engineered to do for minutes. That is the pattern to watch for throughout the rest of this course: a mechanism that is not merely useful but genuinely protective in the short term, quietly inverting when the clock is left running.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Popular advice treats "stress lowers your immunity" as a flat rule and sells products to counter it. Given Dhabhar's finding that a short-term stressor actually mobilizes immune defenses, what has that advice quietly collapsed together? Name the variable it left out, and you have named the variable this entire chapter is about.</p>
+    </aside>
+
+    <blockquote class="ch-quote">
+      <p>The stress-response is remarkably well suited to dealing with short-term physical emergencies. The problem is what happens when you turn on the same stress-response chronically for purely psychological reasons.</p>
+      <cite>Robert M. Sapolsky, <em>Why Zebras Don't Get Ulcers</em> (2004)</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>Spend now, repay later: the architecture of the loan</h2>
+    <p>Everything above can be unified under a single metaphor, and it is the metaphor on which the rest of this course turns. The acute stress response is a <span class="ch-key">short-term loan</span>. It takes energy and resources away from long-horizon projects, digestion, growth, tissue repair, reproduction, and immune surveillance, and reallocates them to a single overwhelming priority: <em>surviving the next few minutes</em>. The body has a finite energy budget at any given instant. It cannot fund everything at full power at once. So when an emergency arrives, it does what any organization does in a genuine crisis. It pulls funding from the departments that can wait and pours it into the one department whose failure means the end of everything.</p>
+    <p>This is a rational trade only under one assumption, and the whole design rides on it: that the emergency will be brief and will have a clear endpoint. The zebra borrows against its own future. It will digest that breakfast later, repair that tissue later, fight off that low-grade infection later, invest in offspring later, because <em>later</em> only exists if it survives <em>now</em>. Diverting resources away from reproduction in the middle of a lion attack is not a malfunction of priorities. It is the correct answer to the question the moment is asking. What use is ovulating, or digesting, or laying down new bone, during the ten seconds in which you may be eaten? The loan is not reckless. It is the most sensible thing the body can do, provided the debt comes due soon and can be repaid.</p>
+    <p>The metaphor holds up even in the details, which is a good sign that it is capturing something real rather than merely being convenient. A loan has a principal, an interest rate, and a repayment schedule. So does the stress response. The principal is the resources pulled from digestion, growth, repair, immune surveillance, and reproduction. The interest is the small extra cost of having run the machinery at all, the mediators that must be cleared, the tissues that must be restored, the balance that must be re-established. And the repayment schedule is the recovery period after the threat resolves, when the animal grazes, digests, sleeps, heals, and returns its systems to baseline. Run this way, the arithmetic works out fine. A brief, occasional loan against the future, promptly repaid during recovery, costs the organism almost nothing over a lifetime. The trouble, as any lender will tell you, is never the loan itself. It is the borrower who keeps rolling the debt over and never pays down the principal, so that the interest compounds. That borrower is the chronically stressed human, and the compounding interest is the subject of the chapters to come.</p>
+    <p>Chrousos (2009) frames this formally. The stress system exists to defend <span class="ch-key">homeostasis</span> against a threat, mobilizing its effectors to restore balance and then, critically, to <em>stand down</em>. That standing-down is not an afterthought. It is half of the design. Tsigos and Chrousos (2002) make the temporal logic explicit when they note that the catabolic and immunosuppressive consequences of the stress response are "temporarily beneficial" precisely <em>because</em> acute stress is time-limited. Read that phrase carefully. The benefit is not unconditional. It is conditional on the word "temporarily." Strip the time limit away and the same consequences stop being beneficial and start being corrosive. The whole architecture presupposes an off-switch. The loan was engineered to be repaid, and repaid soon.</p>
+    <p>It helps to see how old this insight is. Hans Selye, working in the 1930s, was the first to describe a stereotyped bodily response to diverse threats, what he later called the general adaptation syndrome (Selye, 1936). Selye noticed something that reads, in hindsight, like the loan metaphor in embryo. An organism exposed to a stressor showed an initial alarm reaction, then a stage of resistance in which it seemed to cope, and then, if the stressor persisted long enough, a stage of exhaustion in which the very adaptations that had protected it began to fail and the organism succumbed. Selye's animals could survive an enormous acute challenge. What broke them was a challenge that would not end. Nearly a century of research has refined the details, but the shape of his observation has held: the response that saves you in the short run exacts a price in the long run, and the price is a function of duration.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn isometric infographic in the style of a naturalist's field notebook, depicting a body's energy budget as five stacked wooden crates on a balance scale. In the resting state on the left, the crates are labelled in small serif type: 'survival', 'digestion', 'immunity', 'growth', 'reproduction', roughly equal in size. On the right, an arrow points to a stressed state where the 'survival' crate has swelled enormous while the others have shrunk to slivers, with a small ledger tag reading 'borrowed' pinned to the shrunken crates. Warm palette of ochre, sepia ink, muted forest green, and cream paper texture with visible grain. No numbers, no percentages, six labels maximum. No watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Under threat, the fixed energy budget swells toward survival, and the rest is borrowed.</em></figcaption></figure>
+
+    <p>The genius of this architecture is also its vulnerability, and McEwen (1998) named that vulnerability precisely. In introducing the concept of <span class="ch-key">allostatic load</span>, the cumulative wear and tear that accrues when the stress response is mounted too often or fails to switch off, McEwen articulated a principle that will echo through every remaining chapter: <em>the very same mediators that protect the body in the short term damage it when they are overused.</em> This is the sentence to tattoo on the inside of your understanding. The stress response is not intrinsically good or bad. It is a tool whose value is entirely a function of duration and frequency. Used briefly and put away, it saves you. Left running, it grinds you down, and it does so using the exact same machinery that saved you, aimed now at the wrong duration.</p>
+    <p>A comparison makes the logic concrete. A tourniquet applied to a bleeding limb saves a life over the span of an hour or two. The same tourniquet left in place for two days destroys the limb it was meant to save. Nothing about the tourniquet changed. It did not become a bad device. It was used past the window in which its trade-off made sense. Cortisol is a tourniquet. So is insulin resistance during a sprint. So is the suppression of digestion, growth, and reproduction. Every one of these is a life-saving intervention on the ninety-second timescale and a source of disease on the ninety-day one. This is not a paradox. It is the single most important thing to carry out of this chapter, and it is why the popular instinct to simply crush cortisol is aimed at the wrong target. The problem is almost never the tool. It is the duration of its use.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>List three long-horizon projects the body defunds during a sprint. For each, explain why sacrificing it for ninety seconds costs almost nothing, and then ask yourself what happens to that same project if the ninety seconds becomes ninety days. If your answers start to look like a list of chronic diseases, you are now thinking exactly the way the next chapter needs you to think.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-budget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Resource Reallocation Budget</div>
+    </div>
+    <p class="ch-widget-sub">At rest, a fixed energy budget is split across five systems. Trigger a stressor, choose how long it lasts, and watch the body borrow from the future, with a running tally of the debt.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">State</span>
+        <select class="ch-widget-select" id="bg-state">
+          <option value="rest">Resting (baseline)</option>
+          <option value="stress">Stressor active</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Stressor duration</span>
+        <select class="ch-widget-select" id="bg-dur">
+          <option value="90s">90 seconds (the sprint)</option>
+          <option value="1h">1 hour (a rough morning)</option>
+          <option value="1w">1 week (a deadline)</option>
+          <option value="6mo">6 months (chronic)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Survival (fight/flight)</span>
+        <span class="ch-meter-bar"><span id="bg-surv" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bg-surv-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Digestion</span>
+        <span class="ch-meter-bar"><span id="bg-dig" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bg-dig-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Immunity</span>
+        <span class="ch-meter-bar"><span id="bg-imm" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bg-imm-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Growth &amp; repair</span>
+        <span class="ch-meter-bar"><span id="bg-gro" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bg-gro-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Reproduction</span>
+        <span class="ch-meter-bar"><span id="bg-rep" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bg-rep-n">20</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="bg-verdict">Budget balanced. All systems funded. This is homeostasis.</p>
+
+    <button class="ch-widget-btn" id="bg-btn">Recalculate the budget</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Why the design is evolutionarily sound</h2>
+    <p>Step back and ask what kind of world this machinery was built for. For nearly the entire evolutionary history of the vertebrate stress response, threats had three properties. They were <span class="ch-key">short</span>. They were <span class="ch-key">physical</span>. And they had a <span class="ch-key">clear resolution</span>. A predator either caught you or it did not. A rival either yielded or it did not. A river crossing either drowned you or it did not. In every case the challenge was measured in seconds to minutes, it demanded a muscular response, and it ended definitively, one way or the other (Sapolsky, 2004). A system optimized for that world would be exactly the system we have described: a fast arm and a slow arm, an aggressive reallocation of resources, and, above all, a reliable way to shut the whole thing off once the threat resolved.</p>
+    <p>The mismatch that causes so much trouble today is not that the machinery is poorly built. It is that the world changed faster than the machinery could. The stress response was tuned over hundreds of millions of years for lions and rivals and river crossings, and it is superbly good at those. It has had only a few thousand years, an evolutionary eyeblink, to contend with mortgages, commutes, group chats, and the particular modern talent for summoning a full-blown threat response by simply thinking about something that might go wrong next month. The hardware is not defective. It is running, flawlessly, in an environment it was never designed for. Keeping that distinction clear matters, because it points at the right response. You do not fix a mismatch by attacking the well-built machine. You fix it by changing what you ask the machine to do, and that is a very different project from the one the wellness industry keeps trying to sell.</p>
+    <p>That last requirement, the off-switch, is where the design shows its real sophistication, and it is the part the popular story of stress almost never mentions. Ulrich-Lai and Herman (2009) describe how the neural circuitry reflects exactly this design specification. Brainstem and hypothalamic structures launch the immediate autonomic response, while limbic regions, the amygdala, the hippocampus, and the prefrontal cortex, do something equally vital. They <em>modulate and terminate</em> the response, tuning it to the modality and the intensity of the stressor and then bringing it back down. A well-designed emergency system is defined as much by its off-switch as by its on-switch. An alarm that cannot be silenced is not a better alarm. It is a broken one.</p>
+    <p>The termination runs partly through an elegant piece of self-regulation. Cortisol feeds back on the very structures that triggered its release. The hippocampus and the hypothalamus and the pituitary are all densely populated with glucocorticoid receptors, and when they sense that cortisol has risen, they throttle back the production of CRH and ACTH. In effect, cortisol carries its own message to stand down. The signal that says "mobilize" also, once it has done its work and reached a high enough level, becomes the signal that says "cortisol received, threat handled, resume normal operations." This negative-feedback loop is why the zebra shakes it off and returns to grazing within the hour. Its brain is built not merely to sound the alarm but to end the response as decisively as it began it. The shaking you see in an animal after a near escape is the visible edge of a system actively powering down.</p>
+    <p>It is worth dwelling on that shaking, because it reframes something most people misunderstand about their own bodies. When Malik sat in his pulled-over car with trembling hands, he was doing, in miniature, what the zebra does on the plain. The tremor is not the emergency continuing. It is the emergency ending, the motor and hormonal systems discharging the last of their mobilization as the off-switch engages. Read correctly, the shaking is reassuring. It is the sound of the machinery shutting itself down on schedule, exactly as a well-built response should. A system that could roar to life but not stand back down would be far more worrying than one that trembles for a few minutes and then goes quiet. The trembling is the proof of the off-switch, not evidence of its absence.</p>
+    <p>This is the deep point, and it is worth stating flatly. The acute stress response is not a crude alarm that blares until the danger happens to clear. It is a <span class="ch-key">regulated, self-limiting program</span> with a beginning, a middle, and, by design, an end. It borrows aggressively, and it is built to repay promptly, with feedback loops whose entire purpose is to guarantee the repayment. When it works, it is, in Dhabhar's word, <em>beautiful</em>: fast where it needs to be fast, sustained where it needs to be sustained, forward-deployed where it needs to defend, and self-terminating so that none of the borrowing becomes permanent.</p>
+    <p>Now consider Malik one more time, because his whole worry rests on not yet trusting the off-switch. He felt the full force of the on-switch, the pounding heart and the shaking hands, and he interpreted its very intensity as evidence that something in him was miscalibrated. But look at what actually happened next. Within perhaps twenty minutes of pulling over, his heart had slowed, his hands had steadied, and he was able to drive home. The response did not run away with him. It fired hard, did its job, and then switched itself off, on schedule, exactly as the negative-feedback design predicts. The strength of his reaction and the reliability of its shutdown are two sides of the same well-built system. What he read as a system out of control was in fact a system demonstrating both of its essential features in the space of half an hour.</p>
+    <p>And here is the hinge of the entire course, the sentence to carry into the next chapter. Nothing in this magnificent design accounts for a threat that is <em>psychological</em>, <em>prolonged</em>, and <em>unresolvable</em>: a mortgage, a hostile inbox, an unhappy relationship, a chronic worry that never sprints and never ends. The machinery cannot tell the difference between a lion and a looming performance review, because for almost all of evolutionary history there were no performance reviews, only lions. It mounts the same ancient response to both. And when the emergency has no physical form to fight or flee, and no clean moment of resolution after which the body can know it is safe, the off-switch never fully engages. The loan is never repaid. The very mechanisms we have just spent a whole chapter celebrating begin, one by one, to turn against the body they were built to save. That reversal is the subject of everything that follows, and you now understand the machinery well enough to watch it happen.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where understanding ends and clinical judgment begins</h2>
+    <p>Before we close, we need to name the frame that governs this entire course, because this chapter in particular can be misused if that frame is left implicit. Everything you have learned here is an account of <em>mechanism</em>. It explains how a healthy acute stress response is built and why its design is sound. What it is not, and cannot be, is a tool for judging whether any particular person's stress response is functioning well or poorly, least of all your own or that of someone you care about.</p>
+    <p>The distance between those two things is larger than it looks. Understanding that a robust adrenaline surge and a lingering cortisol wave are normal features of a near miss is genuinely valuable knowledge. It can spare someone a great deal of needless alarm about ordinary physiology, which is precisely the service this chapter can do for a learner like Malik. But the moment the question shifts from "how does this system work in general" to "is this specific reaction, in this specific body, a sign of a problem," you have crossed out of education and into territory that belongs to a qualified clinician. A racing heart and shaking hands are a textbook acute stress response. They can also, in a different person or a different context, be a symptom of something a physician would want to evaluate. The mechanism does not tell you which, and neither does a course.</p>
+    <p>This is why we are careful with Malik. It is reasonable and useful to help him see that his reaction to the van was almost certainly his physiology working as designed, and that the intensity he found alarming is a feature rather than a fault. It would not be reasonable to tell him that his stress response is definitely healthy, that he has nothing to worry about, or that he never needs to raise any of this with a professional. Those are clinical judgments about a real individual, and they require a licensed professional who can take a history, ask the questions a course cannot ask, and interpret the answers in context. The most honest thing this chapter can do for Malik is exactly what it has done: replace a vague fear that his body is broken with an accurate model of how the body is built, and leave the question of his particular health where it belongs.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Malik came to this course convinced his stress response was too big, too sensitive, out of proportion. Run his near miss through this chapter and the picture changes. The instant reaction was the SAM axis firing before conscious thought. The lingering buzz was cortisol still climbing while adrenaline cleared. The vivid, unshakable memory was stress-enhanced consolidation filing a survival lesson. The trembling in the pulled-over car was the off-switch engaging on schedule. Every piece he read as malfunction is, mechanically, the system working. What this chapter can give Malik is an accurate model and a great deal of relief. What it cannot give him is a verdict on his own health, which is not ours to issue.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Malik asks you directly: "So is my stress response healthy or not?" Draft the honest answer. Notice how much you can say about the mechanism, and notice exactly where the sentence has to stop and hand off to someone qualified to evaluate him. That stopping point is the whole discipline of this course in a single conversation.</p>
+    </aside>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The same mediators of allostasis that protect the body in the short run can, when overused or inefficiently managed, contribute to disease.</p>
+    <cite>Bruce S. McEwen, <em>New England Journal of Medicine</em> (1998)</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The acute stress response runs on two arms with different speeds: the <strong>SAM axis</strong> releases adrenaline within <em>seconds</em> via a fast neural route; the <strong>HPA axis</strong> releases cortisol over <em>minutes</em> via a slower CRH → ACTH → cortisol hormonal cascade.</li>
+      <li>Cortisol's acute actions are adaptive and each solves a specific emergency problem: mobilizing glucose and fatty acids (fuel for muscle and brain), permissively supporting the cardiovascular surge, sharpening arousal and analgesia (focus on the threat), and dampening non-essential functions (digestion, growth, reproduction).</li>
+      <li>Cortisol is a <strong>coordinator</strong>, not a lone cause. Sapolsky et al. (2000) classify its actions as permissive, suppressive, stimulatory, and preparative.</li>
+      <li>Acute stress <em>enhances</em> immunity by mobilizing leukocytes to the body's frontiers (Dhabhar, 2014). Only <em>chronic</em> stress suppresses immune function, so the two timescales can have opposite effects on the same system.</li>
+      <li>The core architecture is a <strong>short-term loan</strong>: resources are borrowed from long-horizon systems on the assumption the emergency is brief and self-limiting. The design presupposes a working off-switch (Ulrich-Lai & Herman, 2009).</li>
+      <li>Per McEwen (1998), the same mediators that protect in the short term damage the body when overused. Acute stress is healthy <em>because</em> it is time-limited; chronic activation is where pathology begins.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have admired the loan. In Chapter 5 we follow what happens when it is never repaid. The threat that does not sprint and does not end keeps the HPA axis switched on for weeks and months, and one by one, every adaptive action you learned to celebrate today reverses into a liability. Glucose mobilization becomes insulin resistance. Immune enhancement becomes immune suppression. The off-switch that defines a healthy response begins to fail. Welcome to chronic stress: the same machinery, the wrong duration.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Chrousos, G. P. (2009). Stress and disorders of the stress system. <em>Nature Reviews Endocrinology, 5</em>(7), 374–381. https://doi.org/10.1038/nrendo.2009.106</p>
+    <p>Dhabhar, F. S. (2014). Effects of stress on immune function: The good, the bad, and the beautiful. <em>Immunologic Research, 58</em>(2–3), 193–210. https://doi.org/10.1007/s12026-014-8517-0</p>
+    <p>Herman, J. P., et al. (2011). The role of the hypothalamic–pituitary–adrenal axis in neuroendocrine responses to stress. <em>Dialogues in Clinical Neuroscience / PMC.</em> https://pmc.ncbi.nlm.nih.gov/articles/PMC3181830/</p>
+    <p>Joëls, M., &amp; Baram, T. Z. (2009). The neuro-symphony of stress. <em>Nature Reviews Neuroscience, 10</em>(6), 459–466. https://doi.org/10.1038/nrn2632</p>
+    <p>McEwen, B. S. (1998). Protective and damaging effects of stress mediators. <em>New England Journal of Medicine, 338</em>(3), 171–179. https://doi.org/10.1056/NEJM199801153380307</p>
+    <p>Sapolsky, R. M. (2004). <em>Why zebras don't get ulcers</em> (3rd ed.). Holt Paperbacks. https://us.macmillan.com/books/9780805073690/whyzebrasdontgetulcers/</p>
+    <p>Selye, H. (1936). A syndrome produced by diverse nocuous agents. <em>Nature, 138</em>(3479), 32. https://doi.org/10.1038/138032a0</p>
+    <p>Sapolsky, R. M., Romero, L. M., & Munck, A. U. (2000). How do glucocorticoids influence stress responses? Integrating permissive, suppressive, stimulatory, and preparative actions. <em>Endocrine Reviews, 21</em>(1), 55–89. https://doi.org/10.1210/edrv.21.1.0389</p>
+    <p>Tsigos, C., & Chrousos, G. P. (2002). Hypothalamic–pituitary–adrenal axis, neuroendocrine factors and stress. <em>Journal of Psychosomatic Research, 53</em>(4), 865–871. https://doi.org/10.1016/S0022-3999(02)00429-4</p>
+    <p>Ulrich-Lai, Y. M., & Herman, J. P. (2009). Neural regulation of endocrine and autonomic stress responses. <em>Nature Reviews Neuroscience, 10</em>(6), 397–409. https://doi.org/10.1038/nrn2647</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 4 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-timeline');
+    if(!root) return;
+    var slider = root.querySelector('#tl-slider');
+    var timeEl = root.querySelector('#tl-time');
+    var playBtn = root.querySelector('#tl-play');
+
+    // slider 0..120 maps to a nonlinear time axis (0s to 7200s / 2h)
+    function sliderToSeconds(v){
+      // first 20% of slider = 0..120s (the sprint), rest = up to 7200s
+      var f = v/120;
+      if(f <= 0.25){ return (f/0.25)*120; }
+      return 120 + ((f-0.25)/0.75)*(7200-120);
+    }
+    function fmt(s){
+      if(s < 90) return Math.round(s) + ' seconds';
+      if(s < 3600) return (s/60).toFixed(1).replace(/\.0$/,'') + ' minutes';
+      return (s/3600).toFixed(1).replace(/\.0$/,'') + ' hours';
+    }
+    // adrenaline: fast spike, peaks ~10s, cleared by ~10 min
+    function adrenaline(s){
+      if(s<=0) return 0;
+      var rise = Math.min(1, s/8);
+      var decay = Math.exp(-Math.max(0,s-10)/180);
+      return Math.max(0, rise*decay);
+    }
+    // cortisol: slower, peaks ~20 min (1200s), returns to baseline by ~90 min
+    function cortisol(s){
+      if(s<=0) return 0;
+      var t = s;
+      var rise = 1 - Math.exp(-t/500);
+      var fall = Math.exp(-Math.max(0,t-1200)/1600);
+      return Math.max(0, rise*fall);
+    }
+    function set(id, numId, pct, num){
+      var bar = root.querySelector(id); var n = root.querySelector(numId);
+      if(bar) bar.style.width = Math.round(pct) + '%';
+      if(n) n.textContent = (num===undefined ? Math.round(pct/10) : num);
+    }
+    function update(v){
+      var s = sliderToSeconds(v);
+      timeEl.textContent = fmt(s);
+      var a = adrenaline(s), c = cortisol(s);
+      var drive = Math.max(a, c*0.9); // overall emergency drive
+      set('#tl-adr','#tl-adr-n', a*100, Math.round(a*10));
+      set('#tl-cort','#tl-cort-n', c*100, Math.round(c*10));
+      // heart follows adrenaline mostly, sustained a bit by cortisol
+      var hr = Math.max(a, c*0.6);
+      set('#tl-hr','#tl-hr-n', hr*100, Math.round(hr*10));
+      // glucose follows cortisol with adrenaline kick
+      var glu = Math.max(a*0.7, c);
+      set('#tl-glu','#tl-glu-n', glu*100, Math.round(glu*10));
+      // alertness blends both
+      set('#tl-alert','#tl-alert-n', drive*100, Math.round(drive*10));
+      // downregulated: start at 10, dip with drive
+      var dig = 1 - drive*0.9;
+      set('#tl-dig','#tl-dig-n', dig*100, Math.round(dig*10));
+      var rep = 1 - drive*0.95;
+      set('#tl-rep','#tl-rep-n', rep*100, Math.round(rep*10));
+    }
+    slider.addEventListener('input', function(){ update(+slider.value); });
+
+    var playing = false, raf;
+    function play(){
+      if(playing){ playing=false; cancelAnimationFrame(raf); playBtn.textContent='▶ Play the whole event'; return; }
+      playing = true; playBtn.textContent='❚❚ Pause';
+      var v = 0; slider.value = 0;
+      var start = null;
+      function step(ts){
+        if(!playing) return;
+        if(start===null) start = ts;
+        var elapsed = ts - start;
+        v = Math.min(120, (elapsed/9000)*120); // ~9s to traverse
+        slider.value = v; update(v);
+        if(v < 120){ raf = requestAnimationFrame(step); }
+        else { playing=false; playBtn.textContent='▶ Play the whole event'; }
+      }
+      raf = requestAnimationFrame(step);
+    }
+    playBtn.addEventListener('click', play);
+    update(0);
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-budget');
+    if(!root) return;
+    var stateSel = root.querySelector('#bg-state');
+    var durSel = root.querySelector('#bg-dur');
+    var btn = root.querySelector('#bg-btn');
+    var verdict = root.querySelector('#bg-verdict');
+
+    var keys = ['surv','dig','imm','gro','rep'];
+    function setBar(k, val){
+      var bar = root.querySelector('#bg-'+k);
+      var n = root.querySelector('#bg-'+k+'-n');
+      if(bar) bar.style.width = Math.round(val) + '%';
+      if(n) n.textContent = Math.round(val);
+    }
+    // baseline: 20 each
+    var baseline = {surv:20, dig:20, imm:20, gro:20, rep:20};
+
+    // stress profiles: how survival dominates and what shrinks
+    var profiles = {
+      '90s': {surv:60, dig:12, imm:14, gro:8, rep:6,
+        verdict:'The sprint. Survival surges; everything else is briefly deferred. This debt is trivial, and it will be repaid in minutes. This is the response at its best.'},
+      '1h': {surv:64, dig:10, imm:14, gro:7, rep:5,
+        verdict:'A rough morning. Digestion and reproduction are throttled for an hour. Still easily repaid by lunch. Adaptive.'},
+      '1w': {surv:60, dig:12, imm:10, gro:10, rep:8,
+        verdict:'A deadline week. The loan is now overdue. Growth and repair are running a deficit; immune surveillance is dipping. The off-switch is straining.'},
+      '6mo': {surv:52, dig:14, imm:9, gro:13, rep:12,
+        verdict:'Chronic activation. The loan is never repaid. Chronically defunded immunity, digestion, growth, and reproduction are where disease begins, and that is the subject of Chapter 5.'}
+    };
+
+    function render(){
+      var st = stateSel.value;
+      if(st === 'rest'){
+        keys.forEach(function(k){ setBar(k, baseline[k]); });
+        verdict.textContent = 'Budget balanced. All systems funded equally. This is homeostasis, the state the loan is meant to return you to.';
+        return;
+      }
+      var p = profiles[durSel.value];
+      keys.forEach(function(k){ setBar(k, p[k]); });
+      var borrowed = (baseline.dig - p.dig) + (baseline.imm - p.imm) + (baseline.gro - p.gro) + (baseline.rep - p.rep);
+      verdict.textContent = 'Borrowed for survival: ~' + Math.round(borrowed) + ' units diverted from digestion, immunity, growth, and reproduction. ' + p.verdict;
+    }
+    stateSel.addEventListener('change', function(){
+      durSel.disabled = (stateSel.value === 'rest');
+      render();
+    });
+    durSel.addEventListener('change', render);
+    btn.addEventListener('click', render);
+    durSel.disabled = true;
+    render();
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+</body>
+</html>

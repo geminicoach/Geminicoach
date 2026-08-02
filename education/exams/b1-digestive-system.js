@@ -18,7 +18,7 @@ window.GEM_EXAM = {
       "id": "b1-c1-mc-1",
       "chapter": 1,
       "type": "mc",
-      "q": "A client asks why the small intestine, rather than the stomach, is described as the main site of nutrient uptake. Which structural feature best explains the small intestine's absorptive capacity?",
+      "q": "A person asks why the small intestine, rather than the stomach, is described as the main site of nutrient uptake. Which structural feature best explains the small intestine's absorptive capacity?",
       "options": [
         "Its thick muscular wall churns food more forcefully than the stomach",
         "Folds, villi, and microvilli multiply its surface area enormously",
@@ -33,7 +33,7 @@ window.GEM_EXAM = {
       "id": "b1-c2-mc-1",
       "chapter": 2,
       "type": "mc",
-      "q": "A client takes a fiber supplement marketed for regularity but sees no change in symptoms tied to fermentation. Which distinction best explains why a fiber supplement is not automatically microbiome food?",
+      "q": "A person takes a fiber supplement marketed for regularity but sees no change in symptoms tied to fermentation. Which distinction best explains why a fiber supplement is not automatically microbiome food?",
       "options": [
         "Fermentability, not solubility, drives the microbial biology, and not all fiber is fermentable",
         "All soluble fiber is non-fermentable and only adds bulk",
@@ -63,7 +63,7 @@ window.GEM_EXAM = {
       "id": "b1-c3-mc-1",
       "chapter": 3,
       "type": "mc",
-      "q": "A client read online that gut-made serotonin directly lifts mood. Based on the chapter, what is the most accurate correction?",
+      "q": "A person read online that gut-made serotonin directly lifts mood. Based on the chapter, what is the most accurate correction?",
       "options": [
         "Gut serotonin is the same pool that the brain uses for mood",
         "The gut makes almost no serotonin, so the claim is backwards",
@@ -93,7 +93,7 @@ window.GEM_EXAM = {
       "id": "b1-c4-mc-2",
       "chapter": 4,
       "type": "mc",
-      "q": "A client with greasy, floating, foul-smelling stools and weight loss asks what such a pattern can indicate. Which condition does the chapter associate with this hallmark of steatorrhea?",
+      "q": "A person with greasy, floating, foul-smelling stools and weight loss asks what such a pattern can indicate. Which condition does the chapter associate with this hallmark of steatorrhea?",
       "options": [
         "Lactose intolerance from a single missing brush border enzyme",
         "Acid reflux from a leaking valve",
@@ -102,13 +102,13 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "Steatorrhea (greasy, floating, foul stools plus weight loss) is the hallmark of exocrine pancreatic insufficiency; note this is educate-and-refer, not a coaching diagnosis."
+      "explanation": "Steatorrhea (greasy, floating, foul stools plus weight loss) is the hallmark of exocrine pancreatic insufficiency; note this is educate-and-refer, not an educational diagnosis."
     },
     {
       "id": "b1-c5-mc-1",
       "chapter": 5,
       "type": "mc",
-      "q": "A client reports their belly looks visibly distended after meals, but a careful history suggests they are not eating unusual amounts. Based on the chapter's mechanism for distension, what is the best framing to offer?",
+      "q": "A person reports their belly looks visibly distended after meals, but a careful history suggests they are not eating unusual amounts. Based on the chapter's mechanism for distension, what is the best framing to offer?",
       "options": [
         "The visible bulge reliably reflects the actual volume of gas trapped in the gut, so reducing gas is the priority",
         "Visible girth and internal gas volume are only loosely coupled; a shape change in the muscular container (abdominophrenic dyssynergia) can produce the bulge",
@@ -123,7 +123,7 @@ window.GEM_EXAM = {
       "id": "b1-c5-mc-2",
       "chapter": 5,
       "type": "mc",
-      "q": "A client says antacids relieve their occasional heartburn, and concludes this proves they make too much stomach acid. Reading the signal backwards, what does the relief actually demonstrate?",
+      "q": "A person says antacids relieve their occasional heartburn, and concludes this proves they make too much stomach acid. Reading the signal backwards, what does the relief actually demonstrate?",
       "options": [
         "That the stomach is overproducing acid and the factory needs to be slowed",
         "That the person has GERD and should start a long-term acid-suppression plan",
@@ -138,7 +138,7 @@ window.GEM_EXAM = {
       "id": "b1-c5-mc-3",
       "chapter": 5,
       "type": "mc",
-      "q": "Two clients both report watery diarrhea. The chapter (per Keely and Barrett, 2022, and Camilleri and colleagues, 2017) stresses that this single complaint can arise from distinct physiologies. Which pairing correctly separates them?",
+      "q": "Two people both report watery diarrhea. The chapter (per Keely and Barrett, 2022, and Camilleri and colleagues, 2017) stresses that this single complaint can arise from distinct physiologies. Which pairing correctly separates them?",
       "options": [
         "Fast transit leaving too little time to reabsorb water versus active secretion of chloride and water into the lumen",
         "Too much fiber versus too little fiber, with no other mechanism involved",
@@ -153,7 +153,7 @@ window.GEM_EXAM = {
       "id": "b1-c6-mc-4",
       "chapter": 6,
       "type": "mc",
-      "q": "A new client states matter-of-factly, \"I have IBS, it flares whenever I eat.\" They have never seen a clinician. What is the most appropriate coaching response within scope?",
+      "q": "A new person states matter-of-factly, \"I have IBS, it flares whenever I eat.\" They have never seen a clinician. What is the most appropriate educational response within scope?",
       "options": [
         "Agree that it is probably IBS and start an IBS-specific food plan right away",
         "Tell them it is likely SIBO instead and suggest a breath test",
@@ -162,13 +162,13 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "IBS is a positive, criteria-based clinical diagnosis (Rome IV) that presumes a clinician has considered and excluded organic mimics. A self-applied label skips that step, which the coach is not qualified to perform. Educate and refer; do not say someone probably has IBS or start an IBS plan on a self-label."
+      "explanation": "IBS is a positive, criteria-based clinical diagnosis (Rome IV) that presumes a clinician has considered and excluded organic mimics. A self-applied label skips that step, which the educator is not qualified to perform. Educate and refer; do not say someone probably has IBS or start an IBS plan on a self-label."
     },
     {
       "id": "b1-c6-mc-5",
       "chapter": 6,
       "type": "mc",
-      "q": "A client suspects they have celiac disease and asks whether they should try cutting out gluten for a month to see if they feel better. What is the correct, in-scope guidance?",
+      "q": "A person suspects they have celiac disease and asks whether they should try cutting out gluten for a month to see if they feel better. What is the correct, in-scope guidance?",
       "options": [
         "Yes, a diagnostic gluten elimination is the simplest way to confirm celiac at home",
         "No; testing (serology plus confirming biopsy) must come first, while still eating gluten, so a clinician should be seen before any gluten change",
@@ -177,13 +177,13 @@ window.GEM_EXAM = {
       ],
       "answer": 1,
       "points": 1,
-      "explanation": "Celiac is diagnosed by serology plus a confirming biopsy, which must happen before gluten is removed, because removing gluten first can mask the disease and invalidate testing. A coach should never suggest a diagnostic gluten elimination; testing, and therefore a clinician, comes first."
+      "explanation": "Celiac is diagnosed by serology plus a confirming biopsy, which must happen before gluten is removed, because removing gluten first can mask the disease and invalidate testing. An educator should never suggest a diagnostic gluten elimination; testing, and therefore a clinician, comes first."
     },
     {
       "id": "b1-c7-mc-6",
       "chapter": 7,
       "type": "mc",
-      "q": "A client sleeping five and a half hours a night asks which probiotic to buy to repair their gut barrier. Using the chapter's order of leverage and the Sun and colleagues (2023) findings on sleep loss, what is the highest-leverage response?",
+      "q": "A person sleeping five and a half hours a night asks which probiotic to buy to repair their gut barrier. Using the chapter's order of leverage and the Sun and colleagues (2023) findings on sleep loss, what is the highest-leverage response?",
       "options": [
         "Recommend the most expensive multi-strain probiotic, since barrier repair starts with supplements",
         "Suggest a butyrate supplement to bottle the molecule directly and skip the foundations",
@@ -198,7 +198,7 @@ window.GEM_EXAM = {
       "id": "b1-c8-mc-1",
       "chapter": 8,
       "type": "mc",
-      "q": "A client takes a large iron supplement with a cup of strong tea right after a meal and wonders why their iron status has not improved. Based on the chapter, which combination best explains the poor non-heme iron uptake?",
+      "q": "A person takes a large iron supplement with a cup of strong tea right after a meal and wonders why their iron status has not improved. Based on the chapter, which combination best explains the poor non-heme iron uptake?",
       "options": [
         "Tea polyphenols and the timing of a large dose with food both inhibit non-heme iron at the duodenum",
         "Iron is absorbed in the terminal ileum, so meal timing is irrelevant",
@@ -228,7 +228,7 @@ window.GEM_EXAM = {
       "id": "b1-c8-mc-3",
       "chapter": 8,
       "type": "mc",
-      "q": "A client splits their magnesium into smaller doses across the day rather than one large dose. Which absorption principle does this strategy use?",
+      "q": "A person splits their magnesium into smaller doses across the day rather than one large dose. Which absorption principle does this strategy use?",
       "options": [
         "Paracellular transport is faster for small volumes",
         "Bile is only available in small amounts at a time",
@@ -258,7 +258,7 @@ window.GEM_EXAM = {
       "id": "b1-c9-mc-5",
       "chapter": 9,
       "type": "mc",
-      "q": "A client reports that even a trace of peanut causes hives and lip swelling within minutes. According to the chapter, the single most important thing a coach should do is:",
+      "q": "A person reports that even a trace of peanut causes hives and lip swelling within minutes. According to the chapter, the single most important thing an educator should do is:",
       "options": [
         "Run a structured elimination and reintroduction to confirm the food",
         "Suggest an at-home IgG panel to map the reaction",
@@ -267,13 +267,13 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "Fast, trace-triggered reactions like hives and lip swelling point to an IgE-mediated allergy, a medical condition. The coach refers to an allergist and never advises an eat-it-to-test approach; this can risk anaphylaxis."
+      "explanation": "Fast, trace-triggered reactions like hives and lip swelling point to an IgE-mediated allergy, a medical condition. The educator refers to an allergist and never advises an eat-it-to-test approach; this can risk anaphylaxis."
     },
     {
       "id": "b1-c10-mc-6",
       "chapter": 10,
       "type": "mc",
-      "q": "A client on a long-term PPI mentions new fatigue and asks if they should just stop the drug to fix their nutrient levels. Based on the chapter, the coach's correct response is to:",
+      "q": "A person on a long-term PPI mentions new fatigue and asks if they should just stop the drug to fix their nutrient levels. Based on the chapter, the educator's correct response is to:",
       "options": [
         "Agree, since stopping the PPI will quickly restore B12 and iron",
         "Tell them to halve the dose to reduce nutrient losses",
@@ -282,7 +282,7 @@ window.GEM_EXAM = {
       ],
       "answer": 2,
       "points": 1,
-      "explanation": "PPIs can reduce B12, non-heme iron, magnesium, and some calcium. The coach may notice the pattern and route to a prescriber or pharmacist, but never advises stopping or changing the dose; rebound acid hypersecretion is real and tapering is clinical."
+      "explanation": "PPIs can reduce B12, non-heme iron, magnesium, and some calcium. The educator may notice the pattern and route to a prescriber or pharmacist, but never advises stopping or changing the dose; rebound acid hypersecretion is real and tapering is clinical."
     },
     {
       "id": "b1-c2-tf-1",
@@ -360,7 +360,7 @@ window.GEM_EXAM = {
       ],
       "answer": 0,
       "points": 1,
-      "explanation": "Opioids bind mu-opioid receptors in the enteric nervous system, slowing transit and cutting secretion. The colon does not develop tolerance, so constipation persists and often needs medical management; the coach supports fiber, fluids, and movement and refers."
+      "explanation": "Opioids bind mu-opioid receptors in the enteric nervous system, slowing transit and cutting secretion. The colon does not develop tolerance, so constipation persists and often needs medical management; the educator supports fiber, fluids, and movement and refers."
     }
   ]
 };
