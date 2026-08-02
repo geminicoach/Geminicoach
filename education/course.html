@@ -70,6 +70,9 @@
     .bar { height:8px; background:#10243f; border-radius:99px; overflow:hidden; }
     .fill { height:100%; background:linear-gradient(90deg,var(--blue),var(--blue-bright)); border-radius:99px; transition:width .25s; }
     .ch.done { border-color:#2a6b46; background:linear-gradient(180deg,rgba(46,204,113,.07),var(--panel)); }
+    .ch.locked { opacity:.5; }
+    .ch.locked .num { background:rgba(138,154,181,.12); color:var(--gray); }
+    .ch .lockmsg { font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; text-transform:uppercase; font-size:12px; color:var(--gray); margin-top:6px; }
     .rt .donew { display:flex; align-items:center; gap:6px; margin-top:10px; font-size:12.5px; color:var(--off-white); cursor:pointer; white-space:nowrap; }
     .rt .donew input { cursor:pointer; width:15px; height:15px; }
     footer { max-width:880px; margin:0 auto; padding:24px; color:var(--gray); font-size:12.5px; border-top:1px solid var(--line); }
@@ -148,22 +151,32 @@
       function toggleDone(pos){ var a=getDone(); var i=a.indexOf(pos); if(i===-1) a.push(pos); else a.splice(i,1); setDone(a); }
       function doneCount(){ return chs.filter(function(ch){ return isDone(ch.position); }).length; }
 
-      var list = chs.map(function (ch) {
-        var done = isDone(ch.position);
-        return '<div class="ch' + (done?' done':'') + '" data-pos="' + esc(ch.position) + '"><div class="num">' + esc(ch.position) + '</div><div>'
-          + '<h3>' + esc(ch.title) + '</h3><p>' + esc(ch.subtitle||"") + '</p>'
-          + '<div class="links">'
-          + (ch.reading ? '<a class="read" href="' + esc(ch.reading) + '">Read chapter</a>' : '')
-          + (ch.quiz ? '<a class="aux" href="' + esc(ch.quiz) + '">Quiz</a>' : '')
-          + (ch.challenge ? '<a class="aux" href="' + esc(ch.challenge) + '">Weekly challenge</a>' : '')
-          + (ch.worksheet ? '<a class="aux" href="' + esc(ch.worksheet) + '">Worksheet</a>' : '')
-          + (ch.caseAssignment ? '<a class="aux" href="' + esc(ch.caseAssignment) + '">Case assignment</a>' : '')
-          + (ch.cheatsheet ? '<a class="aux" href="' + esc(ch.cheatsheet) + '">Cheat-sheet</a>' : '')
-          + '</div></div>'
-          + '<div class="rt"><span class="mins">~' + esc(ch.minutes||c.minutes_per_chapter||60) + ' min</span>'
-          + '<label class="donew"><input type="checkbox" class="donecb" data-pos="' + esc(ch.position) + '"' + (done?' checked':'') + '> Done</label>'
-          + '</div></div>';
-      }).join("");
+      // sequential unlock: chapter N is open only when N-1 is done (chapter 1 always open; bypass opens all)
+      function listHTML(){
+        return chs.map(function (ch, i) {
+          var done = isDone(ch.position);
+          var unlocked = bypass || i===0 || isDone(chs[i-1].position);
+          if (!unlocked) {
+            return '<div class="ch locked" data-pos="' + esc(ch.position) + '"><div class="num">' + esc(ch.position) + '</div><div>'
+              + '<h3>' + esc(ch.title) + '</h3><p>' + esc(ch.subtitle||"") + '</p>'
+              + '<div class="lockmsg">Finish the previous chapter to unlock</div></div>'
+              + '<div class="rt"><span class="mins">~' + esc(ch.minutes||c.minutes_per_chapter||60) + ' min</span></div></div>';
+          }
+          return '<div class="ch' + (done?' done':'') + '" data-pos="' + esc(ch.position) + '"><div class="num">' + esc(ch.position) + '</div><div>'
+            + '<h3>' + esc(ch.title) + '</h3><p>' + esc(ch.subtitle||"") + '</p>'
+            + '<div class="links">'
+            + (ch.reading ? '<a class="read" href="' + esc(ch.reading) + '">Read chapter</a>' : '')
+            + (ch.quiz ? '<a class="aux" href="' + esc(ch.quiz) + '">Quiz</a>' : '')
+            + (ch.challenge ? '<a class="aux" href="' + esc(ch.challenge) + '">Weekly challenge</a>' : '')
+            + (ch.worksheet ? '<a class="aux" href="' + esc(ch.worksheet) + '">Worksheet</a>' : '')
+            + (ch.caseAssignment ? '<a class="aux" href="' + esc(ch.caseAssignment) + '">Case assignment</a>' : '')
+            + (ch.cheatsheet ? '<a class="aux" href="' + esc(ch.cheatsheet) + '">Cheat-sheet</a>' : '')
+            + '</div></div>'
+            + '<div class="rt"><span class="mins">~' + esc(ch.minutes||c.minutes_per_chapter||60) + ' min</span>'
+            + '<label class="donew"><input type="checkbox" class="donecb" data-pos="' + esc(ch.position) + '"' + (done?' checked':'') + '> Done</label>'
+            + '</div></div>';
+        }).join("");
+      }
 
       var nQuiz = chs.filter(function(x){return x.quiz;}).length;
       var nChal = chs.filter(function(x){return x.challenge;}).length;
@@ -189,9 +202,10 @@
       }
 
       body.innerHTML = startBtn + '<div id="prog-slot">' + progressHTML() + '</div>'
-        + list + included + '<div id="ce-slot">' + ceHTML() + '</div>';
+        + '<div id="list-slot">' + listHTML() + '</div>' + included + '<div id="ce-slot">' + ceHTML() + '</div>';
 
       function repaint(){
+        var ls=document.getElementById("list-slot"); if(ls) ls.innerHTML=listHTML();
         var ps=document.getElementById("prog-slot"); if(ps) ps.innerHTML=progressHTML();
         var cs=document.getElementById("ce-slot"); if(cs) cs.innerHTML=ceHTML();
       }
