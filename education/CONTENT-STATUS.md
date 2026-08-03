@@ -11,6 +11,10 @@
 - NO em-dashes anywhere. NO "ClassBuild" branding.
 - Two interactive `ch-widget` blocks per chapter preserved (came from ClassBuild export).
 
+## TWO STANDARDS LOCKED 2026-08-03 (apply to ALL modules + every future build)
+1. **Em-dash regulation.** No em-dashes (—), no em-dash entities (&mdash;, &#8212;) anywhere in learner-facing content. Convert to commas or parentheses. En-dashes (–) in compound labels (e.g. "Brain–Gut–HPA") should be plain hyphens too. Applies to chapters, homework, quizzes, weekly challenges, exam banks. (Catalog-wide sweep of A1-A4/B1/B2 quiz+challenge files is task #26, still pending; B3 was authored clean. Two em-dashes remain in courses-data.js code COMMENTS only, lines 1 & 20, cosmetic.)
+2. **Acronym / receptor expansion.** Spell out every abbreviation and receptor in FULL on first use, then the acronym in parentheses, e.g. "glucocorticoid receptor (GR)", "estrogen receptor alpha (ER-alpha)", "hypothalamic-pituitary-adrenal (HPA) axis", "cortisol awakening response (CAR)". Knowing the full receptor name is a learning objective, not optional. B2's ER-alpha/ER-beta gap is the origin of this rule; fix it in the #26 sweep. B3 authored to this standard throughout.
+
 ## Catalog state
 - **Track A (A1–A4)** — complete, CE depth, QC-clean, **published**.
 - **B1 — The Digestive System (10 ch: 8 core + 2 bonus)** — ✅ ALL 10 chapters expanded to CE depth AND voice/tone-swept to Parker's voice (2026-06-23). 0 em-dashes, 20 widgets intact (2/ch), References present. **Held from publish** until homework + extra material added.
@@ -70,7 +74,7 @@ A1, A2, A3, A4, B1, B2 all have: CE-depth chapters + full homework (worksheet + 
 ### ✅ A-track chapters role-neutral (DONE): all 32 A1-A4 chapters swept role-neutral (prose + callout labels renamed to "In practice"/"Where education ends" + learner-visible widget-script feedback fixed). Verified: 0 "client", 0 coach-framing in prose across A1-A4. Only residuals are invisible JS identifiers (a `coach:` data key in one A4 widget) and one legitimate study description ("coached by health educators"). ENTIRE CATALOG (A1-A4, B1, B2) is now fully role-neutral and consistent.
 NOTE: these A-track chapter edits (this sweep) are UNCOMMITTED - another `git add education/ && commit && push` needed.
 Homework build pattern = B1's: worksheet (applied parts + CE-grade "Scope of Practice" section, role-neutral), case-assignment (role-neutral "Consider [Name]..." scenario + free-response + visible rubric + hidden machine-readable AI-grader rubric comment + unique localStorage key), cheat-sheet (one-page reference). Add the gem-theme-paper.css link to each. Then exam bank per EXAM-SPEC.md (full .full.js + interim MC/TF .js) and wire into courses-data.js + catalog.
-| B3 | Cortisol & the Stress-Hormone System | ? | Stage 0 — not yet generated in ClassBuild |
+| B3 | Cortisol & the Stress-Hormone System | 13 | ✅ COMPLETE + PUBLISHED. 13 chapters expanded to CE depth (0 em-dash, 2 widgets each, role-neutral, acronyms spelled out). 39 homework files (worksheet/case/cheat-sheet per ch, gem-theme-paper.css, hidden AI-grader rubrics pass_threshold:70, localStorage gemHw:b3:case1-13; case names Corinne/Bram/Noelle/Tomas/Greta/Amir/Selina/Otto/Della/Rourke/Petra/Cyrus/Willa). Exam bank exams/b3-cortisol.js (26 items, 20 MC+6 TF, draw 20, pass 80, contact_hours 13, ceu 1.3) + .full.js (36 all-types). Wired into courses-data.js (13-chapter array + homework fields, published:true). Chapter personas: Elias/Reuben/Sana/Malik/Wendy/Hector/Yara/Idris/Beatrice/Quentin/Freya/Roland/Sasha. |
 | B4 | Reading Your Bloodwork | ? | Stage 0 — not yet generated |
 | B5 | Nervous System I: Foundations | ? | Stage 0 — not yet generated |
 | B6 | Nervous System II: Applied | ? | Stage 0 — not yet generated |
