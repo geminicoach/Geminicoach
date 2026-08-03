@@ -1,4 +1,4 @@
-/* Gemini Education — catalog + curriculum data (plain classic script, no modules/fetch).
+/* Gemini Education , catalog + curriculum data (plain classic script, no modules/fetch).
    Loaded via <script src="courses-data.js"></script>, sets window.GEMINI_COURSES.
    To publish a course: add its files under courses/<slug>/, fill in `chapters`, set published:true.
    To feature a learning path: add/edit an entry in `stacks`. */
@@ -17,7 +17,7 @@ window.GEMINI_COURSES = {
     { id: "E", name: "Systems & Metabolism" }
   ],
 
-  // Curated "builds" — ordered learning paths drawn from the prerequisite map.
+  // Curated "builds" , ordered learning paths drawn from the prerequisite map.
   stacks: [
     { slug: "stack-nutrition", name: "Nutrition, front to back", advanced: false,
       blurb: "The complete nutrition path, from food literacy to advanced strategy.",
