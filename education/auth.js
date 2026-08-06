@@ -77,6 +77,14 @@
           .order("issued_at", { ascending: false }).then(function (r) { return r.data || []; });
       });
     },
+    // best exam score per course (read-only; returns [] if none/blocked)
+    listExamAttempts: function () {
+      return this._uid().then(function (id) {
+        if (!id) return [];
+        return sb.from("exam_attempts").select("course_slug,score,passed,created_at").eq("user_id", id)
+          .then(function (r) { return r.data || []; }, function () { return []; });
+      });
+    },
 
     // current session access token (a real Supabase JWT) or null
     getAccessToken: function () {
