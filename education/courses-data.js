@@ -99,7 +99,7 @@ window.GEMINI_COURSES = {
       ]
     },
         {
-      slug:"a2-macro-micro-diet", code:"A2", track:"A", title:"Macro & Micronutrients + Building a Diet",
+      slug:"a2-macro-micro-diet", code:"A2", track:"A", title:"Macro & Micronutrients + Building a Diet", image:"covers/a2.png",
       description:"From the macros and micros to setting real targets and building a diet you'll actually follow.",
       level:"Core", minutes_per_chapter:33, published:true,
       chapters:[
@@ -416,7 +416,7 @@ window.GEMINI_COURSES = {
           quiz:"courses/b2-endocrine-hormones/quiz-12-the-whole-symphony-putting-hormones-together.html",
           challenge:"courses/b2-endocrine-hormones/weekly-challenge-12-the-whole-symphony-putting-hormones-together.html" },
       ] },
-    { slug:"b3-cortisol", code:"B3", track:"B", title:"Cortisol & the Stress-Hormone System",
+    { slug:"b3-cortisol", code:"B3", track:"B", title:"Cortisol & the Stress-Hormone System", image:"covers/b3.png",
       description:"Cortisol as a vital molecule, not a villain, and what chronic stress actually does to metabolism, immunity, the gut, sleep, mood, and training, at CEU-style depth.",
       level:"Advanced", minutes_per_chapter:45, published:true,
       chapters:[
@@ -511,11 +511,11 @@ window.GEMINI_COURSES = {
           worksheet:"courses/b3-cortisol/worksheet-13-working-with-the-system-evidence-based-stress-management.html",
           caseAssignment:"courses/b3-cortisol/case-assignment-13-working-with-the-system-evidence-based-stress-management.html",
           cheatsheet:"courses/b3-cortisol/cheat-sheet-13-working-with-the-system-evidence-based-stress-management.html" } ] },
-    { slug:"b4-reading-bloodwork", code:"B4", track:"B", title:"Reading Your Bloodwork",
+    { slug:"b4-reading-bloodwork", code:"B4", track:"B", title:"Reading Your Bloodwork", image:"covers/b4.png",
       description:"Read your own common lab panels: normal vs. optimal, and what training and supplements shift.", level:"Advanced", published:false },
-    { slug:"b5-nervous-system-i", code:"B5", track:"B", title:"Nervous System I: Foundations",
+    { slug:"b5-nervous-system-i", code:"B5", track:"B", title:"Nervous System I: Foundations", image:"covers/b5.png",
       description:"A working model of the nervous system: structure, signaling, stress, and recovery.", level:"Core", published:false },
-    { slug:"b6-nervous-system-ii", code:"B6", track:"B", title:"Nervous System II: Applied",
+    { slug:"b6-nervous-system-ii", code:"B6", track:"B", title:"Nervous System II: Applied", image:"covers/b6.png",
       description:"Motor control, the neuromuscular system, skill acquisition, and CNS fatigue.", level:"Advanced", published:false },
 
     // ---- Track C: Movement & Recovery ----
