@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Brain That Rewires Itself</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 8 &middot; Module 3</div>
+    <h1 class="ch-title">The Brain That <em>Rewires</em> Itself</h1>
+    <p class="ch-subtitle">How experience physically reshapes the nervous system, one strengthened synapse at a time.</p>
+    <div class="ch-meta">
+      <span>70 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>9 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">I</span>n 2004, a team at the University of Regensburg took a group of adults who had never juggled and handed each of them three beanbags. The instruction was simple: learn to keep the beanbags in the air. Over three months the volunteers practiced, and before, during, and after, researchers scanned their brains. When the results came back, something quietly remarkable had happened. The brains had changed shape. A region tucked into the visual cortex, an area that tracks motion, had physically expanded in the jugglers and not in a matched group who never touched a beanbag. Then the researchers told the jugglers to stop practicing. Three months later they scanned again. The expansion had partly melted away (Draganski et al., 2004).</p>
+    <p>Read that sequence again, because it overturns the picture of the nervous system this course has been building. Learn a skill, and gray matter grows. Abandon the skill, and it recedes. The brain is not the fixed circuit board it has been treated as up to now. It is a living structure that remodels itself in response to what a person does, and what a person stops doing.</p>
+    <p>The Regensburg team had not stumbled onto a curiosity. Their design was careful precisely because the claim was so large: a matched, non-juggling comparison group was scanned on the same schedule and showed no such change, which is what let the researchers attribute the growth to the juggling itself rather than to age, time, or simply being scanned twice. Studies like this one are the reason the promise of plasticity is not folk wisdom or motivational poster material. Stroke survivors who recover movement are drawing on the same mechanism, as nearby, undamaged cortex gradually takes over functions once handled by injured tissue. People who lose their sight early in life and learn to read Braille are drawing on it too, as the visual cortex, deprived of its usual input, is recruited to help process fine touch. None of that is this chapter's clinical territory, but it is the same underlying biology this chapter is built to explain in its ordinary, everyday form.</p>
+    <p>Throughout this chapter you will follow one learner, Dmitri, a 54-year-old shipping-dock supervisor who decided, the week his youngest daughter left for college, to finally learn the violin he had abandoned at twelve. Dmitri is not a case study and not a patient. He is a stand-in for the ordinary confusion that surrounds learning as an adult, and his missteps are useful precisely because they are common ones. In his first month he practiced the way he assumed practice was supposed to work, in one long, exhausting session each Saturday, bow arm aching, fingertips sore, convinced that packing more hours into a single sitting would get him there fastest. A month later he could barely hold a tune, and he was ready to quit. He is not a case to be solved. He is a thread we will follow through the mechanics of plasticity, and by the end of the chapter his Saturday marathon sessions will look like exactly the mistake the science predicts.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The assumption we are about to overturn</h2>
+    <p>Up to now, this course has leaned on a deliberately useful fiction. We described the neuron as a signaling unit in Chapter 2, the synapse as a junction where one cell speaks to the next in Chapter 3, the autonomic branches as patterned circuits in Chapter 5, the sensory cortex as a map of the body in Chapter 6, and motor learning as the refinement of movement commands in Chapter 7. In each case we implied a kind of permanence, as if the wiring were laid down once and simply used thereafter.</p>
+    <p>That fiction was scaffolding. It let us learn the parts before asking the harder question: where do the connections come from, and what keeps them the way they are? The answer is one of the most consequential ideas in modern neuroscience, and it is the thread that ties this entire course together. The nervous system is <span class="ch-key">plastic</span>, capable of structural and functional change throughout life. <span class="ch-key">Neuroplasticity</span> is not a special feature reserved for children or for recovery from injury. It is the ordinary, continuous mechanism behind every skill a learner has ever acquired, every habit ever formed, and every recovery ever made.</p>
+    <p>The word plastic here does not mean flimsy. It borrows an older sense, the one used in plastic arts, sculpture, of something that can be molded and then holds its new shape. That double meaning is exactly right. The nervous system is soft enough to be shaped by experience and stable enough to keep the shape until experience reshapes it again.</p>
+    <p>For much of the twentieth century, neuroscience taught something closer to the opposite. The dominant view held that the brain's wiring was essentially fixed after a childhood critical period, and that adult neurons could die but not meaningfully rewire. That view has not survived contact with the evidence. The jugglers in Regensburg were adults, most well into their twenties and thirties, and their motion-tracking cortex still expanded after three months of practice. Adult plasticity is smaller in some respects than the plasticity of a developing brain, and it is not equally easy in every circuit, but the doors it opens do not close at some fixed age and lock.</p>
+    <p>It is worth being precise about what changed in the field's thinking, because the correction matters as much as the original claim. Early and mid-century neuroscience was not wrong that childhood shows heightened plasticity in certain systems, language acquisition and basic visual wiring among them. It was wrong to generalize that heightened childhood plasticity into a rule that adult circuits were essentially static. The modern picture, the one this course adopts, is a spectrum rather than a switch: some circuits are more readily reshaped early in life, some retain a lifelong capacity for change, and the degree of plasticity available at any age depends heavily on the four conditions this chapter builds toward, attention, repetition, spacing, and sleep. A fixed brain would make the rest of this course, and the effort a learner puts into it, beside the point. A plastic one makes the effort the whole point.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further: name one thing you can do now that you could not do five years ago, a language phrase, a musical passage, a physical technique, even a route you drive without thinking. That capacity is not stored in some abstract mind. It is physically instantiated in altered connections. What do you think had to change for it to become automatic?</p>
+    </aside>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common belief holds that meaningful brain change belongs to childhood, and that by adulthood the wiring is essentially set, for better or worse. The Regensburg study alone argues against this: adult brains grew new cortical territory from three months of juggling practice, and lost some of it again once practice stopped. Neuroplasticity slows in some respects with age and is not identical across every circuit, but it does not switch off. The wiring stays live for as long as a person is alive.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;overflow:visible;">
+      <img src="img/ch8-img1.jpg" alt="Two hands juggling three beanbags, with the faint outline of a brain in the background and a highlighted motion tracking region" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;">
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Learning to juggle expanded a motion tracking region of the visual cortex, and stopping the practice partly reversed the change.</em></figcaption>
+  </figure>
+
+  <section class="ch-section">
+    <h2>Start at the synapse: fire together, wire together</h2>
+    <p>To understand how a whole brain region can grow, return to the smallest unit of change, the synapse introduced in Chapter 3. Recall the basic transaction. A presynaptic neuron releases neurotransmitter, which binds receptors on a postsynaptic neuron, nudging it toward or away from firing. What that earlier chapter did not stress is that this junction is not a fixed valve. Its strength is adjustable. The same presynaptic spike can produce a large postsynaptic response or a small one, depending on the recent history of the connection.</p>
+    <p>The organizing principle was articulated by the psychologist Donald Hebb in 1949, and it is usually compressed into a slogan: <span class="ch-key">cells that fire together, wire together</span>. The fuller version carries more precision. Hebb proposed that when one neuron repeatedly and persistently takes part in firing another, some growth process or metabolic change strengthens the connection between them. The causal ordering matters, since neuron A helps cause neuron B to fire, but the memorable phrase captures the essence: co-active neurons build stronger links.</p>
+    <p>The mirror image principle is just as important and often forgotten: connections that are not used tend to weaken. Kleim and Jones (2008), reviewing the empirical principles of plasticity, place two of them side by side, use it or lose it and use it and improve it. A synapse is not neutral about neglect. Idle connections are pruned, active ones are reinforced. Plasticity is therefore always a two-way process of strengthening and weakening, and any honest model has to hold both.</p>
+
+    <h3>From a slogan to a laboratory finding</h3>
+    <p>Hebb's idea was a theory in 1949. The physiological demonstration came in 1973, when Timothy Bliss and Terje Lomo published one of the most cited findings in neuroscience. Working in the hippocampus of anaesthetized rabbits, they delivered a brief burst of high frequency stimulation to an input pathway and then measured how the receiving cells responded to ordinary test pulses afterward. The receiving synapses had become dramatically more responsive, and stayed that way. The enhancement lasted from thirty minutes to as long as ten hours (Bliss &amp; Lomo, 1973).</p>
+    <p>They had discovered <span class="ch-key">long-term potentiation (LTP)</span>: a persistent, use-dependent increase in synaptic strength produced by intense co-activation. We will keep LTP conceptual rather than biochemical here, since a learner does not need the molecular cascade to grasp the working model. What matters is the shape of the phenomenon. Fire a pathway hard enough, and the synapses along it become more efficient at the same task, and the change outlasts the stimulation by hours. Repeat the experience and the change can last far longer. Here, at last, was physical evidence for Hebb: repeated use does not merely employ a synapse, it modifies it.</p>
+    <p>Why does this matter for memory and skill? Because if experience can leave a persistent trace in the efficiency of a connection, then the pattern of a person's experiences can be written into the pattern of their synapses. Abraham and colleagues (2019), reviewing decades of work, describe LTP as the most studied and most memory-linked form of synaptic plasticity in the mammalian brain, the leading candidate for the cellular substrate of long-term memory. The slogan and the finding converge: the things a person does repeatedly become physically easier to do because the synapses that carry them have been potentiated.</p>
+    <p>LTP has a mirror-image partner worth naming, because the use it or lose it side of Hebb's principle needs a physical mechanism too, not just a slogan. Researchers call it long-term depression, a persistent weakening of a synapse produced by patterns of activity that are low frequency, poorly timed, or simply absent while a competing pathway is active. We will not dwell on its cellular details any more than we dwelt on the details of LTP; the conceptual point is what matters. Strengthening and weakening are two settings on the same dial, not two separate systems, and a synapse is being nudged one way or the other essentially all the time. A connection that goes unused is not preserved in a neutral, dormant state, waiting patiently to be called on again. It is actively allowed to fade, its resources reallocated to whatever the nervous system is actually doing. This is the physical basis of forgetting a language you no longer speak or losing the fine touch you once had at a job you left, and it is the same mechanism, run in reverse, that lets an unwanted habit eventually loosen its grip.</p>
+    <p>This is the mechanism sitting underneath Dmitri's aching Saturday bow arm, whether he knew it or not. Every time he drew the bow across the strings and his fingers landed roughly in the right position, a set of co-activated neurons in his motor and somatosensory cortex fired together. Some of those connections were being potentiated with each repetition. The trouble, as the next two sections will show, was not that his synapses were failing to respond. It was that a single exhausting weekly session is a strange way to ask a slow, structural process to do its best work.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Bliss and Lomo used high frequency stimulation, a rapid burst, not a slow trickle. Why might the intensity and frequency of activation matter for producing lasting change? Hold that question. It returns when we discuss the conditions that favor plasticity.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-wire">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Wire Together: The Strengthening Synapse</div>
+    </div>
+    <p class="ch-widget-sub">Repeatedly co-activate two neurons and watch the connection grow. Switch to separate activation and watch the together requirement fail.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Activation mode</span>
+        <select class="ch-widget-select" id="wire-mode">
+          <option value="together">Fire together (paired)</option>
+          <option value="separate">Fire separately (unpaired)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Action</span>
+        <select class="ch-widget-select" id="wire-action">
+          <option value="pair">Activate neurons</option>
+          <option value="rest">Let it rest (disuse)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Synaptic strength</span>
+        <span class="ch-meter-bar"><span id="wire-strength-bar" style="width:12%"></span></span>
+        <span class="ch-meter-num" id="wire-strength-num">1.2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Postsynaptic response</span>
+        <span class="ch-meter-bar"><span id="wire-resp-bar" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="wire-resp-num">1.0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="wire-btn">Apply once</button>
+    <p class="ch-widget-sub" id="wire-readout">Connection is weak and untrained. Pair the neurons to strengthen it.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Scaling up: from synapses to cortical maps</h2>
+    <p>A single strengthened synapse is invisible to a brain scanner. So how did juggling produce a change large enough to see on magnetic resonance imaging (MRI)? The answer is that plasticity does not stop at the individual junction. When many synapses in a region are repeatedly co-activated by the same experience, the region as a whole reorganizes, and those changes aggregate into measurable shifts in <span class="ch-key">cortical maps</span>.</p>
+    <p>What Draganski and colleagues actually measured was regional gray matter volume, estimated from the scan and compared across time points within the same brains. A single synapse gaining strength does not move that needle by itself; what does is the combined effect of new dendritic branches, additional synaptic contacts, and possibly the recruitment of supporting glial cells, all clustered in the region doing the most work. Scale is the key word. One Hebbian event is a rounding error. Millions of correlated Hebbian events, repeated daily for months in the same population of neurons, become visible on an imaging scan. The jump from an invisible synapse to a measurable brain region is not a change in kind, it is a change in how many times the same basic event has happened in the same place.</p>
+    <p>Recall the sensory and motor maps from Chapters 6 and 7: the cortex contains orderly representations of the body, with more territory devoted to parts that demand fine control, the fingers, the lips. The crucial revision this chapter adds is that these maps are not fixed at birth. Their borders move with use. A body part or a skill that is exercised intensely claims more cortical territory; one that falls into disuse cedes territory to its neighbors. The map is a negotiated settlement, constantly renegotiated by experience.</p>
+    <p>The clearest human demonstration of a moving map comes from musicians. Elbert and colleagues (1995) used magnetic source imaging to compare the cortical representation of the fingers in string players against non-players. The cortical territory devoted to the fingers of the left hand, the hand that presses the strings rather than draws the bow, was measurably larger in the musicians. The effect was smallest for the thumb, which does less of the fine fretting work, and it did not appear on the right hand at all, the hand that simply holds the bow. Most tellingly, the amount of reorganization correlated with the age at which a musician had started playing: the earlier the start, the larger the shift, though the effect was present in people who began as adults too. This is Dmitri's violin project, quantified. If he keeps practicing, the map of his left hand fingers in his own somatosensory cortex will, in principle, begin to claim more territory, much as it did for the players Elbert and colleagues measured.</p>
+    <p>The structural machinery for this was documented in exquisite detail by Holtmaat and Svoboda (2009), who used repeated imaging of living cortex to watch synapses come and go. In the adult mammalian brain, they found, dendritic spines and axonal boutons, the physical points of synaptic contact, are continuously formed and eliminated. Experience biases this turnover: sensory input causes new synapses to appear where activity is high and existing ones to vanish where it is low. This is not a metaphor for rewiring. Connections literally materialize and disappear, giving the cortex a physical substrate for redrawing its maps.</p>
+    <p>It helps to picture what a map actually is at this level, because the word map can suggest something drawn once and filed away. A cortical map is closer to a crowd of neighbors than to a printed chart. Each patch of cortex is staffed by neurons whose job, loosely speaking, is to respond to a particular finger, a particular patch of skin, a particular movement. Neighboring patches compete for the same limited territory and the same limited blood supply and metabolic resources, the way neighboring shops compete for foot traffic on the same street. A finger that is used constantly, pressing strings, reading Braille, typing, sends a heavy and reliable stream of co-activated input into its patch of cortex, and through the Hebbian mechanism already described, the synapses serving that finger are potentiated while the boundary neurons that could have served a neighboring, less-used finger are gradually recruited across the border. A finger that goes unused, in a cast for months or simply never called upon for fine work, cedes ground the same way. The map is not redrawn by some central planner. It emerges from thousands of small, local, Hebbian competitions playing out at once.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;overflow:visible;">
+        <img src="img/ch8-img2.jpg" alt="Three side by side diagrams of a patch of cortical tissue showing a skill's territory growing larger across early, practiced, and consolidated stages" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;">
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 2</span> <em>As a skill is practiced, the cortical territory representing it expands, the visible sum of countless strengthened synapses.</em></figcaption>
+    </figure>
+
+    <h3>When the map actually moves: the timing of change</h3>
+    <p>A learner might assume the map expands the moment practice begins. It does not, and the exception is instructive. Kleim and colleagues (2004) trained adult rats on a demanding reaching task and asked precisely when the motor cortex reorganized. During the early phase of learning, the fast, dramatic phase where performance leaps forward, they found little map change. The reorganization and the growth of new synapses, a process called synaptogenesis, appeared during the late phase, after the fast gains had plateaued, as the skill was being consolidated into something durable.</p>
+    <p>This is a subtle but important lesson for any learner. The visible improvement in the first few sessions is largely the brain getting more efficient with connections it already has. The physical, structural rewriting, the part that makes a skill stick, happens later and more slowly, during continued practice and, as the next section will show, during sleep. The frustrating plateau where progress seems to stall may be exactly when the map is being redrawn underneath the surface.</p>
+    <p>Dmitri hit that plateau in week three. His fingers had learned roughly where the notes were, the fast early gains the reaching-task rats also showed, and then progress seemed to stop entirely. He nearly quit, reading the plateau as proof he lacked any talent for music. What the animal work suggests instead is that week three was likely exactly when the slower, structural rewriting his violin fingering needed was getting underway, invisible to him because it does not feel like the dramatic early gains do.</p>
+
+    <blockquote class="ch-quote">
+      <p>Neural plasticity is thought to be the basis for both learning in the intact brain and relearning in the damaged brain.</p>
+      <cite>Kleim &amp; Jones, 2008</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>The conditions that favor plasticity</h2>
+    <p>If experience rewires the nervous system, then not all experience is equal. Plasticity is selective and demanding. Kleim and Jones (2008) distilled ten empirically derived principles from the rehabilitation literature, and four of them form a useful working model for a learner's own practice. Think of these as the levers that determine whether an experience leaves a durable trace or washes away.</p>
+
+    <h3>Attention makes activity count</h3>
+    <p>The nervous system does not reinforce everything that happens to it. It reinforces what it attends to. Passive exposure produces far weaker plasticity than engaged, focused practice. This is the principle Kleim and Jones call salience: the experience has to matter to the learner. In practical terms, twenty distracted minutes of practicing scales while watching a screen changes the motor cortex far less than five attentive minutes without distraction. Attention is the gate that decides which co-activations get to count as firing together. Dmitri's Saturday sessions were, in fact, reasonably focused; his mistake was not attention. It was what came next.</p>
+    <p>Salience also explains why a task that carries real stakes tends to leave a deeper trace than an identical task performed for no particular reason. A learner rehearsing a phrase they will actually need to say in an unfamiliar language tomorrow tends to encode it more durably than the same phrase copied out as an abstract exercise. The nervous system appears to weight experience partly by consequence, not just by repetition count, which is a reminder that motivation is not a soft, separate topic from plasticity. It is one of the levers that turns the mechanism on.</p>
+
+    <h3>Repetition and intensity</h3>
+    <p>Long-term potentiation required a burst of high frequency stimulation, not a single pulse, and the same holds at the behavioral scale. Plasticity is driven by repetition: connections strengthen with repeated activation, and durable maps require enough total practice to trigger the late-phase structural changes Kleim and colleagues documented. A skill practiced ten times will not claim the territory of a skill practiced ten thousand times. Intensity, the concentration of practice within a session, matters too, though as the next principle shows, it interacts strongly with how that practice is distributed in time.</p>
+    <p>Kleim and Jones (2008) add a related principle worth naming here: specificity. The nature of the training experience shapes the nature of the plasticity it produces. Practicing scales builds the specific circuits for playing scales; it does not automatically transfer into sight-reading a new piece or improvising, even though all three involve a violin. This is a useful corrective for any learner tempted to treat practice as a generic substance, more of which always helps everything equally. The map grows in the shape of what was actually rehearsed, not in the shape of what a learner hoped the practice would generalize into.</p>
+
+    <h3>Spacing: why cramming fails</h3>
+    <p>Here is where intuition betrays most learners, Dmitri included. It feels efficient to practice a skill in one long block, to get it done. But distributed practice, in which the same total amount is spread across days, produces stronger and more durable learning than massed practice crammed into a single session. The <span class="ch-key">spacing effect</span> is one of the most robust findings in the science of learning. The reason connects directly to the timing principle from the previous section: the structural, consolidating changes that redraw the map unfold over hours and days. Spacing gives those slow processes room to run between sessions. Cramming outruns the biology, asking days of consolidation to happen inside a single afternoon.</p>
+    <p>There is also a fatigue cost to massed practice that is easy to underrate. Long, unbroken sessions run into declining attention well before they run out of time, which means the back half of a marathon session is often lower-salience practice, the very thing the attention principle warns against. A learner grinding through hour three of an exhausting session is frequently paying full time cost for a fraction of the encoding benefit. Spacing sidesteps this by ending each session while attention is still genuinely engaged.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that more hours in one sitting always beats the same hours split up, since the total practice time is identical either way. The biology says otherwise. Dmitri's four hour Saturday marathon and four one hour weekday sessions are not equivalent, even though the clock time matches. The massed version front-loads fatigue and gives the brain no gap in which to consolidate; the spaced version lets the late-phase structural changes described above unfold between sessions. Equal total practice is not equal total learning.</p>
+    </aside>
+
+    <h3>Sleep: the price of plasticity</h3>
+    <p>The fourth condition is the one this course will devote its next chapter to, so it is introduced only in outline here. Sleep is not downtime. It is an active phase of neural remodeling. Tononi and Cirelli (2014) proposed the influential <span class="ch-key">synaptic homeostasis hypothesis</span>: during waking, learning drives a broad net strengthening of synapses across the cortex, so a person accumulates plastic change all day. But unchecked strengthening is unsustainable. It saturates circuits, blurs the signal, and costs enormous energy. During sleep, the brain renormalizes, selectively downscaling synaptic strength, restoring balance, sharpening the signal to noise ratio, and locking in the important changes. Sleep, in their memorable framing, is the price the brain pays for plasticity. Practice loads the changes; sleep consolidates them.</p>
+    <p>It is worth underlining how counterintuitive this is, because most learners, Dmitri among them, treat sleep as time subtracted from practice rather than as a continuation of it. Staying up later to fit in one more repetition feels like it should help. The synaptic homeostasis hypothesis suggests the opposite trade may be more common: a session cut short in favor of a full night's sleep can leave more of the day's gains intact a week later than a longer session followed by a shortened night. Sleep is not the reward for practice. In this account, it is part of the practice, the phase where the day's tentative, energetically expensive strengthening gets sorted, kept, or discarded.</p>
+    <p>Once Dmitri restructured his practice, twenty minutes each evening instead of four hours on Saturday, protected his sleep, and kept his attention on the music rather than the television playing in the next room, his plateau broke within two weeks. Nothing about his underlying talent had changed. He had simply stopped fighting his own consolidation process.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Suppose two learners each spend four total hours preparing for the same skill assessment. One does all four hours the night before; the other does one hour on each of four evenings, sleeping between sessions. Using the four principles above, predict who retains more a week later, and explain why in terms of consolidation and spacing rather than simply saying cramming is bad.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Try This</div>
+      <p>Pick one skill you are currently trying to build: a language, an instrument, a physical movement, even a work habit. Write down, in one sentence each, how you could raise your score on each of the four levers: what would make your practice more attentive, what a minimum durable amount of repetition looks like, how you could space it across a week instead of a weekend, and what would have to change about your sleep for the gains to consolidate. Dmitri's answer, once he did this exercise, was to trade one long session for six short ones and to stop practicing after ten in the evening.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-map">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Practice Map</div>
+    </div>
+    <p class="ch-widget-sub">Choose how to distribute the same total practice, decide whether to sleep between sessions, then see how much cortical territory a finger skill like Dmitri's claims, and how much survives a week later.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Practice schedule</span>
+        <select class="ch-widget-select" id="map-sched">
+          <option value="massed">Massed (all at once)</option>
+          <option value="spaced">Spaced (over days)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sleep between sessions</span>
+        <select class="ch-widget-select" id="map-sleep">
+          <option value="sleep">Yes, full sleep</option>
+          <option value="nosleep">No, sleep-deprived</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Attention</span>
+        <select class="ch-widget-select" id="map-attn">
+          <option value="focused">Focused</option>
+          <option value="distracted">Distracted</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Territory after practice</span>
+        <span class="ch-meter-bar"><span id="map-peak-bar" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="map-peak-num">10%</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Retained after 1 week</span>
+        <span class="ch-meter-bar"><span id="map-ret-bar" style="width:5%"></span></span>
+        <span class="ch-meter-num" id="map-ret-num">5%</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="map-btn">Run practice block</button>
+    <p class="ch-widget-sub" id="map-readout">Configure a schedule and run a practice block to see the map grow.</p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The shadow side: plasticity is not a synonym for improvement</h2>
+    <p>Everything said so far frames plasticity as good news, the biology of growth, skill, and recovery. But the same mechanism is indifferent to whether what it strengthens is helpful. The nervous system wires in whatever fires together repeatedly, including patterns a learner would rather not keep. Plasticity is a double edged capacity, and a working model that ignores the second edge is incomplete.</p>
+
+    <h3>Habits: automaticity is wired-in plasticity</h3>
+    <p>A habit is, mechanically, a well potentiated pathway. The reason a habit feels effortless, the reason a hand reaches for a phone before a person has decided to, is that repetition has strengthened the relevant connections until the behavior runs with minimal deliberate input. This is the same LTP-flavored process that makes a musical passage automatic; the neutrality of the mechanism is precisely the problem. Cells that fire together, wire together does not check whether the wiring serves the learner. Unhelpful habits are not failures of willpower so much as successful, durable plasticity applied to a pattern a person would prefer to weaken.</p>
+    <p>The reassuring corollary is the use it or lose it principle in reverse. Because unused connections weaken, a habit can in principle be allowed to fade by starving the pathway of activation while repeatedly strengthening a competing one, building a new, stronger route rather than trying to erase the old. This is slow, and it is exactly why breaking a habit is hard: it asks a heavily potentiated circuit to yield territory to a barely formed rival.</p>
+    <p>Dmitri had his own example of this, unrelated to the violin. Years of warehouse shift work had wired in a habit of reaching for a second and third cup of coffee after four in the afternoon to push through the shift's slow stretch, a pattern so well potentiated he barely noticed doing it. Recognizing it as a strengthened pathway rather than a character flaw changed how he approached it. Instead of trying to will the habit away in one attempt, he built a competing routine, a short walk at the same hour, and let the old pathway weaken from disuse while the new one strengthened from repetition. Notice, too, how directly the four conditions from the previous section apply here even though the goal is subtraction rather than addition: the competing walk needed his attention rather than being done on autopilot, it needed to be repeated consistently, it needed to be spread across weeks rather than attempted once, and it needed enough sleep behind it for the new routine to actually consolidate. The same four levers that build a skill are the ones that unseat a habit.</p>
+
+    <h3>Stress and the shaping of vulnerable circuits</h3>
+    <p>Chapter 5 introduced the stress response as an adaptive autonomic pattern. Plasticity adds a warning to that story. Kim and Diamond (2002) reviewed how stress alters the hippocampus, a structure central to memory and to the long-term potentiation work this chapter began with. Under sustained stress, acting through glucocorticoids and the hypothalamic-pituitary-adrenal (HPA) axis, the very plasticity that supports learning is compromised: long-term potentiation is impaired, its weakening counterpart is facilitated, and prolonged stress produces measurable structural changes and deficits on memory tasks. Two things follow. First, chronic stress is not just an unpleasant state; it degrades the machinery of learning itself. Second, because stress responses are patterns of activation, they too can be strengthened by repetition; a nervous system that rehearses threat can become more efficient at producing threat. The capacity that lets a person grow can also entrench the patterns they most want to escape.</p>
+    <p>It is worth being explicit about why this belongs in the same chapter as violin practice and juggling. The mechanism Kim and Diamond describe is not a separate, exotic process bolted onto the Hebbian story. It is the same story, applied to a circuit that happens to be tracking threat rather than a bow arm. A stressor that recurs night after night, an argument replayed, a looming deadline rehearsed in the mind at 2 a.m., is a form of repetition, and repetition is precisely what this chapter has spent its length showing the nervous system responds to. The unsettling implication is that a person can, without any intention to do so, practice their own anxiety with the same fidelity Dmitri brought to his scales. Recognizing that pattern for what it is, an ordinary application of an ordinary mechanism, is itself useful, because it reframes a seemingly mysterious struggle as something with an identifiable, if not simple, cause.</p>
+    <p>None of this is a clinical claim, and this chapter is not a treatment protocol. It is a working model for understanding how experience shapes the nervous system. But the model has a clear implication: the conditions a learner places themselves in, repeatedly and attentively, are shaping their nervous system whether or not they intend them to. Plasticity is always on.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where Education Ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The phrase fire together, wire together is value neutral. Give one example from your own life of a helpful pattern this principle explains, and one example of an unhelpful one. What does the use it or lose it principle suggest about how the unhelpful one might, over time, weaken?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Reframing the whole course</h2>
+    <p>Step back and notice what this chapter has done to everything before it. The neuron of Chapter 2 is not a fixed component but a cell that grows and retracts its connections. The synapse of Chapter 3 is not a fixed valve but an adjustable, history dependent junction. The autonomic patterns of Chapter 5 are not hardwired reflexes but rehearsable circuits. The sensory maps of Chapter 6 and the motor skills of Chapter 7 are negotiated territories whose borders move with practice. Plasticity is the property that unifies them all: the nervous system is, from the synapse to the cortical map, sculptable by experience.</p>
+    <p>That reframing carries both a responsibility and a promise. The promise is that improvement is genuinely possible. A learner is not stuck with the nervous system they have today, because attentive, repeated, well spaced, well slept experience physically changes it. The responsibility is that the changes accrue whether a person directs them or not. Understanding the mechanism does not make a learner its master, but it does let them tilt the odds: attend on purpose, repeat what matters, space it out, and protect sleep.</p>
+    <p>Treat those four levers as a working model rather than a formula, because that is what the evidence actually supports. None of the studies in this chapter promise a specific number of hours or a guaranteed timeline; a rat's reaching task, a juggler's three months, and a string player's years of training all reorganized cortex at their own pace, under their own conditions. What the studies converge on is direction, not schedule. Practice that is attended to, repeated, spread out, and followed by sleep reliably outperforms practice that is not, across an enormous range of skills and circuits. That is a modest claim by the standards of a marketing pitch and a remarkably durable one by the standards of neuroscience, which is exactly the trade a careful learner should want.</p>
+    <p>Dmitri played a simple folk tune for his daughter over a video call four months after he started, badly in places, correctly in most. He had not discovered a shortcut around plasticity. He had simply stopped working against it.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The nervous system is not fixed wiring. <span class="ch-key">Neuroplasticity</span>, experience-dependent structural and functional change, operates throughout life and underlies all learning, habit, and recovery.</li>
+      <li>Change begins at the synapse. Hebb's principle, cells that fire together wire together, means co-active connections strengthen while unused ones weaken. Bliss and Lomo's (1973) discovery of <span class="ch-key">long-term potentiation (LTP)</span> gave this a physiological demonstration.</li>
+      <li>Synaptic changes aggregate into shifts in <span class="ch-key">cortical maps</span>: practiced skills claim more territory, as shown directly in string players (Elbert et al., 1995), and structural rewiring occurs during the later, consolidating phase of learning (Kleim et al., 2004; Draganski et al., 2004).</li>
+      <li>Plasticity is favored by four conditions: <span class="ch-key">attention</span> (salience), <span class="ch-key">repetition</span>, <span class="ch-key">spacing</span> over time, and <span class="ch-key">sleep</span> (Kleim &amp; Jones, 2008; Tononi &amp; Cirelli, 2014).</li>
+      <li>Plasticity is double edged: the same mechanism that builds skills also wires in unhelpful habits and, under chronic stress, can degrade the learning machinery itself (Kim &amp; Diamond, 2002).</li>
+      <li>This is a working model for understanding your own learning, not a clinical or therapeutic protocol.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We ended on a promissory note: the plastic changes accumulated during the day are not yet permanent. In Chapter 9 we follow those changes into the night. Sleep, far from being idle, is when the brain pays the price of plasticity, consolidating the day's learning, renormalizing overgrown synapses, and locking in the maps you spent the day redrawing. If plasticity is the writing, sleep is the saving.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Abraham, W. C., Jones, O. D., &amp; Glanzman, D. L. (2019). Is plasticity of synapses the mechanism of long-term memory storage? <em>npj Science of Learning, 4</em>(1), 9. https://doi.org/10.1038/s41539-019-0048-y</p>
+    <p>Bliss, T. V. P., &amp; Lomo, T. (1973). Long-lasting potentiation of synaptic transmission in the dentate area of the anaesthetized rabbit following stimulation of the perforant path. <em>The Journal of Physiology, 232</em>(2), 331 to 356. https://doi.org/10.1113/jphysiol.1973.sp010273</p>
+    <p>Draganski, B., Gaser, C., Busch, V., Schuierer, G., Bogdahn, U., &amp; May, A. (2004). Changes in grey matter induced by training. <em>Nature, 427</em>(6972), 311 to 312. https://doi.org/10.1038/427311a</p>
+    <p>Elbert, T., Pantev, C., Wienbruch, C., Rockstroh, B., &amp; Taub, E. (1995). Increased cortical representation of the fingers of the left hand in string players. <em>Science, 270</em>(5234), 305 to 307. https://doi.org/10.1126/science.270.5234.305</p>
+    <p>Holtmaat, A., &amp; Svoboda, K. (2009). Experience-dependent structural synaptic plasticity in the mammalian brain. <em>Nature Reviews Neuroscience, 10</em>(9), 647 to 658. https://doi.org/10.1038/nrn2699</p>
+    <p>Kim, J. J., &amp; Diamond, D. M. (2002). The stressed hippocampus, synaptic plasticity and lost memories. <em>Nature Reviews Neuroscience, 3</em>(6), 453 to 462. https://doi.org/10.1038/nrn849</p>
+    <p>Kleim, J. A., Hogg, T. M., VandenBerg, P. M., Cooper, N. R., Bruneau, R., &amp; Remple, M. (2004). Cortical synaptogenesis and motor map reorganization occur during late, but not early, phase of motor skill learning. <em>The Journal of Neuroscience, 24</em>(3), 628 to 633. https://doi.org/10.1523/JNEUROSCI.3440-03.2004</p>
+    <p>Kleim, J. A., &amp; Jones, T. A. (2008). Principles of experience-dependent neural plasticity: Implications for rehabilitation after brain damage. <em>Journal of Speech, Language, and Hearing Research, 51</em>(1), S225 to S239. https://doi.org/10.1044/1092-4388(2008/018)</p>
+    <p>Tononi, G., &amp; Cirelli, C. (2014). Sleep and the price of plasticity: From synaptic and cellular homeostasis to memory consolidation and integration. <em>Neuron, 81</em>(1), 12 to 34. https://doi.org/10.1016/j.neuron.2013.12.025</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Nervous System I: Foundations &middot; Chapter 8 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-wire');
+    if(!root) return;
+    var modeEl = root.querySelector('#wire-mode');
+    var actionEl = root.querySelector('#wire-action');
+    var btn = root.querySelector('#wire-btn');
+    var sBar = root.querySelector('#wire-strength-bar');
+    var sNum = root.querySelector('#wire-strength-num');
+    var rBar = root.querySelector('#wire-resp-bar');
+    var rNum = root.querySelector('#wire-resp-num');
+    var readout = root.querySelector('#wire-readout');
+
+    var strength = 1.2; // 1..10 scale
+    var MIN = 1.0, MAX = 10.0;
+
+    function render(msg){
+      var sPct = Math.max(4, Math.min(100, (strength-1)/(MAX-1)*100));
+      // response scales with strength; paired activation shows a proportional response
+      var response = strength;
+      var rPct = Math.max(4, Math.min(100, (response-1)/(MAX-1)*100));
+      sBar.style.width = sPct.toFixed(0)+'%';
+      sNum.textContent = strength.toFixed(1);
+      rBar.style.width = rPct.toFixed(0)+'%';
+      rNum.textContent = response.toFixed(1);
+      if(msg) readout.textContent = msg;
+    }
+
+    btn.addEventListener('click', function(){
+      var mode = modeEl.value;
+      var action = actionEl.value;
+      if(action === 'rest'){
+        strength = Math.max(MIN, strength - 0.9);
+        render('Disuse. The unused connection weakens, following the use it or lose it principle. Strength is drifting back toward baseline.');
+        return;
+      }
+      // activate
+      if(mode === 'together'){
+        var gain = 0.9 * (1 - (strength-MIN)/(MAX-MIN)) + 0.25; // diminishing returns
+        strength = Math.min(MAX, strength + gain);
+        render('Paired activation: both neurons fired together, so the synapse potentiated. Strength and the postsynaptic response both grew.');
+      } else {
+        // separate activation: no Hebbian strengthening
+        render('Separate activation: the neurons fired, but not together. There was no co-activation, so no strengthening occurred. The together requirement was not met.');
+      }
+    });
+
+    modeEl.addEventListener('change', function(){
+      if(modeEl.value==='separate'){
+        readout.textContent = 'Contrast mode: activating the neurons separately. Predict whether the connection will strengthen.';
+      } else {
+        readout.textContent = 'Paired mode: activating both neurons together. Apply repeatedly to build long-term potentiation.';
+      }
+    });
+
+    render();
+  } catch(e){ /* silent */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-map');
+    if(!root) return;
+    var schedEl = root.querySelector('#map-sched');
+    var sleepEl = root.querySelector('#map-sleep');
+    var attnEl = root.querySelector('#map-attn');
+    var btn = root.querySelector('#map-btn');
+    var peakBar = root.querySelector('#map-peak-bar');
+    var peakNum = root.querySelector('#map-peak-num');
+    var retBar = root.querySelector('#map-ret-bar');
+    var retNum = root.querySelector('#map-ret-num');
+    var readout = root.querySelector('#map-readout');
+
+    var blocks = 0;
+    var peak = 10; // percent territory
+
+    function run(){
+      blocks++;
+      var sched = schedEl.value;
+      var sleep = sleepEl.value;
+      var attn = attnEl.value;
+
+      // attention gates how much each block adds
+      var attnFactor = (attn === 'focused') ? 1.0 : 0.45;
+      // massed adds a lot up front but plateaus fast; spaced adds steadily
+      var gain;
+      if(sched === 'massed'){
+        gain = 22 * attnFactor / Math.sqrt(blocks); // strong early, quick plateau
+      } else {
+        gain = 16 * attnFactor; // steady per spaced session
+      }
+      peak = Math.min(100, peak + gain);
+
+      // retention: fraction of peak that survives a week
+      var retFrac;
+      if(sched === 'spaced' && sleep === 'sleep'){
+        retFrac = 0.90;
+      } else if(sched === 'spaced' && sleep === 'nosleep'){
+        retFrac = 0.55;
+      } else if(sched === 'massed' && sleep === 'sleep'){
+        retFrac = 0.50;
+      } else {
+        retFrac = 0.28;
+      }
+      if(attn === 'distracted') retFrac *= 0.75;
+
+      var retained = peak * retFrac;
+
+      peakBar.style.width = Math.round(peak)+'%';
+      peakNum.textContent = Math.round(peak)+'%';
+      retBar.style.width = Math.round(retained)+'%';
+      retNum.textContent = Math.round(retained)+'%';
+
+      var msg = 'Block ' + blocks + ': ';
+      if(sched === 'massed'){
+        msg += 'Massed practice pushes territory up quickly but the gains plateau. ';
+      } else {
+        msg += 'Spaced practice builds territory steadily across days. ';
+      }
+      if(sleep === 'sleep'){
+        msg += 'Sleep consolidated the changes, so retention is high. ';
+      } else {
+        msg += 'Without sleep, little was consolidated, so retention lags. ';
+      }
+      if(attn === 'distracted'){
+        msg += 'Distraction weakened every gain (low salience).';
+      } else {
+        msg += 'Focused attention let each session count.';
+      }
+      readout.textContent = msg;
+    }
+
+    btn.addEventListener('click', run);
+
+    function resetNote(){
+      readout.textContent = 'Configuration changed. Run a practice block to see the effect on the map.';
+    }
+    schedEl.addEventListener('change', resetNote);
+    sleepEl.addEventListener('change', resetNote);
+    attnEl.addEventListener('change', resetNote);
+  } catch(e){ /* silent */ }
+})();
+</script>
+</body>
+</html>

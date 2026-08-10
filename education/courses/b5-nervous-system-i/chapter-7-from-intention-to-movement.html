@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From Intention to Movement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 7 · From Command to Contraction</div>
+    <h1 class="ch-title">From Intention to Movement</h1>
+    <p class="ch-subtitle">How a decision becomes a contracting muscle, and why it never happens blind.</p>
+    <div class="ch-meta">
+      <span>65 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">B</span>ianca is a violinist, or she is trying to become one again. She played as a teenager, quit for a decade, and picked the instrument back up at twenty nine because she missed the feeling of a difficult passage finally clicking into place under her fingers. Most evenings she works through the same eight bars of a fast run, and most evenings, for the first several weeks, her bow arm betrayed her. It would judder where it should glide, land too hard where it should land soft, and occasionally, on the fastest notes, simply refuse to keep up. She assumed the problem was her fingers. It was not. The fingers were only the last stop on a very long line.</p>
+    <p>Consider what actually has to happen for Bianca to draw the bow across the string with the right speed and the right pressure at the right instant. A plan forms in her motor cortex, shaped by weeks of repetition and the memory of how the passage is supposed to feel. That plan becomes a command, and the command travels down her spinal cord to a specific population of cells that control the small muscles of her forearm, wrist, and fingers. Those cells fire, in a particular order, at a particular rate. Their signals cross a specialized junction into muscle, and the muscle fibers on the other side of that junction shorten by a precise, coordinated amount. And the entire time this is happening, in a fraction of a second, sensors buried inside her muscles and tendons are reporting back exactly how far each part of her arm has moved, so that if the bow starts to drift off course, a correction is already underway before Bianca is even aware anything went wrong.</p>
+    <p>This is the outbound half of the nervous system, the efferent pathway we sketched in an earlier chapter, now fully developed. Earlier chapters in this course followed signals inward, from the world into the spinal cord and brain. This chapter follows them back out, to their most visible and most physical consequence: a limb that moves the way you intended it to move, or does not. The goal is an honest working model of that outbound relay, built from four linked ideas. First, that every command in the nervous system, no matter where it originates, must pass through a single final cell before it can reach muscle. Second, that the handoff from that cell to the muscle happens at a remarkable, highly reliable synapse built around a single chemical messenger. Third, that force is not graded by making individual events bigger, but by recruiting more units and firing them faster, the same frequency principle you have already met at the level of a single cell, now scaled up to the level of a whole muscle. And fourth, that none of this ever runs blind: movement is shadowed at every instant by feedback from the body itself, and by reflexes fast enough to correct an error before the brain has finished registering that one occurred. By the end of the chapter you should be able to trace an intention like Bianca's, from the decision to move a bow to the shortening of a muscle fiber and back again through the feedback that keeps the motion smooth, and you should understand, in outline, why months of practice were able to change what her arm could do.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The final common pathway</h2>
+    <p>Every voluntary movement anyone has ever made, and every reflexive twitch besides, has passed through the same narrow gate. The physiologist Charles Sherrington gave that gate a name early in the twentieth century that has never needed replacing: the <span class="ch-key">final common pathway</span>. It refers to a single kind of cell, the <span class="ch-key">alpha motor neuron</span>, whose body sits in the ventral horn of the spinal cord, or in a matching nucleus in the brainstem for the muscles of the head and face, and whose axon runs, unbroken, all the way out to the muscle fibers it controls.</p>
+    <p>The phrase rewards a moment of thought before we move past it. Descending commands arrive at the spinal cord from many sources at once: the motor cortex, several brainstem centers, and a set of local spinal circuits, all shaped indirectly by the basal ganglia and the cerebellum, which help plan and time the movement without themselves connecting directly to muscle. None of these upstream regions can talk to muscle on its own. Every one of them, without exception, has to route its influence through the alpha motor neuron. It is the last neural link in a very long chain, and it is common to every source feeding into that chain, which is exactly what the name says. Whatever the cortex intends, whatever a spinal reflex demands, whatever a brainstem circuit is adjusting on the fly, the vote is tallied on the membrane of that one cell. If the vote reaches threshold, the cell fires, and if it fires, the muscle fibers under its command will contract. There is no appeal beyond that point, and no shortcut around it.</p>
+    <p>This convergence is what makes the motor neuron such a useful anchor for a working model of movement. Upstream, the complexity is genuinely enormous, involving millions of cells across several brain regions negotiating a plan. Downstream of the motor neuron, that complexity collapses into a single, easily interpreted output: a train of action potentials traveling down one axon. Recall the all or nothing rule for a single spike, introduced earlier in this course. The motor neuron obeys that rule exactly. It does not send a large signal for a heavy lift and a small one for a light touch. Every spike it produces is identical to every other spike it produces. As the chapter unfolds, you will see that the entire richness of graded muscular force, from the gentlest touch to a maximal effort, is built downstream from a stream of these identical, all or nothing events. That should already tell you something important: how many motor neurons are active, and how often each one fires, will matter far more than how large any single spike happens to be, because size is simply not a variable this system has to work with.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch7-img1.jpg" alt="The alpha motor neuron as the final common pathway, with descending influences converging on it and its axon reaching out to a bundle of muscle fibers" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The alpha motor neuron: one cell bridging spinal cord and muscle, with all descending influence converging upstream of it.</em></figcaption></figure>
+
+    <p>It helps to be precise about what a motor neuron actually controls, because the phrase final common pathway is sometimes read as though a single motor neuron commands an entire muscle. It does not. A muscle like the biceps contains many hundreds of individual motor neurons, each one responsible for its own private slice of the muscle's fibers. The final common pathway is the principle that governs each of those slices individually. Every one of them is the sole neural gateway to the fibers it owns, and every one of them is where all upstream influence on those particular fibers has to converge. We will return to what that private slice is called, and why its size varies so much from one muscle to another, once the chemistry of the handoff to muscle is in place.</p>
+    <p>It is also worth flagging, briefly and without wandering into territory beyond this course, that the spinal cord houses a second, smaller class of motor neuron alongside the alpha type described above. These are the gamma motor neurons, and rather than driving the bulk of a muscle's contractile fibers, they adjust the sensitivity of the stretch sensors embedded inside the muscle, the same sensors this chapter will return to once feedback comes into focus. For now, the detail worth keeping is simple: the term motor neuron is not a single monolithic category. The alpha type is the one that produces force, and it is the one this chapter follows all the way to muscle. The gamma type quietly tunes how well the system can feel what it is doing, a job that becomes relevant once we reach proprioception later in the chapter.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If every spike a motor neuron fires is identical in size, what two properties of the spike train are still free to vary from one contraction to the next? Hold your answer. The entire logic of force grading in this chapter depends on it.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where nerve meets muscle</h2>
+    <p>The axon has arrived at the muscle. It cannot simply plug into a muscle fiber and inject electrical current directly, because nerve and muscle are separate cells with separate membranes, and the signal has to jump the gap between them. That gap, together with the specialized machinery built around it, is the <span class="ch-key">neuromuscular junction</span> (NMJ), and despite its unassuming name it is nothing less than a synapse. Everything you have already learned about chemical transmission between neurons applies here, tuned to one very specific and very consequential job. Sanes and Lichtman (1999) called the NMJ the best studied of all synapses, and the description has held up well since, for good reason: it is large by cellular standards, it is physically accessible to researchers, and it behaves with a dependability that makes it both an excellent teaching model and a favorite subject of decades of experiments.</p>
+    <p>The chemical messenger at this junction is <span class="ch-key">acetylcholine</span> (ACh), a molecule that shows up in several roles across the nervous system and here is doing one of its signature jobs. The cascade from arriving spike to muscle contraction is worth walking through slowly, because it is the exact moment at which intention finally becomes mechanical force (Rodríguez Cruz et al., 2020).</p>
+
+    <h3>The relay, step by step</h3>
+    <p>First, the action potential travels down the motor axon and reaches the nerve terminal, the specialized swelling where the axon meets the muscle fiber. Its arrival depolarizes the terminal membrane and opens voltage gated calcium channels sitting in that membrane. Calcium ions rush into the terminal, the near universal trigger for transmitter release throughout the nervous system, and this influx causes small vesicles loaded with acetylcholine to fuse with the terminal membrane and dump their contents into the narrow space between nerve and muscle, called the synaptic cleft.</p>
+    <p>Acetylcholine diffuses across that cleft in a fraction of a millisecond and binds a class of receptors called nicotinic acetylcholine receptors, clustered densely on the muscle fiber's membrane directly opposite the release sites. These receptors are ligand gated ion channels, meaning the binding of acetylcholine itself physically opens them, allowing positive ions to flow into the muscle fiber and depolarize its membrane. This local depolarization has its own name, the <span class="ch-key">endplate potential</span>, after the specialized patch of muscle membrane, called the motor endplate, where it occurs.</p>
+    <p>Here the NMJ differs from a typical synapse inside the brain in a way that matters for the whole rest of this chapter. At a central synapse, one incoming spike usually produces only a small dent in the receiving neuron's membrane, and it takes many such inputs summing together, often from many different neurons, to push that membrane to threshold. The neuromuscular junction is not built for that kind of deliberation. It is built for reliability. The endplate potential it produces is enormous, far larger than what is strictly needed to trigger a response. This built in safety margin means that, under healthy conditions, one motor neuron spike reliably produces one muscle fiber action potential, essentially every single time. The junction does not tally competing votes the way a central synapse does. It faithfully relays. That muscle fiber action potential then sweeps rapidly along the length of the fiber and, through a further chain of internal events involving calcium release inside the muscle cell, causes the fiber to shorten.</p>
+    <p>Notice the echo, at a new level of organization, of the same all or nothing principle introduced for the neuron. The muscle fiber obeys it too. Once its membrane crosses threshold, it produces a complete action potential and a complete, brief contraction called a <span class="ch-key">twitch</span>. There is no such thing as a half twitch. The single fiber, like the single spike that triggered it, is a digital, on or off unit. And this raises the same puzzle a second time, now one level higher: if a fiber's response is strictly all or nothing, how does a violinist produce a feather light pianissimo bow stroke with a whisper of force, and a full fortissimo chord with a great deal more? As before, the answer is not hidden in the size of any single event. It is hidden in how many such events are combined, and how quickly.</p>
+    <p>Two further design features of the neuromuscular junction are worth naming, because they explain why the relay is not just reliable but also fast and self resetting. First, the postsynaptic membrane on the muscle side is not flat. It is thrown into deep folds directly beneath each release site, and those folds dramatically increase the surface area available to pack in nicotinic receptors, which is part of how the endplate potential manages to be so oversized relative to what threshold actually requires. Second, once acetylcholine has done its job and opened enough receptors, it does not simply linger in the cleft. An enzyme called acetylcholinesterase, stationed right at the junction, rapidly breaks the transmitter down within milliseconds of its release. This matters enormously for control. If acetylcholine stayed in the cleft indefinitely, the muscle fiber would remain depolarized and could not reset in time to respond cleanly to the next incoming spike. Fast clearance is what allows a motor neuron to fire dozens of times each second and have every single spike produce its own distinct, countable twitch downstream, which is the entire premise behind rate coding later in this chapter.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>In myasthenia gravis, the immune system produces antibodies that destroy acetylcholine receptors at the motor endplate, shrinking the endplate potential toward threshold instead of comfortably above it. Given the safety factor idea above, predict what happens to the reliability of the nerve to muscle relay as more receptors are lost, and why the disease characteristically produces weakness and fatigue that worsen the longer a muscle is used.</p>
+    </aside>
+
+    <p>That example is worth pausing on, because it marks a boundary this course takes seriously. Bianca, curious after a rehearsal where her hand tired unusually fast, found an online quiz claiming to screen for myasthenia gravis from a list of symptoms and nearly filled it out. Muscle fatigue with repeated use has many possible explanations, most of them ordinary, and sorting a real neuromuscular disorder from simple overuse, poor conditioning, or a hundred other causes is not something a symptom checklist, or this chapter, is equipped to do. Understanding how the safety factor at the NMJ works is genuinely useful. It tells you why certain diseases produce the specific pattern of weakness they do, and it will make you a more informed person the next time such a diagnosis comes up in your life. It does not make you qualified to apply that understanding to a specific case, including your own.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The motor unit: the true quantum of movement</h2>
+    <p>A motor neuron does not, in practice, control a single isolated muscle fiber. Its axon branches repeatedly as it enters the muscle, and each branch terminates on a different fiber. One motor neuron, together with every muscle fiber it innervates through those branches, forms what is called a <span class="ch-key">motor unit</span> (Heckman &amp; Enoka, 2012). When that motor neuron fires a single spike, every fiber belonging to its unit twitches together, essentially as one. The motor unit, not the individual fiber and not the individual spike, is therefore the smallest element of movement the nervous system can actually command as a discrete choice. You cannot fire half a motor unit any more than you can fire half of a single spike.</p>
+    <p>Motor units come in a wide range of sizes, and the range is genuinely enormous across the body. In a muscle built for fine, precise movement, such as the small muscles that aim the eyes, or the muscles Bianca relies on to place her fingers exactly on a string, a single motor neuron might command only a handful of fibers, perhaps a dozen or two. That arrangement gives the nervous system exquisitely fine grained control, because turning on or off any one such unit changes the total force only slightly. In a large muscle built for sustained postural work, such as the calf muscles that keep a standing body upright, a single motor neuron may command many hundreds, or even close to a thousand, fibers, trading away precision for raw power and efficiency. The size of a motor unit sets the grain of control available in that particular muscle: small units allow force to be adjusted in tiny steps, while large units add a substantial lump of force all at once.</p>
+    <p>Motor units also differ from each other in more than size. Some are small, contract relatively slowly, and are highly resistant to fatigue, ideal for the low level, sustained work of holding posture for hours without tiring. Others are large, contract quickly, produce a great deal of force, and fatigue rapidly, held in reserve for a maximal effort such as a sprint or a heavy lift. This diversity is not incidental. It is the raw material the nervous system draws on to grade force intelligently rather than crudely.</p>
+    <p>This variation traces back to the muscle fibers themselves, which come in broad families with distinct metabolic personalities. Type I fibers, sometimes called slow oxidative fibers, rely heavily on aerobic metabolism, contract at a modest speed, and can sustain low level effort for a very long time without tiring, which is exactly why a motor unit built from them makes such a good match for postural muscles. Type II fibers, sometimes called fast fibers, lean more heavily on rapid, less efficient energy pathways, contract quickly, generate more force per fiber, and fatigue sooner. A motor unit's overall personality, small and tireless or large and powerful, largely reflects which fiber type its motor neuron happens to be paired with. The nervous system did not invent two separate control strategies from scratch. It simply learned to recruit an existing menu of fiber types in a sensible order, saving the fast, hungry fibers for the moments that genuinely need them.</p>
+
+    <h3>Grading force: recruitment and rate</h3>
+    <p>Here the chapter arrives at its central mechanical insight, and it is a direct extension of the frequency coding you met earlier in this course applied to a single neuron. The nervous system has exactly two levers available for grading the force a muscle produces, and only two (Enoka &amp; Duchateau, 2017).</p>
+    <p><strong>Recruitment</strong> means turning on more motor units. As the demand for force increases, additional units are switched on to help carry the load. Crucially, they are not switched on in a random order. They are recruited in a remarkably orderly sequence, running from the smallest units to the largest, a pattern known as the <span class="ch-key">size principle</span>. The small, fatigue resistant units come online first, for gentle tasks that need only a little force. The large, powerful, fast fatiguing units are held in reserve and recruited last, only when near maximal effort is required. This ordering is a strikingly economical piece of biological design. It means fine control is available exactly where it is needed most, at low forces, because small units each add only a small increment, while raw power is still available on demand when the moment calls for it.</p>
+    <p><strong>Rate coding</strong> means firing each already recruited unit faster. A single twitch is brief. The fiber begins relaxing again before the next command has a chance to arrive. But if the motor neuron fires a second spike before that relaxation is complete, the two twitches begin to overlap and add together, a phenomenon called summation. Fire fast enough, and the individual twitches fuse into a smooth, sustained, and substantially stronger contraction called <span class="ch-key">tetanus</span>. In this way, the same all or nothing units produce noticeably more force simply by being driven at a higher spike frequency. This is the same frequency coding principle from earlier in the course, reappearing now at the level of whole muscle force output: intensity is encoded not by bigger individual events, but by faster ones.</p>
+    <p>Across most of a muscle's working range, these two levers operate together. The nervous system recruits additional units while also speeding up the units already firing. At higher force levels, once most or all available units have already been recruited, rate coding becomes the dominant remaining means of adding still more force, and this is especially prominent during fast, forceful contractions (Enoka &amp; Duchateau, 2017). Recruitment and rate coding are not alternative strategies the nervous system chooses between. They are a coordinated pair, working in concert throughout a contraction.</p>
+    <p>One further subtlety, captured elegantly by a computational model built by Fuglevand and colleagues (1993), explains why force does not appear to climb in even, regular steps as you exert more effort. Low threshold motor units are far more numerous than high threshold units in most muscles, and each newly recruited unit adds proportionally less to the running total as overall force climbs, simply because it is joining a larger and larger pool of units already contributing. The practical result is a nonlinear relationship between recruitment order and force output, in which small forces near the bottom of the range are finely divisible into many small steps, and large forces near the top are built in coarser lumps. Put plainly, the nervous system has its highest resolution exactly where it is most needed, at the gentle end of the range, where a light touch, or a soft bow stroke, must not be crushed by an accidental excess of force.</p>
+
+    <blockquote class="ch-quote">
+      <p>The force exerted by a muscle during a voluntary contraction depends on the number of motor units that are activated and the rates at which the active motor neurons discharge action potentials.</p>
+      <cite>Enoka &amp; Duchateau (2017)</cite>
+    </blockquote>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>It is tempting to picture force as though the nervous system simply turns a dial, sending a bigger or smaller electrical signal down a single wire to make a muscle push harder or softer. Nothing in the periphery works that way. There is no dial. There is only a population of on or off units, and the appearance of a smooth dial is manufactured entirely by how many of those units are switched on and how quickly each one is firing. What looks continuous from the outside is built from discrete parts underneath.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-recruit">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Recruit and Grade: Building Force</div>
+    </div>
+    <p class="ch-widget-sub">Set how many motor units you recruit and how fast each one fires, then contract the muscle and try to hit each target force.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Target</span>
+        <select class="ch-widget-select" id="w-recruit-target">
+          <option value="12">A soft bow stroke (about 12%)</option>
+          <option value="40">Lifting a coffee cup (about 40%)</option>
+          <option value="90">Hauling a heavy box (about 90%)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Units recruited</span>
+        <select class="ch-widget-select" id="w-recruit-units">
+          <option value="1">A few (small units)</option>
+          <option value="2">Some</option>
+          <option value="3">Many</option>
+          <option value="4">Nearly all (large units too)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Firing rate</span>
+        <select class="ch-widget-select" id="w-recruit-rate">
+          <option value="1">Slow (isolated twitches)</option>
+          <option value="2">Medium</option>
+          <option value="3">Fast (fusing)</option>
+          <option value="4">Maximal (full tetanus)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Force output</span>
+        <span class="ch-meter-bar"><span id="w-recruit-forcebar" style="width:8%"></span></span>
+        <span class="ch-meter-num" id="w-recruit-forcenum">8</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Target force</span>
+        <span class="ch-meter-bar"><span id="w-recruit-targetbar" style="width:12%"></span></span>
+        <span class="ch-meter-num" id="w-recruit-targetnum">12</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Contraction smoothness</span>
+        <span class="ch-meter-bar"><span id="w-recruit-smoothbar" style="width:25%"></span></span>
+        <span class="ch-meter-num" id="w-recruit-smoothnum">2</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="w-recruit-msg">Choose a target, then adjust the two dials and press Contract.</p>
+    <button class="ch-widget-btn" id="w-recruit-btn">Contract muscle</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Movement is never open loop</h2>
+    <p>So far the chapter has built a one way street: a command goes in, a force comes out. If that were the whole story, movement would be catastrophically clumsy. Imagine Bianca drawing her bow with her eyes closed and, more importantly, with no sense whatsoever of where her arm actually was in space. She would have to guess the entire trajectory in advance, fire off exactly the right pattern of commands, and simply hope. Any error at all, a string that offered slightly more resistance than expected, a small slip of the fingers, a muscle that had tired a little more than she realized, would go completely uncorrected. She would overshoot, wobble, and miss the note.</p>
+    <p>Real movement is not built this way. It is a <span class="ch-key">closed loop</span>: the nervous system continuously monitors what the body is actually doing and adjusts on the fly, in real time, while the movement is still underway. The sense that makes this possible is <span class="ch-key">proprioception</span>, the sense of body position and movement introduced earlier in this course. Buried inside your muscles are specialized stretch sensors called <span class="ch-key">muscle spindles</span>. Embedded within your tendons are tension sensors called <span class="ch-key">Golgi tendon organs</span>. Together these two sensor types report, moment by moment, how long each muscle currently is, how quickly that length is changing, and how much force it is bearing. This stream of information flows back into the spinal cord and up toward the cerebellum, giving the motor system a live, continuously updated readout of the very limb it is trying to control (Bosco &amp; Poppele, 2001).</p>
+    <p>Proprioception rarely gets the attention that vision or hearing receives, and part of the reason is structural. There is no single dedicated organ for it, nothing shaped like an eye or an ear that you can point to and say, there, that is where this sense lives. Instead it is distributed across thousands of small sensors woven through nearly every muscle, tendon, and joint in the body, each one quietly reporting a tiny slice of the whole picture. Because the sense normally works so well and so invisibly, it tends to be noticed only in its absence. People who lose proprioceptive input to a limb, through certain rare nerve conditions, can retain full strength in the muscles involved and still be unable to control the limb smoothly, because they can no longer feel where it is without looking directly at it. That striking observation, on its own, makes the case for this section better than any amount of description: a working motor system needs the outbound half described earlier in this chapter and this inbound half in equal measure, and neither one is sufficient alone.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch7-img2.jpg" alt="A movement control loop showing a command traveling from the spinal cord to a muscle and continuous proprioceptive feedback traveling back" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The loop that makes movement smooth: every command is checked continuously against proprioceptive feedback from the moving limb itself.</em></figcaption></figure>
+
+    <h3>Reflexes: correction before thought</h3>
+    <p>The fastest layer of correction in this loop does not involve the brain at all. Recall the spinal reflex arc from an earlier chapter. The clearest example is the <span class="ch-key">stretch reflex</span>. When a muscle is stretched suddenly and unexpectedly, its spindles fire rapidly, and the sensory axons carrying that signal run directly into the spinal cord and synapse, often with remarkably few intervening connections, onto the very motor neurons that drive contraction of that same muscle. The muscle is commanded to contract and resist the stretch, and the whole exchange happens within a few dozen milliseconds, long before any signal could travel all the way up to the cortex, be processed, and travel back down again. This is precisely the loop a clinician is testing when they tap below your kneecap with a small reflex hammer. The sudden stretch of the tendon triggers the reflex, and the lower leg kicks forward without any conscious involvement whatsoever.</p>
+    <p>In everyday movement these reflexes are not party tricks or curiosities. They function as an automatic gain control that keeps posture and grip stable without requiring constant conscious attention. Picture Bianca holding her violin under her chin for a long rehearsal. If her arm begins to sag with fatigue, the stretch reflex in the muscles supporting the instrument catches the sag and corrects it before she is even consciously aware anything shifted. The correction happens at the level of the spinal cord first, and only afterward do the slower cortical and cerebellar loops refine what the reflex already began. Movement, in short, is best understood as a layered hierarchy of feedback loops running at different speeds at once: a fast, simple, local reflex nested inside slower, more sophisticated supervisory loops that can plan further ahead and account for more context.</p>
+    <p>There is a long running and genuinely rich scientific conversation about how much of skilled movement relies on feedback, meaning the system reacting to what has already happened, versus feedforward, meaning the brain predicting an outcome and pre compensating for it before anything has gone wrong at all. Bosco and Poppele (2001) place this debate in useful context, and the mature answer that has emerged is that skilled movement uses both mechanisms together. The brain builds an internal prediction of what a given command ought to produce, and feedback is then used to catch and correct the difference whenever reality departs from that prediction. But the foundational point for the working model in this chapter is simpler, and it is not really up for debate: without feedback of some kind, controlled movement is not possible at all. The widget later in this section is built to let you feel that difference directly, rather than simply read about it.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A stretch reflex can correct an error in roughly thirty to fifty milliseconds. A correction routed all the way through the cortex takes considerably longer than that. Why might the nervous system keep both the fastest, simplest loop and the slower, smarter loop running at the same time, rather than relying on either one alone?</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Bianca notices that when she is exhausted late at night, her intonation gets noticeably worse before her tone does. Given that pitch on a string instrument depends heavily on precise finger placement, which the spindles and tendon organs in her hand and forearm help monitor, offer a plausible, mechanism based guess about what fatigue might be doing to the reliability of that feedback loop.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-loop">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Open Loop vs Closed Loop</div>
+    </div>
+    <p class="ch-widget-sub">A virtual arm reaches for the target. Run it with feedback disabled, then enabled, and use Perturb to knock the arm mid reach and watch the loop catch it.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Control mode</span>
+        <select class="ch-widget-select" id="w-loop-mode">
+          <option value="open">Open loop (feedback OFF)</option>
+          <option value="closed">Closed loop (feedback + reflex ON)</option>
+        </select>
+      </div>
+    </div>
+
+    <canvas id="w-loop-canvas" width="640" height="240" style="width:100%"></canvas>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Endpoint accuracy</span>
+        <span class="ch-meter-bar"><span id="w-loop-accbar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="w-loop-accnum">..</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Smoothness</span>
+        <span class="ch-meter-bar"><span id="w-loop-smoothbar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="w-loop-smoothnum">..</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="w-loop-msg">Press Run reach to begin.</p>
+    <div class="ch-widget-row">
+      <button class="ch-widget-btn" id="w-loop-run">Run reach</button>
+      <button class="ch-widget-btn" id="w-loop-perturb">Perturb mid reach</button>
+    </div>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Upstream: planning, sequencing, and the sculpting power of practice</h2>
+    <p>The spotlight so far has stayed deliberately on the motor neuron and everything downstream of it, because that is where an honest working model needs to be anchored. It is worth lifting our eyes briefly, though, to see what feeds into the final common pathway from above. Descending commands originate largely in the motor cortex and travel down through several major pathways, the most prominent of which is the <span class="ch-key">corticospinal tract</span>. In humans and other primates, some corticospinal fibers make direct connections, called corticomotoneuronal connections, straight onto spinal motor neurons, a relatively direct line running from cortex to the final common pathway. This particular kind of connection is associated with skilled, highly individuated movements, such as the independent control of single fingers that a violinist depends on constantly (Lemon, 2008).</p>
+    <p>Lemon's (2008) central message, and a welcome corrective, is that we should resist the tempting picture of the brain as a general barking fixed orders at an obedient set of spinal troops. Motor control, he argues, emerges from the entire motor network working together, including the cortex, brainstem, basal ganglia, cerebellum, spinal circuits, and the constant sensory feedback threading through all of them at once. A command is not a fixed script written in advance and simply executed on schedule. It is shaped, moment by moment, by the whole distributed system, including the very periphery it is trying to move. The layered loop picture built in the previous section of this chapter is this same idea, seen from below rather than from above.</p>
+    <p>Between the initial intention and the final descending command lies the work of planning and sequencing, deciding not merely to move but in what order, with what timing, and with what transitions between individual movements. The basal ganglia and the cerebellum are both deeply involved in assembling smooth, well timed sequences out of individual component movements, and in learning and refining those sequences over repeated attempts. This brings us to the most tangible reason the motor system makes such a natural entry point into the rest of this course: practice physically changes it.</p>
+    <p>When Bianca practices that same eight bar passage night after night, the circuits producing the movement are not merely being used. They are being reorganized. Roth and Ding (2024), reviewing the cortico basal ganglia circuit specifically in the context of motor learning, describe how a newly acquired motor skill becomes written into the nervous system through long term synaptic plasticity and the growth and pruning of tiny structures on neurons called dendritic spines. The physical hardware of the relevant connections is remodeled as the skill is acquired and gradually refined with repetition. This is the nervous system rewiring itself in the most concrete, observable way available to us. You can watch a clumsy, halting movement become fluent over days or weeks of deliberate practice, and know that specific synapses are being reshaped underneath that visible improvement. It is the clearest possible preview of the chapter still ahead of us on plasticity.</p>
+    <p>And the process does not stop the moment practice stops for the day. Much of the consolidation of a newly practiced motor skill, the surprising overnight leap in fluency that Bianca has noticed more than once after sleeping on a difficult passage, appears to continue during sleep itself, a topic this course will return to directly in a later chapter. The acting half of the sense, decide, and act arc, it turns out, keeps working on itself quietly even while the body is at rest.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Lemon (2008) warns against picturing the brain as a single commander issuing orders to obedient spinal troops. Based on everything in this chapter, from the final common pathway to proprioceptive feedback to the layered speed of reflexes, explain in your own words why that command and obey metaphor understates how motor control actually works.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Tracing the whole path: a worked example</h2>
+    <p>Let us close the loop on Bianca's bow stroke, tracing one movement from beginning to end using only the concepts introduced in this chapter.</p>
+    <p>The <strong>intention</strong> forms: Bianca wants to play the next note softly, then crescendo into the phrase that follows. The <strong>plan</strong> is assembled with help from her cerebellum and basal ganglia, drawing on months of practice with this exact passage: draw the bow slowly at first, then gradually add pressure and speed. A <strong>command</strong> descends the corticospinal tract and, in her spinal cord, converges on the <strong>final common pathway</strong>, the alpha motor neurons controlling her bow arm and finger muscles. Following the <strong>size principle</strong>, small motor units are recruited first for the gentle opening of the phrase, and as more force is needed for the crescendo, larger units join in while firing <strong>rates</strong> climb, grading the force smoothly rather than in noticeable jumps.</p>
+    <p>Each motor neuron spike, all or nothing, travels out to the <strong>neuromuscular junction</strong>, where calcium entry triggers <strong>acetylcholine</strong> release. That acetylcholine opens nicotinic receptors on the muscle fiber, generating an <strong>endplate potential</strong> so large that it reliably fires a muscle fiber action potential and a resulting <strong>twitch</strong>. Faster motor neuron firing fuses successive twitches toward <strong>tetanus</strong>, and the muscle shortens in a controlled, graded way rather than in a single abrupt jerk.</p>
+    <p>Throughout all of this, <strong>muscle spindles</strong> and <strong>Golgi tendon organs</strong> in her forearm and hand report length and tension back to the spinal cord continuously, many times each second. If her finger lands slightly off the intended spot on the string, a fast <strong>stretch reflex</strong> style correction can begin adjusting within milliseconds, while slower cortical and cerebellar loops fine tune pitch and tone over the following moments. The note rings true, or close enough that her ear and her practiced feedback loops can nudge it the rest of the way. And because she has drawn this same bow stroke hundreds of times already, the circuits that produced it tonight will have quietly rewired themselves, just slightly, to do it a little more reliably tomorrow. That quiet rewiring is the bridge to everything the rest of this course builds on.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>It is tempting to think of a skilled, fluent movement, a fast violin passage, a practiced golf swing, a fluid handwriting stroke, as evidence that the nervous system has learned to skip steps or bypass feedback for the sake of speed. It has not. Every step described in this chapter, from motor neuron to neuromuscular junction to spindle feedback to reflex correction, still runs in a skilled performer exactly as it does in a beginner. What changes with practice is not whether the loop runs. It is how well tuned and how efficient each stage of that same loop has become.</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The <strong>alpha motor neuron</strong> is the final common pathway: every descending command, every reflex, and every modulatory influence on a muscle converges on it, and only it reaches the muscle fibers themselves.</li>
+      <li>The <strong>neuromuscular junction</strong> is a specialized, high reliability synapse. An arriving spike triggers calcium entry, acetylcholine release, and an endplate potential so large that one nerve spike faithfully produces one muscle fiber action potential and one twitch.</li>
+      <li>At the level of a single fiber, contraction is <strong>all or nothing</strong>, an echo of the same principle governing a single spike, so force cannot be graded by simply making individual events bigger.</li>
+      <li>A <strong>motor unit</strong>, one motor neuron plus every fiber it controls, is the smallest element of movement the nervous system can actually command. Force is graded by <strong>recruiting</strong> more units, in order from small to large under the size principle, and by <strong>rate coding</strong>, firing already active units faster until their twitches fuse toward tetanus.</li>
+      <li>Movement is never <strong>open loop</strong>. Proprioceptive feedback from muscle spindles and Golgi tendon organs continuously reports limb position and force, and spinal <strong>reflexes</strong> supply near instant corrections nested inside slower, more sophisticated cortical loops.</li>
+      <li>Motor control emerges from the whole distributed motor network working together, and practice physically <strong>rewires</strong> that network at the level of individual synapses, the most tangible and observable example of plasticity in this entire course.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter ended with a promise: that practicing a movement physically remodels the circuits that produce it. The next chapter takes that promise as its subject directly. We turn from how the nervous system works to how it changes, plasticity, the capacity of synapses to strengthen, weaken, form, and disappear with experience. Bianca's slowly improving bow arm was our first concrete glimpse of that process. Next we build the general principles underneath it.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bosco, G., &amp; Poppele, R. E. (2001). Proprioception from a spinocerebellar perspective. <em>Physiological Reviews, 81</em>(2), 539-568. https://doi.org/10.1152/physrev.2001.81.2.539</p>
+    <p>Enoka, R. M., &amp; Duchateau, J. (2017). Rate coding and the control of muscle force. <em>Cold Spring Harbor Perspectives in Medicine, 7</em>(10), a029702. https://doi.org/10.1101/cshperspect.a029702</p>
+    <p>Fuglevand, A. J., Winter, D. A., &amp; Patla, A. E. (1993). Models of recruitment and rate coding organization in motor-unit pools. <em>Journal of Neurophysiology, 70</em>(6), 2470-2488. https://doi.org/10.1152/jn.1993.70.6.2470</p>
+    <p>Heckman, C. J., &amp; Enoka, R. M. (2012). Motor unit. <em>Comprehensive Physiology, 2</em>(4), 2629-2682. https://doi.org/10.1002/cphy.c100087</p>
+    <p>Lemon, R. N. (2008). Descending pathways in motor control. <em>Annual Review of Neuroscience, 31</em>, 195-218. https://doi.org/10.1146/annurev.neuro.31.060407.125547</p>
+    <p>Rodríguez Cruz, P. M., Cossins, J., Beeson, D., &amp; Vincent, A. (2020). The neuromuscular junction in health and disease: Molecular mechanisms governing synaptic formation and homeostasis. <em>Frontiers in Molecular Neuroscience, 13</em>, 610964. https://doi.org/10.3389/fnmol.2020.610964</p>
+    <p>Roth, R. H., &amp; Ding, J. B. (2024). Cortico-basal ganglia plasticity in motor learning. <em>Neuron, 112</em>(15), 2486-2502. https://doi.org/10.1016/j.neuron.2024.06.014</p>
+    <p>Sanes, J. R., &amp; Lichtman, J. W. (1999). Development of the vertebrate neuromuscular junction. <em>Annual Review of Neuroscience, 22</em>, 389-442. https://doi.org/10.1146/annurev.neuro.22.1.389</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 7 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-recruit');
+    if(!root) return;
+    var targetSel = root.querySelector('#w-recruit-target');
+    var unitsSel = root.querySelector('#w-recruit-units');
+    var rateSel = root.querySelector('#w-recruit-rate');
+    var forceBar = root.querySelector('#w-recruit-forcebar');
+    var forceNum = root.querySelector('#w-recruit-forcenum');
+    var targetBar = root.querySelector('#w-recruit-targetbar');
+    var targetNum = root.querySelector('#w-recruit-targetnum');
+    var smoothBar = root.querySelector('#w-recruit-smoothbar');
+    var smoothNum = root.querySelector('#w-recruit-smoothnum');
+    var msg = root.querySelector('#w-recruit-msg');
+    var btn = root.querySelector('#w-recruit-btn');
+
+    function updateTarget(){
+      var t = parseInt(targetSel.value,10);
+      targetBar.style.width = t + '%';
+      targetNum.textContent = t;
+    }
+
+    function compute(){
+      var units = parseInt(unitsSel.value,10); // 1..4
+      var rate = parseInt(rateSel.value,10);   // 1..4
+      // recruitment contributes with a nonlinear (size-principle) weighting:
+      // early units add less absolute force capacity, capacity grows.
+      var recruitCap = [0,25,45,70,100][units]; // proportion of max fibers active
+      // rate coding scales the force each active fiber produces (twitch->tetanus)
+      var rateScale = [0,0.45,0.68,0.88,1.0][rate];
+      var force = Math.round(recruitCap * rateScale);
+      // smoothness: low rate = unfused, jerky; high rate = fused, smooth (0..10)
+      var smooth = Math.round([0,2,5,8,10][rate]);
+      return {force:force, smooth:smooth};
+    }
+
+    function run(){
+      var t = parseInt(targetSel.value,10);
+      var r = compute();
+      forceBar.style.width = Math.min(100,r.force) + '%';
+      forceNum.textContent = r.force;
+      smoothBar.style.width = (r.smooth*10) + '%';
+      smoothNum.textContent = r.smooth;
+      var diff = r.force - t;
+      var out;
+      if(Math.abs(diff) <= 6){
+        out = 'On target. You matched the demand, the right blend of recruitment and rate.';
+        if(r.smooth < 5) out += ' But firing is slow, so the contraction is jerky, unfused twitches. Push the rate up for a smoother hold.';
+      } else if(diff < -6){
+        out = 'Too weak, you fell short of the target. Recruit more units, fire them faster, or both. Remember, both levers work together.';
+      } else {
+        out = 'Too strong, you overshot. For a soft bow stroke this would be clumsy and wasteful; ease off recruitment or rate.';
+      }
+      msg.textContent = out;
+    }
+
+    targetSel.addEventListener('change', function(){ updateTarget(); run(); });
+    unitsSel.addEventListener('change', run);
+    rateSel.addEventListener('change', run);
+    btn.addEventListener('click', run);
+    updateTarget();
+    run();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-loop');
+    if(!root) return;
+    var modeSel = root.querySelector('#w-loop-mode');
+    var canvas = root.querySelector('#w-loop-canvas');
+    var ctx = canvas.getContext('2d');
+    var runBtn = root.querySelector('#w-loop-run');
+    var perturbBtn = root.querySelector('#w-loop-perturb');
+    var accBar = root.querySelector('#w-loop-accbar');
+    var accNum = root.querySelector('#w-loop-accnum');
+    var smoothBar = root.querySelector('#w-loop-smoothbar');
+    var smoothNum = root.querySelector('#w-loop-smoothnum');
+    var msg = root.querySelector('#w-loop-msg');
+
+    var W = canvas.width, H = canvas.height;
+    var shoulder = {x:60, y:H/2};
+    var target = {x:W-90, y:H/2};
+    var running = false;
+    var perturbQueued = false;
+
+    function drawScene(handX, handY){
+      ctx.clearRect(0,0,W,H);
+      // target
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, 22, 0, Math.PI*2);
+      ctx.strokeStyle = '#c98a3a';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(target.x, target.y, 6, 0, Math.PI*2);
+      ctx.fillStyle = '#c98a3a';
+      ctx.fill();
+      // arm segment
+      ctx.beginPath();
+      ctx.moveTo(shoulder.x, shoulder.y);
+      ctx.lineTo(handX, handY);
+      ctx.strokeStyle = '#4a6a70';
+      ctx.lineWidth = 6;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+      // shoulder
+      ctx.beginPath();
+      ctx.arc(shoulder.x, shoulder.y, 8, 0, Math.PI*2);
+      ctx.fillStyle = '#4a6a70';
+      ctx.fill();
+      // hand
+      ctx.beginPath();
+      ctx.arc(handX, handY, 9, 0, Math.PI*2);
+      ctx.fillStyle = '#8a4a3a';
+      ctx.fill();
+    }
+
+    function seededNoise(){ return (Math.random()-0.5); }
+
+    function runReach(){
+      if(running) return;
+      running = true;
+      var mode = modeSel.value;
+      var x = shoulder.x, y = shoulder.y;
+      var vx = 0, vy = 0;
+      var t = 0;
+      var wobbleSum = 0;
+      var perturbAt = perturbQueued ? 55 : -1;
+      perturbQueued = false;
+      var open = (mode === 'open');
+      var frames = 130;
+
+      function step(){
+        t++;
+        var dx = target.x - x;
+        var dy = target.y - y;
+        // command: push toward target
+        var gain = 0.06;
+        vx += dx * gain;
+        vy += dy * gain;
+
+        if(open){
+          // open loop: fixed drive, no correction, accumulating drift + no damping
+          vx += seededNoise()*2.2;
+          vy += seededNoise()*2.2;
+          vx *= 0.86; vy *= 0.86; // weak, uncontrolled damping -> overshoot/wobble
+        } else {
+          // closed loop: proprioceptive feedback damps velocity strongly (reflex)
+          vx *= 0.62; vy *= 0.62;
+          vx += seededNoise()*0.35;
+          vy += seededNoise()*0.35;
+        }
+
+        // perturbation
+        if(t === perturbAt){
+          vy += open ? 26 : 26;
+          vx += 8;
+        }
+
+        x += vx; y += vy;
+        // keep in bounds visually
+        if(y<20) y=20; if(y>H-20) y=H-20;
+        if(x<shoulder.x) x=shoulder.x; if(x>W-20) x=W-20;
+
+        wobbleSum += Math.abs(vx)+Math.abs(vy);
+        drawScene(x,y);
+
+        if(t < frames){
+          requestAnimationFrame(step);
+        } else {
+          finish(x,y,wobbleSum,open,perturbAt>0);
+        }
+      }
+      step();
+    }
+
+    function finish(x,y,wobbleSum,open,perturbed){
+      var dist = Math.sqrt(Math.pow(target.x-x,2)+Math.pow(target.y-y,2));
+      var acc = Math.max(0, Math.round(100 - dist*1.6));
+      var smooth = Math.max(0, Math.round(100 - (wobbleSum/130)*4.2));
+      accBar.style.width = acc + '%';
+      accNum.textContent = acc;
+      smoothBar.style.width = smooth + '%';
+      smoothNum.textContent = smooth;
+      if(open){
+        msg.textContent = 'Open loop: with no feedback, the arm overshoots, wobbles, and cannot correct'
+          + (perturbed ? '. The perturbation sent it off course and it never recovered.' : '. Every error accumulates unchecked.')
+          + ' Now switch to closed loop and run again.';
+      } else {
+        msg.textContent = 'Closed loop: proprioceptive feedback and the stretch reflex damp the motion and pull the hand onto the target'
+          + (perturbed ? '. Watch how the loop caught the perturbation and corrected it within the reach.' : '. Smooth and accurate.');
+      }
+      running = false;
+    }
+
+    runBtn.addEventListener('click', runReach);
+    perturbBtn.addEventListener('click', function(){
+      perturbQueued = true;
+      if(!running){
+        msg.textContent = 'Perturbation armed. Press Run reach and the arm will be nudged mid movement.';
+      }
+    });
+    drawScene(shoulder.x, shoulder.y);
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

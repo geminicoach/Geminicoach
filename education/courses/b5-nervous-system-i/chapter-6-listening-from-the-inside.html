@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Listening from the Inside</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 6 &middot; Module 2</div>
+    <h1 class="ch-title">Listening from the <em>Inside</em></h1>
+    <p class="ch-subtitle">Transduction turns the world into spikes, adaptation decides which spikes matter, and interoception is how the body tells the brain what state it is in.</p>
+    <div class="ch-meta">
+      <span>70 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">S</span>it still for a moment and try to feel your own heartbeat without touching your wrist or your chest. No pulse taking, just listening. Some of you will sense a steady thud almost immediately. Others will strain and catch nothing at all, or will mistake the tick of a clock, or the pressure of your own attention, for a beat. Now try something easier. Notice the chair or the floor pressing against you right now. There it is, obvious, except that a moment ago, before this sentence mentioned it, you were not feeling it at all, even though the pressure never changed.</p>
+    <p>Those two small experiments are this whole chapter in miniature. One shows how strangely dim the sense of your own insides can be. The other shows that even a strong, constant signal can vanish from awareness entirely, without the signal itself ever weakening. Both are clues to how the nervous system decides what is worth reporting, and both are about to reshape what you think the word sensation actually means.</p>
+    <p>A learner named Cato will walk through this chapter with you. Cato wears a small ring that measures heart rate variability, the beat to beat fluctuation in the time between heartbeats, and reports a single number on his phone every morning. Some mornings the number frightens him. Other mornings it reassures him, sometimes more than it should. He has started treating that number as a verdict on how well his nervous system is holding up, and by the end of this chapter you will understand exactly why that habit is both understandable and mistaken. Cato is not a patient and not a diagnosis. He is a stand in for an experience many people share: a body that speaks in a language nobody ever taught us to read, and a piece of technology offering to translate it, whether or not the translation deserves to be trusted.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Turning the Arrows Around</h2>
+    <p>For the last several chapters, this course followed signals outward. A decision became a command, a command became a muscle contraction, an autonomic setpoint became a change in heart rate. We traced the <span class="ch-key">efferent</span> half of the map, the pathways that carry orders from the center of the nervous system out to the periphery. Now we turn every arrow around and follow the far larger flow moving the other way, the <span class="ch-key">afferent</span> half, the news arriving from the body and from the world.</p>
+    <p>The volume of that inbound traffic is hard to overstate. At every instant, your skin, eyes, ears, joints, gut, blood vessels, and airways are generating streams of signals bound for the spinal cord and brain. The nervous system's problem is not a shortage of information. It is a flood, arriving from every direction, every moment, without pause. Most of this chapter is about two elegant solutions to that flood. The first is <span class="ch-key">transduction</span>, the universal trick for turning a physical event into the neural language of spikes. The second is <span class="ch-key">adaptation</span>, the trick for ignoring almost all of it, so the important parts can still be heard over the noise.</p>
+    <p>Then we make a turn that reorganizes the whole picture. Instead of marching through the classic five senses one at a time, we will split sensation along a different seam entirely, the difference between sensing the world outside you, called <span class="ch-key">exteroception</span>, and sensing the state of the body that is you, called <span class="ch-key">interoception</span>. That second sense, the one you were straining to use when you hunted for your own heartbeat a moment ago, turns out to be the raw material of emotion, effort, and the plain feeling of being alive. It is also the sensory partner to the autonomic and stress systems built in earlier chapters of this course. A brake you cannot feel is a brake you cannot use.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>In the outward signaling chapters, a command ended cleanly at a muscle or a gland. Where does an afferent signal end? Hold that question. The answer is less obvious than it sounds, and it drives the second half of this chapter.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Universal Grammar of Sensation: Transduction</h2>
+    <p>Here is a fact that sounds trivial but is not: your brain has never touched the world. It sits in the dark, suspended in fluid, sealed inside bone. Light, sound pressure, warmth, the stretch of a full stomach: none of these physical things ever enter the skull. What enters is only ever one currency, the action potential. Every sensory experience you have ever had, from the taste of coffee to the ache of a pulled muscle, was assembled entirely from trains of these identical electrical spikes.</p>
+    <p>The process that makes this possible is called <span class="ch-key">transduction</span>, the conversion of a physical stimulus into a change in a neuron's membrane potential, and ultimately into a pattern of action potentials. A sensory receptor is, at bottom, a specialized transducer, a cell or a nerve ending built to be exquisitely sensitive to one form of energy and to translate it into the only language neurons speak.</p>
+
+    <h3>A worked example: pressure on the skin</h3>
+    <p>Consider what happens when you press a fingertip firmly against the edge of a table. The physical event is mechanical, a deformation of the skin. Buried in that skin are mechanoreceptors whose membranes contain mechanically gated ion channels, among them the Piezo family of channels, whose discovery clarified exactly how a bending force becomes an electrical event (Hao et al., 2014). When the membrane is stretched or indented, these channels physically pop open. Positive ions rush in, and the local membrane voltage shifts toward the threshold for firing. This graded shift is called the <span class="ch-key">receptor potential</span>.</p>
+    <p>Crucially, the receptor potential is not yet an action potential. It is a smooth, analog voltage change whose size scales with the strength of the stimulus. Press harder, and more channels open, and the receptor potential grows larger. But the nerve fiber carrying the message toward the spinal cord speaks only in all or nothing spikes, not in smooth analog waves. So the graded receptor potential has to be encoded: a stronger stimulus produces a larger receptor potential, which produces a higher frequency of action potentials. This is the heart of sensory coding. Intensity is written in rate, spikes per second, not in the size of any single spike (Hao et al., 2014).</p>
+    <p>The same logic, dressed in different molecular clothing, plays out everywhere in the body. In the retina, photons trigger a chemical cascade that changes membrane voltage. In the cochlea, sound driven fluid motion bends hair cells and opens mechanical channels of their own. In the wall of the gut, stretch from a filling stomach opens stretch sensitive channels on visceral nerve fibers. Different energies, different receptors, one shared destination language. Once you understand transduction as physical stimulus, then receptor potential, then frequency of spikes, you understand the grammar shared by every sense you have, inside the body and out.</p>
+    <p>It is worth pausing on how far this single grammar reaches, because it is easy to underestimate. Proprioceptors buried in muscle spindles and tendons transduce stretch and tension into the sense of where a limb sits in space, which is how you can touch your own nose with your eyes closed. Thermoreceptors transduce small shifts in skin temperature into warmth or cold. Nociceptors, the receptors behind pain, transduce potentially damaging mechanical, thermal, or chemical events into a signal urgent enough to demand attention immediately. Chemoreceptors in the carotid body transduce the chemistry of the blood itself, oxygen, carbon dioxide, and acidity, into signals that drive the basic rhythm of breathing without any conscious involvement at all. None of these receptors share a body plan, and none of them share a location, yet every one of them ends its work at the identical junction: a graded receptor potential converted into a train of action potentials. Nature did not invent a new signaling system for each sense. It reused one system relentlessly, and built specialization entirely at the front end, in the receptor itself, rather than in the wire carrying the message onward.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <img src="img/ch6-img1.jpg" alt="A physical stimulus is converted into a graded receptor potential, then into a frequency coded train of action potentials." style="display:block;max-width:100%;height:auto;width:100%;margin:0 auto;">
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Transduction in miniature. A physical stimulus becomes a graded receptor potential, then a frequency coded train of identical action potentials. One currency carries every kind of sensory news.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If every stimulus arrives in the brain as the same kind of spike, how does the brain ever know whether a signal means light, or warmth, or a full stomach? The answer is not written inside the spike itself. Think instead about which wire the spike arrives on.</p>
+    </aside>
+
+    <p>That hint deserves a name. Because all spikes look alike, the meaning of a sensory signal is carried largely by <span class="ch-key">labeled lines</span>, by which pathway a spike happens to travel. Spikes arriving on the optic nerve are interpreted as light no matter what actually caused them, which is why pressing gently on a closed eyelid produces a faint spot of light that was never really there. The brain reads the return address on the message, not the content of the message itself.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Adaptation: Why You Notice Change, Not Constancy</h2>
+    <p>Return to that chair or floor pressing against you. The pressure was there the whole time, generating receptor potentials the whole time, yet it vanished from awareness within seconds. This is <span class="ch-key">sensory adaptation</span>: the tendency of receptors and the pathways attached to them to reduce their response to an unchanging stimulus. Adaptation is not fatigue, and it is not a failure of the system. It is a strategy, and a remarkably efficient one.</p>
+    <p>The logic is informational rather than mechanical. A signal that never changes carries almost no new information after its first moment. If a receptor fired at a constant rate forever to report still pressing, still pressing, still pressing, it would waste energy and clog a limited channel with redundancy the brain does not need. Far more useful is a system that announces itself loudly at the onset of a stimulus, quiets down once the stimulus proves constant and unremarkable, and then announces itself loudly again the instant anything changes. Wark, Lundstrom, and Fairhall (2007) frame adaptation in exactly these terms, as a mechanism for efficient neural coding, in which the nervous system continually retunes itself to the current statistics of its input, spending its limited bandwidth on what is new rather than on what has already been settled.</p>
+    <p>This is why adaptation operates across an enormous range of timescales, from milliseconds inside a single channel to seconds and minutes across a whole pathway (Wark et al., 2007). Your eyes adapt to a dark room over many minutes. A single touch receptor can stop responding to steady pressure in well under a second. Different jobs, same underlying principle: track the change, discard the constant.</p>
+
+    <h3>Fast and slow: two ways to report a stimulus</h3>
+    <p>Not all receptors adapt at the same rate, and the difference is functional rather than incidental. <span class="ch-key">Fast adapting</span> receptors, sometimes called phasic receptors, respond briskly to the onset and offset of a stimulus and fall silent in between. They are change detectors, ideal for sensing vibration and texture. <span class="ch-key">Slow adapting</span> receptors, sometimes called tonic receptors, keep firing throughout a sustained stimulus, though at a gradually declining rate. They are better suited to reporting an ongoing state, such as the position of a joint or a steady pressure that still needs to be tracked (Hao et al., 2014).</p>
+    <p>You have a felt example of both kinds right now. A fast adapting population is why you feel the exact instant you put on a wristwatch, and then forget it is there entirely; the "on" signal is loud, and the "still on" signal is nearly silent. A slow adapting population is why, if you consciously attend to it, you can still recover a faint ongoing sense of the watch's weight on your wrist. The widget below lets you drive both kinds of receptor directly and watch the difference for yourself.</p>
+    <p>Adaptation is also why walking into a bakery hits you with a wave of scent that fades within a minute, even though the same molecules keep drifting through the air the entire time you stand there, and why stepping from bright daylight into a dim room leaves you briefly blind before your visual system slowly retunes itself to the new baseline. Neither example is a failure of the nose or the eye. Both are the identical strategy at work: reset the baseline to whatever is currently present, and spend the system's limited attention on whatever changes next. The cost of this strategy is real. It is exactly why a person who works around a constant background hazard, a factory floor or a kitchen full of ongoing low grade odors, can stop consciously registering a stimulus that a visitor would notice instantly. The benefit is just as real. Without adaptation, the nervous system would be permanently shouting about yesterday's news, with no bandwidth left for today's.</p>
+  </section>
+
+  <div class="ch-widget" id="adapt-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Adaptation Meter</div>
+    </div>
+    <p class="ch-widget-sub">Apply a constant stimulus and watch a receptor spike, then fall quiet, even though the stimulus never turns off. Raise the intensity partway through, and it fires again. Receptors report change, not steady state.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Stimulus type</span>
+        <select class="ch-widget-select" id="adapt-stim">
+          <option value="pressure">Steady pressure on skin</option>
+          <option value="smell">A constant smell</option>
+          <option value="sound">A background hum</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Receptor type</span>
+        <select class="ch-widget-select" id="adapt-type">
+          <option value="fast">Fast adapting (phasic)</option>
+          <option value="slow">Slow adapting (tonic)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Intensity</span>
+        <select class="ch-widget-select" id="adapt-int">
+          <option value="3">Light</option>
+          <option value="6" selected>Medium</option>
+          <option value="9">Strong</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Stimulus (physical)</span>
+        <span class="ch-meter-bar"><span id="adapt-stimbar" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="adapt-stimnum">6</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Firing rate (spikes/s)</span>
+        <span class="ch-meter-bar"><span id="adapt-firebar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="adapt-firenum">0</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="adapt-readout">Press Apply stimulus to begin. The stimulus will stay on the whole time, watch what the receptor does.</p>
+
+    <button class="ch-widget-btn" id="adapt-btn">Apply stimulus</button>
+  </div>
+
+  <section class="ch-section">
+    <p>Two lessons should fall out of playing with that meter. First, the firing rate spikes hard at onset and then decays, even though the stimulus bar itself never moves. The receptor is not measuring the world's steady state. It is measuring change over time. Second, when you raise the intensity partway through, the receptor re-ignites immediately. It had not run out of anything. It had simply decided the old level was old news, no longer worth reporting. This is efficient coding made visible (Wark et al., 2007): the system spends its spikes on the edges of events, not on the events themselves.</p>
+    <p>Hold onto this idea of a system tuned to change and effectively blind to constancy. It will explain, in the second half of this chapter, one of the more consequential features of the human mind: that a body humming along in a stable, healthy state generates almost no felt signal at all, which is exactly why so many people are strangers to their own interiors until something changes.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Two Directions of Sensing: Exteroception and Interoception</h2>
+    <p>Now for the reorganizing move promised earlier. The traditional approach sorts sensation by modality: vision, hearing, touch, taste, smell. That grouping is useful, but it hides a deeper split that the modern research literature treats as fundamental, the difference in direction. Some senses point outward, toward the world. Others point inward, toward the body itself.</p>
+    <p><span class="ch-key">Exteroception</span> is the sensing of the external environment: the light bouncing off this page, the sound in a room, an object resting under your fingers. These are the senses most people mean when they say "the five senses," and they are built for high spatial and temporal resolution. You can localize a touch to within a millimeter and hear a click within a few milliseconds of it occurring. Exteroception answers a single question: what is out there?</p>
+    <p><span class="ch-key">Interoception</span> answers a different question entirely: what is going on in here? It is the sense of the internal physiological condition of the body, heart rate, breathing, gut fullness and motility, temperature, blood chemistry, the burn of working muscle, the urge to breathe, the pang of hunger or thirst. Chen and colleagues (2021), in a coordinated overview of the field from the National Institutes of Health, treat interoception as a distinct sensory domain with its own receptors, its own ascending pathways, and its own destinations in the brain, and they draw a firm line between it and exteroception rather than treating it as an afterthought.</p>
+
+    <h3>Craig's reframing: the whole physiological condition of the body</h3>
+    <p>For much of the twentieth century, "interoception" meant little more than crude visceral sensation, the dull ache of a distended organ and not much else. The influential reframing came from the neuroanatomist A. D. Craig (2002), whose landmark review redefined interoception as the sense of the entire physiological condition of the body: not just the gut and the bladder, but temperature, pain, itch, muscle and joint state, hunger, thirst, and even air hunger, the full readout of the flesh. Craig proposed that this afferent representation forms the substrate of subjective feeling and, ultimately, of self-awareness itself. He gave the body as sensed a memorable name, "the material me."</p>
+    <p>Craig also gave the reframing an anatomical spine. He identified a lamina I spinothalamocortical pathway, a dedicated line carrying signals about the body's condition up through the spinal cord and thalamus and into the cortex, as the structural foundation of interoception (Craig, 2002). The point that matters for a working model is not the anatomical vocabulary. It is that interoception is not a vague afterthought hanging off the "real" senses. It is a full and dedicated afferent system, with its own wiring, and its destination in the cortex turns out to be significant, as the next section will show.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <img src="img/ch6-img2.jpg" alt="Ascending signals from the heart, lungs, and gut converge toward the brainstem and brain, illustrating interoception." style="display:block;max-width:100%;height:auto;width:100%;margin:0 auto;">
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 2</span> <em>Interoception. The heart, lungs, and gut send a continuous ascending stream of signals toward the brainstem and, from there, into the brain, the news arriving from inside the body itself.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats a "gut feeling" as something mystical, a hunch arriving from nowhere in particular. It is not mysterious at all. The gut wall is genuinely wired with sensory endings, and stretch, motility, and chemical signals from the digestive tract really do travel to the brain and really do shape mood and decision making. What is mistaken is the direction people draw the arrow. The feeling is not evidence that the gut somehow knows something the conscious mind does not. It is ordinary interoceptive traffic, arriving through the same afferent channels as every other bodily signal, and like every other interoceptive signal, it is genuinely ambiguous and open to misreading.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Vagus and the Ascending Route</h2>
+    <p>Where does interoceptive news actually travel? A great deal of it rides the <span class="ch-key">vagus nerve</span>, the same nerve met earlier in this course as the highway of the parasympathetic, rest and digest, side of the autonomic nervous system. But there is a fact about the vagus that most people, even people who mention it constantly, get backward. The vagus is not primarily a command line running down to the organs. It is overwhelmingly a sensory nerve. Roughly eighty percent of its fibers are afferent, carrying signals up from the heart, lungs, and gut toward the brain, a ratio documented in the classical anatomical work of Berthoud and Neuhuber (2000) and confirmed in more recent interoception research (Paciorek & Skora, 2020).</p>
+    <p>That single statistic reorganizes the whole autonomic story. Earlier in this course, the vagus was treated mainly as the parasympathetic brake, an outbound cable carrying instructions to slow the heart and support digestion. That description is accurate, but it describes the minority of the traffic. The dominant flow runs the other way: the body constantly telling the brain how it is doing. The vagus is, first and foremost, the nervous system's chief interoceptive conduit (Paciorek & Skora, 2020).</p>
+    <p>These afferents arrive first at a brainstem structure called the <span class="ch-key">nucleus tractus solitarii</span>, often abbreviated as the NTS, a hub that functions as the reception desk for visceral news. From there, signals relay onward through the parabrachial nucleus and the thalamus, then upward to the hypothalamus, the insular cortex, and the anterior cingulate cortex (Chen et al., 2021). The insular cortex deserves particular attention. It is where the many separate strands of bodily signal are integrated into one unified sense of the body's condition, the closest thing the brain has to a neural home for Craig's "material me" (Craig, 2002). Notice what this destination is not. It is not a motor area, and it is not a passive storage bin. It is where feeling itself gets built.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Earlier in this course, a whole chapter was devoted to the recovery brake, the parasympathetic shift that ends a stress response. If most of the vagus is afferent rather than efferent, what does that imply about the ability to deliberately engage recovery? Can a person steer a system whose current state they can barely perceive in the first place?</p>
+    </aside>
+
+    <p>That question is not rhetorical. It is the practical hinge of this entire module. Recovery, self-regulation, and the winding down of a stress response all depend on the brain having an accurate read of the body's actual state. If the afferent report arriving through the vagus and other pathways is faint or distorted, regulation is operating half blind, adjusting a system it cannot properly see. This is also why this chapter had to arrive after the chapters on the autonomic and stress systems rather than before them. Sensing is the closing of a loop earlier chapters deliberately left open.</p>
+    <p>It also helps to see why the eighty percent figure surprises so many learners the first time they meet it. Popular accounts of the vagus nerve, especially outside formal biology, tend to describe it purely as a switch to be flipped, something a person activates through breathing exercises or cold exposure in order to summon calm on command. That framing is not entirely wrong, the vagus does carry outbound, calming instructions, but it quietly skips the larger half of the story. A nerve that is mostly sensory is not best understood as a lever. It is closer to a continuous news feed, and the outbound calming signal is only possible once the brain has correctly read what the feed is reporting. Treating the vagus purely as an on switch is a little like describing a telephone only by its ringer, while ignoring that most of what the line actually carries is someone talking.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Why Inner Signals Are Vague, and the Brain Predicts</h2>
+    <p>Here is where interoception becomes genuinely strange, and genuinely important. Exteroceptive senses tend to be sharp. Interoceptive ones are often maddeningly blurry. Most people cannot reliably report their own heart rate from feeling alone. Hunger, anxiety, fatigue, and even the urge to urinate can all be confidently misidentified, sometimes for one another. Why is the sense that matters most for emotion also one of the least precise?</p>
+    <p>Part of the answer is adaptation, which can now be cashed in directly. A healthy body sitting in a steady state, heart beating regularly, breath even, temperature stable, is itself a constant stimulus. And a constant stimulus is exactly the kind of thing receptors stop reporting (Wark et al., 2007). The very homeostasis that keeps a person alive also makes the interior quiet. A heartbeat becomes noticeable when it changes, pounding after climbing stairs or skipping during a moment of fear, far more than when it simply ticks along at its usual pace.</p>
+    <p>But there is a deeper answer, and it sits at the current frontier of the field. The cognitive scientist Anil Seth (2013) proposed that emotional feelings do not arise from a direct readout of bodily signals at all. Instead, the brain continuously runs a predictive model of what its body should be doing, generates expectations from that model, and compares those expectations against the noisy, ambiguous afferent stream actually arriving. What a person feels is the brain's best inference about the causes of its interoceptive signals, not the raw signals themselves. Seth called this process <span class="ch-key">interoceptive inference</span>.</p>
+    <p>Extended with the theoretical neuroscientist Karl Friston into a broader framework called active inference (Seth &amp; Friston, 2016), this idea flips the classic model of perception on its head. The brain is not a passive receiver, patiently waiting to be told how the body feels. It is a prediction engine, mostly generating expectations in advance and updating them only when the incoming prediction error grows large enough to matter. On this view, even reflexive autonomic responses are partly shaped by descending predictions: the brain predicts a certain heart rate, and the body is nudged toward fulfilling that prediction, with any mismatch resolved either by revising the belief or by acting to change the body itself (Seth &amp; Friston, 2016).</p>
+    <p>Two consequences follow that are worth sitting with. First, feeling is constructed rather than simply received, which is one reason the same racing heart can be labeled excitement before a performance and labeled dread during a panic. The bodily signal is genuinely ambiguous. The interpretation does most of the work. Second, when the predictive model itself becomes chronically miscalibrated, when the brain expects danger by default and reads every ordinary twinge as a threat, the result is the felt signature of conditions in which interoceptive prediction error gets resolved not by calming the body but by escalating the alarm (Seth, 2013; Seth &amp; Friston, 2016). Researchers have also worked to separate two things ordinary language tends to blur together: how accurately a person's felt sense actually tracks their physiology, called interoceptive accuracy, and how confident that person is in their own reading, called interoceptive awareness. Garfinkel and colleagues (2015) showed that these two dimensions can diverge sharply. A person can feel very sure about a bodily signal while being almost entirely wrong about it, and that gap between confidence and accuracy is itself something a predictive brain will happily paper over.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The interoceptive loop, ascending afferents meet descending prediction in the insula" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The interoceptive loop</title>
+<rect x="1" y="1" width="638" height="338" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="32" fill="#aab8d2" font-size="12.5" letter-spacing="1.3">THE INTEROCEPTIVE LOOP: TWO STREAMS MEET IN THE INSULA</text>
+<rect x="250" y="42" width="140" height="56" rx="10" fill="#12314f" stroke="#5aaff5" stroke-width="2.4"/>
+<text x="320" y="68" fill="#e8edf5" font-size="15" font-weight="700" text-anchor="middle">INSULA</text>
+<text x="320" y="86" fill="#aab8d2" font-size="10.5" text-anchor="middle">integration</text>
+<rect x="40" y="170" width="210" height="64" rx="9" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="56" y="196" fill="#5aaff5" font-size="13.5" font-weight="700">Ascending afferents</text>
+<text x="56" y="216" fill="#cdd8ea" font-size="10.5">vagus, spinal, chemical signals</text>
+<line x1="150" y1="170" x2="285" y2="102" stroke="#5aaff5" stroke-width="2.4"/>
+<polygon points="285,102 272,106 282,114" fill="#5aaff5"/>
+<rect x="390" y="170" width="210" height="64" rx="9" fill="#2a1f16" stroke="#e0873a" stroke-width="1.6"/>
+<text x="406" y="196" fill="#e0873a" font-size="13.5" font-weight="700">Descending prediction</text>
+<text x="406" y="216" fill="#cdd8ea" font-size="10.5">the brain's expected body state</text>
+<line x1="490" y1="170" x2="355" y2="102" stroke="#e0873a" stroke-width="2.4"/>
+<polygon points="355,102 358,114 368,106" fill="#e0873a"/>
+<line x1="320" y1="98" x2="320" y2="264" stroke="#7f8fab" stroke-width="2" stroke-dasharray="2 4"/>
+<rect x="140" y="264" width="360" height="52" rx="9" fill="#132a45" stroke="#7f8fab" stroke-width="1.6"/>
+<text x="320" y="286" fill="#e8edf5" font-size="13" font-weight="700" text-anchor="middle">FELT EXPERIENCE</text>
+<text x="320" y="304" fill="#cdd8ea" font-size="10.5" text-anchor="middle">the resolved inference, not a raw readout</text>
+<text x="320" y="332" fill="#7f8fab" font-size="10.5" text-anchor="middle">A mismatch is resolved by updating the belief or by changing the body.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 3</span> <em>The interoceptive loop. Ascending afferents meet descending prediction in the insula, and what is felt is the resolved inference, not a raw readout of the body.</em></figcaption>
+    </figure>
+  </section>
+
+  <div class="ch-widget" id="intero-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Read Your Inner Signals</div>
+    </div>
+    <p class="ch-widget-sub">Rate how clearly you think each internal signal can normally be sensed. Then reveal the typical picture, and see where the brain fills gaps with prediction. Finish with a no touch heartbeat self-check.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Signal source</span>
+        <select class="ch-widget-select" id="intero-src">
+          <option value="breath">Breath (air hunger)</option>
+          <option value="heart">Heartbeat</option>
+          <option value="gut">Gut fullness / motility</option>
+          <option value="temp">Core temperature</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your confidence it can be sensed</span>
+        <select class="ch-widget-select" id="intero-conf">
+          <option value="20">Very low</option>
+          <option value="45">Low</option>
+          <option value="65" selected>Moderate</option>
+          <option value="85">High</option>
+          <option value="98">Very high</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Your rated clarity</span>
+        <span class="ch-meter-bar"><span id="intero-youbar" style="width:65%"></span></span>
+        <span class="ch-meter-num" id="intero-younum">65</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Typical actual clarity</span>
+        <span class="ch-meter-bar"><span id="intero-actbar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="intero-actnum">?</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Brain fills the gap (prediction)</span>
+        <span class="ch-meter-bar"><span id="intero-predbar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="intero-prednum">?</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="intero-readout">Choose a signal and your confidence, then reveal the typical picture.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Heartbeat self-check: your guess (beats in 30s)</span>
+        <select class="ch-widget-select" id="intero-guess">
+          <option value="30">About 30 (near 60 bpm)</option>
+          <option value="35" selected>About 35 (near 70 bpm)</option>
+          <option value="40">About 40 (near 80 bpm)</option>
+          <option value="45">About 45 (near 90 bpm)</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="intero-btn">Reveal typical picture</button>
+  </div>
+
+  <section class="ch-section">
+    <p>The self-check inside that widget makes the point felt rather than abstract. Most people, asked to count their own heartbeats for thirty seconds without touching a pulse, are off by a wide margin and do not know it, because the brain confidently supplies a number drawn from its predictive model when the true afferent signal is too faint to count accurately. That gap between felt confidence and measured accuracy is the everyday face of interoceptive inference (Seth, 2013; Garfinkel et al., 2015).</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Line This Chapter Does Not Cross</h2>
+    <p>Before turning to Cato's own situation, it is worth naming the frame that governs everything in this chapter, because interoception is exactly the territory where education and self-diagnosis are most easily confused. A racing heart, a knotted stomach, a wave of dread with no obvious trigger: all of these are real interoceptive events, and all of them can mean many different things, from a strong cup of coffee to a genuine cardiac or psychiatric condition worth a clinician's attention. Nothing about understanding transduction, adaptation, or predictive processing equips a learner to sort those possibilities out for themselves or for anyone else.</p>
+    <p>That boundary follows directly from the physiology already covered in this chapter. Interoceptive accuracy and interoceptive awareness are not the same thing, and a confident feeling is not proof of an accurate one (Garfinkel et al., 2015). A person who has learned that the brain predicts as much as it perceives has learned something valuable, but also something that should make them more careful, not less, about turning a felt sense into a verdict. The correct response to a persistent or worrying bodily signal is not a better mental model of interoception. It is a conversation with a professional who can examine the body the signal is coming from.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone describes a racing heart that appears for no clear reason several times a week and asks whether it is just anxiety. What does an educated, evidence based, non clinical answer sound like, and just as importantly, where does that answer stop? The place it stops is the boundary this whole section is about.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case Study: Cato and the Number on the Ring</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Cato is in his mid thirties and generally healthy. He started wearing a ring that measures heart rate variability after a friend recommended it, and within a few weeks he was checking the app before he checked anything else in the morning. On mornings when the number was low, he felt anxious before he had even gotten out of bed. On mornings when it was high, he felt oddly invincible, pushing himself harder in the gym and later feeling depleted in a way the ring had not predicted. He came to this chapter wanting to know whether his device was telling him the truth about his nervous system.</p>
+    </aside>
+    <p>Run Cato's situation through this chapter and most of the mystery falls away, not into a verdict about his health, which is not this course's place to give, but into an accurate account of what his device can and cannot tell him. Start with what the ring is actually doing. It is a transducer, in the same technical sense as a mechanoreceptor in skin. An optical sensor detects small changes in blood volume with each heartbeat and converts that physical signal into a number, an estimate of the variation in time between beats. That number is a genuine measurement of something real. It is not, however, a direct readout of how his nervous system is holding up. It is one narrow slice of afferent information, transduced by a machine rather than felt by a body, and then handed to Cato's own predictive brain to interpret.</p>
+    <p>That handoff is where the trouble starts. Cato cannot feel his own heart rate variability the way he can feel a hand on his shoulder. What he feels is his own interoceptive inference, built from a genuinely ambiguous internal state and now further colored by a number on a screen that his brain treats as a strong prior. Seth's account of interoceptive inference (2013) predicts exactly this pattern: a low number primes an expectation of threat, and an ordinary morning gets read through that expectation, so an unremarkable flutter of nerves before a normal day gets labeled as evidence the number was right. The number is not neutral information sitting quietly beside his felt experience. It actively reshapes the felt experience.</p>
+    <p>Move to the mornings when the number is high and Cato feels invincible. This is adaptation and prediction working together in the opposite direction. A high number sets an expectation of resilience, so ordinary signs of accumulating fatigue during a hard workout get discounted rather than reported, in much the same way a fast adapting receptor stops reporting a steady, unchanging pressure. Cato is not imagining this. He is experiencing a real interaction between a device that transduces one narrow physiological measure and a brain that predicts far more than it can directly perceive.</p>
+    <p>Here is the part that matters most, and it is where the line from the previous section does real work. Nothing in this account tells Cato whether his fluctuating heart rate variability reflects normal day to day variation, poor sleep, dehydration, overtraining, or something a clinician would want to examine more closely. Those are genuinely different possibilities with genuinely different implications, and no amount of understanding transduction or prediction can sort them out from the outside. The right move for Cato is not to trust the ring uncritically, and it is not to distrust it uncritically either. It is to treat the number as one imperfect data point, hold his interpretation of it loosely, and bring any persistent or worrying pattern to a professional who can evaluate his actual physiology rather than his felt story about it. This chapter did not diagnose Cato and could not. What it gave him was an accurate account of why his device and his felt sense sometimes disagree, and a clearer sense of where his own understanding should stop.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Closing the Loop, and Why It Is Trainable</h2>
+    <p>Step back and look at the whole architecture built across this course so far. Earlier chapters gave the basic unit of neural signaling and the map of the nervous system with its two directions. Later chapters built the autonomic and stress systems as outbound regulation, a brake and an accelerator working the body from the center outward. This chapter supplies the missing return path, the afferent stream that tells the regulating brain what state the body is actually in. Sensing, deciding, and acting is now a closed loop rather than a one way arrow.</p>
+    <p>Here is the encouraging part. Because felt experience is a skill of interpretation as much as it is a fact of wiring, interoceptive ability can be improved. Lazzarelli and colleagues (2024), reviewing mind and body interventions, treat the capacity to detect, interpret, and integrate bodily signals as genuinely trainable, reachable through top down attentional practices such as mindful attention to breath and body, and through bottom up movement and expressive practices. Their central claim connects directly to the aim of this whole module: because interoception supplies the raw material of emotion, sharpening it improves emotion regulation. A person regulates what they can feel, and what a person can feel, they can learn to feel more clearly.</p>
+    <p>This is also why the recovery story from earlier chapters stays genuinely unfinished without this one. Engaging a parasympathetic brake is not only a matter of outbound signaling. It depends on an inbound sense of the body's rising and falling arousal. A person with clearer interoception has, in effect, a more accurate gauge on the dashboard, and a gauge that can actually be read is a system that can actually be steered.</p>
+    <p>Notice, too, what this closes off as much as what it opens up. A closed loop is not a promise that the body's reports will always be pleasant, or even accurate on any given day. It is a promise that the two directions of sensing, outward toward the world and inward toward the self, are built from the same underlying grammar and answer to the same underlying logic. Transduction turns a physical event into spikes whether that event happens on the surface of the skin or deep in the wall of a blood vessel. Adaptation quiets a signal whether it originates outside the body or inside it. Prediction shapes what gets felt whether the raw material is a sound in a room or a heartbeat in a chest. Once a learner sees that the exteroceptive and interoceptive halves of the nervous system are variations on one design rather than two unrelated systems, the whole of this course starts to read less like a list of separate facts and more like a single argument, carried from chapter to chapter, about how a body built from electrical signals manages to know anything about itself or the world at all.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Recall the two experiments from the start of this chapter, the invisible chair and the elusive heartbeat. Using adaptation, labeled lines, and interoceptive inference, can you now explain each one in a single sentence? If you can, you have the chapter.</p>
+    </aside>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The brain does not simply receive feelings. It infers them, from a body that mostly whispers, in a language of change set against a background of predicted calm.</p>
+    <cite>A synthesis of Craig (2002) and Seth (2013)</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li><strong>Transduction</strong> converts any physical stimulus into a graded receptor potential, which is encoded as the frequency of action potentials. Intensity lives in rate, and meaning lives in which labeled line the spike travels.</li>
+      <li><strong>Adaptation</strong> is a coding strategy, not a failure: receptors quiet down to unchanging stimuli so the system spends its limited bandwidth reporting change. Fast adapting receptors flag onset and offset; slow adapting receptors track ongoing state.</li>
+      <li><strong>Exteroception</strong> senses the outside world with high resolution; <strong>interoception</strong> senses the body's own physiological condition, heart, breath, gut, temperature, chemistry, and is the substrate of feeling and self-awareness (Craig, 2002).</li>
+      <li>The <strong>vagus nerve is roughly eighty percent afferent</strong>: its dominant traffic is bodily news traveling up to the nucleus tractus solitarii and on to the insula, making it the chief interoceptive conduit (Berthoud &amp; Neuhuber, 2000; Paciorek &amp; Skora, 2020).</li>
+      <li>Interoceptive signals are often vague because a homeostatic body is a constant, adapted away stimulus. The brain compensates by <strong>predicting</strong>: you feel its best inference about the body, not a raw readout (Seth, 2013; Seth &amp; Friston, 2016), and confident feeling is not the same as accurate feeling (Garfinkel et al., 2015).</li>
+      <li>A recovery brake you cannot feel is a brake you cannot use. Interoceptive ability is <strong>trainable</strong>, and sharpening it improves emotion regulation (Lazzarelli et al., 2024).</li>
+      <li>This is education, not diagnosis. A vague or worrying bodily signal belongs with a qualified clinician, not a course, a device, or a forum.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Now that both directions of the loop are in place, the next chapter returns to the outbound side to build the motor system in earnest, and the reason it belongs here will be immediate. Movement that is not guided by a continuous stream of sensory feedback is clumsy, drifting, and blind. The action studied earlier in this course turns out to lean on the sensing studied here.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Berthoud, H. R., &amp; Neuhuber, W. L. (2000). Functional and chemical anatomy of the afferent vagal system. <em>Autonomic Neuroscience, 85</em>(1-3), 1-17. https://doi.org/10.1016/S1566-0702(00)00215-0</p>
+    <p>Chen, W. G., Schloesser, D., Arensdorf, A. M., Simmons, J. M., Cui, C., Valentino, R., Gnadt, J. W., Nielsen, L., Hillaire-Clarke, C. S., Spruance, V., Horowitz, T. S., Vallejo, Y. F., &amp; Langevin, H. M. (2021). The emerging science of interoception: Sensing, integrating, interpreting, and regulating signals within the self. <em>Trends in Neurosciences, 44</em>(1), 3-16. https://doi.org/10.1016/j.tins.2020.10.007</p>
+    <p>Craig, A. D. (2002). How do you feel? Interoception: The sense of the physiological condition of the body. <em>Nature Reviews Neuroscience, 3</em>(8), 655-666. https://doi.org/10.1038/nrn894</p>
+    <p>Garfinkel, S. N., Seth, A. K., Barrett, A. B., Suzuki, K., &amp; Critchley, H. D. (2015). Knowing your own heart: Distinguishing interoceptive accuracy from interoceptive awareness. <em>Biological Psychology, 104</em>, 65-74. https://doi.org/10.1016/j.biopsycho.2014.11.004</p>
+    <p>Hao, J., Bonnet, C., Amsalem, M., Ruel, J., &amp; Delmas, P. (2014). Transduction and encoding sensory information by skin mechanoreceptors. <em>Pfl&uuml;gers Archiv, European Journal of Physiology, 467</em>(1), 109-119. https://doi.org/10.1007/s00424-014-1651-7</p>
+    <p>Lazzarelli, A., Scafuto, F., Crescentini, C., Matiz, A., Orr&ugrave;, G., Ciacchini, R., Alfano, G., Gemignani, A., &amp; Conversano, C. (2024). Interoceptive ability and emotion regulation in mind-body interventions: An integrative review. <em>Behavioral Sciences, 14</em>(11), 1107. https://doi.org/10.3390/bs14111107</p>
+    <p>Paciorek, A., &amp; Skora, L. (2020). Vagus nerve stimulation as a gateway to interoception. <em>Frontiers in Psychology, 11</em>, 1659. https://doi.org/10.3389/fpsyg.2020.01659</p>
+    <p>Seth, A. K. (2013). Interoceptive inference, emotion, and the embodied self. <em>Trends in Cognitive Sciences, 17</em>(11), 565-573. https://doi.org/10.1016/j.tics.2013.09.007</p>
+    <p>Seth, A. K., &amp; Friston, K. J. (2016). Active interoceptive inference and the emotional brain. <em>Philosophical Transactions of the Royal Society B, 371</em>(1708), 20160007. https://doi.org/10.1098/rstb.2016.0007</p>
+    <p>Wark, B., Lundstrom, B. N., &amp; Fairhall, A. (2007). Sensory adaptation. <em>Current Opinion in Neurobiology, 17</em>(4), 423-429. https://doi.org/10.1016/j.conb.2007.07.001</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 6 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('adapt-widget');
+    if(!root) return;
+    var stimSel = root.querySelector('#adapt-stim');
+    var typeSel = root.querySelector('#adapt-type');
+    var intSel  = root.querySelector('#adapt-int');
+    var stimBar = root.querySelector('#adapt-stimbar');
+    var stimNum = root.querySelector('#adapt-stimnum');
+    var fireBar = root.querySelector('#adapt-firebar');
+    var fireNum = root.querySelector('#adapt-firenum');
+    var readout = root.querySelector('#adapt-readout');
+    var btn     = root.querySelector('#adapt-btn');
+    var timer = null;
+
+    function setStimBar(){
+      var v = parseInt(intSel.value,10);
+      stimBar.style.width = (v*10)+'%';
+      stimNum.textContent = v;
+    }
+    intSel.addEventListener('change', setStimBar);
+    setStimBar();
+
+    function run(){
+      if(timer){ clearInterval(timer); timer=null; }
+      var intensity = parseInt(intSel.value,10);
+      var fast = typeSel.value === 'fast';
+      var stimName = stimSel.options[stimSel.selectedIndex].text.toLowerCase();
+      var peak = Math.round(intensity*10 + 5);
+      var t = 0;
+      var plateau = fast ? 0 : Math.round(peak*0.35);
+      var tau = fast ? 0.9 : 2.4;
+      var bumped = false;
+      readout.textContent = 'Onset. The receptor fires hard at ' + peak + ' spikes per second, even though the ' + stimName + ' will now hold perfectly steady.';
+      timer = setInterval(function(){
+        t += 0.2;
+        var rate = plateau + (peak-plateau)*Math.exp(-t/tau);
+        if(t >= 3 && !bumped){
+          bumped = true;
+          peak = peak + 40;
+          plateau = fast ? 0 : Math.round(peak*0.35);
+          t = 0;
+          stimBar.style.width = Math.min(100,(intensity*10)+30)+'%';
+          stimNum.textContent = Math.min(10, intensity+3);
+          readout.textContent = 'You increased the intensity, and the receptor fires again. It never ran out, it just reports change, not steady state.';
+        }
+        var r = Math.max(0, Math.round(rate));
+        fireBar.style.width = Math.min(100, r) + '%';
+        fireNum.textContent = r;
+        if(t >= 5){
+          clearInterval(timer); timer=null;
+          if(fast){
+            readout.textContent += ' Fast adapting: it has fallen silent even though the stimulus is still on. It heard only the edges.';
+          } else {
+            readout.textContent += ' Slow adapting: it settled onto a low plateau, still whispering the ongoing state, but far quieter than at onset.';
+          }
+        }
+      }, 200);
+    }
+    btn.addEventListener('click', run);
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('intero-widget');
+    if(!root) return;
+    var srcSel = root.querySelector('#intero-src');
+    var confSel= root.querySelector('#intero-conf');
+    var youBar = root.querySelector('#intero-youbar');
+    var youNum = root.querySelector('#intero-younum');
+    var actBar = root.querySelector('#intero-actbar');
+    var actNum = root.querySelector('#intero-actnum');
+    var predBar= root.querySelector('#intero-predbar');
+    var predNum= root.querySelector('#intero-prednum');
+    var readout= root.querySelector('#intero-readout');
+    var guessSel = root.querySelector('#intero-guess');
+    var btn    = root.querySelector('#intero-btn');
+
+    var data = {
+      breath: {act:70, note:'Air hunger is among the most accessible interoceptive signals. The urge to breathe is loud and hard to ignore.'},
+      heart:  {act:35, note:'Heartbeat perception is notoriously poor. Most people cannot count their own beats accurately without a pulse.'},
+      gut:    {act:30, note:'Gut signals are diffuse and slow, poorly localized, and easily confused with emotion, the literal gut feeling.'},
+      temp:   {act:45, note:'Core temperature is sensed only coarsely. Skin surface and rate of change are felt far better than true core state.'}
+    };
+
+    function setYou(){
+      var v = parseInt(confSel.value,10);
+      youBar.style.width = v+'%';
+      youNum.textContent = v;
+    }
+    confSel.addEventListener('change', setYou);
+    setYou();
+
+    btn.addEventListener('click', function(){
+      var d = data[srcSel.value];
+      var conf = parseInt(confSel.value,10);
+      actBar.style.width = d.act+'%';
+      actNum.textContent = d.act;
+      var pred = Math.max(0, 100 - d.act);
+      predBar.style.width = pred+'%';
+      predNum.textContent = pred;
+
+      var guess = parseInt(guessSel.value,10);
+      var actual = 38;
+      var off = Math.abs(guess-actual);
+      var hbMsg = ' Heartbeat self-check: you guessed '+guess+' beats in 30 seconds. A typical resting count is around '+actual+' beats, roughly 76 beats per minute. You were off by '+off+', and notice you had no felt way to know it. The brain supplied a confident number your afferents could not.';
+
+      var gap = conf - d.act;
+      var gapMsg = gap > 15
+        ? ' Your confidence ('+conf+') runs well ahead of the typical raw clarity ('+d.act+'). That surplus is prediction, not sensation.'
+        : ' Your rating is close to the typical raw clarity, a well calibrated read of a genuinely faint signal.';
+
+      readout.textContent = d.note + gapMsg + ' The brain fills the gap bar shows how much of the felt sense is supplied top down by the predictive model rather than read bottom up from the body.' + hbMsg;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

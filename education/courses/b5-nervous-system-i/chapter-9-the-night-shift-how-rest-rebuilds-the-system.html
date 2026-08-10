@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Night Shift: How Rest Rebuilds the System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 9 · Module 4 · Synthesis</div>
+    <h1 class="ch-title">The Night Shift: How Rest Rebuilds the System</h1>
+    <p class="ch-subtitle">Sleep is not the brain switching off. It is the most coordinated maintenance operation the nervous system runs, and the place where every system this course has built finally clicks into place.</p>
+    <div class="ch-meta">
+      <span>65 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ou spend roughly a third of your life unconscious, immobile, and, to any outside observer, profoundly unproductive. For most of the twentieth century, neuroscience broadly agreed with that observer. Sleep was treated as the off state, the passive interval when the day's activity subsided and the brain idled until morning. The metaphor was electrical: a light switched off, a machine powered down. It was tidy, intuitive, and almost entirely wrong.</p>
+    <p>We now know that some of the most intense, organized, and metabolically expensive activity the nervous system ever performs happens while you lie perfectly still. During deep sleep, millions of cortical neurons fall into slow, thunderous synchrony, firing and falling silent together in waves that sweep across the brain roughly once a second. During rapid eye movement (REM) sleep, your cortex lights up in patterns nearly indistinguishable from waking, while your body is paralyzed from the neck down. Fluid pumps through channels that were sealed shut all day, flushing out the metabolic debris of thinking. Memories formed hours earlier are replayed, sorted, and rewritten. This is not the system shutting down. This is the night shift.</p>
+    <p>Follow one learner through this final chapter. Halle is finishing this course the way she has finished most things this year: late, laptop balanced on her knees after the house has gone quiet. Somewhere across the last eight chapters she picked up a private theory, never quite stated out loud, that sleep is the one part of her day she can crop without cost. For three weeks she has been trimming forty minutes off each end of the night to fit in more study time, and she reports, genuinely, that she feels basically fine. Halle is not a patient and not a case study. She is a stand-in for a belief nearly everyone tests at some point in their life, that sleep is dead time you can borrow against. By the end of this chapter you will be equipped to check that belief far more carefully than Halle currently can, using nothing but the model this course has already given you.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The whole course, revisited in the dark</h2>
+    <p>This is the final chapter, and it is deliberately a synthesis. Across eight chapters we assembled a working model of the nervous system piece by piece: the neuron and its electrical language of graded and action potentials; the divisions of the nervous system and the <span class="ch-key">autonomic balance</span> between sympathetic and parasympathetic branches; the stress and recovery systems that mobilize the body and then restore it; sensory processing and the way attention quiets some signals to amplify others; and finally <span class="ch-key">neuroplasticity</span>, the capacity of synapses to strengthen and weaken with experience.</p>
+    <p>Every one of those systems has a night job, and sleep is where they converge. The electrical signaling story scales up from single neurons to whole-brain rhythms. Autonomic balance swings decisively toward parasympathetic dominance and then oscillates back. The stress-and-recovery machinery quiets and hands the floor to genuinely restorative processes. Sensory gating, which by day protects attention from irrelevant noise, is repurposed to hold the sleeping brain largely offline from the outside world so that internal signals can be heard clearly. And plasticity, the very thing that makes learning possible, turns out to depend on sleep so completely that a single sleepless night measurably degrades the brain's capacity to change (Salehinejad et al., 2022). If you want to see how the pieces of this course fit together into one coherent organism, the clearest place to look is a person asleep.</p>
+    <p>A note on scope, stated plainly, because it will matter for the rest of this chapter. What follows is a working mental model for a learner, coach, or professional earning continuing education, not a course in clinical sleep medicine. We will not diagnose sleep disorders, and nothing here is a substitute for evaluation by a qualified clinician when sleep itself becomes the problem rather than the solution. What you will leave with is an integrated picture: the architecture of a night, why that architecture matters for both physical recovery and learning, and how the systems you already understand behave once the lights go out.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial illustration in the style of a vintage scientific plate, showing a single human figure asleep on their side in cross-section silhouette, rendered in deep indigo and warm amber. Above and around the figure, delicate hand-drawn wave patterns transition from left to right: on the left, tall slow rolling waves suggesting deep synchronized brain rhythm; on the right, small rapid jagged waves suggesting fast activity. Soft glowing channels of pale blue flow through the head region suggesting fluid movement. Composition centred, rule of thirds, intimate low-light mood. No text labels, no watermarks, no cropped letters." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img1.jpg" alt="<em>Sleep as active operation: slow synchronized rhythms and fast dreaming activity across one night.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Sleep as active operation: slow synchronized rhythms and fast dreaming activity across one night.</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>The line we will not cross</h2>
+    <p>Before we go further we should name the frame that has governed every chapter of this course, because a chapter about sleep is exactly the kind of material that tempts a reader toward self-diagnosis. Insomnia, sleep apnea, restless legs, and circadian rhythm disorders are real, common, and sometimes serious conditions, and several of them can look, at a glance, like ordinary variation in how someone sleeps. This chapter is not built to sort one from the other, and it would be dishonest to pretend otherwise.</p>
+    <p>What this chapter can do, honestly, is give you a working model of how a typical night is organized and why that organization matters for recovery and learning. If something in your own sleep, or in a learner's you are supporting, looks persistently disrupted rather than merely inconvenient, that is a question for a clinician, not a chapter. Halle's late nights, the ones we will follow through the rest of this chapter, are a scheduling problem layered on top of an otherwise healthy system. That is a very different situation from a sleep disorder, and the distinction is worth holding onto as you read.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>From single spikes to whole-brain rhythms</h2>
+    <p>In the first chapter of this course we treated the action potential as the atom of neural signaling, a single neuron crossing threshold and firing. That framing is correct but incomplete for understanding sleep, because sleep is fundamentally a phenomenon of populations. When you place recording electrodes on the scalp, the technique of <span class="ch-key">electroencephalography (EEG)</span>, you are not listening to one neuron. You are hearing the summed electrical activity of billions, and what that summed signal reveals is rhythm.</p>
+    <p>Think of it this way. If every neuron in a cortical region fires at random moments, their contributions cancel out and the scalp signal is small and fast, a low-amplitude, high-frequency scribble. This is roughly what waking looks like: a busy, desynchronized brain doing many things at once. But if large populations of neurons begin to fire and fall silent together, in lockstep, their signals add up into large, slow deflections, high amplitude, low frequency. Synchronization is the signature of sleep, and the degree of synchronization is exactly what changes as you descend through the stages.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats sleep as the brain going quiet, the neural equivalent of a screen dimming. The EEG record says the opposite. Deep sleep produces some of the largest, most organized electrical signals the brain generates all day, because enormous populations of neurons are cooperating on the same rhythm at once. Quiet is not the right word. Coordinated is.</p>
+    </aside>
+
+    <h3>The stages, briefly</h3>
+    <p>Sleep researchers divide sleep into two broad categories, <span class="ch-key">non-rapid eye movement (NREM) sleep</span> and REM sleep, with NREM sleep further split into stages that deepen in sequence (American Academy of Sleep Medicine, 2023). You do not need to memorize the scoring rules used in a sleep laboratory, but you should know the character of each stage, because each has a distinct rhythm and a distinct job.</p>
+    <p><strong>N1, light transition.</strong> The doorway between waking and sleep, occupying only a small slice of a typical night. The fast, alert rhythm of waking gives way to slower activity, muscle tone relaxes, and a brief falling sensation is common. N1 is short and easily interrupted; wake someone here and they may deny they were asleep at all.</p>
+    <p><strong>N2, the workhorse.</strong> You spend nearly half the night in this stage. N2 introduces two hallmark electrical events: <span class="ch-key">sleep spindles</span>, brief bursts of fast oscillation generated by the thalamus, and <span class="ch-key">K-complexes</span>, large solitary waves. Spindles are not idle noise. As we will see later in this chapter, they are central to how memories get consolidated, which is part of why a stage often dismissed as merely transitional is, in truth, doing quiet, essential work for most of the night.</p>
+    <p><strong>N3, deep, slow-wave sleep (SWS).</strong> The deepest stage, dominated by slow-wave activity: large, slow oscillations, roughly zero point five to four cycles per second, in which vast cortical territories toggle between an active up state and a silent down state in unison. This is the hardest stage to be woken from, and it is where the body does its heaviest physical restoration. Slow-wave activity is also, crucially, the single best EEG marker of accumulated sleep pressure, a fact that will anchor the two-process model later in this chapter (Borbély et al., 2016).</p>
+    <p><strong>REM, rapid eye movement sleep.</strong> The paradox stage. The cortical EEG looks fast and desynchronized, much like waking, yet the body's skeletal muscles are actively paralyzed, a state called atonia, the eyes dart beneath closed lids, and vivid dreaming predominates. REM sleep is where several forms of memory reorganization occur, and, as the next section shows, its autonomic profile is strikingly unlike deep sleep.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The EEG of deep sleep is slow and large, while the EEG of REM sleep is fast and small, closer to waking. Why would larger, slower waves indicate <em>more</em> neurons being active together rather than fewer? What does amplitude tell you that frequency does not?</p>
+    </aside>
+
+    <h3>The architecture: why it cycles</h3>
+    <p>Here is the part that surprises most people. You do not descend into deep sleep and stay there until morning. Instead, sleep is organized into <span class="ch-key">cycles</span> of roughly ninety minutes each, a descent from light sleep into deep NREM sleep and then an ascent back up into REM sleep. A typical night contains four to six such cycles, but they are not identical. The composition shifts across the night in a way that is purposeful rather than random.</p>
+    <p>Early cycles are rich in N3 slow-wave sleep. This is when homeostatic sleep pressure is highest, and the brain spends its deepest currency first: physical recovery and the most demanding memory processing happen in the first third of the night. As the night proceeds, N3 shrinks and REM periods lengthen, so the last cycles before waking are dominated by REM sleep and lighter NREM sleep. This is why the dreams people remember tend to come from the early morning, and why cutting a night short by a few hours disproportionately removes REM sleep rather than deep sleep. Halle's forty minutes trimmed off each end of the night were never evenly priced. The minutes she loses at the end, closest to her alarm, are drawn overwhelmingly from the REM-rich final cycles, the ones this chapter will later connect to integrating what she has just spent the evening studying.</p>
+    <p>It also helps to notice what a single cycle is not. It is not a fixed, interchangeable unit that can be counted like currency, four good cycles being simply better than three. The first cycle of the night and the last cycle of the night are doing almost opposite jobs, one weighted toward deep, slow, parasympathetic-heavy repair, the other weighted toward fast, autonomically volatile, REM-rich integration. A night assembled from five identical light-sleep cycles would satisfy a clock but not the underlying biology, because neither job would get done properly. The shape of the night, not merely its total length, is doing the work.</p>
+  </section>
+
+  <div class="ch-widget" id="w-hypnogram">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Ride the Sleep Cycles</div>
+    </div>
+    <p class="ch-widget-sub">Scrub through a simulated night. Watch the descent into deep sleep and the ascent into REM sleep repeat, and see what each stage is doing for you. Then try skipping a stage entirely.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Time into the night</span>
+        <input class="ch-widget-select" id="hyp-scrub" type="range" min="0" max="479" value="20" step="1">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Skip a stage</span>
+        <select class="ch-widget-select" id="hyp-skip">
+          <option value="none">Nothing (full night)</option>
+          <option value="N3">Skip deep sleep (N3)</option>
+          <option value="REM">Skip REM</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="hyp-readout" style="font-weight:600"></p>
+    <p class="ch-widget-sub" id="hyp-detail"></p>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Wave synchrony</span>
+        <span class="ch-meter-bar"><span id="hyp-sync" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="hyp-sync-n">2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Heart rate</span>
+        <span class="ch-meter-bar"><span id="hyp-hr" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="hyp-hr-n">6</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Parasympathetic tone</span>
+        <span class="ch-meter-bar"><span id="hyp-para" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="hyp-para-n">4</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Physical repair</span>
+        <span class="ch-meter-bar"><span id="hyp-repair" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="hyp-repair-n">2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Memory consolidation</span>
+        <span class="ch-meter-bar"><span id="hyp-mem" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="hyp-mem-n">2</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="hyp-play">▶ Play the night</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Deep sleep and the return of the parasympathetic</h2>
+    <p>Recall the autonomic balance introduced earlier in this course. During waking, and especially during stress, the sympathetic branch dominates: heart rate rises, pupils dilate, blood is shunted to muscle, and digestion is suspended. The parasympathetic branch, the rest-and-digest system carried largely by the vagus nerve, is the counterweight that slows the heart and restores the body's housekeeping functions. Across a normal day the two branches trade influence moment to moment, never fully off, just leaning one way or the other.</p>
+    <p>Deep NREM sleep is the most parasympathetically dominant state you routinely enter. Heart rate slows to its nightly minimum, blood pressure falls, breathing becomes slow and regular, and the measures that reflect vagal control, such as high-frequency <span class="ch-key">heart rate variability (HRV)</span>, climb. Trinder and colleagues, tracking cardiac autonomic activity across full nights in healthy adults, documented exactly this pattern: parasympathetic activity rises as sleep deepens from N1 through slow-wave sleep, while sympathetic activity falls in step (Trinder et al., 2001). This is the physiological substrate of what people mean when they call deep sleep restorative. Growth hormone is secreted in pulses timed to early-night slow-wave sleep, and tissue repair, immune signaling, and metabolic housekeeping proceed under parasympathetic cover. If an earlier chapter taught you that recovery is an active parasympathetic accomplishment rather than the mere absence of stress, deep sleep is that lesson written large across the whole body.</p>
+    <p>REM sleep breaks this pattern in an instructive way. Trinder's data, and the broader literature it belongs to, show autonomic control during REM sleep becoming irregular and, at times, storm-like: heart rate and breathing surge and fall, blood pressure fluctuates, and sympathetic activity can spike toward levels closer to waking than to slow-wave sleep. The tidy parasympathetic calm of deep sleep does not persist through the night. This autonomic volatility is one reason REM sleep is sometimes called paradoxical sleep: the body's regulation looks anything but restful, even as the skeletal muscles lie paralyzed.</p>
+    <p>None of this is incidental variation. It is a schedule. The steepest, most reliable drop in heart rate and blood pressure of the entire twenty-four-hour day happens in the first slow-wave-heavy cycles of a normal night, and the sharpest autonomic swings of the day happen in the REM-heavy cycles that follow. A cardiovascular system that never reached this nightly low point, because sleep was shallow, fragmented, or simply too short to reach deep N3, would be missing a genuine daily reset rather than an optional bonus.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common shorthand treats deep sleep as the real recovery and REM sleep as an optional light show for dreaming. The autonomic record argues against that ranking. Deep sleep and REM sleep are doing different jobs: one calms the cardiovascular system toward its nightly floor, the other drives it back toward waking levels of activity, and both are scheduled, repeatable features of a healthy night rather than one being the point and the other being filler.</p>
+    </aside>
+
+    <h3>The brain cleans itself: the glymphatic discovery</h3>
+    <p>One of the most striking findings in recent sleep science reframes what physical recovery means for the brain itself. In a landmark 2013 study in mice, Xie and colleagues showed that sleep is associated with a roughly sixty percent expansion of the interstitial space, the fluid-filled gaps between brain cells. That expansion dramatically increases the flow of cerebrospinal fluid through brain tissue, driving what the authors called the <span class="ch-key">glymphatic system</span>: a convective exchange that flushes metabolic waste, including the amyloid-beta protein implicated in neurodegeneration, out of the brain (Xie et al., 2013).</p>
+    <p>The clearance rate during sleep was roughly double that of the waking state. The interpretation is almost startling in its simplicity: a meaningful part of what makes sleep restorative may be that the brain cannot wash itself as efficiently while it is awake. The waste of a day's thinking accumulates, and the night shift takes it out. The finding was made in mice, and the details of the human glymphatic system are still being worked out, but it gave physical, mechanical substance to the old intuition that a good night's sleep clears your head. Halle's late study sessions push her waking hours later without pushing her wake time later to match, which quietly shortens the window available for this washing cycle to run its course.</p>
+
+    <blockquote class="ch-quote">
+      <p>Sleep is not simply a period when brain activity quiets down. It appears to be a distinct working state in which the brain actively clears the metabolic waste that accumulates during waking hours, at a rate roughly double what the awake brain manages.</p>
+      <cite>Summarizing Xie et al. (2013), <em>Science</em></cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>The night as the price of plasticity</h2>
+    <p>Now we connect sleep to the plasticity chapter. Plasticity, the strengthening and weakening of synaptic connections, is how experience physically changes the brain. But plasticity has a hidden cost, and a leading theory of why we sleep addresses it directly.</p>
+    <p>Tononi and Cirelli's <span class="ch-key">synaptic homeostasis hypothesis (SHY)</span> begins with a problem. During waking, as you learn and interact with the world, synapses across the brain tend, on net, to strengthen. Strengthening is metabolically expensive, consumes cellular resources, occupies space, and, critically, cannot continue indefinitely. A brain whose synapses only ever grew stronger would eventually saturate: every connection loud, none distinct, the signal drowning in noise, with no room left to encode anything new (Tononi & Cirelli, 2014).</p>
+    <p>SHY proposes that sleep, and slow-wave sleep in particular, is when the brain solves this by renormalizing. The slow oscillations of deep sleep drive a broad, proportional downscaling of synaptic strength, a global turning down of the volume that preserves the relative differences between connections while restoring absolute strength to a sustainable baseline. Sleep, in this view, is the price the brain pays for plasticity, the recovery process that keeps learning possible day after day. As a side effect of this renormalization, weakly encoded, irrelevant traces fade while robustly encoded ones survive in relief, a passive contribution to memory that complements the active processes we meet in the next section.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If waking strengthens synapses and sleep downscales them proportionally, both strong and weak connections shrink, but only the strongest survive above the noise floor. How does proportional downscaling end up sharpening which memories persist, without the brain having to decide, connection by connection, which ones to keep?</p>
+    </aside>
+
+    <p>There is now direct human evidence for a version of this claim. Salehinejad and colleagues (2022) kept participants awake for one night and measured cortical physiology and cognition. Sleep deprivation upscaled cortical excitability, more glutamate-driven facilitation and less activity mediated by <span class="ch-key">gamma-aminobutyric acid (GABA)</span>, consistent with a brain whose synapses had not been renormalized. In that hyperexcitable, saturated state, the capacity for new plasticity was blunted: both <span class="ch-key">long-term potentiation (LTP)</span>-like and <span class="ch-key">long-term depression (LTD)</span>-like changes were impaired, along with learning, memory formation, working memory, and attention. The brain that skips its night shift is not simply a tired brain running on less fuel. It is a brain that has partially lost the ability to change itself effectively, at exactly the moment Halle is asking hers to absorb new material.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="An isometric infographic in pencil-and-watercolour idiom, warm earthy palette of ochre, sage green, and slate blue, depicting a stylized cross-section of cortical tissue as a small landscape of neurons and synaptic connections drawn as glowing nodes and links. On the left half, labelled 'wake' in small lowercase serif, the connections are dense, bright, and crowded together. On the right half, labelled 'sleep' in small lowercase serif, the same network appears with connections thinned and rebalanced, cleaner spacing between nodes, a few faint links faded away. A gentle arrow curves from left to right. Hand-drawn field-guide aesthetic, subtle paper grain, no numerical values, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img2.jpg" alt="<em>The synaptic homeostasis hypothesis: waking strengthens and crowds; sleep renormalizes and clears.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The synaptic homeostasis hypothesis: waking strengthens and crowds; sleep renormalizes and clears.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>How a memory gets locked in overnight</h2>
+    <p>The passive account, weak traces fading as strong ones survive downscaling, is only part of the story. The past decade has established that sleep also does something active and remarkably precise. Rasch and Born's landmark review documented the field's shift from older passive protection theories, in which sleep merely shielded fragile memories from interference, to active systems consolidation, in which the sleeping brain deliberately replays and redistributes what it learned (Rasch & Born, 2013).</p>
+    <p>The core idea concerns two memory stores. New declarative memories, facts, events, the name of a person met at lunch, are initially encoded rapidly by the hippocampus, a fast but temporary buffer. For a memory to become durable it must be gradually transferred into the distributed circuits of the neocortex, the slow but vast long-term store. Sleep is when that transfer happens, and it happens through the coordinated interplay of three nested electrical rhythms.</p>
+
+    <h3>Three rhythms, precisely coupled</h3>
+    <p>Staresina (2024) and Marshall and colleagues (2020) describe the choreography with growing precision. Consolidation during NREM sleep depends on the tight coupling of three oscillations across brain regions.</p>
+    <p><strong>Slow oscillations</strong>, the roughly one-cycle-per-second waves of deep sleep generated in the cortex, set the tempo. Their up states open brief, global windows of cortical excitability, moments when the cortex is ready to receive information.</p>
+    <p><strong>Sleep spindles</strong>, the thalamic bursts characteristic of N2, ride on the slow-oscillation up states and act as relays, partially reactivating the specific cortical networks that were engaged during learning.</p>
+    <p><strong>Hippocampal sharp-wave ripples</strong>, brief, very fast bursts in the hippocampus, carry compressed replays of the day's experiences and are timed to nest inside the spindles, driving a hippocampal-cortical exchange that strengthens and reorganizes the memory trace.</p>
+    <p>The order matters: the slow oscillation opens the window, the spindle relays the address, and the ripple delivers the content. When these three rhythms are precisely phase-locked, memory consolidation is strongest; when the coupling degrades, as it does with age, consolidation suffers. Staresina (2024) frames this coupling as a kind of timing problem as much as an amplitude problem: it is not simply that older brains generate weaker slow oscillations or fewer spindles, it is that the precise nesting of spindle inside slow-oscillation up state, and ripple inside spindle, drifts out of alignment, and the memory benefit degrades even when each rhythm is still individually present. This is the mechanistic heart of what people mean when they say they slept on it. The plastic changes built while awake, the subject of an earlier chapter, are not automatically permanent. They are provisional until the night shift replays them into cortex.</p>
+    <p>REM sleep plays a complementary role. While slow-wave sleep excels at consolidating hippocampus-dependent declarative memories, REM sleep and the lighter stages surrounding it appear especially important for procedural and emotional memories and for integration, the creative recombination that can leave a person waking with a solution they did not have the night before (Marshall et al., 2020; Rasch & Born, 2013). This is why the shifting architecture of the night is not incidental. The early-night dominance of deep sleep and the late-night dominance of REM sleep mean that different consolidation jobs get their turn in sequence, and neither can simply substitute for the other. Halle mentioned, almost in passing, that she sometimes wakes with a cleaner answer to a problem she could not solve the night before. That is not a coincidence or a mood. It is very likely the late-night REM sleep she has been shortening, doing exactly the integrative work this section describes.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Suppose a learner studies hard, then cuts the night short by three hours to start early the next day. Given that REM sleep concentrates in the final cycles, which kind of memory processing is most likely sacrificed, the deep-sleep consolidation of the facts themselves, or the REM-associated integration and procedural work? What would that predict about how the material feels the next day?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Two forces decide when you sleep</h2>
+    <p>We have described what sleep does. But what determines when a person feels sleepy in the first place? The dominant framework, elegant, durable, and now more than forty years old, is the <span class="ch-key">two-process model</span> of sleep regulation, formalized by Borbély and colleagues and recently revisited by its original author (Borbély et al., 2016; Borbély, 2022).</p>
+    <p><strong>Process S, homeostatic sleep pressure.</strong> The longer a person is awake, the greater the pressure to sleep. This is a homeostatic drive, building steadily across the waking day and discharging during sleep, fastest during the deep slow-wave sleep of the early night. Its strength as a model is that it has a measurable biomarker: slow-wave activity in the NREM EEG rises with prior time awake and dissipates across the night, tracking Process S almost exactly. Sleep pressure is not a metaphor. It is something visible in the electrical rhythm of the brain.</p>
+    <p><strong>Process C, the circadian rhythm.</strong> Independently of how long someone has been awake, an internal clock, the roughly twenty-four-hour circadian rhythm generated in the hypothalamus and entrained chiefly by light, sets a daily oscillation in alertness. Process C is not a simple get-sleepy-at-night signal. Counterintuitively, it produces a strong wake-promoting drive in the evening, sometimes called the wake maintenance zone, that rises to oppose the mounting sleep pressure, and it reaches its alerting low in the early hours of the morning.</p>
+    <p>Sleepiness at any given moment is the interaction of the two, and that interaction is non-linear, a point the model's authors emphasize in their reappraisal (Borbély et al., 2016; Borbély, 2022). Two familiar experiences fall directly out of the interplay.</p>
+    <p><strong>The afternoon dip.</strong> In early to mid afternoon, homeostatic pressure has built substantially since morning, but the circadian alerting signal has not yet risen to its evening peak. The gap between the two widens, sleepiness surfaces, and the mid-afternoon slump appears, no heavy lunch required to explain it.</p>
+    <p><strong>The evening second wind.</strong> Later, even though a person has been awake even longer and Process S is higher still, the circadian wake maintenance zone surges to its peak and masks the pressure. Someone can feel alert at nine in the evening despite sixteen hours awake, because the clock is holding the door open. When that circadian drive finally falls away, the accumulated pressure floods in and sleep arrives quickly.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If Process S has been rising all day by four in the afternoon, and Process C has also been rising since morning, why does the mid-afternoon slump happen at all, and why does it lift again by early evening rather than continuing to worsen? What does that tell you about how the two processes combine rather than simply add together?</p>
+    </aside>
+
+    <h3>Why a late nap wrecks the night</h3>
+    <p>The model also explains something practical. A nap discharges homeostatic pressure, it lets Process S bleed off early. A short midday nap taken during the afternoon dip can restore alertness at little cost, because plenty of pressure will rebuild before bedtime. But a long or late-afternoon nap discharges too much of the very pressure needed to fall asleep at night. A person then arrives at bedtime with low Process S, meeting a circadian wake maintenance zone that has not yet released, and lies awake. The nap did not so much give energy as spend sleep pressure early. Light exposure compounds this. Bright light in the evening delays the circadian clock, pushing the wake maintenance zone later and further postponing the moment the two forces finally align for sleep.</p>
+    <p>This is, in miniature, Halle's other habit. Twice a week, to survive an evening study session, she has been taking a long nap around five in the afternoon, right when the model above predicts it will do the most damage to that night's sleep onset. She reads the resulting late bedtime as more proof that late nights are simply who she is now. The two-process model offers a less fatalistic explanation: the nap, not her character, is doing most of the work.</p>
+    <p>It is worth adding one honest caveat before moving on. The two-process model describes a strong, well-replicated average pattern, but the exact clock times attached to the wake maintenance zone shift somewhat from person to person, a difference popularly discussed as chronotype, the tendency toward being more of a morning or an evening person. This chapter is not the place to map an individual's precise circadian phase, and nothing here should be read as a claim that everyone's afternoon dip or evening second wind lands at the identical hour. The mechanism, two forces interacting non-linearly, is the durable, general part of the model. The exact clock face it draws on any one person is a separate question, and a more individual one.</p>
+  </section>
+
+  <div class="ch-widget" id="w-twoforce">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Two Forces of Sleep</div>
+    </div>
+    <p class="ch-widget-sub">Set your wake time, an optional nap, and evening light exposure. See how homeostatic pressure (Process S) and the circadian rhythm (Process C) interact to predict when sleep comes easily, and when it will not.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Wake time</span>
+        <select class="ch-widget-select" id="tf-wake">
+          <option value="6">6:00 a.m.</option>
+          <option value="7" selected>7:00 a.m.</option>
+          <option value="8">8:00 a.m.</option>
+          <option value="10">10:00 a.m.</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Nap</span>
+        <select class="ch-widget-select" id="tf-nap">
+          <option value="none">No nap</option>
+          <option value="13">Short, 1:00 p.m.</option>
+          <option value="17">Long, 5:00 p.m.</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Evening light</span>
+        <select class="ch-widget-select" id="tf-light">
+          <option value="dim">Dim / warm</option>
+          <option value="bright">Bright screens</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sleep pressure at 11 p.m.</span>
+        <span class="ch-meter-bar"><span id="tf-s" style="width:70%"></span></span>
+        <span class="ch-meter-num" id="tf-s-n">7</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Afternoon dip depth</span>
+        <span class="ch-meter-bar"><span id="tf-dip" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="tf-dip-n">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Ease of falling asleep</span>
+        <span class="ch-meter-bar"><span id="tf-ease" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="tf-ease-n">6</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="tf-verdict" style="font-weight:600"></p>
+    <button class="ch-widget-btn" id="tf-run">Predict my night</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The whole system, in one night</h2>
+    <p>Step back and watch the model this course has built run through a single night, all systems at once.</p>
+    <p>Evening: the circadian wake maintenance zone finally releases, and the accumulated Process S floods in. Sleep descends through N1 and N2 into the deep slow-wave sleep of the first cycles. The electrical signaling introduced early in this course has scaled into whole-brain synchrony. Autonomic balance swings hard toward parasympathetic dominance; heart rate and blood pressure fall to their nightly floor; growth hormone pulses; the glymphatic channels open and the brain begins to wash out the day's metabolic debris (Xie et al., 2013). Meanwhile the slow oscillations, spindles, and hippocampal ripples couple in their precise sequence, replaying the day's declarative memories into cortex, while global synaptic strength is renormalized to keep tomorrow's learning possible (Tononi & Cirelli, 2014; Staresina, 2024).</p>
+    <p>As the night proceeds, Process S discharges, N3 shrinks, and REM sleep lengthens. Autonomic control becomes volatile; the cortex lights up while the body lies paralyzed; procedural and emotional memories are processed and new knowledge is integrated with old. By the final cycles the sleeper is mostly in REM sleep and light sleep, dreams vivid, and the circadian alerting signal is climbing back toward its morning rise. Waking arrives with the system cleaned, rebalanced, and with yesterday's provisional learning now more durably held.</p>
+    <p>This is the sense in which sleep is the grand synthesis of the course. The nervous system that senses, decides, and acts by day is the same system that recovers, rewires, and rests by night. Nothing in that description is idle. The night shift is where the working model finally becomes a working organism, one that cannot learn without also sleeping, because in this system remembering and resting turn out to be the same operation seen from two different sides.</p>
+    <p>Notice, too, how little of this required a new organ or a new mechanism. Sleep does not introduce some separate maintenance module bolted onto the nervous system described in the rest of this course. It runs the same neurons, the same autonomic branches, the same synapses, the same hippocampus and cortex, simply in a different mode, tuned by a different balance of the same signals that govern the waking day. That reuse is, in its own way, the tidiest argument against the old off-switch metaphor. A system cannot be switched off and simultaneously be running its most demanding, most tightly coordinated program of the entire twenty-four hours.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What this means for a learner's own night</h2>
+    <p>It would be tidy to end there, but the honest version of this chapter includes what a learner does with all of this the next time an exam, a deadline, or simply a long day tempts them to treat sleep as the flexible line item in a schedule. None of what follows is a protocol or a prescription. It is the same working model, pointed at Halle's actual week, and it should be read as a starting point for a learner's own thinking rather than a fixed rule.</p>
+    <p>A consistent wake time anchors Process C more reliably than a consistent bedtime does, because the circadian clock is entrained largely by light exposure at a predictable point each day. Protecting the last two hours of a typical night matters more than the popular framing of a single target number of hours suggests, because those final cycles are the ones carrying most of the REM sleep this chapter has connected to integration and procedural learning. A short nap early in the afternoon costs little; a long one in late afternoon spends sleep pressure that the coming night needs. Bright light in the hours before bed pushes the circadian wake maintenance zone later, which is simply the two-process model applied to a laptop screen at eleven at night.</p>
+    <p>There is also a scheduling lesson buried in the memory-consolidation section above. If the goal is to hold onto specific facts, cramming right before a full night of sleep gives the slow oscillation, spindle, and ripple sequence fresh material to work with during the very first cycles, when that coupling is strongest. If the goal is to integrate material, to see how a new idea connects to something learned earlier, the REM-rich final cycles are doing more of that work, which is one more reason a shortened morning costs a learner something different than a shortened evening does. Neither pattern is right for every situation. The point is that the two are not interchangeable, and a learner who understands why can make a more informed trade than Halle was making when she assumed all sleep hours were the same hour.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A familiar plan treats a short night as a debt that a long weekend lie-in simply repays. The two-process model complicates that story. Sleeping in can discharge accumulated Process S and leave a person feeling less pressured, but it does not retroactively deliver the REM-rich final cycles a Tuesday night lost, or restore the specific coupling of slow oscillations, spindles, and ripples that would have consolidated Tuesday's material. Catching up on quantity is real and worth doing. It is not the same as recovering what a particular night was actually for.</p>
+    </aside>
+
+    <p>Halle's plan, once she worked through this chapter, was not dramatic. She moved her cutoff for new material an hour earlier, kept her wake time fixed, swapped the five o'clock nap for a shorter one at one in the afternoon, and dimmed her screen after dinner. She is not sleeping more out of virtue. She is sleeping in a way that lets the specific mechanisms in this chapter actually run: the parasympathetic recovery of the early cycles, the synaptic renormalization of slow-wave sleep, and the REM-dependent integration of the final hour she used to sacrifice first.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Sleep is an active, organized, metabolically expensive operation, not the brain switching off. It is the nervous system's maintenance shift, and its rhythms are among the largest, most synchronized electrical signals the brain ever produces.</li>
+      <li>Sleep cycles roughly every ninety minutes through NREM stages (N1, N2, N3) and REM sleep, each with a distinct EEG rhythm: deep sleep is slow and highly synchronized, REM sleep is fast and waking-like. Deep sleep dominates early cycles; REM sleep dominates later ones.</li>
+      <li>Deep NREM sleep is the most parasympathetically dominant state a person routinely enters, the physiological substrate of physical recovery, growth hormone release, and, through the glymphatic system, the clearance of metabolic waste from the brain (Xie et al., 2013; Trinder et al., 2001).</li>
+      <li>REM sleep is autonomically volatile rather than restful in the cardiovascular sense, with sympathetic activity rising toward waking levels even as the muscles remain paralyzed. Deep sleep and REM sleep do different jobs; neither is filler.</li>
+      <li>Sleep is the price the brain pays for plasticity: slow-wave sleep renormalizes synaptic strength so learning remains possible, and losing a night measurably upscales excitability while blunting the capacity for new plasticity (Tononi & Cirelli, 2014; Salehinejad et al., 2022).</li>
+      <li>Memory is actively consolidated through the precise coupling of slow oscillations, spindles, and hippocampal ripples, transferring declarative memories from hippocampus to cortex; REM sleep supports procedural, emotional, and integrative processing (Rasch & Born, 2013; Staresina, 2024; Marshall et al., 2020).</li>
+      <li>The two-process model explains sleep timing: homeostatic pressure (Process S) builds with wakefulness while the circadian rhythm (Process C) oscillates independently. Their non-linear interaction produces the afternoon dip, the evening second wind, and the way a late nap can spend the pressure a person needs for night sleep (Borbély et al., 2016; Borbély, 2022).</li>
+      <li>This is a working model for education, not a diagnostic tool. Persistent, disruptive sleep problems belong to a qualified clinician, not a self-assessment built from one chapter.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This is where the course ends, deliberately, where the day does. You now hold an integrated working model of a nervous system that senses, decides, acts, recovers, rewires, and rests. Carry it forward not as nine separate chapters but as one connected picture. The next time you feel the afternoon dip, catch a second wind, or wake with a problem quietly solved, you will recognize the same signaling body at work, running its night shift so the day shift can begin again. Halle's laptop still closes late some nights. But she now knows what that costs, what it does not cost, and, more importantly, what the hour she protects is actually buying her.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>American Academy of Sleep Medicine. (2023). <em>The AASM manual for the scoring of sleep and associated events: Rules, terminology and technical specifications</em> (Version 3). American Academy of Sleep Medicine.</p>
+    <p>Borbély, A. A., Daan, S., Wirz-Justice, A., &amp; Deboer, T. (2016). The two-process model of sleep regulation: A reappraisal. <em>Journal of Sleep Research, 25</em>(2), 131-143. https://doi.org/10.1111/jsr.12371</p>
+    <p>Borbély, A. (2022). The two-process model of sleep regulation: Beginnings and outlook. <em>Journal of Sleep Research, 31</em>(4), e13598. https://doi.org/10.1111/jsr.13598</p>
+    <p>Marshall, L., Cross, N., Binder, S., &amp; Dang-Vu, T. T. (2020). Brain rhythms during sleep and memory consolidation: Neurobiological insights. <em>Physiology, 35</em>(1), 4-15. https://doi.org/10.1152/physiol.00004.2019</p>
+    <p>Rasch, B., &amp; Born, J. (2013). About sleep's role in memory. <em>Physiological Reviews, 93</em>(2), 681-766. https://doi.org/10.1152/physrev.00032.2012</p>
+    <p>Salehinejad, M. A., Ghanavati, E., Reinders, J., Hengstler, J. G., Kuo, M.-F., &amp; Nitsche, M. A. (2022). Sleep-dependent upscaled excitability, saturated neuroplasticity, and modulated cognition in the human brain. <em>eLife, 11</em>, e69308. https://doi.org/10.7554/eLife.69308</p>
+    <p>Staresina, B. P. (2024). Coupled sleep rhythms for memory consolidation. <em>Trends in Cognitive Sciences, 28</em>(4), 339-351. https://doi.org/10.1016/j.tics.2024.02.002</p>
+    <p>Tononi, G., &amp; Cirelli, C. (2014). Sleep and the price of plasticity: From synaptic and cellular homeostasis to memory consolidation and integration. <em>Neuron, 81</em>(1), 12-34. https://doi.org/10.1016/j.neuron.2013.12.025</p>
+    <p>Trinder, J., Kleiman, J., Carrington, M., Smith, S., Breen, S., Tan, N., &amp; Kim, Y. (2001). Autonomic activity during human sleep as a function of time and sleep stage. <em>Journal of Sleep Research, 10</em>(4), 253-264. https://doi.org/10.1046/j.1365-2869.2001.00263.x</p>
+    <p>Xie, L., Kang, H., Xu, Q., Chen, M. J., Liao, Y., Thiyagarajan, M., O'Donnell, J., Christensen, D. J., Nicholson, C., Iliff, J. J., Takano, T., Deane, R., &amp; Nedergaard, M. (2013). Sleep drives metabolite clearance from the adult brain. <em>Science, 342</em>(6156), 373-377. https://doi.org/10.1126/science.1241224</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 9 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('w-hypnogram');
+    if(!w) return;
+    // Build a 480-minute (8h) night as an array of stage codes per minute.
+    // Cycles: descend N1->N2->N3, ascend N2->REM. Early cycles deep-heavy, later REM-heavy.
+    var minutes = [];
+    function fill(stage, len){ for(var i=0;i<len;i++) minutes.push(stage); }
+    // Cycle 1
+    fill('N1',6); fill('N2',24); fill('N3',40); fill('N2',12); fill('REM',8);
+    // Cycle 2
+    fill('N2',22); fill('N3',30); fill('N2',15); fill('REM',15);
+    // Cycle 3
+    fill('N2',25); fill('N3',15); fill('N2',18); fill('REM',22);
+    // Cycle 4
+    fill('N2',28); fill('N3',6); fill('N2',20); fill('REM',26);
+    // Cycle 5 (light morning)
+    fill('N2',30); fill('N1',6); fill('REM',22);
+    while(minutes.length<480) minutes.push('N2');
+    minutes = minutes.slice(0,480);
+
+    var stageInfo = {
+      'N1':{name:'N1, light transition', wave:'Slow-rolling drift; the fast waking rhythm fades. Easily interrupted.', sync:3, hr:6, para:5, repair:2, mem:2,
+        detail:'The doorway between waking and sleep. Muscle tone loosens; a falling sensation is common.'},
+      'N2':{name:'N2, the workhorse', wave:'Sleep spindles (fast thalamic bursts) and K-complexes appear on a slowing background.', sync:5, hr:5, para:6, repair:4, mem:6,
+        detail:'Nearly half the night lives here. Spindles relay memory traces to the cortex, quietly essential work.'},
+      'N3':{name:'N3, deep slow-wave sleep', wave:'Large, slow (about 1 Hz) synchronized waves; vast cortical territories toggle in unison.', sync:10, hr:2, para:10, repair:10, mem:9,
+        detail:'Hardest stage to wake from. Parasympathetic dominance peaks; growth hormone pulses; the glymphatic system flushes waste; declarative memories consolidate.'},
+      'REM':{name:'REM, rapid eye movement', wave:'Fast, desynchronized, waking-like EEG, while the body is paralyzed.', sync:2, hr:8, para:4, repair:2, mem:8,
+        detail:'Vivid dreaming. Autonomic control turns volatile and storm-like. Procedural, emotional, and integrative memory processing dominate.'}
+    };
+
+    var scrub = document.getElementById('hyp-scrub');
+    var skipSel = document.getElementById('hyp-skip');
+    var playBtn = document.getElementById('hyp-play');
+    var timer = null;
+
+    function stageAt(idx){
+      var s = minutes[idx];
+      var skip = skipSel.value;
+      if(skip!=='none' && s===skip){
+        // Replaced by lighter sleep (N2), the function is lost.
+        return {code:s, replaced:true};
+      }
+      return {code:s, replaced:false};
+    }
+
+    function fmtTime(idx){
+      // start 11:00 pm
+      var total = 23*60 + idx;
+      var h = Math.floor(total/60)%24;
+      var m = total%60;
+      var disp = h%12; if(disp===0) disp=12;
+      var suffix;
+      if(h===23) suffix='p.m.'; else if(h<12) suffix='a.m.'; else suffix='p.m.';
+      return disp+':'+(m<10?'0':'')+m+' '+suffix;
+    }
+
+    function setMeter(fillId, numId, val){
+      var pct = Math.max(0,Math.min(10,val))*10;
+      document.getElementById(fillId).style.width = pct+'%';
+      document.getElementById(numId).textContent = val;
+    }
+
+    function render(){
+      var idx = parseInt(scrub.value,10);
+      var st = stageAt(idx);
+      var info = stageInfo[st.code];
+      var ro = document.getElementById('hyp-readout');
+      var det = document.getElementById('hyp-detail');
+      if(st.replaced){
+        var lightered = stageInfo['N2'];
+        ro.textContent = fmtTime(idx)+' · '+info.name+' , SKIPPED (replaced by light N2)';
+        det.textContent = 'Recovery function lost: '+ (st.code==='N3' ? 'no deep-sleep physical repair, weak glymphatic clearance, and impaired declarative-memory consolidation.' : 'no REM, so procedural, emotional, and integrative memory processing does not happen; the sleeper wakes feeling under-consolidated.');
+        setMeter('hyp-sync','hyp-sync-n', lightered.sync);
+        setMeter('hyp-hr','hyp-hr-n', lightered.hr);
+        setMeter('hyp-para','hyp-para-n', lightered.para);
+        setMeter('hyp-repair','hyp-repair-n', st.code==='N3'?1:lightered.repair);
+        setMeter('hyp-mem','hyp-mem-n', st.code==='REM'?2:lightered.mem);
+      } else {
+        ro.textContent = fmtTime(idx)+' · '+info.name;
+        det.textContent = info.wave+' '+info.detail;
+        setMeter('hyp-sync','hyp-sync-n', info.sync);
+        setMeter('hyp-hr','hyp-hr-n', info.hr);
+        setMeter('hyp-para','hyp-para-n', info.para);
+        setMeter('hyp-repair','hyp-repair-n', info.repair);
+        setMeter('hyp-mem','hyp-mem-n', info.mem);
+      }
+    }
+
+    scrub.addEventListener('input', render);
+    skipSel.addEventListener('change', render);
+    playBtn.addEventListener('click', function(){
+      if(timer){ clearInterval(timer); timer=null; playBtn.textContent='▶ Play the night'; return; }
+      playBtn.textContent='❚❚ Pause';
+      timer = setInterval(function(){
+        var v = parseInt(scrub.value,10);
+        v += 4;
+        if(v>=480){ v=479; clearInterval(timer); timer=null; playBtn.textContent='▶ Play the night'; }
+        scrub.value = v;
+        render();
+      }, 60);
+    });
+    render();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var w = document.getElementById('w-twoforce');
+    if(!w) return;
+    var wakeSel = document.getElementById('tf-wake');
+    var napSel = document.getElementById('tf-nap');
+    var lightSel = document.getElementById('tf-light');
+    var runBtn = document.getElementById('tf-run');
+
+    function setMeter(fillId,numId,val){
+      var v = Math.max(0,Math.min(10,Math.round(val)));
+      document.getElementById(fillId).style.width = (v*10)+'%';
+      document.getElementById(numId).textContent = v;
+    }
+
+    function compute(){
+      var wake = parseInt(wakeSel.value,10);
+      var nap = napSel.value;
+      var light = lightSel.value;
+      var bedtime = 23; // 11 pm
+      // Hours awake by bedtime
+      var hoursAwake = bedtime - wake;
+      // Process S at bedtime ~ proportional to hours awake, capped
+      var S = Math.min(10, hoursAwake * 0.62);
+      // Nap discharges pressure
+      var napPenalty = 0;
+      if(nap==='13'){ napPenalty = 1.2; }      // short early nap: mild
+      else if(nap==='17'){ napPenalty = 3.6; } // long late nap: heavy
+      var Sbed = Math.max(0, S - napPenalty);
+
+      // Afternoon dip depth: bigger when awake longer by early afternoon and no nap
+      var awakeByAfternoon = 14 - wake; // ~2pm
+      var dip = Math.min(10, Math.max(2, awakeByAfternoon*0.85));
+      if(nap==='13') dip = Math.max(1, dip-4); // nap taken during the dip relieves it
+      if(nap==='17') dip = Math.min(10, dip+0.5);
+
+      // Ease of falling asleep at 11pm: high pressure good, but bright light delays clock (raises wake drive)
+      var wakeDrive = (light==='bright') ? 3.2 : 1.4; // circadian wake-maintenance strength at 11pm
+      var ease = Sbed - wakeDrive + 4;
+      ease = Math.max(0, Math.min(10, ease));
+
+      setMeter('tf-s','tf-s-n', Sbed);
+      setMeter('tf-dip','tf-dip-n', dip);
+      setMeter('tf-ease','tf-ease-n', ease);
+
+      var verdict = document.getElementById('tf-verdict');
+      var msg = '';
+      if(nap==='17' && Sbed<5){
+        msg = 'The long 5 p.m. nap spent too much of your sleep pressure. You arrive at bedtime with Process S low while the circadian wake-maintenance zone is still up, so expect to lie awake.';
+      } else if(light==='bright' && ease<5){
+        msg = 'Bright evening light has delayed your circadian clock, pushing the wake-maintenance zone later. Even with decent sleep pressure, falling asleep at 11 p.m. is harder.';
+      } else if(nap==='13' && dip<4){
+        msg = 'The short 1 p.m. nap landed right in the afternoon dip. It restored alertness cheaply, and enough pressure rebuilds before bed for an easy night.';
+      } else if(ease>=7){
+        msg = 'Process S has climbed all day and the evening wake-maintenance zone is releasing. The two forces align, so sleep should come easily.';
+      } else {
+        msg = 'A moderate night: sleep pressure and the circadian rhythm are roughly balanced. Small changes in nap timing or evening light would tip it either way.';
+      }
+      verdict.textContent = msg;
+    }
+
+    runBtn.addEventListener('click', compute);
+    wakeSel.addEventListener('change', compute);
+    napSel.addEventListener('change', compute);
+    lightSel.addEventListener('change', compute);
+    compute();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
