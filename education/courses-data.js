@@ -162,7 +162,7 @@ window.GEMINI_COURSES = {
       ]
     },
         {
-      slug:"a3-supplementation", code:"A3", track:"A", title:"Supplementation: When, Why & What",
+      slug:"a3-supplementation", code:"A3", track:"A", title:"Supplementation: When, Why & What", image:"covers/a3.jpg",
       description:"A rational, evidence-first framework. Supplements fill gaps, they don't replace food.",
       level:"Core", minutes_per_chapter:36, published:true,
       chapters:[
@@ -225,7 +225,7 @@ window.GEMINI_COURSES = {
       ]
     },
         {
-      slug:"a4-advanced-nutrition", code:"A4", track:"A", title:"Advanced Nutrition",
+      slug:"a4-advanced-nutrition", code:"A4", track:"A", title:"Advanced Nutrition", image:"covers/a4.jpg",
       description:"Why diets behave the way they do: metabolism, adaptation, and strategy.",
       level:"Advanced", minutes_per_chapter:35, published:true,
       chapters:[
@@ -289,7 +289,7 @@ window.GEMINI_COURSES = {
     },
 
     // ---- Track B: Physiology & Body Systems ----
-    { slug:"b1-digestive-system", code:"B1", track:"B", title:"The Digestive System",
+    { slug:"b1-digestive-system", code:"B1", track:"B", title:"The Digestive System", image:"covers/b1.jpg",
       description:"How food becomes usable fuel, and what goes wrong, at CEU-style depth.",
       level:"Core", minutes_per_chapter:38, published:true,
       chapters:[
@@ -363,7 +363,7 @@ window.GEMINI_COURSES = {
           worksheet:"courses/b1-digestive-system/worksheet-10-bonus-the-pharmacy-and-the-gut-how-common-medications-reshape-digestion.html",
           caseAssignment:"courses/b1-digestive-system/case-assignment-10-bonus-the-pharmacy-and-the-gut-how-common-medications-reshape-digestion.html",
           cheatsheet:"courses/b1-digestive-system/cheat-sheet-10-bonus-the-pharmacy-and-the-gut-how-common-medications-reshape-digestion.html" } ] },
-    { slug:"b2-endocrine-hormones", code:"B2", track:"B", title:"Endocrine System / Hormones 101",
+    { slug:"b2-endocrine-hormones", code:"B2", track:"B", title:"Endocrine System / Hormones 101", image:"covers/b2.jpg",
       description:"The hormonal control system: the major players and how they keep you in balance, at CEU-style depth.",
       level:"Core", minutes_per_chapter:40, published:true,
       chapters:[
