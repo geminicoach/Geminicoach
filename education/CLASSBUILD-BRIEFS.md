@@ -108,6 +108,7 @@ Angle: a rigorous, EDUCATIONAL and HARM-REDUCTION look at AAS: physiology, risks
 
 ## D2 — Advanced Fat Loss  (Advanced, 9 chapters)
 Angle: metabolism, training methods, and population strategy synthesized into real fat-loss strategy.
+OPEN DECISION (PJ, 2026-08-10): fat-loss PEPTIDES and supplements (mechanism + when-deployed). Two options: (a) fold a peptide/pharmacology chapter into D2, or (b) build a SEPARATE peptide module set (leaning this way). Recommendation: separate module, framed like D1 AAS = strictly educational + harm-reduction, NO dosing/sourcing/protocols, strong non-endorsement and clinician boundary. GLP-1 receptor agonists (semaglutide, tirzepatide) are well-evidenced and get real mechanism coverage; most "research peptides" (BPC-157, etc.) are largely unproven / not approved and must be framed honestly as such. Build path: ClassBuild can scaffold, but peptides are exactly where its draft risks being thin, dated, or overreaching, so plan a HEAVY local rewrite with current citations, or author locally from the start. Either way this thread verifies every citation and holds the boundary.
 1. Energy Balance, Revisited at Depth
 2. Metabolic Adaptation: The Body That Fights Back
 3. Diet Breaks, Refeeds, and Managing the Deficit
