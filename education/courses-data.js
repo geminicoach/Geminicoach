@@ -519,23 +519,23 @@ window.GEMINI_COURSES = {
       description:"Motor control, the neuromuscular system, skill acquisition, and CNS fatigue.", level:"Advanced", published:false },
 
     // ---- Track C: Movement & Recovery ----
-    { slug:"c1-anatomy-biomechanics", code:"C1", track:"C", title:"Musculoskeletal Anatomy & Lifting Biomechanics",
+    { slug:"c1-anatomy-biomechanics", code:"C1", track:"C", title:"Musculoskeletal Anatomy & Lifting Biomechanics", image:"covers/c1.png",
       description:"The anatomy and mechanics behind why lifts look and feel the way they do.", level:"Core", published:false },
-    { slug:"c2-recovery-science", code:"C2", track:"C", title:"Recovery Science",
+    { slug:"c2-recovery-science", code:"C2", track:"C", title:"Recovery Science", image:"covers/c2.png",
       description:"How recovery actually works: the systems, the levers, and the truth about modalities.", level:"Core", published:false },
 
     // ---- Track D: Applied & Advanced ----
-    { slug:"d1-aas-education", code:"D1", track:"D", title:"AAS: Education & Harm Reduction",
+    { slug:"d1-aas-education", code:"D1", track:"D", title:"AAS: Education & Harm Reduction", image:"covers/d1.png",
       description:"A rigorous, educational look at anabolic steroids: effects, risks, and what to monitor. Not a how-to.", level:"Advanced", published:false },
-    { slug:"d2-advanced-fat-loss", code:"D2", track:"D", title:"Advanced Fat Loss",
+    { slug:"d2-advanced-fat-loss", code:"D2", track:"D", title:"Advanced Fat Loss", image:"covers/d2.png",
       description:"Metabolism, training methods, and population strategy synthesized into real fat-loss strategy.", level:"Advanced", published:false },
 
     // ---- Track E: Systems & Metabolism ----
-    { slug:"e1-energy-metabolism", code:"E1", track:"E", title:"Energy Systems & Metabolism",
+    { slug:"e1-energy-metabolism", code:"E1", track:"E", title:"Energy Systems & Metabolism", image:"covers/e1.png",
       description:"How the body makes and uses energy at every level, plus body composition.", level:"Core", published:false },
-    { slug:"e2-immune-inflammation", code:"E2", track:"E", title:"Immune System & Inflammation",
+    { slug:"e2-immune-inflammation", code:"E2", track:"E", title:"Immune System & Inflammation", image:"covers/e2.png",
       description:"How immunity and inflammation work, and how training, stress, gut, and food shape them.", level:"Core", published:false },
-    { slug:"e3-female-physiology", code:"E3", track:"E", title:"Female Physiology & the Menstrual Cycle",
+    { slug:"e3-female-physiology", code:"E3", track:"E", title:"Female Physiology & the Menstrual Cycle", image:"covers/e3.png",
       description:"Female-specific physiology done properly: the cycle, life stages, and their training and nutrition effects.", level:"Core", published:false }
   ]
 };
