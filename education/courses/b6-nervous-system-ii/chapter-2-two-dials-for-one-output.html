@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two Dials for One Output</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 2 · Module 1</div>
+    <h1 class="ch-title">Two Dials for One Output</h1>
+    <p class="ch-subtitle">Recruitment answers "how many." Rate coding answers "how fast." Force is what happens when a nervous system turns both at once.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>ick up an egg. Now, gently, close your hand until it cracks. Same hand, same forearm muscles, same wiring, and yet somewhere between "hold" and "crush" your nervous system moved through hundreds of intermediate force levels without a single clumsy jump. If the last chapter left you with the impression that force is built by switching motor units on one at a time, like flipping a row of light switches, that egg is a problem. Switching units on and off, one after another, would feel like a staircase: a small jolt of added force each time a new unit joined in, then a flat pause until the next one clicked on. What your hand just did was not a staircase. It was a ramp, smooth from the lightest touch to the crunch, and nothing about a pure on-off system explains how you got there.</p>
+    <p>The resolution is that motor unit recruitment, the "how many units are switched on" lever you learned in the last chapter, is only one of two control dials the nervous system has. There is a second, quieter dial turning at the very same time, and this chapter is about learning to see both of them working together instead of mistaking one for the whole story. Get this model straight and a long list of training questions that used to feel mysterious start explaining themselves: why maximal effort is a skill you can be bad at even with plenty of muscle to spare, why two learners with an identical one-rep max can look completely different when the bar has to move fast, and why an early plateau sometimes has nothing to do with the size of the muscle at all.</p>
+    <p>Meet Ines, a learner in this course who is not a case to be solved and not a stand-in for anyone specific, only a useful thread to pull on. Ines is 33, and two years ago she took up sprinting and the long jump again after a decade away from organized track and field. Her strength program has done exactly what strength programs are supposed to do: her back squat has climbed steadily for six months, set after set, plate after plate. Her jump distance and her acceleration off the blocks, on the other hand, have barely moved. She assumed force was force, that a bigger squat number had to mean a faster start and a longer jump, because in her mind "strength" was one thing and more of it was simply more of it. By the end of this chapter you will be able to explain, more precisely than she can currently explain to herself, why her assumption was reasonable, why it was incomplete, and what she is actually missing.</p>
+    <p>Notice, too, that this is a different kind of confusion than the one the last chapter addressed. That chapter was about discovering that a muscle is not one actuator but a population of independent motor units. This chapter is about something one level deeper: even once you know a population of units is involved, you still have not explained how that population produces a smooth, continuously adjustable output rather than a series of jerks. The egg in your hand and the flat line on Ines's stopwatch are, it turns out, the same problem wearing two different costumes. Both are about what a nervous system does with motor units it has already recruited, not merely which ones it has recruited.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The one-line version, first</h2>
+    <p>Before we get into the mechanism, here is the working model you can put to use today, the same way the last chapter opened with the motor unit before explaining why it mattered:</p>
+    <p><span class="ch-key">A nervous system grades muscular force with two dials: recruitment, meaning how many motor units (MU) are switched on, and rate coding, meaning how fast each switched-on unit is firing.</span> Recruitment does most of the work across the lower and middle portion of a muscle's force range. Once you climb past roughly the midpoint, most muscles have already recruited nearly everything they are going to recruit, so any further increase in force comes almost entirely from firing those already-active units faster. The top slice of anyone's force output is, mechanically, a firing-frequency problem rather than a recruitment problem.</p>
+    <p>That single sentence is the engine behind three claims this chapter will earn the right to make. Heavy and, especially, explosive efforts train the second dial in a way that moderate efforts do not. Smoothness of movement comes from blending both dials continuously, not from simply owning more motor units than the next person. And there is a real, trainable gap between how hard a motor unit is currently firing and how hard it is capable of firing, a gap this chapter will name and that explains a surprising amount of early strength gain.</p>
+    <p>It helps to say plainly why a course on the nervous system spends an entire chapter on something as narrow-sounding as "how fast a neuron fires." The answer is that firing rate is not a footnote to force production, it is one of exactly two levers that exist. There is no third dial hiding somewhere in the muscle that quietly does the rest of the work. Everything a muscle does, from a whisper-light adjustment to a maximal, explosive effort, is built from some combination of how many motor units are active and how quickly each of those units is being driven. Once you accept that constraint, a great many training questions stop being open-ended and start being answerable: any claim about how to increase force has to cash out as a claim about one of these two dials, or it is not really a claim about the nervous system at all.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: if a muscle has already recruited essentially every motor unit (MU) it owns at, say, 80 percent of a learner's maximum effort, where could the remaining 20 percent of force possibly come from? Hold your answer. You are about to name the mechanism yourself.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Refresher: the recruitment ladder</h2>
+    <p>We only need the last chapter in brief, so a quick refresher rather than a full rebuild. A motor unit (MU) is a single motor neuron plus every muscle fiber that neuron commands. When the neuron fires, every one of its fibers contracts together, all at once, in a package that cannot be subdivided. There is no such thing as half a motor unit contracting. It is on, or it is off.</p>
+    <p>Motor units are not recruited in a random order. Henneman's size principle, first laid out from spinal cord recordings in cats, established that motor units switch on in a remarkably fixed sequence, from the smallest to the largest, because smaller motor neurons have a lower electrical threshold and cross into firing first (Henneman et al., 1965). As a learner asks a muscle for more force, the nervous system climbs a ladder: small, fatigue-resistant units join first, ideal for fine and sustained work, and progressively larger, more powerful, faster-fatiguing units join as the demand keeps rising. That order turns out to be strikingly stable across tasks. The same low-threshold units that steady a cup of coffee are the very first units active in a maximal deadlift. The difference between the two tasks is not which units start the sequence, it is how far up the ladder the demand pushes you, and, as this chapter will show, how hard the active units are being driven once they are on.</p>
+    <p>Left on its own, this is a staircase model of force. Each new rung on the ladder adds a chunk of force, and if recruitment were the entire story, a slowly rising contraction would look like a series of small steps as each newly recruited unit clicked in. Because there can be hundreds of units in a given muscle, the steps would be small, almost too small to notice, but they would still be discrete jumps rather than a continuous climb. To turn that staircase into the ramp your hand traced while crushing the egg, the nervous system needs a second lever, one that can adjust the output of units that are already switched on rather than only adding new ones.</p>
+    <p>There is also a practical reason the size principle's fixed order matters beyond explaining a staircase. Because the smallest, most fatigue-resistant units are always recruited first regardless of the task, a nervous system never has to "choose" to spare them for endurance work or "choose" to reserve the largest units for a one-rep max. The order takes care of itself automatically. What a learner or a coach actually controls is not which units come online first, that sequence is fixed by biology, but how far up the ladder a given task pushes the demand, and, as the rest of this chapter will show, how hard the units that do come online are then driven. Recruitment order is not a training variable. Recruitment ceiling and firing rate are.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 340" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Recruitment as a staircase of motor units, smallest to largest" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>Recruitment climbs a ladder, smallest units first</title>
+<rect x="1" y="1" width="638" height="338" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="32" fill="#aab8d2" font-size="13" letter-spacing="1.5">RECRUITMENT ORDER: SMALLEST MOTOR UNITS FIRST</text>
+<line x1="60" y1="290" x2="600" y2="290" stroke="#3a5578" stroke-width="1.5"/>
+<line x1="60" y1="70" x2="60" y2="290" stroke="#3a5578" stroke-width="1.5"/>
+<text x="46" y="76" fill="#7f8fab" font-size="10" text-anchor="end">high</text>
+<text x="46" y="290" fill="#7f8fab" font-size="10" text-anchor="end">low</text>
+<text x="330" y="312" fill="#7f8fab" font-size="10.5" text-anchor="middle">force demand rises &#8594;</text>
+<rect x="90" y="255" width="46" height="35" fill="#5aaff5"/>
+<rect x="150" y="230" width="46" height="60" fill="#5aaff5"/>
+<rect x="210" y="198" width="46" height="92" fill="#5aaff5"/>
+<rect x="270" y="160" width="46" height="130" fill="#e0873a"/>
+<rect x="330" y="120" width="46" height="170" fill="#e0873a"/>
+<rect x="390" y="95" width="46" height="195" fill="#c93b2a" fill-opacity="0.85"/>
+<rect x="450" y="80" width="46" height="210" fill="#c93b2a" fill-opacity="0.85"/>
+<rect x="510" y="70" width="46" height="220" fill="#c93b2a" fill-opacity="0.85"/>
+<text x="113" y="245" fill="#cdd8ea" font-size="9.5" text-anchor="middle">S</text>
+<text x="173" y="220" fill="#cdd8ea" font-size="9.5" text-anchor="middle">S</text>
+<text x="233" y="188" fill="#cdd8ea" font-size="9.5" text-anchor="middle">M</text>
+<text x="293" y="150" fill="#f0e3d8" font-size="9.5" text-anchor="middle">M</text>
+<text x="353" y="110" fill="#f0e3d8" font-size="9.5" text-anchor="middle">L</text>
+<text x="413" y="85" fill="#f0e3d8" font-size="9.5" text-anchor="middle">L</text>
+<text x="473" y="70" fill="#f0e3d8" font-size="9.5" text-anchor="middle">XL</text>
+<text x="533" y="60" fill="#f0e3d8" font-size="9.5" text-anchor="middle">XL</text>
+<text x="150" y="322" fill="#7f8fab" font-size="10" text-anchor="middle">small, fatigue-resistant units</text>
+<text x="480" y="322" fill="#7f8fab" font-size="10" text-anchor="middle">large, powerful, fast-fatiguing units</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Recruitment adds units in a fixed order, smallest and most fatigue-resistant first. Taken alone, this produces a staircase, not a ramp.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Handwriting recruits only your lowest-threshold motor units. Almost no new units join in as you sign your name; recruitment is essentially flat across the whole signature. So what is doing the moment-to-moment force adjustment that lets you cross a "t" harder than you dot an "i"? Keep this question in mind as you read the next section.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The second dial: rate coding</h2>
+    <p>Here is the fact that makes the ramp possible: a motor unit does not produce one fixed amount of force every time it fires. It produces more or less depending on how frequently its motor neuron sends impulses down the axon.</p>
+    <p>A single nerve impulse triggers one mechanical twitch, a brief rise and fall of force that lasts a few tens of milliseconds. If the next impulse arrives before that twitch has fully relaxed, the second twitch stacks on top of whatever force is left over from the first. Fire again before that one relaxes, and it stacks again. This stacking is called summation. Push the firing frequency high enough and the individual twitches blur together into a smooth, sustained, and substantially higher plateau of force called tetanus (Heckman &amp; Enoka, 2012). This entire process, modulating a motor unit's force output by changing how fast its neuron fires, is called <span class="ch-key">rate coding</span>, and it is the second dial.</p>
+    <p>The range available through rate coding alone is large. A given motor unit firing at a low rate might produce a small fraction of what the same unit produces once it is firing fast enough to fuse into tetanus; the gap between a barely summed twitch train and a fully fused contraction can be several times larger in force, from the identical unit, with zero additional recruitment. Nothing about the muscle changed. Only the timing of the signal arriving at it changed.</p>
+    <p>This is how the staircase problem dissolves. Between the discrete "steps" created by each newly recruited unit joining the pool, rate coding of the units that are already active fills in every intermediate value the staircase model would otherwise skip. The force curve becomes continuous rather than stepped. You can grade your grip on the egg precisely because both dials are turning together: new units are joining the pool at a modest pace while units already active are having their firing rate nudged up or down to smooth over whatever gaps recruitment alone would leave.</p>
+    <p>It is worth pausing on why this matters beyond the egg. A muscle built only for on-off recruitment would be a genuinely clumsy tool, capable of a handful of discrete force levels and nothing in between, forced to overshoot or undershoot any target that fell between two rungs of the ladder. Rate coding is what turns a coarse switchboard into something closer to a dimmer, and it does so without requiring the nervous system to touch recruitment at all. That distinction, adjusting force by changing frequency of firing rather than by changing which units are on, is the whole reason two people can produce very different qualities of force at the identical recruitment level, a point this chapter returns to more than once.</p>
+    <p>It is also worth being precise about what "faster firing" actually buys a muscle fiber, because the mechanism is not magic, it is timing. A single twitch is the mechanical echo of a single electrical event: calcium is released inside the fiber, the contractile filaments engage, force rises, and then the calcium is pumped back and the fiber relaxes. That relaxation takes real time, on the order of tens of milliseconds depending on the fiber type. If a second electrical impulse arrives while the calcium from the first is still elevated and the filaments are still partly engaged, the fiber does not have to start from zero. It adds new force on top of force that has not yet decayed. Fire fast enough, repeatedly, and the fiber never gets the chance to relax between impulses at all, which is exactly what a fused tetanus is: not a different kind of contraction, but the same twitch mechanism denied any opportunity to switch off. Rate coding, in other words, is not a separate biological trick layered on top of the twitch. It is what happens when twitches are not given time to finish.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that once a motor unit is recruited, it is contributing everything it has to offer, so the only way to add more force is to recruit something new. That is the staircase model, and it is incomplete. A recruited unit is more like a dial than a switch: it can be barely on, contributing a small twitch here and there, or driven hard enough to sit near tetanus, contributing several times as much force, all without a single additional unit joining the pool. "Recruited" tells you a unit is participating. It tells you almost nothing about how hard it is working.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="fusion-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Firing-Rate Fusion Visualizer</div>
+    </div>
+    <p class="ch-widget-sub">Watch one motor unit's discrete twitches merge into smooth tetanus as you raise its firing rate. Find where the output smooths out, and where it stops climbing.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Firing rate (impulses/sec)</span>
+        <input type="range" class="ch-widget-select" id="fus-rate" min="2" max="50" value="6" step="1">
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Rate</span>
+        <span class="ch-meter-bar"><span id="fus-rate-bar" style="width:12%"></span></span>
+        <span class="ch-meter-num" id="fus-rate-num">6 Hz</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Mean force</span>
+        <span class="ch-meter-bar"><span id="fus-force-bar" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="fus-force-num">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fusion / smoothness</span>
+        <span class="ch-meter-bar"><span id="fus-smooth-bar" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="fus-smooth-num">15</span>
+      </div>
+    </div>
+
+    <canvas id="fus-canvas" width="720" height="200" style="width:100%;height:auto;display:block;margin-top:1rem;border-radius:4px"></canvas>
+    <p class="ch-widget-sub" id="fus-status" style="margin-top:0.5rem">Unfused: distinct twitches. Force is bumpy and low.</p>
+
+    <button class="ch-widget-btn" id="fus-sweep">Sweep low to high</button>
+  </div>
+
+  <section class="ch-section">
+    <p>Play with the visualizer above and notice three landmarks. At low rates the twitches sit apart, force is low and visibly rippled, which is unfused tetanus. As you raise the rate, the ripples shrink and the mean force climbs steeply; this is the smoothing zone, where rate coding buys stability and force at the same time. Past a certain frequency the trace flattens into a nearly straight line and stops climbing much, which means you have reached full fusion, the ceiling of what this one unit can produce no matter how much faster you drive it. The practical insight worth carrying forward: for most of the useful range, turning up firing rate delivers more force and smoother force simultaneously. The two are not a trade-off you have to choose between. They arrive together.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Division of labor across the force range</h2>
+    <p>Both dials contribute across most of a muscle's operating range, but the balance between them shifts as intensity climbs. Enoka and Duchateau's (2017) review of decades of motor unit recordings lays out the pattern that the broader evidence base now confirms: over the lower and middle portion of a muscle's force range, recruitment and rate coding rise together, each contributing a share of the increase. As effort approaches the top of the range, the muscle runs out of new units to recruit, a point worth naming directly as the <span class="ch-key">recruitment ceiling</span>, and from there further force depends increasingly, then almost entirely, on driving the already-recruited units to fire faster.</p>
+    <p>Where that recruitment ceiling sits is not the same number for every muscle, and this variation is not a minor footnote, it is one of the more useful facts in this chapter. Small muscles built for fine control, many of the muscles that move your hand and fingers among them, tend to finish recruiting relatively early, sometimes by roughly half to two-thirds of maximum effort, which means they spend the majority of their high-force range relying on rate coding almost alone. Large limb muscles, built for gross output rather than precision, tend to keep adding new units closer to true maximum, so recruitment stays in the game longer before rate coding has to carry the whole load. A systematic review and meta-analysis pooling data across 262 studies confirmed the general rule holds everywhere it was tested: motor unit discharge rate rises with contraction intensity in every muscle examined, while also confirming that the slope of that rise, how steeply firing rate climbs per percent of added force, differs meaningfully from muscle to muscle (Inglis et al., 2025). There is no single universal handoff point where recruitment stops and rate coding takes over. There is a family of handoff points, one for roughly each muscle, shaped by what that muscle is built to do.</p>
+    <p>That same review found that which muscle fired fastest depended on how hard the muscle was already working. At low-to-moderate force, small hand and forearm muscles tended to show the highest discharge rates of the muscles studied, consistent with their early recruitment ceiling and their reliance on rate coding almost from the start. At high force, that ranking shifted, with a large lower-leg muscle showing among the highest discharge rates instead. Read plainly, this is one more piece of evidence against a single universal number for "where recruitment stops," and it is a useful caution against importing a finding from one muscle, say a study on the hand, and assuming it applies unchanged to a squat or a sprint, which lean on entirely different muscles built for entirely different jobs.</p>
+
+    <h3>Why this answers the earlier question</h3>
+    <p>Recall the retrieval question from a few pages back: if nearly all of a muscle's motor units are already recruited at 80 percent of maximum, where does the remaining 20 percent of force come from? You can now name it precisely. It comes from rate coding, driving the already-active pool from moderate firing frequencies up toward their individual maximums. The top slice of anyone's force output is, mechanically, a firing-frequency problem, not a "find more muscle fibers to switch on" problem. This is exactly why "just recruit harder" is the wrong mental model for a maximal effort. At the very top of the range, there is often little left to recruit, and the entire remaining project is frequency.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two dials, one output" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>Two dials feeding one force output</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="32" fill="#aab8d2" font-size="13" letter-spacing="1.5">TWO CONTROL DIALS, ONE FORCE OUTPUT</text>
+<circle cx="150" cy="120" r="46" fill="#12314f" stroke="#5aaff5" stroke-width="2.5"/>
+<text x="150" y="112" fill="#e8edf5" font-size="12.5" font-weight="700" text-anchor="middle">RECRUITMENT</text>
+<text x="150" y="130" fill="#aab8d2" font-size="10" text-anchor="middle">how many units</text>
+<circle cx="150" cy="240" r="46" fill="#12314f" stroke="#e0873a" stroke-width="2.5"/>
+<text x="150" y="232" fill="#e8edf5" font-size="12.5" font-weight="700" text-anchor="middle">RATE CODING</text>
+<text x="150" y="250" fill="#aab8d2" font-size="10" text-anchor="middle">how fast each fires</text>
+<path d="M196 130 C 320 150, 380 155, 440 178" fill="none" stroke="#5aaff5" stroke-width="2.5"/>
+<path d="M196 230 C 320 210, 380 200, 440 180" fill="none" stroke="#e0873a" stroke-width="2.5"/>
+<circle cx="500" cy="180" r="60" fill="#132a45" stroke="#f0e3d8" stroke-width="2.5"/>
+<text x="500" y="172" fill="#f0e3d8" font-size="15" font-weight="700" text-anchor="middle">FORCE</text>
+<text x="500" y="192" fill="#cdd8ea" font-size="10" text-anchor="middle">one muscle output</text>
+<text x="270" y="300" fill="#7f8fab" font-size="11" text-anchor="middle">Low to mid force: both dials rise together.</text>
+<text x="270" y="318" fill="#7f8fab" font-size="11" text-anchor="middle">High force: rate coding does almost all the remaining work.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 2</span> <em>One output, two inputs. The mix shifts toward rate coding as force climbs toward the recruitment ceiling.</em></figcaption>
+    </figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="mixer-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Two-Dial Force Mixer</div>
+    </div>
+    <p class="ch-widget-sub">Hit the target force line using any blend of the two dials. Many combinations reach the same output, but they differ in smoothness and fatigue cost.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Units recruited (%)</span>
+        <input type="range" class="ch-widget-select" id="mix-units" min="0" max="100" value="30" step="1">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Firing rate (%)</span>
+        <input type="range" class="ch-widget-select" id="mix-rate" min="0" max="100" value="30" step="1">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Target force</span>
+        <select class="ch-widget-select" id="mix-target">
+          <option value="30">Light (30)</option>
+          <option value="55" selected>Moderate (55)</option>
+          <option value="80">Heavy (80)</option>
+          <option value="95">Near-max (95)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Force output</span>
+        <span class="ch-meter-bar"><span id="mix-force-bar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="mix-force-num">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Smoothness</span>
+        <span class="ch-meter-bar"><span id="mix-smooth-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="mix-smooth-num">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fatigue cost</span>
+        <span class="ch-meter-bar"><span id="mix-fatigue-bar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="mix-fatigue-num">30</span>
+      </div>
+    </div>
+
+    <canvas id="mix-canvas" width="720" height="160" style="width:100%;height:auto;display:block;margin-top:1rem;border-radius:4px"></canvas>
+    <p class="ch-widget-sub" id="mix-status" style="margin-top:0.5rem">Adjust the dials to match the target line.</p>
+
+    <button class="ch-widget-btn" id="mix-check">Check my blend</button>
+  </div>
+
+  <section class="ch-section">
+    <p>Two things fall out of the mixer that matter for how you think about programming. First, the same force target has many recipes. You can reach a moderate target with a lot of units firing slowly, or with fewer units firing fast, and the two recipes feel different and fatigue differently even though the meter reads the same number. Second, the near-max target is close to impossible to hit on recruitment alone. Once the units slider is pushed high, the only remaining path to the top line is turning up firing rate; try it, and notice that the smoothness and force meters only satisfy together once both dials are driven hard. That is the two-dial model made tactile rather than theoretical.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Rate coding reserve: the force you already own</h2>
+    <p>Here is the concept that turns this chapter from anatomy into strategy. Suppose a learner is at a given recruitment level, meaning every motor unit that is going to be active for this contraction is already active. If those active units are not yet firing near their own maximal rate, there is force sitting unused. Drive their firing frequency higher and force rises with no new recruitment at all, no additional units, nothing changing except the timing of the signal. The gap between a unit's current firing rate and its maximal firing rate is what this chapter calls the <span class="ch-key">rate coding reserve</span>, and for most untrained or unpracticed learners, it is larger than they assume.</p>
+    <p>Unpracticed maximal efforts often leave a meaningful share of that reserve unspent. A learner can recruit close to everything a muscle has to offer and still not fire hard enough or fast enough at the start of an effort to express it fully. This is a major reason early strength gains routinely outpace any measurable change in muscle size: a large share of what improves in the first weeks of a new training program is not tissue, it is access. The nervous system is learning to spend a reserve that was there the entire time. This is also the mechanistic core of an idea the next chapter builds out in full: that a meaningful share of what we call strength is a trainable skill of signaling, not only a matter of how much contractile tissue a learner is carrying.</p>
+    <p>It helps to think about why that reserve exists in the first place rather than treating it as a curiosity. A nervous system that always fired every recruited unit at its absolute maximum rate would be a nervous system with no margin, no capacity to modulate a submaximal task and no protection against unnecessary fatigue. Holding firing rate below maximum for anything short of a genuine emergency is not an oversight, it is a sensible default. The cost is that a learner who has never practiced asking for maximum rate, who has never rehearsed the specific skill of driving firing frequency all the way to its ceiling under load, will underperform their own true capability the first several times they try a truly maximal effort. That underperformance closes quickly with practice, which is exactly why the first weeks of unfamiliar heavy or explosive training tend to produce force gains far faster than any biologically plausible rate of muscle growth could explain.</p>
+
+    <h3>The explosive case: reserve at the very start</h3>
+    <p>Rate coding reserve is at its most dramatic in fast, explosive efforts, and this is where Ines's confusion starts to make sense. During an explosive isometric push, motor neurons are not eased gradually up the recruitment ladder the way they are in a slow ramp. They are recruited in a rapid burst and fire at strikingly high initial frequencies, with peak instantaneous discharge rates measured well above 100 to 200 impulses per second at the very onset of the contraction (Del Vecchio et al., 2019). Across a sample of healthy adults performing explosive ankle contractions, the fastest individuals reached peak discharge rates roughly twice as high as the slowest, and that difference in peak discharge rate, together with how quickly units were recruited, statistically explained the great majority of the variation in how quickly each person could produce force. How fast a learner can recruit and how hard they can fire in those first tens of milliseconds together explain much of the individual difference in <span class="ch-key">rate of force development (RFD)</span>, meaning how quickly force climbs from zero once a contraction begins. For sprinting, jumping, and sudden changes of direction, RFD often matters more than peak force does, because the athletic task is over before peak force could ever be reached. Explosive intent, then, is largely a rate-coding skill. It trains the nervous system to open the reserve fast rather than merely to open it eventually.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two learners produce an identical peak force in a slow ramp to maximum. One reaches it in 90 milliseconds, the other in 300 milliseconds. Same recruitment ceiling, same peak force. What dial almost certainly differs between them, and what would a coach train to close that gap?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What trains each dial</h2>
+    <p>The two-dial model earns its keep at the point of programming, and the longitudinal evidence here is unusually clean. Del Vecchio and colleagues (2019) tracked large populations of individual motor units, decomposed from surface recordings, before and after four weeks of isometric strength training and found the resulting force gains were accounted for by two distinct neural changes acting together: increased discharge rate, meaning the rate-coding dial was turned up, and lowered recruitment thresholds, meaning the recruitment dial became easier to turn. Both dials were upregulated by training, and this happened over a window too short to be plausibly explained by muscle growth. Duchateau and colleagues (2006) reach a compatible synthesis in their review of training adaptations in motor unit behavior: both maximal firing rates and recruitment behavior adapt measurably to resistance training, and the two adaptations are not mutually exclusive alternatives, they typically occur together.</p>
+    <p>Translated into decisions a learner or a coach can act on, this splits into two practical levers.</p>
+
+    <h3>Turning up the rate-coding dial</h3>
+    <p>Heavy loads, and especially maximal-intent efforts, are the stimulus that most reliably drives this dial. It is not only the load that matters, it is the explicit instruction to produce force hard and fast rather than merely to move a weight from point A to point B. Explosive concentric intent, contrast training that pairs a heavy lift with an explosive one, and genuinely near-maximal loading all push motor units toward higher firing frequencies and teach the nervous system to reach those frequencies quickly rather than gradually. If a learner's strength has plateaued with no obvious change in muscle size to blame, an unexpressed rate coding reserve is a reasonable first suspect.</p>
+    <p>Notice what unifies these different-looking methods: none of them is defined primarily by the muscle mass involved, and all of them are defined by the demand placed on timing. A heavy near-maximal lift forces the nervous system to reach a high firing rate because there is no other way to move the load at all. An explosive lift against a light or moderate load forces the nervous system to reach a high firing rate quickly, even though it will not need to sustain it, because the entire task is over in a fraction of a second. Both are rate-coding stimuli. They simply ask the question, "how fast can you fire," from two different directions, one through sheer necessity and one through speed of intent.</p>
+
+    <h3>Keeping the recruitment dial honest</h3>
+    <p>Because recruitment follows the size principle regardless of the load on the bar, a learner can access the high-threshold units either by lifting genuinely heavy or by taking a lighter load to real proximity to failure; both routes eventually demand the largest, most powerful units in the pool. But recruiting a unit is not the same as firing it fast, and a program that only ever chases fatigue and the pump can top out the recruitment dial while leaving the rate-coding dial almost entirely undeveloped. Volume taken near failure recruits. Load and intent teach rate. A complete program needs both, deployed for what each one actually does.</p>
+
+    <h3>The modeling caveat, kept honest</h3>
+    <p>One reason it is possible to speak this confidently about a mix of signals that cannot be observed directly in most training settings is computational work like Fuglevand, Winter, and Patla's (1993) model of a 120-unit motor pool, which showed that the smoothness of the resulting force, and the relationship between a muscle's electrical activity (recorded as electromyography, or EMG) and its force output, depend critically on how recruitment and rate coding are organized across the range together, not simply on how much total drive is applied. Different organizational schedules produce different smoothness for an identical target force. The two dials are not interchangeable knobs feeding a single number independently of each other. Their interaction is itself part of the control system, which is one more reason a simple "more drive equals more force" mental model undersells what is actually happening.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Over most of the operating range of a muscle, the nervous system controls force by varying both motor unit recruitment and rate coding, but except at relatively low forces, the control of force depends primarily on rate coding, especially during fast contractions.</p>
+    <cite>Paraphrasing Enoka &amp; Duchateau (2017)</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>Working through a case: submaximal versus all-out</h2>
+    <p>Put the model together with one concrete contrast. Picture two efforts produced by the same muscle in the same learner.</p>
+    <p><strong>The submaximal hold.</strong> Carrying a moderate load a short distance recruits perhaps the lower half of the available pool, bringing in a solid share of units without approaching the ceiling. Firing rates across those active units sit at a moderate level. Force stays steady and comfortably below maximum, and fatigue accumulates slowly, because the effort is neither recruiting the biggest, fastest-fatiguing units nor driving anyone near their top firing rate. Most of the moment-to-moment grading here is a blend of both dials working in their comfortable middle range.</p>
+    <p><strong>The all-out contraction.</strong> A true maximal grind, or an explosive jump or throw, pushes recruitment to or near its ceiling almost immediately; the largest units are in the pool from the start. From that point forward, the entire remaining story is firing frequency, driving the active pool toward its maximal discharge rate and spending down the rate coding reserve. This is precisely where a trained learner separates from an untrained one: the same recruitment ceiling, reached by both, but the trained nervous system fires the pool harder and reaches its top rate faster. Between two learners with an identical amount of muscle, the muscle is not what changed. The signal driving it is what changed.</p>
+    <p>That last sentence is close to the whole chapter compressed into one line: the signal before the muscle. It is also a preview of a question a later chapter in this course will take seriously. If the top of anyone's force output depends on firing rate, and firing rate can fall under fatigue while the muscle's own contractile machinery is still perfectly capable of producing force, then some of what feels like "the muscle giving out" toward the end of a hard set may actually be the rate-coding dial spinning down rather than the tissue itself failing. Keep that distinction in your pocket. It will matter again.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where the model stops: skill versus injury, insight versus advice</h2>
+    <p>Before we close with Ines, it is worth naming the boundary this chapter, and this course, works inside. Understanding recruitment and rate coding explains why force behaves the way it does. It does not make anyone a coach qualified to diagnose why a specific person's specific lift feels wrong, and it certainly does not make anyone qualified to evaluate pain, an injury, or a movement that should be assessed in person by someone trained to do that assessment. A model of the nervous system is a lens for understanding mechanism. It is not a substitute for a coach watching a live rep, and it is not a substitute for a clinician evaluating a body that is not behaving the way the textbook says it should.</p>
+    <p>This distinction matters more, not less, once a learner starts training explosively. Fast, high-intent efforts are a legitimate and well-supported way to develop the rate-coding dial, but "produce force hard and fast" is advice about the signal, not permission to ignore how a joint, a tendon, or an old injury actually feels on a given day. The mechanism in this chapter explains why explosive intent trains something distinct from heavy grinding. It says nothing about whether a specific learner, on a specific day, with a specific history, should be doing it. That second question belongs to people trained to answer it in person.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner asks whether they should add explosive jump training because "it trains the nervous system." What does an accurate, mechanism-based answer sound like, and, just as importantly, where does that answer stop and a coach's or clinician's judgment need to begin?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Ines and the number that would not move</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Ines is 33, back in structured training after a decade away from competitive track and field. Her back squat has risen steadily for six months under a straightforward strength program: consistent load increases, comfortable rep ranges, plenty of recovery. Her long jump distance and her acceleration over the first ten meters, the two numbers she actually cares about, have barely changed. She assumed a bigger squat had to translate directly into a longer jump and a faster start, because in her mental model "getting stronger" was a single quantity, and more of it should show up everywhere force is required. A month of frustration later, she arrived at this course wanting to know what she was missing.</p>
+    </aside>
+    <p>Run Ines's situation through the two-dial model and the confusion resolves into a specific, nameable gap rather than a mystery. Her squat program was built almost entirely around moderate-to-heavy loads moved at a controlled, unhurried tempo, week after week. That style of training is genuinely excellent at raising the recruitment ceiling and at teaching the recruitment dial to open easily under load; it is a large part of why her squat number kept climbing. But it asks very little of the rate-coding dial's speed of response. A controlled heavy squat gives the nervous system as much time as it needs to reach a high firing rate gradually. A sprint start and a jump takeoff give it a fraction of a second to reach a high firing rate immediately, and Ines's program had never once demanded that.</p>
+    <p>This is precisely the gap Del Vecchio and colleagues' (2019) explosive-contraction data describes: the speed at which motor neurons are recruited and the peak discharge rate they reach in the opening tens of milliseconds of an effort, not the eventual peak force, is what predicts rate of force development. Ines had spent six months getting very good at reaching a high force eventually. Sprinting and jumping do not care about eventually. Her recruitment ceiling had almost certainly risen along with her squat, which is real, useful progress and not a wasted six months, but her rate coding reserve, the gap between how fast her motor units currently fire at the start of an effort and how fast they are capable of firing, had never been specifically trained. Peak strength and explosive strength are related, but they are not the same skill, and her program had only ever asked for one of them.</p>
+    <p>It is worth being fair to the program Ines had been following, because the two-dial model cuts both ways here. Nothing about her six months was wasted or misguided; a higher recruitment ceiling is a real prerequisite for a bigger jump and a faster start, since a muscle cannot fire units it never learned to recruit at all. What her program lacked was not correctness, it was completeness. A block built entirely around controlled tempo and moderate-to-heavy loads will reliably raise the ceiling. It will just as reliably leave the speed of reaching that ceiling untouched, because nothing about that style of training ever asks the nervous system to get there quickly. The fix implied by the model is not to abandon the heavy work that built her ceiling, it is to add work that specifically asks for speed, on top of a foundation that was never the problem.</p>
+    <p>Notice what this reframe does and does not tell Ines. It tells her, with real mechanistic confidence, why a rising squat number and a flat jump distance are not a contradiction, and it points toward a category of training, genuinely explosive-intent work and contrast methods that pair a heavy effort with an explosive one, that targets the piece her program had been skipping. It does not tell her exactly how much explosive volume to add, how to sequence it around her current program, or whether some nagging soreness in her hip flexor changes that plan, because none of that can be answered from a mechanism alone. Those are questions for a coach who can watch her move and, if the soreness is more than routine, for a clinician who can evaluate it properly. What this chapter gave Ines was not a program. It was an accurate account of why her assumption, that force is one quantity that rises uniformly, was reasonable on its face and wrong in a specific, useful way. She left with a sharper question to bring to her coach, which is a smaller deliverable than a fix, and a considerably sturdier one.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li><strong>Two dials, one output.</strong> Force is graded by recruitment (how many motor units are active) and rate coding (how fast each one fires). Both operate at once, and neither tells the whole story alone.</li>
+      <li><strong>Rate coding is what makes force smooth.</strong> A single unit's twitches sum into higher, smoother force as firing frequency rises, filling the gaps between discrete recruitment steps so the force curve is a ramp, not a staircase.</li>
+      <li><strong>The mix shifts with intensity.</strong> Recruitment dominates from low force through roughly the middle of the range; once the recruitment ceiling is reached, additional force comes almost entirely from rate coding. Exactly where that ceiling sits is specific to each muscle.</li>
+      <li><strong>Rate coding reserve is trainable force a learner may already own.</strong> The gap between current and maximal firing rate is a major reason early strength gains happen with little or no change in muscle size.</li>
+      <li><strong>Explosiveness is a rate-coding skill.</strong> High initial firing rates and rapid recruitment at the start of a contraction drive rate of force development (RFD), which is often more decisive for sprinting and jumping than peak force is.</li>
+      <li><strong>Program for both dials on purpose.</strong> Maximal load and maximal intent develop rate coding; volume taken near failure and heavy load develop recruitment. A program that trains only one leaves real capability unclaimed.</li>
+      <li><strong>Mechanism is not permission.</strong> Understanding why explosive training works does not replace a coach's eye on technique or a clinician's judgment about pain and injury.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>If the top end of anyone's force is a firing-frequency problem, then getting stronger is partly about becoming better at signaling, a skill, not only a size adaptation. The next chapter takes the two-dial model and builds the full case for strength as a neural skill, showing how much of early, and even ongoing, force gain lives in the signal rather than the muscle, and how a learner or coach can develop it deliberately.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Del Vecchio, A., Casolo, A., Negro, F., Scorcelletti, M., Bazzucchi, I., Enoka, R., Felici, F., &amp; Farina, D. (2019). The increase in muscle force after 4 weeks of strength training is mediated by adaptations in motor unit recruitment and rate coding. <em>The Journal of Physiology, 597</em>(7), 1873-1887. https://doi.org/10.1113/JP277250</p>
+    <p>Del Vecchio, A., Negro, F., Holobar, A., Casolo, A., Folland, J. P., Felici, F., &amp; Farina, D. (2019). You are as fast as your motor neurons: Speed of recruitment and maximal discharge of motor neurons determine the maximal rate of force development in humans. <em>The Journal of Physiology, 597</em>(9), 2445-2456. https://doi.org/10.1113/JP277396</p>
+    <p>Duchateau, J., Semmler, J. G., &amp; Enoka, R. M. (2006). Training adaptations in the behavior of human motor units. <em>Journal of Applied Physiology, 101</em>(6), 1766-1775. https://doi.org/10.1152/japplphysiol.00543.2006</p>
+    <p>Enoka, R. M., &amp; Duchateau, J. (2017). Rate coding and the control of muscle force. <em>Cold Spring Harbor Perspectives in Medicine, 7</em>(10), a029702. https://doi.org/10.1101/cshperspect.a029702</p>
+    <p>Fuglevand, A. J., Winter, D. A., &amp; Patla, A. E. (1993). Models of recruitment and rate coding organization in motor-unit pools. <em>Journal of Neurophysiology, 70</em>(6), 2470-2488. https://doi.org/10.1152/jn.1993.70.6.2470</p>
+    <p>Heckman, C. J., &amp; Enoka, R. M. (2012). Motor unit. <em>Comprehensive Physiology, 2</em>(4), 2629-2682. https://doi.org/10.1002/cphy.c100087</p>
+    <p>Henneman, E., Somjen, G., &amp; Carpenter, D. O. (1965). Functional significance of cell size in spinal motoneurons. <em>Journal of Neurophysiology, 28</em>(3), 560-580. https://doi.org/10.1152/jn.1965.28.3.560</p>
+    <p>Inglis, J. G., Cabral, H. V., Cosentino, C., Bonardi, A., &amp; Negro, F. (2025). Motor unit discharge behavior in human muscles throughout force gradation: A systematic review and meta-analysis with meta-regression. <em>Journal of Applied Physiology, 138</em>(4), 1050-1065. https://doi.org/10.1152/japplphysiol.00863.2024</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 2 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('fus-widget') || document.getElementById('fusion-widget');
+    if(!w) return;
+    var rate = w.querySelector('#fus-rate');
+    var rateBar = w.querySelector('#fus-rate-bar');
+    var rateNum = w.querySelector('#fus-rate-num');
+    var forceBar = w.querySelector('#fus-force-bar');
+    var forceNum = w.querySelector('#fus-force-num');
+    var smoothBar = w.querySelector('#fus-smooth-bar');
+    var smoothNum = w.querySelector('#fus-smooth-num');
+    var status = w.querySelector('#fus-status');
+    var canvas = w.querySelector('#fus-canvas');
+    var sweepBtn = w.querySelector('#fus-sweep');
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+
+    // twitch impulse response: rise & exponential decay
+    function twitch(t){
+      if(t < 0) return 0;
+      var tc = 0.045; // time constant in seconds
+      return (t/tc) * Math.exp(1 - t/tc);
+    }
+
+    function compute(hz){
+      // simulate 1 second at fine resolution
+      var dur = 1.0, N = 600;
+      var dt = dur/N;
+      var interval = 1/hz;
+      var trace = new Array(N);
+      var maxv = 0, sum = 0;
+      var mn = Infinity, mx = -Infinity;
+      // only measure in steady window (second half)
+      for(var i=0;i<N;i++){
+        var t = i*dt;
+        var v = 0;
+        // sum contributions from spikes up to t
+        var k = 0, st;
+        while((st = k*interval) <= t){
+          v += twitch(t - st);
+          k++;
+          if(k>200) break;
+        }
+        trace[i] = v;
+        if(v>maxv) maxv=v;
+        if(i > N/2){
+          sum += v;
+          if(v<mn) mn=v;
+          if(v>mx) mx=v;
+        }
+      }
+      var mean = sum/(N - Math.floor(N/2));
+      var ripple = mx>0 ? (mx-mn)/mx : 0; // fraction
+      return {trace:trace, maxv:maxv, mean:mean, ripple:ripple};
+    }
+
+    function draw(hz){
+      var r = compute(hz);
+      ctx.clearRect(0,0,W,H);
+      // normalize by a fixed reference (fused max ~ constant)
+      var ref = compute(50).mean * 1.15;
+      var scale = (H-30) / (ref);
+      // axis baseline
+      ctx.strokeStyle = 'rgba(120,120,120,0.4)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, H-15);
+      ctx.lineTo(W, H-15);
+      ctx.stroke();
+      // trace
+      ctx.strokeStyle = '#c76b3f';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      var N = r.trace.length;
+      for(var i=0;i<N;i++){
+        var x = (i/(N-1))*W;
+        var y = (H-15) - r.trace[i]*scale;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // mean line
+      ctx.strokeStyle = 'rgba(60,110,110,0.7)';
+      ctx.setLineDash([5,4]);
+      ctx.beginPath();
+      var my = (H-15) - r.mean*scale;
+      ctx.moveTo(0,my); ctx.lineTo(W,my);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      return r;
+    }
+
+    function update(){
+      var hz = parseInt(rate.value,10);
+      var r = draw(hz);
+      rateBar.style.width = ((hz-2)/48*100).toFixed(0)+'%';
+      rateNum.textContent = hz+' Hz';
+      var refMean = compute(50).mean;
+      var forcePct = Math.min(100, r.mean/refMean*100);
+      forceBar.style.width = forcePct.toFixed(0)+'%';
+      forceNum.textContent = forcePct.toFixed(0);
+      var smooth = Math.max(0, Math.min(100, (1 - r.ripple)*100));
+      smoothBar.style.width = smooth.toFixed(0)+'%';
+      smoothNum.textContent = smooth.toFixed(0);
+      if(hz < 8){
+        status.textContent = 'Unfused: distinct twitches. Force is bumpy and low.';
+      } else if(hz < 20){
+        status.textContent = 'Smoothing zone: ripples shrinking and mean force climbing steeply, more force and more smoothness at once.';
+      } else if(forcePct < 96){
+        status.textContent = 'Nearly fused: trace is smooth, force still creeping up toward the ceiling.';
+      } else {
+        status.textContent = 'Full fusion (tetanus): smooth line, and firing faster buys almost no extra force.';
+      }
+    }
+
+    rate.addEventListener('input', update);
+    sweepBtn.addEventListener('click', function(){
+      var v = 2;
+      rate.value = 2; update();
+      var iv = setInterval(function(){
+        v += 2;
+        if(v>50){ clearInterval(iv); return; }
+        rate.value = v; update();
+      }, 90);
+    });
+    update();
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('mixer-widget');
+    if(!w) return;
+    var units = w.querySelector('#mix-units');
+    var rate = w.querySelector('#mix-rate');
+    var target = w.querySelector('#mix-target');
+    var forceBar = w.querySelector('#mix-force-bar');
+    var forceNum = w.querySelector('#mix-force-num');
+    var smoothBar = w.querySelector('#mix-smooth-bar');
+    var smoothNum = w.querySelector('#mix-smooth-num');
+    var fatBar = w.querySelector('#mix-fatigue-bar');
+    var fatNum = w.querySelector('#mix-fatigue-num');
+    var status = w.querySelector('#mix-status');
+    var canvas = w.querySelector('#mix-canvas');
+    var checkBtn = w.querySelector('#mix-check');
+    var ctx = canvas.getContext('2d');
+    var W = canvas.width, H = canvas.height;
+
+    var scroll = [];
+    for(var i=0;i<W;i++) scroll.push(0);
+
+    function force(u, r){
+      // force is product-ish: units set how many, rate scales each unit's output
+      // normalized so both maxed => ~100
+      var uf = u/100;
+      var rf = 0.25 + 0.75*(r/100); // even at low rate units produce some force
+      return Math.min(100, uf * rf * 100 / 0.75);
+    }
+
+    function smoothness(u, r){
+      // smoothness improves with higher rate (fusion) and with more units (averaging)
+      var rateComp = Math.min(1, r/60);
+      var unitComp = Math.min(1, u/50);
+      return Math.round((0.55*rateComp + 0.45*unitComp)*100);
+    }
+
+    function fatigue(u, r){
+      // high units (big fast-fatiguing) + high rate => costly
+      var big = Math.max(0, u-55)/45; // penalty for recruiting high-threshold units
+      var driveCost = r/100;
+      var base = (u/100)*0.4;
+      return Math.round(Math.min(100,(base + big*0.4 + driveCost*0.4*(u/100))*100));
+    }
+
+    function update(){
+      var u = parseInt(units.value,10);
+      var r = parseInt(rate.value,10);
+      var f = force(u,r);
+      var s = smoothness(u,r);
+      var fa = fatigue(u,r);
+      forceBar.style.width = f.toFixed(0)+'%';
+      forceNum.textContent = f.toFixed(0);
+      smoothBar.style.width = s+'%';
+      smoothNum.textContent = s;
+      fatBar.style.width = fa+'%';
+      fatNum.textContent = fa;
+
+      // scroll trace
+      var noise = (1 - s/100) * 12 * (Math.random()-0.5);
+      scroll.push(f + noise);
+      scroll.shift();
+
+      ctx.clearRect(0,0,W,H);
+      var tgt = parseInt(target.value,10);
+      // target line
+      ctx.strokeStyle = 'rgba(60,110,110,0.8)';
+      ctx.setLineDash([6,4]);
+      ctx.beginPath();
+      var ty = H - (tgt/100)*(H-20) - 10;
+      ctx.moveTo(0,ty); ctx.lineTo(W,ty);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // force trace
+      ctx.strokeStyle = '#c76b3f';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      for(var i=0;i<scroll.length;i++){
+        var x = i;
+        var y = H - (scroll[i]/100)*(H-20) - 10;
+        if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      return {f:f,tgt:tgt,u:u,r:r};
+    }
+
+    checkBtn.addEventListener('click', function(){
+      var u = parseInt(units.value,10);
+      var r = parseInt(rate.value,10);
+      var f = force(u,r);
+      var tgt = parseInt(target.value,10);
+      var diff = Math.abs(f - tgt);
+      if(diff <= 4){
+        if(tgt >= 90 && r < 75){
+          status.textContent = 'On target, but notice you could only reach it by driving firing rate high. At near-max, rate coding does the work.';
+        } else {
+          status.textContent = 'On target. Try a different blend for the same target, fewer units firing faster, or more units firing slower, and watch fatigue and smoothness change.';
+        }
+      } else if(f < tgt){
+        if(u > 85){
+          status.textContent = 'Short of target with units nearly maxed, you have hit the recruitment ceiling. Turn up the firing rate to spend the reserve.';
+        } else {
+          status.textContent = 'Below target. Raise either dial, but at high targets, rate coding is the only path once units run out.';
+        }
+      } else {
+        status.textContent = 'Above target. Ease off a dial. Same force, many recipes.';
+      }
+    });
+
+    units.addEventListener('input', update);
+    rate.addEventListener('input', update);
+    target.addEventListener('change', update);
+    setInterval(update, 120);
+    update();
+  } catch(e){ /* fail silently */ }
+})();
+</script>
+</body>
+</html>

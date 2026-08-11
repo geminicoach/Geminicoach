@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>From Clumsy to Automatic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+<div class="ch-eyebrow">Class 4 &middot; Module 2</div>
+<h1 class="ch-title">From Clumsy to <em>Automatic</em></h1>
+<p class="ch-subtitle">How a movement stops fighting you: the three stages of motor learning, and what practice should look like at each one.</p>
+<div class="ch-meta">
+<span>65 min read</span>
+<span class="ch-meta-dot"></span>
+<span>10 cited sources</span>
+</div>
+</header>
+
+<section class="ch-hook">
+<p><span class="ch-dropcap">S</span>unny still remembers the first time she got behind the wheel of a car. Both hands locked at ten and two, the radio off, nobody allowed to talk. She narrated the mechanics to herself, mirror, signal, ease off the clutch, and she still stalled at the light. Fast forward a decade and she drives across town while holding a conversation, adjusting the climate control, and rehearsing what she will say in a meeting. Nothing about the car changed. Everything about her did.</p>
+<p>That transformation, from white knuckled, attention devouring effort to something that runs quietly in the background, is not a metaphor for skill acquisition. It <em>is</em> skill acquisition. And if you accept the idea that a well executed movement, a golf swing, a suture, a scale on a violin, a barbell lift, is a coordinated motor pattern rather than a simple act of muscle, then you need a map of how that pattern actually gets built. This chapter is that map.</p>
+<p>We will follow Sunny through it, not because her story is a case to be solved, but because a single thread makes an abstract framework concrete. Later in the chapter she takes up a new lift, the front squat, and every stage of learning it will illustrate a stage in this chapter's model. Her story is a thread, not a diagnosis, and we will keep it that way the whole way through.</p>
+</section>
+
+<section class="ch-section">
+<h2>Why you need a stage model at all</h2>
+<p>Every new skill feels like chaos before it feels like anything else. A learner staring down a first attempt, whether it is a golf swing, a piano scale, or a barbell held across the front of the shoulders, is not primarily short on muscle. They are short on a coordinated plan for using the muscle they already have. The signal comes before the muscle, and that raises an obvious question: if skill is largely a matter of the signal, how does the signal change with practice? What, specifically, gets better?</p>
+<p>The honest answer is that "gets better" hides at least four separate things happening at once. Attention relocates. Movements get more repeatable. Errors shrink and start correcting themselves. And control quietly migrates from slow, deliberate circuits to fast, automatic ones. A stage model matters because it bundles those four shifts into a single diagnostic frame, one you can hold in your head while watching a rep, a scale, a swing, or your own merge onto the highway. Without a model like this, "practice" is just a word for repeating something until it feels different, with no account of what is actually changing underneath the feeling.</p>
+<p>This question also closes a loop opened earlier in the course. An earlier chapter argued that a heavy lift is not primarily a feat of muscle but a coordinated motor pattern that muscle happens to execute, and that the signal shaping the pattern comes before the muscle producing it. That argument leaves an obvious follow-up hanging: if a skill is mostly signal, how does the signal itself change as a person practices? This chapter is the direct answer. It is also, deliberately, a general one. Everything below applies whether the skill in question is a barbell lift, a surgical knot, a second language, or a golf swing, because the underlying nervous system does not know or care which domain it is automating.</p>
+<p>The framework we will use is the oldest and most durable one in the field, proposed by Paul Fitts and Michael Posner in 1967. They described skill learning as a passage through three stages: <span class="ch-key">cognitive</span>, <span class="ch-key">associative</span>, and <span class="ch-key">autonomous</span>. Nearly six decades of research have refined the edges, but nobody has replaced the core picture, and every modern textbook on motor learning still teaches it (Magill and Anderson, 2017; Schmidt and Lee, 2020). It has survived because it is useful at the bench, not just on the page, and because it applies just as cleanly to a surgeon learning a new technique, a language learner building fluent speech, and an adult beginner learning to lift.</p>
+<p>One warning before we start. The three stages are not boxes with walls between them. They are regions on a <span class="ch-key">continuum</span> from fully controlled to fully automatic performance. A given performer can straddle two of them at once, sitting in the autonomous stage for a familiar movement while languishing in the cognitive stage for a new one. You are never diagnosing a person. You are diagnosing a skill, in a person, on a given day.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>Pick a movement you perform well and one you are still learning. Before reading further, ask which one you could do while distracted, say, while carrying on a conversation, and which one falls apart the moment your attention splits. Hold those two examples in mind. We will keep returning to the difference between them.</p>
+</aside>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn pencil-and-watercolour editorial diagram showing a left-to-right horizontal gradient representing a learning continuum, sketched as if in a movement scientist's notebook. Three soft translucent bands blend into one another labelled in small italic serif: 'cognitive' at left in cool grey-blue, 'associative' in warm ochre in the middle, 'autonomous' in deep green at right. Above the bands, a thin curving arrow labelled 'attention' descends from high on the left to low on the right; below the bands a second arrow labelled 'automaticity' rises from low-left to high-right. Muted earthy palette, cream paper texture, loose confident linework, no numerical ticks, no grid, no people." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img1.jpg" alt="<em>The three stages are regions on one continuum, not separate boxes.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The three stages are regions on one continuum, not separate boxes.</em></figcaption></figure>
+
+<section class="ch-section">
+<h2>Stage one: cognitive, the effortful, attention hungry beginning</h2>
+<p>The <span class="ch-key">cognitive stage</span> is where every new skill begins, and it is exactly as awkward as it looks. The learner is trying to answer a very basic question: <em>what am I even supposed to do?</em> They are building a rough mental model of the task, which parts move, in what order, toward what goal, and they are doing it by consciously thinking their way through every step.</p>
+<p>Three features define this stage, and you can spot all of them from across the room.</p>
+
+<h3>It devours attention</h3>
+<p>Cognitive stage performance is <span class="ch-key">controlled processing</span> in the sense Schneider and Shiffrin (1977) made precise: serial, effortful, and easily disrupted. The learner cannot do anything else at the same time. Talk to a first day driver at a critical moment and they will miss the turn, not from rudeness but because the conversation and the driving are competing for the same scarce pool of conscious attention. There is no spare capacity, because the movement is consuming all of it.</p>
+
+<h3>It is wildly inconsistent</h3>
+<p>Two attempts at a brand new skill can look like two different tasks entirely. The learner has not yet found a movement solution, so every attempt is a fresh experiment. This <span class="ch-key">high variability</span> is not a defect to be stamped out. It is the visible signature of a system searching the space of possible movements for one that works. Early learning is fragile precisely because it has not yet settled on anything to be stable about.</p>
+
+<h3>Errors are large, and the learner cannot fix them alone</h3>
+<p>Cognitive stage learners make big, obvious errors, and here is the crucial part: they often cannot tell you what went wrong. They know the attempt felt bad. They cannot diagnose <em>why</em>, because they do not yet have the internal reference, the felt sense of "correct," to compare it against. This is why the cognitive stage is the one place where external instruction genuinely does the heavy lifting. The learner literally lacks the equipment to self correct yet, which is not a character flaw. It is simply where the system starts.</p>
+
+<p>Think of a musician meeting a new scale for the first time. First they stare at the fingering chart. Then they play it note by note, eyes locked on their hands, stopping to work out the next finger. It is halting, it is uneven, and if you ask them to play it faster they simply cannot. That is the cognitive stage in audible form. A surgical trainee learning a new suture pattern, or a new driver learning a roundabout, looks the same way underneath a very different surface.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>A learner stalls, resets, and stalls again on a movement you consider trivial. Is the high variability a sign they are doing it wrong, or a sign the learning system is working exactly as designed? What would an honest, encouraging answer to that question sound like?</p>
+</aside>
+</section>
+
+<section class="ch-section">
+<h2>Stage two: associative, refinement and the shrinking of error</h2>
+<p>Once the learner has the basic idea, once they have stopped asking "what do I do?" and started asking "how do I do it <em>better</em>?", they have entered the <span class="ch-key">associative stage</span>. This is the long middle. Depending on the skill, it can last weeks, months, or years. Most of the movements a person is genuinely competent at but not yet effortless with live here.</p>
+<p>The defining work of the associative stage is <span class="ch-key">refinement</span>. The gross pattern is roughly correct. Now the learner is tuning it. Watch what changes.</p>
+
+<h3>Variability collapses</h3>
+<p>Attempts start to resemble each other. The scatter tightens. The learner has found a movement solution and is now grooving it, reinforcing the successful pattern and pruning the unsuccessful variations. Consistency is the headline metric of this stage, and it is measurable. Film ten attempts and they overlay far more cleanly than they did a month earlier.</p>
+
+<h3>Efficiency climbs</h3>
+<p>Early movement is full of wasted effort, muscles fighting each other, jerky corrections, extraneous motion. As the pattern refines, that waste burns off. The movement gets smoother, uses less energy for the same output, and the performer stops fatiguing so quickly from the coordination cost alone. This is why an intermediate performer can often do more total work than a beginner with similar physical capacity. They are not spending energy on internal friction.</p>
+
+<h3>Errors shrink, and start self correcting</h3>
+<p>This is the hinge of the whole stage. In the cognitive stage, the learner could not detect their own errors. In the associative stage, they begin to. They develop an internal reference of correctness, so an attempt that drifts off line now <em>feels</em> wrong, and they can nudge it back, sometimes mid attempt. The job of catching errors is migrating from an outside observer's eyes to the learner's own sense of their body in space, a system we will look at closely in a later chapter. This shift has enormous consequences for how feedback should be delivered, which we get to shortly.</p>
+
+<p>Our musician now plays the scale without the chart, at a moderate tempo, and winces when they hit a wrong note, because they can hear that it was wrong. They cannot yet play it fast without thinking, but they no longer need to consciously plan each finger. They are refining, not decoding. A language learner at the same stage no longer translates word by word, but still has to think before the sentence comes out. A surgical trainee at this stage no longer needs the steps of a suture pattern read aloud, but still narrates the plan silently to themselves before each pass of the needle. In every one of these cases, the observable behavior looks different on the surface, fingers, sentences, needle passes, yet the underlying transition is the same one: an internal reference for "correct" has switched on, and the performer is now their own second set of eyes.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="A pen-and-ink and watercolour field-guide style plate comparing three attempts at a movement outcome, arranged left to right on cream paper. Three simple circular targets, each with a cluster of small ink dots representing hits: the left target labelled 'cognitive' in small italic serif has widely scattered dots spread across and beyond the ring; the middle target labelled 'associative' has a tighter cluster nearer the centre; the right target labelled 'autonomous' has a compact tight group in the centre. Muted palette of ink black, ochre, slate blue on warm paper. Loose scientific-notebook aesthetic, no numbers, no percentage labels, no grid lines, no people." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img2.jpg" alt="<em>Consistency is the visible signature of the associative stage: the scatter tightens toward the goal.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Consistency is the visible signature of the associative stage: the scatter tightens toward the goal.</em></figcaption></figure>
+
+<section class="ch-section">
+<h2>Stage three: autonomous, when the movement runs itself</h2>
+<p>The <span class="ch-key">autonomous stage</span> is the destination. The skill now runs with minimal conscious attention. Control has been handed off to lower, faster circuits, what Schneider and Shiffrin (1977) called <span class="ch-key">automatic processing</span>: parallel, resistant to interference, and cheap in attentional cost. The learner has freed up their conscious mind for other things.</p>
+<p>The tells are the mirror image of the cognitive stage.</p>
+
+<h3>It costs almost no attention</h3>
+<p>The autonomous performer can do the skill and something else at the same time. The experienced driver holds a conversation. The touch typist looks at the screen, not the keys, and thinks about the sentence rather than the letters. A seasoned athlete can be coached on their next attempt while completing the current one. Spare capacity is the surest sign a skill has automated.</p>
+
+<h3>It is highly consistent and efficient</h3>
+<p>Attempt to attempt variability is low, movement is economical, and performance holds up under conditions that would wreck a less practiced skill: fatigue, distraction, pressure, noise. This robustness is what "grooved" really means. A useful diagnostic: the autonomous skill is the one that <em>survives fatigue</em>. A performer who only breaks technically when deeply tired is not a cognitive stage learner having a bad day. They are an autonomous performer whose automatic pattern degrades only when the system is genuinely taxed.</p>
+
+<h3>Self correction is fast and largely unconscious</h3>
+<p>Errors are small, rare, and corrected before the performer has consciously registered them. The stumble is caught before it becomes a fall. This is the point where the skill has become resistant to the very thing that built it, deliberate conscious control, which sets up the single most important lesson in this chapter.</p>
+
+<p>Our musician now plays the scale at full tempo while reading the next passage, or talking to another player, or thinking about phrasing. The fingers simply go. Ask them which finger plays the fourth note and they might have to stop and physically play it to find out. The knowledge has descended below the level of words.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>Here is the paradox in one sentence: the autonomous performer often cannot explain what they do, and asking them to explain it can make them worse. Why would drawing conscious attention back to an automatic skill degrade it? Sit with that before the next section. It is the key to not sabotaging a skilled performer.</p>
+</aside>
+</section>
+
+<div class="ch-widget" id="stage-detector">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Stage Detector Sorter</div>
+</div>
+<p class="ch-widget-sub">Read each performer scenario, choose the stage it belongs to, and learn the tell. Your running accuracy rewards pattern recognition: attention, variability, and self correction are the three cues to watch.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field" style="flex:1 1 100%">
+<span class="ch-widget-fieldlabel">Scenario</span>
+<div class="ch-widget-title" id="sd-scenario" style="font-size:1rem;line-height:1.5">&mdash;</div>
+</div>
+</div>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Your call</span>
+<select class="ch-widget-select" id="sd-select">
+<option value="">Choose a stage&hellip;</option>
+<option value="cognitive">Cognitive</option>
+<option value="associative">Associative</option>
+<option value="autonomous">Autonomous</option>
+</select>
+</div>
+</div>
+
+<div class="ch-widget-meters">
+<div class="ch-meter">
+<span class="ch-meter-label">Accuracy</span>
+<span class="ch-meter-bar"><span id="sd-acc-bar" style="width:0%"></span></span>
+<span class="ch-meter-num" id="sd-acc-num">0%</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Cases sorted</span>
+<span class="ch-meter-bar"><span id="sd-count-bar" style="width:0%"></span></span>
+<span class="ch-meter-num" id="sd-count-num">0</span>
+</div>
+</div>
+
+<p class="ch-widget-sub" id="sd-feedback" style="min-height:2.5em">Choose a stage above, then submit to see the tell.</p>
+
+<button class="ch-widget-btn" id="sd-btn">Submit call</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>What actually changes: the four shifts, side by side</h2>
+<p>Now that all three stages are on the table, let us collapse them into the four things that move across the whole arc. When you observe a skill in the wild, these are what you are reading.</p>
+
+<h3>1. Attention relocates, from internal to external</h3>
+<p>This is the shift with the most practical leverage, so we will spend the most time on it. In the cognitive stage, attention is stuck <em>inside</em>, on body mechanics, on which part moves next. As a skill automates, attention is freed to point <em>outward</em>, toward the effect and goal of the movement.</p>
+<p>Gabriele Wulf's fifteen year program of research (2013) turned this observation into one of the most reliable findings in the field: an <span class="ch-key">external focus of attention</span>, on the movement's effect on the environment, produces better performance and better learning than an <span class="ch-key">internal focus</span> on the body itself. Tell someone to "push the floor away," an external cue, rather than "contract your quadriceps," an internal cue, and they typically move more cleanly and retain the pattern better. Wulf's review reports this effect across balance tasks, throwing and striking tasks, and complex sport skills, and across beginners and experts alike. The proposed mechanism is exactly what our stage model predicts: an internal focus drags conscious control back into a system that runs better automatically, jamming the very processes that produce smooth movement. An external focus lets automatic control do its job.</p>
+<p>Wulf and Rebecca Lewthwaite (2016) later folded this into their broader <span class="ch-key">OPTIMAL theory of motor learning</span>, short for Optimizing Performance Through Intrinsic Motivation and Attention for Learning, which adds that motivation and a sense of autonomy also strengthen the coupling between goal and action. The headline for you is simpler: cueing toward external effects respects automaticity, cueing toward internal mechanics interrupts it. Match the cue to the stage, and match it to the goal, not to the muscle.</p>
+
+<h3>2. Consistency rises</h3>
+<p>Variability falls steadily across the stages: high and chaotic in the cognitive stage, tightening through the associative, minimal in the autonomous. This is the single most reliable visual diagnostic available to an observer. Film a set of attempts. Do they overlay?</p>
+
+<h3>3. Efficiency rises</h3>
+<p>Wasted motion, unnecessary co-contraction, and jerky corrections burn off. The movement does more with less. This is felt by the performer as "it got easier," even when the demand did not change. Sport scientists sometimes measure this directly as a drop in the metabolic or muscular cost of producing the same output, but a performer usually notices it first as reduced soreness, reduced perceived effort, or simply finishing a session less wrecked than they used to for identical work.</p>
+
+<h3>4. Error detection descends into the performer</h3>
+<p>Detection and correction migrate from an outside observer's eyes, in the cognitive stage, to the performer's own conscious sense, in the associative stage, to fast unconscious circuits, in the autonomous stage. Whoever owns error detection should own the feedback, which is the bridge to the most misunderstood topic in this chapter. Notice, too, that these four shifts are not four independent processes running in parallel. They are four readings of the same underlying migration, of control moving from a slow, effortful, conscious system to a fast, cheap, largely unconscious one. Attention, consistency, efficiency, and error detection are simply the four places you can stand to observe that single migration happening.</p>
+</section>
+
+<section class="ch-section">
+<h2>Feedback should change as competence grows</h2>
+<p>Here is where most well intentioned instruction goes wrong. The instinct is that more feedback is more helpful. For long term learning, that instinct is backwards, and the evidence has been clear for decades.</p>
+<p>Carolee Winstein and Richard Schmidt (1990) ran the study that made the point unavoidable. They compared learners who received <span class="ch-key">knowledge of results</span>, abbreviated KR, information about the outcome of an attempt given after every single trial, against learners who received it only half the time. During practice, the constant feedback group looked better. But on a delayed retention test, the test that actually measures <em>learning</em> rather than momentary <em>performance</em>, the reduced feedback group won. Constant feedback had produced a mirage: good performance that did not stick.</p>
+<p>Why? Alan Salmoni, Schmidt, and Charles Walter (1984) had already framed the mechanism as the <span class="ch-key">guidance hypothesis</span>. Frequent feedback acts as a crutch. It guides the learner to good performance in the moment, but it prevents them from developing their own error detection machinery, the internal reference that appears in the associative stage. Lean on the crutch too hard and the leg never strengthens. Worse, constant feedback invites maladaptive trial to trial corrections, where the learner chases every small deviation instead of settling into a stable pattern.</p>
+<p>The practical rule that falls out of this: <span class="ch-key">fade the feedback as competence grows</span>. In the cognitive stage, richer and more frequent feedback is appropriate. The learner genuinely cannot self correct, so external information is doing necessary work. As the learner enters the associative stage and their own error detection comes online, feedback should thin out, get delayed, and get less prescriptive. By the autonomous stage, the performer's internal system is faster and more accurate than anything shouted from the sideline. At that point, feedback is not neutral. It can actively interfere.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>You spot a tiny technical flaw in a near autonomous performer mid effort and correct it immediately, every time. Performance looks great in the session. What does the retention research predict about whether that skill is actually being <em>learned</em>, or just propped up while you happen to be watching?</p>
+</aside>
+
+<h3>The over-coaching trap</h3>
+<p>The most expensive mistake in this whole framework is over-coaching a near autonomous performer. It feels like diligence. It is usually damage.</p>
+<p>Two mechanisms combine against you. First, the guidance hypothesis problem: constant correction keeps the learner dependent on outside input and stalls their own self correction. Second, and more acutely, drawing an autonomous performer's conscious attention back to their mechanics forces an internal focus onto a skill that thrives on external focus and automatic control (Wulf, 2013; Wulf and Lewthwaite, 2016). It is, quite literally, asking a system that runs smoothly on autopilot to switch back to manual, and manual is slower, clumsier, and more variable. This is part of the mechanism behind "paralysis by analysis" and performance slumps under pressure. The remedy for a competent performer in a slump is rarely more technical instruction. It is often less.</p>
+<p>None of this means autonomous performers need no guidance at all. It means the guidance changes character: environmental design, strategic problems, motivation, decisions about load and volume, occasional external cues, not a running commentary on elbow position. Respect the automaticity that practice already built.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="2" data-prompt="A risograph-style two-panel editorial illustration on warm cream paper contrasting two coaching situations, muted palette of slate blue, brick red, and mustard. Left panel labelled 'cognitive stage' in small sans-serif: a stylised learner figure rendered as a simple geometric silhouette with a dense cluster of small arrows and dotted feedback lines pointing at them from outside, suggesting heavy external guidance. Right panel labelled 'autonomous stage': the same silhouette standing loosely with almost no arrows, a single thin arrow pointing outward and away toward a small target in the distance, suggesting external focus and faded feedback. Clean flat shapes, visible risograph grain and slight misregistration, no faces, no text other than the two stage labels." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img3.jpg" alt="<em>Feedback density should fall as competence rises: the crutch that helped a beginner hinders an expert.</em>" data-image-idx="2" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 3</span> <em>Feedback density should fall as competence rises: the crutch that helped a beginner hinders an expert.</em></figcaption></figure>
+
+<section class="ch-section">
+<h2>How practice is structured matters as much as how much of it there is</h2>
+<p>So far we have talked about feedback as though the only variable in a practice session is how much information a learner receives. But two other variables shape how a skill moves through these stages just as strongly: how practice attempts are <em>ordered</em>, and how they are <em>spaced out</em> in time. Both findings are counterintuitive, and both are backed by a genuinely large body of evidence.</p>
+
+<h3>Blocked versus random practice</h3>
+<p>Picture two ways of practicing three related skills, say, three different serve types, or three variations of a lift. In <span class="ch-key">blocked practice</span>, the learner repeats skill A many times in a row, then switches to skill B and repeats it many times, then skill C. Each block feels smooth. Performance during the block looks clean almost immediately, because the learner is simply repeating the same solution over and over without having to retrieve a different plan each time.</p>
+<p>In <span class="ch-key">random practice</span>, the learner meets A, then C, then B, then A again, in an unpredictable order, so that no two consecutive attempts use the same solution. Random practice looks messy in the moment. Performance during the session is worse, sometimes noticeably worse, than blocked practice.</p>
+<p>Here is the surprise. On a delayed retention test, days later, or on a transfer test that asks the learner to apply the skill in a new context, random practice wins, often by a wide margin. John Shea and Robyn Morgan (1979) demonstrated this in the study that founded the field, comparing a barrier knockdown task practiced in blocked and random orders, and found that the blocked group's advantage during acquisition reversed completely on retention and transfer tests. The effect has a name, the <span class="ch-key">contextual interference effect</span>, first proposed for verbal learning and later carried into motor learning by Shea and Morgan. It has since been replicated across sport, surgical, and rehabilitation settings, including a 2024 systematic review and meta-analysis that found high contextual interference, meaning more random ordering, reliably improved retention relative to low contextual interference, meaning blocked ordering.</p>
+<p>Why would harder, messier practice produce better learning? The leading explanation is that random practice forces the learner to fully reconstruct the plan for each attempt, rather than simply repeating the plan still sitting active in short term memory from the previous attempt. That reconstruction work is effortful, and effortful retrieval is what tends to make information stick. Blocked practice lets the learner coast on a plan they never actually had to rebuild, which produces fast, comfortable improvement that evaporates once the block ends.</p>
+
+<h3>Massed versus distributed practice</h3>
+<p>A second and related choice is how attempts are spaced across time. <span class="ch-key">Massed practice</span> crowds many repetitions into one long session with little rest. <span class="ch-key">Distributed practice</span> spreads the same number of repetitions across multiple sessions with rest or sleep in between.</p>
+<p>John Donovan and David Radosevich (1999) pooled 63 studies and found a clear, moderate advantage for distributed practice over massed practice, an effect they described as robust across a wide range of tasks. Their analysis found the advantage of spacing to be largest for simple motor tasks and to shrink, though not disappear, as tasks became more complex. The mechanism overlaps with the logic of random practice: a gap between sessions allows some forgetting, and the effort of retrieving and re-establishing the skill after that gap strengthens the memory more than an equivalent block of uninterrupted repetition would.</p>
+<p>Consider two learners preparing for the same practical exam a month out, one learning a fixed sequence of surgical knots, the other memorizing a set of foreign vocabulary. Both could cram the entire preparation into two long weekend sessions, which is massed practice, or spread the identical number of repetitions across ten short sessions over the month, which is distributed practice. The crammed weekend will feel more productive while it is happening. Progress is visible attempt to attempt, and the learner leaves each session feeling like they have "gotten it." The spaced version will feel slower and more frustrating, because every session opens with a bit of rust that has to be worked off again. The research consistently favors the second learner on the exam itself, precisely because that rust, and the retrieval effort needed to knock it off, is what cements the memory rather than merely refreshing it.</p>
+<p>Put blocked versus random and massed versus distributed side by side and a pattern emerges. In both cases, the practice condition that feels best in the room, smooth blocks, long uninterrupted sessions, is the one that teaches the least for the long run. The practice condition that feels worst, scrambled order, sessions broken up by rest, is the one that produces a skill that survives time and pressure. This should sound familiar. It is the same logic as the guidance hypothesis for feedback: comfort during acquisition and durability of learning are not the same thing, and they can trade off against each other directly.</p>
+<p>None of this means random or distributed practice is correct at every stage. A true beginner in the cognitive stage, who cannot yet produce the movement at all, usually needs a period of blocked repetition just to build a rough version of the pattern before contextual interference has anything to bite into. The general guidance the literature supports is to lean on blocked, massed practice early, to build a basic pattern, and to shift toward random, distributed practice as the pattern becomes serviceable, to lock it in against forgetting and to prepare it for the unpredictable conditions of real performance.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+<p>A common assumption is that a good practice session is one where every attempt looks clean and improvement is visible attempt to attempt. But smooth, fast improvement during a single session, the hallmark of blocked and massed practice, is a poor predictor of what a learner retains a week later. Choppy, effortful, seemingly worse practice sessions, the hallmark of random and distributed practice, often produce the durable learning that blocked and massed practice only appears to produce. Judging a practice session by how it feels in the room is judging the wrong outcome.</p>
+</aside>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>A learner practicing three different skills has one hour available. Would you rather they spend it drilling skill A for twenty minutes straight, then B, then C, or cycling unpredictably between all three the entire hour? Now imagine splitting that same hour across three separate days instead. Which choice protects performance a month from now, and why does the answer feel uncomfortable?</p>
+</aside>
+</section>
+
+<div class="ch-widget" id="variability-shrinker">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Practice and Retention Lab</div>
+</div>
+<p class="ch-widget-sub">Drag the practice slider to add reps, choose how the practice is structured, and watch session performance and predicted retention diverge. Then toggle "too much feedback" to see an autonomous skill degrade.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field" style="flex:1 1 100%">
+<span class="ch-widget-fieldlabel">Practice (reps completed)</span>
+<input type="range" min="0" max="100" value="0" id="vs-reps" style="width:100%">
+</div>
+</div>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Practice structure</span>
+<select class="ch-widget-select" id="vs-structure">
+<option value="blocked">Blocked and massed (same skill, one long session)</option>
+<option value="random">Random and distributed (interleaved, spread across days)</option>
+</select>
+</div>
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Coaching setting</span>
+<select class="ch-widget-select" id="vs-feedback">
+<option value="matched">Stage matched feedback</option>
+<option value="excess">Too much feedback</option>
+</select>
+</div>
+</div>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Attention focus</span>
+<div class="ch-widget-title" id="vs-focus" style="font-size:1rem">Internal</div>
+</div>
+</div>
+
+<div class="ch-widget-meters">
+<div class="ch-meter">
+<span class="ch-meter-label">Session look</span>
+<span class="ch-meter-bar"><span id="vs-session" style="width:12%"></span></span>
+<span class="ch-meter-num" id="vs-session-num">12</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Retention</span>
+<span class="ch-meter-bar"><span id="vs-retention" style="width:8%"></span></span>
+<span class="ch-meter-num" id="vs-retention-num">8</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Self correction</span>
+<span class="ch-meter-bar"><span id="vs-selfcorr" style="width:8%"></span></span>
+<span class="ch-meter-num" id="vs-selfcorr-num">8</span>
+</div>
+</div>
+
+<p class="ch-widget-sub" id="vs-scatter" style="font-family:monospace;letter-spacing:1px;line-height:1.4;min-height:3em">&middot; &middot; &middot; &middot; &middot; &middot; &middot; &middot; &middot;</p>
+<p class="ch-widget-sub" id="vs-note" style="min-height:2.5em">Slide the reps up to build the skill.</p>
+
+<button class="ch-widget-btn" id="vs-reset">Reset to first day</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>Putting it to work: diagnosing the stage</h2>
+<p>Let us make this operational. When you watch a skill, someone else's or your own, run three quick checks. They map directly onto the four shifts already described.</p>
+<h3>The three-question field test</h3>
+<p><strong>Can they do it while distracted?</strong> If holding a conversation or handling a second task destroys the movement, attention is still captive, cognitive or early associative. If the movement survives a distraction, automaticity is present.</p>
+<p><strong>Do the attempts look the same?</strong> Film a set. High attempt to attempt variability points cognitive. Tight, overlaying attempts point associative to autonomous. This is the consistency read.</p>
+<p><strong>Who catches the errors, and how fast?</strong> If every fault has to be pointed out, the learner cannot yet detect their own, cognitive. If they wince and adjust on their own, associative. If errors are rare and corrected before anyone notices, autonomous.</p>
+<p>Notice that "how strong" or "how fast" is not on this list. Outcome tells you the result. These three questions tell you the <em>stage</em>, which is what determines the next move.</p>
+
+<h3>Worked example: Sunny grooves a new lift</h3>
+<p>Sunny decided to learn the front squat as an adult beginner. Week one: she is staring at cues, dropping her elbows, losing the bar path, unable to think about anything except where her weight is. Every attempt looks different. A training partner has to tell her what went wrong because she genuinely does not know. That is textbook cognitive stage, so the right move is frequent, clear feedback and simple external cues, "stand tall," "lead with the elbows," and loads light enough that the coordination cost, not the muscular one, is what she is paying. Because she is still building the basic pattern, her early sessions lean blocked: the same cue, the same setup, repeated until something clicks.</p>
+<p>Month three: the pattern is grooved. Attempts overlay. She can feel when the bar drifts forward and fixes it on the way up. She still thinks about her setup, but the descent runs mostly on its own. Associative stage, so feedback thins out and gets delayed, "how did that set feel?" before "your third rep drifted," and her own error detection starts doing the work, because it is finally capable of it. This is also the point where mixing the front squat into a varied, interleaved session, alongside a hinge pattern and a carry, starts to pay off more than another block of the same single movement.</p>
+<p>Year two: she unracks, and the squat happens. She is thinking about her competition attempt selection, not her elbows. It only breaks down at the very end of a brutal set. Autonomous stage, so the running commentary stops, cues stay external and sparing, and the pattern, already faster and more accurate than any spoken instruction could be, gets to run.</p>
+
+<h3>The same lens on yourself</h3>
+<p>Because none of this assumes you are guiding anyone else, turn it inward. The skill you are learning right now, a lift, an instrument, a language, a technical craft, sits somewhere on this continuum. Diagnose it honestly. If you are in the cognitive stage, seek out feedback and do not be ashamed of the variability. It is the system working as intended, and blocked, repetitive practice is a reasonable place to start. If you are associative, start weaning yourself off constant outside correction, trust your growing internal sense, and start mixing in variation and spacing rather than grinding the same block. If you are autonomous and slumping, the answer is almost never to think harder about mechanics. It is to get out of your own way and point your attention back at the goal.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Case</div>
+<p>Sunny did not end up with a diagnosis or a shortcut. She ended up with a working model: a new skill will feel clumsy and inconsistent before it feels smooth, that feeling is not a sign of failure, feedback and practice structure should change as she improves, and the goal was never to think harder forever. It was to think hard enough, for long enough, to earn the right to stop thinking about it at all.</p>
+</aside>
+</section>
+
+<blockquote class="ch-quote">
+<p>The learner passes from a stage in which performance is under close cognitive control to one in which it is largely automatic and freed from the need for attention.</p>
+<cite>After Fitts &amp; Posner, <em>Human Performance</em> (1967)</cite>
+</blockquote>
+
+<section class="ch-section">
+<h2>Where this framework stops</h2>
+<p>Before we close, it is worth being explicit about what a stage model can and cannot tell you. This chapter gives you a way to read a skill, cognitive, associative, or autonomous, and a set of evidence based defaults for feedback and practice structure at each stage. It does not give you a way to diagnose why a specific person's movement is breaking down, whether that cause is technical, physical, or something an injury or a movement disorder would explain. Persistent pain, a sudden loss of a previously automatic skill, or a movement that will not stabilize despite appropriate practice are signals to involve a qualified professional, not signals to practice harder or cue more precisely.</p>
+<p>This matters because the vocabulary in this chapter is seductively general. "Cognitive stage," "regressed to an earlier stage," and "the pattern broke down" are descriptive terms borrowed from motor learning research, and they are genuinely useful for reading an ordinary skill in an ordinary learner. They were never built to explain a neurological event, a tremor, a sudden asymmetry, or a loss of coordination with a medical cause, and stretching them to cover those situations does real harm, because it offers a tidy, practice-focused explanation for something that may need an entirely different kind of attention.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Where education ends</div>
+<p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+</aside>
+
+<p>Sunny's story is a useful illustration here too. Nothing in her front squat progression required a clinician. It was ordinary skill acquisition, exactly what this chapter describes. But if a learner's coordination suddenly changes, if a previously smooth movement becomes clumsy again for no practice related reason, or if pain enters the picture, the right next step is a qualified evaluation, not a deeper read of a motor learning framework. Knowing where a model like this one stops applying is part of using it well.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>A learner who has been autonomous at a skill for years suddenly starts making the kind of large, inconsistent errors you would expect from the cognitive stage, with no change in how much they have practiced. Does this chapter's framework, on its own, tell you why? What would you want to know before assuming this is an ordinary stage regression?</p>
+</aside>
+</section>
+
+<section class="ch-section">
+<h2>Why the boundaries blur, and why that is fine</h2>
+<p>A last honest caveat. Real skills do not announce their stage transitions, and no single behavior gives a clean reading. A tired autonomous performer can briefly look associative. A cognitive stage learner who happens to produce one good attempt can look further along than they are. The stage is a property of a system's typical behavior, not of any one attempt.</p>
+<p>Read across multiple observations, weight the three-question test over any single tell, and remember that the whole point of the model is to be approximately right in a way that changes your decisions: how you cue, how much you feed back, how you structure practice, and when to simply get out of the way. A model that does that is doing its job even with fuzzy borders.</p>
+</section>
+
+<section class="ch-takeaways">
+<h2>Key Takeaways</h2>
+<ul>
+<li>Motor learning progresses along a continuum through three stages, cognitive (effortful, variable, attention hungry), associative (refining, consistent, self correcting), and autonomous (automatic, efficient, low attention), first mapped by Fitts and Posner (1967).</li>
+<li>Four things shift across the arc: attention relocates from internal to external, consistency rises, efficiency rises, and error detection descends from an outside observer's eyes into the performer's own fast circuits.</li>
+<li>An external focus of attention beats an internal one because it protects automatic control; cueing toward mechanics forces a smooth system back into slow, manual operation (Wulf, 2013; Wulf and Lewthwaite, 2016).</li>
+<li>Feedback should be faded as competence grows. Constant feedback flatters short term performance but degrades long term learning by preventing self correction, the guidance hypothesis (Salmoni et al., 1984; Winstein and Schmidt, 1990).</li>
+<li>Practice structure matters as much as feedback: random, interleaved practice and distributed, spaced-out sessions feel worse in the moment but produce far better retention than blocked, massed practice, the contextual interference effect (Shea and Morgan, 1979) and the spacing effect (Donovan and Radosevich, 1999).</li>
+<li>Over-coaching a near autonomous performer is the most expensive mistake in the framework: it both breeds dependency and jams automatic control.</li>
+<li>Diagnose the stage with three field questions: Can they do it while distracted? Do the attempts overlay? Who catches the errors, and how fast?</li>
+</ul>
+</section>
+
+<section class="ch-lookahead">
+<div class="ch-lookahead-label">Looking Ahead</div>
+<p>We kept referring to an "internal sense of correctness" that comes online in the associative stage and lets a performer catch their own errors. That sense has a name and a physiology: proprioception, the body's system for knowing where it is without looking. The next chapter opens up that system, how reflexes and proprioceptive feedback mature as a skill automates, and why the fast, low circuits we have been calling "automatic" are exactly where control ends up living.</p>
+</section>
+
+<section class="ch-refs">
+<h2>References</h2>
+<p>Donovan, J. J., &amp; Radosevich, D. J. (1999). A meta-analytic review of the distribution of practice effect: Now you see it, now you don't. <em>Journal of Applied Psychology, 84</em>(5), 795-805. https://doi.org/10.1037/0021-9010.84.5.795</p>
+<p>Fitts, P. M., &amp; Posner, M. I. (1967). <em>Human performance.</em> Brooks/Cole.</p>
+<p>Magill, R. A., &amp; Anderson, D. I. (2017). <em>Motor learning and control: Concepts and applications</em> (11th ed.). McGraw-Hill.</p>
+<p>Salmoni, A. W., Schmidt, R. A., &amp; Walter, C. B. (1984). Knowledge of results and motor learning: A review and critical reappraisal. <em>Psychological Bulletin, 95</em>(3), 355-386. https://doi.org/10.1037/0033-2909.95.3.355</p>
+<p>Schmidt, R. A., &amp; Lee, T. D. (2020). <em>Motor learning and performance: From principles to application</em> (7th ed.). Human Kinetics.</p>
+<p>Schneider, W., &amp; Shiffrin, R. M. (1977). Controlled and automatic human information processing: I. Detection, search, and attention. <em>Psychological Review, 84</em>(1), 1-66. https://doi.org/10.1037/0033-295X.84.1.1</p>
+<p>Shea, J. B., &amp; Morgan, R. L. (1979). Contextual interference effects on the acquisition, retention, and transfer of a motor skill. <em>Journal of Experimental Psychology: Human Learning and Memory, 5</em>(2), 179-187. https://doi.org/10.1037/0278-7393.5.2.179</p>
+<p>Winstein, C. J., &amp; Schmidt, R. A. (1990). Reduced frequency of knowledge of results enhances motor skill learning. <em>Journal of Experimental Psychology: Learning, Memory, and Cognition, 16</em>(4), 677-691. https://doi.org/10.1037/0278-7393.16.4.677</p>
+<p>Wulf, G. (2013). Attentional focus and motor learning: A review of 15 years. <em>International Review of Sport and Exercise Psychology, 6</em>(1), 77-104. https://doi.org/10.1080/1750984X.2012.723728</p>
+<p>Wulf, G., &amp; Lewthwaite, R. (2016). Optimizing performance through intrinsic motivation and attention for learning: The OPTIMAL theory of motor learning. <em>Psychonomic Bulletin &amp; Review, 23</em>(5), 1382-1414. https://doi.org/10.3758/s13423-015-0999-9</p>
+</section>
+
+<footer class="ch-foot">
+<span class="ch-foot-mark">&para;</span>
+<span class="ch-foot-meta">Gemini Education &middot; Chapter 4 of 9</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('stage-detector');
+    if(!root) return;
+    var scenarios = [
+      {t:"A first-day driver grips the wheel at ten-and-two, radio off, and stalls at the light while narrating each step to themselves.", s:"cognitive", why:"Attention is fully captive, with no spare capacity for the radio, and performance is halting and error-prone. Classic cognitive stage."},
+      {t:"A touch typist looks only at the screen, thinking about the sentence's meaning, while their fingers find the keys unattended.", s:"autonomous", why:"The skill costs almost no attention and runs in parallel with a higher task, composing meaning. Textbook autonomous automaticity."},
+      {t:"Sunny's front squat only breaks down technically in the last two reps of a brutal, fully fatiguing set.", s:"autonomous", why:"An automatic pattern that survives everything except extreme fatigue is autonomous. Robustness under load is the tell, not the rare failure."},
+      {t:"A musician plays a new scale without the fingering chart at a moderate tempo, wincing audibly when they hit a wrong note.", s:"associative", why:"They can now detect their own errors, the wince, and no longer decode each finger, but can't yet play it fast on autopilot. Associative refinement."},
+      {t:"On Sunny's first day under the bar, her ten reps of a new lift each look like a different exercise, and she can't tell you what went wrong.", s:"cognitive", why:"High rep-to-rep variability plus an inability to self-diagnose errors are the two loudest cognitive-stage signals."},
+      {t:"Months into training, Sunny feels the bar drift forward and nudges it back on the way up, though she still thinks about her setup.", s:"associative", why:"Mid-rep self-correction from an internal reference is the hinge of the associative stage. Error detection has moved into the performer."},
+      {t:"An experienced driver crosses town holding a full conversation and adjusting the climate control without a lapse.", s:"autonomous", why:"Doing the skill and a demanding second task at once proves the movement is running on cheap automatic control."},
+      {t:"A learner plays a scale note by note, eyes locked on their hands, stopping to work out the next finger.", s:"cognitive", why:"Serial, attention-locked, unable to speed up. This is the effortful decoding of the cognitive stage."},
+      {t:"After three months, a lifter's ten reps overlay almost perfectly on film, though the movement still takes some conscious thought.", s:"associative", why:"Collapsed variability with residual conscious involvement is squarely associative. Consistency has arrived, full automaticity has not."}
+    ];
+    var order = scenarios.map(function(_,i){return i;});
+    for(var i=order.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=order[i];order[i]=order[j];order[j]=tmp;}
+    var ptr=0, correct=0, total=0;
+    var scEl=document.getElementById('sd-scenario');
+    var selEl=document.getElementById('sd-select');
+    var fbEl=document.getElementById('sd-feedback');
+    var btn=document.getElementById('sd-btn');
+    var accBar=document.getElementById('sd-acc-bar');
+    var accNum=document.getElementById('sd-acc-num');
+    var cntBar=document.getElementById('sd-count-bar');
+    var cntNum=document.getElementById('sd-count-num');
+    function show(){
+      var cur=scenarios[order[ptr%order.length]];
+      scEl.textContent=cur.t;
+      selEl.value="";
+      btn.textContent="Submit call";
+    }
+    var awaiting=true;
+    btn.addEventListener('click',function(){
+      var cur=scenarios[order[ptr%order.length]];
+      if(awaiting){
+        if(!selEl.value){fbEl.textContent="Pick a stage first.";return;}
+        total++;
+        var ok=selEl.value===cur.s;
+        if(ok)correct++;
+        var label=cur.s.charAt(0).toUpperCase()+cur.s.slice(1);
+        fbEl.innerHTML=(ok?"<strong>Correct, "+label+".</strong> ":"<strong>Not quite, this is "+label+".</strong> ")+cur.why;
+        var acc=Math.round(correct/total*100);
+        accBar.style.width=acc+"%";accNum.textContent=acc+"%";
+        cntNum.textContent=total;
+        cntBar.style.width=Math.min(100,total/9*100)+"%";
+        btn.textContent="Next scenario";
+        awaiting=false;
+      } else {
+        ptr++;
+        show();
+        fbEl.textContent="Choose a stage above, then submit to see the tell.";
+        awaiting=true;
+      }
+    });
+    show();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root=document.getElementById('variability-shrinker');
+    if(!root) return;
+    var reps=document.getElementById('vs-reps');
+    var structureSel=document.getElementById('vs-structure');
+    var fb=document.getElementById('vs-feedback');
+    var focusEl=document.getElementById('vs-focus');
+    var sess=document.getElementById('vs-session');
+    var sessN=document.getElementById('vs-session-num');
+    var ret=document.getElementById('vs-retention');
+    var retN=document.getElementById('vs-retention-num');
+    var self=document.getElementById('vs-selfcorr');
+    var selfN=document.getElementById('vs-selfcorr-num');
+    var scatter=document.getElementById('vs-scatter');
+    var note=document.getElementById('vs-note');
+    var resetBtn=document.getElementById('vs-reset');
+
+    function clamp(v){return Math.max(0,Math.min(99,Math.round(v)));}
+
+    function render(){
+      var r=parseInt(reps.value,10);
+      var structure=structureSel.value;
+      var excess=fb.value==='excess';
+
+      var sessionBase=10+r*0.85+(structure==='blocked'?10:-6);
+      var retentionBase=8+r*0.80+(structure==='blocked'?-16:12);
+      var selfcorrBase=8+r*0.90+(structure==='blocked'?-4:6);
+
+      var degraded=false;
+      if(excess && r>60){
+        var pen=Math.round((r-60)*0.7);
+        sessionBase-=pen*0.5;
+        retentionBase-=pen*1.2;
+        selfcorrBase-=pen*1.3;
+        degraded=true;
+      }
+
+      var session=clamp(sessionBase);
+      var retention=clamp(retentionBase);
+      var selfc=clamp(selfcorrBase);
+
+      sess.style.width=session+"%";sessN.textContent=session;
+      ret.style.width=retention+"%";retN.textContent=retention;
+      self.style.width=selfc+"%";selfN.textContent=selfc;
+
+      if(r<35){focusEl.textContent="Internal (on mechanics)";}
+      else if(r<70){focusEl.textContent="Shifting outward";}
+      else {focusEl.textContent="External (on the goal)";}
+
+      var spread=Math.max(1, Math.round((100-r)/11) + (degraded?4:0) + (structure==='blocked'?0:2));
+      var slots=15;
+      var center=Math.floor(slots/2);
+      var arr=[];
+      for(var i=0;i<slots;i++)arr[i]="·";
+      var hits=9;
+      for(var h=0;h<hits;h++){
+        var off=Math.round((Math.random()-0.5)*spread*2);
+        var pos=Math.min(slots-1,Math.max(0,center+off));
+        arr[pos]="●";
+      }
+      arr[center]=arr[center]==="·"?"◎":"◉";
+      scatter.textContent=arr.join(" ");
+
+      if(degraded){
+        note.innerHTML="<strong>Over-coaching an advanced skill.</strong> Constant feedback forced an internal focus back onto an automatic pattern. Retention and self correction drop even as reps climb. Fade the feedback instead.";
+      } else if(structure==='blocked' && r>=70){
+        note.innerHTML="<strong>The blocked and massed trap.</strong> The session looks smooth and fast, but predicted retention lags well behind it. This is the guidance hypothesis and the contextual interference effect working together: comfort now, forgetting later.";
+      } else if(structure==='random' && r>=70){
+        note.innerHTML="<strong>Random and distributed pays off.</strong> The session looked messier along the way, but retention has caught up to, and passed, session performance. This is what Shea and Morgan, and later Donovan and Radosevich, found in the research.";
+      } else if(r<35){
+        note.innerHTML="<strong>Cognitive stage.</strong> Wide scatter, internal focus, weak self correction. Frequent feedback and some blocked repetition are genuinely useful here, the learner cannot self diagnose yet.";
+      } else {
+        note.innerHTML="<strong>Associative stage.</strong> The gap between session look and retention is starting to matter. Start fading the feedback, delaying it, and mixing in variation.";
+      }
+    }
+    reps.addEventListener('input',render);
+    fb.addEventListener('change',render);
+    structureSel.addEventListener('change',render);
+    resetBtn.addEventListener('click',function(){reps.value=0;fb.value='matched';structureSel.value='blocked';render();});
+    render();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Programming for the Wire, Not Just the Tissue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 9 · Module 4 · Capstone</div>
+    <h1 class="ch-title">Programming for the Wire, Not Just the Tissue</h1>
+    <p class="ch-subtitle">Assembling recruitment, skill, fatigue, and priming into one coherent training logic.</p>
+    <div class="ch-meta">
+      <span>65 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>9 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>wo learners finish an identical eight-week training block. Same exercises, same sets, same relative loads, the same careful attention to sleep and food. On paper, their tissue received the same stimulus. Yet on test day, one of them adds twelve kilograms to a lift she has trained for months, and the other adds nothing at all. Look at their muscle cross-sections and you can barely tell the difference. Whatever separated them was not built in the tissue. It was built in the wiring: how completely each of them could call on the muscle they already owned, how cleanly they could coordinate it, and whether the nervous system arrived on test day rested or buried under fatigue nobody had bothered to track.</p>
+    <p>This is the failure mode of programming that only manages tissue. It counts sets, monitors soreness, and adjusts volume, while quietly ignoring the system that actually converts a muscle into a performance. Priyanka, a learner who threads through this final chapter the way earlier learners have threaded through earlier ones, spent a full training cycle doing exactly this. She tracked every set, logged every repetition, iced her knees when they ached, and could not understand why her numbers stalled while a training partner on a lighter program kept climbing. The tissue was not her problem. The wire was. Her story is a thread, not a diagnosis, and we will use it only to make an abstract model concrete.</p>
+    <p>This final chapter is about programming for that wire on purpose. It is the capstone of everything this course has built: the motor unit as the smallest packet of force, the two dials of recruitment and rate coding that grade that force, the discovery that strength is partly a skill and not only a matter of bigger muscle, how a clumsy pattern becomes an automatic one, the sixth sense that tells the nervous system where the body is in space, the orchestra of coordinated timing that turns isolated force into athletic output, the difference between a tired brain and a tired muscle, and the deliberate, short-lived art of waking the system up right before it matters. None of those ideas is complete on its own. Programming is where they finally have to work together, in the same week, on the same learner, and the rest of this chapter is about how.</p>
+    <p>None of this is an argument that the tissue does not matter. A muscle still has to be built, fed, and given time to repair, and a program that ignored cross-sectional growth entirely would eventually run out of raw material no matter how skillfully the nervous system deployed it. The argument is narrower and more useful than that: tissue-only programming is incomplete, not wrong, and the missing half is exactly what most templates leave to chance. A learner who reads this chapter carefully is not being asked to abandon volume, hypertrophy work, or careful attention to recovery. They are being asked to add a second, equally deliberate layer on top of it.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The thesis, stated plainly</h2>
+    <p>Everything in this course has pointed here. Strength is a skill expressed through tissue, not a property of tissue alone. Sale's (1988) foundational review made the case decades ago: strength performance depends on the nervous system's ability to activate muscle appropriately, not merely on how much muscle exists. Modern high-density surface electromyography (EMG) has since made this literal. Del Vecchio and colleagues (2019) tracked individual motor units across four weeks of training and watched discharge rates climb and recruitment thresholds fall before hypertrophy could plausibly explain the strength gain. The critical review by Škarabot and colleagues (2020) confirms the broad pattern while honestly flagging what remains contested about exactly where in the central nervous system (CNS) the change lives, whether at the motor cortex, the spinal motor neuron, the descending tract, or some combination the field has not yet fully mapped.</p>
+    <p>The practical inference is what matters to a learner sitting down to build a program. If a large share of early adaptation is neural, meaning recruitment, rate coding, coordination, and skill, then a program that only manipulates tissue-level variables such as volume, soreness, or the sensation of a muscular pump is programming with half the levers available. This chapter hands you the other half, and shows how the two halves have to be sequenced together rather than treated as separate concerns assigned to different days by different rules.</p>
+    <p>Restate the whole course as a single sentence and it reads like this: the tissue sets the raw ceiling of what force a muscle could theoretically produce, and the nervous system decides how much of that ceiling actually gets expressed on any given day, in any given pattern, at any given velocity. Train the tissue alone and you build a bigger engine that the driver never learns to use well. Train the wire alone and you build a driver with nothing left to drive. Programming for the wire, not just the tissue, means holding both variables in the same plan and being honest about which one is the real bottleneck at any given point in a cycle.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on, name the four neural drivers of performance this course has covered: recruitment, rate coding, coordination, and skill. For each one, ask yourself which single training variable most directly develops it. If you cannot answer for all four, that gap is exactly what this chapter closes.</p>
+    </aside>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial illustration contrasting two systems: on the left, a bundle of muscle fibres rendered as red-brown braided rope in cross-section; on the right, a spare diagram of a nerve pathway drawn as fine copper wiring branching down toward the muscle. A single warm key light from upper left, earthy palette of ochre, rust, and copper against a cream paper ground. Small hand-lettered serif labels: 'the tissue' beneath the muscle, 'the wire' beneath the nerve pathway. Rule-of-thirds composition, generous negative space, sketched as if from a physiologist's notebook. No people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img1.jpg" alt="<em>Same muscle, two levers: the tissue you can see and the wiring that decides how much of it you can use.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Same muscle, two levers: the tissue you can see and the wiring that decides how much of it you can use.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Lever one: programming intensity and intent for neural drive</h2>
+    <p>Neural drive is built by asking the nervous system to produce force hard and fast, not merely often. Two variables govern it, and a program that manages only one of them is only half doing its job.</p>
+    <h3>Intensity sets the ceiling of recruitment</h3>
+    <p>High relative loads, broadly at or above 85 percent of a one-repetition maximum (1RM), force high-threshold motor units into play, the ones a moderate load never touches. This is the recruitment story from earlier in this course restated as a programming rule: if the biggest, fastest motor units are never invited to work, they are never trained. You cannot backfill high-threshold recruitment with more repetitions at a submaximal load. The size principle that governs which motor units switch on is not negotiable, and the ceiling it sets is a ceiling set by intensity, not by fatigue and not by total volume.</p>
+    <h3>Intent sets the quality of drive at any load</h3>
+    <p>Intent, the deliberate attempt to accelerate a given load as fast as possible, drives rate coding even when the bar itself moves slowly. A 60 percent load moved with genuine maximal intent produces a very different neural signature than the same load moved carelessly. This is why compensatory acceleration, the technique of pushing explosively against a submaximal load, and explicit cueing to move fast belong in a program built for the wire. They let a learner train discharge rate without always paying the joint and connective tissue tax that comes with truly maximal loads.</p>
+    <p>The programming tradeoff here is real, and pretending otherwise is how good cycles go stale. Maximal intensity and maximal intent both build neural drive, but they cost central fatigue at different rates. Heavy singles cost a great deal of central fatigue for a great deal of recruitment. Fast submaximal work costs less central fatigue for a strong rate-coding stimulus. A mature program uses both, deliberately, at different points in the cycle, rather than leaning on one to the exclusion of the other. Priyanka's stalled cycle, in hindsight, had plenty of intensity and almost no explicit intent work; every set she logged was heavy, slow, and grinding, and nothing in her plan ever asked her nervous system to simply move something fast.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Decision Frame</div>
+      <p>If a session's purpose is neural drive, protect two things above everything else. Proximity to failure is optional. Proximity to maximal intent is not. A grinding set to failure buries the central nervous system and degrades the very quality the session was supposed to train. Stop while every repetition still looks and feels crisp.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Lever two: scheduling skill, variety, and specificity</h2>
+    <p>Coordination and skill obey the rules of motor learning, not the rules of hypertrophy. Magill and Anderson (2017) give three scheduling principles that most strength programs violate by accident rather than by design.</p>
+    <h3>Match practice to the learner's stage</h3>
+    <p>The three stages of motor learning, cognitive, associative, and autonomous, should change how a program is built. A learner in the cognitive stage needs frequent, lower-load, high-feedback exposures to build the pattern; loading that learner heavy mostly rehearses errors under strain, wiring in the very faults a coach or a self-directed learner will later have to unwind. A learner in the autonomous stage needs the opposite: high specificity, competition-like conditions, and enough load and intent to express a skill they already own. Treating both stages the same way, which is the default in most generic templates, wastes the cognitive-stage learner's early weeks and under-challenges the autonomous learner's late ones.</p>
+    <p>A single example makes the mismatch concrete. Two learners are handed the same eight-week template for a new lift, one who has never performed the pattern and one who has drilled it for years. The template calls for heavy triples from week one. The experienced learner expresses an existing skill under load, which is exactly the right stimulus for their stage. The newer learner, with no reliable pattern yet, spends those same triples rehearsing whatever compensation their body improvises under strain, and by week four has practiced a flawed version of the lift far more than a correct one. The load was identical. The outcome was not, because the program never asked which stage of learning it was actually training for.</p>
+    <h3>Variability builds the skill; specificity expresses it</h3>
+    <p>Variability of practice, meaning deliberate changes to stance, tempo, bar, angle, and general contextual interference, builds a more transferable and robust motor program (Magill &amp; Anderson, 2017). But specificity of practice is the necessary counterweight: the skill must ultimately be rehearsed in the exact context in which it will be tested. This mirrors an older idea in exercise science, sometimes shortened to specific adaptation to imposed demands, which simply states that the body adapts most precisely to the exact stress it is repeatedly asked to handle. The programming answer to the tension between variability and specificity is temporal, not either-or. Push variability early in a cycle, to build the pattern broadly and give the nervous system many contexts to generalize from, then funnel toward specificity as the target date approaches, so the final expression of the skill matches the test as closely as possible.</p>
+    <p>This funnel is a scheduling decision made weeks in advance, not a feeling to chase in the final week. A common capstone-level error is running maximal variety right up to a peak, arriving skilled in general and specific in nothing, technically diverse and competitively unprepared.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide style diagram of a funnel timeline reading left to right, sketched in warm graphite and muted teal on cream paper. On the wide left opening, many small scattered icons suggesting varied practice, different stances and angles drawn as loose thumbnail figures. The funnel narrows rightward toward a single crisp icon of one clean lift on the far right. Hand-lettered serif labels only: 'variability' at the wide left mouth, 'specificity' at the narrow right spout, and 'target date' beneath the spout. No numbers, no axis ticks, no charted data. Editorial notebook idiom, no people's faces, no watermarks." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img2.jpg" alt="<em>The variability-to-specificity funnel: broaden the skill early, narrow it toward the test.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The variability-to-specificity funnel: broaden the skill early, narrow it toward the test.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Lever three: managing central and peripheral fatigue across a cycle</h2>
+    <p>This is where tissue-only programming does the most damage, because it monitors the wrong fatigue entirely. Carroll and colleagues (2017) draw the line cleanly: peripheral fatigue is impairment at the muscle itself, while central fatigue is the central nervous system failing to fully activate the muscle a learner still has. The two recover on different timecourses. Brief, high-intensity efforts can produce rapid central recovery, on the order of a couple of minutes, alongside slower, partial peripheral recovery, whereas longer or more complex work produces more prolonged central fatigue that can linger for days.</p>
+    <p>Why does this matter for programming rather than just for theory? Because a learner can be muscularly fresh, no soreness, tissue fully recovered, and still be neurally flat. Soreness is a peripheral signal. It tells a program almost nothing reliable about whether the wire is ready to fire maximally. If the heaviest neural session of the week gets scheduled off a soreness check, a learner will routinely walk into it central-fatigued and simply call the session an off day, without ever identifying the real cause.</p>
+    <h3>The two currencies do not refill at the same rate</h3>
+    <ul>
+      <li>High-intent, high-intensity work, such as heavy strength efforts, maximal sprints, and plyometrics, draws heavily on the central account. It can feel deceptively easy on the tissue even as it drains the nervous system.</li>
+      <li>High-volume hypertrophy work draws heavily on the peripheral account, producing soreness and local metabolic disruption, with a comparatively smaller central cost per unit of work.</li>
+      <li>High-skill technical work requires a fresh central account simply to be productive at all, because coordination is one of the first qualities to degrade under central fatigue, well before raw force output falls.</li>
+    </ul>
+    <p>A cycle that ignores this will let central fatigue creep upward, session after session of neural work paired with recovery decisions based only on peripheral signals, until performance stagnates or regresses even though nothing hurts and every soreness check comes back clean. Programming for the wire means budgeting these two currencies separately, and never spending the central account right before the moment it is needed most.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner reports zero soreness three days after a heavy top-single day and asks to test a new maximum. What single piece of information, other than soreness, would you want before saying yes? What does Carroll and colleagues (2017) tell you about why soreness alone is the wrong readout here?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Lever four: sequencing stress, recovery, and peaking</h2>
+    <p>Bompa and Buzzichelli (2019) formalize the engine underneath all of this: the supercompensation cycle. Training stress creates fatigue. Recovery restores baseline. Adequate recovery overshoots baseline to a slightly higher level. Time the next stress at that overshoot and a learner climbs in a wavelike progression across weeks and months. Apply maximal stimulus continuously, without the recovery wave built in, and the result runs the other direction: decline. This single mechanism explains why simply adding more work stops producing more adaptation once a nervous system is already fatigued, a pattern Priyanka's own stalled cycle illustrated without her realizing it at the time.</p>
+    <p>Two distinct interventions ride on this engine, and conflating them is a classic and avoidable mistake.</p>
+    <h3>Deload versus taper, two different jobs</h3>
+    <p>A deload restores readiness within a cycle. It is a planned dip in load that lets accumulated fatigue, especially central fatigue, clear so the next block lands on rested tissue and a rested wire. It is not aimed at a specific date and does not need to be dramatic; its job is simply to keep the wave from flattening into decline.</p>
+    <p>A taper is a peaking tool aimed at a date. Mujika and Padilla (2003) define it as a progressive, nonlinear reduction in training load designed to shed accumulated fatigue without shedding the adaptations already built, typically maintaining intensity while cutting volume by roughly 60 to 90 percent and only slightly reducing frequency, delivered as a gradual reduction rather than a single abrupt step down. The payoff is real and substantially neural: performance gains averaging around 3 percent, with a typical range of 0.5 to 6 percent, arising from neuromuscular, hormonal, and psychological recovery working together. Travis and colleagues (2020) confirm the strength-sport version of this pattern directly: hold intensity at or above 85 percent of a 1RM, drop volume, and maximal neural activation recovers without meaningful detraining.</p>
+    <p>The rule that ties the taper together is short enough to remember under pressure: maintain intensity, cut volume. Cut intensity instead and a learner detrains the very high-threshold recruitment the cycle spent months building. Keep intensity and simply stop draining the central account, and the wire arrives on test day fully charged rather than merely rested.</p>
+
+    <blockquote class="ch-quote">
+      <p>The taper's purpose is to minimize accumulated fatigue without compromising adaptations, best achieved by maintaining intensity while sharply reducing volume.</p>
+      <cite>After Mujika &amp; Padilla (2003)</cite>
+    </blockquote>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Priming, and why timing is everything</h2>
+    <p>Priming is the acute cousin of these chronic levers. Where a taper resolves fatigue over weeks, a priming session exploits the fact that a well-chosen dose of high-intent, low-fatigue work can raise readiness within a day or two, potentiating the nervous system just ahead of a target performance. The logic is the same currency management already described, only compressed into hours instead of weeks: a learner wants the potentiation without the residual central fatigue that would otherwise cancel it out. That means low volume, high intent, ample recovery, and precise timing. Prime too close to the event and the learner is fatigued. Prime too far out and the effect has already faded.</p>
+    <p>The mechanism underneath a priming effect is the same recruitment and rate-coding story that has run through this entire chapter, simply compressed onto a shorter timescale. A well-dosed conditioning effort briefly heightens motor unit recruitment and firing frequency, and for a narrow window that heightened state carries over into whatever performance follows. Miss the window in either direction, too soon and the accompanying fatigue still dominates, too late and the heightened state has already decayed back to baseline, and priming buys nothing. This is why priming belongs at the end of a plan, layered on top of a taper, rather than as a substitute for the weeks of accumulated training that came before it.</p>
+    <p>Placed inside a full cycle, priming is the fine-tuning knob at the very end of a taper: a small, sharp, neural stimulus that leaves a learner potentiated on the exact day it counts, sitting on top of weeks of accumulated fitness rather than replacing them.</p>
+  </section>
+
+  <div class="ch-widget" id="w-sandbox">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Neural Programming Sandbox</div>
+    </div>
+    <p class="ch-widget-sub">Assign an emphasis to each of six weeks leading to a Week 6 peak. The model tracks central and peripheral fatigue, neural drive, and skill, then projects peak-day performance. Sequence stress and recovery so you arrive charged, not buried.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 1</span>
+        <select class="ch-widget-select" data-wk="0">
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">Skill / technical</option>
+          <option value="prime">Priming</option>
+          <option value="deload">Deload</option>
+          <option value="taper">Taper</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 2</span>
+        <select class="ch-widget-select" data-wk="1">
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">Skill / technical</option>
+          <option value="prime">Priming</option>
+          <option value="deload">Deload</option>
+          <option value="taper">Taper</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 3</span>
+        <select class="ch-widget-select" data-wk="2">
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">Skill / technical</option>
+          <option value="prime">Priming</option>
+          <option value="deload">Deload</option>
+          <option value="taper">Taper</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 4</span>
+        <select class="ch-widget-select" data-wk="3">
+          <option value="max">Max-intent strength</option>
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="skill">Skill / technical</option>
+          <option value="prime">Priming</option>
+          <option value="deload">Deload</option>
+          <option value="taper">Taper</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 5</span>
+        <select class="ch-widget-select" data-wk="4">
+          <option value="deload">Deload</option>
+          <option value="taper">Taper</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">Skill / technical</option>
+          <option value="prime">Priming</option>
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Week 6 (peak)</span>
+        <select class="ch-widget-select" data-wk="5">
+          <option value="taper">Taper</option>
+          <option value="prime">Priming</option>
+          <option value="deload">Deload</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">Skill / technical</option>
+          <option value="hyp">Hypertrophy volume</option>
+          <option value="rest">Rest / off</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Neural drive</span>
+        <span class="ch-meter-bar"><span id="sb-drive" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="sb-drive-n">40</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Skill</span>
+        <span class="ch-meter-bar"><span id="sb-skill" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="sb-skill-n">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Central fatigue</span>
+        <span class="ch-meter-bar"><span id="sb-cns" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="sb-cns-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peripheral fatigue</span>
+        <span class="ch-meter-bar"><span id="sb-per" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="sb-per-n">20</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak-day performance</span>
+        <span class="ch-meter-bar"><span id="sb-perf" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="sb-perf-n">50</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="sb-readout">Choose an emphasis for each week, then run the cycle to see your peak-day readiness.</p>
+    <button class="ch-widget-btn" id="sb-run">Run cycle</button>
+  </div>
+
+  <section class="ch-section">
+    <h3>Reading the sandbox</h3>
+    <p>Notice the two traps the model exposes. Stack maximal-intent weeks with no recovery wave and neural drive plateaus while central fatigue climbs, which is the Bompa and Buzzichelli (2019) decline curve made visible in real time. Deload or taper too early, on the other hand, and central fatigue clears but a learner also stops accumulating drive, arriving rested and undertrained on the one day it mattered most to be sharp. The winning shapes almost always build stress across the early weeks, place a genuine recovery wave in the middle of the block, and then hold intensity while shedding volume into the peak. There is no single correct six-week template. There is only the same logic, applied honestly to whatever timeline a learner actually has.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Zooming in: the week itself</h2>
+    <p>Cycle logic sets the shape of months, but the same fatigue-currency thinking governs the ordering of a single week, and this is where most conflicts actually happen. Not in the macro plan spread across a wall calendar, but in an ordinary Tuesday that quietly ruins Wednesday without anyone noticing why.</p>
+    <p>The governing rule is short: high-skill and high-intent work both need a fresh central account, so neither one should stand directly behind heavy neural work. Put a max-intent strength session the afternoon before a technical session, and the plan hands a learner central fatigue precisely when coordination is most sensitive to it (Carroll et al., 2017). The tissue is fine. The skill falls apart. And because the tissue feels fine, it is easy to misread the session as a bad technical day rather than what it actually is: a predictable consequence of sequencing.</p>
+    <p>This is also where the idea of coordinated, orchestrated timing earns its keep. A single instrument playing out of tune is a tissue problem. An entire section coming in at the wrong time is a wire problem, and no amount of individual practice on any one instrument fixes a timing failure between sections. Weekly sequencing is conducting, not just scheduling.</p>
+    <p>Consider two learners training the same three session types each week, one heavy strength session, one technical skill session, and one easier conditioning session. The first learner places the heavy strength session on Monday and the technical session on Tuesday. The second places the technical session first, on Monday, and the heavy strength session on Tuesday. The total dose of work across the week is identical. The felt experience is not. The first learner's Tuesday technical session sits on top of Monday's central fatigue and will look sloppier than that learner's actual skill level. The second learner's technical work opens the week on a fully rested wire and shows what that same learner can really do. A coach or self-directed learner comparing the two sessions without knowing the order behind them would draw exactly the wrong conclusion about who has the better technique.</p>
+  </section>
+
+  <div class="ch-widget" id="w-week">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Fatigue-Balance Weekly Planner</div>
+    </div>
+    <p class="ch-widget-sub">Fill six training days with session types. Central and peripheral fatigue accumulate differently and recover overnight at different rates. Arrange the week so central fatigue is low before any high-skill or high-intent day; the planner flags clashes.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Mon</span>
+        <select class="ch-widget-select" data-day="0">
+          <option value="max">Max-intent strength</option>
+          <option value="skill">High-skill technical</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="low">Low-fatigue</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Tue</span>
+        <select class="ch-widget-select" data-day="1">
+          <option value="skill">High-skill technical</option>
+          <option value="max">Max-intent strength</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="low">Low-fatigue</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Wed</span>
+        <select class="ch-widget-select" data-day="2">
+          <option value="low">Low-fatigue</option>
+          <option value="max">Max-intent strength</option>
+          <option value="skill">High-skill technical</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Thu</span>
+        <select class="ch-widget-select" data-day="3">
+          <option value="max">Max-intent strength</option>
+          <option value="skill">High-skill technical</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="low">Low-fatigue</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fri</span>
+        <select class="ch-widget-select" data-day="4">
+          <option value="rest">Rest</option>
+          <option value="skill">High-skill technical</option>
+          <option value="max">Max-intent strength</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="low">Low-fatigue</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sat</span>
+        <select class="ch-widget-select" data-day="5">
+          <option value="skill">High-skill technical</option>
+          <option value="prime">Potentiation / priming</option>
+          <option value="max">Max-intent strength</option>
+          <option value="low">Low-fatigue</option>
+          <option value="rest">Rest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak central fatigue</span>
+        <span class="ch-meter-bar"><span id="wk-cns" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="wk-cns-n">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak peripheral fatigue</span>
+        <span class="ch-meter-bar"><span id="wk-per" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="wk-per-n">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Week quality</span>
+        <span class="ch-meter-bar"><span id="wk-q" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="wk-q-n">60</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="wk-readout">Set your six days, then check the week for clashes.</p>
+    <button class="ch-widget-btn" id="wk-run">Check the week</button>
+  </div>
+
+  <section class="ch-section">
+    <h3>The clashes worth avoiding</h3>
+    <p>The planner enforces a handful of hard-won rules, each one a direct consequence of the physiology already covered in this course. A high-skill day entered with high residual central fatigue gets flagged, because coordination will suffer regardless of how the tissue feels. A max-intent day standing directly in front of a technical day gets flagged for the same reason, in reverse order. And stacking two max-intent days back to back gets flagged as a central-account overdraft, the training equivalent of writing two large checks against an account that only refills partway overnight.</p>
+    <p>Good weeks tend to share a shape. They lead with the neurally demanding work when a learner is freshest, usually early in the week. They follow that work with lower-fatigue or peripheral-dominant work that does not ask much of the central nervous system. And they place technical days on rested wiring, protected from whatever heavy neural work happened the day before. None of this requires more total training time. It requires ordering the same sessions with the wire in mind instead of only the tissue.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Specificity, exercise order, and the shape of a single session</h2>
+    <p>Zoom in one level further, from the week to the session itself, and the wire still governs the plan. Exercise order inside a single session is not a matter of preference or habit; it is a direct consequence of the central and peripheral fatigue currencies already described. Sforzo and Touey's (1996) classic study had trained lifters perform the same set of exercises in two different orders, once moving from large, multijoint movements toward smaller, single-joint ones, and once in reverse. When smaller, single-joint exercises such as a triceps pushdown or a military press came first, total force production on a subsequent large, multijoint lift such as a bench press dropped measurably. The finding is intuitive once stated plainly: the exercises that demand the most from recruitment, rate coding, and coordination should be performed first, while the nervous system is freshest, and the exercises that demand less should be pushed later, once some of that freshness has already been spent.</p>
+    <p>This is specificity of training expressed as a scheduling rule rather than an abstract principle. A learner chasing a heavier squat should squat first, while central drive is at its daily peak, not after twenty minutes of accessory work that has already begun drawing down the same central account the squat needs most. A learner chasing a more automatic golf swing should rehearse that swing before, not after, a fatiguing conditioning circuit, for the same reason: coordination is one of the first casualties of central fatigue, and a skill practiced on a tired wire risks grooving the tired, compensated version of the pattern rather than the clean one.</p>
+    <p>The same logic explains why specificity cannot simply mean doing the target lift often, without regard for the state of the nervous system performing it. Repetition on a fatigued system does not rehearse the target skill; it rehearses a degraded stand-in for it, and that stand-in is what gets reinforced. Specific practice only pays off when it happens on a system capable of producing the specific pattern being asked for. This is the same variability-to-specificity funnel from earlier in the chapter, applied at the scale of a single session instead of a whole cycle: general, less-demanding work first if it must happen at all, and the specific, highest-value work protected at the point in the session where the wire is least compromised.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Decision Frame</div>
+      <p>When building a single session, order exercises by how much they demand of recruitment, rate coding, and coordination, not by muscle group and not by habit. The exercise that most needs a fresh nervous system goes first. Everything that can tolerate a partially spent central account goes later.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Velocity as the readout</h2>
+    <p>Everything in this chapter has argued that soreness is the wrong instrument for reading central fatigue, and that intent, not just load, is what trains rate coding. That raises an obvious question: if soreness will not tell a learner whether the wire is ready, what will? One increasingly practical answer, at least for loaded, barbell-style movements, is velocity.</p>
+    <p><span class="ch-key">Velocity-based training</span> (VBT) uses the speed at which a load moves, typically measured with a linear position transducer, an accelerometer-based device, or a camera-based system, as direct, session-by-session feedback on neuromuscular readiness (Weakley et al., 2021). The logic follows directly from everything already covered. A given load moved with genuine maximal intent should move at a fairly consistent velocity when the nervous system is fresh. When central fatigue accumulates, whether from the previous set, the previous session, or a poorly sequenced week, the same load moves slower, even though the load itself has not changed and even though the learner may report no soreness at all. Velocity, in other words, is a direct, real-time readout of exactly the variable soreness cannot measure.</p>
+    <p>Weakley and colleagues (2021) describe several practical applications that programming for the wire can put to immediate use. Load-velocity profiling lets a learner estimate a current 1RM without actually testing to failure, by measuring the velocity produced at several known, submaximal loads and extrapolating the relationship. Session-to-session velocity tracking on a fixed load gives an objective early warning of accumulating fatigue, often before a learner consciously feels it. And velocity-loss thresholds, meaning a decision to stop a set once bar speed drops by a set percentage relative to the fastest repetition in that set, offer a way to cap central fatigue within a single set rather than relying on subjective proximity to failure, which lever one already flagged as an unreliable way to protect neural drive.</p>
+    <p>None of this replaces the fundamentals already covered in this chapter. Velocity-based training is a measurement layer laid on top of the same underlying model: intensity sets the ceiling of recruitment, intent sets the quality of drive, and central fatigue determines how much of that ceiling is actually available on a given day. What velocity adds is an objective number where a learner previously had to rely on feel, on soreness, or on guesswork. For a learner without access to a velocity device, the same principle can be approximated more crudely by simply watching bar speed and stopping a set the moment a clearly maximal-intent repetition visibly slows: an imperfect substitute, but a far better one than tracking soreness alone.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner's velocity on a fixed submaximal load has dropped noticeably over the last three sessions, even though the load and the prescribed repetitions have not changed and nothing feels sore. What does that pattern most likely indicate, and which lever from earlier in this chapter would you reach for first?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Four worked cases</h2>
+    <h3>Case 1: periodizing toward a peak</h3>
+    <p>An early accumulation phase builds work capacity and hypertrophy, a peripheral-dominant emphasis, before transitioning into an intensification phase that shifts toward high-intensity, high-intent neural work, the wavelike alternation Bompa and Buzzichelli (2019) describe as the engine of the whole cycle. As the target date nears, skill work funnels from variable to specific (Magill &amp; Anderson, 2017), exercise order within each session tightens around the highest-value, most demanding lift (Sforzo &amp; Touey, 1996), and the plan enters a progressive, nonlinear taper: intensity held, volume cut by roughly 60 to 90 percent (Mujika &amp; Padilla, 2003; Travis et al., 2020). A short priming session lands one to two days out. The neural adaptation built across the block gets expressed on the day that matters, rather than quietly detrained by a taper that cut the wrong variable.</p>
+    <h3>Case 2: deloading for central recovery</h3>
+    <p>Three weeks of heavy neural work with no soreness but stalling bar speed is the signature of a drained central account, not a peripheral one, and a velocity readout would have flagged it well before the third week (Weakley et al., 2021). A deload here is not a full-body rest; it is a targeted reduction in volume and neural demand while some intensity is preserved to protect recruitment. The goal is refilling the central currency that soreness never reported on in the first place (Carroll et al., 2017).</p>
+    <h3>Case 3: high-skill and high-intent work in the same week</h3>
+    <p>Both qualities need a fresh central nervous system, so they compete for the same account. The fix is separation, not avoidance: place the max-intent work when a learner is freshest, protect the technical session behind a low-fatigue or rest day, and never let heavy neural work sit directly in front of skill acquisition. This is exactly the clash the weekly planner above flags, and exactly the mistake Priyanka's original program made without ever naming it, stacking her heaviest lifting two days before the technical work she most needed to feel sharp for.</p>
+    <h3>Case 4: why more is not always better</h3>
+    <p>For a fatigued nervous system, added volume is not added stimulus; it is added suppression. Past the point of central fatigue, more work degrades the recruitment and rate-coding quality a program is trying to train, pushing performance down the decline curve instead of up the supercompensation wave. The skill of programming for the wire is often the skill of prescribing less, precisely when tissue-based thinking is screaming for more. When Priyanka finally cut her weekly volume and reordered her week so her heaviest neural work landed on her most rested days, her bar speed on a fixed submaximal load climbed back within three weeks, without a single new exercise added to her program.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Decision Frame</div>
+      <p>When performance stalls, ask first whether this is a tissue problem or a wire problem. Sore and weak points toward peripheral under-recovery. Fresh and flat points toward central under-recovery. The two demand opposite prescriptions, and getting the diagnosis backward is how good programs stall for months instead of weeks.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Honest limits</h2>
+    <p>A capstone chapter earns a final obligation: naming what this model does not do. The neural adaptations described throughout this course are real and well documented, but the exact anatomical site of many of them, spinal, supraspinal, or some interaction between the two, remains genuinely contested, and Škarabot and colleagues (2020) are explicit that the field has firmer evidence for what changes than for precisely where it changes. A learner does not need to resolve that debate to program well, but pretending the science is more settled than it is would misrepresent the very sources this course relies on.</p>
+    <p>The individual variability across learners is large. The ranges given throughout this chapter, roughly 85 percent of a 1RM for intensity, roughly 60 to 90 percent for taper volume reduction, a handful of minutes for a priming rest interval, are population averages drawn from group data, not guarantees for any one nervous system. A specific learner's specific optimum is found by testing and by tracking real output, whether that output is measured with a velocity device, a stopwatch, or simply an honest read of how crisp a lift looked and felt, not by looking a single correct number up in a table.</p>
+    <p>And none of this replaces sound judgment about risk. A program built around neural drive still has to respect joints, connective tissue, sleep, and the parts of a learner's life that exist outside the gym. Chasing maximal intent on every set, or scheduling a heavy single every time soreness happens to be low, is not what this chapter is arguing for. The model exists to sharpen a small number of high-leverage decisions, which session gets the fresh nervous system, how a week is ordered, when to hold intensity and cut volume, not to justify training harder in every direction at once.</p>
+    <p>Programming for the wire is a better model than programming for the tissue alone, but it is still a model, built from averages, applied to one particular person at a time, and it works best when it is held with the same humility this entire course has tried to build.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Priyanka's problem was never a lack of effort. It was a plan that only ever asked one question: how much tissue work did I do this week? Write down the one question a plan built for the wire should ask alongside it, in your own words, before you read the takeaways below.</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A large share of early strength adaptation is neural. Recruitment and rate coding change before hypertrophy can plausibly explain the gain (Del Vecchio et al., 2019; Sale, 1988). Program for the wire, not only the tissue.</li>
+      <li>Neural drive is built by intensity, which sets the ceiling of recruitment, and intent, which sets the quality of rate coding. Train both, keep repetitions crisp, and stop short of grinding failure.</li>
+      <li>Skill obeys motor-learning rules: match practice to the learner's stage, build with variability early, and funnel toward specificity as the target date approaches (Magill &amp; Anderson, 2017).</li>
+      <li>Central and peripheral fatigue recover on different timecourses (Carroll et al., 2017). Soreness reports on the peripheral account only; never schedule heavy neural work off it alone.</li>
+      <li>Exercise order inside a session follows the same logic: the movement that most demands recruitment, rate coding, and coordination goes first, while the nervous system is freshest (Sforzo &amp; Touey, 1996).</li>
+      <li>Sequence stress and recovery to ride the supercompensation wave; continuous maximal stimulus produces decline (Bompa &amp; Buzzichelli, 2019). Deload restores readiness within a cycle; taper peaks for a date by maintaining intensity and cutting volume 60 to 90 percent (Mujika &amp; Padilla, 2003; Travis et al., 2020).</li>
+      <li>Velocity offers an objective readout of neural readiness where soreness cannot, and can guide both load prescription and when to end a set (Weakley et al., 2021).</li>
+      <li>For a fatigued nervous system, more is not better. Often the highest-skill programming decision is prescribing less.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter closes the course, but it opens a learner's practice. You now hold an integrated model of the neuromuscular system as trainable, learnable, fatigable, and primeable all at once, from the single motor unit at the start of this course to the full training cycle in this chapter. The real assessment was never a final exam question; it is the next training block. Pick one learner, whether that is someone you train alongside or simply yourself, name where each lever in this chapter belongs across a real calendar, and program the wire deliberately rather than by habit. When results outrun what the tissue alone should have produced, across a cycle, a week, or a single well-ordered session, you will know the model is working, not because a formula said so, but because you built it to.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bompa, T. O., &amp; Buzzichelli, C. A. (2019). <em>Periodization: Theory and methodology of training</em> (6th ed.). Human Kinetics.</p>
+    <p>Carroll, T. J., Taylor, J. L., &amp; Gandevia, S. C. (2017). Recovery of central and peripheral neuromuscular fatigue after exercise. <em>Journal of Applied Physiology, 122</em>(5), 1068-1076. https://doi.org/10.1152/japplphysiol.00775.2016</p>
+    <p>Del Vecchio, A., Casolo, A., Negro, F., Scorcelletti, M., Bazzucchi, I., Enoka, R., Felici, F., &amp; Farina, D. (2019). The increase in muscle force after 4 weeks of strength training is mediated by adaptations in motor unit recruitment and rate coding. <em>The Journal of Physiology, 597</em>(7), 1873-1887. https://pmc.ncbi.nlm.nih.gov/articles/PMC6441907/</p>
+    <p>Magill, R. A., &amp; Anderson, D. I. (2017). <em>Motor learning and control: Concepts and applications</em> (11th ed.). McGraw-Hill.</p>
+    <p>Mujika, I., &amp; Padilla, S. (2003). Scientific bases for precompetition tapering strategies. <em>Medicine &amp; Science in Sports &amp; Exercise, 35</em>(7), 1182-1187. https://doi.org/10.1249/01.mss.0000074448.73931.11</p>
+    <p>Sale, D. G. (1988). Neural adaptation to resistance training. <em>Medicine &amp; Science in Sports &amp; Exercise, 20</em>(5 Suppl.), S135-S145. https://doi.org/10.1249/00005768-198810001-00009</p>
+    <p>Sforzo, G. A., &amp; Touey, P. R. (1996). Manipulating exercise order affects muscular performance during a resistance exercise training session. <em>Journal of Strength and Conditioning Research, 10</em>(1), 20-24.</p>
+    <p>Škarabot, J., Brownstein, C. G., Casolo, A., Del Vecchio, A., &amp; Ansdell, P. (2020). The knowns and unknowns of neural adaptations to resistance training. <em>European Journal of Applied Physiology, 121</em>(3), 675-685. https://doi.org/10.1007/s00421-020-04567-3</p>
+    <p>Travis, S. K., Mujika, I., Gentles, J. A., Stone, M. H., &amp; Bazyler, C. D. (2020). Tapering and peaking maximal strength for powerlifting performance: A review. <em>Sports, 8</em>(9), 125. https://doi.org/10.3390/sports8090125</p>
+    <p>Weakley, J., Mann, B., Banyard, H., McLaren, S., Scott, T., &amp; Garcia-Ramos, A. (2021). Velocity-based training: From theory to application. <em>Strength and Conditioning Journal, 43</em>(2), 31-49. https://doi.org/10.1519/SSC.0000000000000560</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 9 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-sandbox');
+    if(!root) return;
+    // session emphasis effects per week
+    var CFG = {
+      hyp:   {fc:14, fp:34, fd:4,  fs:2,  rec:0.80},
+      max:   {fc:30, fp:16, fd:13, fs:5,  rec:0.82},
+      skill: {fc:12, fp:9,  fd:3,  fs:13, rec:0.72},
+      prime: {fc:10, fp:5,  fd:8,  fs:3,  rec:0.60},
+      deload:{fc:6,  fp:6,  fd:2,  fs:2,  rec:0.50},
+      taper: {fc:8,  fp:6,  fd:5,  fs:4,  rec:0.52},
+      rest:  {fc:0,  fp:0,  fd:0,  fs:0,  rec:0.42}
+    };
+    var selects = root.querySelectorAll('select[data-wk]');
+    function clamp(v){ return Math.max(0, Math.min(100, v)); }
+    function setBar(id, num, val){
+      var b = root.querySelector('#'+id);
+      var n = root.querySelector('#'+num);
+      if(b) b.style.width = clamp(val) + '%';
+      if(n) n.textContent = Math.round(clamp(val));
+    }
+    function run(){
+      var C=15, P=15, D=35, S=25;
+      var plan=[];
+      selects.forEach(function(s){ plan[+s.getAttribute('data-wk')] = s.value; });
+      for(var w=0; w<plan.length; w++){
+        var k = CFG[plan[w]] || CFG.rest;
+        C = C*k.rec + k.fc;
+        P = P*k.rec + k.fp;
+        D = D*0.97 + k.fd;
+        S = S*0.99 + k.fs;
+      }
+      var Cc=clamp(C), Pc=clamp(P), Dc=clamp(D), Sc=clamp(S);
+      // performance: drive+skill expressed, discounted by fatigue
+      var perf = clamp(30 + Dc*0.55 + Sc*0.35 - Cc*0.45 - Pc*0.18);
+      setBar('sb-drive','sb-drive-n', Dc);
+      setBar('sb-skill','sb-skill-n', Sc);
+      setBar('sb-cns','sb-cns-n', Cc);
+      setBar('sb-per','sb-per-n', Pc);
+      setBar('sb-perf','sb-perf-n', perf);
+      var msg;
+      if(Cc > 62){
+        msg = 'Overreached. Central fatigue is high on peak day. You built drive but never let the supercompensation wave arrive. Insert a deload or taper before Week 6.';
+      } else if(Dc < 45){
+        msg = 'Undertrained. You recovered well but accumulated too little neural drive. Add max-intent or intensity work earlier before you taper.';
+      } else if(perf > 68 && Cc < 42){
+        msg = 'Peaked cleanly. High drive and skill expressed on a rested central account, intensity held, fatigue shed. This is the shape you want.';
+      } else {
+        msg = 'Serviceable, not sharp. Drive and skill are decent but fatigue is still shaving performance. Tighten the recovery wave into the peak.';
+      }
+      var out = root.querySelector('#sb-readout');
+      if(out) out.textContent = msg;
+    }
+    root.querySelector('#sb-run').addEventListener('click', run);
+    selects.forEach(function(s){ s.addEventListener('change', run); });
+    run();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-week');
+    if(!root) return;
+    // per-session central/peripheral load
+    var LOAD = {
+      max:  {c:36, p:20, label:'Max-intent strength'},
+      skill:{c:16, p:10, label:'High-skill technical', needsFresh:true},
+      prime:{c:18, p:8,  label:'Potentiation / priming'},
+      low:  {c:6,  p:9,  label:'Low-fatigue'},
+      rest: {c:0,  p:0,  label:'Rest'}
+    };
+    var days=['Mon','Tue','Wed','Thu','Fri','Sat'];
+    var selects = root.querySelectorAll('select[data-day]');
+    function clamp(v){ return Math.max(0, Math.min(100, v)); }
+    function setBar(id, num, val){
+      var b=root.querySelector('#'+id); var n=root.querySelector('#'+num);
+      if(b) b.style.width=clamp(val)+'%';
+      if(n) n.textContent=Math.round(clamp(val));
+    }
+    function run(){
+      var plan=[];
+      selects.forEach(function(s){ plan[+s.getAttribute('data-day')]=s.value; });
+      var C=0, P=0, peakC=0, peakP=0;
+      var warnings=[];
+      for(var d=0; d<plan.length; d++){
+        // overnight recovery (central faster than peripheral)
+        C = C*0.55;
+        P = P*0.72;
+        var k = LOAD[plan[d]] || LOAD.rest;
+        // check clashes on entering central fatigue for demanding days
+        if((plan[d]==='skill') && C > 34){
+          warnings.push(days[d]+': high-skill work on a fatigued CNS (central '+Math.round(C)+'). Coordination will degrade.');
+        }
+        if((plan[d]==='max') && C > 40){
+          warnings.push(days[d]+': max-intent work stacked on residual central fatigue. Drive quality will suffer.');
+        }
+        // yesterday heavy neural in front of today's skill
+        if(plan[d]==='skill' && d>0 && plan[d-1]==='max'){
+          warnings.push(days[d]+': technical day sits directly behind a max-intent day. Protect it with a lower-fatigue buffer.');
+        }
+        if(plan[d]==='max' && d>0 && plan[d-1]==='max'){
+          warnings.push(days[d]+': back-to-back max-intent days overdraw the central account.');
+        }
+        C += k.c;
+        P += k.p;
+        if(C>peakC) peakC=C;
+        if(P>peakP) peakP=P;
+      }
+      var q = clamp(100 - warnings.length*22 - Math.max(0,peakC-70)*0.6);
+      setBar('wk-cns','wk-cns-n', peakC);
+      setBar('wk-per','wk-per-n', peakP);
+      setBar('wk-q','wk-q-n', q);
+      var out=root.querySelector('#wk-readout');
+      if(out){
+        if(warnings.length===0){
+          out.textContent='Clean week. Neurally demanding work lands on fresh wiring and skill days are protected. Peak central fatigue stayed manageable.';
+        } else {
+          out.textContent='Clashes: '+warnings.join(' ');
+        }
+      }
+    }
+    root.querySelector('#wk-run').addEventListener('click', run);
+    selects.forEach(function(s){ s.addEventListener('change', run); });
+    run();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

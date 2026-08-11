@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Orchestra, Not the Soloist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 6 &middot; Module 2</div>
+    <h1 class="ch-title">The Orchestra, Not the <em>Soloist</em></h1>
+    <p class="ch-subtitle">Coordination is the skill of firing the right muscles, in the right order, with the right timing, and nothing else.</p>
+    <div class="ch-meta">
+      <span>65 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>12 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">W</span>atch two people throw a ball as hard as they can. Test their muscles first: grip strength, bench press, a standing broad jump, whatever you like, and suppose the numbers come back nearly identical. Now clock the throws. One releases the ball at 60 miles per hour and looks almost bored doing it. The other grunts, recruits the whole body in one desperate heave, and produces 38 miles per hour. Same raw material. Wildly different output. The gap is not strength. It is <em>sequencing</em>, the order and the timing with which those identical muscles switch on and off.</p>
+    <p>That gap is the subject of this chapter, and it is a genuinely uncomfortable idea once you sit with it: for most powerful, skillful movement, the ceiling is not set by how much force any one muscle can produce. It is set by how well the nervous system organizes many muscles in time. A single prime mover working alone, no matter how strong, is a soloist playing a piece written for a full ensemble. It will hit its notes and the performance will still fall apart, because the piece was never written for one instrument.</p>
+    <p>Follow one learner through this chapter, a 24-year-old named Yusuf who pitches for a city recreational baseball league. Yusuf spent a winter adding twenty pounds to his bench press and building his shoulders on isolation machines because a training article told him velocity comes from a stronger arm. His fastball did not get faster. If anything it got slower, and by midseason his shoulder ached in a way it never had before. Yusuf is not a case to be diagnosed here and he is not a cautionary tale about one bad decision. He is a stand-in for a mistake almost everyone who trains a skill eventually makes: assuming that a movement problem is a strength problem, when it is very often a coordination problem wearing a strength problem's clothes. By the end of this chapter you will be able to see the difference, and so will he.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Nobody controls one muscle</h2>
+    <p>Start by discarding a mental model most people carry without noticing it: the idea that the brain sends a command to a muscle, the muscle contracts, and movement happens, muscle by muscle, like keys struck one at a time on a piano. That is not how movement is built, and it is worth being precise about why, because the wrong model quietly produces wrong training decisions for years.</p>
+    <p>Consider something as simple as reaching forward for a cup. That single action already involves the sequenced contraction and relaxation of a dozen or more muscles, timed to within milliseconds of each other, and most of them have nothing to do with the hand doing the reaching. Some stabilize the shoulder blade against the ribcage. Some brace the trunk against rotation. Some in the calves and lower back are already tensing before the arm has moved at all, because reaching forward will drag the body's center of mass forward with it, and something has to counter that before it happens, not after.</p>
+    <p>The nervous system does not appear to manage this muscle by muscle, and the reason is essentially arithmetic. The human body has more than six hundred skeletal muscles and, if you count every joint's rotational freedom, an almost absurd number of ways to move at any instant. Nikolai Bernstein, the Soviet physiologist whose work still anchors this entire field, named this the <span class="ch-key">degrees-of-freedom problem</span>: a control system with that many independently adjustable parts should be nearly impossible to command in real time, and yet bodies move fluently within a fraction of a second of deciding to. Something must be collapsing that enormous space of possibilities down to a manageable number of choices.</p>
+    <p>The leading proposal is that the central nervous system does not command muscles individually but instead combines a small number of <span class="ch-key">muscle synergies</span>, coherent packages of activation spanning several muscles that switch on together, in a shared, reusable temporal pattern. The idea was made rigorous in an unlikely setting: a laboratory study of frogs. d'Avella, Saltiel, and Bizzi (2003) recorded muscle activity as frogs performed a natural kicking behavior in many directions and found that the entire, flexible range of kicks could be reconstructed from combinations of just a handful of time-varying synergies, blended in different proportions and timed differently for each direction. Rather than solving the impossible problem of specifying six hundred individual signals, the nervous system appears to reach for a short list of pre-built recipes and mix them.</p>
+    <p>You do not need to accept the synergy hypothesis as settled science to use it, and honestly, the field has not settled it. Tresch and Jarc (2009) laid out the case for and against with admirable honesty, noting that researchers still cannot always tell whether the central nervous system is truly controlling groups of muscles, or individual muscles that merely look grouped because of how a task constrains them, or some higher-level feature of the task itself that muscles are simply obeying. Bruton and O'Dwyer (2018), reviewing the field a decade later, found that even the word synergy means different things to different camps of researchers, neural, computational, and behavioral, and that a truly unifying account is still being built. That unresolved debate is honest science. It does not undermine the practical lesson, which survives every version of the theory: movement is assembled from coordinated packages, not from muscles working in isolation.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If the nervous system trains coordination in packages rather than in individual muscles, what does that predict about a strength gain built on one exercise transferring to a different sporting movement? Hold your answer. This chapter returns to that question directly once the pieces are all on the table.</p>
+    </aside>
+    <p>The working model to carry forward is simple to state and harder to fully absorb: <strong>you train patterns, not parts.</strong> Every cue, every drill, every rep is shaping which synergies fire and how they are timed and scaled relative to one another. This reframes a great deal. It explains why isolating a supposedly weak muscle on a machine so often fails to fix a movement fault, because the fault usually lives in the timing between muscles, not in the raw strength of any single one. And it explains why coordination has to be trained inside the actual movement it is meant to serve, a point this chapter will keep returning to because it is the single most expensive lesson to learn the hard way.</p>
+  </section>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Movement built from coordinated packages of muscle activation" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>Movement is assembled from synergies, not single muscles</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="34" fill="#aab8d2" font-size="13" letter-spacing="1.5">ONE REACH, THREE COORDINATED PACKAGES</text>
+<line x1="150" y1="230" x2="300" y2="180" stroke="#2e8de8" stroke-width="2"/>
+<line x1="300" y1="180" x2="470" y2="150" stroke="#2e8de8" stroke-width="2"/>
+<g>
+<rect x="42" y="200" width="180" height="66" rx="9" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="58" y="228" fill="#5aaff5" font-size="14" font-weight="700">Postural package</text>
+<text x="58" y="248" fill="#cdd8ea" font-size="11">calf and low back brace, fires first</text>
+</g>
+<g>
+<rect x="222" y="150" width="180" height="66" rx="9" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="238" y="178" fill="#5aaff5" font-size="14" font-weight="700">Trunk package</text>
+<text x="238" y="198" fill="#cdd8ea" font-size="11">core and hip rotate, fires second</text>
+</g>
+<g>
+<rect x="402" y="102" width="196" height="66" rx="9" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="418" y="130" fill="#5aaff5" font-size="14" font-weight="700">Reaching-arm package</text>
+<text x="418" y="150" fill="#cdd8ea" font-size="11">shoulder and hand extend, fires last</text>
+</g>
+<text x="320" y="320" fill="#7f8fab" font-size="11" text-anchor="middle">A dozen muscles, three reusable packages, one smooth reach.</text>
+<text x="320" y="340" fill="#7f8fab" font-size="11" text-anchor="middle">The brain selects and times packages. It does not micromanage muscles one by one.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>A reach is not built muscle by muscle. It is built from a small number of coordinated packages of activation, each spanning several muscles, selected and timed as a unit.</em></figcaption>
+  </figure>
+
+  <section class="ch-section">
+    <h2>The ensemble: agonists, antagonists, synergists, and stabilizers</h2>
+    <p>If the packages are the notes, the players in the ensemble have parts, and knowing what each part is supposed to do is what lets you hear when one of them comes in late. Kinesiology gives every contributing muscle in a movement a functional role, and the roles are worth defining precisely, because loose use of these words is exactly what produces the muscle-by-muscle mental model this chapter is trying to correct.</p>
+    <p>The <span class="ch-key">agonist</span> is the muscle or muscle group most directly responsible for producing the movement you are watching, the prime mover. The <span class="ch-key">antagonist</span> is the muscle on the opposite side of the joint that would resist or reverse that movement if it were fully contracted. When you extend your elbow to throw a punch, the triceps is the agonist and the biceps is the antagonist. For the movement to be fast and clean, the antagonist has to relax on cue, not fight the agonist the whole way. That relaxation is not passive. It is an active neural event, and a skilled nervous system executes it as precisely as it executes the contraction itself.</p>
+    <p>A <span class="ch-key">synergist</span> is a muscle that assists the agonist, either by adding force in the same direction or by canceling out an unwanted side effect the agonist would otherwise produce. Many muscles cross two joints at once, and when they contract they tend to pull on both. A synergist's job is often to neutralize the pull at the joint you do not want moved, so that the intended motion happens cleanly at the joint you do. A <span class="ch-key">stabilizer</span>, finally, does not move the working joint at all. Its job is to hold a nearby segment, often the trunk or the shoulder blade, rigid enough that the prime mover has something solid to pull against. Think of a stabilizer as the stagehand bolting the set to the floor so the lead performer has somewhere firm to stand.</p>
+    <p>Here is the detail that changes how you should watch a movement from now on: a single muscle can hold different roles in different movements, and sometimes different roles within the same movement at different instants. The same muscle that acts as a prime mover in one exercise may spend its time in a throw acting purely as a stabilizer, contracting hard without ever producing the visible motion. This is precisely why treating any muscle as simply strong or weak, in the abstract, misses the point. The relevant question is not how strong is this muscle. It is whether this muscle is doing its assigned job, in its assigned role, at its assigned moment, inside this specific movement.</p>
+    <p>The classical physiological basis for the agonist-antagonist relationship is more than a century old and still holds up well: when a prime mover contracts, the nervous system sends a simultaneous inhibitory signal to the motor neurons of the direct antagonist, a phenomenon generally referred to as reciprocal inhibition. It is a genuinely elegant piece of wiring, because it means the nervous system does not have to separately decide to relax the antagonist. Relaxation is built into the same command that produces the contraction. But reciprocal inhibition is a default, not an absolute law, and one of the more interesting findings in modern motor control is how often skilled systems deliberately override it, which is a thread this chapter picks back up shortly.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner is told their glutes are weak because a screening test shows the muscle firing late during a squat. Before accepting weak as the explanation, what would you want to know about the muscle's assigned role, agonist, synergist, or stabilizer, in that specific movement, and about its timing relative to the other players?</p>
+    </aside>
+    <p>Notice what this framework already does to the opening throw example. Two throwers with identical raw muscle strength can produce wildly different ball speeds because the ensemble is not playing the same piece in the same order. In the slow, effortful thrower, agonists and antagonists may be co-contracting when they should be taking turns, synergists may be firing out of sequence, and stabilizers may be arriving too late to give the prime movers something firm to push against. None of that shows up on a strength test. All of it shows up on a stopwatch.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Timing, sequencing, and the kinetic chain</h2>
+    <p>If coordination is the skill of firing muscles in the right order, the single most important ordering principle in athletic movement has a name: <span class="ch-key">proximal-to-distal sequencing</span>. Large, heavy segments close to the center of the body move first. Smaller, faster segments farther out move last. In a throw, the sequence runs legs and hips, then trunk, then shoulder, then elbow, then wrist and hand. In a sprint start, it runs hip, then knee, then ankle, then the toes. The body behaves like a whip, and a whip is cracked from the handle, never from the tip.</p>
+    <p>Serrien and Baeyens (2017) laid out the mechanical logic in a wide-ranging review of the evidence across the body, the brain, and even developmental time scales. A proximal segment accelerates, reaches its peak velocity, and then <em>decelerates</em>, and that deceleration is not wasted motion. As the larger segment slows, it transfers its energy and angular momentum down the chain to the next segment, which is now free to accelerate starting from a speed it did not have to generate on its own. Each link inherits velocity from the one before it and adds its own contribution on top, so the endpoint, the hand, the foot, the racket, reaches a speed no single segment could produce by itself. Peak velocities occur in strict sequence, rippling outward from the core toward the extremity.</p>
+    <p>This is why <strong>power is so often a timing problem rather than a force problem.</strong> The energy handoff only works if each segment fires at the correct instant relative to the segment before it. Release the distal segment too early, snapping the wrist before the trunk has finished rotating, and the inherited velocity is thrown away before it can be used. That is cracking the whip from somewhere in the middle. The arm produces only what the arm alone can produce, which, compared to the whole chain working in sequence, is not much. Fire everything at once, in one simultaneous, all-out effort, and you get the second thrower from the opening: maximum grunt, minimum ball speed. Simultaneous is not powerful. Sequential is powerful.</p>
+
+    <div class="ch-widget" id="kinetic-chain">
+      <div class="ch-widget-head">
+        <div class="ch-widget-label">Interactive</div>
+        <div class="ch-widget-title">Kinetic Chain Sequencer</div>
+      </div>
+      <p class="ch-widget-sub">Set when each segment fires. Find the sequence that produces the fastest, most efficient throw, then break it on purpose and watch what happens to the output.</p>
+
+      <div class="ch-widget-row">
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Legs / hips fire at</span>
+          <select class="ch-widget-select" data-seg="legs">
+            <option value="0">t = 0 ms</option>
+            <option value="60">t = 60 ms</option>
+            <option value="120">t = 120 ms</option>
+            <option value="180">t = 180 ms</option>
+          </select>
+        </div>
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Trunk fires at</span>
+          <select class="ch-widget-select" data-seg="trunk">
+            <option value="0">t = 0 ms</option>
+            <option value="60">t = 60 ms</option>
+            <option value="120">t = 120 ms</option>
+            <option value="180">t = 180 ms</option>
+          </select>
+        </div>
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Shoulder fires at</span>
+          <select class="ch-widget-select" data-seg="shoulder">
+            <option value="0">t = 0 ms</option>
+            <option value="60">t = 60 ms</option>
+            <option value="120">t = 120 ms</option>
+            <option value="180">t = 180 ms</option>
+          </select>
+        </div>
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Arm / hand fires at</span>
+          <select class="ch-widget-select" data-seg="arm">
+            <option value="0">t = 0 ms</option>
+            <option value="60">t = 60 ms</option>
+            <option value="120">t = 120 ms</option>
+            <option value="180">t = 180 ms</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ch-widget-meters">
+        <div class="ch-meter">
+          <span class="ch-meter-label">Release velocity</span>
+          <span class="ch-meter-bar"><span data-bar="vel" style="width:20%"></span></span>
+          <span class="ch-meter-num" data-num="vel">-</span>
+        </div>
+        <div class="ch-meter">
+          <span class="ch-meter-label">Energy transfer efficiency</span>
+          <span class="ch-meter-bar"><span data-bar="eff" style="width:20%"></span></span>
+          <span class="ch-meter-num" data-num="eff">-</span>
+        </div>
+        <div class="ch-meter">
+          <span class="ch-meter-label">Sequencing quality</span>
+          <span class="ch-meter-bar"><span data-bar="seq" style="width:20%"></span></span>
+          <span class="ch-meter-num" data-num="seq">-</span>
+        </div>
+      </div>
+
+      <button class="ch-widget-btn" id="kc-eval">Throw</button>
+      <p class="ch-widget-sub" id="kc-msg" style="margin-top:.6rem"></p>
+    </div>
+
+    <p>Notice, if you experimented with the widget, that the best result comes from staggering the four segments in order, legs, trunk, shoulder, arm, with real time between each. Bunch them together and velocity collapses. Reverse the order and it collapses further still. The <em>same four muscle groups, each producing the same force</em>, generate radically different output depending only on when they fire relative to one another. That single fact is the thesis of this entire chapter, compressed into one interaction.</p>
+
+    <h3>The sprint start: the same law, on the ground</h3>
+    <p>Proximal-to-distal sequencing is not only an upper-body story. Bezodis, Willwacher, and Salo (2019), reviewing the biomechanics of the track and field sprint start, found the same signature in the first stance phase after the starting blocks: peak angular velocities appear in sequence at the hip, then the knee, then the ankle, then the joints of the toes. The hip extensors initiate the drive, and the energy rolls outward to the foot, which delivers the final impulse into the track. Their review also highlights the special role of <span class="ch-key">biarticular muscles</span>, muscles that cross two joints at once, such as the hamstrings and the calf muscle group, in ferrying energy between segments and steering it toward horizontal acceleration rather than letting it scatter. The whip cracks downward into the ground instead of forward through a ball, but the underlying sequencing principle is identical.</p>
+
+    <h3>When the chain breaks: the case of the injured thrower</h3>
+    <p>Here is the clinical evidence that sequencing is not a nicety, it is load-bearing, and fragile. Owens, Coyles, and Khaiyat (2024) compared overhead throwing athletes with and without a current shoulder injury, using three-dimensional motion analysis of maximal throws. Across most of the chain, the two groups sequenced identically: hip, then pelvis, then thorax, in the same order at the same relative timing. But one coupling broke down specifically in the injured group. In the uninjured throwers, peak elbow-extension velocity and peak shoulder-flexion velocity occurred almost simultaneously, a tightly coupled final handoff. In the injured throwers, that coupling had come apart in time, elbow extension peaking noticeably before ball release and shoulder flexion peaking noticeably after it, a sequential pattern where a coupled one should have been. Just as tellingly, in the injured group, ball velocity correlated strongly with the angular velocities of the arm's own joints. In the uninjured group it did not. That pattern is consistent with an athlete whose arm has been recruited to manufacture speed that a well-sequenced chain would otherwise have supplied for free, loading precisely the segment least equipped to absorb it. Broken sequencing is not just slower. In this population it travels together with injury.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner's throw looks arm-heavy and their velocity has plateaued despite months of shoulder-strengthening work. Given everything above, what earlier link in the chain would you want examined before adding more load to the arm, and why might strengthening the arm in isolation make the underlying problem worse rather than better?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Anticipatory postural adjustments: the fire before the fire</h2>
+    <p>Raise your arm quickly in front of you and something happens that you will never consciously feel: the muscles in your calves and back activate <em>before</em> the shoulder muscle that actually lifts the arm does. They have to. Swinging an arm forward pushes the body's center of mass forward as well, and if nothing counteracted that shift you would tip off balance the instant the arm started moving. So the nervous system, already knowing what the arm is about to do, pre-fires the postural muscles to cancel the disturbance before it ever arrives. These feedforward activations are called <span class="ch-key">anticipatory postural adjustments</span>, or APAs, and Massion (1992) gave the classic account of them in a landmark review: muscle activations that precede, and compensate in advance for, the destabilizing forces that a voluntary movement is about to generate.</p>
+    <p>The important word is <em>anticipatory</em>. This is not the reactive balancing you perform when someone bumps into you, which is a feedback correction, and feedback corrections are always a beat late by definition, because they can only begin once the disturbance has already been detected. An anticipatory postural adjustment is planned in advance. The brain predicts the mechanical consequences of the movement it is about to launch and issues the stabilizing commands ahead of time, so that stability and movement arrive together rather than stability chasing movement after the fact. Massion's review traced this predictive machinery to the interplay of cortical and cerebellar circuits, an internal model of the body's own mechanics running quietly in the background of every voluntary act.</p>
+    <p>Why should this invisible pre-firing matter to anyone training a skill? Three practical reasons stand out.</p>
+    <p><strong>First, anticipatory postural adjustments are part of the skill itself, and they are learnable.</strong> A beginner's postural anticipation tends to be sloppy or missing entirely. They move the limb and then scramble afterward to catch their balance, which bleeds force out of the movement and slows the whole sequence down. As skill develops, the anticipation sharpens and the postural foundation becomes quiet and automatic, arriving so reliably early that it stops being noticeable at all. Training a movement in its real context, feet planted, full body engaged, trains these adjustments along with everything else. Training the same prime mover seated on a machine, with the trunk fully supported, does not, because there is nothing left for the postural system to anticipate.</p>
+    <p><strong>Second, a stable base is what the kinetic chain pushes against.</strong> Proximal-to-distal sequencing depends on a firm proximal anchor. If the postural foundation is not set an instant before the prime movers fire, the first segment in the chain has nothing solid to transfer energy from, and the whole sequence leaks force from the very first link. A well-timed anticipatory adjustment is the quiet precondition for a powerful sequence, not a separate topic from it.</p>
+    <p><strong>Third, these adjustments degrade under fatigue and under rushing.</strong> When a movement is hurried, or when the system running it is depleted, there simply is not time to lay down the anticipatory base before the prime mover fires, and coordination visibly comes apart: the performer looks muscled and off balance, wrestling the movement rather than producing it. The pre-firing was skipped, not the effort.</p>
+  </section>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Anticipatory postural adjustment fires before the prime mover" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>Stability is planned in advance, not reacted to after the fact</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="34" fill="#aab8d2" font-size="13" letter-spacing="1.5">STABILITY IS PLANNED, NOT REACTED TO</text>
+<line x1="60" y1="270" x2="600" y2="270" stroke="#3a5578" stroke-width="1.5"/>
+<line x1="330" y1="90" x2="330" y2="290" stroke="#e0873a" stroke-width="1.5" stroke-dasharray="4 4"/>
+<text x="330" y="308" fill="#e0873a" font-size="11" text-anchor="middle">movement onset</text>
+<g>
+<rect x="90" y="180" width="180" height="58" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="106" y="206" fill="#5aaff5" font-size="13.5" font-weight="700">Postural muscles</text>
+<text x="106" y="224" fill="#cdd8ea" font-size="10.5">calf, back: fire first</text>
+</g>
+<g>
+<rect x="360" y="120" width="200" height="58" rx="8" fill="#12314f" stroke="#e8edf5" stroke-width="1.6"/>
+<text x="376" y="146" fill="#e8edf5" font-size="13.5" font-weight="700">Prime mover</text>
+<text x="376" y="164" fill="#cdd8ea" font-size="10.5">deltoid: fires second, lifts the arm</text>
+</g>
+<line x1="270" y1="209" x2="358" y2="152" stroke="#5aaff5" stroke-width="2" marker-end="url(#arw2)"/>
+<defs>
+<marker id="arw2" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+</defs>
+<text x="320" y="340" fill="#7f8fab" font-size="11" text-anchor="middle">The postural base is set before the prime mover fires, so stability and movement arrive together.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>An anticipatory postural adjustment fires before the prime mover, not after it. Stability is scheduled in advance, so the limb never has to move first and catch its balance second.</em></figcaption>
+  </figure>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Two learners perform the identical drill. One looks planted and calm through the whole movement. The other looks like they are constantly catching themselves. Their prime movers test equally strong on a machine. What does the concept of anticipatory postural adjustments suggest is actually different between them, and where in the movement would you look to confirm it?</p>
+  </aside>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Movement economy: co-contraction, joint stiffness, and why less can be more</h2>
+    <p>Now to the most transferable idea in the chapter, the one that most reliably separates a skilled performer from an unskilled one at a glance. Watch a beginner grip a golf club, hold a plank, or throw a first punch. They are <em>tense everywhere</em>. Muscles with no business firing are firing anyway: the jaw, the free hand, and, critically, the antagonist of nearly every prime mover involved. This is <span class="ch-key">co-contraction</span>, agonist and antagonist pulling against each other at the same time, spending energy to cancel each other out, stiffening the joint and slowing the movement down.</p>
+    <p>A skilled performer looks, by comparison, almost lazy. They fire what the task needs, when it needs it, at the intensity it needs, and relax everything else. Effortlessness is the visible signature of economy: fewer muscles active, less total energy spent, less wasted co-contraction, for an equal or better outcome. The evidence behind this being the real marker of skill is stronger than most people training a movement realize. Brueckner, Kiss, and Muehlbauer (2018) systematically reviewed studies tracking exactly what changes in the muscles as people practice a task, and the headline finding is subtle and important: raw electromyography amplitude, essentially how hard a muscle fires, correlates only weakly with how much performance improves. The markers that reliably track learning are qualitative: the <strong>timing</strong> of activation and the <strong>reduction in coactivation</strong> between agonist and antagonist. In plain language, learning a movement is less about turning muscles up and more about learning which ones to turn down, and getting the timing of the rest exactly right. Skill is subtraction as much as it is addition.</p>
+    <p>There is a mechanical reason co-contraction happens in the first place, and it is not simply clumsiness. Hogan (1984), in a foundational paper on the mechanics of joint control, showed that co-activating a pair of antagonist muscles increases the mechanical stiffness of the joint they cross, independent of any net force the joint produces. A stiffer joint resists being pushed off its intended path by an unpredictable disturbance. That is genuinely useful when the environment is unstable, the task is unfamiliar, or precision matters more than speed. It becomes wasteful specifically when the environment is predictable, the task is well learned, and the extra stiffness is bought at the cost of speed and energy the task does not actually require.</p>
+
+    <div class="ch-widget" id="economy">
+      <div class="ch-widget-head">
+        <div class="ch-widget-label">Interactive</div>
+        <div class="ch-widget-title">Economy Comparator</div>
+      </div>
+      <p class="ch-widget-sub">A beginner and an expert perform the identical task. Nudge the beginner's coordination profile toward the expert's and watch economy improve for an equal or better outcome.</p>
+
+      <div class="ch-widget-row">
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Co-contraction (antagonist)</span>
+          <select class="ch-widget-select" data-p="cocon">
+            <option value="90">Very high (beginner)</option>
+            <option value="65">High</option>
+            <option value="40">Moderate</option>
+            <option value="15">Low (expert)</option>
+          </select>
+        </div>
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Irrelevant muscles engaged</span>
+          <select class="ch-widget-select" data-p="extra">
+            <option value="85">Many (beginner)</option>
+            <option value="55">Some</option>
+            <option value="25">Few</option>
+            <option value="5">Almost none (expert)</option>
+          </select>
+        </div>
+        <div class="ch-widget-field">
+          <span class="ch-widget-fieldlabel">Timing precision</span>
+          <select class="ch-widget-select" data-p="timing">
+            <option value="30">Ragged (beginner)</option>
+            <option value="55">Improving</option>
+            <option value="78">Good</option>
+            <option value="96">Crisp (expert)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="ch-widget-meters">
+        <div class="ch-meter">
+          <span class="ch-meter-label">Muscles active</span>
+          <span class="ch-meter-bar"><span data-bar="active" style="width:85%"></span></span>
+          <span class="ch-meter-num" data-num="active">-</span>
+        </div>
+        <div class="ch-meter">
+          <span class="ch-meter-label">Total effort spent</span>
+          <span class="ch-meter-bar"><span data-bar="effort" style="width:85%"></span></span>
+          <span class="ch-meter-num" data-num="effort">-</span>
+        </div>
+        <div class="ch-meter">
+          <span class="ch-meter-label">Wasted co-contraction</span>
+          <span class="ch-meter-bar"><span data-bar="waste" style="width:85%"></span></span>
+          <span class="ch-meter-num" data-num="waste">-</span>
+        </div>
+        <div class="ch-meter">
+          <span class="ch-meter-label">Task outcome</span>
+          <span class="ch-meter-bar"><span data-bar="outcome" style="width:30%"></span></span>
+          <span class="ch-meter-num" data-num="outcome">-</span>
+        </div>
+      </div>
+
+      <button class="ch-widget-btn" id="ec-eval">Compare economy</button>
+      <p class="ch-widget-sub" id="ec-msg" style="margin-top:.6rem"></p>
+    </div>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common belief holds that co-contraction is simply a mistake, evidence of poor coordination, full stop, and that a good coach's job is to stamp it out wherever it appears. The evidence is more textured than that. Armstrong, Deluzio, and Scott (2025) found that even small amounts of co-contraction measurably improved rapid corrective responses to an unexpected mechanical disturbance, partly because activating both the agonist and the antagonist lets both contribute to a fast reflex correction. Co-contraction is not the enemy. Unnecessary, chronic co-contraction in a task that is stable, familiar, and well learned is the enemy. In a new skill, an unstable surface, or a load that might shift, some co-contraction is the nervous system correctly buying stiffness it may need. The tell is not whether co-contraction is present. It is whether it is still present once the task has become familiar and stable.</p>
+    </aside>
+
+    <h3>Why unconventional technique can still be elite</h3>
+    <p>Economy explains a pattern every experienced coach has seen: the performer whose technique looks wrong on video but works spectacularly in competition. The thrower with the unusual hitch, the sprinter with the unorthodox arm carry. Their movement violates the textbook aesthetic, but if their sequencing is clean and their co-contraction is low for the demands of the task, they are economical <em>for their own body</em>, and economy is what output ultimately answers to. Textbook form is a reasonable default hypothesis about what will be efficient for most bodies. It is not the actual target. The target is a coordinated timing pattern that produces the outcome with minimal waste, and sometimes an individual's optimum looks strange on paper. Before correcting unconventional but effective technique, it is worth asking honestly whether the correction improves economy or merely improves appearances.</p>
+
+    <h3>Coordination is task-specific, more than most people expect</h3>
+    <p>Return now to the question parked earlier. If the nervous system builds coordination in packages tuned to a specific task, then coordination trained in one pattern does not automatically transfer to a different one, even when the same muscles are involved. This is one of the best-established and least respected facts in the science of motor learning: <span class="ch-key">coordination is highly specific to the practiced task</span>. The efficient firing sequence built for a barbell squat is not the sequence needed for a vertical jump, even though the prime movers overlap almost completely. The economical timing of a tennis serve does not hand itself over to a volleyball spike. What is actually built through practice is not a general coordination attribute floating free of context. What is built is <em>this movement's</em> coordination, and only this movement's.</p>
+    <p>The practical consequences are sharp and worth stating plainly. Train the actual pattern you want. If the goal is efficient sprinting, most of the coordination work has to happen while sprinting, at or near real speed and posture, because strength work supports the pattern without building its timing. Be skeptical of transfer promises. A drill that merely looks like the target movement may recruit an entirely different sequence and build a different, unrelated skill. Respect the specificity of speed and load. Change the speed or the load enough and the nervous system often selects a genuinely different coordination pattern to solve the same task, which is why a movement grooved slowly and carefully may simply not be the movement that shows up at competition speed. A learner who is beautifully coordinated on a familiar lift but falls apart on a new, superficially similar movement has not necessarily hit a strength ceiling at all. Task-specificity predicts exactly that outcome, and the fix is to build the new pattern on its own terms, not to add load to the old one.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Coordination is the process of mastering redundant degrees of freedom of the moving body, in other words its conversion to a controllable system.</p>
+    <cite>Nikolai Bernstein, <em>The Co-ordination and Regulation of Movements</em> (1967)</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>Motor programs: how the pattern gets stored</h2>
+    <p>Muscle synergies describe how a movement is assembled moment to moment out of coordinated packages. A separate, older, and equally influential line of research asks a related but distinct question: once a pattern of coordination has been learned, what exactly is stored in memory that lets a person reproduce it reliably, and even adapt it on the fly to a slightly different situation? Schmidt (1975) proposed an answer that has shaped motor learning research for half a century: the <span class="ch-key">generalized motor program</span>, or GMP, a stored structure that specifies a whole class of related movements rather than one single, rigid movement.</p>
+    <p>The key move in Schmidt's schema theory is separating what stays fixed within a class of movement from what gets adjusted on each execution. Certain features, he proposed, are <em>invariant</em>: the relative timing between the parts of a movement and the relative force applied by each part, expressed as proportions rather than exact values. Other features are freely adjustable <em>parameters</em>: the overall speed of the movement, its overall size, and which specific muscles carry it out. On this account, a baseball pitcher and a javelin thrower are not drawing on two unrelated skills when they both execute a proximal-to-distal throwing pattern. They may be running variations of a related generalized program, with the invariant relative timing preserved and the parameters, how far, how hard, with what object, adjusted to fit the specific throw.</p>
+    <p>This is a useful second lens on everything already covered in this chapter, not a competing one. Muscle synergies explain how many muscles get combined into a coordinated package at a given instant. Generalized motor programs describe how that whole temporal pattern, packages and all, gets stored, retrieved, and flexibly rescaled the next time it is needed. Put together, they explain both why proximal-to-distal sequencing shows up as a stable, repeatable signature across very different throwing tasks, and why an athlete can throw a ball a little harder or a little softer without relearning the movement from scratch. The relative timing, the signature Serrien and Baeyens documented, is exactly the kind of feature Schmidt's theory predicts should stay fixed while everything else scales around it.</p>
+    <p>The theory has been challenged and refined for decades, and no single model of motor storage commands universal agreement, which is worth stating honestly rather than glossing over. But the practical implication that survives the theoretical arguments is the same one this chapter keeps arriving at from different directions: what training actually installs is a timing relationship, not a muscle, and not even a single fixed movement. That is precisely why a pattern trained at the wrong speed, the wrong load, or in a meaningfully different context can fail to appear when it is needed, even though every individual muscle involved has become measurably stronger.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If relative timing is the invariant feature and overall speed is just a freely adjustable parameter, what does that suggest about practicing a skill slowly to learn it and then expecting it to hold together at full competition speed? Where might that assumption break down?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Putting it to work: four questions for watching a movement</h2>
+    <p>Here is the frame this chapter is built to leave behind. When you watch a movement now, resist the pull to ask only whether the muscles are strong enough, and instead run four questions in order.</p>
+    <p><strong>1. What is the firing sequence?</strong> Which segments lead and which follow? Is it running proximal to distal, or is a distal segment leading and throwing away velocity it should have inherited? A power problem is very often a sequencing problem wearing a strength problem's disguise.</p>
+    <p><strong>2. Is the base set in time?</strong> Is there a stable postural anchor established an instant before the prime movers fire, or is the performer catching their balance mid-movement? A missing or late anticipatory postural adjustment leaks force and usually signals a movement being rushed or practiced out of its real context.</p>
+    <p><strong>3. How much is being wasted?</strong> Where is the co-contraction, and is it there because the task genuinely demands stiffness, or because the pattern has simply not been cleaned up yet? Recall Brueckner, Kiss, and Muehlbauer: turning the wrong muscles <em>down</em> is more diagnostic of real skill than turning the right ones up.</p>
+    <p><strong>4. Is this coordination specific to the task that actually matters?</strong> Is the drill building the timing of the target movement, or the timing of a proxy that merely resembles it on the outside?</p>
+    <p>None of these four is a strength question. All four are coordination questions, and every one of them is trainable, precisely because coordination is a learned pattern of activation and timing, and learned patterns respond to deliberate, specific practice. That is the encouraging fact hiding inside task-specificity: what looks like a hard ceiling on talent, they simply are not explosive, is frequently an unbuilt sequence waiting to be built.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where coordination coaching ends</h2>
+    <p>Before going further, it is worth naming the boundary that governs everything in this chapter, because the ideas here are powerful enough to be misapplied if that boundary goes unstated. Coordination, sequencing, and economy are teachable, observable, trainable qualities of movement. They are not, on their own, tools for identifying or explaining pain, and a learner who has absorbed this chapter should feel more capable of noticing a coordination fault, not more qualified to decide what is causing a specific ache in a specific joint.</p>
+    <p>The Owens, Coyles, and Khaiyat (2024) research discussed earlier illustrates why this line matters in practice. The study found a real, measurable association between a breakdown in kinetic-chain timing and a history of shoulder injury in overhead throwers. That is a genuinely useful piece of coordination science. It is not, by itself, a method for deciding whether any individual person's specific shoulder pain is caused by a sequencing fault, a structural issue, an unrelated condition, or several things at once. Untangling that requires an examination, a history, and often imaging, the kind of assessment that belongs to a qualified clinician, not to a coordination framework applied from the outside.</p>
+    <p>This is also why the four questions in the previous section are framed as questions about movement quality, not as a checklist for diagnosing an injury. A learner can reasonably notice that a throw looks arm-heavy and sequencing looks broken. Whether that pattern is a cause of pain, a consequence of pain, or coincidental to it is a clinical question, not a coaching one, and the honest, useful response to a real ache is a referral, not a home-built theory.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case in point: Yusuf and the fastball that would not come back</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Yusuf is 24 and pitches for a recreational baseball team. Frustrated by a fastball that seemed to have stalled, he spent a winter adding weight to his bench press and building his shoulder and triceps on isolation machines, following an article that told him velocity comes from a stronger throwing arm. By spring his one-rep numbers were up noticeably. His fastball was not faster. By midseason his shoulder had developed a soreness that had never been there before, and a teammate suggested he simply was not training the arm hard enough yet.</p>
+    </aside>
+    <p>Run Yusuf's winter through this chapter and the confusion resolves, not into a diagnosis, which is not this chapter's job to hand out, but into a much clearer picture of what he actually trained and what he did not. He trained a prime mover in isolation, seated, trunk supported, moving through a fixed path against a machine's resistance. Nothing about that exercise asks the legs to fire first, the trunk to rotate second, or the shoulder to receive inherited velocity third. Nothing about it asks any postural muscle to anticipate an off-balance moment that never occurs, because a supported seat removes the need to anticipate anything at all. He added strength to one instrument in the ensemble while leaving the rest of the orchestra exactly where it was, and a stronger soloist does not make an uncoordinated ensemble play faster together.</p>
+    <p>Worse, by leaning even more heavily on arm strength to chase the velocity his winter program promised, Yusuf plausibly pushed himself toward the exact pattern Owens, Coyles, and Khaiyat (2024) described in symptomatic throwers: a chain that sequences normally through the legs and trunk but decouples at the elbow and shoulder, with the arm recruited to manufacture speed a well-timed chain would otherwise have delivered for free. That is not a diagnosis of Yusuf, and it should not be treated as one. It is a plausible mechanism, offered as education, that points toward a very different next step than more isolation work: an evaluation of his throwing sequence, ideally by a coach or clinician who can actually watch the chain in motion, and, given the new shoulder soreness, a conversation with a qualified clinician about the pain itself before any training decision is made at all.</p>
+    <p>What Yusuf actually needed was never a stronger triceps in isolation. It was a training plan built around the four questions from earlier in this chapter: whether his legs, trunk, shoulder, and arm were firing in the right order and with real separation in time between them, whether his postural base was set before his arm ever accelerated, how much of his effort was being burned on co-contraction rather than output, and whether his drills were actually building his pitching sequence or merely something that resembled it in a mirror. None of that is a smaller answer than more arm work. It is a sturdier one, because it targets the actual bottleneck instead of the instrument that happened to be easiest to isolate and load.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Movement is not commanded muscle by muscle. The nervous system appears to combine a small number of coordinated <em>muscle synergies</em>, so training patterns matters more than training parts.</li>
+      <li>Every contributing muscle plays a role, agonist, antagonist, synergist, or stabilizer, and the same muscle can hold different roles in different movements. The question is not how strong a muscle is, but whether it is doing its assigned job at its assigned moment.</li>
+      <li>Power is often a timing problem, not a force problem. <em>Proximal-to-distal sequencing</em> lets large segments transfer velocity to smaller ones, so identical muscles can produce very different output depending only on firing order. Broken sequencing is also measurably associated with injury in overhead throwers.</li>
+      <li><em>Anticipatory postural adjustments</em> pre-fire stabilizing muscles before the prime mover, building the stable base the kinetic chain pushes against. They are learnable, context-dependent, and the first thing to erode when a movement is rushed or fatigued.</li>
+      <li>Skill is subtraction as much as addition: the reliable markers of motor learning are cleaner timing and reduced co-contraction, not higher muscle activity. Some co-contraction is a genuinely useful, deliberate strategy for stability under instability or unfamiliarity, not simply a mistake.</li>
+      <li>Coordination is stored as a pattern, likely something like a generalized motor program with fixed relative timing and adjustable parameters, and it is brutally task-specific. Build the timing of the actual movement, at something close to real speed and load.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Everything in this chapter describes how a rested, well-resourced nervous system assembles fluent movement: the sequence, the anticipatory adjustments, the economy. Every one of those depends on a system that has resources left to spend. The next chapter asks what happens when those resources run low: how fatigue degrades timing before it degrades raw force, why coordination tends to unravel from the distal segments inward rather than the reverse, and why the first casualty of a tired performer is almost never the muscle itself.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Armstrong, D. P., Deluzio, K. J., &amp; Scott, S. H. (2025). Agonist-antagonist muscular co-contraction improves rapid corrective responses. <em>iScience, 28</em>(8), 113122. https://doi.org/10.1016/j.isci.2025.113122</p>
+    <p>Bernstein, N. A. (1967). <em>The co-ordination and regulation of movements.</em> Pergamon Press.</p>
+    <p>Bezodis, N. E., Willwacher, S., &amp; Salo, A. I. T. (2019). The biomechanics of the track and field sprint start: A narrative review. <em>Sports Medicine, 49</em>(9), 1345-1364. https://doi.org/10.1007/s40279-019-01138-1</p>
+    <p>Brueckner, D., Kiss, R., &amp; Muehlbauer, T. (2018). Associations between practice-related changes in motor performance and muscle activity in healthy individuals: A systematic review. <em>Sports Medicine - Open, 4</em>, 9. https://doi.org/10.1186/s40798-018-0123-6</p>
+    <p>Bruton, M., &amp; O'Dwyer, N. (2018). Synergies in coordination: A comprehensive overview of neural, computational, and behavioral approaches. <em>Journal of Neurophysiology, 120</em>(6), 2761-2774. https://doi.org/10.1152/jn.00052.2018</p>
+    <p>d'Avella, A., Saltiel, P., &amp; Bizzi, E. (2003). Combinations of muscle synergies in the construction of a natural motor behavior. <em>Nature Neuroscience, 6</em>(3), 300-308. https://doi.org/10.1038/nn1010</p>
+    <p>Hogan, N. (1984). Adaptive control of mechanical impedance by coactivation of antagonist muscles. <em>IEEE Transactions on Automatic Control, 29</em>(8), 681-691. https://doi.org/10.1109/TAC.1984.1103644</p>
+    <p>Massion, J. (1992). Movement, posture and equilibrium: Interaction and coordination. <em>Progress in Neurobiology, 38</em>(1), 35-56. https://doi.org/10.1016/0301-0082(92)90034-c</p>
+    <p>Owens, L. P., Coyles, G., &amp; Khaiyat, O. (2024). Alterations to the kinetic chain sequence after a shoulder injury in throwing athletes. <em>Orthopaedic Journal of Sports Medicine, 12</em>(11). https://doi.org/10.1177/23259671241288889</p>
+    <p>Schmidt, R. A. (1975). A schema theory of discrete motor skill learning. <em>Psychological Review, 82</em>(4), 225-260. https://doi.org/10.1037/h0076770</p>
+    <p>Serrien, B., &amp; Baeyens, J.-P. (2017). The proximal-to-distal sequence in upper-limb motions on multiple levels and time scales. <em>Human Movement Science, 55</em>, 156-171. https://doi.org/10.1016/j.humov.2017.08.009</p>
+    <p>Tresch, M. C., &amp; Jarc, A. (2009). The case for and against muscle synergies. <em>Current Opinion in Neurobiology, 19</em>(6), 601-607. https://doi.org/10.1016/j.conb.2009.09.002</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 6 of 9</span>
+  </footer>
+
+</article>
+<script>(function(){
+  try {
+    var root = document.getElementById('kinetic-chain');
+    if(!root) return;
+    var order = ['legs','trunk','shoulder','arm'];
+    function getVals(){
+      var v = {};
+      order.forEach(function(seg){
+        var el = root.querySelector('select[data-seg="'+seg+'"]');
+        v[seg] = parseInt(el.value,10);
+      });
+      return v;
+    }
+    function setBar(key,pct,num){
+      root.querySelector('[data-bar="'+key+'"]').style.width = pct+'%';
+      root.querySelector('[data-num="'+key+'"]').textContent = num;
+    }
+    function evaluate(){
+      var v = getVals();
+      var times = order.map(function(s){return v[s];});
+      var seqScore = 0;
+      for(var i=0;i<order.length-1;i++){
+        var diff = times[i+1]-times[i];
+        if(diff>0){ seqScore += 25; }
+        else if(diff===0){ seqScore += 8; }
+      }
+      var spread = Math.max.apply(null,times)-Math.min.apply(null,times);
+      var stagger = spread>=150 ? 1 : spread/150;
+      var eff = Math.round(seqScore*0.7 + 30*stagger);
+      if(eff>100) eff=100; if(eff<8) eff=8;
+      var vel = Math.round((seqScore/100)*(0.5+0.5*stagger)*100);
+      if(vel>100) vel=100; if(vel<6) vel=6;
+      var seqPct = Math.round(seqScore);
+      setBar('vel', vel, vel+' %');
+      setBar('eff', eff, eff+' %');
+      setBar('seq', seqPct, seqPct+' %');
+      var msg = root.querySelector('#kc-msg');
+      var correctOrder = times[0]<times[1] && times[1]<times[2] && times[2]<times[3];
+      if(correctOrder && spread>=150){
+        msg.textContent = 'Clean proximal-to-distal whip. Each segment inherits the velocity of the one before it. This is how the endpoint outruns any single muscle.';
+      } else if(correctOrder){
+        msg.textContent = 'Right order, but the segments are bunched together. Spread the timing out so each segment can decelerate and hand off its energy.';
+      } else if(spread===0){
+        msg.textContent = 'Everything fires at once, the all-out grunt. Maximum effort, minimum output. Simultaneous is not powerful.';
+      } else {
+        msg.textContent = 'Sequence is scrambled. A distal segment is leading and throwing away inherited velocity. Crack the whip from the handle: legs, trunk, shoulder, arm.';
+      }
+    }
+    root.querySelector('#kc-eval').addEventListener('click', evaluate);
+    order.forEach(function(seg){
+      root.querySelector('select[data-seg="'+seg+'"]').addEventListener('change', evaluate);
+    });
+    evaluate();
+  } catch(e){}
+})();</script>
+<script>(function(){
+  try {
+    var root = document.getElementById('economy');
+    if(!root) return;
+    function val(p){ return parseInt(root.querySelector('select[data-p="'+p+'"]').value,10); }
+    function setBar(key,pct,num){
+      root.querySelector('[data-bar="'+key+'"]').style.width = Math.max(3,Math.min(100,pct))+'%';
+      root.querySelector('[data-num="'+key+'"]').textContent = num;
+    }
+    function evaluate(){
+      var cocon = val('cocon');
+      var extra = val('extra');
+      var timing = val('timing');
+      var active = Math.round((extra*0.7 + cocon*0.3));
+      var waste = Math.round((cocon*0.6 + extra*0.4));
+      var effort = Math.round((active*0.5 + waste*0.5));
+      var outcome = Math.round(timing - waste*0.35);
+      if(outcome<10) outcome=10; if(outcome>100) outcome=100;
+      setBar('active', active, active+' %');
+      setBar('effort', effort, effort+' %');
+      setBar('waste', waste, waste+' %');
+      setBar('outcome', outcome, outcome+' %');
+      var msg = root.querySelector('#ec-msg');
+      if(waste<=25 && timing>=78){
+        msg.textContent = 'Expert profile: few muscles active, little wasted co-contraction, crisp timing, and the outcome is as good or better. Effortless is the look of economy.';
+      } else if(waste>=65){
+        msg.textContent = 'Beginner profile: tense everywhere. Agonist and antagonist fighting each other, spending energy to cancel out. Turn the wrong muscles down before turning anything up.';
+      } else {
+        msg.textContent = 'Improving. Notice the outcome barely drops as waste is stripped away. Economy buys the same result for far less effort.';
+      }
+    }
+    root.querySelector('#ec-eval').addEventListener('click', evaluate);
+    ['cocon','extra','timing'].forEach(function(p){
+      root.querySelector('select[data-p="'+p+'"]').addEventListener('change', evaluate);
+    });
+    evaluate();
+  } catch(e){}
+})();</script>
+</body>
+</html>

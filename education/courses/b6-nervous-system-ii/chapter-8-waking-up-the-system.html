@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Waking Up the System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 8 &middot; Module 3</div>
+    <h1 class="ch-title">Waking Up the System</h1>
+    <p class="ch-subtitle">Priming, potentiation, and the minutes that decide whether the machinery hits its ceiling.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>10 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> jumper walks to the runway, chalks her hands, and loads a single near-maximal rep on the bar: one clean lift, rack it, sit down. Six minutes later she runs down the runway and clears three centimeters more than she managed cold. Nothing about her muscle mass changed in those six minutes. Nothing about her tendons or her leverages changed either. What changed was the state of the system delivering the signal. For a brief, decaying window, her nervous system was driving harder and her contractile machinery was primed to respond faster than it had been ten minutes earlier. Then the window closed, and by the time she lined up for a second attempt the advantage was gone.</p>
+    <p>Every earlier chapter in this course has been about what the nervous system can do and how that capacity gets compromised, by fatigue, by injury, by poor coordination. This chapter is about the lever a learner can pull deliberately, in the final minutes before it matters, to push that system toward its ceiling rather than away from it. If a nervous system can be fatigued and driven down, and the previous seven chapters have shown exactly how, then it stands to reason it can also be deliberately, temporarily driven up. That is the entire premise of a warmup done well, and of the sharper, more specific tool sitting inside it: post-activation potentiation (PAP), along with its longer-lasting cousin, post-activation performance enhancement (PAPE).</p>
+    <p>To keep the abstractions honest, this chapter follows one learner, Anton, a 29-year-old recreational long jumper who found a video explaining that heavy squats before a jump session could make him more explosive, and decided that if a little was good, more had to be better. He started loading three sets of heavy back squat triples about ninety seconds before every jump attempt at practice. His jumps got worse, not better, and he could not understand why a mechanism described as a performance booster seemed to be working against him. Anton is not a case to diagnose. He is a stand-in for an honest and extremely common misreading of a real phenomenon, and by the end of this chapter you will be able to say exactly where his plan went wrong, and why.</p>
+    <p>Notice, too, what makes his confusion so understandable. He was not wrong that heavy loading can potentiate a subsequent effort. He had read that finding correctly, from a source that summarized real research accurately. What he lacked was any sense of dosing, of the fact that the same tool applied a little differently produces an opposite result. A single well-timed effort and three fatiguing sets separated by too little rest are not points on the same line drawn slightly further along. They are, physiologically, close to opposite interventions, and the gap between them is exactly what this chapter exists to make visible.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The bottom line, first</h2>
+    <p>Because this chapter exists to be applied, here is the decision frame before the theory that justifies it. A pre-performance sequence has exactly two jobs to do, and one thing it must never do in the process.</p>
+    <ul>
+      <li><strong>Raise the general readiness of the whole system</strong>, temperature, blood flow, joint lubrication, and arousal. This part is cheap, low-risk, and essentially non-negotiable.</li>
+      <li><strong>Raise the specific readiness of the target task</strong>, rehearsing the exact pattern and velocities the task demands, and, when warranted, adding a heavy or explosive <span class="ch-key">conditioning effort</span> to potentiate the coming attempt.</li>
+      <li><strong>Not arrive fatigued.</strong> Every unit of readiness bought this way costs some fatigue. The entire craft of priming is spending that fatigue so net readiness peaks at the moment of the attempt, not before it and not long after it.</li>
+    </ul>
+    <p>If you take away only one idea from this chapter, make it this one: <span class="ch-key">potentiation and fatigue are two curves triggered by the very same effort, and performance is the difference between them</span> (Tillin &amp; Bishop, 2009). Everything that follows, how heavy a conditioning effort should be, how much of it to do, and how long to wait before attempting, is really just a matter of learning to manage where those two curves cross.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Picture an athlete finishing five hard squats and walking straight out to attempt a maximal vertical jump. Two competing effects have just been triggered by that single set. Name them, and predict which one is more likely to dominate in the first thirty seconds after the bar comes off the rack.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>General versus specific: two jobs, not one</h2>
+    <p>For a long time, "a warmup" meant undifferentiated jogging followed by static stretching, treated as one generic block with no internal structure. The working model this chapter uses separates the general raise from the specific preparation, because the two buy different things, and because they fail in different, instructive ways.</p>
+
+    <h3>The general raise, buying temperature and conduction</h3>
+    <p>The general portion of a warmup is largely a <span class="ch-key">temperature story</span>, and it is one of the best-established findings in this area of sport science (Bishop, 2003a; McGowan et al., 2015). Raising muscle temperature by only a couple of degrees decreases muscle and joint stiffness, speeds nerve conduction velocity, and shifts the force-velocity relationship so a muscle can produce more force at any given shortening speed. Metabolically, a modest temperature rise accelerates oxygen-uptake kinetics and increases the availability of anaerobic energy, both of which matter in the opening seconds of a hard effort. This general benefit is well supported at the level of the whole warmup, too: a broad meta-analysis found that some form of active warmup improved subsequent performance in a clear majority of the studies it reviewed, an unusually consistent finding for exercise science as a field (Fradkin et al., 2010).</p>
+    <p>Notice that one item on that list is neural, not muscular: faster nerve conduction. The general raise is not purely a tissue phenomenon. Warming the system speeds the signal itself, and a faster signal is the thread running through this entire course, from the reflex arcs of earlier chapters to the recruitment patterns ahead of us. This is also why a genuinely cold athlete underperforms even with technically flawless coaching. The signal simply arrives late, and cold tissue resists it once it does.</p>
+    <p>It is worth being honest about how modest the general raise looks in isolation, because that honesty is what makes the specific work that follows it so important. Temperature effects are real and worth every minute spent on them, but they are also blunt. Raising muscle temperature helps every task a person might attempt next, a sprint, a squat, a chess match requiring sustained focus, more or less equally. A general raise cannot tell the nervous system which task is coming. It cannot rehearse a takeoff angle, a bar path, or the timing of a reactive step. That is not a flaw in the general raise. It is simply the limit of what a non-specific intervention can accomplish, and it is exactly the gap the next stage of the warmup is built to close.</p>
+
+    <h3>The specific preparation, rehearsing the pattern and priming the drive</h3>
+    <p>Specific work accomplishes something temperature alone cannot: it rehearses the exact motor program the task requires and, when the tool is used deliberately, potentiates it. Rehearsal matters because the coordination and reflex systems covered earlier in this course are pattern-specific, not general. A sprinter's rehearsal starts are not cardiovascular exercise in disguise. They are the nervous system running through the timing of the actual event at progressively higher intensity, so the reflexive and feed-forward components of the movement are loaded and ready the instant the gun sounds.</p>
+    <p>Think back to how this course described motor learning and coordination in its earlier chapters. A movement pattern is not stored as an abstract instruction waiting to be issued from scratch each time. It is closer to a well-worn path through a network of connections, one that fires more cleanly and more quickly the more recently and specifically it has been rehearsed. A general raise does nothing to refresh that path. Only movement-specific rehearsal does, which is why an athlete who skips it can be fully warm, fully mobilized, and still technically sluggish on the very first real attempt of the day.</p>
+    <p>The Raise, Activate, Mobilize, Potentiate sequence, generally known by its acronym <span class="ch-key">RAMP</span>, is the most useful shorthand for organizing this progression (McGowan et al., 2015). Raise handles the general job described above. Activate and Mobilize bridge the gap into the pattern itself, taking joints through range and waking the muscles that will carry the coordination load. Potentiate is where the sharp tool in this chapter's title lives, and it is also where most mistakes happen.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide style diagram, pen-and-ink with muted watercolour wash in warm ochre, slate blue, and brick red, laid out left to right as four stacked horizontal bands labeled 'RAISE', 'ACTIVATE', 'MOBILIZE', 'POTENTIATE' in small clean serif capitals. Each band shows a simple sketched human figure performing a representative action, light jogging, a band activation, a lunge reach, and a single heavy barbell effort, increasing in intensity from left to right. A thin rising arrow runs beneath all four bands labeled 'intensity'. Editorial sketchbook aesthetic, cream paper texture, no photorealism, no numbers, no extra text beyond the four band labels and the word 'intensity'." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img1.jpg" alt="The RAMP progression: intensity climbs as the work narrows toward the actual task." data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The RAMP progression: intensity climbs as the work narrows toward the actual task.</em></figcaption></figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A warmup can be executed perfectly on the general side and still leave an athlete unprepared. What, specifically, does a temperature-only warmup fail to prepare in a shot-putter compared with a marathon runner, and why does the answer differ so sharply between the two?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What potentiation actually is</h2>
+    <p>Post-activation potentiation was defined cleanly two decades ago as a <span class="ch-key">transient increase in muscle contractile performance following prior contractile activity</span> (Sale, 2002). Do something hard with a muscle, and for a short while afterward that same muscle produces more force, faster, than it did beforehand. That is the phenomenon in its simplest form. The genuinely interesting part is what is happening underneath it, and how long it actually lasts once you start timing it carefully.</p>
+
+    <h3>Mechanism one: light-chain phosphorylation</h3>
+    <p>The classic mechanism behind PAP is <span class="ch-key">myosin regulatory light chain phosphorylation</span> (Sale, 2002; Tillin &amp; Bishop, 2009). After a strong contraction, the regulatory light chains sitting on the myosin molecule get phosphorylated, and this makes the actin-myosin cross-bridges more sensitive to calcium. For a given amount of calcium released into the muscle, you get more force in return, an effect most pronounced at low-to-moderate activation levels, and most pronounced of all in type II fibers, the fibers most responsible for fast, forceful contractions.</p>
+    <p>Here is the catch that reshaped how the whole field talks about this phenomenon: the half-life of that phosphorylation signal is roughly <em>twenty-eight seconds</em> (Blazevich &amp; Babault, 2019). It decays fast, and by fast this chapter means genuinely fast. If light-chain phosphorylation were the entire story, the potentiating effect would be largely gone before an athlete finished re-racking the bar, let alone walked to the runway.</p>
+
+    <h3>Mechanism two, and the reason the effect actually lasts: neural drive</h3>
+    <p>Yet athletes routinely jump higher, throw farther, or sprint faster several <em>minutes</em> after a conditioning effort, long after the phosphorylation window should have closed. That mismatch between a twenty-eight-second mechanism and a multi-minute result is exactly why the field now separates classic PAP from <span class="ch-key">post-activation performance enhancement</span>, abbreviated PAPE, a related but distinct effect that persists for minutes rather than seconds and appears to be driven by more than one mechanism at once (Blazevich &amp; Babault, 2019). Some of the candidate mechanisms for this longer effect involve increased muscle temperature and shifts in muscle water content, but the mechanisms this course cares most about are neural: heightened recruitment of high-threshold motor units, elevated motor-unit firing frequency, and improved motor-unit synchronization (Tillin &amp; Bishop, 2009; Harrison et al., 2019).</p>
+    <p>Read those neural mechanisms against the material from earlier chapters and the pattern is unmistakable. Recruitment of high-threshold units is the size principle running all the way to its top end. Firing frequency is rate coding. Elevated central drive is the ceiling on voluntary output being pushed, temporarily, higher than it normally sits. Potentiation, in other words, is not some exotic new phenomenon bolted onto the nervous system. It is a temporary, deliberate upshift of the exact dials this course has spent seven chapters teaching you to read. A heavy conditioning contraction effectively tells the nervous system: we are recruiting the largest units available and driving them hard. That instruction carries over, briefly, into whatever effort comes next.</p>
+    <p>It helps to hold both mechanisms in mind at the same time rather than picking a favorite, because they are not competing explanations, they are two processes running on different clocks. In the first thirty seconds or so after a heavy conditioning effort, an athlete is benefiting from both light-chain phosphorylation and elevated neural drive at once, which is part of why a conditioning effort followed by almost no rest can still feel powerful in the moment even though it usually is not the right choice for a maximal attempt. By the two or three minute mark, the phosphorylation contribution has essentially vanished, and whatever performance boost remains is running on neural drive alone. By the eight to ten minute mark, even the neural contribution has typically faded back toward baseline. Knowing which clock is running at which moment is what separates a coach who can explain why a given rest interval worked from one who is simply repeating a number they once heard.</p>
+
+    <blockquote class="ch-quote">
+      <p>It is the net balance between potentiation and fatigue that dictates whether subsequent explosive performance is potentiated or impaired.</p>
+      <cite>Tillin &amp; Bishop, 2009</cite>
+    </blockquote>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption is that if a heavy conditioning effort potentiates performance, a heavier or more voluminous conditioning effort must potentiate it more. This is close to backward for most athletes. Intensity drives the potentiation signal; volume mostly drives the fatigue that buries it. Stacking on extra sets in the name of activation is usually just stacking on fatigue, dressed up as preparation.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If classic PAP's half-life is only around twenty-eight seconds, but trained athletes often peak four to eight minutes after the conditioning effort, what does that timing gap tell you about which mechanism is actually doing the useful work in a real warmup?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The trade-off that governs everything</h2>
+    <p>Here is the core model, and it is simple enough to sketch on a napkin between sets. A conditioning effort triggers <em>two</em> responses at once, not one.</p>
+    <ul>
+      <li>A <strong>potentiation</strong> curve that boosts contractile and neural output, then decays over several minutes.</li>
+      <li>A <strong>fatigue</strong> curve that suppresses output, then also decays, usually faster than potentiation does when the conditioning effort is dosed well.</li>
+    </ul>
+    <p>Net readiness at any moment is potentiation minus fatigue. Immediately after the conditioning effort, fatigue is large and typically dominates, which means net readiness often sits below baseline right away. As fatigue clears faster than potentiation fades, net readiness climbs back above baseline, hits a peak, and then drifts down again as the potentiation itself decays. That stretch above baseline is the <span class="ch-key">window</span> this chapter keeps referring to. Perform inside it and an athlete is genuinely enhanced. Perform too early and the athlete is pre-fatigued. Perform too late and the potentiation has already evaporated, leaving nothing but an athlete who is simply warm.</p>
+    <p>It is worth sitting with why this shape, dip first, then rise, then fade, is not a design flaw but an unavoidable consequence of two processes running at different speeds. Fatigue is the faster reaction: it appears almost immediately after a hard effort and clears relatively quickly once the effort stops. Potentiation is the slower reaction: it builds alongside the fatigue but persists well after the fatigue has cleared. Any time two effects share a trigger but run on different clocks, their difference will trace exactly this kind of dip-then-rise curve. Once you see that the window is a mathematical consequence of two decay rates rather than some special trick of physiology, the whole model becomes far easier to apply to a situation this chapter has not explicitly covered.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="An editorial notebook-style line diagram on cream paper, drawn as if sketched by a sports scientist. Three hand-drawn curves over a horizontal time axis: one rising-then-falling curve labeled 'potentiation', one steeper curve that starts high and drops quickly labeled 'fatigue', and a resulting curve labeled 'net readiness' that dips below a faint horizontal dashed 'baseline' line early, then rises into a shaded hump above baseline, then settles. The shaded above-baseline hump is tinted soft green and labeled 'window'. Muted palette of slate blue, green, and warm grey ink. No numerical ticks, no axis numbers, only the words 'potentiation', 'fatigue', 'net readiness', 'baseline', and 'window'. Clean, minimal, hand-annotated." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img2.jpg" alt="Two curves, one difference. Performance lives in the shaded window where potentiation outruns residual fatigue." data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Two curves, one difference. Performance lives in the shaded window where potentiation outruns residual fatigue.</em></figcaption></figure>
+
+    <p>Three variables move those two curves, and they happen to be the three levers an athlete or a coach actually controls.</p>
+
+    <h3>Load and intensity of the conditioning effort</h3>
+    <p>Heavier, more forceful conditioning efforts generally produce more potentiation, but they also produce more fatigue. A near-maximal heavy single potentiates strongly and, because the total volume involved is tiny, fatigues relatively little, which is exactly why the heavy single before a jump has become something of a signature move in this space. A set of ten hard repetitions also potentiates, but it buries the athlete in a volume of fatigue that takes far longer to clear. As a rule of thumb, intensity buys potentiation, while volume mostly buys fatigue (Tillin &amp; Bishop, 2009; Seitz &amp; Haff, 2016).</p>
+
+    <h3>Recovery interval</h3>
+    <p>This is the timing dial, and it is where most attempts at priming quietly fail. Rest too little and the athlete attempts on top of fatigue that has not resolved. Rest too long and the potentiation itself has faded, leaving no advantage to collect. Two independent meta-analyses converge on a similar bracket for most trained athletes, generally somewhere between <span class="ch-key">three and twelve minutes</span>, with heavier or higher-volume conditioning efforts typically needing the longer end of that range (Seitz &amp; Haff, 2016; Wilson et al., 2013). Wilson and colleagues (2013) found that rest periods of roughly seven to ten minutes produced a larger effect than either shorter or longer rest windows in their pooled data, though the honest reading of these numbers is a bracket to start from, not a law carved into the sport. The right rest interval for a specific person and a specific dose is something found by testing, not by reading a chart.</p>
+
+    <h3>Athlete characteristics</h3>
+    <p>This is the variable people forget most often, and it might be the most consequential one of all. <span class="ch-key">Stronger, more resistance-trained athletes potentiate more and fatigue less</span> from an identical conditioning effort than less-trained athletes do (Seitz &amp; Haff, 2016; Wilson et al., 2013; Sale, 2002). Trained athletes carry more type II fiber to phosphorylate, better-developed high-threshold recruitment to draw on, and greater resistance to fatigue in the first place. The corollary is blunt: priming through a heavy conditioning effort is a tool that works best on an already well-trained system. On a newer or less-trained athlete, the identical heavy single may deliver more fatigue than potentiation, and the window may never rise above baseline at all. The tool has to be matched to the system it is applied to, or it simply will not do what the literature promises.</p>
+    <p>There is a practical corollary worth stating plainly: training status is not a fixed label an athlete carries forever, it is a variable that shifts across a career and even across a single season. An athlete who could not usefully potentiate off a heavy single a year ago may be able to now, as their high-threshold recruitment and fatigue resistance have both improved through consistent training. This is one more reason the population-level brackets in this chapter are starting points rather than settled answers. The question is never simply does priming work, it is does priming work for this athlete, at this point in their development, on this day.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two athletes perform an identical heavy triple. One is a national-level lifter with a decade of training behind her, the other is six months into structured training. Sketch their net-readiness curves side by side. Whose window opens sooner and deeper, whose opens later and shallower, and who might have no usable window at all?</p>
+    </aside>
+  </section>
+
+  <p>The interactive below turns that three-variable model into something you can actually feel. Set the intensity and volume of a conditioning effort, choose an athlete's training background, pick a rest interval, then take the attempt. Watch how the same conditioning effort can enhance one athlete and bury another, and how an identical dose can look completely different at thirty seconds of rest versus twelve minutes.</p>
+
+  <div class="ch-widget" id="w-balancer">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Potentiation vs Fatigue Balancer</div>
+    </div>
+    <p class="ch-widget-sub">Set the conditioning effort's intensity and volume, choose how long to rest, then attempt. Land inside the window.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Conditioning intensity</span>
+        <select class="ch-widget-select" id="bal-int">
+          <option value="1">Moderate (~70%)</option>
+          <option value="2" selected>Heavy (~90%)</option>
+          <option value="3">Near-max single (~95%+)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Volume</span>
+        <select class="ch-widget-select" id="bal-vol">
+          <option value="1" selected>Low (1 rep)</option>
+          <option value="2">Moderate (3 reps)</option>
+          <option value="3">High (6+ reps)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Athlete</span>
+        <select class="ch-widget-select" id="bal-ath">
+          <option value="1">Newer trainee</option>
+          <option value="2" selected>Well-trained</option>
+          <option value="3">Very strong</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Rest before attempt</span>
+        <select class="ch-widget-select" id="bal-rest">
+          <option value="0.5">30 seconds</option>
+          <option value="2">2 minutes</option>
+          <option value="5" selected>5 minutes</option>
+          <option value="8">8 minutes</option>
+          <option value="12">12 minutes</option>
+          <option value="20">20 minutes</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Potentiation now</span>
+        <span class="ch-meter-bar"><span id="bal-pot" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bal-pot-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fatigue now</span>
+        <span class="ch-meter-bar"><span id="bal-fat" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bal-fat-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Net readiness</span>
+        <span class="ch-meter-bar"><span id="bal-net" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bal-net-n">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="bal-go">Take the attempt</button>
+    <p class="ch-widget-sub" id="bal-out" style="min-height:1.2em"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Working the cases</h2>
+    <p>The model above is only useful once you can run it against real situations rather than abstractions. Here are the cases most commonly encountered in practice, worked through the same lens each time.</p>
+
+    <h3>The heavy single before a jump</h3>
+    <p>High intensity paired with tiny volume is close to the ideal potentiation-to-fatigue ratio available. A well-trained jumper works up to a heavy squat or trap-bar single, then rests. Because the fatigue generated by a single repetition is small and clears quickly, the window opens early and cleanly. In practice, this typically looks like one near-maximal effort, then four to eight minutes of rest, then the jump attempt. A very strong athlete may tolerate a shorter rest interval, while an athlete whose single felt grindy and slow should be given more time before attempting, since a slow bar speed on the conditioning lift is itself a signal that fatigue is running higher than expected.</p>
+
+    <h3>The sprinter's rehearsal starts</h3>
+    <p>Here the conditioning effort is the movement pattern itself, simply ramped up in intensity. Progressive rehearsal starts warm the tissue through the temperature mechanisms already covered, rehearse the exact reflexive and feed-forward timing the event demands, and lightly potentiate the system through their own rising intensity. The fatigue cost of this approach is kept deliberately low. Nobody sprints themselves tired inside a warmup. The final rehearsal effort typically sits a few minutes before the actual race, run near race intensity but stopped well short of failure.</p>
+
+    <h3>Resistance priming hours before</h3>
+    <p>This case operates on a different timescale entirely and is worth separating cleanly from the minutes-based examples above. <span class="ch-key">Resistance priming</span> is a short, low-volume strength-power session performed hours before competition, sometimes the same morning as an evening event, intended to elevate neuromuscular performance for as long as forty-eight hours afterward (Harrison et al., 2019). The underlying mechanisms overlap with the ones already discussed, firing frequency, recruitment, and synchronization among them, but because the fatigue from this kind of session clears over hours rather than minutes, the resulting window is far wider and considerably more forgiving of imprecise timing. This is priming at the level of a training session, not the level of a warmup, and it functions as a bridge toward the longer-timescale view this course takes up next.</p>
+
+    <h3>The failure case: potentiation that becomes pre-fatigue</h3>
+    <p>The instructive failures in this area share a common signature: too much volume, too little rest, or the wrong athlete for the tool. Five hard repetitions followed immediately by a walk to the starting line. A newer athlete handed a "heavy single" that is genuinely maximal for them and destabilizing rather than activating. A coach who watched the heavy-single trick work once and concluded that heavier and more must therefore be better. In every one of these situations, the fatigue curve is still dominant at the moment of the attempt, and the athlete performs below where a plain, unremarkable warmup would have left them. Priming of this kind is not free readiness. It is borrowed readiness, and it comes with a repayment schedule that arrives whether or not the athlete is ready to pay it.</p>
+    <p>A related failure worth naming separately is what might be called the stacking error: an athlete who potentiates successfully once, on the first attempt of the day, and then repeats the identical conditioning effort before every subsequent attempt without adjusting anything. Fatigue accumulates across a session in a way potentiation does not reliably keep pace with, particularly if rest between attempts is compressed by a competition schedule or a crowded training group. A conditioning effort that opened a clean window on attempt one can leave an athlete net-fatigued by attempt four, even though nothing about the protocol itself changed. Reading the athlete's actual output across the session, not just trusting the protocol that worked earlier, is what catches this before it costs a result.</p>
+
+    <blockquote class="ch-quote">
+      <p>Warming-up is vital for optimum performance, but the risk of fatigue from excessive pre-exercise activity, and minimizing the gap between warm-up completion and performance, are as important as the warm-up itself.</p>
+      <cite>Bishop, 2003b</cite>
+    </blockquote>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Designing the sequence</h2>
+    <p>Put all of this together and a task-appropriate warmup reads as a progression of climbing specificity and intensity, with the potentiating effort, if one is used at all, placed so its window lands squarely on the actual attempt.</p>
+    <ol>
+      <li><strong>General raise (3 to 6 min).</strong> Elevate temperature and blood flow. This step is cheap and essentially always worth including.</li>
+      <li><strong>Mobilize and activate (2 to 5 min).</strong> Take the joints through range and wake the muscles that will carry the pattern. This step bridges the general work into the specific.</li>
+      <li><strong>Movement-specific rehearsal (progressive).</strong> Run the actual pattern at climbing intensity. This is where the coordination and reflex systems from earlier chapters get loaded and readied.</li>
+      <li><strong>Potentiating effort (optional, used only when the task is explosive and the athlete is well-trained).</strong> One high-intensity, low-volume conditioning effort, followed by rest that is deliberately spent waiting for the window to open.</li>
+      <li><strong>The attempt</strong>, placed at the peak of net readiness: warm, rehearsed, potentiated, and not fatigued.</li>
+    </ol>
+    <p>Two mismatches are responsible for sinking most otherwise-reasonable warmups. The first is a potentiating effort with no real rest built in afterward, so the athlete pays the fatigue cost in full and collects none of the potentiation on offer. The second is a warmup that never becomes specific at all: beautifully raised in temperature, thoroughly mobilized, but the actual motor program was never rehearsed, so the reflexive and feed-forward systems arrive at the task cold, having never been shown what is about to be asked of them. The builder below lets you construct both failures deliberately, and then correct them.</p>
+    <p>It is also worth planning for the practical reality that competition and training rarely hand an athlete a perfectly controlled clock. A meet can run behind schedule, a coach can be called to warm up a second athlete, a call room can hold a competitor far longer than anticipated. Building the sequence with an approximate hold point, a stage where the athlete can pause for several minutes without losing the general raise or the specific rehearsal, protects the plan from exactly this kind of disruption. The one component that tolerates almost no slack is the potentiating effort, precisely because its window is the narrowest of the four. If a schedule is unpredictable, it is often wiser to place the potentiating effort as late as realistically possible, or to skip it in favor of a slightly longer specific rehearsal, than to gamble on a window that a delay could close before the attempt arrives.</p>
+  </section>
+
+  <p>Use the tool below to build a four-block warmup for a given task, in whatever order you choose, and see how the sequence scores on neural readiness, specificity, and fatigue cost. Put the potentiating block in the wrong slot, or leave out rehearsal entirely, and the builder will flag exactly why the sequence underperforms.</p>
+
+  <div class="ch-widget" id="w-builder">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Warmup Builder</div>
+    </div>
+    <p class="ch-widget-sub">Choose a task, then order four blocks. The builder rates neural readiness, specificity, and fatigue cost, and flags mismatches.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Task</span>
+        <select class="ch-widget-select" id="bld-task">
+          <option value="explosive">Explosive (max vertical jump)</option>
+          <option value="sprint">Sprint start</option>
+          <option value="endurance">Endurance (5&nbsp;km time trial)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 1</span>
+        <select class="ch-widget-select bld-slot" id="bld-1">
+          <option value="raise">General raise</option>
+          <option value="mobility">Mobility / activation</option>
+          <option value="rehearsal">Movement-specific rehearsal</option>
+          <option value="potentiate">Potentiating effort + rest</option>
+          <option value="none">&mdash; empty &mdash;</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 2</span>
+        <select class="ch-widget-select bld-slot" id="bld-2">
+          <option value="raise">General raise</option>
+          <option value="mobility">Mobility / activation</option>
+          <option value="rehearsal">Movement-specific rehearsal</option>
+          <option value="potentiate">Potentiating effort + rest</option>
+          <option value="none">&mdash; empty &mdash;</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 3</span>
+        <select class="ch-widget-select bld-slot" id="bld-3">
+          <option value="raise">General raise</option>
+          <option value="mobility">Mobility / activation</option>
+          <option value="rehearsal">Movement-specific rehearsal</option>
+          <option value="potentiate">Potentiating effort + rest</option>
+          <option value="none">&mdash; empty &mdash;</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Slot 4</span>
+        <select class="ch-widget-select bld-slot" id="bld-4">
+          <option value="raise">General raise</option>
+          <option value="mobility">Mobility / activation</option>
+          <option value="rehearsal">Movement-specific rehearsal</option>
+          <option value="potentiate">Potentiating effort + rest</option>
+          <option value="none">&mdash; empty &mdash;</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Neural readiness</span>
+        <span class="ch-meter-bar"><span id="bld-neu" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bld-neu-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Specificity</span>
+        <span class="ch-meter-bar"><span id="bld-spec" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bld-spec-n">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fatigue cost</span>
+        <span class="ch-meter-bar"><span id="bld-fat" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bld-fat-n">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="bld-go">Rate this warmup</button>
+    <p class="ch-widget-sub" id="bld-out" style="min-height:1.2em"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Honest limits</h2>
+    <p>Two cautions keep everything in this chapter from hardening into dogma. First, the effect sizes involved are meaningful but genuinely modest, not the dramatic transformation a phrase like "unlock your potential" tends to imply. A meta-analysis by Seitz and Haff (2016) puts the pooled effect size (ES) at roughly 0.29 for jump performance, 0.26 for throwing performance, and 0.51 for sprint performance. Priming sharpens an athlete who is already well-prepared. It does not rescue one who is not, and no amount of clever timing substitutes for the years of training that make an athlete's tissue capable of potentiating strongly in the first place.</p>
+    <p>Second, individual variability here is large, larger than most of the tidy brackets in this chapter suggest at first glance. The rest and load ranges discussed above are population averages drawn from group data, and a specific athlete has a specific optimum that is found by testing across a season, not by looking a number up in a table and trusting it blindly. The model built across this chapter tells you which direction to move: more rest or less, heavier or lighter, more volume or none at all. Watching the actual output, bar speed on the conditioning lift, jump height on the attempt, reaction time off the blocks, tells you when the right combination for a particular athlete has actually been found.</p>
+    <p>A third, quieter limit deserves mention: most of the supporting research measures a single quality in a controlled setting, a jump, a sprint, a throw, immediately after a conditioning effort. Competition rarely isolates a single quality that cleanly. A jumper's actual event includes an approach run, a takeoff, and a landing under fatigue accumulated across several earlier attempts, not a single isolated vertical leap performed fresh in a laboratory. None of this invalidates the underlying mechanism, but it is a reminder that a technique validated in a tightly controlled study still has to be tested, adapted, and re-tested against the messier shape of a real event before it can be trusted there.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this chapter stops: priming advice versus individual judgment</h2>
+    <p>Before moving to the case that closes this chapter, it is worth naming the frame that governs everything in it, because it shapes what these pages are for and what they are deliberately not for. This chapter explains mechanisms so a learner can reason about priming and warmups with genuine understanding. It does not evaluate anyone's specific pain, injury history, or fitness to train, and it is not a substitute for judgment that belongs to a qualified professional.</p>
+    <p>That boundary is not paperwork bolted onto the science. It follows directly from what a conditioning effort actually is: a real physical stress applied to real tissue. A heavy near-maximal single is, by design, a demanding effort, and demanding efforts interact with old injuries, current pain, and individual circumstances in ways this chapter cannot see or account for. A learner who understands post-activation potentiation deeply is exactly the kind of learner who should recognize when a question has stopped being about general physiology and started being about a specific body, with a specific history, in front of a specific professional.</p>
+    <p>This matters more, not less, once a learner has absorbed the mechanism in this chapter, because a confident model of how something works is precisely what makes overreach feel justified. Understanding why intensity and rest interact the way they do does not qualify anyone to clear a person with a healing joint sprain for a near-maximal single, or to decide that a lingering ache is safe to load through because the physiology of potentiation sounds compelling. Mechanism explains what a healthy system does under a given stimulus. It says nothing about whether a particular system, on a particular day, is healthy enough to receive that stimulus in the first place. That second question is always a clinical one, not an educational one.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>Anton's situation is a useful illustration of why this boundary matters even in a topic as seemingly low-stakes as warmup design. Loading heavy conditioning efforts before every jump attempt is not a decision to make casually, particularly for a learner without a strength-training background, without supervision, and without a plan for how the body should respond to a genuinely heavy near-maximal load. The physiology in this chapter explains why his approach was probably backfiring on the fatigue-versus-potentiation math. It does not, and should not, stand in for an assessment of whether that loading was appropriate for his body in the first place. That assessment belongs to a qualified coach or clinician working with him directly, not to a chapter in a course.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner reads this chapter and wants to know exactly how heavy a conditioning effort should be and exactly how many minutes to rest, as a single fixed personal number. What does an educated, evidence-based, non-prescriptive answer to that question sound like, and, just as importantly, where does it stop?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Anton and the squat he added before every jump</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Anton is 29, a recreational long jumper training three sessions a week at a local club, with roughly a year of consistent strength training behind him. He found a video explaining post-activation potentiation, understood the basic idea correctly, heavy effort now, better jump soon after, and decided to apply it aggressively. Before every jump attempt at practice, he began loading three sets of heavy back squat triples about ninety seconds before running down the runway. His best jump distance dropped over the following month, and he could not understand why a technique described as a performance booster seemed to be working in reverse.</p>
+    </aside>
+    <p>Run Anton's plan through the fatigue-versus-potentiation model and the problem becomes clear almost immediately, not as a mystery but as an entirely predictable outcome of the dosing he chose. Start with the conditioning effort itself: three sets of triples is a meaningful volume of heavy work, not the single, tiny-volume effort that produces the favorable ratio of potentiation to fatigue described earlier in this chapter. Volume is exactly the variable that drives fatigue rather than potentiation (Tillin &amp; Bishop, 2009; Seitz &amp; Haff, 2016), and Anton had unknowingly maximized the fatigue side of the ledger while assuming he was maximizing the potentiation side.</p>
+    <p>Now consider the rest interval, or rather the near absence of one. Ninety seconds sits close to the very short end of anything reported in the literature as producing a useful window, and it falls well inside the period where fatigue from a genuinely heavy set is still dominant (Seitz &amp; Haff, 2016; Wilson et al., 2013). At ninety seconds after three sets of heavy triples, Anton was not attempting inside the enhancement window described earlier in this chapter. He was attempting on top of largely unresolved fatigue, which is precisely the failure case worked through above.</p>
+    <p>Finally, consider Anton himself as an athlete. With roughly a year of structured strength training, he sits closer to the newer-trainee end of the training-status spectrum than to the well-trained end that potentiates strongly and fatigues comparatively little (Seitz &amp; Haff, 2016; Wilson et al., 2013; Sale, 2002). For an athlete at his stage, an aggressive heavy-conditioning protocol was always likely to tip the fatigue-potentiation balance further toward fatigue than it would for a decade-trained lifter attempting the identical sets.</p>
+    <p>None of this settles whether Anton should be squatting heavy at all, whether his particular body was ready for that loading, or whether some other factor entirely was contributing to his declining jump distances. Those are exactly the kinds of questions that belong with a coach who can watch him move and, where relevant, a clinician who can evaluate him directly, not with a chapter explaining a general mechanism. What this chapter can offer Anton is a clear account of why his specific implementation of a genuinely real phenomenon was working against him: too much volume, too little rest, and a training background not yet suited to the aggressive version of the tool he chose. Adjusted toward a single heavy effort and a rest interval closer to four to eight minutes, the same underlying idea he found in that video might do exactly what it promised. The idea was not wrong. The dosing was.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A pre-performance sequence has two jobs: raise general readiness (temperature, conduction, arousal) and raise specific readiness (rehearse the pattern, optionally potentiate) without arriving at the attempt fatigued.</li>
+      <li>Post-activation potentiation (PAP) is a transient rise in contractile performance after a hard prior contraction. Classic PAP, driven by light-chain phosphorylation, has a half-life of roughly twenty-eight seconds, but the practically useful minutes-long enhancement, called post-activation performance enhancement (PAPE), runs largely on neural drive: recruitment, firing frequency, and synchronization.</li>
+      <li>Potentiation and fatigue are two decaying curves triggered by the same conditioning effort. Net readiness is their difference, and the above-baseline window is where an attempt should land.</li>
+      <li>Intensity buys potentiation; volume mostly buys fatigue. Favor a high-intensity, low-volume conditioning effort. The heavy single is the archetype for good reason.</li>
+      <li>Rest is the timing dial: roughly three to twelve minutes for most trained athletes, with heavier or higher-volume conditioning generally needing longer. Too short means pre-fatigue; too long means the potentiation has already faded.</li>
+      <li>Stronger, more resistance-trained athletes potentiate more and fatigue less from an identical conditioning effort. Priming through a heavy conditioning effort is a tool best matched to an already well-trained system.</li>
+      <li>Effect sizes are real but modest, and individual variability is large. The model gives direction; measured output, such as bar speed or jump height, gives the actual answer for a specific athlete.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter worked at the timescale of minutes, the state that can be deliberately shifted in the moments right before performance. The next chapter zooms all the way out to the timescale of weeks and months, examining how training is programmed across a full cycle so the ceiling a learner is priming toward is itself climbing over time. Session-level readiness meets long-term adaptation, and the two turn out to follow many of the same underlying rules.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bishop, D. (2003a). Warm up I: Potential mechanisms and the effects of passive warm up on exercise performance. <em>Sports Medicine, 33</em>(6), 439-454. https://doi.org/10.2165/00007256-200333060-00005</p>
+    <p>Bishop, D. (2003b). Warm up II: Performance changes following active warm up and how to structure the warm up. <em>Sports Medicine, 33</em>(7), 483-498. https://doi.org/10.2165/00007256-200333070-00005</p>
+    <p>Blazevich, A. J., &amp; Babault, N. (2019). Post-activation potentiation versus post-activation performance enhancement in humans: Historical perspective, underlying mechanisms, and current issues. <em>Frontiers in Physiology, 10</em>, 1359. https://doi.org/10.3389/fphys.2019.01359</p>
+    <p>Fradkin, A. J., Zazryn, T. R., &amp; Smoliga, J. M. (2010). Effects of warming-up on physical performance: A systematic review with meta-analysis. <em>Journal of Strength and Conditioning Research, 24</em>(1), 140-148. https://doi.org/10.1519/JSC.0b013e3181c643a0</p>
+    <p>Harrison, P. W., James, L. P., McGuigan, M. R., Jenkins, D. G., &amp; Kelly, V. G. (2019). Resistance priming to enhance neuromuscular performance in sport: Evidence, potential mechanisms and directions for future research. <em>Sports Medicine, 49</em>(10), 1499-1514. https://doi.org/10.1007/s40279-019-01136-3</p>
+    <p>McGowan, C. J., Pyne, D. B., Thompson, K. G., &amp; Rattray, B. (2015). Warm-up strategies for sport and exercise: Mechanisms and applications. <em>Sports Medicine, 45</em>(11), 1523-1546. https://doi.org/10.1007/s40279-015-0376-x</p>
+    <p>Sale, D. G. (2002). Postactivation potentiation: Role in human performance. <em>Exercise and Sport Sciences Reviews, 30</em>(3), 138-143. https://doi.org/10.1097/00003677-200207000-00008</p>
+    <p>Seitz, L. B., &amp; Haff, G. G. (2016). Factors modulating post-activation potentiation of jump, sprint, throw, and upper-body ballistic performances: A systematic review with meta-analysis. <em>Sports Medicine, 46</em>(2), 231-240. https://doi.org/10.1007/s40279-015-0415-7</p>
+    <p>Tillin, N. A., &amp; Bishop, D. (2009). Factors modulating post-activation potentiation and its effect on performance of subsequent explosive activities. <em>Sports Medicine, 39</em>(2), 147-166. https://doi.org/10.2165/00007256-200939020-00004</p>
+    <p>Wilson, J. M., Duncan, N. M., Marin, P. J., Brown, L. E., Loenneke, J. P., Wilson, S. M. C., Jo, E., Lowery, R. P., &amp; Ugrinowitsch, C. (2013). Meta-analysis of postactivation potentiation and power: Effects of conditioning activity, volume, gender, rest periods, and training status. <em>Journal of Strength and Conditioning Research, 27</em>(3), 854-859. https://doi.org/10.1519/JSC.0b013e31825c2bdb</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 8 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-balancer');
+    if(!root) return;
+    var intEl = root.querySelector('#bal-int');
+    var volEl = root.querySelector('#bal-vol');
+    var athEl = root.querySelector('#bal-ath');
+    var restEl = root.querySelector('#bal-rest');
+    var potBar = root.querySelector('#bal-pot');
+    var fatBar = root.querySelector('#bal-fat');
+    var netBar = root.querySelector('#bal-net');
+    var potN = root.querySelector('#bal-pot-n');
+    var fatN = root.querySelector('#bal-fat-n');
+    var netN = root.querySelector('#bal-net-n');
+    var out = root.querySelector('#bal-out');
+
+    function compute(){
+      var intensity = parseFloat(intEl.value); // 1..3
+      var volume = parseFloat(volEl.value);    // 1..3
+      var ath = parseFloat(athEl.value);       // 1..3
+      var t = parseFloat(restEl.value);        // minutes
+
+      // Peak potentiation magnitude: intensity drives it, athlete amplifies it.
+      var potPeak = (0.35 + 0.22*intensity) * (0.7 + 0.2*ath);
+      // Potentiation decays slowly (time constant ~ 9 min), rises fast.
+      var potDecay = Math.exp(-t/9);
+      var pot = potPeak * potDecay;
+
+      // Fatigue magnitude: volume + intensity drive it, stronger athletes resist.
+      var fatPeak = (0.25*intensity + 0.5*volume) * (1.3 - 0.15*ath);
+      // Fatigue clears faster (time constant ~ 3.5 min).
+      var fatDecay = Math.exp(-t/3.5);
+      var fat = fatPeak * fatDecay;
+
+      var net = pot - fat; // net readiness relative to baseline
+
+      // Scale to 0..100 display
+      var potPct = Math.max(0, Math.min(100, pot*70));
+      var fatPct = Math.max(0, Math.min(100, fat*55));
+      // net centered at 50 = baseline
+      var netPct = Math.max(0, Math.min(100, 50 + net*90));
+
+      potBar.style.width = potPct.toFixed(0)+'%';
+      fatBar.style.width = fatPct.toFixed(0)+'%';
+      netBar.style.width = netPct.toFixed(0)+'%';
+      potN.textContent = (pot*100).toFixed(0);
+      fatN.textContent = (fat*100).toFixed(0);
+      netN.textContent = (net>=0?'+':'')+(net*100).toFixed(0);
+      return {pot:pot, fat:fat, net:net, t:t, volume:volume, ath:ath, intensity:intensity};
+    }
+
+    function attempt(){
+      var s = compute();
+      var msg;
+      if(s.net > 0.18){
+        msg = '★ Enhanced. You landed inside the window, potentiation is outrunning residual fatigue. This is what priming feels like when the dose and rest match.';
+      } else if(s.net > 0.05){
+        msg = 'Modestly enhanced. You are above baseline but not at the peak. Nudge the rest interval toward the window, or match the load to the athlete better.';
+      } else if(s.net > -0.05){
+        msg = 'Roughly neutral, you performed about where a plain warmup would leave you. The conditioning effort neither helped nor hurt. Check timing and volume.';
+      } else {
+        if(s.fat > s.pot && s.t < 3){
+          msg = '✗ Pre-fatigued. You attempted on top of unresolved fatigue. Rest longer, or drop the volume.';
+        } else if(s.t > 14){
+          msg = '✗ Window closed. You rested so long the potentiation faded, you are just warm now. Attempt earlier.';
+        } else {
+          msg = '✗ Below baseline. For this athlete and dose the fatigue dominated. Lower volume, raise intensity-to-volume ratio, or match the tool to a stronger athlete.';
+        }
+      }
+      out.textContent = msg;
+    }
+
+    [intEl,volEl,athEl,restEl].forEach(function(el){ el.addEventListener('change', compute); });
+    root.querySelector('#bal-go').addEventListener('click', attempt);
+    compute();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-builder');
+    if(!root) return;
+    var taskEl = root.querySelector('#bld-task');
+    var slots = [root.querySelector('#bld-1'),root.querySelector('#bld-2'),root.querySelector('#bld-3'),root.querySelector('#bld-4')];
+    var neuBar = root.querySelector('#bld-neu');
+    var specBar = root.querySelector('#bld-spec');
+    var fatBar = root.querySelector('#bld-fat');
+    var neuN = root.querySelector('#bld-neu-n');
+    var specN = root.querySelector('#bld-spec-n');
+    var fatN = root.querySelector('#bld-fat-n');
+    var out = root.querySelector('#bld-out');
+
+    function rate(){
+      var seq = slots.map(function(s){return s.value;});
+      var task = taskEl.value;
+      var neu=0, spec=0, fat=0;
+      var notes=[];
+
+      var idxPot=-1, idxReh=-1, idxRaise=-1;
+      seq.forEach(function(v,i){
+        if(v==='potentiate') idxPot=i;
+        if(v==='rehearsal') idxReh=i;
+        if(v==='raise' && idxRaise<0) idxRaise=i;
+      });
+
+      seq.forEach(function(v){
+        if(v==='raise'){ neu+=12; spec+=4; fat+=6; }
+        else if(v==='mobility'){ neu+=8; spec+=10; fat+=4; }
+        else if(v==='rehearsal'){ neu+=18; spec+=30; fat+=8; }
+        else if(v==='potentiate'){ neu+=32; spec+=14; fat+=30; }
+      });
+
+      // ordering: raise should come early
+      if(idxRaise>1) notes.push('General raise sits late, warm the system first.');
+      // potentiator should be last or near-last (rest lands on the attempt)
+      if(idxPot>-1 && idxPot < idxReh) notes.push('Potentiator before rehearsal, put the potentiating effort near the end so its window lands on the attempt.');
+
+      // task fit
+      if(task==='endurance'){
+        if(idxPot>-1){ fat+=15; neu-=10; notes.push('A heavy potentiator adds fatigue with little payoff for an endurance task, this is not an explosive event.'); }
+      } else { // explosive / sprint
+        if(idxPot<0) notes.push('No potentiating effort, fine, but an explosive task can gain from one high-intensity, low-volume effort placed last.');
+        if(idxReh<0) { spec-=20; notes.push('No movement-specific rehearsal, the pattern and its reflexive timing arrive cold.'); }
+      }
+
+      // potentiator with nothing after / no rest concept handled implicitly: if pot is not last slot AND something heavy follows
+      if(idxPot>-1 && idxPot<3 && seq[idxPot+1]!=='none' ){
+        // ok if what follows is the attempt; but if rehearsal follows, flagged above
+      }
+
+      neu=Math.max(0,Math.min(100,neu));
+      spec=Math.max(0,Math.min(100,spec));
+      fat=Math.max(0,Math.min(100,fat));
+
+      neuBar.style.width=neu+'%'; specBar.style.width=spec+'%'; fatBar.style.width=fat+'%';
+      neuN.textContent=neu; specN.textContent=spec; fatN.textContent=fat;
+
+      var verdict;
+      var good = (spec>=40 && neu>=45 && fat<=70);
+      if(task==='endurance') good = (spec>=35 && neu>=35 && fat<=45);
+
+      if(notes.length===0 && good){
+        verdict='★ Task-appropriate. Specificity and readiness are high and fatigue is controlled, this sequence would arrive sharp.';
+      } else if(good && notes.length){
+        verdict='Solid, with fixes: '+notes.join(' ');
+      } else {
+        verdict='Needs work. '+ (notes.length? notes.join(' ') : 'Balance readiness and specificity against fatigue cost for this task.');
+      }
+      out.textContent=verdict;
+    }
+
+    slots.forEach(function(s){ s.addEventListener('change', rate); });
+    taskEl.addEventListener('change', rate);
+    root.querySelector('#bld-go').addEventListener('click', rate);
+    // sensible default
+    slots[0].value='raise'; slots[1].value='mobility'; slots[2].value='rehearsal'; slots[3].value='potentiate';
+    rate();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

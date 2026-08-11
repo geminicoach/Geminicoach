@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tired Brain or Tired Muscle?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 7 &middot; Module 3</div>
+    <h1 class="ch-title">Tired Brain or Tired <em>Muscle?</em></h1>
+    <p class="ch-subtitle">Localizing where performance breaks down, and why the answer changes the whole recovery decision.</p>
+    <div class="ch-meta">
+      <span>65 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>9 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ou set up for a heavy single. The first five attempts of the session moved the way they were supposed to. This one does not. The bar stalls halfway up, feels like it gained fifty pounds since the last rep, and you rack it, frustrated and a little confused. Here is the question that actually matters, the one that decides everything you do for the rest of the week: did the muscle run out of force to give, or did the nervous system simply stop asking for it?</p>
+    <p>From the inside, those two failures feel almost identical. A stalled bar is a stalled bar. But they are not the same event, they do not resolve on the same clock, and they do not respond to the same fix. Confuse them and the mistakes compound in both directions: a learner who deloads when the real problem was a single rough night of sleep loses training time for nothing, while a learner who grinds through a genuinely fatigued muscle because they assume it is just in their head can turn ordinary fatigue into an injury. This chapter builds a working model for telling the two apart, not in a research laboratory with wires taped to your leg, but on an ordinary training day, with only the evidence an attentive learner can actually gather.</p>
+    <p>Throughout this chapter you will follow one learner, Bree, a 29-year-old who splits her training time between a barbell program and a first attempt at a half-marathon, on top of a job that regularly runs her ragged before she ever gets to the gym. Bree found two very confident, very opposite communities online. One insisted that any stalled lift or flat run meant her central nervous system, the brain-and-spinal-cord half of the equation, was fried and she needed a full week off. The other insisted that fatigue is mostly a story you tell yourself and that a tough set just means you need to want it more. Bree spent a month oscillating between the two, deloading after sessions that turned out to be ordinary local muscle fatigue from a hard leg day, then grinding through a heavy single that, in hindsight, was exactly the kind of central shortfall a short break would have fixed in minutes. Bree is not a patient and not a case to be diagnosed. She is a stand-in for an extremely common confusion, and by the end of this chapter you will be equipped to sort through her sessions more carefully than either online camp ever did.</p>
+    <p>Notice what both of Bree's online communities had in common, even while disagreeing about everything else. Neither one asked where, specifically, the failure had occurred. One camp jumped straight to a scary-sounding label for the nervous system, the other jumped straight to a moral judgment about willpower, and both skipped the actual diagnostic work in between. That skipped step, figuring out whether a given failure sits upstream in the command or downstream in the tissue, is the entire subject of this chapter. It is not a minor technicality. It is the difference between resting the right system and resting the wrong one, and between calling something a problem that will resolve by Thursday and something that needs a genuinely different plan.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Two places a rep can die</h2>
+    <p>Everything built in the earlier chapters, recruitment order, rate coding, the signal traveling from cortex to motoneuron to muscle fiber, now becomes a diagnostic map. Fatigue is not one event happening in one location. It is, most generally, a reduction in the capacity to produce force or power, and that reduction can originate almost anywhere along the chain that starts in the brain and ends in a sarcomere (Enoka &amp; Duchateau, 2008). For practical purposes this chapter splits the chain at one clean joint: the neuromuscular junction, the connection where a nerve fiber hands its signal to a muscle fiber. Everything upstream of that junction, the cortex, the spinal cord, the motoneuron itself, is the nervous system's territory. Everything at and inside the muscle fiber is the muscle's territory.</p>
+    <p><span class="ch-key">Peripheral fatigue</span> is a failure at or below the muscle. The contractile machinery can no longer convert an adequate command into the same amount of force. The signal arrives essentially intact, but the fiber cannot answer it fully. Metabolite buildup, impaired handling of the calcium that triggers contraction, and a degraded electrical signal spreading across the muscle membrane all live here (Martinez-Navarro et al., 2022). The defining feature of peripheral fatigue is this: even a perfect, maximal command delivered flawlessly would not bring the force back, because the problem sits downstream of the command itself.</p>
+    <p><span class="ch-key">Central fatigue</span> is a reduction in the drive the nervous system actually sends. The muscle still has force sitting in reserve, but the outgoing command has shrunk: fewer motor units recruited, lower firing rates, a smaller output from the motor cortex for the same intended effort (Gandevia, 2001). The defining feature of central fatigue is the mirror image of the peripheral case: the muscle could do more, if only the command asking it to do so were bigger. That is the counterintuitive part worth sitting with. Central fatigue means there is unused capacity parked just out of reach, not gone, just untapped.</p>
+    <p>It helps to be honest about the limits of this two-part split before leaning on it. Real fatigue rarely respects a clean boundary, and the neuromuscular junction itself can, under extreme conditions, become a genuine bottleneck of its own, muddying the line between upstream and downstream. This chapter treats central versus peripheral as a working model, a deliberately simplified map good enough to guide a real decision on a real training day, not a courtroom-grade partition of the nervous system. That is precisely the same posture this course has taken toward every other model so far, from recruitment order to rate coding: useful, testable, and always provisional against better evidence. Held that way, the split earns its keep even though the underlying biology is messier than any two labeled circles could ever fully capture.</p>
+    <div class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Two places a rep can fail, central and peripheral" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>Two places a rep can fail</title>
+<rect x="1" y="1" width="638" height="298" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="32" fill="#aab8d2" font-size="12.5" letter-spacing="1.3">ONE COMMAND, ONE CHAIN, TWO PLACES IT CAN FAIL</text>
+<line x1="70" y1="150" x2="570" y2="150" stroke="#3a5578" stroke-width="2"/>
+<circle cx="95" cy="150" r="30" fill="#12314f" stroke="#5aaff5" stroke-width="2.2"/>
+<text x="95" y="146" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">Motor</text>
+<text x="95" y="158" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">cortex</text>
+<circle cx="230" cy="150" r="30" fill="#12314f" stroke="#5aaff5" stroke-width="2.2"/>
+<text x="230" y="146" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">Spinal</text>
+<text x="230" y="158" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">motoneuron</text>
+<circle cx="365" cy="150" r="30" fill="#2a1f16" stroke="#e0873a" stroke-width="2.2"/>
+<text x="365" y="146" fill="#e8edf5" font-size="10.5" text-anchor="middle" font-weight="700">Neuromuscular</text>
+<text x="365" y="158" fill="#e8edf5" font-size="10.5" text-anchor="middle" font-weight="700">junction</text>
+<circle cx="500" cy="150" r="30" fill="#2a1f16" stroke="#e0873a" stroke-width="2.2"/>
+<text x="500" y="146" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">Muscle</text>
+<text x="500" y="158" fill="#e8edf5" font-size="11" text-anchor="middle" font-weight="700">fiber</text>
+<path d="M110 100 C 160 78, 200 78, 250 100" fill="none" stroke="#5aaff5" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="162" y="72" fill="#5aaff5" font-size="12" font-weight="700" text-anchor="middle">CENTRAL</text>
+<path d="M350 210 C 400 232, 450 232, 500 210" fill="none" stroke="#e0873a" stroke-width="2" stroke-dasharray="4 3"/>
+<text x="425" y="252" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">PERIPHERAL</text>
+<text x="320" y="284" fill="#7f8fab" font-size="10.5" text-anchor="middle">Upstream of the junction, it is a drive problem. At and inside the fiber, it is a tissue problem.</text>
+</svg>
+      </div>
+      <div class="ch-figure-caption"><span class="ch-fig-num">Fig. 1</span> Two places the same rep can fail. Central fatigue lives upstream of the neuromuscular junction, in the brain and spinal cord. Peripheral fatigue lives at and inside the muscle fiber itself.</div>
+    </div>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: if a learner's best lift dropped fifteen percent today, what single piece of evidence would tell you the muscle itself is genuinely weaker, as opposed to the command to that muscle simply being smaller? Hold your answer. The idea in the next section is exactly that piece of evidence.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Voluntary activation and the interpolated twitch technique</h2>
+    <p>You will not need to run this test yourself to use its logic, but understanding it anchors everything that follows. The reference method researchers use to ask, is there reserve force this person is not using, is a procedure built around <span class="ch-key">voluntary activation</span>, and the tool most commonly used to measure it is the <span class="ch-key">interpolated twitch technique</span> (Shield &amp; Zhou, 2004). The idea is simpler than the name suggests.</p>
+    <p>Ask someone to produce a <span class="ch-key">maximal voluntary contraction</span>, an all-out effort against a fixed resistance. While that person is pushing as hard as they consciously can, deliver a brief external electrical stimulus to the muscle or the nerve feeding it, a jolt that bypasses the brain entirely and forces the muscle fibers to fire directly. If the person were truly, completely activating every available motor unit, that extra jolt would add nothing. There would be no spare units left to switch on and no headroom in firing rate to exploit. The force output would not move. But if the stimulus produces a visible bump in force, called a <span class="ch-key">superimposed twitch</span>, then that extra force was sitting there the whole time. The nervous system simply was not calling on it.</p>
+    <p>The size of that bump is the measure of voluntary activation. A small or absent twitch means activation is close to complete, the drive is close to maxed out, and so any force lost from a fresh baseline has to be peripheral, because there is essentially no reserve left to blame. A large twitch means activation is incomplete, meaning central fatigue is holding real force in reserve. Gandevia's landmark review (2001) makes an uncomfortable point worth sitting with: voluntary activation is frequently below one hundred percent even in efforts a person swears, in good faith, were maximal. The reserve is real and it shows up more often than intuition would suggest.</p>
+    <p>You will almost never wheel electrical stimulation equipment onto a training floor. But the underlying question, is there force here that the outgoing command is not reaching, is exactly the question the practical field markers later in this chapter try to answer without any hardware at all. Every signature described from here forward is, in essence, a cheap proxy for the interpolated twitch technique.</p>
+    <p>One more detail worth knowing, because it explains why this reserve is so easy to underestimate: it is not evenly distributed across the body. Research using this technique has repeatedly found that some muscle groups, the quadriceps being a frequently cited example, tend to show larger and more persistent gaps between stimulated and voluntary force than others, such as the muscles that flex the elbow (Gandevia, 2001). A learner's own intuition about how close to their true ceiling a given effort felt is built from experience with whichever muscles they have trained most, and that intuition does not transfer cleanly from one muscle group to another. The honest takeaway is not that any single number applies everywhere. It is that unused reserve is a real and common feature of ordinary human effort, more common in some muscles than others, and rarely as small as maximal effort feels from the inside.</p>
+  </section>
+
+  <div class="ch-widget" id="w-localizer">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Fatigue Localizer</div>
+    </div>
+    <p class="ch-widget-sub">Set a scenario's true central and peripheral fatigue, run a voluntary-activation style test, and read where the force is actually being lost.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">True central fatigue (reduced drive)</span>
+        <select class="ch-widget-select" id="loc-central">
+          <option value="0">None, full drive</option>
+          <option value="15">Mild</option>
+          <option value="30" selected>Moderate</option>
+          <option value="45">Heavy</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">True peripheral fatigue (muscle weaker)</span>
+        <select class="ch-widget-select" id="loc-periph">
+          <option value="0">None, fresh fiber</option>
+          <option value="15">Mild</option>
+          <option value="30" selected>Moderate</option>
+          <option value="45">Heavy</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Voluntary force (% of fresh)</span>
+        <span class="ch-meter-bar"><span id="loc-vol-bar" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="loc-vol-num">40</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Stimulated force available</span>
+        <span class="ch-meter-bar"><span id="loc-stim-bar" style="width:70%"></span></span>
+        <span class="ch-meter-num" id="loc-stim-num">70</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Superimposed twitch (the gap)</span>
+        <span class="ch-meter-bar"><span id="loc-gap-bar" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="loc-gap-num">30</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="loc-run">Run the test and interpret</button>
+    <p class="ch-widget-sub" id="loc-verdict" style="margin-top:0.75rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Why maximal and skilled efforts are the most vulnerable</h2>
+    <p>Central limits do not strike every task with equal force. They land hardest exactly where a learner would least want them: at the top of the intensity range and in the most technical work. The reason traces directly back to how force is actually graded.</p>
+
+    <h3>Recruitment and rate coding leave no margin at maximum</h3>
+    <p>Recall that force is graded two ways: recruiting more motor units, and driving the already-recruited units to fire faster, a process called rate coding. A true maximal effort demands both pushed to their ceiling at the same time, every available high-threshold unit switched on and firing near its top rate. That is a fragile, nearly all-or-nothing state. Any shortfall in central drive, even a slightly lower firing rate or a handful of high-threshold units left un-recruited, subtracts directly from peak force with nowhere to hide. At submaximal loads there is slack: the nervous system can quietly compensate for a small dip in drive by reaching into unrecruited units held in reserve. At true maximum there is no slack left to spend. This is why a learner who can still grind out solid volume at seventy percent of a max suddenly cannot budge a heavy single. The central shortfall that stays invisible at submaximal loads becomes decisive the moment the ceiling is tested (Shield &amp; Zhou, 2004).</p>
+
+    <h3>Skilled work spends a separate budget</h3>
+    <p>Novel, highly technical, or precision-demanding work fatigues the system in a different currency than steady grinding does. Coordinating a complex movement, sequencing muscles correctly, inhibiting the wrong ones, correcting error on the fly, is a heavy cortical demand that never shows up as a metabolite in the working muscle. A learner can walk away from a technical session feeling completely wrung out with muscles that were barely taxed. That is central fatigue wearing a cognitive disguise, and it draws from the same account that ordinary mental work spends down, a connection this chapter returns to shortly.</p>
+    <p>Pacing sports make the same point from a different angle. A runner holding a demanding but sustainable pace is not simply managing peripheral fuel and heat. A meaningful share of that effort is continuous, moment-to-moment regulation, monitoring internal signals, adjusting stride, deciding whether the current pace is sustainable to the finish, all of it cortical work layered on top of the muscular work. That is one reason a monotonous, understimulating long effort can feel disproportionately draining even when the physical output is modest: the regulatory overhead itself is a real cost, paid continuously, whether or not the legs are the limiting factor that day.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner nails five clean reps of an unfamiliar barbell movement, and the sixth falls apart technically, bar path drifts, timing slips, even though breathing is easy and the weight itself is light. Central or peripheral? What is the budget that just ran out?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Effort is a perception, and the brain sets the price</h2>
+    <p>This is where the model becomes genuinely useful for making sense of a bad session. <span class="ch-key">Perception of effort</span>, how hard something feels, is not a direct readout of what is happening inside the muscle. It is generated centrally, built from a copy of the outgoing motor command called the <span class="ch-key">corollary discharge</span>, which the brain reads to estimate how hard it is currently trying (Pageaux &amp; Lepers, 2016). Effort perception tracks the size of the command, not the condition of the tissue receiving it.</p>
+    <p>The supporting evidence is striking. When researchers pharmacologically block the sensory nerves that carry information back from the muscle, cutting the muscle's ability to report its own state to the brain, the perception of effort is essentially unchanged (Pageaux &amp; Lepers, 2016). Effort does not need the muscle to check in at all. It is manufactured entirely from the outgoing side of the loop. And here is the part with real practical weight: when a person is already fatigued, producing the same output force requires a larger cortical command, more units, more drive, to compensate for whatever is already failing elsewhere. A larger outgoing command means a larger corollary discharge, which means the exact same task feels harder, even when the measured output has not changed at all.</p>
+    <p>Marcora and colleagues (2009) delivered the cleanest demonstration of this available. Sixteen subjects cycled to exhaustion on two separate occasions, once after ninety minutes of demanding cognitive work and once after ninety minutes of watching neutral documentary footage. The mentally fatigued condition cut time to exhaustion by roughly fifteen percent, with no measured difference in heart rate, blood lactate, or any peripheral neuromuscular marker. The muscles were, by every available measure, identical between conditions. The only thing that had changed was that everything felt harder from the very first pedal stroke. Perceived effort climbed faster, subjects reached their personal ceiling of tolerable effort sooner, and they stopped. Mental fatigue impaired physical performance through perception alone, with no muscular explanation required.</p>
+    <p>This is also the mechanism behind a familiar training-log mystery: the same weight, the same reps, logged as noticeably harder on one day than another, with no obvious difference in soreness or sleep debt to blame. A learner tracking effort ratings alongside load has, without necessarily realizing it, been recording a rough readout of corollary discharge all along. A rating that drifts upward while the load on the bar stays flat is worth taking seriously as data in its own right, not dismissed as simply having an off day. It is one of the more accessible, low-cost signals a learner has for tracking central load across a training block, precisely because it does not require any equipment beyond an honest number written down after each session.</p>
+    <div class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The corollary discharge loop behind perceived effort" style="position:relative;display:block;width:100%;height:auto;font-family:'IBM Plex Sans',system-ui,sans-serif;">
+<title>The corollary discharge loop</title>
+<rect x="1" y="1" width="638" height="298" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="32" fill="#aab8d2" font-size="12.5" letter-spacing="1.3">WHERE PERCEIVED EFFORT ACTUALLY COMES FROM</text>
+<rect x="40" y="120" width="150" height="62" rx="9" fill="#12314f" stroke="#5aaff5" stroke-width="2"/>
+<text x="115" y="146" fill="#e8edf5" font-size="12.5" font-weight="700" text-anchor="middle">Motor cortex</text>
+<text x="115" y="164" fill="#aab8d2" font-size="10" text-anchor="middle">issues the command</text>
+<path d="M190 135 C 260 110, 320 108, 380 128" fill="none" stroke="#5aaff5" stroke-width="2.2"/>
+<polygon points="380,128 370,122 371,134" fill="#5aaff5"/>
+<text x="285" y="102" fill="#5aaff5" font-size="10.5" text-anchor="middle">copy: corollary discharge</text>
+<rect x="384" y="98" width="200" height="60" rx="9" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="484" y="122" fill="#e8edf5" font-size="12" font-weight="700" text-anchor="middle">Effort-perception areas</text>
+<text x="484" y="140" fill="#aab8d2" font-size="10" text-anchor="middle">read command size, not tissue</text>
+<path d="M190 165 C 260 190, 320 192, 380 172" fill="none" stroke="#e0873a" stroke-width="2.2"/>
+<polygon points="380,172 370,166 372,178" fill="#e0873a"/>
+<rect x="384" y="172" width="200" height="60" rx="9" fill="#2a1f16" stroke="#e0873a" stroke-width="1.6"/>
+<text x="484" y="196" fill="#e8edf5" font-size="12" font-weight="700" text-anchor="middle">Working muscle</text>
+<text x="484" y="214" fill="#cdd8ea" font-size="10" text-anchor="middle">executes the command</text>
+<text x="320" y="266" fill="#7f8fab" font-size="10.5" text-anchor="middle">A bigger command, needed when tissue is already tired, means a bigger copy, which reads as more effort.</text>
+</svg>
+      </div>
+      <div class="ch-figure-caption"><span class="ch-fig-num">Fig. 2</span> Perceived effort is read from a copy of the outgoing motor command, the corollary discharge, not from a report sent back by the muscle. That is why effort can spike while the muscle itself has barely changed.</div>
+    </div>
+  </section>
+
+  <div class="ch-widget" id="w-dial">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Effort Perception Dial</div>
+    </div>
+    <p class="ch-widget-sub">Drive the inputs the nervous system actually reads, and watch perceived effort and drive diverge from actual muscular capacity.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sleep last night</span>
+        <select class="ch-widget-select" id="dial-sleep">
+          <option value="0">Full, rested</option>
+          <option value="1" selected>A bit short</option>
+          <option value="2">Poor</option>
+          <option value="3">Wrecked</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Prior mental load</span>
+        <select class="ch-widget-select" id="dial-mental">
+          <option value="0">Calm day</option>
+          <option value="1" selected>Normal</option>
+          <option value="2">Heavy cognitive work</option>
+          <option value="3">Draining, high stakes</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Motivation and arousal</span>
+        <select class="ch-widget-select" id="dial-motiv">
+          <option value="0">Fired up</option>
+          <option value="1" selected>Neutral</option>
+          <option value="2">Flat</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Accumulated work today</span>
+        <select class="ch-widget-select" id="dial-work">
+          <option value="0">Just started</option>
+          <option value="1" selected>Mid-session</option>
+          <option value="2">Deep into it</option>
+          <option value="3">Long grind</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Actual muscular capacity remaining</span>
+        <span class="ch-meter-bar"><span id="dial-cap-bar" style="width:80%"></span></span>
+        <span class="ch-meter-num" id="dial-cap-num">80</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Perceived effort (same force target)</span>
+        <span class="ch-meter-bar"><span id="dial-eff-bar" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="dial-eff-num">40</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Available voluntary drive</span>
+        <span class="ch-meter-bar"><span id="dial-drv-bar" style="width:85%"></span></span>
+        <span class="ch-meter-num" id="dial-drv-num">85</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="dial-run">Update the gauges</button>
+    <p class="ch-widget-sub" id="dial-verdict" style="margin-top:0.75rem"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The governor: fatigue as a decision, not just a failure</h2>
+    <p>Why would the nervous system hold force in reserve, or crank up perceived effort, when the muscle could still do more? Because that reserve, and that discomfort, are protective. This is the heart of the <span class="ch-key">central governor</span> view (Noakes, 2012): fatigue is, in significant part, a brain-generated regulatory signal, an emotion, Noakes provocatively calls it, that exists to throttle or end effort before the body reaches a genuinely catastrophic failure of internal balance. On this view, a person finishes almost any hard effort with some physiological reserve still intact, because the entire point of the system is to prevent anyone from spending all the way down to the wall.</p>
+    <p>You do not have to accept the strongest version of that claim to put the idea to work. A more moderate and widely accepted mechanism operates at the level of the spinal cord. During hard exercise, thin sensory fibers called <span class="ch-key">Group III and IV muscle afferents</span>, which report metabolic and mechanical stress from inside the working muscle back to the central nervous system (CNS), increase how often they fire (Amann, 2012). These afferents do two jobs at once. They drive the cardiovascular and breathing reflexes that keep oxygen flowing to the muscle, which fights peripheral fatigue directly. And their projection into the spinal cord inhibits the very motoneurons that would otherwise keep driving the muscle, actively reducing voluntary drive and producing central fatigue. Amann's experiments, which selectively block this feedback, show the trade cleanly: block the signal and a person can access more drive, but they lose the protective regulation and risk overshooting into genuine tissue damage. The inhibition is a governor doing its job, not a glitch in the wiring.</p>
+    <p>So central fatigue is, in part, the nervous system choosing, well below the level of conscious control, to send less. The command shrinks because a protective loop has decided the metabolic cost of continuing is climbing toward dangerous. That reframes a stalled lift or a collapsing pace entirely. It may not be that the muscle cannot. It may be that the system will not, yet.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If the governor is protective, what does that predict about a sudden second wind, the return of capacity mid-effort when a finish line comes into view or a rival pulls alongside? What actually changed, if the muscle's own chemistry did not?</p>
+    </aside>
+
+    <h3>The second wind and the discouraged-but-not-empty learner</h3>
+    <p>Two everyday cases fall directly out of this model. A <span class="ch-key">second wind</span>, a runner who feels finished and then surges when the crowd gets loud or the finish comes into sight, is the governor loosening its grip because the perceived balance of risk and reward just shifted. If the drop had been purely peripheral, no amount of motivation could restore force, because depleted fibers do not care about a finish line. The fact that force actually returns is proof the reserve was there the whole time, held back centrally.</p>
+    <p>The discouraged learner is the same phenomenon wearing a psychological costume. Someone who feels they have nothing left after a demoralizing set often has plenty of muscular capacity still on hand. What actually collapsed was drive, undercut by frustration, low arousal, or a rising sense that the effort is not worth it. This is why a well-timed cue, a short rest, or a change of task can seem to magically restore performance that felt completely gone a minute earlier. Nothing refilled the muscle. What changed was the governor's math.</p>
+    <p>Pacing behavior offers a third, quieter example of the same governor at work, one that does not require a dramatic finish-line surge to notice. Experienced endurance athletes tend to hold back slightly in the early portion of an unfamiliar or especially demanding effort, well before any plausible peripheral limitation could explain the caution. That early restraint looks a great deal like an anticipatory version of the same regulation described above, the nervous system pacing output against an estimate of how much total demand lies ahead rather than only reacting to damage already done. None of this requires assuming the governor is consciously calculating anything. It only requires recognizing that output is being regulated relative to a forecast, not simply relative to current tissue state, which is precisely why effort and pacing can shift the moment new information, a finish line, a competitor, a revised estimate of the remaining distance, enters the picture.</p>
+
+    <blockquote class="ch-quote">
+      <p>"Fatigue should rather be perceived as an emotion, part of a complex regulation system whose sole purpose is to ensure that the exercise is completed before there is a catastrophic failure of homeostasis."</p>
+      <cite>Noakes, 2012</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>Reading the signatures in the wild</h2>
+    <p>Nobody trains next to a stimulator, so localizing fatigue in the field means building a case from converging patterns rather than reading one definitive number. Here is the practical field guide.</p>
+    <p>Treat each item below the way an investigator treats a piece of evidence rather than a verdict on its own. A single central-leaning signature on an otherwise ordinary day is worth noticing and nothing more. Three or four signatures pointing the same direction, especially when the context lines up as well, is a genuinely useful basis for a decision. The goal of building a case this way is to keep a learner from anchoring on the first plausible story, which is exactly what both of Bree's online communities were doing when they reached for a single, all-purpose explanation.</p>
+
+    <h3>Signatures that point peripheral</h3>
+    <ul>
+      <li><strong>Force loss tracks the local metabolic work.</strong> The muscle group that did the grinding is the one that is weak. The failure is localized and it matches the burn.</li>
+      <li><strong>Rest restores force on a metabolic timeline.</strong> Minutes to hours for ordinary metabolite clearance, a day or more if there is real muscle damage involved. Motivation and clever cues do not move this timeline.</li>
+      <li><strong>Effort feels high and the muscle feels genuinely worked</strong>, pumped, burning, shaky in the specific muscle group. The sensation is local and tissue-specific, not general.</li>
+      <li><strong>It is dose-dependent on the exercise stress</strong>, tracking repeated near-maximal contractions, high metabolic demand, and heavy eccentric loading (Enoka &amp; Duchateau, 2008).</li>
+    </ul>
+
+    <h3>Signatures that point central</h3>
+    <ul>
+      <li><strong>Maximal and skilled efforts fail before submaximal ones do.</strong> A single dies while volume work at seventy percent stays crisp, the tell of drive shrinking exactly where there is no margin to absorb it.</li>
+      <li><strong>Effort feels disproportionate to output.</strong> Everything feels harder than the numbers justify, and a load that felt easy last week feels like a fight this week with no muscular explanation.</li>
+      <li><strong>It responds to non-metabolic interventions.</strong> A cue, competition, caffeine, a short break, or a switch to a novel task restores performance, which would be impossible if the tissue itself were the limiter.</li>
+      <li><strong>Context predicts it</strong>, including poor sleep, heavy prior cognitive load, monotony, low arousal, or a long stretch of steady-state duration (Marcora et al., 2009; Martinez-Navarro et al., 2022).</li>
+      <li><strong>Whole-system signs appear</strong>, including degraded coordination, more tremor, and worse balance and body-position sense, because the same drive that shapes fine control is the drive that is compromised (Gandevia, 2001).</li>
+    </ul>
+
+    <p>And the honest answer most of the time is that it is mixed. Real training sessions blend both kinds of fatigue. The narrative reviews are explicit that the dominant mechanism shifts with the task: ultra-endurance events skew markedly more central, while explosive and mixed-demand sports show a wide, unpredictable range of both (Martinez-Navarro et al., 2022; Enoka &amp; Duchateau, 2008). The goal is not to force a clean binary. It is to estimate the mixture, because the mixture is what should drive the decision that follows.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>When central fatigue becomes a pattern: overreaching and overtraining</h2>
+    <p>Everything so far has treated central fatigue as something that resolves, sometimes within a single session, usually within a day or two of decent sleep. That is the normal, even useful, picture. A hard training block that leaves a learner's drive genuinely suppressed for a few days is not a red flag by itself. It is called <span class="ch-key">functional overreaching (FOR)</span>, a short, deliberate overload that, followed by adequate recovery, typically produces a rebound in performance above where it started (Kreher &amp; Schwartz, 2012). Plenty of well-designed programs use it on purpose.</p>
+    <p>The problem is a version of the same central-fatigue mechanism that stops resolving. Push the overload further, or fail to back off when the body is asking for it, and functional overreaching can slide into <span class="ch-key">nonfunctional overreaching (NFOR)</span>, where the performance decline and the underlying fatigue now take weeks, not days, to recover from, often accompanied by mood disturbance and disrupted sleep. Left unaddressed further still, this can progress into <span class="ch-key">overtraining syndrome (OTS)</span>, a maladaptive state spanning the nervous, hormonal, and immune systems that can take months to resolve, and that is often described clinically in terms that look a great deal like a chronic, unresolving version of the central fatigue described throughout this chapter (Kreher &amp; Schwartz, 2012).</p>
+    <p>This distinction matters enormously for how a learner should read a bad week. A single central-leaning session, a stalled single after a rough night of sleep, is simply data, and the right response is usually a small, immediate adjustment: back off the top end, protect sleep, come back primed in a few days. A pattern of central-leaning sessions that will not resolve across two or three weeks, especially alongside a flattening mood, disrupted sleep, and stalled progress across multiple lifts or runs at once, is a different signal entirely. It suggests the short-term governor mechanism has stopped being able to recover between exposures, and the appropriate response shifts from a training tweak to a genuine, extended reduction in load, together with attention from someone qualified to evaluate what else might be contributing.</p>
+    <p>Kreher and Schwartz (2012) frame the practical challenge here bluntly: there is no single definitive marker or laboratory test that reliably distinguishes ordinary functional overreaching from the beginning of a genuine overtraining syndrome. The diagnosis, to the extent the word applies at all outside a clinical setting, rests on the same kind of pattern-recognition this chapter has been building throughout, applied over a longer window of time. A performance decline that persists despite adequate rest, alongside disturbed sleep, altered mood, and reduced enthusiasm for training that used to feel rewarding, is the signature that separates a rough patch from something that needs a structural change rather than a few easy days. The timescale is the tell. Central fatigue from one hard session is measured in hours to a couple of days. Overreaching that has tipped past functional is measured in weeks. That difference in scale is doing almost all of the diagnostic work.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A single rough session gets treated as proof of overtraining, and a learner takes two unplanned weeks off after one stalled lift. Or the opposite happens: weeks of stalled progress, flat mood, and poor sleep get waved away as just needing to push through, because any one session in isolation still looks like ordinary central fatigue. The marker that actually separates a normal dip from a developing problem is not the size of any single bad session. It is duration and pattern across sessions, weeks, not one workout.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why the difference changes the next move</h2>
+    <p>This is the payoff for doing the localizing work at all. The two fatigues recover on different timelines and respond to different levers, so misreading one for the other wastes days or, in the peripheral direction, digs a hole that takes longer to climb out of.</p>
+
+    <h3>If it is peripheral</h3>
+    <p>The muscle is genuinely diminished. The answer is substrate and time: fueling, hydration, sleep for tissue repair, and enough rest for the specific metabolic or structural cost to actually clear. Pushing harder here does not build resilience, it accumulates damage. Managing load is fundamentally about respecting the working tissue's tolerance. There is no clever workaround. The fiber needs what it needs, on its own schedule.</p>
+
+    <h3>If it is central</h3>
+    <p>The muscle is fine. The drive is suppressed. Here the levers are different, and often faster. Reducing cognitive and emotional load, protecting sleep, which feeds central fatigue heavily, managing arousal, and, as the next chapter covers, using priming and readiness strategies deliberately. Central fatigue can sometimes lift within a single session by changing the task, the stakes, or the state a learner is in. And this is exactly why a deload aimed only at muscular recovery can quietly miss the mark: if the real problem is neural, more physical rest without addressing sleep and mental load can leave a learner just as flat as before.</p>
+
+    <h3>The costly errors</h3>
+    <p>Two mistakes deserve to be named directly. First, treating central fatigue as simple weakness, grinding a discouraged-but-not-empty learner into the ground, or piling on volume when the real issue is a sleep-deprived, cognitively fried nervous system quietly down-regulating drive. Second, treating peripheral fatigue as something to just push through, chasing another rep out of muscle tissue that is genuinely compromised, turning ordinary fatigue into injury. The entire value of this distinction is that it stops a learner from applying the central fix to a peripheral problem, and the peripheral fix to a central one.</p>
+    <p>It is worth being explicit about what this model does not promise. It will not turn a bad day into a good one, and it is not a substitute for the basics of adequate sleep, adequate food, and sensible programming, all of which matter regardless of which kind of fatigue shows up on a given day. What it offers instead is a better question to ask before reacting. Rather than jumping straight to more effort or straight to more rest, a learner who has internalized this model pauses long enough to ask which system actually needs the break, and picks the response that matches the evidence rather than the mood of the moment. That pause, more than any single tactic in this chapter, is the actual skill being built here.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The line we will not cross: education, not diagnosis</h2>
+    <p>Before going further, it is worth naming the frame that governs this entire course, because it shapes what this chapter is for and what it is not. This is education, not diagnosis. The model here explains mechanisms and points toward qualified help when the situation calls for it. It does not diagnose, treat, or manage anyone's actual medical condition, in a learner or in anyone else.</p>
+    <p>That boundary is not a legal formality bolted onto the science. It follows directly from the physiology described above. Persistent, unexplained fatigue, the kind that will not resolve with sleep and reduced load, can have many causes, some of them entirely outside the training-related mechanisms covered in this chapter, including conditions a clinician would need bloodwork or a proper history to evaluate. A learner who has learned to say it is just central nervous system fatigue, or just overtraining, has, at best, made a reasonable working guess. At worst, they have attached a plausible-sounding label to something that deserves a professional workup, and delayed care a real condition would require.</p>
+    <p>So the discipline this course practices is straightforward. Understanding the mechanism lets a learner explain, to themselves or to someone else, why a stalled lift after a bad night plausibly reflects central drive rather than a torn muscle. That is genuinely useful education. But the moment specific, persistent symptoms in a specific person are on the table, the correct move is a referral to a licensed professional who can order appropriate evaluation and interpret it in context. Fatigue is subtle enough, and its causes varied enough, that untangling a genuinely stuck case requires clinical judgment, the kind that belongs to trained clinicians, not to a course, a forum, or a training log.</p>
+    <p>This is exactly the gap Bree fell into before she ever reached this course. Neither online community she followed asked whether her fatigue might have a cause outside the training-and-recovery framework altogether, because neither framework had room for that possibility. A course built on mechanism can do better, not by naming what is wrong with a specific person, which is never its job, but by being honest about the edge of its own competence. Knowing where a model stops being useful is not a weakness in it. It is what keeps a genuinely useful tool from being misapplied to a problem it was never built to solve.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner describes months of unexplained heavy-legged tiredness that never fully lifts, no matter how much they back off training. What does an educated, evidence-based, non-clinical response sound like, and just as importantly, where does it stop? The place it stops is exactly the boundary this section is about.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>A worked example, end to end</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Bree is deep into a squat session, working up to a heavy triple. Warm-ups feel normal, the ramp is smooth, and then at eighty-five percent the bar suddenly grinds. She misses a weight she hit for a double the previous week. Frustrated, she tells her training partner her legs are gone and considers calling the session.</p>
+    </aside>
+    <p>Run Bree's situation through the model built across this chapter, and the confusion mostly dissolves, not into a diagnosis, which is not this course's job to hand out, but into a specific, answerable set of questions the online advice she had been following never asked.</p>
+    <p>Start by interrogating the markers. Did the submaximal work feel off along the way? No, the warm-ups and the ramp were crisp the entire time. Is the working muscle pumped, burning, visibly shaking? Not really. She is not breathing hard and her quads do not feel worked in the way a truly fatigued muscle feels. What is the context around the session? She slept five hours the night before, powered through a genuinely brutal deadline at work that morning, and it is an otherwise low-stakes Tuesday with nothing on the line. The failure appeared specifically at the top of the intensity range, effort felt disproportionate to the actual output, and every contextual flag points toward suppressed drive rather than a depleted muscle.</p>
+    <p>The provisional read is central-leaning. The muscle most likely has force sitting in reserve. The command is what is down. From here, rather than grinding out more misses, which teaches the body nothing useful and drains the reserve further, the sensible path is to scale back the top-end work for the day, keep whatever submaximal volume still moves well, and treat the actual problem: protect sleep tonight, trim load for a day or two, and plan a better-primed attempt at the heavy single later in the week. If instead every marker had pointed peripheral, deep local fatigue after a genuinely high-volume session, submaximal work already degrading earlier in the workout, well-rested and motivated going in, the correct read would be genuine muscular fatigue, and the answer would be time and fuel rather than expecting a change of state to rescue the day.</p>
+    <p>It is worth naming what Bree actually walks away with, because it is the real value of running the model at all. She does not leave with a diagnosis, a supplement, or a magic number to chase. She leaves with a sturdier way of reading her own sessions: central and peripheral fatigue feel similar but are not the same event, a stalled lift is not automatically proof of either one, and a pattern that will not resolve across weeks is a different problem than a single rough day and belongs with a professional rather than a forum. Same missed lift, two entirely different responses, because she took the time to localize where it actually broke.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Fatigue can fail upstream, central fatigue, meaning reduced drive from the nervous system, or at the fiber, peripheral fatigue, meaning the muscle cannot answer an adequate signal. The two feel similar and usually coexist to some degree.</li>
+      <li>Central fatigue means unused reserve exists. The defining evidence is the superimposed twitch revealed by the interpolated twitch technique: extra force appears when a stimulus bypasses the voluntary command (Gandevia, 2001; Shield &amp; Zhou, 2004).</li>
+      <li>Maximal and highly technical efforts are the most vulnerable to central limits, because true maximum leaves no motor-unit slack to absorb a drop in drive, and skilled work spends a separate cortical budget.</li>
+      <li>Perceived effort is generated from the outgoing motor command's corollary discharge, not from feedback sent by the muscle, so fatigue can raise effort and hurt performance with the muscle itself largely unchanged (Marcora et al., 2009; Pageaux &amp; Lepers, 2016).</li>
+      <li>Central fatigue is partly a protective decision: Group III and IV muscle afferents inhibit motoneurons to guard the body's internal balance (Amann, 2012), the same mechanism behind a second wind and a discouraged-but-not-empty learner (Noakes, 2012).</li>
+      <li>Central fatigue that resolves in a day or two is normal, even useful overload. A pattern that will not resolve across weeks points toward overreaching sliding into overtraining, and calls for a real reduction in load rather than a training tweak (Kreher &amp; Schwartz, 2012).</li>
+      <li>Diagnose from converging markers, intensity-specificity, effort-to-output mismatch, response to non-metabolic cues, and context, then match the recovery response to the mixture: substrate and time for peripheral, load and state management for central.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>If central fatigue is partly the nervous system choosing to send less, then readiness is something that can be deliberately raised rather than simply waited out. Chapter 8 turns this diagnostic model into an intervention: how priming, brief and potent pre-work, can lift voluntary drive and shift the governor's math to unlock reserve that fatigue was holding back.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Amann, M. (2012). Significance of Group III and IV muscle afferents for the endurance exercising human. <em>Clinical and Experimental Pharmacology and Physiology, 39</em>(9), 831-835. https://doi.org/10.1111/j.1440-1681.2012.05681.x</p>
+    <p>Enoka, R. M., &amp; Duchateau, J. (2008). Muscle fatigue: What, why and how it influences muscle function. <em>The Journal of Physiology, 586</em>(1), 11-23. https://doi.org/10.1113/jphysiol.2007.139477</p>
+    <p>Gandevia, S. C. (2001). Spinal and supraspinal factors in human muscle fatigue. <em>Physiological Reviews, 81</em>(4), 1725-1789. https://doi.org/10.1152/physrev.2001.81.4.1725</p>
+    <p>Kreher, J. B., &amp; Schwartz, J. B. (2012). Overtraining syndrome: A practical guide. <em>Sports Health, 4</em>(2), 128-138. https://doi.org/10.1177/1941738111434406</p>
+    <p>Marcora, S. M., Staiano, W., &amp; Manning, V. (2009). Mental fatigue impairs physical performance in humans. <em>Journal of Applied Physiology, 106</em>(3), 857-864. https://doi.org/10.1152/japplphysiol.91324.2008</p>
+    <p>Martinez-Navarro, I., Sanchez-Gomez, J. M., et al. (2022). Central and peripheral fatigue in physical exercise explained: A narrative review. <em>International Journal of Environmental Research and Public Health, 19</em>(7), 3909. https://doi.org/10.3390/ijerph19073909</p>
+    <p>Noakes, T. D. (2012). Fatigue is a brain-derived emotion that regulates the exercise behavior to ensure the protection of whole body homeostasis. <em>Frontiers in Physiology, 3</em>, 82. https://doi.org/10.3389/fphys.2012.00082</p>
+    <p>Pageaux, B., &amp; Lepers, R. (2016). Fatigue induced by physical and mental exertion increases perception of effort and impairs subsequent endurance performance. <em>Frontiers in Physiology, 7</em>, 587. https://doi.org/10.3389/fphys.2016.00587</p>
+    <p>Shield, A., &amp; Zhou, S. (2004). Assessing voluntary muscle activation with the twitch interpolation technique. <em>Sports Medicine, 34</em>(4), 253-267. https://doi.org/10.2165/00007256-200434040-00005</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 7 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-localizer');
+    if(!root) return;
+    var cSel = root.querySelector('#loc-central');
+    var pSel = root.querySelector('#loc-periph');
+    var volBar = root.querySelector('#loc-vol-bar');
+    var volNum = root.querySelector('#loc-vol-num');
+    var stimBar = root.querySelector('#loc-stim-bar');
+    var stimNum = root.querySelector('#loc-stim-num');
+    var gapBar = root.querySelector('#loc-gap-bar');
+    var gapNum = root.querySelector('#loc-gap-num');
+    var verdict = root.querySelector('#loc-verdict');
+    var btn = root.querySelector('#loc-run');
+
+    function run(){
+      var c = parseFloat(cSel.value);
+      var p = parseFloat(pSel.value);
+      // stimulated force = what muscle can do bypassing brain = limited only by peripheral
+      var stim = 100 - p;
+      // voluntary force = further reduced by central drive loss
+      var vol = stim * (1 - c/100);
+      vol = Math.round(vol);
+      stim = Math.round(stim);
+      var gap = stim - vol; // superimposed twitch
+      volBar.style.width = vol + '%';
+      volNum.textContent = vol;
+      stimBar.style.width = stim + '%';
+      stimNum.textContent = stim;
+      gapBar.style.width = Math.max(0,gap) + '%';
+      gapNum.textContent = gap;
+
+      var msg;
+      if(gap <= 8 && p >= 25){
+        msg = 'Small twitch, low voluntary force. The muscle is nearly fully activated but genuinely weaker. This drop is PERIPHERAL, with no hidden reserve to unlock. Recovery is substrate and time.';
+      } else if(gap <= 8 && p < 25){
+        msg = 'Small twitch and force is near fresh. Little fatigue of either kind, and near full activation of a capable muscle.';
+      } else if(gap >= 20 && p < 20){
+        msg = 'Large superimposed twitch, healthy stimulated force. Force is being held in reserve. This drop is CENTRAL, meaning the muscle can do more than the command is asking. Look to sleep, mental load, arousal, and priming.';
+      } else if(gap >= 20 && p >= 20){
+        msg = 'Large twitch and a weaker muscle. This is MIXED fatigue. Real central reserve sits on top of genuine peripheral decline. Address both: recover the tissue and restore the drive.';
+      } else {
+        msg = 'A moderate gap with some tissue decline. This is MIXED, leaning by whichever share is larger. The bigger the twitch relative to the peripheral loss, the more central the problem.';
+      }
+      verdict.textContent = msg;
+    }
+    btn.addEventListener('click', run);
+    cSel.addEventListener('change', run);
+    pSel.addEventListener('change', run);
+    run();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-dial');
+    if(!root) return;
+    var sleep = root.querySelector('#dial-sleep');
+    var mental = root.querySelector('#dial-mental');
+    var motiv = root.querySelector('#dial-motiv');
+    var work = root.querySelector('#dial-work');
+    var capBar = root.querySelector('#dial-cap-bar');
+    var capNum = root.querySelector('#dial-cap-num');
+    var effBar = root.querySelector('#dial-eff-bar');
+    var effNum = root.querySelector('#dial-eff-num');
+    var drvBar = root.querySelector('#dial-drv-bar');
+    var drvNum = root.querySelector('#dial-drv-num');
+    var verdict = root.querySelector('#dial-verdict');
+    var btn = root.querySelector('#dial-run');
+
+    function run(){
+      var s = parseFloat(sleep.value);
+      var m = parseFloat(mental.value);
+      var mo = parseFloat(motiv.value);
+      var w = parseFloat(work.value);
+
+      // Muscular capacity: only accumulated physical work touches the fiber much
+      var cap = 100 - w*10;
+      cap = Math.max(30, cap);
+
+      // Perceived effort rises with central-fatigue drivers, largely independent of muscle
+      var eff = 35 + s*10 + m*10 + mo*7 + w*4;
+      eff = Math.min(100, eff);
+
+      // Available voluntary drive falls with the central drivers
+      var drv = 95 - s*9 - m*9 - mo*8 - w*4;
+      drv = Math.max(25, drv);
+
+      cap = Math.round(cap); eff = Math.round(eff); drv = Math.round(drv);
+      capBar.style.width = cap+'%'; capNum.textContent = cap;
+      effBar.style.width = eff+'%'; effNum.textContent = eff;
+      drvBar.style.width = drv+'%'; drvNum.textContent = drv;
+
+      var gap = cap - drv;
+      var msg;
+      if(gap >= 25 && eff >= 65){
+        msg = 'Notice the divergence: muscular capacity is still high, but effort has spiked and drive has collapsed. This is central fatigue and the protective governor at work, a strong, capable muscle held back. The fix is state, not tissue: sleep, lower mental load, arousal, priming.';
+      } else if(gap >= 12){
+        msg = 'Drive has dropped below what the muscle could deliver, and effort is climbing. A central deficit is opening up even though the fiber is fine. Non-metabolic levers, rest, cues, reduced cognitive load, can recover this quickly.';
+      } else if(cap < 60){
+        msg = 'Accumulated physical work has pulled real muscular capacity down, and drive and capacity are falling roughly together. This is where peripheral fatigue starts to dominate. Substrate and time matter here, not just state.';
+      } else {
+        msg = 'Fresh and aligned: capacity, drive, and effort are all in a good place. Little central suppression and a capable muscle.';
+      }
+      verdict.textContent = msg;
+    }
+    btn.addEventListener('click', run);
+    [sleep,mental,motiv,work].forEach(function(el){ el.addEventListener('change', run); });
+    run();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
