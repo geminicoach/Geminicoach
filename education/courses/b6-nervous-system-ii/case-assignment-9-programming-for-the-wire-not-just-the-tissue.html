@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 9: Programming for the Wire, Not Just the Tissue</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: b6-nervous-system-ii | chapter: 9 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    Marguerite's stalled top single, absent soreness, and slowing bar speed on a fixed submaximal load point to
+    central fatigue, not peripheral (tissue) fatigue: the muscle is not the bottleneck, the central nervous system's
+    ability to fully drive it is. Her week compounds the problem by sequencing, her heaviest max-intent lifting sits
+    directly in front of her technical practice, so the technical session runs on a partially spent central account
+    and both recruitment and coordination suffer even though nothing is sore. A responsible plan for her final five
+    weeks separates the two currencies: reduce total neural load, resequence the week so technical work is protected
+    on fresher days, and enter a true taper as the date nears, holding intensity while cutting volume by roughly 60
+    to 90 percent, not simply resting everything or cutting intensity along with volume. A short, low-volume priming
+    session can sit in the final one to two days, layered on top of the taper rather than replacing it. A responsible
+    response explains the mechanism, gives a scoped and practical outline, and does NOT diagnose. It identifies that
+    any pain, joint symptoms, or a stall that does not respond to reduced neural load and better sequencing warrants
+    evaluation by a qualified coach or clinician.
+  rubric_points:
+    - correctly identifies the pattern as central fatigue rather than peripheral/tissue fatigue, citing the absent soreness and the slowing bar speed as evidence (25)
+    - explains that sequencing (max-intent day directly before technical day) degrades the technical session via a depleted central account, even with fresh-feeling tissue (20)
+    - correctly describes a taper as maintaining intensity while cutting volume by roughly 60 to 90 percent, gradually, and distinguishes it from a deload (25)
+    - positions a short, low-volume priming session appropriately near the end, layered on the taper rather than replacing it (15)
+    - identifies what, if anything, warrants evaluation by a qualified coach or clinician, and does not diagnose (15)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; B6 Nervous System II &middot; Capstone</div>
+  <h1>Chapter 9: Reason Through a Real Complaint</h1>
+  <p class="sub">Take the whole course, recruitment, skill, fatigue, and priming, and use it to reason through a real programming problem, in plain language, within the bounds of general education.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 30 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Marguerite, 34</div>
+    Consider Marguerite, who is five weeks out from a strength competition. For the last three weeks her top single has stalled, and on her most recent heavy session it actually felt slower coming off the floor than it did a month ago, even though the weight on the bar did not change. Nothing hurts. She has no soreness at all going into most sessions, and every recovery check she runs, sleep, appetite, mood, comes back normal. Her weekly plan puts her heaviest, most maximal lifting on Monday and her technical practice, the session where she drills bar path and positioning, on Tuesday, because that felt like the natural order to her. Marguerite is unsure whether to add more volume to break the plateau, back off entirely, or change something about how her week is arranged, and she wants to know how to use her final five weeks before the competition.
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Explain, mechanically, whether Marguerite's stalled lift and slowing bar speed, given the complete absence of soreness, points to a tissue (peripheral) problem or a wire (central) problem, and say how you know.</li>
+    <li>Explain what the order of her week, heavy max-intent lifting on Monday directly followed by technical practice on Tuesday, is likely doing to her technical session, and why that would happen even though her tissue feels completely fine.</li>
+    <li>Give a general-education outline for her final five weeks: what her weekly sequencing should change, and what a proper taper should do with intensity and volume as the competition approaches.</li>
+    <li>State clearly where general education ends and where Marguerite would need a qualified coach or clinician, and do not diagnose.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating understanding and plain-language communication, not diagnosing or prescribing a competition plan. A responsible response explains the mechanism, identifies what if anything warrants professional evaluation, and does not diagnose. Program design for a real competitor and diagnosis of any injury belong to a qualified coach or clinician.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Correctly identifies the pattern as central fatigue rather than peripheral (tissue) fatigue, citing the absent soreness and the slowing bar speed as evidence.</li>
+      <li>Explains that sequencing, a max-intent day placed directly before a technical day, degrades the technical session through a depleted central account, even with tissue that feels fresh.</li>
+      <li>Correctly describes a taper as holding intensity while cutting volume by roughly 60 to 90 percent, applied gradually, and distinguishes it from a deload.</li>
+      <li>Positions a short, low-volume priming session appropriately near the end, layered on top of the taper rather than replacing it.</li>
+      <li>Identifies what, if anything, warrants evaluation by a qualified coach or clinician, and does not diagnose.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; B6 Nervous System II &middot; Chapter 9 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:b6:case9', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:b6:case9'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>
