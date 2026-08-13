@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading a Lift: Integrating the Mechanics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 10 · Module 4</div>
+    <h1 class="ch-title">Reading a Lift: Integrating the Mechanics</h1>
+    <p class="ch-subtitle">Turning nine chapters of concepts into one durable skill — a way of seeing torque, leverage, and demand in any barbell movement.</p>
+    <div class="ch-meta">
+      <span>24 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> stranger walks into the gym you are working in, loads a bar you have never seen them touch, and performs a variation of a deadlift you have never taught. Their stance is wide, their shins nearly vertical, their torso far more upright than the conventional pull you know best. Within three repetitions, someone asks you the question the entire course has been preparing you to answer: <em>Is that okay?</em></p>
+    <p>Notice what you did not do. You did not reach for a rulebook of approved postures. You did not compare the lifter against a poster of ideal form. Instead — if the course has done its work — you began to read. You located the bar's line of gravity, you tracked where it sat relative to the hip and the knee, you asked where the external moment arm was longest and therefore where the demand piled up, and you checked that answer against the geometry of the body in front of you. That sequence, run fluently and under uncertainty, is the whole skill. This chapter names it, formalizes it, and puts it to work on lifts you have never seen.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>From concepts to a single competence</h2>
+    <p>Every prior chapter isolated one lens. We separated the joints into <span class="ch-key">lever classes</span> and asked how each trades force for range. We measured <span class="ch-key">honest ranges of motion</span> and distinguished them from the ranges a lifter merely wishes they had. We mapped muscle <span class="ch-key">architecture and lines of pull</span> onto the skeleton. We defined the <span class="ch-key">external moment arm</span> — the perpendicular distance from a joint's axis to the load's line of action — and its internal counterpart, the muscle's leverage on that same axis. And we tied all of it together with <span class="ch-key">anthropometry</span>, the segment lengths and proportions that make one person's squat geometrically incapable of resembling another's.</p>
+    <p>Isolation was pedagogically necessary and clinically false. No lift presents one lens at a time. The formal machinery that lets us fuse them is inverse dynamics: given the kinematics of the segments and the external forces, we solve for the <span class="ch-key">net joint moment</span> — the single number that summarizes everything the muscles crossing a joint must collectively produce to account for the observed motion (Winter, 2009). When you "read a lift" without instrumentation, you are estimating that same quantity by eye, joint by joint, phase by phase. The framework below is nothing more than a disciplined way of making that estimate.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in pen-and-ink with muted watercolour wash, showing a single lifter mid-squat depicted three times across the page as an overlaid sequence from standing to depth, in warm sepia and slate-blue tones. Over the middle figure, a thin dashed vertical line drops from the barbell through the body labelled 'line of gravity'; short perpendicular tick-marks bracket the horizontal gap between that line and the hip joint, and a second bracket between the line and the knee joint. Small neat serif labels read 'hip', 'knee', 'ankle', and 'external moment arm'. Composition centred, generous margin, notebook register as if from a biomechanist's sketchbook. No numerical values, no charts, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch10-img1.jpg" alt="<em>The load's line of gravity is the anchor of every read: demand at a joint scales with its distance from that line.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The load's line of gravity is the anchor of every read: demand at a joint scales with its distance from that line.</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>The reading framework, in five moves</h2>
+    <p>Here is the sequence, stated once, plainly, so you can run it on anything.</p>
+
+    <h3>1. Identify the pattern</h3>
+    <p>Before measuring anything, classify the movement. Is this fundamentally a squat pattern (knee and hip flexion under an axially loaded trunk), a hinge (hip-dominant, minimal knee travel), a horizontal or vertical press, or a pull? Pattern recognition tells you which joints are the protagonists and roughly where load will live. It is the coarse filter that keeps the rest of the read honest.</p>
+
+    <h3>2. Locate the load's line of gravity relative to each joint</h3>
+    <p>Drop an imaginary plumb line from the system's center of mass — for a barbell lift, that is dominated by the bar. Now note, at the phase you are examining, where that line falls relative to each joint axis. A line passing anterior to the knee loads the knee extensors; posterior to it, and the demand flips. This single observation does more diagnostic work than any other, which is why both widgets in this chapter begin there.</p>
+
+    <h3>3. Find where the external moment arm peaks</h3>
+    <p>The external moment arm is the horizontal distance between that gravity line and a given joint. Torque equals force times that distance, so peak demand at a joint occurs when its moment arm is longest — and that is almost never where a beginner assumes. It changes continuously through the range. Brazil and colleagues (2021) showed this vividly in the barbell hip thrust: contrary to the widespread coaching belief that hip extensor demand stays constant across the lift, the hip extension moment is actually greatest early and <em>diminishes</em> as the hips rise toward lockout, because the moment-arm geometry shrinks as the femur approaches horizontal. Where peak demand sits is a property of the geometry, not of the exercise's name.</p>
+
+    <h3>4. Trace which muscles are best positioned to meet the demand</h3>
+    <p>Having found where demand concentrates, ask which muscles cross that joint with a favorable internal moment arm and a line of pull aligned to resist the external torque. This is where architecture returns: a muscle with a long internal moment arm at that specific joint angle is the one nature has nominated for the job. In the deadlift, the conventional pull's more inclined trunk lengthens the external moment arm at the hip, and Hanen et al. (2025) — using fourteen motion-capture cameras, dual force plates, and surface EMG on thirty experienced lifters at 85% of one-repetition maximum — measured correspondingly higher hip extension moments and greater posterior-chain activation than in the sumo variant.</p>
+
+    <h3>5. Check the answer against proportions and honest ranges</h3>
+    <p>Finally, hold your mechanical prediction up against the actual body. Does this lifter have the ankle dorsiflexion to keep the tibia over the foot? Does the femur-to-torso ratio force a forward lean your read should already have anticipated? A read that ignores anthropometry predicts a lift no real person can perform. A read that respects it explains why <em>this</em> person's lift looks the way it does — and, crucially, why it may legitimately look nothing like the textbook photograph.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: in a barbell hip thrust, at what point in the range would you predict the hip extensors face their greatest demand — at the bottom, at mid-range, or at lockout? Now recall what Brazil et al. (2021) found. Does your intuition match the geometry, or the coaching cliché?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-console">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Full-Lift Diagnostic Console</div>
+    </div>
+    <p class="ch-widget-sub">Step through an unfamiliar lift on a specified body. At each phase, run the five-move framework — then let the console score your read layer by layer and flag any contradictions.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Lift & body</span>
+        <select class="ch-widget-select" id="wc-lift">
+          <option value="0">Wide-stance low-bar squat · long-femur lifter</option>
+          <option value="1">Deficit conventional deadlift · long-torso lifter</option>
+          <option value="2">Barbell hip thrust · average proportions</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Phase</span>
+        <select class="ch-widget-select" id="wc-phase">
+          <option value="0">Bottom / start</option>
+          <option value="1">Mid-range</option>
+          <option value="2">Near lockout</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Where does the gravity line fall?</span>
+        <select class="ch-widget-select" id="wc-line">
+          <option value="hip">Well behind / far from the hip</option>
+          <option value="knee">Well ahead of / far from the knee</option>
+          <option value="mid">Close to all joints (short arms)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Joint under peak demand</span>
+        <select class="ch-widget-select" id="wc-joint">
+          <option value="hip">Hip extensors</option>
+          <option value="knee">Knee extensors</option>
+          <option value="back">Spinal / trunk extensors</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Best-positioned muscles</span>
+        <select class="ch-widget-select" id="wc-musc">
+          <option value="glute">Gluteus maximus + hamstrings</option>
+          <option value="quad">Quadriceps</option>
+          <option value="erector">Erector spinae</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Gravity-line read</span>
+        <span class="ch-meter-bar"><span id="wc-m1" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="wc-n1">–</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak-demand joint</span>
+        <span class="ch-meter-bar"><span id="wc-m2" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="wc-n2">–</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Muscle match</span>
+        <span class="ch-meter-bar"><span id="wc-m3" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="wc-n3">–</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="wc-btn">Assemble integrated read</button>
+    <p class="ch-widget-sub" id="wc-out" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Peak demand is a moving target</h2>
+    <p>The single most common failure of a novice read is to treat a lift as if it had one fixed "hard part" that stays put. It does not. Because the external moment arm at every joint changes continuously as segments rotate, the location of peak demand migrates through the range — and sometimes hands off from one joint to another mid-repetition.</p>
+    <p>Consider the press. Evangelista and colleagues (2025) modeled the bench press and overhead press as a kinematic chain of rigid links and showed analytically that the notorious <span class="ch-key">sticking region</span> — the velocity minimum where lifts stall — arises specifically when shoulder torque drops below a critical threshold at a particular chain configuration. Adding elbow torque shifts and partially compensates for that minimum. The sticking point is not a fixed inch on the bar path; it is a geometric event that grip width and segment lengths relocate. Change the grip and you change where the chain is weakest.</p>
+    <p>The squat tells the same story with a twist that catches many readers. Straub and Powers (2024), reviewing the modifiable parameters of the squat, make an indispensable point: trunk inclination and tibia inclination have <em>opposite</em> effects on the knee flexion moment. Lean the trunk forward and you unload the knee while loading the hip; drive the tibia forward and you load the knee. Read either variable in isolation and you will reach the wrong conclusion, because the two routinely covary. A deep forward lean does not automatically mean high knee demand — you must read the shin at the same instant. This is precisely the kind of interaction that a lookup table cannot capture and a genuine read must.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A pen-and-ink editorial diagram with cool clinical palette of teal, charcoal, and pale grey, showing two side-by-side line-drawn squatting figures at the same depth for contrast. Left figure has a markedly forward-inclined trunk with a near-vertical shin; right figure has a more upright trunk with the knee travelled forward over the toes. Thin dashed reference lines indicate trunk angle and tibia angle on each. Small serif labels: 'trunk inclined, shin vertical' under the left figure and 'trunk upright, shin forward' under the right. A short caption strip reads 'opposite effects on knee moment'. Clean, textbook-plate composition, rule-of-thirds, no numbers, no charts, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch10-img2.jpg" alt="<em>Trunk and tibia inclination pull the knee moment in opposite directions — which is why neither can be read alone (Straub &amp;amp; Powers, 2024).</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Trunk and tibia inclination pull the knee moment in opposite directions — which is why neither can be read alone (Straub &amp; Powers, 2024).</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>Variation versus warning sign</h2>
+    <p>Once you can predict where demand concentrates, a harder and more professionally consequential question arrives: when a lift looks unusual, is that a mechanically expected consequence of this body's geometry, or a signal that warrants professional evaluation? Getting this distinction right — and staying rigorously within your scope — is the mark of a competent reader.</p>
+    <p>Begin with what proportions actually predict, because folklore here is thick. The reflex attribution of "butt wink" (lumbopelvic flexion at the bottom of a squat) to long femurs is a good test case. Berglund et al. (2024) studied eighteen experienced powerlifters and weightlifters squatting at 70% of one-repetition maximum and ran linear regressions of lumbopelvic flexion against anthropometric measures, range of motion, and movement-control tests. Femur-to-tibia ratios were <em>not</em> significantly associated with lumbopelvic flexion. The only statistically significant predictor was ankle dorsiflexion range of motion. The skeletal-proportions story, so confidently repeated on gym floors, did not survive contact with the data.</p>
+    <p>Kim et al. (2021) reinforce the point from another angle. Across fifty-three participants squatting at 75% of one-repetition maximum, net joint torques and flexion angles correlated more strongly with relative muscular strength and joint flexibility (r ≈ 0.48–0.53 between hip and knee net joint torque and their corresponding flexion angles) than with femur-to-tibia length ratio. And ankle dorsiflexion angle showed significant <em>cross-joint</em> correlations with hip net joint torque — a reminder that a restriction at one joint reshapes demand at another far up the chain. When you check a read against "honest range of motion," the ankle keeps earning its place at the top of the list.</p>
+    <p>So a deep forward lean in a lifter with long femurs, limited ankle dorsiflexion, and a wide low-bar stance is not an anomaly to be corrected — it is the mechanically <em>predicted</em> posture. Hanen et al. (2025) remind us that stance width and trunk inclination together relocate peak demand: the wide sumo-style base, with its more upright trunk, shifts moment into the frontal and transverse planes at the hip and knee, whereas the conventional narrow, inclined pull concentrates it in sagittal-plane hip extension. Neither is a flaw. They are different geometries solving the same task.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A lifter's bar drifts a few centimeters forward, and their torso pitches to meet it, in the last third of a heavy deadlift as fatigue mounts. Is that a mechanically expected variation or a referral cue? What additional information — reproducibility across sets, presence of pain, whether it appears only under load — would move your judgment one way or the other?</p>
+    </aside>
+
+    <h3>Where the referral line actually sits</h3>
+    <p>Be precise about your scope. Reading a lift lets you say <em>where</em> a movement is mechanically demanding and <em>why</em> it looks as it does. It does not license a diagnosis. A feature warrants professional evaluation not because it deviates from a picture, but when it carries markers outside the mechanical story: pain that tracks the movement, a sudden loss of control that was not there before, numbness or a giving-way sensation, an asymmetry that appears only on one side and worsens across sets, or a change a lifter cannot influence with cueing or load adjustment. Those are referral cues — reasons to send someone to a qualified clinician — never labels you apply yourself.</p>
+    <p>And screening tools do not rescue you from this judgment. The temptation is to reach for a standardized battery and let a cutoff score decide. Bonazza et al. (2016) pooled eleven reliability studies and nine injury-prediction studies of the Functional Movement Screen: inter- and intra-rater reliability were respectable (intraclass correlation 0.81), and lifters scoring at or below fourteen had 2.74 times greater odds of injury — but the same meta-analysis flagged serious internal and external validity concerns. A screen can be reliable and still be a weak predictor. It informs your read; it cannot replace it. The judgment stays with you, exercised in the language of mechanics and bounded by an honest sense of what a lift's appearance does and does not reveal.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Signal-or-Variation Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Read each described feature and sort it. Feedback is grounded strictly in mechanics and referral logic — never a diagnosis. Borderline cases are meant to be ambiguous; the point is to justify the call.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Case</span>
+        <select class="ch-widget-select" id="ws-case">
+          <option value="0">Deep forward trunk lean, long-femur lifter, limited ankle DF</option>
+          <option value="1">Bar drifts forward &amp; torso pitches only in final rep under fatigue</option>
+          <option value="2">Sudden one-sided shoulder shift with new pain in a press</option>
+          <option value="3">Wider sumo stance, upright trunk, knees track out</option>
+          <option value="4">Butt wink at the very bottom of a squat, no pain, reproducible</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your call</span>
+        <select class="ch-widget-select" id="ws-call">
+          <option value="var">Mechanically expected variation</option>
+          <option value="ref">Warrants professional evaluation</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Mechanical fit of your call</span>
+        <span class="ch-meter-bar"><span id="ws-m1" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ws-n1">–</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Ambiguity of the case</span>
+        <span class="ch-meter-bar"><span id="ws-m2" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ws-n2">–</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="ws-btn">Check the call</button>
+    <p class="ch-widget-sub" id="ws-out" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Transfer: the point of the whole thing</h2>
+    <p>The reason we insisted on principles rather than a catalog of approved lifts is transfer. A lookup table fails the moment someone performs a movement not in the table — which, on a real gym floor, is most of the time. A framework does not fail there; it engages there. Confronted with a Jefferson deadlift, a Zercher squat, a landmine press, or some hybrid a lifter invented last week, you run the same five moves. Identify the pattern. Drop the gravity line. Find the longest moment arm. Name the muscles positioned to meet it. Check against the body. The lift can be genuinely novel and your read is still valid, because torque does not care whether you have seen the exercise before.</p>
+    <p>This is what it means to hold a <em>predictive</em> working model rather than a descriptive one. The formal apparatus — net joint moment, external and internal moment arms, segment anthropometry — is Winter's (2009), and it is exactly the same mathematics whether a laboratory computes it from marker trajectories or you estimate it by eye. Your estimate is coarser, but it is the same quantity, reasoned about in the same currency. That shared language is the durable takeaway of the entire course. Not a set of postures to enforce. A way of seeing.</p>
+    <p>And a way of seeing that knows its own edges. When you read a lift well, you can say with confidence why it looks the way it does and where its demand lives. You can also say, just as confidently, what its appearance does not tell you — that mechanics explain shape and load, not tissue health, and that the honest response to a genuine warning sign is a referral, not a verdict. Holding both of those at once — the analytic reach and the scope discipline — is what separates a technician who memorized forms from a professional who understands movement.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The location of peak demand is a property of the geometry, not of the exercise's name. Learn to see the geometry, and every lift you will ever meet is already partly read.</p>
+    <cite>The organizing idea of this course</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Reading a lift is one integrated skill: identify the pattern, locate the load's gravity line at each joint, find where the external moment arm peaks, trace the best-positioned muscles, and check against proportions and honest ranges.</li>
+      <li>Peak demand migrates through the range and can hand off between joints — the hip thrust's hip moment diminishes toward lockout (Brazil et al., 2021), and the press's sticking region is a geometric event relocated by grip width (Evangelista et al., 2025).</li>
+      <li>Variables interact: trunk and tibia inclination move the knee moment in opposite directions, so no single feature can be read alone (Straub &amp; Powers, 2024).</li>
+      <li>Folk attributions of unusual postures to skeletal proportions often fail empirically — ankle dorsiflexion, not femur ratio, predicts lumbopelvic flexion (Berglund et al., 2024; Kim et al., 2021).</li>
+      <li>Distinguish expected variation from a warning sign by markers outside the mechanical story — pain, sudden loss of control, worsening asymmetry — and treat those as referral cues, never diagnoses. Screening scores inform but cannot replace this judgment (Bonazza et al., 2016).</li>
+      <li>The framework transfers to lifts you have never seen, because the underlying quantity — net joint moment — is the same mathematics whether measured or estimated (Winter, 2009).</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This is the capstone — but the skill it names is never finished. Every unfamiliar body and every invented variation is another repetition of the read. Carry the five moves onto the gym floor, run them out loud until they run silently, and let the questions you cannot answer within mechanics become the referrals that keep you, and your lifters, honest.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Berglund, L., Aasa, U., Michaelson, P., & Aasa, B. (2024). Are anthropometric measures, range of motion, or movement control tests associated with lumbopelvic flexion during barbell back squats? <em>International Journal of Sports Physical Therapy.</em> https://doi.org/10.26603/001c.122637</p>
+    <p>Bonazza, N. A., Smuin, D., Onks, C. A., Silvis, M. L., & Dhawan, A. (2017). Reliability, validity, and injury predictive value of the Functional Movement Screen: A systematic review and meta-analysis. <em>The American Journal of Sports Medicine, 45</em>(3), 725–732. https://doi.org/10.1177/0363546516641937</p>
+    <p>Brazil, A., Needham, L., Palmer, J. L., & Bezodis, I. N. (2021). A comprehensive biomechanical analysis of the barbell hip thrust. <em>PLOS ONE, 16</em>(3), e0249307. https://doi.org/10.1371/journal.pone.0249307</p>
+    <p>Evangelista, P., Rum, L., Picerno, P., & Biscarini, A. (2025). Decoding the contribution of shoulder and elbow mechanics to barbell kinematics and the sticking region in bench and overhead press exercises: A link-chain model with single- and two-joint muscles. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12372072/</p>
+    <p>Hanen, N., et al. (2025). Biomechanical analysis of conventional and sumo deadlift. <em>Frontiers in Bioengineering and Biotechnology, 13</em>, 1597209. https://doi.org/10.3389/fbioe.2025.1597209</p>
+    <p>Kim, S., et al. (2021). Relationships between physical characteristics and biomechanics of lower extremity during the squat. <em>Journal of Exercise Science & Fitness, 19</em>(4), 269–277. https://doi.org/10.1016/j.jesf.2021.09.002</p>
+    <p>Straub, R., & Powers, C. (2024). A biomechanical review of the squat exercise: Implications for clinical practice. <em>International Journal of Sports Physical Therapy.</em> https://doi.org/10.26603/001c.94600</p>
+    <p>Winter, D. A. (2009). <em>Biomechanics and motor control of human movement</em> (4th ed.). Wiley.</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 10 of 10</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root=document.getElementById('w-console');
+    if(!root)return;
+    // model[lift][phase] = expected reads
+    var model=[
+      [ // wide low-bar squat, long femur
+        {line:'knee',joint:'hip',musc:'glute',note:'Deep bottom, long femur, inclined trunk: gravity line sits far from the hip, so hip extensors face peak demand.'},
+        {line:'mid',joint:'hip',musc:'glute',note:'Mid-range hip moment still dominates in a low-bar wide stance (Straub & Powers, 2024).'},
+        {line:'mid',joint:'hip',musc:'glute',note:'Near lockout the moment arms shorten; demand falls but stays hip-dominant.'}
+      ],
+      [ // deficit conventional deadlift, long torso
+        {line:'knee',joint:'back',musc:'erector',note:'The deficit + inclined long torso lengthens the trunk external moment arm: spinal extensors are heavily taxed at the start.'},
+        {line:'knee',joint:'hip',musc:'glute',note:'Off the floor, hip extension moment peaks — the conventional pull is hip-dominant (Hanen et al., 2025).'},
+        {line:'hip',joint:'hip',musc:'glute',note:'Approaching lockout the bar nears the hip; moment arm shrinks and demand eases.'}
+      ],
+      [ // hip thrust
+        {line:'knee',joint:'hip',musc:'glute',note:'At the start the femur is near vertical: the hip extensor moment is GREATEST here (Brazil et al., 2021).'},
+        {line:'mid',joint:'hip',musc:'glute',note:'Rising through mid-range, the hip moment is already diminishing as geometry changes.'},
+        {line:'hip',joint:'hip',musc:'glute',note:'At lockout the femur is horizontal and the moment arm is short — demand is lowest, not constant.'}
+      ]
+    ];
+    var lift=root.querySelector('#wc-lift'),phase=root.querySelector('#wc-phase'),
+        line=root.querySelector('#wc-line'),joint=root.querySelector('#wc-joint'),musc=root.querySelector('#wc-musc'),
+        btn=root.querySelector('#wc-btn'),out=root.querySelector('#wc-out');
+    function set(id,num,pct,txt){root.querySelector(id).style.width=pct+'%';root.querySelector(num).textContent=txt;}
+    btn.addEventListener('click',function(){
+      var m=model[+lift.value][+phase.value];
+      var s1=line.value===m.line?100:35;
+      var s2=joint.value===m.joint?100:35;
+      var s3=musc.value===m.musc?100:35;
+      set('#wc-m1','#wc-n1',s1,s1===100?'✓':'✗');
+      set('#wc-m2','#wc-n2',s2,s2===100?'✓':'✗');
+      set('#wc-m3','#wc-n3',s3,s3===100?'✓':'✗');
+      // contradiction check: naming knee peak but glute muscles, etc.
+      var contradiction='';
+      if(joint.value==='hip'&&musc.value==='quad')contradiction=' Note: you named the hip as peak-demand joint but chose the quadriceps — those layers contradict each other.';
+      if(joint.value==='knee'&&musc.value==='glute')contradiction=' Note: you named the knee as peak-demand joint but chose the glutes/hamstrings — check that layer.';
+      if(joint.value==='back'&&musc.value!=='erector')contradiction=' Note: you named the spinal extensors as under peak demand but did not select the erector spinae.';
+      var correct=(s1+s2+s3)===300;
+      out.innerHTML='<strong>Integrated read:</strong> '+m.note+(correct?' Your three layers are internally consistent and match the mechanical model.':' One or more layers diverge from the model.')+contradiction;
+    });
+  }catch(e){}
+})();
+(function(){
+  try{
+    var root=document.getElementById('w-sorter');
+    if(!root)return;
+    var cases=[
+      {ans:'var',amb:35,fb:'Long femur + limited ankle dorsiflexion mechanically REQUIRES a forward lean to keep the load over the base (Berglund et al., 2024). Expected variation. No referral cue is present.'},
+      {ans:'ref',amb:80,fb:'Borderline. A single fatigue-driven forward drift is often expected as the moment arm lengthens — but a NEW change under load that the lifter cannot control, especially if it worsens or hurts, is a referral cue. Ambiguity is high; gather more (pain? reproducible? one-sided?).'},
+      {ans:'ref',amb:20,fb:'A SUDDEN one-sided shift accompanied by NEW pain sits outside the mechanical story. This warrants professional evaluation — a referral cue, not a diagnosis.'},
+      {ans:'var',amb:30,fb:'Wider stance with an upright trunk shifts moment into the frontal/transverse planes and knees tracking over the toes is the expected consequence (Hanen et al., 2025). Expected variation.'},
+      {ans:'var',amb:70,fb:'Reproducible, pain-free lumbopelvic flexion at end-range is most strongly predicted by ankle dorsiflexion, not proportions (Berglund et al., 2024; Kim et al., 2021). Expected variation — but "reproducible and pain-free" is doing the work; if pain or progression appeared, the call would flip. Genuinely ambiguous.'}
+    ];
+    var cs=root.querySelector('#ws-case'),call=root.querySelector('#ws-call'),btn=root.querySelector('#ws-btn'),out=root.querySelector('#ws-out');
+    function set(id,num,pct,txt){root.querySelector(id).style.width=pct+'%';root.querySelector(num).textContent=txt;}
+    btn.addEventListener('click',function(){
+      var c=cases[+cs.value];
+      var fit=call.value===c.ans?100:40;
+      set('#ws-m1','#ws-n1',fit,fit===100?'✓':'✗');
+      set('#ws-m2','#ws-n2',c.amb,c.amb>=65?'high':(c.amb>=40?'mod':'low'));
+      out.innerHTML=(fit===100?'<strong>Consistent with the mechanics.</strong> ':'<strong>Reconsider.</strong> ')+c.fb;
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

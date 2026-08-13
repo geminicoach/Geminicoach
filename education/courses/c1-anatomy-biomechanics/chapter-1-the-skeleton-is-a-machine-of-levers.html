@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Skeleton Is a Machine of Levers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 1 · Module 1</div>
+    <h1 class="ch-title">The Skeleton Is a Machine of <em>Levers</em></h1>
+    <p class="ch-subtitle">Every joint is a bargain struck between force and range — learn to read the terms.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>ick up a dumbbell and curl it. The weight is honest — say twelve kilograms, a load your palm feels as a steady downward pull. Now consider what your biceps must do to hold that load motionless at ninety degrees. It is not generating twelve kilograms of force. It is generating something closer to <em>eight or nine times</em> that. The muscle is losing a lopsided tug-of-war on purpose, and it does so at nearly every joint you own.</p>
+    <p>This is not a flaw. It is the central design decision of the vertebrate limb, and once you can see it, you can never unsee it. The skeleton is not merely scaffolding that holds you upright. It is a machine — a system of rigid bars, pivots, and applied forces that trades away raw strength to buy something the body values more: speed and reach.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Bones as rigid levers</h2>
+    <p>Start with the simplest possible reframing. A bone, mechanically speaking, is a <span class="ch-key">rigid lever</span> — a bar stiff enough that it does not appreciably bend under the loads of ordinary movement, free to rotate about a pivot. That pivot is a joint. The muscle that crosses the joint pulls on the bar somewhere along its length, and an external load — the dumbbell, gravity, the ground pushing back — resists somewhere else. Everything downstream in this course is bookkeeping on that arrangement: which forces act, where they act, and how far they act from the pivot.</p>
+    <p>Introductory biomechanics texts deliberately teach mechanics <em>before</em> functional anatomy for exactly this reason. As McGinnis (2020) frames it, you first learn how external forces behave, then how the musculoskeletal system generates internal forces to meet them. The bone is where those two force systems meet. Neumann (2017), writing for a more clinical audience, opens his kinesiology text with the same lever framework — not as an abstraction, but as the working vocabulary a movement professional uses to reason about any joint they will ever assess.</p>
+    <p>Four terms anchor the whole discussion, and you should be able to point to each one on your own arm.</p>
+    <ul>
+      <li>The <span class="ch-key">fulcrum</span> is the pivot — the joint axis about which the bone rotates.</li>
+      <li>The <span class="ch-key">effort</span> is the force the body itself applies, almost always a muscle pulling on bone through its tendon.</li>
+      <li>The <span class="ch-key">resistance</span> is the external force being worked against — a load, body weight, or ground reaction.</li>
+      <li>The <span class="ch-key">effort arm</span> and <span class="ch-key">resistance arm</span> are the perpendicular distances from the fulcrum to the line of action of the effort and the resistance, respectively.</li>
+    </ul>
+    <p>Those last two — the <em>arms</em> — are where the machine hides its logic. A force far from the fulcrum has more rotational authority than the same force applied close in. We will formalize that authority as <span class="ch-key">torque</span> in Chapter 4. For now hold the intuition: distance from the pivot is leverage, and leverage is destiny.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: on your own forearm, where does the biceps tendon actually attach relative to the elbow — near the joint or out near the wrist? Your answer already predicts whether the arm favors force or speed.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in warm sepia ink and muted ochre watercolour, illustrating the human forearm as a mechanical lever. The elbow joint is drawn as a small circular pivot at the left labelled 'fulcrum'; the biceps tendon attaches to the forearm bone just past the pivot with a small upward arrow labelled 'effort'; a downward arrow at the hand at the right end of the bar is labelled 'resistance'. A short bracket near the pivot is labelled 'effort arm' and a long bracket spanning to the hand is labelled 'resistance arm'. Anatomical cross-hatching on the bone, notebook-margin aesthetic, unlabeled measurement ticks avoided. Soft single key light from upper left, cream paper background." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch1-img1.jpg" alt="<em>The forearm read as a third-class lever: effort close in, resistance far out.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The forearm read as a third-class lever: effort close in, resistance far out.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The three classes of levers</h2>
+    <p>Physics recognizes three lever classes, distinguished by one question only: what sits <em>between</em> what? Specifically, which of the three points — fulcrum, effort, resistance — occupies the middle position along the bar. That single geometric fact determines whether the lever multiplies force, multiplies range, or simply redirects it. Remarkably, all three classes live inside the human body, and you use each of them every day.</p>
+
+    <h3>First-class levers: the fulcrum in the middle</h3>
+    <p>In a <span class="ch-key">first-class lever</span>, the fulcrum sits between the effort and the resistance, like a seesaw. The canonical body example is the atlanto-occipital joint — the articulation at the very base of your skull where you nod "yes." The joint is the fulcrum. The weight of your face and jaw, falling forward of that joint, is the resistance. The posterior neck extensors pulling down behind the joint are the effort. Effort on one side, resistance on the other, pivot in between.</p>
+    <p>First-class levers are versatile: depending on where the fulcrum sits, they can favor force, favor range, or balance the two. A crowbar and a pair of scissors are both first-class. In the body they most often serve a balancing role — the small, constant postural adjustments that keep your head from pitching forward as you read this sentence.</p>
+
+    <h3>Second-class levers: the resistance in the middle</h3>
+    <p>In a <span class="ch-key">second-class lever</span>, the resistance sits between the fulcrum and the effort. Because the effort is always farther from the fulcrum than the resistance is, the effort arm is always longer — and so this class <em>always</em> multiplies force. This is the wheelbarrow, the nutcracker, the bottle opener.</p>
+    <p>The body's cleanest example is the <span class="ch-key">calf raise</span>. Rise onto the ball of your foot and watch the geometry. The fulcrum is the ball of the foot, where the toes meet the ground. The resistance is your body weight, transmitted down through the tibia to the ankle, sitting between the toes and the heel. The effort is the pull of the gastrocnemius and soleus through the Achilles tendon at the heel — the point farthest from the fulcrum. Effort arm longer than resistance arm: the calf enjoys a genuine mechanical advantage here, which is precisely why it can hoist your entire body weight onto tiptoe. Keep this example in your pocket. We will return to it repeatedly, because it is the rare joint action where the human machine is arranged to favor force.</p>
+
+    <h3>Third-class levers: the effort in the middle</h3>
+    <p>In a <span class="ch-key">third-class lever</span>, the effort sits between the fulcrum and the resistance. Here the effort arm is always <em>shorter</em> than the resistance arm — the reverse of the second-class deal — and so this class always costs force. And this, unfortunately or brilliantly, is the arrangement at nearly every limb joint in your body.</p>
+    <p>Return to the biceps curl. The fulcrum is the elbow. The resistance is the dumbbell in your hand, out at the far end of the forearm. The effort is the biceps, inserting on the radius just a few centimeters past the elbow — close to the fulcrum, between it and the load. That short effort arm is why the muscle must generate many times the load's weight. If the biceps inserts, say, 4 cm from the elbow axis and the dumbbell sits 32 cm away, the effort arm is one-eighth the resistance arm, and the muscle must produce roughly eight times the load force just to hold the position. The tug-of-war we opened with, quantified.</p>
+    <p>Why would evolution wire nearly every limb this way, saddling the muscles with an eightfold force penalty? The answer is the trade-off that gives this chapter its spine.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A single instructional illustration in the style of a vintage physics textbook engraving, comparing three lever classes stacked vertically, rendered in charcoal grey line art on aged ivory paper with one accent colour of dusty teal. Top row: a seesaw-style first-class lever with the triangular pivot in the centre, small labels 'fulcrum', 'effort', 'resistance'. Middle row: a wheelbarrow-style second-class lever with the load in the middle, same three labels. Bottom row: a forearm-style third-class lever with the pulling arrow in the middle, same three labels. Each lever drawn as a clean horizontal bar with a triangular fulcrum and directional force arrows. Precise, diagrammatic, symmetrical composition, generous white space between rows, no numerical values." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch1-img2.jpg" alt="<em>Three classes, one distinguishing question: what sits in the middle?</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Three classes, one distinguishing question: what sits in the middle?</em></figcaption></figure>
+
+  <div class="ch-widget" id="lever-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Lever-Class Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Assign each body action to its lever class. On each answer the fulcrum (F), effort (E), and resistance (R) points are revealed, with immediate feedback.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Body action</span>
+        <select class="ch-widget-select" id="ls-action">
+          <option value="nod">Head nod (base of skull)</option>
+          <option value="calf">Calf raise (rise onto ball of foot)</option>
+          <option value="curl">Biceps curl (elbow flexion)</option>
+          <option value="ext">Forearm extension (triceps)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="ls-guess">
+          <option value="1">First-class lever</option>
+          <option value="2">Second-class lever</option>
+          <option value="3">Third-class lever</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Correct</span>
+        <span class="ch-meter-bar"><span id="ls-bar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ls-score">0/0</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ls-feedback" style="min-height:1.2em">Choose an action and a class, then submit.</p>
+
+    <button class="ch-widget-btn" id="ls-submit">Check classification</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The force-versus-range trade-off</h2>
+    <p>A lever cannot cheat. Whatever a third-class arrangement costs you in force, it must return in something else — and what it returns is <span class="ch-key">speed and range of motion</span> at the far end of the bar. This is the fundamental bargain, sometimes called the force–velocity trade-off of lever geometry, and it is a direct consequence of geometry, not physiology.</p>
+    <p>Picture the biceps again. It inserts 4 cm from the elbow. When it shortens by a small amount — say 1 cm — the point it pulls on rotates through a certain angle. But the hand, sitting 32 cm out, sweeps through the <em>same angle</em> across a much larger arc. The insertion point moved a little; the hand moved a lot. The muscle traded a small, forceful contraction for a large, rapid excursion of the hand. That is why you can throw, snap, and reach with speed no muscle could produce directly: the third-class lever is a velocity amplifier, and the price of amplification is force.</p>
+    <p>Say it as a slogan and it will serve you all term: <em>a short effort arm buys speed and range at the cost of force; a long effort arm buys force at the cost of speed and range.</em> The second-class calf raise sits at the force-favoring end. The third-class curl sits at the speed-favoring end. Nearly your whole limb system is deliberately tuned toward speed — which tells you something profound about what selection prioritized in an animal that runs, throws, and manipulates.</p>
+
+    <h3>The concept of mechanical advantage</h3>
+    <p>We can put a single number on the bargain. <span class="ch-key">Mechanical advantage</span> is the ratio of the effort arm to the resistance arm. When that ratio exceeds one, the lever multiplies force (a second-class calf raise). When it falls below one, the lever multiplies range and demands extra force from the muscle (a third-class curl). Zajac (1989), in his foundational treatment of muscle as a "musculotendon actuator," framed exactly this: the tendon-bone lever geometry modulates the effective force and velocity that a muscle's contraction actually delivers to the skeleton. The muscle produces a raw force–velocity output; the lever then transforms it, and mechanical advantage is the exchange rate.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A sprinter and a powerlifter are both human, with the same lever <em>classes</em> at every joint. If both are third-class at the knee, what could still differ between them to shift one toward force and the other toward speed? (Hint: the classes are fixed, but the <em>arm lengths</em> are not.)</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="arm-slider">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Effort-Arm Slider</div>
+    </div>
+    <p class="ch-widget-sub">A stylized forearm holds a fixed 12 kg load 32 cm from the elbow. Drag the muscle insertion point and watch the required muscle force respond. Predict first: does moving the insertion <em>outward</em> raise or lower the force needed?</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your prediction</span>
+        <select class="ch-widget-select" id="as-predict">
+          <option value="lower">Outward → lowers required force</option>
+          <option value="raise">Outward → raises required force</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Insertion distance from elbow (cm)</span>
+        <input type="range" class="ch-widget-select" id="as-range" min="2" max="10" step="0.5" value="4">
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Load force</span>
+        <span class="ch-meter-bar"><span id="as-load-bar" style="width:12%"></span></span>
+        <span class="ch-meter-num" id="as-load-num">118 N</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Muscle force</span>
+        <span class="ch-meter-bar"><span id="as-musc-bar" style="width:96%"></span></span>
+        <span class="ch-meter-num" id="as-musc-num">941 N</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Mechanical advantage</span>
+        <span class="ch-meter-bar"><span id="as-ma-bar" style="width:12%"></span></span>
+        <span class="ch-meter-num" id="as-ma-num">0.13</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="as-feedback" style="min-height:1.2em">Set your prediction, then drag the slider.</p>
+
+    <button class="ch-widget-btn" id="as-check">Score my prediction</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Why this matters beyond the textbook</h2>
+    <p>You might suspect that lever classes are a tidy pedagogical fiction — real enough, but too simple to survive contact with a live, moving animal. The primary literature says otherwise, and it says something more interesting still: the <em>class</em> is fixed by anatomy, but the <em>effective</em> mechanical advantage is not.</p>
+    <p>Biewener's (1989) landmark scaling study in <em>Science</em> is the classic demonstration. Ask how an elephant's skeleton survives loads that would shatter a shrew's, given that bone stress scales unfavorably with body size. The answer is not thicker bone alone but <span class="ch-key">posture</span>. Small mammals run crouched, with flexed limbs — long resistance arms relative to their extensor moment arms, meaning low effective mechanical advantage and high muscle forces. Large mammals stand and move with more upright, columnar limbs, aligning the ground reaction force closer to the joints, shortening the effective resistance arm, and raising effective mechanical advantage. The lever classes never change. The geometry within them does, and that adjustable geometry is what keeps a three-ton animal from breaking its own legs.</p>
+    <p>The same variable operates inside a single human across a single afternoon. Biewener, Farley, Roberts, and Temaner (2004) used inverse dynamics to track <span class="ch-key">effective mechanical advantage</span> (EMA) at the hip, knee, and ankle as people shifted from walking to running. They report a striking result: knee-extensor EMA fell by roughly 68% from walk to run, because the more flexed, crouched posture of running lengthens the resistance arm at the knee. That posture change alone dramatically inflates the quadriceps force required. You do not change your lever class when you break into a run — you change the arms, and the muscles pay the difference.</p>
+    <p>There is a further, more cautionary lesson in the recent literature. Osgood and colleagues (2020) argue that the classical, quasi-static picture — measure the arm lengths, compute mechanical advantage, predict the output — is genuinely incomplete once muscle physiology and limb inertia enter the picture. Using dynamic musculoskeletal simulations, they show that a <em>single</em> lever morphology can produce a whole range of output velocities depending on how the movement unfolds in time. The static lever tells you the standing bargain; it does not, by itself, tell you the fastest a limb can move. Nigg and Herzog (2007) and Enoka (2022) build precisely this bridge in their graduate treatments — from the clean geometry of moment arms toward the full torque-equilibrium and neuromechanical models that account for how a nervous system actually drives these levers through time.</p>
+    <p>For this course, hold two truths at once. First, the static lever model is the indispensable foundation — it is the coordinate system in which every later idea is expressed, and you must be fluent in it. Second, it is a first approximation, and the honest professional knows where it stops predicting and dynamics take over. We will spend the term building outward from the foundation while respecting its edges.</p>
+    <blockquote class="ch-quote">
+      <p>The musculoskeletal system does not generate movement so much as negotiate it — every joint a standing contract between the force a muscle can make and the speed a limb must reach.</p>
+      <cite>A working paraphrase of the lever bargain</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>Reading a joint in the wild</h2>
+    <p>Here is the skill this chapter was built to give you. Confronted with any joint action — a movement you have never analyzed before — you can now run a short, reliable procedure. Locate the fulcrum: it is the joint axis. Locate the effort: find the muscle doing the work and where its tendon inserts. Locate the resistance: find the external load and where it acts. Then ask the one diagnostic question — <em>which of the three sits in the middle?</em> — and you have the class. Compare the two arms and you have the direction of the trade-off: force or range.</p>
+    <p>Run it on a movement you know. In the deadlift, the hip is a fulcrum, the spinal erectors and glutes supply effort close to that fulcrum, and the barbell plus torso weight resist far out along the lever of the trunk — a punishing third-class arrangement, which is exactly why the movement is so demanding and why bar-to-body distance matters so much. In the overhead press, the sticking point appears right where the resistance arm is longest relative to the shoulder. You are already, on Chapter 1, reading the mechanics that later chapters will merely make quantitative. When any joint action produces persistent pain rather than ordinary fatigue, that is a signal to seek professional evaluation — the lever model explains loads, not injuries, and the two should never be confused.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Take one movement from your own training this week. Name its fulcrum, effort, and resistance out loud. Which sits in the middle? Does the arrangement favor force or range — and does that match how the movement <em>feels</em>?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A bone is a rigid lever; a joint is its fulcrum; a muscle supplies the effort; an external load supplies the resistance. This is the coordinate system for the entire course.</li>
+      <li>Lever class is decided by one question: which of fulcrum, effort, or resistance sits in the middle. First-class (fulcrum), second-class (resistance, always force-favoring), third-class (effort, always range-favoring).</li>
+      <li>Nearly every limb joint is a third-class lever with a short effort arm — it costs the muscle large forces to buy speed and range at the hand and foot.</li>
+      <li>Mechanical advantage is the ratio of effort arm to resistance arm; above one multiplies force, below one multiplies range.</li>
+      <li>Lever class is fixed by anatomy, but <em>effective</em> mechanical advantage shifts with posture — Biewener's scaling work and the walk-to-run EMA studies show the same class delivering very different demands.</li>
+      <li>The static lever model is foundational but incomplete; dynamic analyses reveal that one morphology can yield a range of output speeds.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have been speaking loosely of "force far from the fulcrum" and "leverage." In Chapter 4 we give that intuition a precise name and equation: torque, the product of force and moment arm. Everything you sorted by eye in this chapter — favors force, favors range — becomes something you can calculate. Keep the calf raise and the biceps curl close; we are about to put numbers on both.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Biewener, A. A. (1989). Scaling body support in mammals: Limb posture and muscle mechanics. <em>Science, 245</em>(4913), 45–48. https://doi.org/10.1126/science.2740914</p>
+    <p>Biewener, A. A., Farley, C. T., Roberts, T. J., & Temaner, M. (2004). Muscle mechanical advantage of human walking and running: Implications for energy cost. <em>Journal of Applied Physiology, 97</em>(6), 2266–2274. https://doi.org/10.1152/japplphysiol.00003.2004</p>
+    <p>Enoka, R. M. (2022). <em>Neuromechanics of human movement</em> (6th ed.). Human Kinetics.</p>
+    <p>McGinnis, P. M. (2020). <em>Biomechanics of sport and exercise</em> (4th ed.). Human Kinetics.</p>
+    <p>Neumann, D. A. (2017). <em>Kinesiology of the musculoskeletal system: Foundations for rehabilitation</em> (3rd ed.). Elsevier.</p>
+    <p>Nigg, B. M., & Herzog, W. (2007). <em>Biomechanics of the musculo-skeletal system</em> (3rd ed.). Wiley.</p>
+    <p>Osgood, A., Reddy, P., Roberts, C., Rankin, J. W., & McGowan, C. P. (2020). Simple muscle-lever systems are not so simple: The need for dynamic analyses to predict lever mechanics that maximize speed. <em>bioRxiv</em>. https://doi.org/10.1101/2020.10.14.339390</p>
+    <p>Zajac, F. E. (1989). Muscle and tendon: Properties, models, scaling, and application to biomechanics and motor control. <em>Critical Reviews in Biomedical Engineering, 17</em>(4), 359–411.</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 1 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('lever-sorter');
+    if(!root) return;
+    var data = {
+      nod:  {cls:'1', name:'Head nod', why:'The skull-base joint is the fulcrum, with face weight (resistance) in front and neck extensors (effort) behind — fulcrum in the middle.'},
+      calf: {cls:'2', name:'Calf raise', why:'Ball of foot is the fulcrum, body weight (resistance) sits in the middle, the calf pulls at the heel (effort) farthest out — resistance in the middle, force-favoring.'},
+      curl: {cls:'3', name:'Biceps curl', why:'Elbow is the fulcrum, biceps inserts close in (effort), the dumbbell (resistance) is far out — effort in the middle, range-favoring.'},
+      ext:  {cls:'3', name:'Forearm extension', why:'Elbow is the fulcrum, triceps inserts close in (effort), the hand load (resistance) is far out — effort in the middle, another third-class lever.'}
+    };
+    var action = root.querySelector('#ls-action');
+    var guess = root.querySelector('#ls-guess');
+    var submit = root.querySelector('#ls-submit');
+    var fb = root.querySelector('#ls-feedback');
+    var scoreEl = root.querySelector('#ls-score');
+    var bar = root.querySelector('#ls-bar');
+    var correct = 0, total = 0;
+    submit.addEventListener('click', function(){
+      var a = data[action.value];
+      var g = guess.value;
+      total++;
+      var ok = (g === a.cls);
+      if(ok) correct++;
+      var names = {'1':'first-class','2':'second-class','3':'third-class'};
+      fb.innerHTML = (ok ? '✓ Correct. ' : '✗ Not quite — it is a ' + names[a.cls] + ' lever. ') + a.why;
+      scoreEl.textContent = correct + '/' + total;
+      bar.style.width = Math.round((correct/total)*100) + '%';
+    });
+  } catch(e) {}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('arm-slider');
+    if(!root) return;
+    var LOAD_KG = 12, G = 9.81, RES_ARM = 0.32; // metres
+    var loadN = LOAD_KG * G; // ~117.7 N
+    var range = root.querySelector('#as-range');
+    var predict = root.querySelector('#as-predict');
+    var check = root.querySelector('#as-check');
+    var fb = root.querySelector('#as-feedback');
+    var loadNum = root.querySelector('#as-load-num');
+    var loadBar = root.querySelector('#as-load-bar');
+    var muscNum = root.querySelector('#as-musc-num');
+    var muscBar = root.querySelector('#as-musc-bar');
+    var maNum = root.querySelector('#as-ma-num');
+    var maBar = root.querySelector('#as-ma-bar');
+    function update(){
+      var eff = parseFloat(range.value)/100; // cm -> m
+      var muscN = loadN * (RES_ARM / eff);
+      var ma = eff / RES_ARM;
+      // reference max for bar scaling: force at 2cm insertion
+      var maxN = loadN * (RES_ARM / 0.02);
+      loadNum.textContent = Math.round(loadN) + ' N';
+      loadBar.style.width = Math.round((loadN/maxN)*100) + '%';
+      muscNum.textContent = Math.round(muscN) + ' N';
+      muscBar.style.width = Math.round((muscN/maxN)*100) + '%';
+      maNum.textContent = ma.toFixed(2);
+      maBar.style.width = Math.min(100, Math.round(ma*100)) + '%';
+    }
+    range.addEventListener('input', update);
+    check.addEventListener('click', function(){
+      var p = predict.value;
+      // Outward (larger effort arm) LOWERS required force.
+      if(p === 'lower'){
+        fb.innerHTML = '✓ Correct. Moving the insertion outward lengthens the effort arm, raising mechanical advantage — so the muscle needs <em>less</em> force to hold the same load. Nature keeps insertions close in precisely because it is buying speed and range instead.';
+      } else {
+        fb.innerHTML = '✗ Actually the reverse. Outward insertion lengthens the effort arm and raises mechanical advantage, so required muscle force <em>drops</em>. Drag toward 2 cm and watch the muscle force climb — that short arm is the price of speed.';
+      }
+    });
+    update();
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>

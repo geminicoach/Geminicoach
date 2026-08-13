@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Torque, the Moment Arm, and the Currency of Lifting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 4 · Module 2</div>
+    <h1 class="ch-title">Torque, the Moment Arm, and the Currency of Lifting</h1>
+    <p class="ch-subtitle">Why every hard part of every lift is, underneath, a story about perpendicular distance.</p>
+    <div class="ch-meta">
+      <span>21 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>ick up a wrench and try to loosen a stubborn bolt. Grip the wrench close to the head and you strain against it; slide your hand out to the end of the handle and the same bolt yields to the same effort. Nothing about your muscle changed. Nothing about the bolt changed. What changed was the distance between the bolt and the line along which you pulled — and that distance, not the force alone, is what turned the bolt.</p>
+    <p>This is the whole chapter in one image. The bolt is a joint. The wrench handle is a body segment. And the reason a squat crushes you at the bottom, the reason a deadlift punishes a long torso, the reason a lateral raise burns hardest when your arms reach the horizon — all of it lives in that changing distance. Master it once, here, and you will read every lift for the rest of the course with the same pair of eyes.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>From force to torque</h2>
+    <p>You already know from the earlier chapters that muscles pull, that joints rotate, and that bones behave as levers. But a lift is not a matter of force in isolation. Bones do not translate freely; they <em>rotate</em> about joint axes. The relevant physical quantity for rotation is not force but <span class="ch-key">torque</span> — the rotational effect of a force, sometimes called a moment.</p>
+    <p>The definition is compact and it is the single most important equation in this course:</p>
+    <p style="text-align:center"><strong>τ = F × d</strong></p>
+    <p>Torque (τ) equals force (F) multiplied by the <span class="ch-key">moment arm</span> (d). The force is measured in newtons; the moment arm in meters; the torque in newton-meters. Two forces of identical magnitude produce wildly different torques depending on their moment arms — exactly the wrench lesson. Double the moment arm and you double the torque for free (Keogh et al., 2013).</p>
+    <p>The subtlety that trips up most students is the word <em>perpendicular</em>. The moment arm is not the distance from the joint to the point where the force is applied. It is the <span class="ch-key">perpendicular distance from the joint axis to the line of action of the force</span> — the straight, shortest distance from the pivot to the infinite line drawn along the force vector (Neumann, 2024). If the force pulls straight down, you drop a horizontal line from the joint to that vertical line of pull; the length of that horizontal segment is the moment arm.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If you push directly toward a door's hinge, the door does not swing no matter how hard you shove. In terms of the equation τ = F × d, what is the value of d in that push, and therefore what is the torque?</p>
+    </aside>
+    <p>The answer — d is zero, so the torque is zero — captures why direction matters as much as magnitude. A force whose line of action passes straight through the axis has no moment arm and produces no rotation. That is not a special case; it is the boundary that organizes everything else.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink technical drawing in the style of a vintage engineering handbook, showing a hand gripping a long wrench on a hexagonal bolt. A clear dashed line traces the line of action of the downward pull force at the hand, and a bold perpendicular bracket marks the horizontal distance from the bolt center to that line, labeled 'moment arm' in small italic serif. The bolt is labeled 'axis'. Warm sepia ink on cream paper, cross-hatched shading, single light source from upper left. No color other than sepia and cream; no watermarks; no people's faces." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img1.jpg" alt="<em>The wrench: force times perpendicular distance, made concrete.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The wrench: force times perpendicular distance, made concrete.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Two moment arms in tension</h2>
+    <p>Here is where the human body departs from the wrench. In a lift there are always at least two torques fighting over the same joint, and each has its own moment arm.</p>
+    <h3>The external moment arm</h3>
+    <p>The load — a barbell, a dumbbell, the weight of your own limb — is pulled straight down by gravity. Its line of action is a vertical line falling through its center of mass. The <span class="ch-key">external moment arm</span> is the horizontal distance from the joint axis to that vertical line of gravity. Multiply it by the load's weight and you get the <span class="ch-key">external torque</span>: the rotational demand the load imposes on the joint (Neumann, 2024). This is the enemy. It is what your body must overcome.</p>
+    <h3>The internal moment arm</h3>
+    <p>Opposing it is the muscle. A muscle pulls along its line of action from insertion toward origin. The <span class="ch-key">internal moment arm</span> is the perpendicular distance from the joint axis to that line of muscle pull. Multiply it by the muscle's tension and you get the <span class="ch-key">internal torque</span> — the rotational effort the muscle supplies (Hamill et al., 2014). This is the ally.</p>
+    <p>Every static position in every lift is a negotiation between these two:</p>
+    <p style="text-align:center"><strong>F<sub>muscle</sub> × d<sub>internal</sub> = F<sub>load</sub> × d<sub>external</sub></strong></p>
+    <p>When you hold a weight still, internal torque equals external torque and the joint is in rotational equilibrium. When you lift, internal torque exceeds external and the segment rotates in your favor. When the weight wins, external exceeds internal and you are lowered whether you like it or not.</p>
+    <p>Now look at the asymmetry between the two moment arms, because it is brutal and it is the reason lifting is hard. External moment arms are measured in the tens of centimeters — the length of a forearm, the reach of a torso. Internal moment arms are measured in <em>centimeters</em>. Németh and Ohlsén (1986), imaging 21 living subjects with computed tomography, found the erector spinae's internal moment arm about the lumbosacral joint to be roughly 68 mm — under seven centimeters. When a barbell hangs 30 or 40 cm forward of your lumbar spine in a deadlift, the muscle is fighting from a five-to-one or six-to-one mechanical disadvantage. To balance a load, the erector spinae must generate several times the load's force. This is the third-class-lever cost you met in Chapter 1, now given a number.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If the erector spinae's internal moment arm is 68 mm and a load produces an external moment arm of 340 mm at the same joint, roughly how many times the load's force must the muscle produce to hold the position static?</p>
+    </aside>
+    <p>The arithmetic — 340 divided by 68 equals five — tells you the muscle force is about five times the external load. Load a 100 kg deadlift and the tissue crossing your lumbar spine is managing forces that dwarf the plates on the bar. This is not a reason for alarm; it is the ordinary price of the geometry we are built with. But it does explain why lifting demands respect, and why the position of the bar relative to your joints is worth obsessing over.</p>
+  </section>
+
+  <div class="ch-widget" id="w-balance">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Balance-the-Torque Challenge</div>
+    </div>
+    <p class="ch-widget-sub">A fixed external load hangs on one side of a joint. Adjust the muscle's force and its insertion distance until net torque reaches zero and the position holds.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Muscle force (N)</span>
+        <select class="ch-widget-select" id="bal-force">
+          <option value="200">200</option>
+          <option value="400">400</option>
+          <option value="600">600</option>
+          <option value="800">800</option>
+          <option value="1000">1000</option>
+          <option value="1200">1200</option>
+          <option value="1400">1400</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Internal moment arm (cm)</span>
+        <select class="ch-widget-select" id="bal-arm">
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">External torque</span>
+        <span class="ch-meter-bar"><span id="bal-ext-bar" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="bal-ext-num">36</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Internal torque</span>
+        <span class="ch-meter-bar"><span id="bal-int-bar" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="bal-int-num">24</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Net torque (→ 0)</span>
+        <span class="ch-meter-bar"><span id="bal-net-bar" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="bal-net-num">12</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="bal-check">Check balance</button>
+    <p class="ch-widget-sub" id="bal-msg">External load is fixed at 300 N acting on a 12 cm external moment arm (36 N·m). Find a force-and-arm combination that matches it.</p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The moment arm changes as you move</h2>
+    <p>So far we have frozen the body in a single pose. But a lift is a rotation, and as segments rotate the geometry never stops shifting. The external moment arm in particular is a moving target, and understanding <em>how</em> it moves is what lets you predict where a lift gets hard.</p>
+    <p>Consider a dumbbell held in your hand during a lateral raise, or a curl, or any single-joint movement where a limb sweeps through an arc against gravity. Gravity always pulls straight down. The external moment arm is the horizontal distance from the joint to the weight. When the limb hangs straight down, the weight sits directly below the joint — the horizontal distance is nearly zero, so the external moment arm is nearly zero, and the movement feels almost weightless. As you raise the limb toward horizontal, the weight swings out to the side, the horizontal distance grows, and the external torque climbs. When the limb is exactly parallel to the floor, the weight is maximally displaced horizontally from the joint: the external moment arm is at its longest and the external torque peaks (Keogh et al., 2013).</p>
+    <p>This is why a lateral raise burns most viciously as your arms approach parallel with the floor, and why it eases the moment you pass the top or return toward your sides. The muscle's demand tracks the external moment arm, and that moment arm follows the sine of the segment's angle relative to vertical. The geometry, not fatigue alone, is authoring the sensation.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide plate, watercolour over graphite, showing a single human arm in four stacked positions rotating from hanging straight down to raised horizontal, as in a lateral raise, viewed from the side. A small weight is drawn in the hand at each position, with a thin vertical dashed line of gravity dropping from each weight and a bold horizontal bracket marking the growing 'moment arm' at each stage in small italic serif. The bracket is shortest at the bottom position and longest when the arm is horizontal. Muted earth palette: ochre, slate blue, warm grey, cream background. Soft even overcast lighting; no faces; no watermarks." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img2.jpg" alt="<em>As the segment sweeps toward horizontal, the external moment arm grows to its maximum.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>As the segment sweeps toward horizontal, the external moment arm grows to its maximum.</em></figcaption></figure>
+
+    <p>The same logic explains the bottom of a squat. As you descend, your torso inclines forward and your shins travel forward over your feet. Both changes push the barbell's line of gravity further from the hip and knee axes, lengthening the external moment arms at exactly the moment your muscles are least mechanically favored. Straub and Powers (2024), reviewing squat biomechanics, show that the orientation of the trunk relative to the tibia is the primary determinant of whether the hip extensors or the knee extensors bear the larger external torque. Sit the torso more upright and you shorten the hip's external moment arm while lengthening the knee's; incline it forward and you do the reverse. There is no way to make both arms short at once — you can only choose where the demand lands. That single insight will drive the entire squat chapter.</p>
+    <p>Internal moment arms change through range too, though usually more gently. The systematic visualization by the 2025 <em>Annals of Biomedical Engineering</em> review, aggregating three hundred moment-arm datasets across the hip, knee, and ankle, shows that a muscle's internal moment arm rises and falls as the joint angle changes, often peaking somewhere in the mid-range and tapering toward the extremes (Various, 2025). The sign of that moment arm even determines whether a muscle acts as a flexor or an extensor at a given angle; its magnitude helps set how hard the muscle must work. So both sides of our fundamental equation are in motion at once — external torque climbing and falling with the load's geometry, internal capacity waxing and waning with the muscle's.</p>
+  </section>
+
+  <div class="ch-widget" id="w-ruler">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Moment-Arm Ruler</div>
+    </div>
+    <p class="ch-widget-sub">Rotate a loaded segment through its arc. Watch the perpendicular distance to the line of gravity, read the external torque, and build a strength curve as you sweep.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Segment angle from vertical</span>
+        <select class="ch-widget-select" id="rul-angle">
+          <option value="0">0° (hanging down)</option>
+          <option value="15">15°</option>
+          <option value="30">30°</option>
+          <option value="45">45°</option>
+          <option value="60">60°</option>
+          <option value="75">75°</option>
+          <option value="90" selected>90° (horizontal)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Load (N)</span>
+        <select class="ch-widget-select" id="rul-load">
+          <option value="50">50</option>
+          <option value="100" selected>100</option>
+          <option value="150">150</option>
+          <option value="200">200</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Moment arm (cm)</span>
+        <span class="ch-meter-bar"><span id="rul-arm-bar" style="width:100%"></span></span>
+        <span class="ch-meter-num" id="rul-arm-num">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">External torque (N·m)</span>
+        <span class="ch-meter-bar"><span id="rul-tq-bar" style="width:100%"></span></span>
+        <span class="ch-meter-num" id="rul-tq-num">30</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="rul-plot">Record this angle on the strength curve</button>
+    <p class="ch-widget-sub" id="rul-curve">Recorded torques: — (sweep through the angles and record each to see the curve emerge)</p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Strength curves: the fingerprint of a lift</h2>
+    <p>If the demand on a muscle changes continuously through the range, then the muscle's ability to meet demand must change too — and it does. Plot the maximal torque a muscle group can produce against joint angle and you get a <span class="ch-key">strength curve</span>: the signature of how strong you are at every point in a movement (Kulig et al., 1984).</p>
+    <p>Strength curves are not flat. Kulig, Andrews, and Hay (1984), in their systematic review of torque-angle relationships across the major muscle groups, established that no muscle produces constant torque across its range. Some curves are ascending — strongest near full extension. Some descend — strongest at the stretched, flexed end. Many are shaped like a hill, peaking in the mid-range and falling off at both extremes. The shape of any given curve is the product of two things multiplied together: the muscle's internal moment arm at each angle, and the muscle's force-generating capacity at each length, which follows the familiar force–length relationship. Where a long moment arm coincides with a favorable muscle length, the curve peaks; where a short moment arm meets an over-stretched or over-shortened muscle, it dips (Hamill et al., 2014).</p>
+    <p>Now overlay the strength curve with the demand curve — the external torque the load imposes at each angle — and you have a complete diagnosis of the lift. The hardest point, the <em>sticking point</em>, is where the ratio of demand to capacity is worst: where the external moment arm is long and your torque-producing ability is thin. That is why a bench press stalls a few inches off the chest, why a squat is hardest just above the bottom, why a curl fights back near ninety degrees of elbow flexion. Each is a place where the two curves pinch together.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A lifter says a movement "has no bottom-end strength but locks out easily." In the language of demand curves and strength curves, what does that pattern tell you about where the external moment arm is longest and where their capacity is greatest?</p>
+    </aside>
+    <p>This is also why load-matching tools exist. Chains, bands, and cam-shaped pulleys all try to reshape the external demand curve to fit the strength curve — piling on resistance where you are strong and easing off where you are weak, so the ratio of demand to capacity stays more even across the range (Keogh et al., 2013). You cannot change your moment arms, but you can change how the load's moment arm behaves through the movement. That is the engineering behind every "accommodating resistance" device on the gym floor.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Reading real lifts: the deadlift case</h2>
+    <p>Let us put the whole apparatus to work on one lift, because the payoff of this chapter is analytic, not merely definitional. Escamilla and colleagues (2000) performed a three-dimensional analysis of sumo and conventional deadlifts on 24 lifters at a national powerlifting championship — a rare study of elite athletes performing near-maximal loads in competition conditions. They quantified joint moments and moment arms at the ankle, knee, and hip through the pull.</p>
+    <p>The finding maps directly onto our framework. The sumo style, with its wider stance and more upright trunk, shortens the horizontal distance from the lumbar spine to the barbell. A shorter external moment arm at the lumbar spine means less external torque there — and Escamilla et al. (2000) reported correspondingly reduced demand on the lumbar extensors relative to the conventional pull. The trade is not free: the wider stance loads the hips differently and recruits the hip abductors and adductors more heavily. But notice what the study is really doing. It is not discovering that sumo is "easier." It is showing that changing body orientation redistributes the external moment arms, and therefore moves the torque demand from one place to another — exactly the lesson Straub and Powers (2024) drew for the squat.</p>
+    <p>This is the engine you will run on every lift for the next four chapters. Freeze the position. Find each joint axis. Drop the vertical line of gravity through the load. Measure the horizontal distance from axis to line — that is the external moment arm, and where it is longest, the demand peaks. You now know, before touching a barbell, where any lift will be hardest and why. Everything else in this course is elaboration on that single move.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The moment arm is the key property transforming muscle force into joint moment; its sign determines whether a muscle flexes or extends the joint, and its magnitude partially determines the required activation.</p>
+    <cite>Paraphrasing the 2025 Annals of Biomedical Engineering moment-arm review</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Torque is force times moment arm (τ = F × d), and the moment arm is the <em>perpendicular</em> distance from the joint axis to the force's line of action — not the distance to the point of application.</li>
+      <li>Every static lift position balances an external torque (load × external moment arm) against an internal torque (muscle tension × internal moment arm).</li>
+      <li>Internal moment arms are tiny — the erector spinae's is roughly 68 mm — so muscles must generate forces several times the external load to hold a position (Németh & Ohlsén, 1986).</li>
+      <li>External moment arms change continuously as segments rotate; a limb's external moment arm is largest when the segment is horizontal and the load is maximally displaced from the axis.</li>
+      <li>A strength curve is the product of internal moment arm and muscle force–length capacity at each angle; the sticking point is where demand-to-capacity is worst (Kulig et al., 1984).</li>
+      <li>You cannot change your own moment arms, but changing body orientation redistributes external moment arms across joints — the basis of squat and deadlift technique variations (Straub & Powers, 2024; Escamilla et al., 2000).</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>With the moment arm in hand, the squat is next. We will drop the line of gravity through a loaded bar, watch the hip and knee external moment arms trade places as the trunk inclines, and finally understand why stance, depth, and bar position feel the way they do — not as rules to memorize, but as consequences you can now derive.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Escamilla, R. F., Francisco, A. C., Fleisig, G. S., Barrentine, S. W., Welch, C. M., Kayes, A. V., Speer, K. P., & Andrews, J. R. (2000). A three-dimensional biomechanical analysis of sumo and conventional style deadlifts. <em>Medicine & Science in Sports & Exercise, 32</em>(7), 1265–1275. https://doi.org/10.1097/00005768-200007000-00013</p>
+    <p>Hamill, J., Knutzen, K. M., & Derrick, T. R. (2014). <em>Biomechanical basis of human movement</em> (4th ed.). Lippincott Williams & Wilkins.</p>
+    <p>Keogh, J. W. L., Lake, J. P., & Swinton, P. A. (2013). Practical applications of biomechanical principles in resistance training: Moments and moment arms. https://pure.bond.edu.au/ws/files/45250947/Practical_applications_of_biomechanical.pdf</p>
+    <p>Kulig, K., Andrews, J. G., & Hay, J. G. (1984). Human strength curves. <em>Exercise and Sport Sciences Reviews, 12</em>(1), 417–466.</p>
+    <p>Németh, G., & Ohlsén, H. (1986). Moment arm lengths of trunk muscles to the lumbosacral joint obtained in vivo with computed tomography. <em>Spine, 11</em>(2), 158–160. https://doi.org/10.1097/00007632-198603000-00011</p>
+    <p>Neumann, D. A. (2024). <em>Neumann's kinesiology of the musculoskeletal system: Foundations for rehabilitation</em> (4th ed.). Elsevier.</p>
+    <p>Straub, R., & Powers, C. (2024). A biomechanical review of the squat exercise: Implications for clinical practice. <em>International Journal of Sports Physical Therapy, 19</em>(3). https://doi.org/10.26603/001c.94600</p>
+    <p>Various. (2025). Muscle moment arm–joint angle relations in the hip, knee, and ankle: A visualization of datasets. <em>Annals of Biomedical Engineering</em>. https://doi.org/10.1007/s10439-025-03735-w</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 4 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-balance');
+    if(!root) return;
+    var extTorque = 36; // fixed: 300 N * 0.12 m
+    var forceSel = root.querySelector('#bal-force');
+    var armSel = root.querySelector('#bal-arm');
+    var extNum = root.querySelector('#bal-ext-num');
+    var intNum = root.querySelector('#bal-int-num');
+    var netNum = root.querySelector('#bal-net-num');
+    var extBar = root.querySelector('#bal-ext-bar');
+    var intBar = root.querySelector('#bal-int-bar');
+    var netBar = root.querySelector('#bal-net-bar');
+    var msg = root.querySelector('#bal-msg');
+    var btn = root.querySelector('#bal-check');
+
+    function clamp(x){ return Math.max(0, Math.min(100, x)); }
+
+    function update(){
+      var F = parseFloat(forceSel.value);
+      var d = parseFloat(armSel.value)/100;
+      var intTorque = F*d;
+      var net = intTorque - extTorque;
+      extNum.textContent = extTorque.toFixed(0);
+      intNum.textContent = intTorque.toFixed(0);
+      netNum.textContent = net.toFixed(0);
+      extBar.style.width = clamp(extTorque/72*100)+'%';
+      intBar.style.width = clamp(intTorque/72*100)+'%';
+      netBar.style.width = clamp(Math.abs(net)/72*100)+'%';
+    }
+
+    function check(){
+      var F = parseFloat(forceSel.value);
+      var d = parseFloat(armSel.value)/100;
+      var intTorque = F*d;
+      var net = intTorque - extTorque;
+      if(Math.abs(net) < 0.6){
+        msg.textContent = 'Balanced. Notice: to match 36 N·m against the 12 cm external arm with only a '+armSel.value+' cm internal arm, the muscle had to produce '+F+' N — far more than the 300 N load. The shorter the internal moment arm, the larger the muscle force. That is the third-class-lever cost.';
+      } else if(net > 0){
+        msg.textContent = 'Internal torque exceeds external by '+net.toFixed(0)+' N·m — the segment would rotate against the load. Reduce force or shorten the internal arm.';
+      } else {
+        msg.textContent = 'External torque wins by '+(-net).toFixed(0)+' N·m — the load lowers you. Increase force or lengthen the internal arm.';
+      }
+    }
+
+    forceSel.addEventListener('change', update);
+    armSel.addEventListener('change', update);
+    btn.addEventListener('click', check);
+    update();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-ruler');
+    if(!root) return;
+    var SEG = 0.30; // 30 cm segment
+    var angleSel = root.querySelector('#rul-angle');
+    var loadSel = root.querySelector('#rul-load');
+    var armNum = root.querySelector('#rul-arm-num');
+    var tqNum = root.querySelector('#rul-tq-num');
+    var armBar = root.querySelector('#rul-arm-bar');
+    var tqBar = root.querySelector('#rul-tq-bar');
+    var curve = root.querySelector('#rul-curve');
+    var btn = root.querySelector('#rul-plot');
+    var recorded = {};
+
+    function clamp(x){ return Math.max(0, Math.min(100, x)); }
+
+    function current(){
+      var a = parseFloat(angleSel.value)*Math.PI/180;
+      var load = parseFloat(loadSel.value);
+      var arm = SEG*Math.sin(a); // meters
+      var tq = load*arm;
+      return {arm:arm, tq:tq, load:load};
+    }
+
+    function update(){
+      var c = current();
+      var maxTq = parseFloat(loadSel.value)*SEG;
+      armNum.textContent = (c.arm*100).toFixed(1);
+      tqNum.textContent = c.tq.toFixed(1);
+      armBar.style.width = clamp(c.arm/SEG*100)+'%';
+      tqBar.style.width = clamp(c.tq/maxTq*100)+'%';
+    }
+
+    function record(){
+      var deg = parseInt(angleSel.value,10);
+      var c = current();
+      recorded[deg] = c.tq;
+      var keys = Object.keys(recorded).map(Number).sort(function(x,y){return x-y;});
+      var parts = keys.map(function(k){ return k+'°: '+recorded[k].toFixed(1)+' N·m'; });
+      var trend = '';
+      if(keys.length >= 3){
+        trend = ' — torque climbs with angle, peaking at 90° where the moment arm is longest.';
+      }
+      curve.textContent = 'Recorded torques → ' + parts.join('   ') + trend;
+    }
+
+    angleSel.addEventListener('change', update);
+    loadSel.addEventListener('change', function(){ recorded={}; curve.textContent='Recorded torques: — (load changed; sweep again)'; update(); });
+    btn.addEventListener('click', record);
+    update();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

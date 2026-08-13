@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Muscle Architecture and the Line of Pull</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 3 · Module 1</div>
+    <h1 class="ch-title">Muscle Architecture and the <em>Line of Pull</em></h1>
+    <p class="ch-subtitle">Why a fan, a feather, and a strap all "contract" — and why that word tells you almost nothing.</p>
+    <div class="ch-meta">
+      <span>17 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>9 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>ut two muscles side by side and ask them to do the same job. The sartorius runs as a single long strap diagonally across the thigh, its fibers stretching nearly the whole length of the belly. The medial gastrocnemius, by contrast, packs hundreds of short fibers at a slant against a broad internal sheet of tendon, like the barbs of a feather. Both are "contractile." Both shorten when their motor units fire. Yet the gastrocnemius can generate several times the force of the sartorius, while the sartorius can shorten through a range the gastrocnemius could never dream of. Neither is a better muscle. They are answers to different mechanical questions.</p>
+    <p>In Class 2 you learned to treat bones as levers and joints as pivots — passive hardware waiting for something to drive it. This chapter opens up the engine. And the first surprise is that the engine's <em>shape</em>, not just its size, decides what kind of work it is built to do.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Opening the muscle: fascicles, pennation, and PCSA</h2>
+    <p>Strip a muscle down and you find bundles of fibers — <span class="ch-key">fascicles</span> — arranged in a characteristic pattern relative to the tendon that will ultimately transmit their force to bone. That arrangement is what we mean by <span class="ch-key">muscle architecture</span>, and Lieber and Fridén (2000) argue in their landmark review that it is "the single most important determinant" of a muscle's function — more predictive of how a muscle behaves than its fiber-type profile, its mass, or its name.</p>
+    <p>Three numbers capture most of what matters. <span class="ch-key">Fascicle (fiber) length</span> is how far the contractile machinery runs before it hands off to tendon. <span class="ch-key">Pennation angle</span> is the angle at which fibers attach to the tendon — zero in a strictly parallel muscle, and as much as 20–30° in a heavily feathered one. And <span class="ch-key">physiological cross-sectional area</span> (PCSA) is the total cross-sectional area of all the fibers measured <em>perpendicular to their own long axis</em>, not perpendicular to the whole muscle. That distinction is the whole game, because force is produced by sarcomeres pulling in parallel, and PCSA is simply a proxy for how many sarcomeres are arranged side by side.</p>
+    <p>The canonical estimate ties the three together for a fixed muscle volume:</p>
+    <p style="text-align:center"><em>PCSA ≈ (Volume × cos θ) / fascicle length</em></p>
+    <p>Read it slowly. For a given lump of tissue, the <em>shorter</em> the fascicles, the more of them you can pack across the muscle's width, and the larger the PCSA. Pennation is what lets you do that packing without the muscle ballooning — angled fibers occupy space efficiently against a broad internal aponeurosis. This is why the strongest muscles in the body, by PCSA, are not the ones with the longest bellies. In Ward and colleagues' (2009) high-fidelity dissection of 21 human lower limbs, the soleus, gluteus medius, and vastus lateralis topped the PCSA rankings — all short-fibered and pennate — while the sartorius, gracilis, and semitendinosus, the long straps, had the greatest excursion capacity and comparatively small PCSA.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two muscles have identical mass. Muscle A has 4 cm fascicles at 20° of pennation; muscle B has 12 cm fascicles running parallel. Before reading on: which makes more force, and which shortens through a greater range? Which architectural number did you actually use to decide?</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in the style of a vintage anatomical atlas, ink-and-watercolour on warm cream paper, showing three muscle architectures side by side for comparison. Left: a broad fan-shaped muscle with fibers radiating to a single point, labelled 'fan'. Center: a feather-like muscle with short fibers angled against a central tendon sheet, labelled 'pennate'. Right: a long thin straplike muscle with fibers running the full length, labelled 'strap'. Muted earthy palette of terracotta, ochre, sage, and ink-brown, fine cross-hatching, three-quarter educational lighting. Small neat serif labels only where specified; no numbers, no other text." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img1.jpg" alt="<em>Same word, &quot;contraction&quot; — three utterly different machines.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Same word, "contraction" — three utterly different machines.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The trade-off, stated cleanly: parallel versus series</h2>
+    <p>The classic way to remember all of this comes from Wickiewicz, Roy, Powell, and Edgerton's (1983) cadaveric study of the human lower limb, which sorted muscles by their predilection for tension versus velocity. Their formulation still holds: <span class="ch-key">tension is a function of sarcomeres in parallel; velocity and range of shortening are functions of sarcomeres in series</span>.</p>
+    <p>Line sarcomeres up end to end along a long fiber and each one's small shortening adds to the next, so the fiber shortens far and fast — but only one sarcomere's worth of force crosses any given cross-section. Stack sarcomeres side by side and their forces sum, but the fiber as a whole shortens only as much as a single sarcomere can. Every muscle in your body is a particular budget split between these two options, spent within a fixed tissue volume. You cannot buy both. Zajac (1989), formalizing the "musculotendon actuator" model that still underlies most biomechanical simulation, made this budget explicit: a muscle's force–length and force–velocity behavior can be scaled almost entirely from its architecture once you know PCSA and fiber length.</p>
+    <p>This is not an abstraction you will meet only in a textbook. It is the reason a calf muscle can hold your entire body weight on tiptoe but moves the ankle through a small arc, and the reason a hamstring can whip the shin through a wide, fast swing but yields to a heavy load. When you watch a lift, you are watching architecture spend its budget.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-arch">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Architecture Trade-off Builder</div>
+    </div>
+    <p class="ch-widget-sub">Design a muscle inside a fixed volume. Set pennation and fascicle length, and watch force trade against range. Then try to match a real lift demand — and compare your design to real anatomy.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Pennation angle: <span id="arch-pen-val">12°</span></span>
+        <input type="range" id="arch-pen" min="0" max="30" value="12" step="1" class="ch-widget-select">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fascicle length: <span id="arch-len-val">70 mm</span></span>
+        <input type="range" id="arch-len" min="20" max="160" value="70" step="2" class="ch-widget-select">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Target demand</span>
+        <select class="ch-widget-select" id="arch-target">
+          <option value="force">Explosive plantarflexion — max force</option>
+          <option value="range">Long-range hip flexion — max excursion</option>
+          <option value="balance">Reaching press — balanced</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Relative max force</span>
+        <span class="ch-meter-bar"><span id="arch-force-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="arch-force-num">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Relative shortening range</span>
+        <span class="ch-meter-bar"><span id="arch-range-bar" style="width:44%"></span></span>
+        <span class="ch-meter-num" id="arch-range-num">44</span>
+      </div>
+    </div>
+
+    <canvas id="arch-canvas" width="360" height="220" style="max-width:100%"></canvas>
+    <p class="ch-widget-sub" id="arch-feedback">Your muscle sits on the force–range map. Named muscles are plotted for reference.</p>
+
+    <button class="ch-widget-btn" id="arch-check">Check against target</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Pennation is a mechanical advantage, not a penalty</h2>
+    <p>Look back at the PCSA equation and you will notice a <em>cos θ</em> lurking in it. Because a pennate fiber pulls at an angle to the tendon, only the component of its force along the tendon's line is transmitted onward — <em>F</em><sub>tendon</sub> = <em>F</em><sub>fiber</sub> × cos θ. Taken alone, that looks like a tax on pennation: angle your fibers and you throw away a slice of their force. For decades the textbook story stopped there, treating pennation as a necessary evil tolerated for the sake of packing.</p>
+    <p>Recent modeling has overturned that framing. Using physiologically informed geometric muscle models, a 2024 study in <em>Royal Society Open Science</em> showed that a pennate arrangement can allow a muscle to produce up to <strong>six times</strong> more isometric force than a non-pennate muscle of the same volume. The authors coined the term <span class="ch-key">pennation mechanical advantage</span> to resolve the old ambiguity: the cos θ "loss" at each fiber is dwarfed by the enormous gain in the number of fibers you can install in parallel when they lie at an angle. Pennation is not the price of packing — pennation <em>is</em> the packing, and it is a net win for force wherever range is not the priority (Royal Society Open Science, 2024).</p>
+    <p>There is a subtlety worth carrying forward, and it explains a persistent messiness in the literature: because fibers rotate to steeper angles as they shorten, pennation angle is not a fixed property but changes throughout a contraction. This is one reason Ward et al. (2009) opened their study by asking whether current architecture measurements are even accurate — much published data comes from formalin-fixed cadavers at a single, often unspecified, joint angle. When you read a PCSA figure, ask at what length it was measured.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Fiber type: shading, not switching</h2>
+    <p>Architecture sets a muscle's mechanical envelope; <span class="ch-key">fiber-type composition</span> shades where inside that envelope the muscle prefers to work. We will stay strictly on the applied side here — the biochemistry of energy systems belongs to another course. What matters for reading a lift is that fibers differ in their myosin heavy-chain isoform, and that isoform sets contraction speed and fatigue resistance. Schiaffino and Reggiani (2011), in their comprehensive review, describe the human continuum: <span class="ch-key">type I</span> (slow, fatigue-resistant), <span class="ch-key">type IIa</span> (fast, moderately fatigue-resistant), and <span class="ch-key">type IIx</span> (fastest, most powerful, quickest to fatigue).</p>
+    <p>Two practical consequences follow. First, a muscle biased toward type I fibers — the postural soleus is the classic example — will feel tireless under sustained low load but will not produce force quickly. A muscle rich in type II fibers can generate high force rapidly but pays for it in fatigue. Second, and more useful at the whiteboard, is the <span class="ch-key">size principle</span> of motor-unit recruitment: within any single muscle the nervous system recruits smaller, slower units first and calls in the larger, faster ones only as force demand climbs. A single muscle therefore serves a range of demands, from a delicate hold to an all-out effort, by choosing <em>which</em> of its motor units to switch on. Fiber type is not a fixed label stamped on a whole muscle so much as a distribution the nervous system reads from as it needs.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A lifter reports that a muscle "gives out" or feels sharply different from the surrounding tissue during a specific movement. Fiber type and architecture help you reason about <em>normal</em> function — but a sudden, localized change in how a muscle performs or feels is a sign that warrants evaluation by a qualified professional, not something to diagnose from a chapter.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The line of pull: a muscle is a vector</h2>
+    <p>Now the pivot of the whole chapter. Everything so far has been about <em>how much</em> force a muscle can make. The equally important question is <em>in which direction</em> it delivers that force to the bone. A muscle does not simply "shorten"; it tugs its insertion toward its origin along a specific line in space. Model that tug as a <span class="ch-key">line of pull</span> — a vector running from origin to insertion — and you can immediately ask the question that governs movement: what is the angle between the line of pull and the bone it acts on?</p>
+    <p>That angle matters because a single pulling force splits into two components. The part <em>perpendicular</em> to the bone is the <span class="ch-key">rotary component</span> — it swings the bone about the joint and is the only part that produces movement. The part <em>parallel</em> to the bone is the <span class="ch-key">stabilizing (or compressive) component</span> — directed along the shaft, it either presses the joint surfaces together or tries to pull them apart, but it produces no rotation. When the line of pull is exactly perpendicular to the bone, every unit of force becomes rotation. When it runs nearly along the bone, almost all of the force is spent squeezing the joint and precious little turns it.</p>
+    <p>The deltoid is the perfect case, because its line of pull changes character as the arm elevates. With the arm hanging at your side, the deltoid's fibers run almost parallel to the humerus — its line of pull is steeply aligned with the bone, so a large fraction of its force is compressive, pressing the humeral head into the socket, and only a small rotary component initiates abduction. This is precisely why the first few degrees of raising the arm feel mechanically awkward and why other muscles help initiate the motion. As the arm rises toward horizontal, the angle between the deltoid's line of pull and the humerus opens up, the rotary component grows, and the muscle becomes a far more effective elevator. Same muscle, same "contraction" — a completely different mechanical contribution at two joint angles.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A two-panel editorial anatomy diagram in pen-and-ink with restrained watercolour washes, warm cream background, showing a shoulder and upper arm from the front. Left panel: the arm hanging down at the side, with a bold arrow along the deltoid representing its line of pull running nearly parallel to the upper arm bone; a large shaded component arrow pointing along the bone into the joint labelled 'stabilizing', and a small thin arrow perpendicular to the bone labelled 'rotary'. Right panel: the same arm raised to horizontal, the line-of-pull arrow now at a wide angle to the bone, with a large perpendicular arrow labelled 'rotary' and a small one labelled 'stabilizing'. Palette of ink-brown, muted teal for the rotary arrows, dull ochre for the stabilizing arrows. Clean short serif labels only as specified; no numbers." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img2.jpg" alt="<em>The deltoid's force is constant in magnitude; its usefulness for rotation is not.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The deltoid's force is constant in magnitude; its usefulness for rotation is not.</em></figcaption></figure>
+
+  <div class="ch-widget" id="w-pull">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Line-of-Pull Tracer</div>
+    </div>
+    <p class="ch-widget-sub">Drag the shoulder through its range and watch a muscle's line of pull update from origin to insertion. The tracer reports the angle to the bone and splits the force into its rotary and stabilizing shares. Switch muscles to compare a fan against a strap.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Muscle</span>
+        <select class="ch-widget-select" id="pull-muscle">
+          <option value="deltoid">Deltoid (fan)</option>
+          <option value="strap">Straplike elevator</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Arm elevation: <span id="pull-angle-val">30°</span></span>
+        <input type="range" id="pull-angle" min="0" max="150" value="30" step="1" class="ch-widget-select">
+      </div>
+    </div>
+
+    <canvas id="pull-canvas" width="360" height="240" style="max-width:100%"></canvas>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Line of pull vs. bone</span>
+        <span class="ch-meter-bar"><span id="pull-ang-bar" style="width:33%"></span></span>
+        <span class="ch-meter-num" id="pull-ang-num">30°</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Rotary component</span>
+        <span class="ch-meter-bar"><span id="pull-rot-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="pull-rot-num">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Stabilizing component</span>
+        <span class="ch-meter-bar"><span id="pull-stab-bar" style="width:86%"></span></span>
+        <span class="ch-meter-num" id="pull-stab-num">86</span>
+      </div>
+    </div>
+  </div>
+
+  <section class="ch-section">
+    <h2>Muscles that cross two joints</h2>
+    <p>The line-of-pull picture gets richer — and stranger — when a muscle spans more than one joint. The rectus femoris crosses both hip and knee; the hamstrings cross hip and knee; the gastrocnemius crosses knee and ankle. These <span class="ch-key">biarticular muscles</span> have a single line of pull but two sets of consequences, one at each joint, and the two are welded together because the same fiber shortening acts on both.</p>
+    <p>Zajac and Gordon (1989) made the counterintuitive core of this explicit in their classic review: a biarticular muscle's net action at each joint depends on the <em>ratio of its moment arms</em> at the two joints, and — most startling of all — a muscle can accelerate a joint it does not even cross, by way of the dynamic coupling of the limb segments. The action you would naively predict from anatomy alone can reverse depending on posture and on what the neighboring muscles are doing.</p>
+    <p>A more tractable everyday consequence is that a two-joint muscle can drive motion at one joint while the other is held fixed. Hold the knee straight and the gastrocnemius becomes a powerful plantarflexor; let the knee bend and it slackens, losing much of its ankle authority — the reason a seated calf raise loads the ankle so differently from a standing one. A 2020 review in the <em>Journal of the Royal Society Interface</em> reframes this apparent complication as a feature: because the ratio of a biarticular muscle's moment arms fixes the ratio of torques it produces at the two joints, the muscle embodies a built-in coordination pattern. It transfers energy between joints and simplifies neural control, which is exactly why engineers keep rediscovering biarticular linkages in walking and jumping robots (Journal of the Royal Society Interface, 2020).</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Tension is a function of the number of sarcomeres in parallel; velocity of shortening is a function of the number of sarcomeres in series.</p>
+    <cite>The organizing principle from Wickiewicz, Roy, Powell, and Edgerton (1983)</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>The bridge to Chapter 4</h2>
+    <p>Notice what the line of pull has quietly delivered. The perpendicular distance from the joint's axis of rotation to the line of pull is the muscle's <span class="ch-key">moment arm</span> — and the rotary component you have been decomposing is force multiplied by that geometry. When the deltoid's line of pull swings away from the humerus as the arm elevates, what is really changing is its moment arm. A 2025 systematic review that assembled 300 moment-arm datasets across the hip, knee, and ankle confirms the general rule: moment arm varies continuously and nonlinearly with joint angle, and even its <em>sign</em> can flip, turning a flexor into an extensor as a joint passes through certain ranges (Annals of Biomedical Engineering, 2025).</p>
+    <p>That is the seam this chapter has been stitching toward. Architecture tells you how much force a muscle can make; the line of pull tells you the direction it delivers that force; and the moment arm is the geometric lever that converts the two into <em>torque</em> — the actual turning effect at the joint. In Chapter 4, line of pull and lever arm finally multiply together. Everything you just learned to trace becomes one term in an equation.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Muscle architecture — fascicle length, pennation angle, and PCSA — predicts a muscle's function better than its size or name (Lieber &amp; Fridén, 2000).</li>
+      <li>For a fixed volume, force scales with sarcomeres in parallel (PCSA) and range/velocity with sarcomeres in series (fascicle length); you cannot maximize both.</li>
+      <li>Pennation is a mechanical advantage: the small cos θ "loss" per fiber is far outweighed by the extra fibers you can pack in parallel — up to a sixfold force gain (Royal Society Open Science, 2024).</li>
+      <li>Fiber type shades a muscle toward endurance or rapid high force; the size principle lets one muscle serve many demands by recruiting motor units in order (Schiaffino &amp; Reggiani, 2011).</li>
+      <li>A muscle is a vector: its line of pull splits into a rotary component (produces motion) and a stabilizing component (compresses the joint), and the split changes with joint angle.</li>
+      <li>Biarticular muscles couple two joints through the ratio of their moment arms and can even act on joints they don't cross (Zajac &amp; Gordon, 1989).</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You can now trace a line of pull and judge whether an architecture favors force or range. Chapter 4 gives that geometry a number. We define the moment arm precisely, watch it change through a joint's range, and assemble the torque equation — force times lever arm — that lets you predict, joint angle by joint angle, exactly where a lift will feel hard and where it will feel easy.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Biarticular muscles in light of template models, experiments and robotics: A review. (2020). <em>Journal of the Royal Society Interface, 17</em>(163), 20180413.</p>
+    <p>Lieber, R. L., &amp; Fridén, J. (2000). Functional and clinical significance of skeletal muscle architecture. <em>Muscle &amp; Nerve, 23</em>(11), 1647–1666.</p>
+    <p>Muscle moment arm–joint angle relations in the hip, knee, and ankle: A visualization of datasets. (2025). <em>Annals of Biomedical Engineering.</em></p>
+    <p>Rethinking the physiological cross-sectional area of skeletal muscle reveals the mechanical advantage of pennation. (2024). <em>Royal Society Open Science, 11</em>(9), 240037.</p>
+    <p>Schiaffino, S., &amp; Reggiani, C. (2011). Fiber types in mammalian skeletal muscles. <em>Physiological Reviews, 91</em>(4), 1447–1531.</p>
+    <p>Ward, S. R., Eng, C. M., Smallwood, L. H., &amp; Lieber, R. L. (2009). Are current measurements of lower extremity muscle architecture accurate? <em>Clinical Orthopaedics and Related Research, 467</em>(4), 1074–1082.</p>
+    <p>Wickiewicz, T. L., Roy, R. R., Powell, P. L., &amp; Edgerton, V. R. (1983). Muscle architecture of the human lower limb. <em>Clinical Orthopaedics and Related Research, 179</em>, 275–283.</p>
+    <p>Zajac, F. E. (1989). Muscle and tendon: Properties, models, scaling, and application to biomechanics and motor control. <em>Critical Reviews in Biomedical Engineering, 17</em>(4), 359–411.</p>
+    <p>Zajac, F. E., &amp; Gordon, M. E. (1989). Determining muscle's force and action in multi-articular movement. <em>Exercise and Sport Sciences Reviews, 17</em>, 187–230.</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 3 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-arch');
+    if(!root) return;
+    var pen = root.querySelector('#arch-pen');
+    var len = root.querySelector('#arch-len');
+    var penVal = root.querySelector('#arch-pen-val');
+    var lenVal = root.querySelector('#arch-len-val');
+    var forceBar = root.querySelector('#arch-force-bar');
+    var forceNum = root.querySelector('#arch-force-num');
+    var rangeBar = root.querySelector('#arch-range-bar');
+    var rangeNum = root.querySelector('#arch-range-num');
+    var canvas = root.querySelector('#arch-canvas');
+    var ctx = canvas.getContext('2d');
+    var target = root.querySelector('#arch-target');
+    var check = root.querySelector('#arch-check');
+    var feedback = root.querySelector('#arch-feedback');
+
+    var named = [
+      {name:'gastrocnemius', x:16, y:84},
+      {name:'deltoid', x:46, y:47},
+      {name:'sartorius', x:88, y:13}
+    ];
+
+    function compute(){
+      var theta = +pen.value;
+      var Lf = +len.value;
+      var c = Math.cos(theta*Math.PI/180);
+      var forceRaw = c/Lf;                 // max at theta0,Lf20 -> 0.05
+      var forcePct = Math.max(0,Math.min(100, forceRaw/0.05*100));
+      var rangeRaw = Lf*c;                 // max 160
+      var rangePct = Math.max(0,Math.min(100, rangeRaw/160*100));
+      return {force:forcePct, range:rangePct};
+    }
+
+    function draw(r){
+      var W=canvas.width,H=canvas.height,pad=30;
+      ctx.clearRect(0,0,W,H);
+      // axes
+      ctx.strokeStyle='#9a8f80';ctx.lineWidth=1;
+      ctx.beginPath();ctx.moveTo(pad,H-pad);ctx.lineTo(W-10,H-pad);ctx.moveTo(pad,H-pad);ctx.lineTo(pad,10);ctx.stroke();
+      ctx.fillStyle='#8a7f70';ctx.font='11px serif';
+      ctx.fillText('range →',W-64,H-pad+16);
+      ctx.save();ctx.translate(pad-16,60);ctx.rotate(-Math.PI/2);ctx.fillText('force →',0,0);ctx.restore();
+      function px(x){return pad+(x/100)*(W-pad-14);}
+      function py(y){return (H-pad)-(y/100)*(H-pad-14);}
+      // named
+      named.forEach(function(m){
+        ctx.fillStyle='#b98b5e';
+        ctx.beginPath();ctx.arc(px(m.x),py(m.y),4,0,6.283);ctx.fill();
+        ctx.fillStyle='#6f6456';ctx.font='10px serif';
+        ctx.fillText(m.name,px(m.x)+6,py(m.y)+3);
+      });
+      // user
+      ctx.fillStyle='#2e7d74';
+      ctx.beginPath();ctx.arc(px(r.range),py(r.force),6,0,6.283);ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+    }
+
+    function update(){
+      penVal.textContent = pen.value+'°';
+      lenVal.textContent = len.value+' mm';
+      var r = compute();
+      forceBar.style.width = r.force.toFixed(0)+'%';
+      forceNum.textContent = r.force.toFixed(0);
+      rangeBar.style.width = r.range.toFixed(0)+'%';
+      rangeNum.textContent = r.range.toFixed(0);
+      draw(r);
+    }
+
+    check.addEventListener('click',function(){
+      var r = compute();
+      var t = target.value;
+      var msg='';
+      if(t==='force'){
+        msg = r.force>=70 ? 'Strong match: short fibers and pennation give a force-dominant design like the gastrocnemius or soleus.' : 'For explosive plantarflexion you want more force — shorten the fascicles and add pennation.';
+      }else if(t==='range'){
+        msg = r.range>=70 ? 'Strong match: long fascicles give an excursion-dominant design like the sartorius.' : 'For long-range hip flexion you want more excursion — lengthen the fascicles and drop the pennation.';
+      }else{
+        msg = (r.force>40 && r.range>40) ? 'Nicely balanced — a deltoid-like compromise between force and range.' : 'Aim for the middle: neither gauge should be starved.';
+      }
+      feedback.textContent = msg;
+    });
+
+    pen.addEventListener('input',update);
+    len.addEventListener('input',update);
+    update();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-pull');
+    if(!root) return;
+    var muscle = root.querySelector('#pull-muscle');
+    var slider = root.querySelector('#pull-angle');
+    var angVal = root.querySelector('#pull-angle-val');
+    var canvas = root.querySelector('#pull-canvas');
+    var ctx = canvas.getContext('2d');
+    var angBar = root.querySelector('#pull-ang-bar');
+    var angNum = root.querySelector('#pull-ang-num');
+    var rotBar = root.querySelector('#pull-rot-bar');
+    var rotNum = root.querySelector('#pull-rot-num');
+    var stabBar = root.querySelector('#pull-stab-bar');
+    var stabNum = root.querySelector('#pull-stab-num');
+
+    var sx=120, sy=80, L=120; // shoulder, humerus length
+
+    function geom(){
+      var phi = +slider.value*Math.PI/180;
+      var d = {x:Math.sin(phi), y:Math.cos(phi)}; // bone distal direction
+      var ins = {x:sx+0.5*L*d.x, y:sy+0.5*L*d.y};
+      var org;
+      if(muscle.value==='deltoid'){
+        org = {x:sx+26, y:sy-34};   // acromion: near, lateral, above
+      }else{
+        org = {x:sx+4, y:sy-96};    // straplike: distant, above
+      }
+      var P = {x:org.x-ins.x, y:org.y-ins.y};
+      var Pm = Math.hypot(P.x,P.y);
+      var prox = {x:-d.x, y:-d.y};  // bone toward shoulder
+      var cosA = (P.x*prox.x+P.y*prox.y)/Pm;
+      cosA = Math.max(-1,Math.min(1,cosA));
+      var A = Math.acos(cosA);
+      var Adeg = A*180/Math.PI;
+      var rot = Math.abs(Math.sin(A));
+      var stab = Math.abs(Math.cos(A));
+      return {d:d,ins:ins,org:org,P:P,Pm:Pm,prox:prox,Adeg:Adeg,rot:rot,stab:stab};
+    }
+
+    function arrow(x1,y1,x2,y2,color,w){
+      ctx.strokeStyle=color;ctx.fillStyle=color;ctx.lineWidth=w;
+      ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+      var a=Math.atan2(y2-y1,x2-x1),h=7;
+      ctx.beginPath();ctx.moveTo(x2,y2);
+      ctx.lineTo(x2-h*Math.cos(a-0.4),y2-h*Math.sin(a-0.4));
+      ctx.lineTo(x2-h*Math.cos(a+0.4),y2-h*Math.sin(a+0.4));
+      ctx.closePath();ctx.fill();
+    }
+
+    function draw(g){
+      var W=canvas.width,H=canvas.height;
+      ctx.clearRect(0,0,W,H);
+      // torso hint
+      ctx.strokeStyle='#d8cdbd';ctx.lineWidth=10;ctx.lineCap='round';
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(sx-6,sy+120);ctx.stroke();
+      // humerus
+      var dist={x:sx+L*g.d.x,y:sy+L*g.d.y};
+      ctx.strokeStyle='#8a7f70';ctx.lineWidth=8;
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(dist.x,dist.y);ctx.stroke();
+      // joint
+      ctx.fillStyle='#6f6456';ctx.beginPath();ctx.arc(sx,sy,6,0,6.283);ctx.fill();
+      // origin
+      ctx.fillStyle='#b98b5e';ctx.beginPath();ctx.arc(g.org.x,g.org.y,4,0,6.283);ctx.fill();
+      // insertion
+      ctx.fillStyle='#b98b5e';ctx.beginPath();ctx.arc(g.ins.x,g.ins.y,4,0,6.283);ctx.fill();
+      // components: draw a fixed-length pull vector for clarity
+      var Fscale=70/g.Pm;
+      var tip={x:g.ins.x+g.P.x*Fscale, y:g.ins.y+g.P.y*Fscale};
+      // decompose
+      var proj=(g.P.x*g.prox.x+g.P.y*g.prox.y)*Fscale;
+      var along={x:g.prox.x*proj,y:g.prox.y*proj};
+      var alongTip={x:g.ins.x+along.x,y:g.ins.y+along.y};
+      // stabilizing (along bone) - ochre
+      arrow(g.ins.x,g.ins.y,alongTip.x,alongTip.y,'#c79a4f',3);
+      // rotary (perp) - teal
+      arrow(alongTip.x,alongTip.y,tip.x,tip.y,'#2e7d74',3);
+      // full line of pull - ink
+      arrow(g.ins.x,g.ins.y,tip.x,tip.y,'#3a342c',2);
+      ctx.fillStyle='#6f6456';ctx.font='10px serif';
+      ctx.fillText('line of pull',tip.x+4,tip.y);
+    }
+
+    function update(){
+      angVal.textContent = slider.value+'°';
+      var g=geom();
+      angBar.style.width=(g.Adeg/180*100).toFixed(0)+'%';
+      angNum.textContent=g.Adeg.toFixed(0)+'°';
+      rotBar.style.width=(g.rot*100).toFixed(0)+'%';
+      rotNum.textContent=(g.rot*100).toFixed(0);
+      stabBar.style.width=(g.stab*100).toFixed(0)+'%';
+      stabNum.textContent=(g.stab*100).toFixed(0);
+      draw(g);
+    }
+
+    slider.addEventListener('input',update);
+    muscle.addEventListener('change',update);
+    update();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

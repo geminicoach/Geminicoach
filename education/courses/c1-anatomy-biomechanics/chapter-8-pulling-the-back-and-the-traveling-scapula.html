@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pulling, the Back, and the Traveling Scapula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 8 · Module 2</div>
+    <h1 class="ch-title">Pulling, the Back, and the Traveling Scapula</h1>
+    <p class="ch-subtitle">Why the shoulder blade — not the arm — is the star of every row and pull-up.</p>
+    <div class="ch-meta">
+      <span>19 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">P</span>ress your fingertips flat against the back of a partner's shoulder blade and ask them to reach slowly overhead. You will feel a bone that refuses to sit still. It slides outward and upward, tilts backward, and rotates like the hand of a clock — all without a single rigid joint to command it. The scapula is suspended on the ribcage by muscle alone, a floating platform that has no bony socket to lock into. Everything the "back" does in a pull is filtered through where this platform happens to be.</p>
+    <p>In the pressing chapter the scapula was a supporting player — a base you stabilized so the arm could deliver force. In pulling it takes the lead. The row and the pull-up are only partly about the arm bending; they are largely about the shoulder blade gliding, rotating, and anchoring so that the large muscles hanging off it can pull with leverage. Read the pull as an arm alone and you will misplace where it is hard, why it is hard, and which muscles can even contribute. Read it as a scapula-plus-arm system and the whole pattern snaps into focus.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>A bone with no home: the scapula as moving platform</h2>
+    <p>Begin with the mechanical oddity. The glenohumeral joint — the ball-and-socket of the shoulder — is a genuine articulation with cartilage, a capsule, and a labrum. The <span class="ch-key">scapulothoracic "joint"</span> is not a joint at all. It is a muscular suspension: the scapula rides on a cushion of soft tissue over the ribcage, held in place and steered entirely by the muscles that attach to it. There is no bony stop. This is what makes the shoulder the most mobile joint complex in the body, and it is also what makes it the most coordination-dependent.</p>
+    <p>The consequence for our mechanics is direct. Nearly every muscle we care about in a pull attaches to the scapula at one end — the trapezius, the rhomboids, the teres major, and (partly) the latissimus dorsi and deltoid. When the platform moves, the origin of those muscles moves with it. And when a muscle's origin moves, so does its <span class="ch-key">line of pull</span> and its <span class="ch-key">moment arm</span> — the two quantities this entire course has taught you to track. A muscle that is beautifully positioned to depress the arm in one scapular position may be slack, mistimed, or pulling at a useless angle in another.</p>
+    <p>So the platform's position is not cosmetic. It continuously rewrites the leverage available to the whole system. This is why we spend a chapter on it rather than treating pulling as "biceps and lats." The single most important idea here: <em>the scapula changes the mechanics, moment by moment, of every muscle attached to it.</em></p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide anatomical plate, pen-and-ink with muted watercolour wash, showing a rear view of the human right shoulder and upper back. The scapula (shoulder blade) is depicted in three ghosted positions overlaid: retracted, protracted, and upwardly rotated, with faint directional arrows showing the glide and rotation between them. Warm sepia and slate-blue palette, aged paper texture, subtle cross-hatching for muscle bulk. Small italic serif labels: 'scapula' on the central blade, 'retract' and 'protract' beside two horizontal arrows, 'upward rotation' beside a curved arrow. No numbers, no charts, no people's faces, clean margins." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img1.jpg" alt="<em>The floating platform: one bone, several positions, each rewriting the leverage of everything attached to it.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The floating platform: one bone, several positions, each rewriting the leverage of everything attached to it.</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>Scapulohumeral rhythm: the coordination that makes pulling possible</h2>
+    <p>The classic description of how the platform cooperates with the arm comes from Inman and colleagues, whose mid-century observations remain the reference point for shoulder mechanics (Inman et al., 1996). They described <span class="ch-key">scapulohumeral rhythm</span> (SHR): during arm elevation, the total motion is shared between the glenohumeral joint and the scapulothoracic complex in a roughly <span class="ch-key">2:1 ratio</span>. For every three degrees the arm rises, about two come from the ball rotating in the socket and one from the scapula rotating upward on the ribcage.</p>
+    <p>Why does this matter for a pull-up, where the arm is coming <em>down</em> against your body weight rather than up? Because SHR runs in reverse just as reliably. As you haul your chin toward the bar, the arm adducts and extends at the glenohumeral joint while the scapula must simultaneously rotate downward and retract to keep the socket oriented under the humeral head. If the scapula fails to participate — if it stays "parked" — the glenohumeral joint is forced to the ends of its range without the socket following the ball. The rhythm is what keeps the joint congruent through the movement, and it is what keeps the muscles at workable lengths and angles.</p>
+    <p>Crucially, SHR is not a fixed gear ratio stamped into the anatomy. Pascoal and colleagues (2010) tracked scapular kinematics during loaded versus unloaded shoulder abduction in healthy subjects and found that adding external resistance <em>increased</em> scapular upward rotation and posterior tilt at 60° and 90°. In other words, the rhythm responds to load — the platform recruits more of its own motion when the demand rises. This is a theme worth holding onto: scapular behavior is not a passive default but an actively regulated response to the mechanical task.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If scapulohumeral rhythm distributes roughly one-third of elevation to the scapula, what happens to the glenohumeral joint's required range of motion if the scapula contributes <em>nothing</em>? Where in a pull-up would you expect that shortfall to be felt first?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>The back as a coordinated team, not a single muscle</h2>
+    <p>"Working the back" is a phrase that hides more than it reveals. The back that pulls is at least three functionally distinct actors with different lines of pull, and their contributions shift depending on where the platform sits.</p>
+
+    <h3>Latissimus dorsi: the long-range prime mover</h3>
+    <p>The <span class="ch-key">latissimus dorsi</span> is the workhorse of adduction and extension at the shoulder. It originates across the lower spine, the thoracolumbar fascia, and the iliac crest, and it converges to insert on the front of the humerus. It is enormous, and its architecture is that of a prime mover: large physiological cross-section, arranged to shorten a long distance and produce force through a wide arc. Hik and Ackland's (2018) systematic review of glenohumeral moment arms found the latissimus dorsi and teres major to have the <em>largest</em> shoulder adduction and depression moment arms of the muscles they surveyed. That is exactly the action a pull-up demands — pulling the humerus down and in toward the trunk — which is why EMG studies routinely find the lats operating at the top of their range. Youdas and colleagues (2010) recorded latissimus dorsi activation of 117–130% of maximum voluntary isometric contraction during pull-ups and chin-ups. The muscle is not merely involved; it is running near ceiling.</p>
+
+    <h3>Trapezius: the platform's steering system</h3>
+    <p>The <span class="ch-key">trapezius</span> does not primarily move the arm. It moves and stabilizes the scapula, and it does so in regions with genuinely different jobs. The upper fibers elevate and help upwardly rotate the scapula; the middle fibers retract it; the lower fibers depress and contribute to upward rotation. Inman et al. (1996) modeled the upper and lower trapezius together with the serratus anterior as a <span class="ch-key">force couple</span> — a pair of opposing pulls that rotate the scapula without translating it, the way two hands on opposite sides of a steering wheel turn it without shoving it sideways. When you set your shoulder blades before a row, you are asking the trapezius force couple to fix the platform so the lats and rhomboids can deliver force from a stable base.</p>
+
+    <h3>Rhomboids: the retractors and downward rotators</h3>
+    <p>The <span class="ch-key">rhomboids</span> run from the spine to the medial border of the scapula, and their line of pull is roughly medial-and-upward. They retract the scapula and rotate it downward — precisely the scapular motion that accompanies the pulling-down phase of a pull-up. Their postural role is continuous and low-grade; their line of pull is short and direct. This is where architecture from Chapter 3 resurfaces.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific illustration in the style of a 19th-century anatomy atlas, muted earth tones with red-ochre muscle tissue and grey fascia, showing the superficial and deep muscles of the upper back from behind. The three muscle groups are distinguished by subtly different wash tones: a large fan-shaped muscle sweeping from the lower spine to the arm, a diamond-shaped sheet across the upper back and neck, and a short rectangular pair connecting the spine to the inner edge of the shoulder blade. Directional arrows show each muscle's line of pull. Small italic serif labels: 'latissimus dorsi', 'trapezius', 'rhomboids'. Aged paper, fine engraving lines, no modern typography, no charts." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img2.jpg" alt="<em>Three actors, three lines of pull: a prime mover, a steering system, and a set of retractors.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Three actors, three lines of pull: a prime mover, a steering system, and a set of retractors.</em></figcaption></figure>
+  </section>
+
+  <section class="ch-section">
+    <h2>Postural muscles behave differently — the fiber-type refresher</h2>
+    <p>Recall from Chapter 3 that muscles are specialized along two axes we can actually see: <span class="ch-key">fiber-type composition</span> and <span class="ch-key">architecture</span> (fiber length, pennation, physiological cross-sectional area). Those ideas predict why the back's team members behave so differently under a pull.</p>
+    <p>The latissimus dorsi is built as a prime mover: long fibers, large cross-section, organized to produce large excursions and high force through a wide arc. It fatigues, it works in bursts, and it is happy operating near its activation ceiling — consistent with the 117–130% MVIC figures we just cited. The scapular stabilizers — the deep trapezius fibers and the rhomboids — carry a heavier postural burden. They are recruited more continuously to hold the platform against gravity and against the reaction forces of the arm muscles pulling on it. Their job is often <em>isometric</em>: not to move the scapula dramatically but to keep it from being dragged out of position while other muscles work.</p>
+    <p>This is why "train your back" is an incomplete instruction. The prime mover wants heavy, arcing loaded work; the stabilizers are being challenged as much by the demand to hold position under load as by any shortening they perform. A row that lets the shoulder blade drift forward under load has not "worked the back" in any unified sense — it has loaded the lat while letting the retractors surrender. The team can be split, and the platform's position is the thing that splits it.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="scapLab">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Scapula-Position Line-of-Pull Lab</div>
+    </div>
+    <p class="ch-widget-sub">Move the platform through protraction, retraction, and rotation, and watch each muscle's leverage at the shoulder change. Pick a target muscle and try to position the scapula to maximize its moment arm.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Protraction ↔ Retraction</span>
+        <select class="ch-widget-select" id="scapPro">
+          <option value="-2">Fully protracted</option>
+          <option value="-1">Protracted</option>
+          <option value="0" selected>Neutral</option>
+          <option value="1">Retracted</option>
+          <option value="2">Fully retracted</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Rotation</span>
+        <select class="ch-widget-select" id="scapRot">
+          <option value="-2">Fully downward-rotated</option>
+          <option value="-1">Downward-rotated</option>
+          <option value="0" selected>Neutral</option>
+          <option value="1">Upward-rotated</option>
+          <option value="2">Fully upward-rotated</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Target muscle</span>
+        <select class="ch-widget-select" id="scapTarget">
+          <option value="lat" selected>Latissimus dorsi</option>
+          <option value="trap">Trapezius (lower)</option>
+          <option value="rhom">Rhomboids</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Lat leverage</span>
+        <span class="ch-meter-bar"><span id="scapBarLat" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="scapNumLat">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Lower-trap leverage</span>
+        <span class="ch-meter-bar"><span id="scapBarTrap" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="scapNumTrap">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Rhomboid leverage</span>
+        <span class="ch-meter-bar"><span id="scapBarRhom" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="scapNumRhom">50</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="scapBtn">Evaluate this position</button>
+    <p class="ch-widget-sub" id="scapMsg">Set the platform, then evaluate to see whether your target muscle is well positioned.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Two lifts, two loading stories: the row versus the pull-up</h2>
+    <p>Both a row and a pull-up "work the back," and both max out the latissimus dorsi. Yet they load the system differently, and the difference lives in two places: the direction of the external load relative to the body, and the scapular motion each movement recruits.</p>
+    <p>In a <span class="ch-key">row</span>, gravity pulls the load straight down while your torso is bent forward. The arm travels roughly horizontally relative to the trunk, so the movement emphasizes horizontal shoulder extension and, critically, scapular retraction. The rhomboids and middle trapezius are central here — they are the muscles that draw the shoulder blade back toward the spine as the elbow passes the ribs.</p>
+    <p>In a <span class="ch-key">pull-up</span>, the load is your body weight and the arm is overhead, so the movement is dominated by shoulder adduction and extension pulling the humerus down — exactly the lat-and-teres-major action Hik and Ackland (2018) flagged as having the largest moment arms. The scapula's job here is downward rotation and depression, and the muscle that initiates it is telling. Youdas and colleagues (2010) found that pull-ups are begun by the <em>lower trapezius</em> firing before the latissimus dorsi — the platform is set into motion before the prime mover delivers its pull. The same study found the pull-up produced significantly greater lower-trapezius activation than the chin-up, while the chin-up (supinated grip) shifted work toward the pectoralis major and biceps.</p>
+    <p>Grip is a real lever, not a cosmetic choice. Dickie and colleagues (2017) compared supinated, pronated, neutral, and rope grips and found the pronated (overhand) grip produced significantly greater middle-trapezius activation than the neutral grip, and that pull-ups in general elicited greater trapezius and latissimus dorsi activation than chin-ups. The takeaway is not that one grip is "better" but that grip redistributes the load across the team by changing the arm's line of pull and, with it, the scapular motion required.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A chin-up (supinated) recruits more biceps and pec, while a pull-up (pronated) recruits more lower and middle trapezius. Using line-of-pull reasoning, why should rotating the forearm at the <em>wrist</em> change which muscles at the <em>shoulder blade</em> do the most work?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Where a pull is hardest: tracking the external moment arm</h2>
+    <p>The course's central analytic move applies cleanly here. A lift is hardest where the <span class="ch-key">external moment arm</span> — the perpendicular distance from the joint to the load's line of action — is longest, because that is where the load demands the most torque from your muscles. Find that point and you have found the sticking point.</p>
+    <p>In a <span class="ch-key">bent-over row</span>, the load hangs straight down. The external moment arm at the shoulder is the horizontal distance from the glenohumeral joint to the bar. That distance is largest when the arm is fully extended and the bar hangs far in front of the shoulder — the bottom of the row. As you pull the bar toward your ribs, the bar moves back under the shoulder, the horizontal distance shrinks, and the demand falls. The row is hardest at the bottom and eases as you retract. Change your torso angle and you change the whole curve: the more horizontal your torso, the more of the range keeps the load out in front, extending the region of high demand.</p>
+    <p>In a <span class="ch-key">pull-up</span>, the load is your body weight acting downward through your center of mass. At the bottom, hanging with arms straight overhead, the arm is nearly vertical — close to the line of the load — so the shoulder's external moment arm is relatively short and much of the early demand lands on the elbow flexors and the initial scapular setting. As you rise and the upper arm swings from overhead toward your side, the humerus becomes more horizontal, the perpendicular distance from the shoulder to the vertical body-weight line grows, and the shoulder's demand climbs. The pull-up tends to get harder as you ascend, peaking in the mid-to-upper range where the arm is farthest from vertical — the opposite temporal pattern from the row.</p>
+    <p>This is why the two lifts feel hard in different places, and why lifters describe them so differently: the row fights you off the floor of the movement, the pull-up fights you near the top. Neither is a statement about the muscles being "weak" there — both are statements about where the geometry stacks the external moment arm against you.</p>
+    <p>Grip width feeds directly into this. Prinold and Bull (2016) tracked 3D scapular kinematics across three pull-up grips and found significantly different scapular patterns, with the wide grip producing reduced scapular protraction/retraction range and placing the shoulder near 90° of abduction with 45° of external rotation. That combination is worth understanding mechanically: a wider grip forces more of the movement into abduction and constrains how much the platform can travel, changing both the arm's line of pull and the scapula's freedom to follow it.</p>
+  </section>
+
+  <div class="ch-widget" id="demandComp">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Row vs. Pull-Up Demand Comparator</div>
+    </div>
+    <p class="ch-widget-sub">Sweep both lifts through their range and compare the external moment arm at the shoulder. Adjust torso angle (row) and grip width (pull-up), then predict which movement peaks earlier.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Position in range</span>
+        <select class="ch-widget-select" id="demPos">
+          <option value="0">Bottom (start)</option>
+          <option value="25">Early</option>
+          <option value="50" selected>Mid-range</option>
+          <option value="75">Late</option>
+          <option value="100">Top (finish)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Row torso angle</span>
+        <select class="ch-widget-select" id="demTorso">
+          <option value="0.6">45° (upright)</option>
+          <option value="0.8" selected>30° (bent)</option>
+          <option value="1.0">Horizontal</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Pull-up grip width</span>
+        <select class="ch-widget-select" id="demGrip">
+          <option value="0.85">Narrow</option>
+          <option value="1.0" selected>Shoulder-width</option>
+          <option value="1.15">Wide</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Row shoulder demand</span>
+        <span class="ch-meter-bar"><span id="demBarRow" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="demNumRow">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Pull-up shoulder demand</span>
+        <span class="ch-meter-bar"><span id="demBarPU" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="demNumPU">50</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="demBtn">Find each demand peak</button>
+    <p class="ch-widget-sub" id="demMsg">Sweep both lifts and watch where each demand curve peaks.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>When the platform misbehaves: a mechanical signal, not a diagnosis</h2>
+    <p>Because the shoulder complex is suspended by muscle and steered by coordination, it is uniquely sensitive to <em>timing</em> — not just how strong the muscles are, but whether the platform moves in the right sequence at the right moment. When that coordination degrades, clinicians describe <span class="ch-key">scapular dyskinesis</span>: altered scapular position or motion during arm movement.</p>
+    <p>The literature treats this seriously. Ludewig and Reynolds (2009) reviewed how normal scapular gliding, tilting, and rotating relate to glenohumeral health, documenting altered serratus anterior and upper-trapezius activation across a range of shoulder conditions. The 2013 "scapular summit" consensus (Kibler et al., 2013) concluded that scapular dyskinesis is present in a high percentage of shoulder injuries and that impingement symptoms in particular are affected by it. Prinold and Bull's (2016) finding — that a wide-grip pull-up drives the shoulder toward a position consistent with increased subacromial impingement risk — is the same story from the loading side.</p>
+    <p>Here is where we hold our lane firmly. This is an applied course in movement mechanics, not a clinical one. The mechanical reading is legitimate: scapular position changes leverage, and poor scapular coordination changes it for the worse. But <em>pain, pinching, catching, or a shoulder that "gives way" during pulling is a signal that warrants professional evaluation</em> — it is not something to diagnose from a moment-arm diagram or to train through. Use the mechanics to understand why the shoulder is so coordination-dependent, and let that understanding make you quicker to refer, not quicker to self-treat. The value of reading the pull as a scapula-plus-arm system is that it tells you when the platform is doing something worth a professional's eyes.</p>
+
+    <blockquote class="ch-quote">
+      <p>The scapula is not merely a passive base but a dynamic link in the kinetic chain; its position and motion establish the mechanical conditions under which every muscle spanning the shoulder must operate.</p>
+      <cite>Synthesis of Inman et al. (1996) and Kibler et al. (2013)</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The scapula is suspended on the ribcage by muscle alone — a floating platform whose position continuously rewrites the line of pull and moment arm of every muscle attached to it.</li>
+      <li>Scapulohumeral rhythm shares elevation between the glenohumeral joint and scapula in a roughly 2:1 ratio, but the rhythm is load-responsive, not fixed (Inman et al., 1996; Pascoal et al., 2010).</li>
+      <li>The back is a team: the latissimus dorsi is a long-range prime mover, the trapezius steers the platform through force couples, and the rhomboids retract and downward-rotate — different lines of pull, different fiber-type and architectural profiles.</li>
+      <li>A row is hardest at the bottom, where the load hangs farthest in front of the shoulder; a pull-up tends to get harder toward the top, where the arm swings farthest from the vertical body-weight line.</li>
+      <li>Grip and torso angle are real levers: they redistribute load across the back's team by changing the arm's line of pull and the scapular motion required (Youdas et al., 2010; Dickie et al., 2017; Prinold & Bull, 2016).</li>
+      <li>Because pulling is intensely coordination-dependent, pain or a shoulder that gives way is a mechanical signal warranting professional evaluation — never a diagnosis to make from a diagram.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>With all four movement patterns now analyzed, the course pivots from building tools to synthesizing them. The next chapter turns to anthropometry: how the lengths of your own segments — femur, torso, forearm, and the placement of muscle attachments — shift every moment arm we have studied, so that two people performing "the same" lift are in fact solving two different mechanical problems.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Dickie, J. A., Faulkner, J. A., Barnes, M. J., & Lark, S. D. (2017). Electromyographic analysis of muscle activation during pull-up variations. <em>Journal of Electromyography and Kinesiology, 32</em>, 30–36. https://www.sciencedirect.com/science/article/abs/pii/S1050641116302978</p>
+    <p>Hik, F., & Ackland, D. C. (2018). The moment arms of the muscles spanning the glenohumeral joint: A systematic review. <em>Journal of Anatomy, 234</em>(1), 1–15. https://doi.org/10.1111/joa.12903</p>
+    <p>Inman, V. T., Saunders, J. B. deC. M., & Abbott, L. C. (1996). Observations on the function of the shoulder joint. <em>Clinical Orthopaedics and Related Research, 330</em>, 3–12. https://doi.org/10.1097/00003086-199609000-00002</p>
+    <p>Kibler, W. B., Ludewig, P. M., McClure, P. W., Michener, L. A., Bak, K., & Sciascia, A. D. (2013). Clinical implications of scapular dyskinesis in shoulder injury: The 2013 consensus statement from the "scapular summit." <em>British Journal of Sports Medicine, 47</em>(14), 877–885. https://doi.org/10.1136/bjsports-2013-092425</p>
+    <p>Ludewig, P. M., & Reynolds, J. F. (2009). The association of scapular kinematics and glenohumeral joint pathologies. <em>Journal of Orthopaedic & Sports Physical Therapy, 39</em>(2), 90–104. https://doi.org/10.2519/jospt.2009.2808</p>
+    <p>Pascoal, A. G., van der Helm, F. C. T., Pezarat Correia, P., & Carita, I. (2010). Scapular kinematics and scapulohumeral rhythm during resisted shoulder abduction — Implications for clinical practice. <em>Physical Therapy in Sport, 11</em>(2), 66–71. https://www.sciencedirect.com/science/article/abs/pii/S1466853X09000479</p>
+    <p>Prinold, J. A. I., & Bull, A. M. J. (2016). Scapula kinematics of pull-up techniques: Avoiding impingement risk with training changes. <em>Journal of Science and Medicine in Sport, 19</em>(8), 629–635. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4916995/</p>
+    <p>Youdas, J. W., Amundson, C. L., Cicero, K. S., Hahn, J. J., Harezlak, D. T., & Hollman, J. H. (2010). Surface electromyographic activation patterns and elbow joint motion during a pull-up, chin-up, or Perfect-Pullup™ rotational exercise. <em>Journal of Strength and Conditioning Research, 24</em>(12), 3404–3414. https://doi.org/10.1519/jsc.0b013e3181f1598c</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 8 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('scapLab');
+    if(!root) return;
+    var pro = root.querySelector('#scapPro');
+    var rot = root.querySelector('#scapRot');
+    var tgt = root.querySelector('#scapTarget');
+    var barLat = root.querySelector('#scapBarLat');
+    var barTrap = root.querySelector('#scapBarTrap');
+    var barRhom = root.querySelector('#scapBarRhom');
+    var numLat = root.querySelector('#scapNumLat');
+    var numTrap = root.querySelector('#scapNumTrap');
+    var numRhom = root.querySelector('#scapNumRhom');
+    var btn = root.querySelector('#scapBtn');
+    var msg = root.querySelector('#scapMsg');
+
+    function clamp(v){ return Math.max(5, Math.min(100, Math.round(v))); }
+
+    function compute(){
+      var p = parseFloat(pro.value); // -2..2 retract positive
+      var r = parseFloat(rot.value); // -2..2 upward positive
+      // Lat: benefits from downward rotation + moderate retraction (depression/adduction leverage)
+      var lat = 60 - r*10 + p*4;
+      // Lower trap: benefits from retraction + upward rotation (its steering role)
+      var trap = 55 + p*8 + r*9;
+      // Rhomboids: best positioned retracted + downward-rotated
+      var rhom = 55 + p*11 - r*7;
+      lat = clamp(lat); trap = clamp(trap); rhom = clamp(rhom);
+      barLat.style.width = lat+'%'; numLat.textContent = lat;
+      barTrap.style.width = trap+'%'; numTrap.textContent = trap;
+      barRhom.style.width = rhom+'%'; numRhom.textContent = rhom;
+      return {lat:lat, trap:trap, rhom:rhom};
+    }
+
+    function evaluate(){
+      var vals = compute();
+      var t = tgt.value;
+      var v = vals[t];
+      var names = {lat:'latissimus dorsi', trap:'lower trapezius', rhom:'rhomboids'};
+      var best = 'lat';
+      if(vals.trap >= vals.lat && vals.trap >= vals.rhom) best = 'trap';
+      if(vals.rhom >= vals.lat && vals.rhom >= vals.trap) best = 'rhom';
+      var s = 'The ' + names[t] + ' has leverage ' + v + '/100 in this position. ';
+      if(best === t){
+        s += 'That is the best-positioned muscle here — the platform is set to favor your target.';
+      } else {
+        s += 'Right now the ' + names[best] + ' is better positioned. Try a scapular position that suits your target\u2019s line of pull.';
+      }
+      msg.textContent = s;
+    }
+
+    pro.addEventListener('change', compute);
+    rot.addEventListener('change', compute);
+    tgt.addEventListener('change', evaluate);
+    btn.addEventListener('click', evaluate);
+    compute();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('demandComp');
+    if(!root) return;
+    var pos = root.querySelector('#demPos');
+    var torso = root.querySelector('#demTorso');
+    var grip = root.querySelector('#demGrip');
+    var barRow = root.querySelector('#demBarRow');
+    var barPU = root.querySelector('#demBarPU');
+    var numRow = root.querySelector('#demNumRow');
+    var numPU = root.querySelector('#demNumPU');
+    var btn = root.querySelector('#demBtn');
+    var msg = root.querySelector('#demMsg');
+
+    function clamp(v){ return Math.max(5, Math.min(100, Math.round(v))); }
+
+    // Row: demand high at bottom (pos 0), falls toward top. Scaled by torso factor.
+    function rowDemand(p, tf){
+      var base = 100 - p*0.75; // 0->100, 100->25
+      return clamp(base * tf);
+    }
+    // Pull-up: demand low at bottom, rises toward top. Scaled by grip factor.
+    function puDemand(p, gf){
+      var base = 30 + p*0.65; // 0->30, 100->95
+      return clamp(base * gf);
+    }
+
+    function compute(){
+      var p = parseFloat(pos.value);
+      var tf = parseFloat(torso.value);
+      var gf = parseFloat(grip.value);
+      var r = rowDemand(p, tf);
+      var u = puDemand(p, gf);
+      barRow.style.width = r+'%'; numRow.textContent = r;
+      barPU.style.width = u+'%'; numPU.textContent = u;
+      return {r:r, u:u};
+    }
+
+    function peaks(){
+      compute();
+      var tf = parseFloat(torso.value);
+      var gf = parseFloat(grip.value);
+      var samples = [0,25,50,75,100];
+      var rowVals = samples.map(function(s){return rowDemand(s, tf);});
+      var puVals = samples.map(function(s){return puDemand(s, gf);});
+      var rowPeakIdx = rowVals.indexOf(Math.max.apply(null, rowVals));
+      var puPeakIdx = puVals.indexOf(Math.max.apply(null, puVals));
+      var labels = ['the bottom','the early range','mid-range','the late range','the top'];
+      var s = 'Row shoulder demand peaks at ' + labels[rowPeakIdx] + '; pull-up shoulder demand peaks at ' + labels[puPeakIdx] + '. ';
+      if(rowPeakIdx < puPeakIdx){
+        s += 'The row peaks earlier — it fights you off the bottom while the pull-up fights you near the top.';
+      } else if(rowPeakIdx > puPeakIdx){
+        s += 'The pull-up peaks earlier here — check your torso and grip settings.';
+      } else {
+        s += 'They peak at the same point under these settings — an unusual match.';
+      }
+      msg.textContent = s;
+    }
+
+    pos.addEventListener('change', compute);
+    torso.addEventListener('change', compute);
+    grip.addEventListener('change', compute);
+    btn.addEventListener('click', peaks);
+    compute();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

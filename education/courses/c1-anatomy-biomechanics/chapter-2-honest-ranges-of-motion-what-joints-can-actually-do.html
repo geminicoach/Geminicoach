@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Honest Ranges of Motion: What Joints Can Actually Do</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 2 · Module 1</div>
+    <h1 class="ch-title">Honest Ranges of Motion: What Joints Can <em>Actually</em> Do</h1>
+    <p class="ch-subtitle">Why the textbook "normal" range is a starting point, not a verdict on your body.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>wo lifters stand side by side at the squat rack. Same height, same shoe, same coaching cue. One drops smoothly until the backs of the thighs kiss the calves; the other stalls a hand's width higher, hips tucking under, lumbar spine rounding to buy those last few centimeters. The coach who assumes both bodies contain the same joint is about to give one of them a bad instruction. Because the difference between these two lifters is not effort, mobility work, or willpower. It is the shape of the bone where the femur meets the pelvis — a shape neither of them chose and neither can cue away.</p>
+    <p>In Chapter 1 we treated bones as levers. A lever, though, is only as useful as the pivot it swings around, and that pivot — the joint — has opinions about which arcs are allowed. This chapter is about learning to read those opinions honestly.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>From "Normal Range" to Honest Range</h2>
+    <p>Open almost any clinical reference and you will find a table: hip flexion, 120°; knee flexion, 135°; shoulder abduction, 180°. These numbers are useful, but they are population summaries, and they carry more authority in a coach's imagination than they deserve. When Roaas and Andersson (1982) actually measured passive range of motion in 210 hips of healthy men aged 30 to 40 using the AAOS-recommended technique, they found their normative values differed <em>significantly</em> from the reference figures cited in the standard texts of the day. They attributed the discrepancy to measurement procedure, technique difficulty, and — critically — plain inter-individual variation.</p>
+    <p>That last phrase is the whole chapter in three words. A "normal" range is the middle of a distribution, and no single person is the middle of every distribution at once. The <span class="ch-key">honest range</span> is what a specific joint, in a specific body, on a specific task, will actually permit. It is discovered, not prescribed. When we stop asking "what is the correct range?" and start asking "what is this joint's honest range, and what is limiting it?", most arguments about "proper depth" or "full range" quietly dissolve into questions about anatomy.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If a normative table says hip flexion is 120°, and a study of 210 healthy hips finds that the reference tables were themselves inaccurate, what should a coach conclude about applying that single number to the lifter in front of them?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Four Joint Shapes, Four Sets of Permissions</h2>
+    <p>Joints are not generic hinges; their geometry dictates their vocabulary of motion. A quick refresher, because the shape is the argument.</p>
+
+    <h3>Ball-and-socket: the hip and the shoulder</h3>
+    <p>Both the hip and the glenohumeral joint are ball-and-socket joints, but they represent opposite ends of a design tradeoff. The hip pairs a deep femoral head with a deep acetabulum reinforced by a labrum — a socket that swallows much of the ball. This buys enormous stability at the cost of some range. The shoulder makes the reverse bargain. Gasbarro and colleagues (2017), reviewing the anatomy of the unstable shoulder, describe a glenohumeral joint whose wide range of motion "is achieved at the cost of inherent bony stability": the glenoid is a shallow dish against a large humeral head, so the joint relies on soft-tissue stabilizers — the capsule, glenohumeral ligaments, and rotator cuff — to stay together. Same joint <em>category</em>, radically different permissions.</p>
+
+    <h3>Hinge-like: the knee and the elbow</h3>
+    <p>The knee and elbow are often called hinges, and to a first approximation they flex and extend in one plane. But "hinge-like" deserves the hedge. The knee's condyles roll and glide and permit a small screw-home rotation near full extension; the elbow's trochlea and capitellum yield slightly different arcs for the ulna and radius. Their end-ranges in flexion are frequently set not by bone but by the bulk of muscle and tissue being compressed — the thigh meeting the calf — which is why knee flexion range varies with limb girth.</p>
+
+    <h3>Gliding: the intervertebral joints</h3>
+    <p>Between each pair of vertebrae sit the facet joints and the disc, permitting small gliding and tilting motions. Individually tiny, they sum across the column into meaningful flexion, extension, and rotation. This matters for lifting more than it first appears, because — as we will see — the lumbar spine likes to <em>volunteer</em> its motion whenever a stubborn hip runs short.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in the style of a vintage anatomical atlas, ink-and-watercolour, comparing four human joint types arranged in a two-by-two grid on aged cream paper. Top-left: a deep hip ball-and-socket joint with the femoral head seated in a deep acetabulum, labelled 'hip'. Top-right: a shallow glenohumeral joint with a large humeral head against a small glenoid, labelled 'shoulder'. Bottom-left: a knee hinge with rolling condyles, labelled 'knee'. Bottom-right: two stacked vertebrae with a disc between them, labelled 'spine'. Muted earth palette of ochre, sienna, slate blue, and bone white; fine sepia outlines; soft directional light from upper left. Small italic serif labels only as specified, no other text, no watermarks." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch2-img1.jpg" alt="<em>Four geometries, four vocabularies of motion — stability and range are traded against each other.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Four geometries, four vocabularies of motion — stability and range are traded against each other.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>What Actually Stops a Joint</h2>
+    <p>When a joint reaches the end of its arc, something physically stopped it. That something falls into two broad families, and telling them apart is one of the most useful skills a movement professional can develop.</p>
+
+    <h3>Bony (hard) end-range</h3>
+    <p>The <span class="ch-key">bony end-range</span> is bone-on-bone contact, or near enough — the femoral neck contacting the acetabular rim, the olecranon seating into its fossa at full elbow extension. It feels abrupt and hard, and it does not negotiate. No stretching protocol lengthens bone. Han and colleagues (2020) made this concrete using cadaveric hips and 3D CT motion simulation across seventeen maneuvers. They found that bony impingement was the true terminator of motion in specific, predictable positions — high abduction combined with flexion, and high flexion combined with adduction and internal rotation. In those configurations, the femur simply ran into the pelvis.</p>
+
+    <h3>Soft-tissue end-range</h3>
+    <p>The <span class="ch-key">soft-tissue end-range</span> is set by tension: capsule, ligament, and muscle drawing taut. It feels springier and comes on more gradually. Han et al. cleverly defined "soft-tissue restriction" as the <em>difference</em> between the virtual bony-impingement range (what the skeleton alone would allow) and the range actually measured in the intact specimen. In many hip positions, that soft-tissue gap was substantial — the tissue stopped the joint well before the bones would have. Turley and colleagues (2012), using two independent experimental methods, drew a similar map: extension and flexion-with-adduction were limited primarily by soft tissue, whereas flexion and flexion-with-abduction placed the hip at risk of true osseous impingement.</p>
+
+    <p>The shoulder illustrates the soft-tissue mechanism beautifully. Gasbarro et al. (2017) describe a glenohumeral capsule that is lax through mid-range and then <em>progressively tightens</em> as the joint approaches its limit, acting as a checkrein. There is very little bone to stop the shoulder; the capsule and ligaments do the job instead. This is exactly why the two families of end-range are worth separating: a hard end-range means the arc is architecturally fixed, while a soft end-range means the limit lives in tissue that responds — over long timescales and within individual limits — to loading and adaptation.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A lifter reports their squat "hits a wall" at a certain depth. What two very different mechanisms could produce that sensation, and why does the distinction change what you would sensibly do about it?</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="rom-explorer">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Joint Range Explorer</div>
+    </div>
+    <p class="ch-widget-sub">Pick a joint, rotate it through its arc, and watch where — and why — it runs out of room. Toggle active versus passive to see the smaller active arc nested inside the larger passive one.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Joint</span>
+        <select class="ch-widget-select" id="rom-joint">
+          <option value="hip">Hip (flexion)</option>
+          <option value="shoulder">Shoulder (abduction)</option>
+          <option value="knee">Knee (flexion)</option>
+          <option value="elbow">Elbow (flexion)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Range shown</span>
+        <select class="ch-widget-select" id="rom-mode">
+          <option value="active">Active (your muscles)</option>
+          <option value="passive">Passive (external force)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Angle</span>
+        <input class="ch-widget-select" id="rom-angle" type="range" min="0" max="180" value="20">
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Current angle</span>
+        <span class="ch-meter-bar"><span id="rom-fill-angle" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="rom-num-angle">20°</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Toward end-range</span>
+        <span class="ch-meter-bar"><span id="rom-fill-tension" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="rom-num-tension">10%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rom-status" style="font-weight:600;">Status: safe mid-range.</p>
+    <p class="ch-widget-sub" id="rom-limit">Limiting structure at end-range: —</p>
+
+    <button class="ch-widget-btn" id="rom-toggle">Toggle Active / Passive</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Active Versus Passive: the Gap That Explains "Blocked"</h2>
+    <p>Here is a distinction that resolves a great deal of confusion on the gym floor. <span class="ch-key">Active range of motion</span> is what your own muscles can move you through. <span class="ch-key">Passive range of motion</span> is what an external force — a partner, gravity, a strap, a clinician's hand — can move you through. Gajdosik and Bohannon (1987), in their foundational review of clinical goniometry, state the general rule plainly: active range of motion is normally <em>less</em> than passive range of motion.</p>
+    <p>Why should there be a gap at all? Because reaching the far edge of a passive arc requires a muscle to be strong and coordinated at a length where it has almost no mechanical advantage — and often the opposing muscle must simultaneously lengthen and relax. If your muscles cannot produce force at that extreme, or cannot let go on the other side, you stop before the tissue would have. The joint could technically go farther; <em>you</em> cannot take it there under your own power. That is precisely the sensation of a lift feeling "blocked" even though nothing structural has been reached: you have arrived at the end of your <em>active</em> range while passive range still has room.</p>
+    <p>Gajdosik and Bohannon add a caution that every coach should tattoo somewhere visible: a goniometric measurement reflects the <em>joint arc only</em> — it does not tell you the cause of the restriction. The same 90° reading could be produced by a tight muscle, a taut capsule, a bony block, or guarding against pain, and the number alone cannot distinguish them. Measurement gives you the "how much," never the "why." The Joint Range Explorer above lets you feel this: switch between active and passive and watch the active arc sit nested inside the larger passive one, ending sooner for reasons that have nothing to do with the bone.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="An editorial pen-and-ink diagram with selective watercolour wash, showing a single hip joint viewed from the side as a protractor-like arc sweeping from 0 to about 130 degrees. Two nested coloured arcs are drawn along the sweep: an inner shorter arc washed in warm amber labelled 'active', and an outer longer arc washed in cool teal labelled 'passive', with a small gap between their endpoints labelled 'the gap'. A dashed radial line marks the shared start. Clean draughtsman aesthetic on off-white paper, thin confident linework, restrained palette of amber, teal, graphite grey. Only the three short labels 'active', 'passive', 'the gap' in small italic serif; no numbers, no other text, no watermarks." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch2-img2.jpg" alt="<em>Active range nested inside passive range — the gap is where &quot;it feels blocked&quot; lives.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Active range nested inside passive range — the gap is where "it feels blocked" lives.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Range Is Task-Dependent</h2>
+    <p>So far we have spoken as if a joint has a range — a single number waiting to be discovered. It does not. Range is <span class="ch-key">task-dependent</span>: the arc available depends on what the rest of the body is doing while the joint moves. Change the position of the neighboring segments and you change the honest range.</p>
+    <p>The hip is the clearest case, and the reason cuts to the heart of squatting arguments. Recall Han et al.'s (2020) finding that bony impingement appeared specifically in flexion combined with adduction and internal rotation. Now consider what happens in a squat. As the femur flexes toward the torso, the exact combination of abduction, rotation, and pelvic tilt determines whether the femoral neck clears the acetabular rim or crashes into it. A hip that flexes gorgeously with the thigh angled out and the pelvis neutral may run out of room the instant you narrow the stance or let the pelvis posteriorly tilt. Turley et al. (2012) map the same territory: flexion-with-abduction risks osseous impingement, while other flexion tasks are governed by soft tissue. The joint has not changed between reps — the <em>task</em> has, and with it the limiting structure.</p>
+
+    <h3>The pelvis borrows from the spine</h3>
+    <p>Task-dependence has a partner in crime: neighboring joints quietly contribute motion you may credit to the hip. Tully, Wagh, and Galea (2002), analyzing hip flexion with computer-aided video in 22 young adults and 22 children, showed that the lumbar spine does <em>not</em> wait politely until the hip is exhausted. Lumbar motion occurs concurrently with hip flexion from the very outset — on average, every 3° of hip motion was accompanied by roughly 1° of lumbar motion, and the lumbar contribution grew as the hip approached its limit. Their pointed conclusion: clinical assessments of hip flexion <em>overestimate</em> true hip joint range because they silently pool in the spine's contribution.</p>
+    <p>Kuo, Tully, and Galea (2009) extended this to active standing hip-and-knee flexion in 34 healthy older adults and found the lumbar spine supplied 26.6% — about 29° — of total thigh movement, again moving throughout rather than only at the end. Older adults showed less hip flexion and more variable hip-to-lumbar sharing. The practical lesson lands directly on the squat: when a lifter appears to "gain depth," some of that gain may be lumbar flexion masquerading as hip flexion. This is the mechanical anatomy of the butt wink. It is not a moral failing; it is a pelvis borrowing range from a spine because the hip's honest arc, for that task, has been spent.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If, on average, roughly 1° of lumbar motion accompanies every 3° of hip flexion from the start of the movement, why is it misleading to describe deep squat depth as purely a measure of "hip mobility"?</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="depth-sim">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Depth Blocker Simulator</div>
+    </div>
+    <p class="ch-widget-sub">Set two anthropometric parameters, predict how deep the hip can flex before a bony block, then run the descent and watch it stop at the modeled end-range. Every configuration is logged.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Hip socket depth</span>
+        <select class="ch-widget-select" id="ds-socket">
+          <option value="shallow">Shallow (more clearance)</option>
+          <option value="medium" selected>Medium</option>
+          <option value="deep">Deep (early rim contact)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Femoral neck angle</span>
+        <select class="ch-widget-select" id="ds-femur">
+          <option value="high">High angle (clears rim)</option>
+          <option value="typical" selected>Typical</option>
+          <option value="low">Low angle (impinges early)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your prediction</span>
+        <select class="ch-widget-select" id="ds-predict">
+          <option value="high">Blocks high (partial)</option>
+          <option value="parallel">Blocks near parallel</option>
+          <option value="deep">Reaches deep</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Descent depth</span>
+        <span class="ch-meter-bar"><span id="ds-fill" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ds-num">0°</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ds-result" style="font-weight:600;">Set your parameters and run the descent.</p>
+    <p class="ch-widget-sub" id="ds-log">Log: —</p>
+
+    <button class="ch-widget-btn" id="ds-run">Run Descent</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>When the Limit Is Pain</h2>
+    <p>There is a third possibility we have deliberately held back, and it changes how you should behave. Sometimes a joint stops not because of tissue tension and not because of bone contact, but because of <em>pain</em> — and the pain arrives before either mechanical limit. Naili and colleagues (2021) studied eight men with femoroacetabular impingement syndrome, comparing each hip's CT-simulated bony-impingement range against its clinically measured passive range. Strikingly, the observed motion limit often occurred <em>well before</em> the point where the bones would actually collide. The restriction was driven by pain and protective soft-tissue guarding, not by bone-on-bone contact. After surgical intervention, passive range improved.</p>
+    <p>The applied moral is firm and it is the ethical spine of this course. A restricted or painful range is a <span class="ch-key">signal</span>, not a diagnosis you are equipped to make and certainly not something to force through. When motion stops short with pain, or a range that was open closes down, or an end-feel seems wrong for the person and the task, the correct action is not more mobility drilling or heavier loading — it is referral for professional evaluation. This chapter gives you a working model of <em>why</em> ranges differ so you can instruct movement intelligently. It does not credential you to distinguish guarding from pathology, and confidently forcing a joint past a pain limit is exactly the mistake the model is meant to prevent.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The difference between the virtual bony-impingement range of motion and the experimentally measured range of motion was defined as "soft-tissue restriction."</p>
+    <cite>Han et al. (2020), on separating what bone forbids from what tissue merely resists</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>Reading a Joint Honestly</h2>
+    <p>Put the pieces together and you have a procedure, not a table. When you watch a joint reach the end of its arc, ask three questions in order. First: is this the <em>active</em> or the <em>passive</em> edge — did the person run out of strength and control, or did tissue and bone actually stop them? Second: if it is a true structural limit, is the end-feel <em>soft</em> (springy, tissue) or <em>hard</em> (abrupt, bone)? Third: is this arc even the joint's job, or is a neighbor — the lumbar spine, the pelvis — quietly contributing motion you are miscrediting? And overriding all three: if <em>pain</em> is the limiter, you stop asking mechanical questions and start a referral.</p>
+    <p>Notice what this procedure refuses to do. It never announces "the correct depth" or "full range" as a universal target, because those phrases assume a shared architecture that Roaas and Andersson (1982) already showed does not exist even among healthy men of the same age. It replaces a number you memorize with a question you investigate. The honest range is the one this joint, on this task, actually has — and the levers we built in Chapter 1 now have realistic arcs to swing through.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Textbook "normal" ranges are population midpoints; the honest range is what a specific joint permits on a specific task, discovered rather than prescribed (Roaas &amp; Andersson, 1982).</li>
+      <li>Joint geometry sets the vocabulary of motion: the deep hip trades range for stability, the shallow shoulder trades stability for range (Gasbarro et al., 2017).</li>
+      <li>End-ranges are bony (hard, bone-on-bone, non-negotiable) or soft-tissue (springy, tension-limited); Han et al. (2020) and Turley et al. (2012) map which hip positions hit which.</li>
+      <li>Active range is normally smaller than passive range; the gap explains why a lift can feel "blocked" while the tissue could still go farther (Gajdosik &amp; Bohannon, 1987).</li>
+      <li>Range is task-dependent, and neighbors borrow motion — the lumbar spine contributes to apparent hip flexion from the outset (Tully et al., 2002; Kuo et al., 2009).</li>
+      <li>When pain limits a range before any mechanical stop, treat it as a signal for professional evaluation, never as something to diagnose or force through (Naili et al., 2021).</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have established that joints have honest, individual arcs and that the hip's arc in particular is exquisitely sensitive to task. Chapter 5 cashes this in directly, asking why squat depth varies so dramatically between individuals — and Chapter 9 builds the systematic account of anthropometry that turns "this person is built differently" from an excuse into a measurable, predictive framework.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Gajdosik, R. L., &amp; Bohannon, R. W. (1987). Clinical measurement of range of motion: Review of goniometry emphasizing reliability and validity. <em>Physical Therapy, 67</em>(12), 1867–1872. https://doi.org/10.1093/ptj/67.12.1867</p>
+    <p>Gasbarro, G., Bondow, B., &amp; Debski, R. (2017). Clinical anatomy and stabilizers of the glenohumeral joint. <em>Annals of Joint, 2</em>, 58. https://pmc.ncbi.nlm.nih.gov/articles/PMC5611901/</p>
+    <p>Han, S., Alexander, J. W., Thomas, V. S., Choi, J., Harris, J. D., Doherty, D. B., Jeffers, J. R. T., &amp; Noble, P. C. (2020). The continuum of hip range of motion: From soft-tissue restriction to bony impingement. <em>Journal of Orthopaedic Research, 38</em>(6), 1360–1368. https://doi.org/10.1002/jor.24594</p>
+    <p>Kuo, Y.-L., Tully, E. A., &amp; Galea, M. P. (2009). Lumbofemoral rhythm during active hip flexion in standing in healthy older adults. <em>Manual Therapy, 14</em>(5), 483–489. https://www.sciencedirect.com/science/article/abs/pii/S1356689X09001350</p>
+    <p>Naili, J. E., Stål, F., Skorpil, M., Nyström, A., Schilcher, J., &amp; Weidow, J. (2021). Hip joint range of motion is restricted by pain rather than mechanical impingement in individuals with femoroacetabular impingement syndrome. <em>Archives of Orthopaedic and Trauma Surgery, 142</em>(8), 1985–1993. https://doi.org/10.1007/s00402-021-04185-4</p>
+    <p>Roaas, A., &amp; Andersson, G. B. J. (1982). Normal range of motion of the hip, knee and ankle joints in male subjects, 30–40 years of age. <em>Acta Orthopaedica Scandinavica, 53</em>(2), 205–208. https://doi.org/10.3109/17453678208992202</p>
+    <p>Tully, E. A., Wagh, P., &amp; Galea, M. P. (2002). Lumbofemoral rhythm during hip flexion in young adults and children. <em>Spine, 27</em>(20), E432–E440. https://doi.org/10.1097/00007632-200210150-00013</p>
+    <p>Turley, G. A., Williams, M. A., Wellings, R. M., &amp; Griffin, D. R. (2012). Evaluation of range of motion restriction within the hip joint. <em>Medical &amp; Biological Engineering &amp; Computing, 51</em>(4), 467–477. https://doi.org/10.1007/s11517-012-1016-3</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 2 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('rom-explorer');
+    if(!root) return;
+    var jointSel = root.querySelector('#rom-joint');
+    var modeSel = root.querySelector('#rom-mode');
+    var angleInput = root.querySelector('#rom-angle');
+    var fillAngle = root.querySelector('#rom-fill-angle');
+    var numAngle = root.querySelector('#rom-num-angle');
+    var fillTension = root.querySelector('#rom-fill-tension');
+    var numTension = root.querySelector('#rom-num-tension');
+    var status = root.querySelector('#rom-status');
+    var limit = root.querySelector('#rom-limit');
+    var toggle = root.querySelector('#rom-toggle');
+
+    var data = {
+      hip:      { active: 118, passive: 128, soft: 100, structure: "acetabular rim / femoral neck (bony impingement in flexion + adduction)" },
+      shoulder: { active: 165, passive: 180, soft: 140, structure: "glenohumeral capsule & ligaments (progressive capsular tightening)" },
+      knee:     { active: 135, passive: 150, soft: 122, structure: "soft-tissue approximation of calf against thigh" },
+      elbow:    { active: 145, passive: 150, soft: 135, structure: "olecranon-in-fossa contact / anterior soft-tissue bulk" }
+    };
+
+    function update(){
+      var joint = jointSel.value;
+      var mode = modeSel.value;
+      var d = data[joint];
+      var max = d[mode];
+      var angle = parseInt(angleInput.value,10);
+      angleInput.max = max;
+      if(angle > max){ angle = max; angleInput.value = max; }
+      var pct = Math.round((angle/max)*100);
+      fillAngle.style.width = Math.min(100, Math.round((angle/180)*100)) + '%';
+      numAngle.textContent = angle + '°';
+      fillTension.style.width = pct + '%';
+      numTension.textContent = pct + '%';
+
+      var softPct = (d.soft / max) * 100;
+      if(pct < softPct - 5){
+        status.textContent = 'Status: SAFE — comfortable mid-range, minimal tissue tension.';
+      } else if(pct < 96){
+        status.textContent = 'Status: CAUTION — approaching soft-tissue tension; capsule and muscle drawing taut.';
+      } else {
+        status.textContent = (mode === 'passive')
+          ? 'Status: END-STOP — passive limit reached.'
+          : 'Status: END-STOP — active limit reached; passive range may still have room.';
+      }
+      limit.textContent = 'Limiting structure at end-range: ' + d.structure;
+    }
+
+    toggle.addEventListener('click', function(){
+      modeSel.value = (modeSel.value === 'active') ? 'passive' : 'active';
+      update();
+    });
+    jointSel.addEventListener('change', update);
+    modeSel.addEventListener('change', update);
+    angleInput.addEventListener('input', update);
+    update();
+  } catch(e) {}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('depth-sim');
+    if(!root) return;
+    var socketSel = root.querySelector('#ds-socket');
+    var femurSel = root.querySelector('#ds-femur');
+    var predictSel = root.querySelector('#ds-predict');
+    var fill = root.querySelector('#ds-fill');
+    var num = root.querySelector('#ds-num');
+    var result = root.querySelector('#ds-result');
+    var logEl = root.querySelector('#ds-log');
+    var runBtn = root.querySelector('#ds-run');
+
+    var socketVal = { shallow: 20, medium: 0, deep: -18 };
+    var femurVal  = { high: 18, typical: 0, low: -20 };
+    var log = [];
+    var animating = false;
+
+    function classify(depth){
+      if(depth < 95) return 'high';
+      if(depth < 120) return 'parallel';
+      return 'deep';
+    }
+    function label(k){
+      return k === 'high' ? 'blocks high (partial)' : k === 'parallel' ? 'blocks near parallel' : 'reaches deep';
+    }
+
+    function run(){
+      if(animating) return;
+      var base = 100;
+      var target = base + socketVal[socketSel.value] + femurVal[femurSel.value];
+      if(target < 70) target = 70;
+      if(target > 145) target = 145;
+      var outcome = classify(target);
+      var predicted = predictSel.value;
+
+      animating = true;
+      var cur = 0;
+      var step = function(){
+        cur += 3;
+        if(cur >= target){ cur = target; }
+        var pct = Math.round((cur/145)*100);
+        fill.style.width = pct + '%';
+        num.textContent = Math.round(cur) + '°';
+        if(cur < target){
+          requestAnimationFrame(step);
+        } else {
+          animating = false;
+          var stopType = (socketSel.value === 'deep' || femurSel.value === 'low')
+            ? 'bony block (rim / femoral neck contact)'
+            : 'soft-tissue tension approaching';
+          var verdict = (predicted === outcome) ? '✓ prediction correct' : '✗ prediction off';
+          result.textContent = 'Descent stopped at ' + Math.round(target) + '° of hip flexion — ' + stopType + '. ' + verdict + '.';
+          log.unshift('socket=' + socketSel.value + ', femur=' + femurSel.value + ' → ' + Math.round(target) + '° (' + label(outcome) + ')');
+          if(log.length > 4) log.pop();
+          logEl.textContent = 'Log: ' + log.join('  |  ');
+        }
+      };
+      requestAnimationFrame(step);
+    }
+
+    runBtn.addEventListener('click', run);
+  } catch(e) {}
+})();
+</script>
+</body>
+</html>
