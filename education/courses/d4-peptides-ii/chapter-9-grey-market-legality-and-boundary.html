@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Grey Market, the Vial, and the Boundary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Peptides II &middot; Chapter 9</div>
+    <h1 class="ch-title">The Grey Market, the Vial, and the <em>Boundary</em></h1>
+    <p class="ch-subtitle">Eight chapters of this module explained what these molecules are supposed to do inside a body. This closing chapter asks the colder question underneath all of it: what actually arrives in the vial, who is allowed to sell it, and where a learner's own understanding has to stop.</p>
+    <div class="ch-meta">
+      <span>54 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>7 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">S</span>omewhere between the receptor diagrams of Chapter 2 and the risk discussion in this module's melanocortin chapter sits a question none of the preceding eight chapters could fully answer, because it is not a biochemistry question at all. It is a supply chain question: what actually arrives in the envelope. This module has explained, family by family, what a specific peptide is proposed to do once it reaches the right tissue, angiogenesis and tendon signaling for BPC-157 and thymosin beta-4 (TB-500), copper-dependent collagen and wound signaling for GHK-Cu, host-defense and anti-inflammatory action for KPV and the cathelicidin LL-37, T-cell modulation for thymosin alpha-1, neurotrophic and inhibitory signaling for semax, selank, delta sleep-inducing peptide (DSIP), and cerebrolysin, melanocortin-receptor activity for bremelanotide and melanotan II, and a scattered set of proposed telomerase, mitochondrial, and tissue-protective mechanisms for epithalon, humanin, cibinetide (ARA-290), and vasoactive intestinal peptide (VIP). Every one of those explanations rested on an assumption this closing chapter can no longer make on a learner's behalf: that the molecule described on the page and the molecule sitting in a vial are the same substance.</p>
+    <p>That assumption is where the real risk in this subject concentrates, and it has almost nothing to do with which receptor a peptide binds. A product can be synthesized in a facility with no quality system at all, filled into a vial at the wrong concentration, contaminated with bacterial endotoxin nobody tested for, or carrying a trace of a heavy metal left behind by an unvalidated purification step, and every one of those failures can happen to a peptide whose receptor pharmacology this module described with complete accuracy. Mechanism explains what a correctly manufactured molecule does inside a body. It says nothing about whether a specific vial, in a specific learner's hands, is that molecule at all. This chapter exists to close that gap honestly, and to close this entire two-course arc the same way.</p>
+    <p>Our thread through this closing chapter is a learner named Inga, who worked through this catalog's companion module on growth, metabolic, and body-composition peptides earlier this year and came back for this second module because the repair, immune, and neuro compounds interested her more personally, an old tendon injury she still favors, a general curiosity about the immune peptides she had read discussed alongside it. Eight chapters into this module, Inga has built a genuinely strong grasp of mechanism. She can explain what BPC-157 is proposed to do at a vascular growth factor receptor, why thymosin alpha-1 shifts T-cell balance, and why melanotan II's blood pressure and pigmentation risks trace back to the same melanocortin receptor family that gives it its cosmetic tanning effect. What she has not yet had to reckon with, and what brings her into this final chapter with real urgency, is a considerably less comfortable question: now that she understands the biology this thoroughly, does that understanding tell her anything at all about what she would actually be holding if she ever ordered one of these compounds herself.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What "grey market" means for this module's compounds</h2>
+    <p>Start with the label itself, because it appears on nearly every product this module has discussed, and it is doing more regulatory work than its size suggests. Search for almost any compound covered in this module's eight preceding chapters and, alongside the vendor's mechanism claims and dosing charts, you will find a small line of text: "research use only," frequently followed by a second line, "not for human consumption." A <span class="ch-key">grey market</span> is not a black market, and treating the two as equivalent misses exactly the mechanism that makes a grey market its own distinct, and in some ways harder to reason about, category. A black market sells something the law prohibits selling at all. A grey market sells something the law generally permits selling, as a raw chemical intended for legitimate laboratory or research use, to a buyer the seller has no meaningful obligation to verify is actually operating a laboratory.</p>
+    <p>The label is the hinge the whole arrangement turns on, and it is worth being precise about what it does and does not do. It is not a certification of safety, purity, or identity. It is a piece of regulatory language that shifts legal exposure away from the seller and toward the buyer. A seller who lists a product accurately as a research chemical, and includes the disclaimer, has technically stayed inside a lane the law recognizes, because selling an unapproved chemical compound for a genuine research purpose is not, by itself, illegal in the way selling the same chemical as a drug intended for human use would be. What that seller is very unlikely to do is verify that a specific buyer holds an institutional research protocol or actually intends anything other than what the same product page's injection-site diagrams and community dosing language make obvious it is being sold for. The label protects the seller. It says nothing whatsoever about what is inside the vial.</p>
+    <p>None of this means a genuine research-supply industry does not exist, or that every seller using this language is acting in bad faith. Laboratories and contract research organizations buy peptide reagents from legitimate suppliers constantly, for real experiments, and that trade is not the subject of this chapter. The grey market this chapter describes is the narrower, far more visible layer of sellers who use the identical "research use only" packaging while marketing unmistakably to individual buyers who intend to use the product on themselves, through community-facing language, injection guidance, and sales channels a genuine laboratory-reagent supplier has no reason to maintain. The honest problem with that layer is not that every vial sold through it is fake. It is that there is no reliable, structural way for an individual buyer to know which situation they are in for any specific vial, because the entire arrangement exists specifically to avoid the testing, inspection, and accountability systems that would answer that question with any confidence.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common defense treats the "research use only" label the way a person might treat boilerplate legal text on a receipt, printed language with no real bearing on what is actually being sold or bought. The label is doing real, deliberate regulatory work, just not the work it is usually assumed to do. It does not certify what is in the vial. It shifts legal responsibility onto the buyer and lets the seller avoid the manufacturing, testing, and labeling obligations that would otherwise apply to a product intended for a person to use. Reading past the label to what a product is actually being marketed and sold for is not paranoia. It is reading the label correctly.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Four tiers, and why this module does not split cleanly into two</h2>
+    <p>Most informal discussion of peptide sourcing collapses into a binary: a product is either "legit," meaning it came through a pharmacy, or it is "grey market," meaning it did not. That binary works reasonably well for a module built almost entirely around compounds with no regulatory approval anywhere. It does not work for this module, because two of the compounds covered in these nine chapters, bremelanotide and thymosin alpha-1, genuinely occupy a different, higher tier of oversight than the rest of this module's library, and understanding exactly what separates them from their neighbors is one of the most practically useful distinctions this closing chapter can offer.</p>
+    <p>The first tier is a <span class="ch-key">Food and Drug Administration (FDA)-approved medicine</span>, sold under an approved indication in the United States. In this module, bremelanotide is the clearest example. According to Clayton, Kingsberg, Portman, Sadiq, Krop, Jordan, and Simon (2022), bremelanotide, a melanocortin receptor agonist, is Food and Drug Administration-approved for treating acquired, generalized hypoactive sexual desire disorder in premenopausal women, and its safety profile was characterized across a clinical development program comprising 3,500 subjects in 43 completed studies, with the most common adverse events being nausea, flushing, headache, and injection site reactions, alongside a documented, small but statistically significant increase in blood pressure that the study's authors specifically flagged as a reason for caution in patients with cardiovascular risk. That is what an approved medicine's safety picture looks like: a specific formulation, a specific manufacturer, a defined indication, and a large, published dataset describing exactly what happens when it is used as labeled. Melanotan II, discussed alongside bremelanotide in this module's melanocortin chapter, activates a closely related family of receptors and is marketed for a similar cosmetic tanning effect, and it holds no equivalent approval anywhere. The receptor family is a near neighbor. The regulatory status is not remotely close.</p>
+    <p>The second tier belongs almost entirely to thymosin alpha-1, and it is a genuinely unusual case worth naming specifically because it does not fit neatly into either "approved" or "grey market." According to Tuthill (2007), writing from within the company that licensed thymosin alpha-1's commercial and patent rights for regions outside the United States and Europe, the compound obtained regulatory approvals in more than thirty countries and has been in commercial sale under a registered trade name for chronic viral hepatitis and as an immune adjunct, following the completion of the toxicology and clinical development programs each national regulator required. Thymosin alpha-1 is, in a real and specific sense, an <span class="ch-key">approved medicine, just not in every jurisdiction</span>, including not in the United States, where it has never completed the equivalent approval pathway. That distinction matters enormously for how a learner should read a bottle: a compound with genuine registered approval and decades of monitored clinical use somewhere in the world carries a fundamentally different evidentiary and manufacturing history than a compound that has never been reviewed by any regulator anywhere, even when both are being sold, in the United States, through the identical "research use only" channel.</p>
+    <p>The third tier is a <span class="ch-key">compounded product</span>, prepared by a licensed pharmacist for an individual patient (a 503A pharmacy, operating primarily under state board oversight) or in batches by a Food and Drug Administration-registered outsourcing facility (a 503B facility, operating under current Good Manufacturing Practice, GMP, standards, the federally enforced set of requirements covering facility cleanliness, equipment validation, and batch testing that licensed manufacturers must follow). A small number of this module's compounds, BPC-157 among them, have at various points been compounded by licensed pharmacies for individual patients, and it matters to say plainly that compounding is real, licensed medicine, prepared by a pharmacist, even when the underlying peptide has never itself completed an approval pathway. It is also worth naming, without treating it as settled, that United States regulators have specifically scrutinized whether several of this module's compounds belong on the list of substances a compounding pharmacy may legally use at all, precisely because the underlying safety and manufacturing data for a compound like BPC-157 remains thin. The fourth tier is the <span class="ch-key">unapproved research chemical</span> described in the previous section, and it is where nearly the entire remaining catalog of this module, BPC-157, thymosin beta-4 (TB-500), GHK-Cu, KPV, LL-37, semax, selank, DSIP, cerebrolysin, melanotan II, epithalon, humanin, ARA-290, and VIP, actually sits when sold through the online channels most learners in this module have encountered.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 380" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four tiers of oversight across this module's compounds" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Four tiers, not two</title>
+<rect x="1" y="1" width="638" height="378" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">FOUR TIERS OF OVERSIGHT, NOT TWO</text>
+<rect x="200" y="52" width="240" height="52" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="2"/>
+<text x="320" y="74" fill="#7fd18a" font-size="12" font-weight="700" text-anchor="middle">FDA-approved (US)</text>
+<text x="320" y="92" fill="#cdd8ea" font-size="9.5" text-anchor="middle">bremelanotide, labeled indication</text>
+<rect x="140" y="112" width="360" height="52" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="134" fill="#5aaff5" font-size="12" font-weight="700" text-anchor="middle">Approved elsewhere, not in the US</text>
+<text x="320" y="152" fill="#cdd8ea" font-size="9.5" text-anchor="middle">thymosin alpha-1, registered in 30-plus countries</text>
+<rect x="100" y="172" width="440" height="52" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="320" y="194" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">Compounded product</text>
+<text x="320" y="212" fill="#cdd8ea" font-size="9.5" text-anchor="middle">licensed pharmacist, 503A or 503B pathway, underlying data varies</text>
+<rect x="50" y="232" width="540" height="60" rx="8" fill="#132a45" stroke="#e88a7a" stroke-width="1.8"/>
+<text x="320" y="256" fill="#e88a7a" font-size="12" font-weight="700" text-anchor="middle">Unapproved research chemical</text>
+<text x="320" y="274" fill="#cdd8ea" font-size="9.5" text-anchor="middle">no review, no inspection, no pharmacist, no batch record</text>
+<text x="320" y="290" fill="#7f8fab" font-size="8.5" text-anchor="middle">BPC-157, TB-500, GHK-Cu, KPV, LL-37, semax, selank, DSIP, cerebrolysin, melanotan II, epithalon, humanin, ARA-290, VIP</text>
+<text x="320" y="332" fill="#7f8fab" font-size="10.5" text-anchor="middle">Oversight narrows toward the top. Two compounds in this module sit near it. Most do not.</text>
+<text x="320" y="352" fill="#7f8fab" font-size="10.5" text-anchor="middle">A "research use only" label describes the seller's legal posture, never which tier a buyer actually receives.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Four tiers of oversight. Bremelanotide is an FDA-approved medicine in the United States. Thymosin alpha-1 is approved and clinically used in more than thirty other countries but not in the United States. A small number of this module's compounds have been compounded by a licensed pharmacist. Most sit in the fourth tier, sold as unapproved research chemicals with no review behind them at all.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner reads that thymosin alpha-1 is "an approved drug," and a page later reads that bremelanotide is "FDA-approved," and concludes that this module's compounds are, on the whole, more legitimate than they first appeared. Before reading further, count how many of this module's fourteen other compounds, BPC-157, thymosin beta-4, GHK-Cu, KPV, LL-37, semax, selank, DSIP, cerebrolysin, melanotan II, epithalon, humanin, ARA-290, and VIP, share that approval status with either of those two. What does the size of that gap suggest about how far a genuine exception should be allowed to generalize.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="tier-classifier">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Approved, Compounded, or Research Chemical?</div>
+    </div>
+    <p class="ch-widget-sub">Sort each scenario into the tier it actually occupies, then reveal the reasoning. The goal is not memorizing a list of eight examples, it is learning to separate a compound's regulatory status from how confidently a vendor's marketing language talks about it.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Scenario</span>
+        <select class="ch-widget-select" id="tc-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="tc-bin">
+          <option value="approved">FDA-Approved Medicine (US)</option>
+          <option value="elsewhere">Approved / Used Clinically Elsewhere</option>
+          <option value="compounded">Compounded Product</option>
+          <option value="research">Unapproved Research Chemical</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="tc-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tc-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="tc-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tc-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="tc-feedback">Choose a scenario and a tier, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="tc-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>From vial to bloodstream: where sterility fails</h2>
+    <p>An injectable product, regardless of which tier it comes from, has to clear a bar a topical cream or an oral capsule does not: it has to be sterile, free of living microorganisms, and free of clinically significant bacterial endotoxin, a fever-inducing byproduct of bacterial cell walls that survives even after the bacteria that produced it are dead. This bar is not a minor manufacturing footnote. It is the entire reason sterile pharmaceutical manufacturing is one of the most heavily inspected activities in medicine, and it is the single largest practical risk in this closing chapter, because it applies even when a peptide's chemical identity and labeled dose happen to be exactly correct.</p>
+    <p>The consequences of a sterility failure are not abstract. An injection that introduces live bacteria into tissue or the bloodstream can produce a localized abscess at the injection site, a bloodstream infection, or, in a severe case, sepsis, a life-threatening systemic response to infection. An injection that introduces bacterial endotoxin, even from bacteria that never survived the manufacturing process, can trigger fever, chills, a sharp drop in blood pressure, and, at high enough exposure, a life-threatening reaction, because the immune system reacts to the endotoxin molecule itself, independent of whether the organism that produced it is still alive. The single most catastrophic documented illustration of what happens when this exact failure occurs at scale did not come from an online peptide seller. According to Kainer et al. (2012), a 2012 outbreak traced to a single United States compounding pharmacy that had shipped fungus-contaminated methylprednisolone for epidural and paraspinal injection resulted in 66 documented cases of fungal meningitis, stroke, spinal infection, or epidural abscess, with eight deaths, and with symptom onset arriving a median of 18 days after the injection, long enough that many patients did not connect a new headache back to an injection weeks earlier. That outbreak happened inside a licensed, inspected pharmacy operating in the third tier this chapter described above, not an unregulated overseas research-chemical seller, and it still produced a mass-casualty event that regulators did not catch until people were already sick.</p>
+    <p>Direct testing of peptide products sold outside the approved pharmaceutical channel confirms that this is not a hypothetical worry layered on top of a mostly clean supply. According to Ashraf, Mackey, Vida, Kulcsar, Schmidt, Balazs, Domian, Li, Csako, and Fittler (2024), test purchases of injectable peptide products from illegal online pharmacies, evaluated with microbiological sterility and endotoxin testing alongside quantitative chemical analysis, found that while the purchased samples were free of viable microorganisms at the time of testing, bacterial endotoxin was detected in every sample tested, at levels ranging from 2.16 to 8.95 endotoxin units per milligram. None of that endotoxin was visible on inspection. A vial that looks perfectly clear, with no cloudiness and no visible particles, tells a buyer nothing about whether it carries a clinically significant endotoxin load, because endotoxin does not require a living organism to be present, and it cannot be detected by looking at a vial. The only way to know is a validated laboratory test, the same test a licensed manufacturer or compounding pharmacy is required to run as a routine condition of selling a sterile product at all, and a research-chemical seller has no obligation, and frequently no facility, to run.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="From vial to bloodstream, four points where contamination can enter" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>From vial to bloodstream: four points of entry</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="28" fill="#aab8d2" font-size="13" letter-spacing="1.5">FROM VIAL TO BLOODSTREAM: FOUR POINTS OF ENTRY</text>
+<defs>
+<marker id="arwd" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#7f8fab"/>
+</marker>
+</defs>
+<rect x="30" y="58" width="130" height="86" rx="8" fill="#132a45" stroke="#e88a7a" stroke-width="1.8"/>
+<text x="95" y="82" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">Synthesis</text>
+<text x="95" y="99" fill="#cdd8ea" font-size="9" text-anchor="middle">no clean-room,</text>
+<text x="95" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">no validated</text>
+<text x="95" y="125" fill="#cdd8ea" font-size="9" text-anchor="middle">purification step</text>
+<line x1="160" y1="101" x2="192" y2="101" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwd)"/>
+<rect x="198" y="58" width="130" height="86" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="263" y="82" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">Lyophilized vial</text>
+<text x="263" y="99" fill="#cdd8ea" font-size="9" text-anchor="middle">identity, dose, and</text>
+<text x="263" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">endotoxin load</text>
+<text x="263" y="125" fill="#cdd8ea" font-size="9" text-anchor="middle">unverified by any lab</text>
+<line x1="328" y1="101" x2="360" y2="101" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwd)"/>
+<rect x="366" y="58" width="130" height="86" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="431" y="82" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">Reconstitution</text>
+<text x="431" y="99" fill="#cdd8ea" font-size="9" text-anchor="middle">non-sterile water,</text>
+<text x="431" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">reused vial stopper,</text>
+<text x="431" y="125" fill="#cdd8ea" font-size="9" text-anchor="middle">unwashed hands</text>
+<line x1="496" y1="101" x2="528" y2="101" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwd)"/>
+<rect x="534" y="58" width="76" height="86" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="572" y="86" fill="#7fd18a" font-size="10.5" font-weight="700" text-anchor="middle">Injection</text>
+<text x="572" y="103" fill="#cdd8ea" font-size="8.5" text-anchor="middle">tissue and</text>
+<text x="572" y="116" fill="#cdd8ea" font-size="8.5" text-anchor="middle">bloodstream</text>
+<rect x="60" y="184" width="520" height="108" rx="8" fill="#1a2e22" stroke="#3a5578" stroke-width="1.2"/>
+<text x="320" y="208" fill="#aab8d2" font-size="11" font-weight="700" text-anchor="middle">What a regulated pathway adds at every one of those steps</text>
+<text x="320" y="230" fill="#cdd8ea" font-size="10" text-anchor="middle">GMP-inspected facility, validated sterilization, batch-by-batch endotoxin testing</text>
+<text x="320" y="248" fill="#cdd8ea" font-size="10" text-anchor="middle">pharmacist verification, standardized reconstitution instructions</text>
+<text x="320" y="266" fill="#cdd8ea" font-size="10" text-anchor="middle">an adverse-event and recall mechanism if a batch is later found contaminated</text>
+<text x="320" y="336" fill="#7f8fab" font-size="10.5" text-anchor="middle">Every arrow is a place a problem can enter, and a place oversight can catch it, or not.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 2</span> <em>From vial to bloodstream. Contamination can enter during synthesis, inside the vial itself, during reconstitution, or through injection technique. A regulated pathway adds a specific safeguard at every one of those points; a research-chemical seller adds none of them.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner in this module inspects a vial before use, checks that the solution is clear, confirms there are no visible particles floating in it, and concludes the product is safe to inject. Using only what this section covered, name the specific test result that visual inspection cannot substitute for, and explain why a vial can pass every visible check a learner is capable of running and still carry a clinically meaningful endotoxin load.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Mislabeling: the compound, and the amount, on the vial</h2>
+    <p>Sterility is one axis of risk. A second, entirely separate axis is identity: whether the vial actually contains the compound its label names, at the concentration the label states. These are not hypothetical concerns raised for effect. The same test-purchase study that documented universal endotoxin contamination also examined content accuracy directly, and its finding is worth sitting with rather than skimming past, because of how far the actual numbers diverge from the label. According to Ashraf et al. (2024), quantitative chemical analysis of the purchased peptide samples found measured peptide purity ranging from 7.7 to 14.37 percent, a fraction of the 99 percent purity claimed on the product labels, while the same samples showed peptide content that substantially exceeded the labeled milligram amount, by 28.56 to 38.69 percent, a combination the researchers characterized as products that were probable substandard and falsified, with visual packaging inspection alone flagging noncompliance in well over half of the criteria examined.</p>
+    <p>Read that finding carefully, because the two numbers point in directions a learner might not expect. The vials in that study were not simply weak or underdosed, the more intuitive failure mode. They contained more total peptide mass than the label claimed, while the fraction of that mass that was actually the correctly assembled target molecule was a small slice of what the label promised, with the remainder made up of degradation products or synthesis byproducts. A buyer weighing a vial's declared milligram content against an expected effect has no way to know, from the outside, whether they are looking at an accurately labeled product, an overfilled one, an underpurified one, or some combination of the three, because nothing about the packaging, the price, or the vendor's confidence in their own marketing copy correlates reliably with which situation is actually true.</p>
+    <p>It matters to be precise about what this specific study does and does not establish for this module's own compound library. Ashraf et al. (2024) tested semaglutide products, a glucagon-like peptide-1 (GLP-1) compound outside this module's own catalog, not BPC-157, thymosin beta-4, or the other peptides covered in these nine chapters directly. What it establishes, with real analytical rigor, is the underlying pattern this entire chapter has been describing: whenever an independent laboratory has actually tested peptide products sold outside the regulated pharmaceutical channel, a meaningful and sometimes dramatic fraction of what gets tested does not match its own label, across multiple product categories and multiple countries. This module's own compounds move through comparable unregulated channels, with no structural reason to expect a cleaner result. A mislabeling failure, unlike a sterility failure, rarely produces an obvious symptom that flags the problem. A vial containing far less correctly assembled peptide than declared simply produces no noticeable effect and gets quietly written off as "this batch was weak." A vial containing an unexpected byproduct can produce an effect, sometimes an unwanted one, that gets attributed to the wrong molecule entirely, because nobody involved has any structural reason to suspect the label was ever accurate.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that a peptide either "worked" or it did not, and that a noticeable effect is itself evidence the vial contained what the label promised. Independent testing of unregulated peptide products has repeatedly found labeled content, purity, and actual milligram amount diverging sharply from what the packaging claims, sometimes containing more total material than declared while containing far less of the intended, correctly assembled compound. A subjective sense that "something happened" cannot distinguish an accurately dosed product from an overfilled, underpurified one, and it cannot rule out a placebo response either. Only laboratory analysis can answer that question, and an individual buyer, by definition, does not have access to it.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Reconstitution and handling: where a learner joins the manufacturing chain</h2>
+    <p>Most of this module's peptides are shipped as a lyophilized powder, freeze-dried for stability, and have to be reconstituted, mixed with a liquid, before they can be drawn into a syringe. In a regulated pathway, that step is either performed by a pharmacist under controlled conditions or handed to a patient with specific, validated instructions: sterile bacteriostatic water, a single-use vial stopper, a defined storage temperature and shelf life once mixed. In the unregulated channel most of this module's compounds move through, that entire step, and every risk embedded in it, gets handed to the buyer with no equivalent instruction, no equivalent product, and frequently no warning that the step matters at all.</p>
+    <p>According to Van Hout and Brennan (2013), an in-depth case study of an individual's experience self-administering an unlicensed melanotan tanning product, the user described specific self-taught handling practices, not reusing needles, keeping the product refrigerated, disinfecting and rotating injection sites, and using sterilized water to dissolve the powder, alongside an explicit awareness that the product was unlicensed, unregulated, and possibly contaminated. That account matters for two reasons that pull in opposite directions. It shows that a careful, self-taught buyer can approximate some of the technique a regulated pathway would otherwise provide, which is a genuine, if partial, harm-reduction insight. It also shows, by the same account, that the buyer was operating entirely on self-taught practice, with no pharmacist verifying technique, no manufacturer specifying a validated shelf life once the product was reconstituted, and no external check on any of it, precisely the gap this chapter has described throughout. A careful individual can reduce some of the risk in this step. No individual, however careful, can replace the testing infrastructure that would confirm the technique actually worked.</p>
+    <p>The specific errors that matter most at this stage are worth naming directly, because they are exactly the kind of detail a mechanism-focused education tends to skip past. Reconstituting a peptide with ordinary tap or bottled water, rather than sterile water intended for injection, introduces exactly the kind of microbial risk the previous section described, with none of the endotoxin testing that would catch it. Reusing a needle to draw from the same vial stopper repeatedly, rather than using a fresh needle for each draw, creates a growing opportunity for contamination to accumulate in a vial that may then be used across several separate injections. Storing a reconstituted peptide at room temperature, rather than refrigerated, for longer than a manufacturer's own instructions specify, whether it is the correct product or not, allows both microbial growth and chemical degradation of the peptide itself, meaning a product that started out correctly labeled and free of contamination can still degrade or become contaminated well before a buyer finishes the vial.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Compare two learners in this module. One sources a compound from an unregulated seller but reconstitutes it with sterile water, uses a fresh needle for every draw, and refrigerates it properly. The other sources from the identical seller but reuses water and needles carelessly. The first learner has genuinely reduced part of their risk. Using only what this section covered, name the specific risks that careful handling technique does not touch at all, the ones that were already fixed the moment the vial left the manufacturer.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Impurities and heavy metals: the problems that produce no symptom at all</h2>
+    <p>A third contamination category is subtler than a missing peptide or a fever-inducing endotoxin load, because it can produce no acute symptom whatsoever and take years to manifest: heavy metal and process-impurity contamination carried over from an unregulated synthesis process. Peptide manufacture, whether by solid-phase chemical synthesis or recombinant biological production, uses reagents, catalysts, and purification steps that can leave trace residues behind if the process is not deliberately controlled and tested to remove them. Lead, cadmium, mercury, and arsenic are the four metals of greatest documented concern in pharmaceutical and supplement contexts, alongside other metals, including chromium, nickel, and various platinum-group metals used in some synthesis chemistry, that can appear as residual impurities when a manufacturer is not specifically screening for and limiting them.</p>
+    <p>According to Abernethy, Destefano, Cecil, Zaidi, and Williams (2010), writing from the United States Pharmacopeia (USP)'s own documentary standards division, setting appropriate limits for metal impurities in medicines and dietary supplements is a genuine, ongoing technical challenge even within the fully regulated pharmaceutical system, precisely because these metals occur ubiquitously in the environment and because reliably detecting them at clinically meaningful thresholds requires real analytical infrastructure, not a visual inspection or a vendor's assurance. That is the standard a licensed pharmaceutical manufacturer, and a licensed compounding pharmacy operating under United States Pharmacopeia quality benchmarks, is expected to meet, with a compendium, an inspection process, and validated analytical methods standing behind the expectation. A grey-market manufacturer has none of that infrastructure and no external requirement to build it, and unlike a sterility failure, which frequently produces a fast, attributable illness, chronic low-level heavy metal exposure tends to accumulate quietly, contributing to kidney, neurological, or cardiovascular harm over a timescale long enough, and diffuse enough in its presentation, that almost nobody would trace it back to a specific vial from months or years earlier.</p>
+    <p>Peptide-specific synthesis errors carry a related concern that sits alongside heavy metals rather than replacing them. Solid-phase peptide synthesis can produce truncated sequences, where the amino acid chain terminates early, or deletion and substitution sequences, where one or more residues in the intended chain are missing or swapped, alongside the correctly assembled target peptide. A rigorous manufacturing process uses high-performance liquid chromatography (HPLC) and mass spectrometry to separate the correct sequence from these byproducts and verify what remains meets a defined purity threshold, exactly the testing a legitimate reagent supplier or pharmaceutical manufacturer performs and documents on a certificate of analysis. Whether any specific grey-market vial received that same purification and verification is, once again, not something a buyer can determine from the outside, and an impure or truncated peptide is not simply a weaker version of the intended compound. It is frequently a different molecule altogether, with its own uncharacterized biological activity, or none at all, sitting in the same vial as whatever correctly formed peptide made it through.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats heavy metal and process-impurity contamination as a lower-priority concern than sterility, because it does not produce the same fast, dramatic illness a bacterial infection can. The opposite framing is closer to the truth for exactly the reason that makes it easy to dismiss. A sterility failure usually announces itself quickly enough that a person, and sometimes a clinician, can connect it to a specific injection. A slow accumulation of an unvalidated impurity, by contrast, produces no single attributable event at all, which does not make it a smaller risk, it makes it a risk with no natural mechanism for anyone to ever notice, investigate, or trace back to its actual source.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="risk-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Grey-Market Risk Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a specific finding from this chapter. Sort it into the risk category it actually belongs to, then reveal the reasoning. The goal is separating three genuinely different problems that get lumped together as one vague worry about "sketchy peptides."</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Finding</span>
+        <select class="ch-widget-select" id="rs-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Risk category</span>
+        <select class="ch-widget-select" id="rs-bin">
+          <option value="sterility">Sterility and Infection Risk</option>
+          <option value="identity">Identity and Dosing Risk</option>
+          <option value="oversight">Oversight and Accountability Risk</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="rs-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rs-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="rs-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rs-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rs-feedback">Choose a finding and a category, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="rs-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The legality picture: three separate questions, one sentence</h2>
+    <p>It is tempting, after everything the preceding sections have described, to reach for a single verdict, legal or illegal, and stop there. That temptation is exactly the error this section exists to correct, because "legal to sell as research" and "legal to use" and "safe to use" are three separate questions, answered by three separate bodies of law and evidence, and a confident answer to one of them is routinely mistaken for an answer to all three. A seller who lists a compound accurately as a research chemical and ships it with a disclaimer has, as this chapter's opening section described, generally stayed inside the legal lane available to that specific transaction. That fact says nothing about whether a buyer's actual, undisclosed use of the product, injecting or ingesting it as a person rather than testing it as a researcher, falls inside any legal lane at all in most jurisdictions, and it says absolutely nothing about whether the specific vial the buyer received is sterile, correctly identified, or free of the impurities the previous sections described in detail.</p>
+    <p>Layer this module's own compound list onto that three-part distinction and the honest picture becomes concrete rather than abstract. Bremelanotide is legal to obtain in the United States the way any prescription medicine is legal to obtain, through a valid prescription from a licensed prescriber, for its labeled indication, dispensed by a pharmacy operating under normal pharmaceutical law. Thymosin alpha-1 is legal to obtain, and legally used clinically, in the more than thirty countries where it holds a registered approval, through whatever prescribing and pharmacy framework that country's regulators require, while occupying a considerably murkier position in the United States, where it has never completed an equivalent approval pathway and is overwhelmingly encountered through the same research-chemical channel as this module's less-studied compounds. Every other compound in this module's nine chapters, BPC-157, thymosin beta-4, GHK-Cu, KPV, LL-37, semax, selank, DSIP, cerebrolysin, melanotan II, epithalon, humanin, ARA-290, and VIP, is, at the time of this writing, sold in the United States almost entirely through the research-chemical channel this chapter has spent its length describing, with no approved medical indication, no compounding pathway most of them can lawfully move through, and a legal status for individual human use that ranges from genuinely unsettled to squarely outside what most state and federal law permits, depending on the specific compound, the specific state, and the specific intended use.</p>
+    <p>None of that is a legal opinion this course is positioned to offer for any individual's specific situation, and this chapter is not attempting to render one. What it can responsibly say, because it follows directly from the tier structure and the contamination evidence already covered, is that the legal question and the safety question point in the same direction for nearly this entire module's compound list, and that direction is toward considerably more uncertainty than the confident language on most vendor pages suggests. A seller staying inside their own narrow legal lane does not make a buyer's use of the product legal, and it does not make the specific vial safe, and collapsing those three separate questions into one reassuring sentence, "it's legal to buy, so it's fine," is precisely the move this entire chapter has been built to unwind.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A frequent argument treats a compound's legal availability for purchase as functionally equivalent to its legal and safe availability for personal use. Those are different legal questions answered by different bodies of law, and neither one is answered by the manufacturing and contamination evidence this chapter has covered. A seller's compliance with a narrow research-chemical exemption tells a buyer nothing about whether their own intended use is lawful where they live, and it tells them nothing at all about whether the specific vial in front of them is what the label says it is.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Inga and the exception that could not carry the rest</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Inga completed this catalog's companion module on growth, metabolic, and body-composition peptides earlier this year and worked through this second module's eight prior chapters with genuine care, building a strong grasp of the mechanism behind BPC-157's proposed tissue-repair activity, thymosin alpha-1's immune modulation, and melanotan II's melanocortin-receptor pharmacology. She arrived at this final chapter having noticed something that unsettled her sense of how risky this module's compounds actually were: two of them, bremelanotide and thymosin alpha-1, turned out to be genuinely approved medicines somewhere in the world. Her question was direct. If two of this module's compounds cleared a real regulatory bar, did that not suggest the rest of the list was probably closer to legitimate than the module's earlier chapters had made it sound.</p>
+    </aside>
+    <p>Running Inga's question back through this chapter resolves it the same way this course has resolved every earlier misconception in this catalog, by tracing it back to the actual evidence rather than dismissing the instinct outright. Her observation is correct as a fact: bremelanotide holds a genuine Food and Drug Administration approval, and thymosin alpha-1 holds genuine approvals in dozens of countries, each backed by the kind of toxicology and clinical development program this chapter's second section described. Where her reasoning needed correcting is the leap from two genuine exceptions to a general upgrade in confidence about the other fourteen compounds this module covers. Section two of this chapter made the actual scale of that gap explicit: two compounds with real regulatory approval, sitting alongside fourteen others with none, sold through the identical online channel, frequently by the identical sellers, described in marketing language that makes no distinction whatsoever between the two categories. A vendor page selling melanotan II next to bremelanotide, using similarly confident language for both, is not evidence that melanotan II shares bremelanotide's regulatory status. It is evidence that marketing language is not a reliable signal of regulatory status at all, which is close to the opposite lesson Inga's instinct had drawn from the same two facts.</p>
+    <p>Her second assumption, which surfaced once the first was corrected, was that BPC-157's genuinely large body of preclinical literature, the receptor mechanism papers, the animal-model tendon and gut-healing studies this module's second chapter covered in depth, functioned as a substitute for human safety data. According to McGuire, Martinez, Lenz, Skinner, and Cushman (2025), a narrative review evaluating BPC-157 specifically for musculoskeletal healing found broad preclinical support for its regenerative and cytoprotective effects across numerous animal models, alongside a striking gap on the human side: only three pilot studies have examined BPC-157 in humans at all, no adverse effects were reported in those small studies, but the authors concluded that, given the compound's growing popularity and wide availability through non-regulated sources, it should be considered investigational and used with caution until well-designed human trials exist. A large stack of animal papers is not a small stack of human papers wearing a disguise. It is a different rung on the evidence ladder entirely, and Inga's instinct to treat volume of published mechanism as a stand-in for volume of human safety evidence is exactly the substitution this module's own first chapter warned against.</p>
+    <p>What Inga actually walked away with matters more than a yes-or-no verdict on any single compound, because a flat verdict was never something this chapter could responsibly hand her. She left understanding that a genuine regulatory exception, real as it is for bremelanotide and thymosin alpha-1, does not transfer its legitimacy to a neighboring compound simply because both are discussed in the same chapter, sold on the same vendor page, or share a receptor family. She also left understanding that a large body of mechanistic and animal literature, however genuinely interesting and however much of this module's nine chapters were built to explain it accurately, is not the same evidence as a large body of monitored human use, and that distinguishing the two is not a technicality, it is the entire difference between what happened to bremelanotide and thymosin alpha-1 and what has, so far, not happened to almost everything else on this module's list.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where both courses close: the ladder, the gap, and the boundary</h2>
+    <p>This module opened, in its first chapter, with an evidence ladder, a simple, honest tool for calibrating how much confidence a specific claim about a specific peptide actually deserves: human randomized controlled trials (RCTs) at the top, smaller human studies below that, animal and preclinical evidence below that, and anecdote and vendor marketing at the bottom. It is worth returning to that ladder explicitly here, at the true close of this two-course arc, because this closing chapter's entire subject, contamination, mislabeling, handling error, and legal status, sits on top of that ladder rather than beside it, and seeing the two together is the most honest way either course could end.</p>
+    <p>Place this module's own compounds on that ladder honestly, and the picture is sobering in a way this course has tried never to soften. Bremelanotide sits near the top rung, its efficacy and safety established across the phase 3 program described earlier in this chapter. Thymosin alpha-1 sits meaningfully high as well, with decades of registered clinical use and a genuine, if geographically bounded, regulatory approval behind it. Almost everything else in this module's nine chapters, from BPC-157's proposed tissue-repair activity through the cognitive claims made for semax, selank, DSIP, and cerebrolysin, to epithalon, humanin, ARA-290, and VIP's proposed longevity benefits, sits meaningfully lower, resting on animal evidence, a handful of small uncontrolled human studies, or mechanism-based reasoning and anecdote. Across this course's two modules combined, eighteen chapters of receptor pharmacology, growth factor biology, immune signaling, and now sourcing risk, a small minority of the entire compound library this course has covered sits genuinely near the top of that ladder. Most of it does not, and this course has tried to say so plainly, compound by compound, rather than let a confident tone substitute for an honest evidence grade.</p>
+    <p>Now layer this closing chapter's subject on top of that already-honest picture, because it adds an entirely separate axis of uncertainty the evidence ladder alone was never built to measure. A randomized controlled trial establishes what bremelanotide does, in a specific, correctly manufactured, correctly dosed formulation, under controlled clinical conditions. It says nothing about what is actually inside an unverified vial sold outside the system that ran that trial, and the ladder's top rung offers no protection at all against a mislabeled, contaminated, or improperly reconstituted product, because the ladder was designed to grade evidence about a molecule's clinical effect, not to grade the manufacturing chain a specific buyer's vial actually passed through. A learner who has correctly identified a compound as sitting high on the evidence ladder has answered one real question. They have not yet answered whether the specific product in front of them is the thing the ladder was actually describing.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The evidence ladder for this module's compounds, with a sourcing uncertainty layer added on top" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The evidence ladder, plus the sourcing layer this chapter adds</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="24" fill="#aab8d2" font-size="12.5" letter-spacing="1.3">THIS MODULE'S COMPOUNDS, ON THE EVIDENCE LADDER</text>
+<rect x="24" y="44" width="330" height="40" rx="6" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="189" y="61" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">Human RCTs</text>
+<text x="189" y="76" fill="#cdd8ea" font-size="8.5" text-anchor="middle">bremelanotide</text>
+<rect x="24" y="90" width="330" height="40" rx="6" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="189" y="107" fill="#5aaff5" font-size="10" font-weight="700" text-anchor="middle">Smaller human studies / approved elsewhere</text>
+<text x="189" y="122" fill="#cdd8ea" font-size="8.5" text-anchor="middle">thymosin alpha-1</text>
+<rect x="24" y="136" width="330" height="40" rx="6" fill="#132a45" stroke="#e0873a" stroke-width="1.6"/>
+<text x="189" y="153" fill="#e0873a" font-size="10" font-weight="700" text-anchor="middle">Animal / preclinical studies</text>
+<text x="189" y="168" fill="#cdd8ea" font-size="8" text-anchor="middle">BPC-157, TB-500, GHK-Cu, KPV, LL-37</text>
+<rect x="24" y="182" width="330" height="40" rx="6" fill="#132a45" stroke="#c94b3a" stroke-width="1.6"/>
+<text x="189" y="199" fill="#e88a7a" font-size="10" font-weight="700" text-anchor="middle">Anecdote and vendor marketing</text>
+<text x="189" y="214" fill="#cdd8ea" font-size="8" text-anchor="middle">semax, selank, DSIP, cerebrolysin, melanotan II,</text>
+<text x="189" y="226" fill="#cdd8ea" font-size="8" text-anchor="middle">epithalon, humanin, ARA-290, VIP</text>
+<text x="189" y="252" fill="#7f8fab" font-size="9.5" text-anchor="middle">Ranks confidence in what the molecule does, in a verified sample</text>
+<rect x="384" y="44" width="226" height="196" rx="8" fill="#1a2e22" stroke="#e88a7a" stroke-width="1.8" stroke-dasharray="4 3"/>
+<text x="497" y="68" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">This chapter's layer:</text>
+<text x="497" y="86" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">sourcing uncertainty</text>
+<text x="497" y="110" fill="#cdd8ea" font-size="9.5" text-anchor="middle">Applies on top of every rung,</text>
+<text x="497" y="126" fill="#cdd8ea" font-size="9.5" text-anchor="middle">including the top one. A trial</text>
+<text x="497" y="142" fill="#cdd8ea" font-size="9.5" text-anchor="middle">proves what the approved</text>
+<text x="497" y="158" fill="#cdd8ea" font-size="9.5" text-anchor="middle">molecule does. It says nothing</text>
+<text x="497" y="174" fill="#cdd8ea" font-size="9.5" text-anchor="middle">about an unverified vial sold</text>
+<text x="497" y="190" fill="#cdd8ea" font-size="9.5" text-anchor="middle">outside that system: identity,</text>
+<text x="497" y="206" fill="#cdd8ea" font-size="9.5" text-anchor="middle">sterility, and dose stay</text>
+<text x="497" y="222" fill="#cdd8ea" font-size="9.5" text-anchor="middle">unverified either way.</text>
+<text x="320" y="336" fill="#7f8fab" font-size="10.5" text-anchor="middle">A high rung tells you what the molecule can do. It does not tell you what is in your vial.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 3</span> <em>This module's compounds, placed on the evidence ladder introduced in Chapter 1, with the sourcing uncertainty this chapter adds layered on top. Strong clinical evidence and strong confidence in a specific vial's identity and purity are two different questions, and grey-market sourcing leaves the second one unanswered regardless of how high the first sits.</em></figcaption>
+    </figure>
+
+    <p>This is the single idea this closing chapter, and in a real sense this entire two-course arc, has been building toward. Understanding a compound's mechanism, however thoroughly, answers the biology question. It does not answer the manufacturing question, and it does not answer the legal question, and treating strong mechanistic understanding as though it substitutes for either is the exact error this chapter has spent its length correcting, in Inga's case and in every learner's case this course was written for. The legal status of any specific peptide varies by jurisdiction, by whether it holds regulatory approval anywhere, and by how it is actually being sourced, and neither this chapter nor this course offers legal advice of any kind for an individual's specific situation. What this course can responsibly offer, across both of its modules and all eighteen chapters, is the biochemical and evidentiary literacy to ask a sharper question, of a source, of a claim, of a vendor page's confident tone, and to recognize precisely the point at which that literacy runs out and a different kind of expertise has to take over.</p>
+    <p>That handoff point is not a failure of anything a learner has built across two full courses of real, hard-won understanding. A licensed clinician can evaluate a specific person's actual health history, order and interpret real bloodwork, and reach a judgment no course, however thorough, is built to reach on a learner's behalf. A functioning regulatory system, imperfect as it visibly is in practice, exists to apply the testing and manufacturing standards this chapter has described, sterility validation, endotoxin testing, purity verification, batch by batch, at a scale no individual buyer can replicate alone, however carefully that buyer reconstitutes a vial. Recognizing that clinical judgment and regulatory infrastructure sit outside what any course can substitute for is not a hedge added to soften this closing chapter's ending. It is the actual conclusion that eighteen chapters of honest mechanism and honest evidence grading, across both of this catalog's peptide courses, were always building toward.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the discipline both of this catalog's peptide courses have tried to model, chapter after chapter, and not only in this final one. Mechanism explains what a molecule does, in general, under conditions a researcher controlled and verified. It cannot verify what is inside one specific vial in one specific learner's hands, and it cannot substitute for the clinical judgment a real medical decision, for a real person with a real health history, actually requires. That is not a smaller use for everything two full courses have built. It is the most responsible use available for it, exactly what a course built on honest mechanism and honest evidence grading was always meant to produce, carried forward by a learner into places this course itself cannot follow.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner finishing both of this catalog's peptide courses, having built exactly the kind of mechanistic and evidentiary literacy this chapter has described in Inga, asks whether that understanding is now enough to evaluate and use a specific compound safely on their own. Using only what this closing chapter has covered, write out what an honest, complete answer to that question actually includes, and name specifically what it still has to hand off, and to whom.</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A "research use only, not for human consumption" label is a liability shield that shifts legal exposure toward the buyer. It certifies nothing about a specific vial's sterility, identity, or purity, regardless of how the product is actually marketed and sold.</li>
+      <li>This module's compounds span four tiers of oversight: an FDA-approved medicine (bremelanotide), a compound approved and clinically used in more than thirty other countries but not the United States (thymosin alpha-1), a compounded product prepared by a licensed pharmacist, and an unapproved research chemical, the tier that holds nearly every other compound this module covers.</li>
+      <li>Sterility and bacterial endotoxin failures are invisible to visual inspection and have produced documented mass-casualty outbreaks even inside licensed, inspected United States compounding pharmacies. Direct testing of unregulated online peptide products found detectable endotoxin in every sample tested.</li>
+      <li>Independent analytical testing of unregulated peptide products has found measured purity as low as a small fraction of the labeled amount, alongside total peptide content that exceeded the labeled milligram amount, a combination that means neither an accurate label nor a felt effect can be assumed from the outside.</li>
+      <li>Reconstitution and handling errors, non-sterile water, reused needles, improper storage, sit alongside heavy metal and synthesis-impurity contamination as separate, largely invisible risks. Careful technique can reduce some of this risk; it cannot replace the testing infrastructure a regulated manufacturing pathway provides.</li>
+      <li>A genuine regulatory exception for one or two compounds in a shared category does not transfer legitimacy to its neighbors, and a large body of animal or mechanistic literature is not the same evidence as a large body of monitored human use. "Legal to sell as research," "legal to use," and "safe to use" are three separate questions, and none of them answers the other two.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Both Courses Complete</div>
+    <p>This closes the nine-chapter arc of Peptides II: Repair, Immune, Neuro and Systemic, and with it, the full eighteen-chapter arc this catalog built across both peptide modules. The receptor pharmacology, the honest evidence grading, and this closing chapter's sourcing, contamination, and legal accounting were built to travel together. Carrying all three forward, and not just the mechanism that was always the easiest part to enjoy, is the actual, hard-earned outcome both courses were written to produce.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Abernethy, D. R., Destefano, A. J., Cecil, T. L., Zaidi, K., &amp; Williams, R. L. (2010). Metal impurities in food and drugs. <em>Pharmaceutical Research, 27</em>(5), 750-755. https://doi.org/10.1007/s11095-010-0080-3</p>
+    <p>Ashraf, A. R., Mackey, T. K., Vida, R. G., Kulcsar, G., Schmidt, J., Balazs, O., Domian, B. M., Li, J., Csako, I., &amp; Fittler, A. (2024). Multifactor quality and safety analysis of semaglutide products sold by online sellers without a prescription: Market surveillance, content analysis, and product purchase evaluation study. <em>Journal of Medical Internet Research, 26</em>, e65440. https://doi.org/10.2196/65440</p>
+    <p>Clayton, A. H., Kingsberg, S. A., Portman, D., Sadiq, A., Krop, J., Jordan, R., &amp; Simon, J. A. (2022). Safety profile of bremelanotide across the clinical development program. <em>Journal of Women's Health, 31</em>(2), 171-182. https://doi.org/10.1089/jwh.2021.0191</p>
+    <p>Kainer, M. A., Reagan, D. R., Nguyen, D. B., Wiese, A. D., Wise, M. E., Ward, J., Park, B. J., Kanago, M. L., Baumblatt, J., Schaefer, M. K., Berger, B. E., Marder, E. P., Min, J. Y., Dunn, J. R., Smith, R. M., Dreyzehner, J., &amp; Jones, T. F. (2012). Fungal infections associated with contaminated methylprednisolone in Tennessee. <em>New England Journal of Medicine, 367</em>(23), 2194-2203. https://doi.org/10.1056/NEJMoa1212972</p>
+    <p>McGuire, F. P., Martinez, R., Lenz, A., Skinner, L., &amp; Cushman, D. M. (2025). Regeneration or risk? A narrative review of BPC-157 for musculoskeletal healing. <em>Current Reviews in Musculoskeletal Medicine, 18</em>(12), 611-619. https://doi.org/10.1007/s12178-025-09990-7</p>
+    <p>Tuthill, C. (2007). Issues in pharmaceutical development of thymosin alpha1 from preclinical studies through marketing. <em>Annals of the New York Academy of Sciences, 1112</em>, 351-356. https://doi.org/10.1196/annals.1415.007</p>
+    <p>Van Hout, M. C., &amp; Brennan, R. (2013). An in-depth case examination of an exotic dancer's experience of melanotan. <em>International Journal of Drug Policy, 25</em>(3), 444-450. https://doi.org/10.1016/j.drugpo.2013.10.008</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 9 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('tier-classifier');
+    if(!root) return;
+    var cards = [
+      {t:"Bremelanotide dispensed by a retail pharmacy under its approved brand name, prescribed for its FDA-labeled indication in premenopausal women", v:"approved", e:"FDA-Approved Medicine. A full clinical development program, 3,500 subjects across 43 studies, stands behind this specific label and formulation."},
+      {t:"Thymosin alpha-1 sold under its registered trade name in one of the more than thirty countries where it holds a national marketing approval for chronic viral hepatitis and as an immune adjunct", v:"elsewhere", e:"Approved / Used Clinically Elsewhere. Real regulatory approval and decades of monitored clinical use stand behind this product, in that specific country's regulatory system, even without an equivalent US approval."},
+      {t:"A BPC-157 preparation mixed by a state-licensed pharmacy for one named patient, despite the underlying peptide never having completed a full FDA approval pathway", v:"compounded", e:"Compounded Product. A licensed pharmacist and state pharmacy board oversight are real, but this is not the same as an approved medicine's reviewed safety and manufacturing record, and BPC-157's own compounding status has drawn direct regulatory scrutiny."},
+      {t:"A vial of thymosin beta-4 (TB-500) labeled 'not for human consumption,' sold with no prescription requirement, marketed alongside injection-site diagrams and community dosing charts", v:"research", e:"Unapproved Research Chemical. No review, no inspection, no pharmacist, and marketing language that contradicts the label's own stated purpose."},
+      {t:"Semax, a compound registered as an approved pharmaceutical for neurological indications in Russia, purchased from an online vendor shipping to the United States under a 'research use only' label with no prescription required", v:"research", e:"Unapproved Research Chemical, in this specific transaction. Approval in one country does not transfer to how a product is being sold, without any equivalent oversight, into a different jurisdiction."},
+      {t:"Melanotan II sold with no regulatory approval anywhere in the world, marketed explicitly for cosmetic tanning despite documented blood pressure and pigmentation risk", v:"research", e:"Unapproved Research Chemical. Unlike its melanocortin-receptor relative bremelanotide, melanotan II has never completed an approval pathway in any jurisdiction."},
+      {t:"Epithalon marketed with confident longevity and telomerase-activation claims, sold from a vendor page listing no manufacturing facility, no certificate of analysis, and no prescription pathway", v:"research", e:"Unapproved Research Chemical. Confident marketing language is not a regulatory credential, and this product carries none of the oversight that would verify either the claim or the vial's actual contents."},
+      {t:"GHK-Cu compounded into an injectable preparation by a 503B FDA-registered outsourcing facility operating under current Good Manufacturing Practice standards, shipped in bulk to a clinic", v:"compounded", e:"Compounded Product. A registered, inspected 503B facility operates under real manufacturing oversight, even though GHK-Cu itself has not completed an approval pathway as its own standalone drug."}
+    ];
+    var cardSel = document.getElementById('tc-card');
+    var binSel = document.getElementById('tc-bin');
+    var fb = document.getElementById('tc-feedback');
+    var btn = document.getElementById('tc-submit');
+    var fillS = document.getElementById('tc-fill-sorted');
+    var fillA = document.getElementById('tc-fill-acc');
+    var numS = document.getElementById('tc-num-sorted');
+    var numA = document.getElementById('tc-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={approved:'FDA-Approved Medicine (US)',elsewhere:'Approved / Used Clinically Elsewhere',compounded:'Compounded Product',research:'Unapproved Research Chemical'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('risk-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"The vial was filled in a facility with no batch-by-batch bacterial endotoxin testing and no sterility certificate on record", v:"sterility", e:"Sterility and Infection Risk. No endotoxin testing or sterility validation means there is no way to rule out a fever-inducing or infection-causing contaminant before the product reaches a buyer."},
+      {t:"Independent chemical analysis found the vial's measured peptide purity was a small fraction of the 99 percent purity claimed on the label", v:"identity", e:"Identity and Dosing Risk. Analytical testing of unregulated peptide products has repeatedly documented exactly this failure, purity far below the labeled amount despite a confident printed claim."},
+      {t:"The product was reconstituted with tap water and stored at room temperature for weeks past when it should have been discarded", v:"sterility", e:"Sterility and Infection Risk. Reconstitution technique and storage conditions are exactly the steps a regulated pathway controls with validated instructions, and an unregulated seller typically leaves entirely to the buyer's own judgment."},
+      {t:"Testing found the vial's total peptide content actually exceeded the labeled milligram amount, while the fraction that was the correctly assembled target compound was far lower than the label implied", v:"identity", e:"Identity and Dosing Risk. More total material does not mean more of the intended compound. This exact combination, overfilled yet underpurified, was documented directly in independent laboratory testing of unregulated peptide products."},
+      {t:"No clinician is aware a learner is using a specific compound, so an emerging symptom has no route back to the substance that may have caused it", v:"oversight", e:"Oversight and Accountability Risk. Without a clinician in the loop, an adverse effect can go unrecognized and unreported, and no regulator or manufacturer will ever hear about it either."},
+      {t:"Trace heavy metal residue from an unvalidated synthesis process accumulates quietly over months without producing any single, attributable symptom", v:"oversight", e:"Oversight and Accountability Risk. With no batch record, no analytical testing, and no clinician tracking exposure, there is no mechanism for this kind of slow, diffuse harm to ever be traced back to its actual source."},
+      {t:"The vial tested positive for bacterial endotoxin despite showing no visible cloudiness or particles on inspection", v:"sterility", e:"Sterility and Infection Risk. Endotoxin does not require living bacteria to cause harm and cannot be detected by looking at a vial. Only a validated laboratory test can catch it, and that is precisely the test a research-chemical seller has no obligation to run."},
+      {t:"A compounded product's manufacturer added an unlisted ingredient with no published rationale and did not disclose the preparation's storage requirements or shelf life once mixed", v:"oversight", e:"Oversight and Accountability Risk. Even inside the more regulated compounded tier, incomplete disclosure and unexplained formulation choices are an accountability gap an approved product's reviewed label does not carry."}
+    ];
+    var cardSel = document.getElementById('rs-card');
+    var binSel = document.getElementById('rs-bin');
+    var fb = document.getElementById('rs-feedback');
+    var btn = document.getElementById('rs-submit');
+    var fillS = document.getElementById('rs-fill-sorted');
+    var fillA = document.getElementById('rs-fill-acc');
+    var numS = document.getElementById('rs-num-sorted');
+    var numA = document.getElementById('rs-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={sterility:'Sterility and Infection Risk',identity:'Identity and Dosing Risk',oversight:'Oversight and Accountability Risk'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

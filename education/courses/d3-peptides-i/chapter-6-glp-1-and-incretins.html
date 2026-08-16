@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fullness Hormone</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Peptides I &middot; Chapter 6</div>
+    <h1 class="ch-title">The <em>Fullness</em> Hormone</h1>
+    <p class="ch-subtitle">Long before a pharmaceutical chemist ever extended its half life, the human gut was already manufacturing a hormone that tells the pancreas, the stomach, and the brain that a meal has arrived and it is time to stop eating.</p>
+    <div class="ch-meta">
+      <span>49 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">E</span>verything this course has covered so far shares a quiet, uncomfortable feature: real biology, thin human evidence. A growth hormone secretagogue with a plausible receptor story and a stack of rodent papers behind it. A myostatin inhibitor with genuine preclinical promise and almost no controlled data in a living human being. A vendor listing with confident directions and zero clinical trials attached to the specific product actually being sold. This chapter breaks that pattern, and it is worth being honest about why before a single biochemical detail gets introduced. The hormone at the center of this chapter, and the three drugs engineered from it, sit at the very top of the evidence ladder this course introduced in its first chapter. Tens of thousands of human participants. Multiple large, randomized, double blind, placebo controlled trials. Full approval from national drug regulators for named medical uses. That is a fundamentally different category of claim than almost anything else in this catalog, and the contrast is a large part of why this chapter sits where it does.</p>
+    <p>The hormone itself is glucagon-like peptide 1 (GLP-1), one of a small family of gut derived signals called incretins, and it was doing its job in human digestive tracts for the entire span of human evolutionary history before anyone isolated it, sequenced it, or thought to extend its working life into a once weekly injection. This chapter covers what GLP-1 actually does inside an intact digestive system: how it, along with a related hormone called glucose-dependent insulinotropic polypeptide (GIP), amplifies insulin release from the pancreas, slows the stomach's emptying rate, and acts directly on the brain to reduce appetite. It then covers the three medicines built to exploit that physiology on purpose. Semaglutide is a single-receptor GLP-1 analog. Tirzepatide is a dual agonist that activates both the GLP-1 receptor and the GIP receptor. Retatrutide is an investigational triple agonist that adds glucagon receptor activity on top of both. Each one is a variation on the same borrowed signal, engineered to last longer in the bloodstream and to reach more receptors than the body's own version ever does unassisted.</p>
+    <p>Our thread through this chapter is a learner named Damaris, 41, who arrived at this course after two unrelated experiences collided in the same week. Her sister had started an approved weekly injection for type 2 diabetes and mentioned, almost as an aside, that she had also lost a meaningful amount of weight on it. A few days later, a wellness account Damaris followed posted a listing for injectable "research peptide" semaglutide, sold with no prescription, no clinic, and a testimonial in place of a citation. Damaris had already worked through this course's earlier chapters on growth hormone secretagogues and myostatin peptides, where the honest verdict, again and again, had been real mechanism, thin evidence, proceed with real caution. She assumed the same verdict would apply here. It does not, not in the way she expected, and untangling exactly why is what this chapter is built to do. Her confusion, once resolved, becomes a template she can reuse for any drug claim she encounters for the rest of her life.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The incretin system: hormones that anticipate a meal</h2>
+    <p>Start with a term this chapter needs defined precisely. An <span class="ch-key">incretin</span> is a hormone released from the gut in response to a meal that amplifies insulin secretion from the pancreas beyond what the same rise in blood glucose would trigger on its own. The proof that such a thing exists is one of the oldest, cleanest experiments in endocrinology. Give a person a fixed amount of glucose by mouth, then on a separate occasion infuse the identical amount directly into a vein, timed so that the blood glucose curve in the bloodstream is matched between the two conditions. The oral dose produces a substantially larger insulin response than the intravenous dose, roughly two to three times greater, even though the glucose exposure the pancreas is technically responding to is the same. According to Nauck and Meier (2018), this gap is called the incretin effect, and it is not a rounding error. It is one of the central organizing facts of human glucose metabolism: the gut is not a passive tube that food happens to pass through on its way into the bloodstream, it is an endocrine organ that tells the pancreas a meal is coming before that meal has even finished being absorbed.</p>
+    <p>Two hormones account for nearly all of the incretin effect. Glucose-dependent insulinotropic polypeptide (GIP) is released from a population of specialized cells called K cells, concentrated in the upper small intestine, largely in response to fat and carbohydrate. Glucagon-like peptide 1 (GLP-1) is released from a different population, L cells, concentrated further along the gut, in response to a broader range of nutrients that includes protein as well as fat and carbohydrate. Both are secreted within minutes of food reaching the relevant stretch of intestine, well before most of that meal has actually finished being digested and absorbed, and that timing is itself a clue about their purpose. Incretins are not reacting to a rise in blood glucose that has already happened. They are anticipating one that is about to. Once released, native GLP-1 has an extraordinarily short working life. An enzyme called dipeptidyl peptidase 4 (DPP-4), present throughout the bloodstream and gut lining, cleaves and inactivates most of it within one to two minutes of release. That single fact, more than any other, explains why this entire drug class exists in a modified, long acting form rather than as a simple injection of the native hormone. A molecule this fragile could never survive long enough between doses to function as practical medicine, and every drug covered later in this chapter is, at its chemical core, a version of GLP-1 reinforced against exactly this degradation pathway.</p>
+    <p>One structural feature of GLP-1's action on the pancreas deserves emphasis before this chapter goes any further, because it recurs throughout the rest of the discussion and it shapes how these medicines actually behave in a person. The amplified insulin release GLP-1 produces is glucose-dependent. It meaningfully boosts insulin secretion only when blood glucose is already elevated, and that effect tapers as glucose approaches a normal range. This is fundamentally different from an older class of diabetes medication, the sulfonylureas, which force the pancreas to release insulin regardless of the current glucose level and can drive blood sugar dangerously low as a direct consequence of that mechanism. GLP-1's built in glucose sensitivity is not a side detail of the biology, it is the central safety feature of the entire mechanism, and it is a large part of why this hormone family looked so promising as a drug target decades before any approved product existed.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The gut, pancreas, and brain incretin axis" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The gut, pancreas, and brain incretin axis</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE GUT, PANCREAS, AND BRAIN INCRETIN AXIS</text>
+<defs>
+<marker id="arrowFig1" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+</defs>
+<rect x="250" y="52" width="140" height="52" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="74" fill="#5aaff5" font-size="11.5" font-weight="700" text-anchor="middle">MEAL ARRIVES</text>
+<text x="320" y="90" fill="#cdd8ea" font-size="9.5" text-anchor="middle">nutrients reach the small intestine</text>
+<line x1="290" y1="104" x2="220" y2="140" stroke="#5aaff5" stroke-width="2" marker-end="url(#arrowFig1)"/>
+<line x1="350" y1="104" x2="420" y2="140" stroke="#5aaff5" stroke-width="2" marker-end="url(#arrowFig1)"/>
+<rect x="130" y="144" width="180" height="52" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="220" y="166" fill="#7fd18a" font-size="11.5" font-weight="700" text-anchor="middle">L cells release GLP-1</text>
+<text x="220" y="182" fill="#cdd8ea" font-size="9.5" text-anchor="middle">lower gut, broad nutrient trigger</text>
+<rect x="330" y="144" width="180" height="52" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="420" y="166" fill="#e0873a" font-size="11.5" font-weight="700" text-anchor="middle">K cells release GIP</text>
+<text x="420" y="182" fill="#cdd8ea" font-size="9.5" text-anchor="middle">upper gut, fat and carbohydrate</text>
+<line x1="220" y1="196" x2="120" y2="242" stroke="#7fd18a" stroke-width="1.8" marker-end="url(#arrowFig1)"/>
+<line x1="220" y1="196" x2="320" y2="242" stroke="#7fd18a" stroke-width="1.8" marker-end="url(#arrowFig1)"/>
+<line x1="420" y1="196" x2="320" y2="242" stroke="#e0873a" stroke-width="1.8" marker-end="url(#arrowFig1)"/>
+<line x1="420" y1="196" x2="520" y2="242" stroke="#e0873a" stroke-width="1.8" marker-end="url(#arrowFig1)"/>
+<rect x="30" y="246" width="190" height="66" rx="8" fill="#12314f" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="125" y="266" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">PANCREAS</text>
+<text x="125" y="282" fill="#cdd8ea" font-size="9" text-anchor="middle">insulin up, glucose-dependent</text>
+<text x="125" y="296" fill="#cdd8ea" font-size="9" text-anchor="middle">glucagon down</text>
+<rect x="230" y="246" width="180" height="66" rx="8" fill="#12314f" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="320" y="266" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">STOMACH</text>
+<text x="320" y="282" fill="#cdd8ea" font-size="9" text-anchor="middle">emptying slows</text>
+<text x="320" y="296" fill="#cdd8ea" font-size="9" text-anchor="middle">fullness prolonged</text>
+<rect x="420" y="246" width="190" height="66" rx="8" fill="#12314f" stroke="#e0873a" stroke-width="1.6"/>
+<text x="515" y="266" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">BRAIN</text>
+<text x="515" y="282" fill="#cdd8ea" font-size="9" text-anchor="middle">hypothalamus and brainstem</text>
+<text x="515" y="296" fill="#cdd8ea" font-size="9" text-anchor="middle">appetite down</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">One meal signal, read simultaneously by three separate organ systems.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>The gut, pancreas, and brain incretin axis. Nutrients reaching the small intestine trigger L cells and K cells to release GLP-1 and GIP, which act on the pancreas, the stomach, and the brain within minutes, before most of the meal has even been absorbed.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>GLP-1's amplified insulin release only engages once blood glucose is already elevated, and it fades as glucose returns toward a normal range. Before the next section, consider what that glucose-dependence implies about the risk of dangerously low blood sugar from a GLP-1 based medicine used on its own, compared with an older diabetes drug that forces insulin release regardless of the current glucose level.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What GLP-1 actually does, in three places at once</h2>
+    <p>It is tempting, once a person hears that these medicines cause weight loss, to assume GLP-1 is simply an appetite suppressant with a fancy name. That assumption skips most of the actual biology, and it is worth resisting for a full section, because GLP-1 receptor activation produces at least three distinct, mechanistically separate effects, each occurring in a different organ, each contributing to the outcomes these drugs eventually produce in a clinical trial. Understanding all three, not just the one that happens to be easiest to picture, is what separates an accurate account of this drug class from a marketing summary of it.</p>
+    <p>The first effect happens in the pancreas, and it is the one most directly tied to the incretin effect described in the previous section. GLP-1 binds a receptor on pancreatic beta cells, the <span class="ch-key">GLP-1 receptor</span>, a G protein coupled receptor that triggers a fast, cyclic AMP driven signaling cascade inside the cell, not the slow, gene transcription driven signaling that some hormone classes rely on. That cascade amplifies glucose-stimulated insulin secretion within minutes, exactly the glucose-dependent boost described above. At the same time, GLP-1 suppresses secretion of glucagon from a separate population of pancreatic cells, the alpha cells. Glucagon's normal job is to raise blood glucose by signaling the liver to release stored sugar, so suppressing an already-elevated, meal-time glucagon signal reduces how much additional glucose the liver adds to the bloodstream right when the gut is already delivering plenty from the meal itself. More insulin and less glucagon, both glucose-dependent, both happening in the same organ, is the core of GLP-1's role in glycemic control.</p>
+    <p>The second effect happens in the stomach. GLP-1 receptor activation, mediated in part through the vagus nerve, slows the rate at which the stomach empties its contents into the small intestine, a process called gastric emptying. A meal that would normally clear the stomach within roughly one to two hours instead lingers considerably longer. This has two consequences that matter for this chapter. It blunts how sharply blood glucose rises after a meal, because glucose is arriving into the bloodstream more gradually, and it prolongs the physical sensation of fullness, because a stomach that stays fuller for longer keeps sending distension signals to the brain for longer. This is not a separate, unrelated action bolted onto the insulin effect. It is part of the same coordinated response to a detected meal, slowing the rate at which that meal's contents reach the rest of the body.</p>
+    <p>The third effect happens in the brain, and it is the one responsible for the appetite reduction that gets the most public attention. GLP-1 receptors are expressed in the hypothalamus, a brain region central to hunger and satiety signaling, and in structures in the brainstem, including a region called the area postrema, which sits in a part of the brain not fully protected by the blood brain barrier and is therefore reachable by circulating GLP-1 and by GLP-1 based drugs directly, not only through vagal nerve signaling from the gut. Activation of these circuits reduces hunger and appears to dampen some of the reward-related drive to eat, an active area of ongoing research. The same area postrema, worth flagging now because this chapter returns to it later, is also a brainstem structure heavily involved in triggering nausea and vomiting, which is not a coincidence and helps explain why the single most common side effect of this entire drug class is gastrointestinal discomfort rather than something unrelated to the mechanism.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common shorthand treats GLP-1 based medicines as pure appetite suppressants, as if the entire drug worked through the brain alone. Mechanistically that is incomplete. A meaningful share of the metabolic benefit these drugs produce, particularly the improved blood glucose control central to their original use in type 2 diabetes, comes from the pancreas and the stomach, not the brain. The appetite effect is real and clinically important, but it is one of three coordinated actions, not the whole mechanism.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="site-matcher">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">GLP-1 Mechanism of Action: Site Matcher</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes one downstream effect of GLP-1 receptor activation. Match it to the organ system responsible, then reveal the explanation. The goal is to see the three-site mechanism clearly, not to memorize a single site and stop there.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Current effect</span>
+        <select class="ch-widget-select" id="sm-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your site</span>
+        <select class="ch-widget-select" id="sm-bin">
+          <option value="gut">Gut (L cells / secretion)</option>
+          <option value="pancreas">Pancreas (islet cells)</option>
+          <option value="stomach">Stomach</option>
+          <option value="brain">Brain (hypothalamus / brainstem)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Matched</span>
+        <span class="ch-meter-bar"><span id="sm-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sm-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="sm-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sm-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="sm-feedback">Choose an effect and a site, then submit to see the explanation.</p>
+
+    <button class="ch-widget-btn" id="sm-submit">Submit match</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>One receptor, two receptors, three: engineering the incretin signal into medicine</h2>
+    <p>Native GLP-1 is too fragile to be a practical drug on its own, degraded within one to two minutes by the enzyme described earlier in this chapter. Every medicine covered in the rest of this chapter starts from the same solved problem: how do you keep a GLP-1 shaped signal circulating in the bloodstream for days instead of minutes, so that a person can receive it on a manageable schedule rather than a continuous drip. The three drugs below solved that problem with increasingly ambitious chemistry, and each one also asks the receptor question differently: how many of the incretin-family receptors should a single molecule engage at once.</p>
+    <p><span class="ch-key">Semaglutide</span> is the most structurally conservative of the three. It is a modified analog of native GLP-1, altered at a handful of amino acid positions to resist DPP-4 degradation, and attached to a fatty acid side chain that allows it to bind circulating albumin, a carrier protein, which shields it from clearance and extends its working life in the bloodstream from minutes to roughly a week. Structurally and functionally, it selectively activates the GLP-1 receptor and essentially nothing else. It is approved, under the brand name Ozempic, for type 2 diabetes, and under the brand name Wegovy, for chronic weight management in adults with obesity or with overweight plus at least one weight-related health condition. An oral formulation, Rybelsus, is also approved for type 2 diabetes. Semaglutide is, in the most literal sense available in this drug class, an engineered, long-lasting copy of the body's own hormone.</p>
+    <p><span class="ch-key">Tirzepatide</span> takes a step further. It is a single peptide backbone engineered to activate two separate receptors at once, the GLP-1 receptor and the GIP receptor, making it what researchers sometimes call a dual agonist or, informally, a twincretin. It is approved, under the brand name Mounjaro, for type 2 diabetes, and under the brand name Zepbound, for chronic weight management. Why adding GIP receptor activity on top of GLP-1 receptor activity produces a larger effect than GLP-1 activity alone is a genuinely interesting, still partly unresolved question. GIP given by itself has historically produced only modest effects on body weight in humans, and some earlier research even raised the possibility that GIP receptor activity could work against weight loss under certain conditions. Yet combined with strong GLP-1 receptor engagement in the same molecule, the two together appear to potentiate each other, producing greater average weight loss in trials than either single-receptor approach has achieved on its own. According to Drucker (2024), the precise mechanism behind that potentiation, whether it involves changes in receptor trafficking, effects in specific brain circuits, or something else entirely, remains an active area of investigation rather than a fully closed question, and this course will not pretend otherwise.</p>
+    <p><span class="ch-key">Retatrutide</span> goes one step further still, adding a third receptor target, the glucagon receptor, on top of GLP-1 and GIP receptor activity, making it a triple agonist. This is a more unusual design choice than it might first appear, because glucagon receptor activation, on its own, raises blood glucose and increases fat breakdown and energy expenditure, effects that sound counterproductive for a diabetes or obesity drug if considered in isolation. Embedded in a molecule that simultaneously provides strong, glucose-dependent insulin amplification and appetite suppression through GLP-1 and GIP receptor activity, the added glucagon receptor component is instead proposed to contribute extra energy expenditure and a preferential reduction in liver fat, on top of the appetite and glycemic effects the other two receptors already provide. Retatrutide remains investigational. According to Jastreboff et al. (2023), it has completed a randomized, placebo-controlled phase 2 trial in humans with strong results, and phase 3 trials were underway at the time of this writing, but it does not yet carry a brand name and has not yet received approval from any national drug regulator for any use.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Single, dual, and triple receptor agonists" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Single, dual, and triple receptor agonists</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">SINGLE, DUAL, AND TRIPLE RECEPTOR AGONISTS</text>
+<rect x="26" y="54" width="185" height="268" rx="10" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="118" y="80" fill="#5aaff5" font-size="13" font-weight="700" text-anchor="middle">SEMAGLUTIDE</text>
+<rect x="42" y="94" width="153" height="30" rx="5" fill="#12314f" stroke="#5aaff5" stroke-width="1.2"/>
+<text x="118" y="113" fill="#cdd8ea" font-size="9.5" text-anchor="middle">GLP-1 receptor</text>
+<text x="118" y="150" fill="#aab8d2" font-size="9" text-anchor="middle">Ozempic, type 2 diabetes</text>
+<text x="118" y="166" fill="#aab8d2" font-size="9" text-anchor="middle">Wegovy, weight management</text>
+<text x="118" y="200" fill="#7f8fab" font-size="8.5" text-anchor="middle">Phase 3 human trials</text>
+<text x="118" y="214" fill="#7f8fab" font-size="8.5" text-anchor="middle">Approved</text>
+<rect x="227" y="54" width="185" height="268" rx="10" fill="#132a45" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="319" y="80" fill="#7fd18a" font-size="13" font-weight="700" text-anchor="middle">TIRZEPATIDE</text>
+<rect x="243" y="94" width="153" height="30" rx="5" fill="#12314f" stroke="#7fd18a" stroke-width="1.2"/>
+<text x="319" y="113" fill="#cdd8ea" font-size="9" text-anchor="middle">GLP-1 receptor</text>
+<rect x="243" y="130" width="153" height="30" rx="5" fill="#12314f" stroke="#7fd18a" stroke-width="1.2"/>
+<text x="319" y="149" fill="#cdd8ea" font-size="9" text-anchor="middle">GIP receptor</text>
+<text x="319" y="180" fill="#aab8d2" font-size="9" text-anchor="middle">Mounjaro, type 2 diabetes</text>
+<text x="319" y="196" fill="#aab8d2" font-size="9" text-anchor="middle">Zepbound, weight management</text>
+<text x="319" y="228" fill="#7f8fab" font-size="8.5" text-anchor="middle">Phase 3 human trials</text>
+<text x="319" y="242" fill="#7f8fab" font-size="8.5" text-anchor="middle">Approved</text>
+<rect x="428" y="54" width="186" height="268" rx="10" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="521" y="80" fill="#e0873a" font-size="13" font-weight="700" text-anchor="middle">RETATRUTIDE</text>
+<rect x="444" y="94" width="154" height="30" rx="5" fill="#12314f" stroke="#e0873a" stroke-width="1.2"/>
+<text x="521" y="113" fill="#cdd8ea" font-size="9" text-anchor="middle">GLP-1 receptor</text>
+<rect x="444" y="130" width="154" height="30" rx="5" fill="#12314f" stroke="#e0873a" stroke-width="1.2"/>
+<text x="521" y="149" fill="#cdd8ea" font-size="9" text-anchor="middle">GIP receptor</text>
+<rect x="444" y="166" width="154" height="30" rx="5" fill="#12314f" stroke="#e0873a" stroke-width="1.2"/>
+<text x="521" y="185" fill="#cdd8ea" font-size="9" text-anchor="middle">Glucagon receptor</text>
+<text x="521" y="216" fill="#aab8d2" font-size="9" text-anchor="middle">No brand name yet</text>
+<text x="521" y="248" fill="#7f8fab" font-size="8.5" text-anchor="middle">Phase 2 complete,</text>
+<text x="521" y="262" fill="#7f8fab" font-size="8.5" text-anchor="middle">phase 3 in progress</text>
+<text x="521" y="278" fill="#7f8fab" font-size="8.5" text-anchor="middle">Investigational, not approved</text>
+<text x="320" y="340" fill="#7f8fab" font-size="11" text-anchor="middle">Same borrowed signal, progressively more receptors engaged.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>Single, dual, and triple receptor agonists. Semaglutide activates only the GLP-1 receptor. Tirzepatide adds the GIP receptor. Retatrutide, still investigational, adds the glucagon receptor on top of both.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Adding the glucagon receptor to a GLP-1 and GIP agonist means adding a receptor that, engaged alone, would raise blood glucose. Before this course discusses risk in detail, consider why engineers of these molecules judged that tradeoff worth making, and what it implies about evaluating a drug's receptor profile as a whole system rather than tallying receptors as if each one were a straightforward, independent positive.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="agonist-matcher">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Single, Dual, or Triple? The Agonist Matcher</div>
+    </div>
+    <p class="ch-widget-sub">Each card is a fact about one of the three drugs covered in this chapter. Sort it to the correct drug, then reveal the explanation.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Current fact</span>
+        <select class="ch-widget-select" id="am-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your drug</span>
+        <select class="ch-widget-select" id="am-bin">
+          <option value="sema">Semaglutide</option>
+          <option value="tirz">Tirzepatide</option>
+          <option value="reta">Retatrutide</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="am-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="am-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="am-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="am-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="am-feedback">Choose a fact and a drug, then submit to see the explanation.</p>
+
+    <button class="ch-widget-btn" id="am-submit">Submit match</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this chapter sits on the evidence ladder</h2>
+    <p>The first chapter of this course introduced an evidence ladder as a tool for grading any claim made about any peptide covered here: a large, randomized controlled trial (RCT) in humans sits at the top, smaller or uncontrolled human studies sit below that, animal-only data sits below that, and unverified anecdote or vendor marketing sits at the bottom. That ladder was not decoration. It is the single most useful tool this course offers for telling the difference between a compound with real support and a compound with a good story, and this chapter is the place where it matters most, because the two ends of that ladder both show up inside the same broad category of drug.</p>
+    <p>Semaglutide and tirzepatide sit at the very top rung. Each has been studied in multiple large, multicenter, randomized, double blind, placebo controlled phase 3 trials enrolling thousands of adults, and each has received full approval from major national drug regulators for specific, named medical uses, type 2 diabetes and chronic weight management. According to Wilding et al. (2021), the trial program behind semaglutide's weight management approval, known as STEP, enrolled nearly two thousand adults in a single pivotal trial alone. According to Jastreboff et al. (2022), the equivalent program behind tirzepatide, known as SURMOUNT, enrolled over two and a half thousand adults in its own pivotal trial. This is not a thin evidence base propped up by a single small study. It is the same tier of evidence that supports any well established modern pharmaceutical.</p>
+    <p>Retatrutide sits one rung down, and it is worth being precise about exactly how far down, because "one rung down from the top" is a very different statement than "unproven." According to Jastreboff et al. (2023), retatrutide has completed a randomized, double blind, placebo controlled phase 2 trial in humans, with results substantial enough to justify moving into phase 3 testing, the stage immediately before a regulatory approval decision. That is a real, controlled human trial with real numbers, not an animal study, not an open label case series, and not a testimonial. It is investigational because it has not yet completed the additional, larger trials regulators require before approval, not because the existing evidence is weak.</p>
+    <p>The contrast this creates with the rest of this course is deliberate, and it deserves to be stated plainly rather than left implicit. Several chapters elsewhere in this catalog cover compounds with genuinely interesting, mechanistically plausible biology and almost no controlled human evidence at all, resting instead on animal studies, small uncontrolled case reports, or the confident claims of a vendor selling an unregulated product. That is not a criticism of this course's earlier chapters, it is an honest description of where the science for those specific compounds currently stands, and this course has tried to say so directly each time it comes up. This chapter is the exception that proves the rule works as intended: when strong human evidence exists, it looks like STEP and SURMOUNT, and the evidence ladder should say so with the same directness it uses to flag when the evidence is thin.</p>
+    <p>One more distinction matters here, and it is exactly the one that confused Damaris. The evidence just described applies to the approved pharmaceutical product, manufactured under regulated conditions, tested for purity and exact concentration, and dispensed against a prescription. It does not automatically apply to a vial purchased from an online vendor advertising "research peptide" semaglutide or tirzepatide outside that regulated supply chain. A product like that may or may not contain what the label claims, in the concentration the label claims, free of contamination, and none of the trials described in this section were conducted on that product. This course's closing chapter covers the grey market in detail, including exactly this gap between a well studied molecule and an unverified vial claiming to contain it, but the distinction is worth planting here, at the point in this course where it is most likely to be misread as a contradiction rather than a genuinely separate question.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The evidence ladder, where this chapter sits" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The evidence ladder: where this chapter sits</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE EVIDENCE LADDER: WHERE THIS CHAPTER SITS</text>
+<rect x="230" y="46" width="380" height="44" rx="6" fill="#12314f" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="420" y="65" fill="#7fd18a" font-size="10.5" font-weight="700" text-anchor="middle">Large phase 3 human RCTs, regulatory approval</text>
+<text x="420" y="80" fill="#cdd8ea" font-size="9" text-anchor="middle">semaglutide, tirzepatide</text>
+<rect x="230" y="98" width="380" height="40" rx="6" fill="#12314f" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="420" y="116" fill="#5aaff5" font-size="10.5" font-weight="700" text-anchor="middle">Completed phase 2 human RCT, not yet approved</text>
+<text x="420" y="130" fill="#cdd8ea" font-size="9" text-anchor="middle">retatrutide</text>
+<rect x="200" y="146" width="300" height="36" rx="6" fill="#182c40" stroke="#3a5578" stroke-width="1.4"/>
+<text x="350" y="168" fill="#cdd8ea" font-size="10" text-anchor="middle">Small human studies or case series</text>
+<rect x="160" y="190" width="280" height="36" rx="6" fill="#182c40" stroke="#3a5578" stroke-width="1.4"/>
+<text x="300" y="212" fill="#cdd8ea" font-size="10" text-anchor="middle">Animal-only data</text>
+<rect x="120" y="234" width="260" height="36" rx="6" fill="#2a1f16" stroke="#e0873a" stroke-width="1.6"/>
+<text x="250" y="256" fill="#e0873a" font-size="10" text-anchor="middle">Anecdote and vendor marketing</text>
+<text x="24" y="212" fill="#7f8fab" font-size="9" text-anchor="start">much of the rest</text>
+<text x="24" y="226" fill="#7f8fab" font-size="9" text-anchor="start">of this course</text>
+<text x="320" y="300" fill="#7f8fab" font-size="10" text-anchor="middle">Two rungs at the top, three drugs, two of them fully approved.</text>
+<text x="320" y="318" fill="#7f8fab" font-size="10" text-anchor="middle">The grey market vial with the same name does not inherit this ladder position.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 3</span> <em>The evidence ladder introduced in Chapter 1 of this course, applied to this chapter specifically. Semaglutide and tirzepatide sit at the top rung. Retatrutide sits one rung down, investigational rather than unproven.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>Because this course has spent most of its chapters covering compounds sold in an unregulated peptide marketplace, a common assumption treats every compound this course touches as belonging to the same grey market bucket by default. That assumption breaks down here specifically. Semaglutide and tirzepatide, as approved pharmaceutical products, carry among the strongest human evidence bases of any drug class covered anywhere in this catalog. A vendor-sold vial using the same chemical name is a genuinely different evidence question, covered on its own terms later in this course, not a reason to discount the trial data behind the approved medicine itself.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What the trials actually showed</h2>
+    <p>According to Wilding et al. (2021), the pivotal trial behind semaglutide's weight management approval enrolled adults with obesity, or with overweight plus at least one weight related health condition, none of whom had diabetes, and randomly assigned them to a weekly injection of semaglutide or a matched placebo, both alongside a lifestyle intervention, for 68 weeks. Average body weight fell by close to fifteen percent in the semaglutide group, compared with roughly two and a half percent in the placebo group, and participants receiving semaglutide also showed improvement across a range of cardiometabolic risk markers, including blood pressure and lipid measures. The most common reason for stopping treatment was gastrointestinal discomfort, a pattern this chapter returns to in the next section.</p>
+    <p>According to Jastreboff et al. (2022), the pivotal trial behind tirzepatide's weight management approval used a comparable design, adults with obesity or overweight plus a weight related condition, no diabetes, randomly assigned to weekly tirzepatide or placebo for 72 weeks. Average weight loss reached roughly twenty one percent at the highest studied level, compared with about three percent with placebo, a larger effect than semaglutide's pivotal trial produced, consistent with the added GIP receptor activity described earlier in this chapter. Cardiometabolic improvements followed a similar pattern to the semaglutide trial, and gastrointestinal symptoms were again the leading cause of treatment discontinuation.</p>
+    <p>According to Jastreboff et al. (2023), the phase 2 trial behind retatrutide produced the largest average weight loss of the three drugs studied so far, approaching roughly a quarter of starting body weight at the highest studied level over 48 weeks, compared with about two percent with placebo. That result, while it needs confirmation in the larger phase 3 trials already underway at the time of this writing, is consistent with the added glucagon receptor activity contributing extra effect on top of what GLP-1 and GIP receptor engagement alone produce.</p>
+    <p>Put together, the mechanism behind these numbers is the same three-site physiology described earlier in this chapter, operating at pharmacological rather than physiological intensity. Reduced appetite from brain receptor engagement lowers how much food a person eats. Slowed gastric emptying prolongs fullness after each meal and blunts the glucose spike that follows it. Amplified, glucose-dependent insulin secretion, alongside suppressed glucagon secretion, improves blood glucose control directly, independent of any change in body weight. In retatrutide's case, added glucagon receptor activity is proposed to raise energy expenditure and shift a larger share of the weight lost toward fat specifically, including liver fat, though this remains an area of active study rather than a fully settled finding. According to Drucker (2024), the accumulating evidence across this drug class also points toward benefits that extend past weight and blood glucose on their own, including measurable reductions in downstream cardiovascular and kidney complications in appropriate populations, benefits that appear to be only partly explained by weight loss itself.</p>
+
+    <blockquote class="ch-quote">
+      <p>"The evidence supports a tailored approach to selection of therapeutic interventions for type 2 diabetes and obesity based on the likelihood of developing specific complications, rather than a stepwise approach focused exclusively on glycemic or weight control."</p>
+      <cite>Daniel J. Drucker, <em>Cell Metabolism</em> (2024)</cite>
+    </blockquote>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Every mechanism described in this chapter depends on the drug continuing to occupy the GLP-1 receptor, and in the dual and triple agonists, the GIP and glucagon receptors as well. Given that mechanism, consider what is likely to happen to appetite, gastric emptying, and blood glucose control once a person stops taking the medicine and the receptor is no longer being engaged, and why that consideration matters for how a person and their clinician think about this drug class as a long term commitment rather than a short course of treatment.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The honest risk picture</h2>
+    <p>No drug this effective at altering appetite, digestion, and pancreatic hormone output arrives without a real side effect profile, and this course's harm reduction framing means naming that profile plainly rather than either minimizing it or treating every reported risk as equally alarming. Four categories of risk are worth understanding in detail, because each traces back directly to the mechanism already described in this chapter, rather than appearing as an unexplained, unrelated hazard.</p>
+    <h3>Gastrointestinal effects</h3>
+    <p>Nausea, vomiting, diarrhea, and constipation are, by a wide margin, the most commonly reported effects across every trial covered in this chapter, and they follow directly from the mechanism already described: slowed gastric emptying changes how a full stomach feels and behaves, and direct activation of brainstem structures, including the area postrema, contributes to nausea independent of anything happening in the stomach itself. These effects are typically most noticeable early in treatment and tend to ease over time as the body adjusts, though for a meaningful minority of trial participants they were significant enough to prompt stopping treatment altogether. This is not a minor footnote. Gastrointestinal discomfort was consistently the leading reason participants left the pivotal trials for all three drugs described in this chapter, and any honest account of this drug class treats it as a central, expected part of the experience rather than a rare exception.</p>
+    <h3>Gallbladder and pancreatic risk</h3>
+    <p>According to Zeng et al. (2023), a systematic review and meta-analysis focused specifically on tirzepatide found a significantly increased risk of gallbladder or biliary disease compared with placebo or standard care, though the same analysis did not find a statistically significant increase in pancreatitis risk for tirzepatide specifically, a labeled precaution that remains under monitoring across the broader drug class regardless. Part of what makes this risk genuinely complicated to interpret is that rapid, large-magnitude weight loss is, on its own, an established independent risk factor for gallstone formation, driven by changes in the cholesterol concentration of bile during fast fat mobilization, so separating how much of the excess gallbladder risk in these trials comes from the drug's direct pharmacology versus the sheer speed of the weight loss it produces is a real, unresolved question rather than a settled one.</p>
+    <h3>Muscle mass and lean tissue loss</h3>
+    <p>Weight lost on these medicines is not exclusively fat. Body composition studies conducted alongside several of the major trials have found that a meaningful share of total weight lost, not the majority, but a real and clinically relevant minority, comes from lean tissue rather than fat mass, a pattern that has drawn particular concern for older adults and for anyone entering treatment with limited muscle reserve to begin with. This is an honest, evidence grounded caveat rather than a reason to dismiss the drug class, and it is exactly the kind of consideration a prescribing clinician is positioned to weigh for a specific person's health history, age, and starting body composition, which is not something this course is positioned to do in the abstract.</p>
+    <h3>The thyroid C-cell signal and the boxed warning</h3>
+    <p>This is the risk most likely to generate an alarmed headline, and it deserves the most careful, precise treatment in this section. According to Byrd et al. (2015), long term rodent studies of a related long-acting GLP-1 receptor agonist found a dose-dependent increase in thyroid C-cell hyperplasia and tumors, a specific type of thyroid growth arising from calcitonin-producing C cells, not the more common thyroid cell types involved in most human thyroid cancers. Rodent thyroid C cells carry an unusually high density of GLP-1 receptors compared with the human thyroid, a documented species difference that is the leading explanation for why this signal appeared so clearly in rodent studies. This rodent finding is the basis for the boxed warning carried across the entire class of long-acting GLP-1 based medicines, and for the contraindication in anyone with a personal or family history of medullary thyroid carcinoma (MTC), a rare thyroid cancer arising from C cells, or with the inherited condition multiple endocrine neoplasia type 2 (MEN2), which carries a strongly elevated lifetime risk of that same cancer.</p>
+    <p>What the rodent finding does not automatically establish is that the same thing happens in humans, and the honest picture requires holding both facts at once. According to Hegedus et al. (2011), a surveillance analysis following over five thousand human subjects treated with an earlier long-acting GLP-1 drug for up to two years found no consistent rise in serum calcitonin, the clinical marker used to detect C-cell activity, across the study population. That is reassuring evidence that the specific rodent mechanism may not translate directly to humans, but it is not the same as long-term human cancer outcome data spanning decades, which continues to accumulate as these drugs remain in widespread use. The boxed warning and the MEN2 and personal or family MTC history contraindication remain in place as a precaution regardless of that reassuring surveillance data, because the underlying biological mechanism, C-cell GLP-1 receptor engagement, is real even if its human cancer relevance remains less certain than the rodent data alone would suggest.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>Two opposite overreactions show up around the thyroid warning, and both are wrong. One treats it as proof that these are secretly dangerous cancer drugs, ignoring that the tumor signal is rodent-specific and that large human surveillance data have not shown the same pattern. The other dismisses the warning entirely as regulatory overcaution, ignoring that the underlying mechanism is real and that the contraindication exists specifically to protect a defined group of people, those with a personal or family history of medullary thyroid carcinoma or multiple endocrine neoplasia type 2, at genuinely elevated risk. The accurate position sits between both: a real, mechanistically explained rodent signal, a precautionary boxed warning and a specific contraindication built around it, and reassuring but still maturing human data.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Damaris and the difference between a molecule and a vial</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Damaris is 41, has no personal diagnosis of diabetes or obesity, and came to this course after her sister started an approved weekly injection for type 2 diabetes and mentioned losing weight on it, in the same week that a wellness account she follows posted an unregulated "research peptide" semaglutide listing with no prescription required. Having already worked through this course's earlier chapters, where the honest pattern was consistently real mechanism paired with thin human evidence, she assumed GLP-1 drugs would follow the same pattern and arrived at this chapter expecting to have her caution reinforced rather than substantially revised.</p>
+    </aside>
+    <p>Running Damaris's situation back through this chapter resolves four separate confusions, and each resolution matters on its own. Her first assumption, formed from this course's earlier chapters, was that every peptide covered here occupies roughly the same evidence tier: mechanistically plausible, thinly tested in humans. Section four replaces that with the actual picture. Semaglutide and tirzepatide sit at the top of the evidence ladder this course uses throughout, supported by large, randomized, placebo controlled phase 3 trials and full regulatory approval, a genuinely different category from most of what this course otherwise covers. Retatrutide sits one rung down, investigational but backed by a real, completed, controlled human trial rather than animal data or anecdote alone.</p>
+    <p>Her second assumption was that these drugs work by suppressing appetite and little else, the same shorthand that circulates widely outside this course. Section two replaces that with the three-site mechanism, pancreas, stomach, and brain, working together, with a meaningful share of the metabolic benefit, particularly the blood glucose control central to the original diabetes indication, coming from sites entirely separate from appetite regulation.</p>
+    <p>Her third confusion arrived indirectly, through an alarmed post a friend had shared calling semaglutide "the thyroid cancer drug." Section six replaces that flattened claim with the actual, more complicated picture: a real rodent signal, a precautionary boxed warning and a specific contraindication for people with a personal or family history of medullary thyroid carcinoma or multiple endocrine neoplasia type 2, and reassuring, though not yet decades-long, human surveillance data suggesting the rodent mechanism may not translate directly to people. Neither the alarmist framing nor a dismissive one survives contact with the actual evidence.</p>
+    <p>Her fourth confusion was the one that started this chapter for her: whether the STEP and SURMOUNT trial evidence she had just read about applied to the vendor-sold vial advertised in her feed. It does not. Section four's closing distinction applies directly here: the trial evidence describes a regulated pharmaceutical product manufactured and tested under regulatory oversight, not any vial carrying the same chemical name sold outside that supply chain with no verification of purity, concentration, or sterility. That gap, not the strength of the underlying science, is where her actual caution belonged all along.</p>
+    <p>What Damaris walked away with was not a verdict on whether anyone should take a GLP-1 based medicine, a question this course does not answer for any individual reader. It was a corrected, working model: a real gut hormone that acts on the pancreas, stomach, and brain together, an engineered drug class with an unusually strong human evidence base sitting at the very top of this course's own evidence ladder, an honest and specific risk profile rather than either a scare or a dismissal, and a sharp, important line between a well studied molecule and an unregulated product claiming to be it. That model travels with her well beyond this single chapter.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this course stops: understanding is not permission</h2>
+    <p>The strength of the evidence covered in this chapter does not change the boundary that governs this entire course. Everything here, the incretin physiology, the three-site GLP-1 mechanism, the receptor logic separating semaglutide, tirzepatide, and retatrutide, the honest risk picture including the thyroid warning, is education, not a treatment plan. This course does not provide dosing or titration guidance, does not tell anyone whether they are a candidate for one of these medicines, and does not substitute for the individualized medical evaluation that a decision like this actually requires.</p>
+    <p>That boundary matters more here, not less, precisely because these are real, effective, regulator-approved medicines rather than unregulated research chemicals. A drug this capable of altering appetite, digestion, and pancreatic hormone secretion needs to be started, monitored, and adjusted by a clinician who knows a specific person's full medical history, including any personal or family history of thyroid disease, pancreatitis, gallbladder disease, or significant unintentional weight loss risk, none of which this course has any way of knowing about any individual reader. Strong trial evidence describes what a medicine does in a large population studied under controlled conditions. It does not describe what is safe or appropriate for one specific person, and no chapter in this course, including this one, is built to make that determination.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the discipline Damaris's situation called for. Her sister's treatment decision was made with a clinician who had access to her actual medical history, and nothing in this chapter is meant to second guess that relationship or substitute for it. What this chapter can responsibly give Damaris, and any learner working through it, is the ability to read a claim about these drugs, whether it is an alarmed headline, a vendor listing, or a family member's experience, and know which part of it is established mechanism, which part is trial evidence, and which part is a question that only belongs to a person and their own clinician.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A friend tells you they read that "GLP-1 drugs are basically just Ozempic, all the same thing." Using only what this chapter covered, what does an accurate, honest, non-clinical correction sound like, and where, specifically, does that correction need to stop and defer to a qualified clinician instead?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Glucagon-like peptide 1 (GLP-1) and glucose-dependent insulinotropic polypeptide (GIP) are incretin hormones released from the gut within minutes of a meal, producing the incretin effect: a two to three fold larger insulin response to oral glucose than to the same blood glucose level delivered intravenously.</li>
+      <li>GLP-1 acts on at least three separate sites at once: the pancreas, amplifying glucose-dependent insulin secretion and suppressing glucagon; the stomach, slowing gastric emptying; and the brain, reducing appetite through hypothalamic and brainstem receptors. Appetite suppression is one of three coordinated mechanisms, not the whole story.</li>
+      <li>Semaglutide activates only the GLP-1 receptor. Tirzepatide adds the GIP receptor as a dual agonist. Retatrutide, still investigational, adds the glucagon receptor as a triple agonist. Both semaglutide and tirzepatide are approved for type 2 diabetes and chronic weight management; retatrutide has completed only a phase 2 human trial.</li>
+      <li>Semaglutide and tirzepatide sit at the top of this course's evidence ladder, supported by large phase 3 randomized controlled trials (RCTs) and full regulatory approval, a genuinely different evidence tier from most of the rest of this course. That evidence describes the regulated pharmaceutical product, not an unverified vial sold outside that supply chain under the same chemical name.</li>
+      <li>The honest risk profile includes common, often treatment-limiting gastrointestinal effects, an increased risk of gallbladder and biliary disease, a meaningful share of lean tissue loss alongside fat loss, and a rodent-derived thyroid C-cell signal that produced a boxed warning and a contraindication for anyone with a personal or family history of medullary thyroid carcinoma or multiple endocrine neoplasia type 2, alongside reassuring but still maturing human surveillance data.</li>
+      <li>Strong evidence at the population level does not replace individualized clinical judgment. This course explains mechanism, evidence grade, and risk; it does not diagnose, prescribe, or substitute for a qualified clinician evaluating a specific person's health history.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter's defining feature, an approved drug class backed by large human randomized controlled trials, is the exception in this course rather than the rule. Chapter 7 returns to more familiar territory: metabolic and mitochondrial compounds including MOTS-c, SS-31, the small molecule SLU-PP-332, and 5-amino-1MQ, where the mechanisms are often genuinely interesting and the human evidence, honestly, is not built like the evidence in this chapter at all.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Byrd, R. A., Sorden, S. D., Ryan, T., Pienkowski, T., LaRock, R., Quander, R., Wijsman, J. A., Smith, H. W., Blackbourne, J. L., Rosol, T. J., Long, G. G., Martin, J. A., &amp; Vahle, J. L. (2015). Chronic toxicity and carcinogenicity studies of the long-acting GLP-1 receptor agonist dulaglutide in rodents. <em>Endocrinology, 156</em>(7), 2417-2428. https://doi.org/10.1210/en.2014-1722</p>
+    <p>Drucker, D. J. (2024). Prevention of cardiorenal complications in people with type 2 diabetes and obesity. <em>Cell Metabolism, 36</em>(2), 338-353. https://doi.org/10.1016/j.cmet.2023.12.018</p>
+    <p>Hegedus, L., Moses, A. C., Zdravkovic, M., Le Thi, T., &amp; Daniels, G. H. (2011). GLP-1 and calcitonin concentration in humans: lack of evidence of calcitonin release from sequential screening in over 5000 subjects with type 2 diabetes or nondiabetic obese subjects treated with the human GLP-1 analog, liraglutide. <em>Journal of Clinical Endocrinology and Metabolism, 96</em>(3), 853-860. https://doi.org/10.1210/jc.2010-2318</p>
+    <p>Jastreboff, A. M., Aronne, L. J., Ahmad, N. N., Wharton, S., Connery, L., Alves, B., Kiyosue, A., Zhang, S., Liu, B., Bunck, M. C., &amp; Stefanski, A. (2022). Tirzepatide once weekly for the treatment of obesity. <em>New England Journal of Medicine, 387</em>(3), 205-216. https://doi.org/10.1056/NEJMoa2206038</p>
+    <p>Jastreboff, A. M., Kaplan, L. M., Frias, J. P., Wu, Q., Du, Y., Gurbuz, S., Coskun, T., Haupt, A., Milicevic, Z., &amp; Hartman, M. L. (2023). Triple-hormone-receptor agonist retatrutide for obesity: a phase 2 trial. <em>New England Journal of Medicine, 389</em>(6), 514-526. https://doi.org/10.1056/NEJMoa2301972</p>
+    <p>Nauck, M. A., &amp; Meier, J. J. (2018). Incretin hormones: Their role in health and disease. <em>Diabetes, Obesity and Metabolism, 20</em>(Suppl 1), 5-21. https://doi.org/10.1111/dom.13129</p>
+    <p>Wilding, J. P. H., Batterham, R. L., Calanna, S., Davies, M., Van Gaal, L. F., Lingvay, I., McGowan, B. M., Rosenstock, J., Tran, M. T. D., Wadden, T. A., Wharton, S., Yokote, K., Zeuthen, N., &amp; Kushner, R. F. (2021). Once-weekly semaglutide in adults with overweight or obesity. <em>New England Journal of Medicine, 384</em>(11), 989-1002. https://doi.org/10.1056/NEJMoa2032183</p>
+    <p>Zeng, Q., Xu, J., Mu, X., Shi, Y., Fan, H., &amp; Li, S. (2023). Safety issues of tirzepatide (pancreatitis and gallbladder or biliary disease) in type 2 diabetes and obesity: a systematic review and meta-analysis. <em>Frontiers in Endocrinology, 14</em>, 1214334. https://doi.org/10.3389/fendo.2023.1214334</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 6 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('site-matcher');
+    if(!root) return;
+    var cards = [
+      {t:"Nutrients reaching the small intestine trigger hormone release within minutes", v:"gut", e:"Gut. L cells and K cells release GLP-1 and GIP almost immediately after a meal arrives, before most of it has been digested, which is the whole basis of the incretin effect."},
+      {t:"Insulin secretion increases, but only when blood glucose is already elevated", v:"pancreas", e:"Pancreas. This is the glucose-dependent amplification of insulin release from beta cells, the mechanism behind the classic incretin effect described by Nauck and Meier (2018)."},
+      {t:"Glucagon secretion is suppressed, reducing how much glucose the liver adds to the bloodstream", v:"pancreas", e:"Pancreas. GLP-1 suppresses glucagon release from alpha cells at the same time it boosts insulin release from beta cells, both in the same organ."},
+      {t:"The rate of stomach emptying slows, prolonging fullness after a meal", v:"stomach", e:"Stomach. Slowed gastric emptying, mediated partly through the vagus nerve, is a distinct mechanism from either the pancreas effect or the appetite effect in the brain."},
+      {t:"Delayed gastric emptying is a major contributor to early treatment nausea, separate from any brain effect", v:"stomach", e:"Stomach. A stomach that empties more slowly than usual produces its own discomfort, independent of the brainstem nausea pathway covered elsewhere in this chapter."},
+      {t:"Activation of receptors in the hypothalamus reduces hunger signaling", v:"brain", e:"Brain. The hypothalamus is a central hub for hunger and satiety signaling, and GLP-1 receptor activation there is a major driver of reduced food intake."},
+      {t:"Activation of receptors in the brainstem area postrema contributes to nausea, especially early in treatment", v:"brain", e:"Brain. The area postrema sits outside the full protection of the blood brain barrier, making it directly reachable by circulating GLP-1 and by GLP-1 based drugs, and it is also a classic nausea and vomiting center."},
+      {t:"Reward-related drive to eat appears to be dampened by central receptor activity as well", v:"brain", e:"Brain. Beyond straightforward hunger signaling, GLP-1 receptor activity in reward-related brain circuits is an active area of ongoing research."}
+    ];
+    var cardSel = document.getElementById('sm-card');
+    var binSel = document.getElementById('sm-bin');
+    var fb = document.getElementById('sm-feedback');
+    var btn = document.getElementById('sm-submit');
+    var fillS = document.getElementById('sm-fill-sorted');
+    var fillA = document.getElementById('sm-fill-acc');
+    var numS = document.getElementById('sm-num-sorted');
+    var numA = document.getElementById('sm-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={gut:'Gut (L cells / secretion)',pancreas:'Pancreas (islet cells)',stomach:'Stomach',brain:'Brain (hypothalamus / brainstem)'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('agonist-matcher');
+    if(!root) return;
+    var cards = [
+      {t:"Activates only the GLP-1 receptor", v:"sema", e:"Semaglutide. It is the most structurally conservative of the three, a modified, long-acting analog of native GLP-1 that engages a single receptor."},
+      {t:"Activates the GLP-1 receptor and the GIP receptor together", v:"tirz", e:"Tirzepatide. A single peptide backbone engineered to engage two receptors at once, sometimes called a twincretin or dual agonist."},
+      {t:"Activates the GLP-1, GIP, and glucagon receptors together", v:"reta", e:"Retatrutide. A triple agonist, adding glucagon receptor activity on top of GLP-1 and GIP receptor engagement."},
+      {t:"Approved as Ozempic for type 2 diabetes and as Wegovy for chronic weight management", v:"sema", e:"Semaglutide. Two brand names for the same molecule, approved for two separate indications, plus an oral formulation, Rybelsus, for diabetes."},
+      {t:"Approved as Mounjaro for type 2 diabetes and as Zepbound for chronic weight management", v:"tirz", e:"Tirzepatide. Again, two brand names, two approved indications, same underlying molecule."},
+      {t:"Still investigational, tested so far in a completed phase 2 human trial, not yet approved by any regulator", v:"reta", e:"Retatrutide. Phase 3 trials were underway at the time of this writing, but it carries no brand name yet and no approval."},
+      {t:"Backed by the pivotal STEP trial program described by Wilding et al. (2021)", v:"sema", e:"Semaglutide. The STEP program is the phase 3 trial series behind its weight management approval."},
+      {t:"Backed by the pivotal SURMOUNT trial program described by Jastreboff et al. (2022)", v:"tirz", e:"Tirzepatide. SURMOUNT is the phase 3 trial series behind its weight management approval."},
+      {t:"Its added glucagon receptor activity is proposed to raise energy expenditure and preferentially reduce liver fat", v:"reta", e:"Retatrutide. Glucagon receptor activation on its own raises blood glucose and energy expenditure, a tradeoff the molecule's designers judged worthwhile alongside strong GLP-1 and GIP receptor engagement."},
+      {t:"Produced the largest average weight loss of the three drugs in the trials published so far", v:"reta", e:"Retatrutide. Its phase 2 results, described by Jastreboff et al. (2023), exceeded both semaglutide's and tirzepatide's pivotal trial results, though it still needs phase 3 confirmation."},
+      {t:"Its added GIP receptor activity potentiates GLP-1 receptor activity through a mechanism still being investigated", v:"tirz", e:"Tirzepatide. According to Drucker (2024), exactly how GIP co-agonism boosts the GLP-1 effect remains an open, actively researched question."}
+    ];
+    var cardSel = document.getElementById('am-card');
+    var binSel = document.getElementById('am-bin');
+    var fb = document.getElementById('am-feedback');
+    var btn = document.getElementById('am-submit');
+    var fillS = document.getElementById('am-fill-sorted');
+    var fillA = document.getElementById('am-fill-acc');
+    var numS = document.getElementById('am-num-sorted');
+    var numA = document.getElementById('am-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={sema:'Semaglutide',tirz:'Tirzepatide',reta:'Retatrutide'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. The correct drug is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Double-Edged Defenders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Peptides II &middot; Chapter 4</div>
+    <h1 class="ch-title">The <em>Double</em>-Edged Defenders</h1>
+    <p class="ch-subtitle">KPV quiets an inflammatory signal from inside the cell while LL-37 stands guard on the body's surfaces and helps rebuild them, and both stories end with the same warning: a peptide the body already makes is not automatically a gentle one to add more of.</p>
+    <div class="ch-meta">
+      <span>52 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>omasz is 41 and works as a physiotherapy technician at a sports medicine clinic, close enough to real clinical conversation to have picked up a decent vocabulary of anatomy and healing timelines, but with no prescribing authority and no formal biochemistry training. Over the past year he has been reading two online communities that, on the surface, seemed to be talking about completely different things. The first was a gut-health forum where people described a peptide called KPV as a gentle, almost boring option, something you might add to a broader anti-inflammatory routine because it "calms things down" without the drama of a stronger drug. The second was a biohacking forum where people described a peptide called LL-37 in much more dramatic terms, an injectable "immune peptide" some members used when they felt a cold coming on, or wanted a surgical incision or a bad blister to close faster. Both communities, notably, used the exact same reassurance to justify using either compound: it is natural, your body already makes this molecule, you are not introducing anything foreign.</p>
+    <p>That single word, natural, is doing an enormous amount of unexamined work in both communities, and untangling it is most of what this chapter is for. KPV and LL-37 are grouped together in this course not because they are structurally related, they are not, but because they sit on either side of a genuinely blurry line that runs through the entire field of host defense biology: the line between calming inflammation down and actively fighting a microbial threat. Inflammation and infection control are not separate systems your body maintains in isolation, they are two tightly coupled responses to the same underlying question, is something here that should not be, and an honest look at either peptide requires understanding how that coupling works, where it is genuinely protective, and where it can misfire.</p>
+    <p>This chapter builds that understanding in four moves. First, we place KPV and LL-37 inside their actual biological families, a hormone fragment and a host-defense peptide, so that "immune-related peptide" stops being one vague bucket. Second, we go inside each mechanism in enough detail to see exactly what each molecule does at a cellular level, KPV's quiet interference with a specific inflammatory signaling pathway, and LL-37's much more physically aggressive assault on microbial membranes paired with a wide-reaching immune-signaling role. Third, we grade the evidence for each compound's claimed uses honestly and separately, because "extensively studied" and "proven safe to inject for this purpose" turn out to be very different claims for both molecules. Fourth, we return to Tomasz, walk through exactly where his natural-therefore-gentle reasoning broke down for each peptide, and close with the boundary this entire course keeps returning to: understanding a mechanism is not the same thing as a green light to use it.</p>
+    <p>One more framing point is worth stating before the biology starts, because it will keep the rest of this chapter from collapsing into a single simple lesson. It would be tidy to conclude that KPV is "the safe one" because its job is to calm things down, and LL-37 is "the risky one" because it is a more aggressive, receptor-heavy molecule with a documented disease link. That tidy conclusion does not survive contact with the actual evidence. KPV's own evidence base is thin specifically because it has barely been tested in humans at all, not because anything about its mechanism looks dangerous. LL-37's disease associations are documented precisely because it has been studied so extensively, in exactly the tissues where things can go wrong. Evidence depth and safety are not the same axis, and this chapter treats them separately throughout.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Two families, one blurred border</h2>
+    <p>Start with what KPV actually is, structurally, because the name gives almost no clue. <span class="ch-key">KPV</span> is the common shorthand for the tripeptide lysine-proline-valine, three amino acids in that order, and it is not a synthetic invention. It is the exact C-terminal, meaning tail-end, three-amino-acid fragment of a much larger and much older hormone called <span class="ch-key">alpha-melanocyte-stimulating hormone (alpha-MSH)</span>, a thirteen-amino-acid peptide that your pituitary gland and skin cells produce from a large precursor protein called proopiomelanocortin. Alpha-MSH is best known outside this course for its role in skin pigmentation, stimulating melanocytes to produce more melanin, which is the pathway a separate family of melanocortin peptides, covered in a later chapter of this course, exploits deliberately for tanning and libido effects. But pigmentation is only one branch of what alpha-MSH does. According to Brzoska et al. (2008), alpha-MSH is also one of the most potent naturally occurring anti-inflammatory mediators identified in vertebrate biology, acting on immune cells and non-immune tissue throughout the body, and remarkably, its C-terminal tripeptide KPV carries forward almost all of that anti-inflammatory capacity on its own, in a three-amino-acid package small enough to be manufactured cheaply and delivered locally.</p>
+    <p>LL-37 comes from an entirely different biological lineage. It is the mature, active form of the only <span class="ch-key">cathelicidin</span> antimicrobial peptide the human body produces, cathelicidins being a family of host-defense peptides found across mammals that function as a chemical first line of defense against invading microorganisms, distinct from the antibody-based adaptive immune system you likely learned about in a general biology course. The human cathelicidin gene, called CAMP, encodes a much larger precursor protein, human cationic antimicrobial protein 18 (hCAP-18), which is stored inside the granules of neutrophils, a type of white blood cell, and produced by epithelial cells lining the skin, gut, lungs, and other body surfaces. When hCAP-18 is enzymatically cleaved, most commonly by an enzyme called proteinase 3, it releases the active thirty-seven-amino-acid fragment that begins with two leucine residues, which is where the name LL-37 comes from. Unlike KPV, LL-37 is not a fragment of a hormone. It is the working, weaponized end product of a dedicated antimicrobial defense system, present at the body's actual physical borders, skin, gut lining, respiratory tract, ready to be deployed the moment a barrier is breached.</p>
+    <p>Here is where the two families genuinely do converge, and it is worth sitting with because it is the entire reason this chapter treats them together rather than in separate modules. Inflammation exists, evolutionarily, largely to fight infection and to clean up and rebuild tissue after an injury or a microbial encounter. A molecule that dials inflammatory signaling down, like KPV, is not acting in some unrelated corner of biology from a molecule that physically kills microbes and recruits immune cells to a wound, like LL-37. They are both operating on the same underlying problem, tissue that has been damaged or invaded and needs to be defended, cleaned up, and rebuilt, from two different directions. KPV works from the inflammation-control side, LL-37 works from the direct-defense-and-repair side, and, as later sections of this chapter make clear, LL-37 in particular does not stay neatly on one side of that line. Understanding both peptides side by side is what actually clarifies each one, far more than studying either in isolation.</p>
+    <p>The research histories behind these two peptides also help explain why one shows up mostly in gut and skin inflammation discussions while the other shows up mostly in infection and wound-care discussions. Alpha-MSH's anti-inflammatory properties, and by extension KPV's, were characterized gradually across the 1990s and 2000s by a research group built largely around Thomas Luger and Thomas Brzoska, working from the observation that a hormone already known for pigmentation also seemed to calm inflamed tissue in a wide range of animal models, fever, contact dermatitis, arthritis, allergic airway disease, well before anyone had fully worked out why. LL-37, and the broader cathelicidin family it belongs to, entered the literature from a completely different direction, immunology and infectious disease research in the 1990s identifying the human cathelicidin gene and characterizing its cleaved product as a genuine front-line antimicrobial agent, with the disease-association literature Kahlenberg and Kaplan (2013) later synthesized building on top of that antimicrobial foundation only once researchers noticed the peptide showing up in unexpected, and unwanted, places. Two different research traditions, converging on the same underlying question this chapter opened with: where does defending tissue end and damaging it begin.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, notice that both KPV and LL-37 are described in their communities as acting on "the immune system," a phrase vague enough to cover almost anything. One of these peptides mainly turns a specific inflammatory signal down. The other mainly kills microbes directly and recruits other immune cells to the site. Holding that distinction clearly in mind before the mechanism sections below will make the rest of this chapter considerably easier to follow.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>KPV: the tripeptide that argues with NF-kB</h2>
+    <p>The single most important fact about how KPV works, and the fact that most forum discussions of it skip entirely, is that it does not need to bind a melanocortin receptor to do its job. Alpha-MSH, its parent hormone, produces most of its effects, pigmentation included, by binding a family of five G protein-coupled melanocortin receptors (MC1R through MC5R) distributed across skin, immune cells, and the central nervous system. KPV, the tripeptide clipped from alpha-MSH's tail end, lacks the structural motif required to bind any of those five receptors with meaningful affinity. And yet, according to Brzoska et al. (2010), KPV retains almost all of alpha-MSH's anti-inflammatory capacity while displaying essentially none of its pigmentary action, a genuinely unusual pharmacological split that researchers have been trying to explain mechanistically for more than two decades. The working model, described across multiple reviews from the same research group, is that KPV acts through a melanocortin-receptor-independent pathway, likely by entering cells directly and interfering with intracellular inflammatory signaling machinery rather than triggering a cell-surface receptor cascade the way its parent hormone does.</p>
+    <p>The specific signaling machinery KPV appears to interfere with is a transcription factor called <span class="ch-key">nuclear factor kappa B (NF-kB)</span>, one of the most central master switches in the entire inflammatory response. In a resting cell, NF-kB is held inactive in the cytoplasm, bound to an inhibitory protein. When a cell detects a threat signal, a bacterial component, a cytokine, tissue damage, an enzyme cascade releases NF-kB from its inhibitor, and NF-kB translocates into the nucleus, where it binds DNA and switches on the transcription of a long list of pro-inflammatory genes, including tumor necrosis factor-alpha (TNF-alpha), interleukin-1beta (IL-1beta), interleukin-6 (IL-6), and various adhesion molecules that recruit more immune cells to the site. According to Luger and Brzoska (2007), alpha-MSH and its related tripeptides, KPV foremost among them, act at exactly this checkpoint, blunting NF-kB activation and, downstream of that, reducing the production of the pro-inflammatory cytokines NF-kB would otherwise switch on. The practical effect, observed across a wide range of animal models of inflammation, is a dampened inflammatory response without KPV itself functioning as a broad immune suppressant in the way a systemic steroid does.</p>
+    <p>It is worth being precise about what "melanocortin-independent" does and does not mean here, because it is easy to overstate. The broader alpha-MSH and related-tripeptide research program, reviewed comprehensively by Brzoska et al. (2008), documents alpha-MSH's own anti-inflammatory effects working substantially through melanocortin receptor 1 (MC1R) on immune cells such as monocytes, macrophages, and dendritic cells, downregulating their production of inflammatory cytokines while upregulating the anti-inflammatory cytokine interleukin-10 (IL-10). KPV's contribution sits alongside that receptor-mediated story rather than replacing it entirely, an independent, intracellular route to a similar endpoint, NF-kB suppression, that does not require the melanocortin receptor engagement its parent molecule relies on. That distinction matters practically because it is exactly what lets KPV be studied and marketed separately from pigmentation-affecting melanocortin peptides. It also matters for the honesty of this chapter, because the mechanism, while genuinely described across a substantial peer-reviewed literature, has never been fully resolved down to a single named intracellular receptor or transporter for KPV the way, for example, the androgen receptor is resolved for testosterone in an earlier course in this catalog. The pathway is real and repeatedly observed. The complete molecular explanation for how a three-amino-acid peptide gets inside a cell and interferes with NF-kB signaling is still, honestly, an area of active investigation.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="KPV downregulating NF-kB activation inside an inflamed cell" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>KPV: from a 13-amino-acid hormone to a 3-amino-acid brake on NF-kB</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">KPV: A THREE-AMINO-ACID BRAKE ON NF-kB</text>
+<defs>
+<marker id="arwk" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+<marker id="arwx" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#c9584a"/>
+</marker>
+</defs>
+<g>
+<rect x="24" y="56" width="150" height="76" rx="8" fill="#132a45" stroke="#7f8fab" stroke-width="1.4"/>
+<text x="99" y="78" fill="#cdd8ea" font-size="10.5" font-weight="700" text-anchor="middle">Proopiomelanocortin</text>
+<text x="99" y="94" fill="#7f8fab" font-size="9" text-anchor="middle">precursor protein</text>
+<text x="99" y="112" fill="#7f8fab" font-size="9" text-anchor="middle">cleaved to release</text>
+</g>
+<line x1="99" y1="132" x2="99" y2="156" stroke="#5aaff5" stroke-width="2" marker-end="url(#arwk)"/>
+<g>
+<rect x="24" y="162" width="150" height="70" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="99" y="184" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">alpha-MSH</text>
+<text x="99" y="200" fill="#cdd8ea" font-size="9" text-anchor="middle">13 amino acids</text>
+<text x="99" y="216" fill="#7f8fab" font-size="8.5" text-anchor="middle">C-terminal 3 clipped off</text>
+</g>
+<line x1="174" y1="197" x2="216" y2="197" stroke="#5aaff5" stroke-width="2" marker-end="url(#arwk)"/>
+<g>
+<rect x="222" y="162" width="120" height="70" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="282" y="184" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">KPV</text>
+<text x="282" y="200" fill="#cdd8ea" font-size="9" text-anchor="middle">Lys-Pro-Val</text>
+<text x="282" y="216" fill="#7f8fab" font-size="8.5" text-anchor="middle">no melanocortin binding</text>
+</g>
+<line x1="342" y1="197" x2="384" y2="197" stroke="#e0873a" stroke-width="2.2" marker-end="url(#arwk)"/>
+<text x="363" y="185" fill="#cdd8ea" font-size="8.5" text-anchor="middle">enters</text>
+<text x="363" y="220" fill="#cdd8ea" font-size="8.5" text-anchor="middle">cell</text>
+<rect x="390" y="56" width="222" height="270" rx="10" fill="#1a2e22" stroke="#3a5578" stroke-width="1.2"/>
+<text x="501" y="46" fill="#7f8fab" font-size="10" text-anchor="middle">INFLAMED CELL, CYTOPLASM</text>
+<rect x="406" y="72" width="190" height="58" rx="8" fill="#132a45" stroke="#c9584a" stroke-width="1.6"/>
+<text x="501" y="94" fill="#c9584a" font-size="10.5" font-weight="700" text-anchor="middle">Threat signal detected</text>
+<text x="501" y="110" fill="#cdd8ea" font-size="9" text-anchor="middle">releases NF-kB from inhibitor</text>
+<line x1="501" y1="130" x2="501" y2="152" stroke="#c9584a" stroke-width="2" stroke-dasharray="3 3" marker-end="url(#arwx)"/>
+<text x="540" y="145" fill="#e0873a" font-size="9" text-anchor="middle">KPV</text>
+<text x="540" y="157" fill="#e0873a" font-size="9" text-anchor="middle">dampens</text>
+<rect x="406" y="160" width="190" height="52" rx="8" fill="#132a45" stroke="#7f8fab" stroke-width="1.4"/>
+<text x="501" y="180" fill="#cdd8ea" font-size="10" font-weight="700" text-anchor="middle">NF-kB translocation</text>
+<text x="501" y="196" fill="#7f8fab" font-size="8.5" text-anchor="middle">to the nucleus, reduced</text>
+<line x1="501" y1="212" x2="501" y2="234" stroke="#7f8fab" stroke-width="1.6" marker-end="url(#arwk)"/>
+<rect x="406" y="240" width="190" height="66" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="501" y="260" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">Lower TNF-alpha, IL-1beta,</text>
+<text x="501" y="274" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">IL-6 transcription</text>
+<text x="501" y="292" fill="#cdd8ea" font-size="8.5" text-anchor="middle">calmer, less inflamed tissue</text>
+<text x="320" y="342" fill="#7f8fab" font-size="10.5" text-anchor="middle">No melanocortin receptor required. KPV appears to act inside the cell, on the NF-kB checkpoint itself.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>KPV is the C-terminal tripeptide of alpha-melanocyte-stimulating hormone (alpha-MSH). Unlike its parent hormone, KPV does not require binding to a melanocortin receptor to act, and is understood to interfere with nuclear factor kappa B (NF-kB) activation from inside the cell, reducing transcription of pro-inflammatory cytokines.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats KPV as simply "a piece of a hormone," implying its effects must run through the same melanocortin receptors alpha-MSH itself uses, tanning included. That is not how the mechanism works. KPV lacks the sequence needed to bind any of the five known melanocortin receptors, which is exactly why it does not meaningfully affect pigmentation the way its parent hormone and the melanocortin-targeted peptides in a later chapter do. Its anti-inflammatory action runs through a separate, melanocortin-independent route centered on NF-kB, not through the pigmentation pathway its name might suggest.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What KPV is claimed for, and how strong that evidence actually is</h2>
+    <p>KPV shows up in two overlapping but distinct contexts, and it is worth naming both plainly, in line with this course's practice of stating intended or claimed use next to mechanism and evidence grade rather than leaving it implied. The first context is gut inflammation. The claimed use is calming inflammatory bowel activity, by way of the NF-kB-suppressing mechanism described above, reducing local production of the pro-inflammatory cytokines that drive tissue damage in conditions like inflammatory bowel disease. The second context is skin, where KPV appears as one ingredient inside cosmetic and grey-market injectable combinations, most visibly a peptide blend sometimes marketed under the name "KLOW," typically combining KPV with GHK-Cu (the copper tripeptide covered in the previous chapter of this course), BPC-157, and thymosin beta-4 (TB-500), marketed collectively for skin healing and a smoother, calmer complexion. In that blend, KPV's role is specifically anti-inflammatory, quieting local irritation and redness, a genuinely different job from GHK-Cu's collagen-signaling role sitting right next to it in the same vial.</p>
+    <p>The gut evidence is the more developed of the two, and it is worth walking through directly. According to Laroui et al. (2009), researchers engineered nanoparticles loaded with KPV and encapsulated them in a polysaccharide hydrogel designed to survive transit through the stomach and release its contents specifically in the colon. In a mouse model of colitis induced by dextran sodium sulfate (DSS), a chemical that damages the intestinal lining and triggers an inflammatory bowel response used routinely to model human inflammatory bowel disease in animals, mice treated with the KPV-loaded, colon-targeted nanoparticles showed measurably reduced inflammatory and histologic damage compared to mice given the DSS insult alone. Notably, the same study found that this targeted nanoparticle delivery let researchers use a KPV concentration roughly twelve thousand times lower than the concentration required to achieve a similar effect with KPV in free, unencapsulated solution, a finding that says as much about the importance of delivery method as it does about the peptide's inherent potency. That is a genuinely striking piece of animal-model evidence, and it is also, worth stating plainly, a mouse study using a specialized nanoparticle delivery system, not a human clinical trial, and not a demonstration that a plain injected or orally taken dose of KPV produces the same effect in a person with inflammatory bowel disease.</p>
+    <p>Zoom out from that one study and the broader picture for KPV holds together: strong, repeatedly demonstrated mechanistic plausibility, a genuinely large body of alpha-MSH and related-tripeptide literature going back over two decades, and multiple animal models across gut, skin, eye, and airway inflammation showing consistent anti-inflammatory effects, as summarized by Luger and Brzoska (2007) and by Brzoska et al. (2010). What is largely missing, as of this writing, is controlled human clinical trial data establishing a safe and effective dose, route, and duration of KPV use for any specific human inflammatory condition. The evidence grade for KPV, stated honestly, is preclinical and mechanistic: strong enough that a research group would have good reason to pursue human trials, not strong enough to treat any current human use, gut-directed or cosmetic, as an established, dose-validated therapy. The cosmetic combinations circulating under names like KLOW carry an additional layer of uncertainty on top of that, because even where an individual ingredient's mechanism is well characterized, the specific blended product, its exact ratios, its purity, and its actual effect when combined, is essentially untested as a product in its own right.</p>
+    <p>It is worth placing this in context against the broader melanocortin field, because that context is exactly what a skeptical reader should ask for. The melanocortin receptor system that alpha-MSH itself signals through is not a purely theoretical target, it underlies at least one approved human therapy, an implantable melanocortin receptor agonist used for a rare photosensitivity condition, which shows the receptor family is druggable in principle and that melanocortin biology can clear the bar of a regulatory approval when the evidence is built out properly. KPV has not walked that same path. It bypasses the melanocortin receptors entirely, works through a still only partly resolved intracellular route, and, unlike the approved melanocortin drug, has no equivalent human trial program behind its anti-inflammatory claims specifically. The existence of one approved melanocortin-pathway drug says the underlying biological territory is real and pharmaceutically workable. It says nothing at all about whether KPV, specifically, at any given dose or route, has cleared that same bar, because it has not.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>KPV's mechanism directly suppresses a signal, NF-kB activation, that your immune system also relies on to fight off genuine infection. Before moving to LL-37 in the next section, consider what that trade-off implies. A peptide that calms inflammation from inside the cell is, by the same logic, a peptide that could blunt part of your body's response to an actual microbial threat if used indiscriminately. This is exactly the kind of double-sided reasoning this chapter keeps returning to.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="action-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Anti-Inflammatory vs. Antimicrobial Action Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Sort each described action into the peptide, or peptides, it actually belongs to, then reveal the mechanistic explanation. The goal is not memorization, it is seeing how consistently KPV's actions trace back to a signaling checkpoint inside the cell, while LL-37's trace back to a physical assault on a membrane plus a much wider immune-signaling role.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Current action</span>
+        <select class="ch-widget-select" id="as-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="as-bin">
+          <option value="kpv">Primarily KPV (anti-inflammatory)</option>
+          <option value="ll37">Primarily LL-37 (antimicrobial / host-defense)</option>
+          <option value="both">Both / Overlapping</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="as-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="as-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="as-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="as-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="as-feedback">Choose an action and a bin, then submit to see the explanation.</p>
+
+    <button class="ch-widget-btn" id="as-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>LL-37: the cathelicidin that patrols the body's surfaces</h2>
+    <p>Where KPV is a quiet intracellular signal, LL-37 is, structurally and functionally, built to be aggressive. The mature peptide is thirty-seven amino acids long, considerably larger than KPV's three, and it folds into an amphipathic alpha-helix, meaning one face of the helix is lined with positively charged and hydrophilic amino acids while the opposite face is lined with hydrophobic ones. That structural split is the entire key to how LL-37 kills microbes. Bacterial cell membranes are, on their outer surface, negatively charged, in contrast to the largely neutral outer surface of human cell membranes, and LL-37's positively charged face is drawn electrostatically to that negatively charged bacterial surface. Once docked, the peptide's hydrophobic face inserts directly into the lipid membrane, and at sufficient concentration, multiple LL-37 molecules aggregate within the membrane to form pores, or to disrupt the membrane's structural integrity broadly enough that it can no longer hold the microbial cell together, a mechanism generally described using a carpet or pore-forming model. According to Vandamme et al. (2012), this same physical mechanism gives LL-37 activity against a genuinely broad range of targets, gram-positive and gram-negative bacteria, fungi, and some enveloped viruses, because the underlying vulnerability, a negatively charged, disruptable lipid membrane, is shared across many microorganisms in a way human cell membranes largely are not.</p>
+    <p>Direct membrane disruption is only half of what LL-37 does, and treating it as a simple antibiotic peptide badly undersells its biology. Vandamme et al. (2012) describe LL-37 as a genuinely pleiotropic molecule, meaning it produces many distinct effects through many distinct pathways beyond its membrane-disrupting core function. LL-37 acts as a chemoattractant, drawing neutrophils, monocytes, T cells, and mast cells toward a site of infection or injury, in part by engaging a cell-surface receptor called formyl peptide receptor 2 (FPR2) found on many immune cells. It modulates the release of cytokines and chemokines from immune cells, influences apoptosis, meaning programmed cell death, in a context-dependent way, and, notably, promotes angiogenesis, the growth of new blood vessels, and stimulates keratinocyte, the main structural cell type of the skin's outer layer, migration, both of which are directly relevant to wound healing rather than to killing microbes at all. This is precisely why LL-37 gets described in the biohacking communities Tomasz was reading as both an antimicrobial and a healing peptide, it genuinely is both, through mechanisms that are only partly overlapping.</p>
+    <p>It is also worth being precise about where LL-37 comes from and how tightly its production is controlled in a healthy body, because that context matters directly for the next section's discussion of what happens when the control breaks down. LL-37 is not secreted continuously at a constant level. Its precursor, hCAP-18, is stored inside neutrophil granules and in the keratinocytes and other epithelial cells that line the body's exposed surfaces, and it is released and cleaved into active LL-37 in response to specific triggers, infection, injury, inflammation, or exposure to vitamin D, which upregulates cathelicidin gene expression in several tissue types. This is a tightly regulated, situational defense system, deployed where and when it is needed, rather than a peptide circulating freely at a fixed baseline the way many circulating hormones do.</p>
+
+    <blockquote class="ch-quote">
+      <p>"Not only do they possess an antibacterial, antifungal and antiviral function, they also show a chemotactic and immunostimulatory/-modulatory effect. Moreover, they are capable of inducing wound healing, angiogenesis and modulating apoptosis."</p>
+      <cite>Dieter Vandamme et al., <em>Cellular Immunology</em> (2012)</cite>
+    </blockquote>
+    <p>That single sentence, describing cathelicidins as a class, is the most concise possible summary of why LL-37 resists being filed under one tidy label. A learner reading a forum post that calls LL-37 simply "the immune peptide" or simply "the wound peptide" is reading a description that captures maybe a third of what the actual research literature documents, and the missing two-thirds are exactly what the next section covers.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LL-37 forming and disrupting a microbial membrane" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>LL-37: from precursor to a membrane-disrupting antimicrobial peptide</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">LL-37: FROM PRECURSOR TO MEMBRANE DISRUPTION</text>
+<defs>
+<marker id="arwl" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+</defs>
+<g>
+<rect x="24" y="60" width="160" height="90" rx="8" fill="#132a45" stroke="#7f8fab" stroke-width="1.4"/>
+<text x="104" y="84" fill="#cdd8ea" font-size="10.5" font-weight="700" text-anchor="middle">hCAP-18</text>
+<text x="104" y="100" fill="#7f8fab" font-size="9" text-anchor="middle">precursor, stored in</text>
+<text x="104" y="114" fill="#7f8fab" font-size="9" text-anchor="middle">neutrophil granules and</text>
+<text x="104" y="128" fill="#7f8fab" font-size="9" text-anchor="middle">epithelial cells</text>
+</g>
+<line x1="184" y1="105" x2="226" y2="105" stroke="#5aaff5" stroke-width="2" marker-end="url(#arwl)"/>
+<text x="205" y="93" fill="#cdd8ea" font-size="8.5" text-anchor="middle">cleaved by</text>
+<text x="205" y="128" fill="#cdd8ea" font-size="8.5" text-anchor="middle">proteinase 3</text>
+<g>
+<rect x="232" y="60" width="150" height="90" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="307" y="84" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">LL-37</text>
+<text x="307" y="100" fill="#cdd8ea" font-size="9" text-anchor="middle">37 residues, amphipathic</text>
+<text x="307" y="114" fill="#cdd8ea" font-size="9" text-anchor="middle">alpha-helix, one charged</text>
+<text x="307" y="128" fill="#cdd8ea" font-size="9" text-anchor="middle">face and one hydrophobic</text>
+</g>
+<line x1="307" y1="150" x2="307" y2="176" stroke="#e0873a" stroke-width="2.2" marker-end="url(#arwl)"/>
+<rect x="150" y="182" width="340" height="140" rx="10" fill="#1a2e22" stroke="#3a5578" stroke-width="1.2"/>
+<text x="320" y="174" fill="#7f8fab" font-size="10" text-anchor="middle">MICROBIAL MEMBRANE</text>
+<line x1="170" y1="230" x2="470" y2="230" stroke="#c9584a" stroke-width="3"/>
+<line x1="170" y1="242" x2="470" y2="242" stroke="#c9584a" stroke-width="3"/>
+<circle cx="230" cy="236" r="9" fill="#5aaff5"/>
+<circle cx="270" cy="236" r="9" fill="#5aaff5"/>
+<circle cx="320" cy="236" r="9" fill="#5aaff5"/>
+<circle cx="360" cy="236" r="9" fill="#5aaff5"/>
+<circle cx="400" cy="236" r="9" fill="#5aaff5"/>
+<text x="320" y="270" fill="#cdd8ea" font-size="9.5" text-anchor="middle">peptides insert, aggregate,</text>
+<text x="320" y="284" fill="#cdd8ea" font-size="9.5" text-anchor="middle">and form pores or carpet the</text>
+<text x="320" y="298" fill="#cdd8ea" font-size="9.5" text-anchor="middle">bilayer until it fails</text>
+<text x="320" y="316" fill="#c9584a" font-size="10" font-weight="700" text-anchor="middle">membrane integrity lost, microbe killed</text>
+<text x="320" y="342" fill="#7f8fab" font-size="10.5" text-anchor="middle">Same physical mechanism against bacteria, fungi, and some enveloped viruses.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>LL-37 is cleaved from its precursor, human cationic antimicrobial protein 18 (hCAP-18), most commonly by the enzyme proteinase 3. The mature 37-amino-acid peptide's amphipathic structure lets it dock on negatively charged microbial membranes and physically disrupt them, alongside a separate set of immune-signaling and wound-healing effects.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common shorthand treats LL-37 as "the body's natural antibiotic," implying it works something like a pharmaceutical antimicrobial drug, narrowly and predictably. The membrane-disruption mechanism is real and genuinely broad-spectrum, but LL-37 is simultaneously a chemoattractant, a cytokine modulator, and a driver of blood vessel growth and skin cell migration, acting through several separate receptor and non-receptor pathways at once. It is not a single-purpose antibiotic peptide with side effects. It is a multi-purpose immune signal that happens to also be able to kill microbes directly, and the next section covers what happens when that many-sided signal gets out of balance.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Healer and provocateur: LL-37's double edge</h2>
+    <p>LL-37's wound-healing role is genuinely well documented and is exactly what draws people toward using it, or a claimed version of it, for faster recovery after a cut, a blister, or a minor procedure. Beyond direct microbial killing at a wound site, keeping infection from taking hold in damaged tissue in the first place, LL-37 promotes angiogenesis and keratinocyte migration, both necessary steps in normal wound closure, and it participates in orchestrating the broader inflammatory-to-repair transition a healing wound has to move through. According to Vandamme et al. (2012), this combination of direct antimicrobial action and active participation in tissue repair is precisely what makes cathelicidin biology so central to skin and mucosal health under normal conditions.</p>
+    <p>The same properties that make LL-37 protective under normal conditions are implicated, when regulation breaks down, in some of the more stubborn inflammatory skin and systemic diseases in modern medicine, and this is the honest caution this section exists to deliver plainly. According to Kahlenberg and Kaplan (2013), LL-37 has a well-documented role in the pathogenesis of psoriasis, where LL-37 released in excess by damaged or stressed skin cells can bind to the body's own DNA and RNA, released from dying cells, forming a complex that the immune system's pattern-recognition receptors were never designed to encounter this way. That LL-37, self-DNA complex is taken up by plasmacytoid dendritic cells, a specialized immune cell type, and triggers a strong type I interferon response, a signaling cascade that, in a healthy antiviral context, helps fight actual viral infection, but in psoriatic skin instead drives a self-sustaining inflammatory loop that contributes directly to the disease's hallmark skin lesions. Kahlenberg and Kaplan (2013) extend this same LL-37-driven mechanism to a broader set of autoimmune and inflammatory conditions, including atopic dermatitis, systemic lupus erythematosus, rheumatoid arthritis, and atherosclerosis, describing LL-37 dysregulation as a genuinely recurring theme across conditions that, on the surface, look unrelated to each other.</p>
+    <p>Put plainly, the same molecule responsible for defending skin and helping it heal is, in several well-studied disease states, implicated as part of what keeps that skin inflamed. This is not a minor asterisk on LL-37's biology, it is close to the central fact any honest account of the peptide has to lead with. It means LL-37's relationship to inflammatory skin disease is not simply "too little LL-37 causes disease" or "too much LL-37 causes disease," both directions show up in the literature depending on the tissue and the specific condition, which is exactly why researchers describe cathelicidin biology as a double-edged system rather than a straightforwardly protective one. Adding exogenous LL-37 into that already-delicate balance, without the tissue-level and dose-level precision that comes from actual clinical trial data, is not a small, low-stakes decision, even though the peptide is, in its natural form, already present in the body.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LL-37's double edge, wound healing versus dysregulated inflammatory signaling" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>LL-37's double edge: host defense and healing versus dysregulated disease signaling</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">LL-37'S DOUBLE EDGE: ONE MOLECULE, TWO OUTCOMES</text>
+<circle cx="320" cy="150" r="46" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="146" fill="#5aaff5" font-size="12" font-weight="700" text-anchor="middle">LL-37</text>
+<text x="320" y="162" fill="#cdd8ea" font-size="8.5" text-anchor="middle">regulated release</text>
+<line x1="288" y1="176" x2="180" y2="220" stroke="#7fd18a" stroke-width="2.2"/>
+<line x1="352" y1="176" x2="460" y2="220" stroke="#c9584a" stroke-width="2.2"/>
+<g>
+<rect x="70" y="226" width="220" height="94" rx="10" fill="#1a2e22" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="180" y="248" fill="#7fd18a" font-size="12" font-weight="700" text-anchor="middle">Balanced, situational</text>
+<text x="180" y="266" fill="#cdd8ea" font-size="9.5" text-anchor="middle">microbe killing, keratinocyte</text>
+<text x="180" y="280" fill="#cdd8ea" font-size="9.5" text-anchor="middle">migration, angiogenesis</text>
+<text x="180" y="300" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">normal wound healing</text>
+</g>
+<g>
+<rect x="350" y="226" width="220" height="94" rx="10" fill="#2a1712" stroke="#c9584a" stroke-width="1.6"/>
+<text x="460" y="248" fill="#c9584a" font-size="12" font-weight="700" text-anchor="middle">Excess or dysregulated</text>
+<text x="460" y="266" fill="#cdd8ea" font-size="9.5" text-anchor="middle">binds self-DNA/RNA, activates</text>
+<text x="460" y="280" fill="#cdd8ea" font-size="9.5" text-anchor="middle">plasmacytoid dendritic cells</text>
+<text x="460" y="300" fill="#c9584a" font-size="10" font-weight="700" text-anchor="middle">psoriasis, lupus, atherosclerosis</text>
+</g>
+<text x="320" y="342" fill="#7f8fab" font-size="10.5" text-anchor="middle">Same peptide, same core biology. Regulation, not identity, decides which outcome dominates.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 3</span> <em>LL-37 supports normal wound healing and microbial defense when release is tightly regulated. In several inflammatory and autoimmune conditions, dysregulated LL-37, including complexes it forms with the body's own DNA and RNA, is implicated in driving disease rather than resolving it.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>LL-37 levels are measurably elevated in psoriatic skin lesions, not absent from them. Before assuming that "more LL-37" would straightforwardly help a skin condition, or a healing wound, consider what that elevated-but-diseased finding implies about dose, timing, and tissue context, and why a grey-market injection with none of those variables controlled is a genuinely different proposition from the body's own tightly regulated release of the same peptide.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="evidence-check">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Evidence Grade Check</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a specific finding or use case for KPV or LL-37. Classify the evidence behind it, then reveal the grade this course actually assigns it. The point is learning to separate "the underlying biology is well documented" from "this specific use is proven."</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Evidence card</span>
+        <select class="ch-widget-select" id="ec-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your grade</span>
+        <select class="ch-widget-select" id="ec-bin">
+          <option value="endogenous">Endogenous biology, well documented</option>
+          <option value="preclinical">Preclinical / animal evidence only</option>
+          <option value="unproven">Unproven grey-market claim</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Graded</span>
+        <span class="ch-meter-bar"><span id="ec-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ec-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="ec-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ec-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ec-feedback">Choose a card and a grade, then submit to see the verdict.</p>
+
+    <button class="ch-widget-btn" id="ec-submit">Submit grade</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Tomasz and the natural-therefore-gentle mistake</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Tomasz is 41 and works as a physiotherapy technician. He is not on any peptide himself and has no diagnosed inflammatory or autoimmune condition, but a family member's flare-up of an inflammatory bowel condition sent him down a research path that eventually crossed into two different online communities discussing KPV and LL-37. Both communities described their peptide of choice as safe largely because it was "something the body already makes." Tomasz came to this course wanting to understand whether that reasoning actually held up, and whether the two peptides he had been reading about were doing anything like the same thing.</p>
+    </aside>
+    <p>Running Tomasz's assumptions back through this chapter resolves four separate confusions, and each resolution follows directly from the mechanism sections above rather than from any general caution about grey-market peptides as a category. His first assumption was that "natural, the body already makes this" was, on its own, meaningful evidence of gentleness or safety. The double-edge sections of this chapter directly contradict that. LL-37 is entirely endogenous, produced by the same immune system Tomasz was hoping to support, and it is simultaneously implicated in driving psoriasis, systemic lupus erythematosus, and other inflammatory disease when its release is not tightly regulated by the body's own control systems. Being endogenous describes where a molecule comes from. It says nothing at all about whether adding more of it, outside the body's normal regulatory context, is safe.</p>
+    <p>His second assumption was that KPV and LL-37 were doing roughly the same kind of "immune support" job, just in different tissues, gut versus skin or blood. The mechanism sections correct that directly. KPV works from inside the cell, quietly turning down a specific inflammatory signaling checkpoint, NF-kB, without needing a cell-surface receptor. LL-37 works largely from outside the cell, physically tearing into microbial membranes, while separately orchestrating a wide immune-signaling and wound-repair response through entirely different pathways. They sit on functionally opposite sides of the inflammation-versus-defense spectrum described at the start of this chapter, not on the same side described in two different vocabularies.</p>
+    <p>His third assumption concerned the KLOW-style skin combination he had read about, where he had assumed KPV's presence in a "skin-repair" blend meant it worked the same way as the collagen-building copper peptide, GHK-Cu, sitting alongside it. The KPV evidence section corrects that: KPV's role in that blend is specifically anti-inflammatory, calming irritation through NF-kB suppression, a mechanistically distinct job from GHK-Cu's matrix-remodeling, collagen-synthesis role covered in the previous chapter. Two peptides in the same vial marketed toward the same general goal, smoother, calmer skin, can still be doing biologically unrelated jobs.</p>
+    <p>His fourth and most consequential assumption was that injecting LL-37 to "boost immunity" against a cold, or to speed healing after a minor procedure, was low risk specifically because it mimicked something the body does naturally. This chapter's double-edge section is the direct correction. There is no published human clinical trial establishing a safe, effective dose of exogenous LL-37 for either of those purposes, and the same molecule's documented role in driving disease when dysregulated is precisely the reason that absence of trial data should be taken seriously rather than waved away, not the reason to dismiss the concern as overcautious. A cold is a viral, self-limited illness in the vast majority of healthy adults, and speeding a minor wound's closure is a genuinely low-stakes goal to begin with, which makes the actual proportional risk of introducing an unregulated dose of a peptide with a documented autoimmune disease association even harder to justify against the modest benefit being chased.</p>
+    <p>What Tomasz walked away with was not a verdict on whether either peptide has genuine promise, both plausibly do, within a much narrower and more carefully governed context than a self-administered vial. He walked away with the actual question worth asking about any peptide the body already makes: not "is this natural," but "who is controlling the dose, the timing, and the tissue here, and is that control anything like what my own body already does automatically." That question travelled back with him into the conversation about his family member's inflammatory bowel flare-up too. It reframed his instinct to research a peptide fix into a more useful instinct, understanding the biology well enough to ask his family member's gastroenterologist sharper, better-informed questions, rather than a plan to source anything himself.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this course stops: understanding is not permission</h2>
+    <p>Everything in this chapter, KPV's melanocortin-independent suppression of NF-kB, the Hershberger-style precision of the DSS colitis nanoparticle data, LL-37's amphipathic membrane-disrupting structure, its chemoattractant and wound-healing functions, and its documented role in autoimmune and inflammatory disease when dysregulated, is true independent of whether any individual reading it ever uses either compound. That is the entire point of teaching mechanism this thoroughly: understanding how a peptide actually works, and how honestly graded the evidence behind its claimed uses actually is, has value on its own, whether the person doing the learning is evaluating a claim made by a friend, a forum post, a vendor, or their own curiosity.</p>
+    <p>This chapter has been explicit throughout about what is established and what is not. KPV's gut-inflammation evidence is real but confined almost entirely to animal models, with a specific and genuinely clever nanoparticle delivery study standing as the strongest single piece of data behind it. LL-37's biology, its structure, its membrane-disrupting mechanism, its immune-signaling roles, and its documented double edge in disease, is about as thoroughly characterized as any human host-defense peptide in the literature, and that thoroughness is precisely what makes its unproven, self-administered, grey-market injectable use a genuinely different and more serious question than the underlying biology alone would suggest. Neither compound has the kind of controlled human clinical trial data that would let anyone, this course included, describe a specific dose or protocol as established or safe, and this course will not provide one, for either peptide, regardless of how much mechanism has just been covered.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>For a learner in Tomasz's position, or in the position of the family member whose flare-up started his research in the first place, this boundary is not a disappointing place for the chapter to end, it is the most useful thing the chapter can hand over. Inflammatory bowel conditions, autoimmune skin disease, and recurrent infection are all situations that call for an actual diagnostic workup and a treatment plan built by a clinician who can see bloodwork, imaging, and a full history, not a peptide sourced from a forum recommendation, however mechanistically plausible that peptide's story sounds after a chapter like this one. What this chapter can responsibly leave a learner with is exactly what it built across every section: the ability to separate a real, well-documented mechanism from a proven, dosed, human-tested therapy, to recognize when "the body already makes this" is being used as a substitute for actual safety data rather than evidence of it, and to know precisely where curiosity needs to hand off to a clinician instead of a vial.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A friend tells you they are about to try injectable LL-37 because "it's just their own immune peptide, so it can't really hurt." Using only what this chapter covered, what does an accurate, honest, non-clinical response sound like, and which specific piece of this chapter's evidence would you point to first?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>KPV is the C-terminal tripeptide of alpha-melanocyte-stimulating hormone (alpha-MSH). It retains almost all of its parent hormone's anti-inflammatory activity without binding the melanocortin receptors responsible for pigmentation, acting instead through a melanocortin-independent route that suppresses nuclear factor kappa B (NF-kB) activation and downstream pro-inflammatory cytokine production.</li>
+      <li>KPV's intended uses, gut inflammation and inclusion in skin-healing cosmetic blends such as KLOW-type combinations, rest on strong mechanistic plausibility and consistent animal-model data, most notably a colon-targeted nanoparticle study in a mouse colitis model, but lack controlled human clinical trial evidence establishing a safe, effective dose.</li>
+      <li>LL-37 is the mature, active form of the human cathelicidin antimicrobial peptide, cleaved from its precursor hCAP-18. Its amphipathic alpha-helix structure lets it physically disrupt negatively charged microbial membranes, killing bacteria, fungi, and some enveloped viruses, while separate pathways let it act as a chemoattractant, cytokine modulator, and driver of angiogenesis and keratinocyte migration in wound healing.</li>
+      <li>LL-37 is genuinely double-edged. The same peptide that defends and helps heal the body's surfaces is, when dysregulated, implicated in driving psoriasis, systemic lupus erythematosus, atopic dermatitis, rheumatoid arthritis, and atherosclerosis, in part through complexes it forms with the body's own DNA and RNA that trigger an inappropriate interferon response.</li>
+      <li>"The body already makes this molecule" is not evidence of safety at any dose or route. Both KPV and LL-37 are endogenous, tightly regulated signals, and grey-market injectable use of either one, unproven in controlled human trials, removes exactly the dose, timing, and tissue-level control that keeps their natural biology protective rather than harmful.</li>
+      <li>This course is education and harm reduction, not a protocol source. Understanding mechanism and evidence grade is valuable on its own and does not replace the judgment of a licensed clinician for any individual health decision.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>KPV and LL-37 both touch the immune system without being immune modulators in the strict sense, KPV dampens one inflammatory checkpoint, LL-37 fights and signals at the body's surfaces. Chapter 5 turns to peptides built specifically to modulate immune function itself, thymosin alpha-1, thymulin, and thymalin, compounds with a genuine approved-elsewhere history in some regions, and it will draw a careful distinction this course has flagged before: thymosin alpha-1's immune-modulating role is a fundamentally different biology from thymosin beta-4, covered in Chapter 2, despite the similar name.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Brzoska, T., B&ouml;hm, M., L&uuml;gering, A., Loser, K., &amp; Luger, T. A. (2010). Terminal signal: anti-inflammatory effects of alpha-melanocyte-stimulating hormone related peptides beyond the pharmacophore. <em>Advances in Experimental Medicine and Biology, 681</em>, 107-116. https://doi.org/10.1007/978-1-4419-6354-3_8</p>
+    <p>Brzoska, T., Luger, T. A., Maaser, C., Abels, C., &amp; B&ouml;hm, M. (2008). Alpha-melanocyte-stimulating hormone and related tripeptides: biochemistry, antiinflammatory and protective effects in vitro and in vivo, and future perspectives for the treatment of immune-mediated inflammatory diseases. <em>Endocrine Reviews, 29</em>(5), 581-602. https://doi.org/10.1210/er.2007-0027</p>
+    <p>Cutuli, M., Cristiani, S., Lipton, J. M., &amp; Catania, A. (2000). Antimicrobial effects of alpha-MSH peptides. <em>Journal of Leukocyte Biology, 67</em>(2), 233-239. https://doi.org/10.1002/jlb.67.2.233</p>
+    <p>Kahlenberg, J. M., &amp; Kaplan, M. J. (2013). Little peptide, big effects: the role of LL-37 in inflammation and autoimmune disease. <em>Journal of Immunology, 191</em>(10), 4895-4901. https://doi.org/10.4049/jimmunol.1302005</p>
+    <p>Laroui, H., Dalmasso, G., Nguyen, H. T. T., Yan, Y., Sitaraman, S. V., &amp; Merlin, D. (2009). Drug-loaded nanoparticles targeted to the colon with polysaccharide hydrogel reduce colitis in a mouse model. <em>Gastroenterology, 138</em>(3), 843-853. https://doi.org/10.1053/j.gastro.2009.11.003</p>
+    <p>Luger, T. A., &amp; Brzoska, T. (2007). alpha-MSH related peptides: a new class of anti-inflammatory and immunomodulating drugs. <em>Annals of the Rheumatic Diseases, 66</em>(Suppl 3), iii52-iii55. https://doi.org/10.1136/ard.2007.079780</p>
+    <p>Luger, T. A., Scholzen, T. E., Brzoska, T., &amp; B&ouml;hm, M. (2003). New insights into the functions of alpha-MSH and related peptides in the immune system. <em>Annals of the New York Academy of Sciences, 994</em>, 133-140. https://doi.org/10.1111/j.1749-6632.2003.tb03172.x</p>
+    <p>Vandamme, D., Landuyt, B., Luyten, W., &amp; Schoofs, L. (2012). A comprehensive summary of LL-37, the factotum human cathelicidin peptide. <em>Cellular Immunology, 280</em>(1), 22-35. https://doi.org/10.1016/j.cellimm.2012.11.009</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 4 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('action-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Downregulates NF-kB activation from inside a cell, without binding any known melanocortin receptor", v:"kpv", e:"Primarily KPV. This is KPV's signature mechanism, a melanocortin-independent brake on the NF-kB checkpoint that controls pro-inflammatory gene transcription."},
+      {t:"Forms an amphipathic alpha-helix that inserts into and disrupts bacterial cell membranes", v:"ll37", e:"Primarily LL-37. The amphipathic structure and direct membrane-disruption mechanism is LL-37's core antimicrobial action, not shared by KPV."},
+      {t:"Reduces production of TNF-alpha and IL-1beta in inflamed gut tissue in animal models", v:"kpv", e:"Primarily KPV. Suppressing these specific pro-inflammatory cytokines downstream of NF-kB is exactly the effect demonstrated in KPV colitis studies."},
+      {t:"Recruits neutrophils, monocytes, and mast cells to a wound or infection site", v:"ll37", e:"Primarily LL-37. This chemotactic, immune-cell-recruiting role runs through receptors like formyl peptide receptor 2 (FPR2), a pathway KPV does not use."},
+      {t:"Retains almost all of its parent hormone's anti-inflammatory activity while losing that hormone's pigmentary action", v:"kpv", e:"Primarily KPV. This is the defining pharmacological split between KPV and its parent hormone, alpha-MSH, described across the Brzoska and Luger review literature."},
+      {t:"Directly kills a broad range of bacteria, fungi, and some enveloped viruses by disrupting their outer membrane", v:"ll37", e:"Primarily LL-37. Broad-spectrum direct microbial killing through membrane disruption is LL-37's defining function, not a KPV mechanism."},
+      {t:"Is released from a larger precursor protein and requires enzymatic cleavage before becoming active", v:"ll37", e:"Primarily LL-37. The precursor hCAP-18 must be cleaved, typically by proteinase 3, before mature, active LL-37 is released."},
+      {t:"Showed reduced inflammatory and histologic damage in a mouse model of DSS-induced colitis when delivered via colon-targeted nanoparticle", v:"kpv", e:"Primarily KPV. This is the Laroui et al. (2009) nanoparticle delivery study, the strongest single piece of animal evidence behind KPV's gut-inflammation claims."},
+      {t:"Can complex with the body's own DNA and RNA and, in that complexed form, trigger an interferon response implicated in psoriasis and lupus", v:"ll37", e:"Primarily LL-37. This self-DNA/RNA complexing behavior is central to LL-37's documented double edge in autoimmune and inflammatory skin disease."},
+      {t:"Promotes wound healing partly through keratinocyte migration and blood vessel growth, in addition to killing microbes directly", v:"both", e:"Both / overlapping, though the mechanism itself is LL-37's. It is included here because it illustrates the theme of this whole chapter, healing and defense running through the very same molecule."},
+      {t:"Is the C-terminal three-amino-acid fragment of a much larger pituitary and skin-derived hormone", v:"kpv", e:"Primarily KPV. KPV is literally the tail end of alpha-melanocyte-stimulating hormone (alpha-MSH), a defining structural fact about the peptide."}
+    ];
+    var cardSel = document.getElementById('as-card');
+    var binSel = document.getElementById('as-bin');
+    var fb = document.getElementById('as-feedback');
+    var btn = document.getElementById('as-submit');
+    var fillS = document.getElementById('as-fill-sorted');
+    var fillA = document.getElementById('as-fill-acc');
+    var numS = document.getElementById('as-num-sorted');
+    var numA = document.getElementById('as-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={kpv:'Primarily KPV',ll37:'Primarily LL-37',both:'Both / Overlapping'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('evidence-check');
+    if(!root) return;
+    var cards = [
+      {t:"KPV reducing inflammatory and histologic damage in DSS-induced colitis when delivered via colon-targeted nanoparticle in mice", v:"preclinical", e:"Preclinical / animal evidence only. This is real, published data (Laroui et al., 2009), but it is a mouse model using a specialized delivery system, not a human trial."},
+      {t:"LL-37 being cleaved from the CAMP gene's precursor protein, hCAP-18, by proteinase 3 in human neutrophils and epithelial cells", v:"endogenous", e:"Endogenous biology, well documented. This is basic, well-established human physiology, not a therapeutic claim at all."},
+      {t:"A vial purchased online and self-injected to 'boost the immune system' or speed healing using LL-37", v:"unproven", e:"Unproven grey-market claim. No published human clinical trial establishes a safe, effective dose or route for this specific use, despite LL-37's biology being extensively studied."},
+      {t:"A topical KPV-containing cosmetic blend such as a KLOW-type combination, marketed for calmer, healthier-looking skin", v:"unproven", e:"Unproven grey-market claim. Even where KPV's individual mechanism is well characterized, the specific blended product, its ratios, purity, and combined effect, has not been tested as a product in controlled human trials."},
+      {t:"Elevated LL-37 levels being a documented, measurable feature of lesional psoriatic skin", v:"endogenous", e:"Endogenous biology, well documented. This is an established clinical observation described across the autoimmune-disease literature, not a claim about a therapeutic use of exogenous LL-37."},
+      {t:"alpha-MSH, KPV's parent hormone, downregulating NF-kB activation across immune cell types in laboratory and animal studies", v:"preclinical", e:"Preclinical / animal evidence only. This mechanistic finding is extensively replicated in cell culture and animal models, but has not been translated into a validated human dosing regimen for any specific condition."},
+      {t:"LL-37 complexing with self-DNA to activate plasmacytoid dendritic cells, a mechanism described across reviews of autoimmune skin disease", v:"endogenous", e:"Endogenous biology, well documented. This mechanism is a well-characterized feature of LL-37's normal and dysregulated biology, described in detail by Kahlenberg and Kaplan (2013)."},
+      {t:"Human clinical trial data establishing a safe and effective dose of injectable KPV for inflammatory bowel disease", v:"unproven", e:"Unproven grey-market claim, framed here as an absence. As of this writing, no such controlled human trial data exists for KPV at any dose or route."}
+    ];
+    var cardSel = document.getElementById('ec-card');
+    var binSel = document.getElementById('ec-bin');
+    var fb = document.getElementById('ec-feedback');
+    var btn = document.getElementById('ec-submit');
+    var fillS = document.getElementById('ec-fill-sorted');
+    var fillA = document.getElementById('ec-fill-acc');
+    var numS = document.getElementById('ec-num-sorted');
+    var numA = document.getElementById('ec-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={endogenous:'Endogenous biology, well documented',preclinical:'Preclinical / animal evidence only',unproven:'Unproven grey-market claim'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. The evidence-based grade is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Grey Market and the Boundary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Peptides I &middot; Chapter 9</div>
+    <h1 class="ch-title">The Grey Market and the <em>Boundary</em></h1>
+    <p class="ch-subtitle">A vial can be perfectly legal for a seller to ship and still be the least examined substance a learner has ever considered putting in their body. Closing this course means learning exactly where that gap sits, and exactly where a learner's own understanding has to stop.</p>
+    <div class="ch-meta">
+      <span>50 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>hree words appear on the label of nearly every peptide vial sold outside a licensed pharmacy, printed in small type down near where a real medicine's label would carry a lot number and an expiration date instead: research use only. A number of sellers add a second line for good measure: not for human consumption. Those few words are doing an enormous amount of legal and commercial work for how little space they occupy, and after eight chapters spent on growth hormone secretagogues, growth factor biology, myostatin pathways, glucagon-like peptide-1 (GLP-1) pharmacology, and hypothalamic-pituitary-gonadal (HPG) axis peptides, it is worth asking directly what those words actually accomplish, what they conspicuously do not accomplish, and why a vial can carry them and still travel through the mail to someone who has every intention of drawing its contents into a syringe.</p>
+    <p>This is the closing chapter of this course, and its job is different from the eight that came before it. Chapters two through eight each took one mechanism family and asked what a specific set of peptides does inside a specific receptor system, with an honest accounting of the evidence behind every claim. This chapter asks a more practical, less comfortable question: once a learner understands the biology, where does the actual product in the vial come from, what can go wrong between a peptide being synthesized somewhere and it entering a human body, and what does the law actually say about any of it. None of that is biochemistry in the sense the rest of this course has used the word. All of it determines whether the mechanisms this course has spent eight chapters explaining ever get to matter, or whether they get overtaken first by an infection, a mislabeled vial, or a legal problem that has nothing to do with pharmacology at all.</p>
+    <p>Our thread through this closing chapter is a learner named Halvard, who has worked through this course from its first chapter on. Halvard came in with a specific, practical goal: he wanted to understand the mechanism behind a handful of compounds he had read about on forums and vendor sites, partly out of general curiosity and partly because he was seriously weighing whether to order something for himself. Eight chapters in, he has a genuinely strong grasp of receptor pharmacology, GLP-1 signaling, and the honest evidence grade behind each compound family this course covers. What he has not yet worked through, and what brought him into this final chapter with real urgency, is a far more mundane question that none of the biology answers on its own: if he actually placed an order, what would show up in the envelope, and how would he have any way of knowing what it actually was.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What "grey market" actually means</h2>
+    <p>Start with the term itself, because it gets used loosely and it describes something specific. A <span class="ch-key">grey market</span> is not a black market. Nothing about buying a vial labeled "research use only" is analogous to buying a controlled substance from an illicit dealer, and treating the two as equivalent misses exactly the mechanism that makes a grey market a distinct, and in some ways more dangerous, category. A black market openly sells something the law prohibits selling at all. A grey market sells something the law permits selling, for a purpose the law permits, to a buyer the seller has no obligation to verify is actually buying it for that purpose. The peptide itself, semaglutide, a growth hormone secretagogue, a growth factor fragment, whatever the specific molecule is, is frequently legal to manufacture and sell as a raw chemical for laboratory and research use. What is not legal, in the United States and in most jurisdictions with a functioning drug regulatory system, is selling that same chemical for a person to inject into their own body without going through the approval, prescription, or licensed-compounding pathways this chapter's next section lays out in detail.</p>
+    <p>The label, "research use only," "not for human consumption," is the hinge the entire grey market swings on. It is not decorative. It is a specific piece of regulatory language that shifts legal responsibility for what happens next from the seller toward the buyer. A seller who lists a product accurately as a research chemical, ships it to a research-sounding business name, and includes the disclaimer, has technically stayed inside a lane the law recognizes, because selling an unapproved chemical compound for a legitimate research purpose is not, by itself, illegal in the way selling it as a drug for human use would be. What that seller is very unlikely to do is verify that the buyer actually operates a laboratory, actually holds an institutional research protocol, or has any intention of doing anything with the vial other than what the product page's own dosing charts, injection-site diagrams, and forum links make obvious it is actually being sold for. The label is a liability shield, not a guarantee about the buyer's intent, and it is definitely not a guarantee about what is inside the vial.</p>
+    <p>It matters to say plainly that this arrangement did not spring up by accident. Peptide chemistry is not intrinsically harder to regulate than small-molecule drug chemistry, and a genuine research-supply industry selling reagents to university laboratories, biotechnology companies, and contract research organizations has existed for decades and serves an entirely legitimate purpose. The grey market as this chapter uses the term is not that industry. It is the much smaller, far more visible layer of sellers who use the identical regulatory language and the identical "research use only" packaging while marketing unmistakably to individual buyers who intend human use, through language, dosing information, and sales channels a genuine laboratory-supply company would never need. According to Trainer (2026), this exact pattern has intensified specifically around GLP-1 peptides in recent years, with patients turning to "illicit research-grade peptides from online sources and unregulated providers" as a direct response to cost and access barriers around the approved medicines, a dynamic this chapter returns to when it covers the regulatory response directly.</p>
+    <p>None of this means every claim about a grey-market product's chemical identity is false. Some sellers do supply what the label says, at a reasonable purity, at least some of the time. The honest problem is not that grey-market peptides are uniformly fake or uniformly contaminated. It is that there is no reliable, systematic way for an individual buyer to know which situation they are in for any specific vial, because the entire structure of this market exists specifically to avoid the testing, inspection, and accountability mechanisms that would answer that question. That absence of any structural guarantee, not a blanket claim that every vial is dangerous, is the actual argument this chapter is built to make, and the next section works through exactly what those testing and accountability mechanisms look like when they do exist.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common defense of grey-market sourcing treats the "research use only" label as a technicality, something sellers are legally required to print that has no real bearing on the product itself. The label is doing real regulatory work, but not the work it is often assumed to do. It does not certify safety, purity, or identity. It shifts legal exposure onto the buyer and lets the seller avoid the manufacturing, testing, and labeling obligations that apply to anything sold for human use. Reading past the label is not paranoia. It is reading the label correctly.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Three tiers, not two</h2>
+    <p>Most conversations about peptide sourcing collapse into a false binary: something is either "legit," meaning it came from a pharmacy, or it is "grey market," meaning it did not. That binary erases a distinction that matters enormously in practice, because a peptide product actually occupies one of three structurally different tiers, and those tiers carry three very different levels of oversight, testing, and accountability. Working through what separates them is the single most useful piece of practical literacy this closing chapter can offer.</p>
+    <p>The first tier is an <span class="ch-key">FDA-approved medicine</span>. In the United States, this means the specific manufacturer, the specific manufacturing facility, and the specific formulation have gone through the Food and Drug Administration (FDA)'s New Drug Application or Biologics License Application process, which requires the manufacturer to demonstrate the product's identity, strength, purity, and safety through controlled trials, and to manufacture it afterward under Good Manufacturing Practice (GMP) standards, a Food and Drug Administration-enforced set of requirements covering facility cleanliness, equipment validation, batch testing, and record-keeping. An approved medicine's label reflects real, reviewed evidence about dose, indication, and risk, and every batch that reaches a pharmacy has been manufactured under a system built specifically to guarantee the vial matches the label.</p>
+    <p>The second tier is a <span class="ch-key">compounded product</span>. Compounding pharmacies exist to solve a real, legitimate problem: sometimes an individual patient needs a formulation, dose, or delivery method that no approved commercial product provides, because of an allergy to an inactive ingredient, a need for a different strength, or a documented shortage of the approved product. Compounding happens in two distinct regulatory lanes in the United States. A 503A pharmacy compounds a specific preparation for a specific patient under a specific prescription, operating primarily under state pharmacy board oversight rather than the full Food and Drug Administration approval pathway. A 503B outsourcing facility, a category created after a catastrophic contamination event this chapter covers directly below, can compound in larger batches without a patient-specific prescription, but only while registered with, and inspected by, the Food and Drug Administration, and only while operating under current Good Manufacturing Practice standards similar in spirit to what an approved manufacturer follows. Compounded products are real medicine, prepared by licensed pharmacists, but they are not the same as an approved product. They have not passed through the controlled trials that generate an approved label, and according to Belcourt, Sapowadia, and White (2026), examining compounded GLP-1 products directly, "efficacy and safety" of many specific compounded formulations remain "largely unknown," even when the underlying peptide itself is well studied elsewhere.</p>
+    <p>The third tier is the <span class="ch-key">unapproved research chemical</span>, the grey-market product described above. No Food and Drug Administration review. No Good Manufacturing Practice inspection. No pharmacist. No prescription. No batch record any regulator has ever seen. The seller may or may not test each batch, may or may not accurately report what testing found, and operates entirely outside any system that would catch and correct a problem before it reaches a buyer. This is the tier that occupies most of the space in online peptide communities, precisely because it is the tier with no prescription requirement and no clinical gatekeeping standing between a curious buyer and a syringe.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three tiers of legitimacy: FDA-approved medicine, compounded product, unapproved research chemical" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Three tiers of legitimacy, not two</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">THREE TIERS OF LEGITIMACY, NOT TWO</text>
+<rect x="200" y="56" width="240" height="58" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="2"/>
+<text x="320" y="80" fill="#7fd18a" font-size="12.5" font-weight="700" text-anchor="middle">FDA-approved medicine</text>
+<text x="320" y="98" fill="#cdd8ea" font-size="9.5" text-anchor="middle">New Drug Application review + GMP-inspected manufacturing</text>
+<rect x="140" y="132" width="360" height="58" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="156" fill="#5aaff5" font-size="12.5" font-weight="700" text-anchor="middle">Compounded product</text>
+<text x="320" y="174" fill="#cdd8ea" font-size="9.5" text-anchor="middle">503A patient prescription, or 503B FDA-registered facility</text>
+<rect x="60" y="208" width="520" height="58" rx="8" fill="#132a45" stroke="#e88a7a" stroke-width="1.8"/>
+<text x="320" y="232" fill="#e88a7a" font-size="12.5" font-weight="700" text-anchor="middle">Unapproved research chemical</text>
+<text x="320" y="250" fill="#cdd8ea" font-size="9.5" text-anchor="middle">no review, no inspection, no pharmacist, no batch record</text>
+<text x="320" y="296" fill="#7f8fab" font-size="10.5" text-anchor="middle">Oversight narrows toward the top. Most grey-market peptide commerce sits in the widest, least-verified tier.</text>
+<text x="320" y="316" fill="#7f8fab" font-size="10.5" text-anchor="middle">A "research use only" label describes the seller's legal posture, not which tier the buyer is actually in.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Three tiers of legitimacy. An FDA-approved medicine, a compounded product, and an unapproved research chemical carry structurally different levels of manufacturing oversight, testing, and accountability, independent of what any single vial's label claims.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A compounded tirzepatide preparation from a 503A pharmacy and a vial of "research grade" tirzepatide from an online vendor might, in principle, contain a chemically similar molecule. Before reading further, consider what actually separates them. It is not necessarily the chemistry sitting in the vial at this exact moment. It is everything that did or did not happen to verify that chemistry before it reached the buyer, and everything that would or would not happen afterward if it turned out to be wrong.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="tier-classifier">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Tier Classifier</div>
+    </div>
+    <p class="ch-widget-sub">Sort each scenario into the tier it actually belongs in, then reveal the reasoning. The goal is not memorizing a list of examples, it is learning to read past marketing language to the oversight actually standing behind a specific product.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Scenario</span>
+        <select class="ch-widget-select" id="tc-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="tc-bin">
+          <option value="approved">FDA-Approved Medicine</option>
+          <option value="compounded">Compounded Product</option>
+          <option value="research">Unapproved Research Chemical</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="tc-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tc-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="tc-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="tc-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="tc-feedback">Choose a scenario and a tier, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="tc-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>From vial to bloodstream: where sterility fails</h2>
+    <p>An injectable product, whatever tier it comes from, has to clear a bar a pill or a capsule does not: it has to be sterile, meaning free of living microorganisms, and it has to be free of clinically significant bacterial endotoxin, a fever-inducing and potentially dangerous byproduct of bacterial cell walls that survives even after the bacteria that produced it are dead. This is not a minor technical footnote. It is the entire reason pharmaceutical manufacturing exists as a heavily regulated, heavily inspected activity in the first place, and it is the single largest practical risk this chapter has to cover, because it applies even when a peptide's chemical identity and dose are exactly correct.</p>
+    <p>Sterility failures in legitimate pharmaceutical manufacturing are rare specifically because the system is built to catch them before a product ships. According to Leo, Poisson, Sinclair, and Tallentire (2004), even a well-controlled aseptic manufacturing process, in their study a Blow/Fill/Seal extrusion system commonly used for sterile pharmaceutical products, requires deliberate, quantified validation against bacterial spore and endotoxin challenge to demonstrate the process reliably excludes contamination, and pharmaceutical manufacturers run exactly this kind of validation as a routine, required part of bringing a sterile product to market. Even a licensed compounding pharmacy is expected to demonstrate ongoing sterility and endotoxin-free status under United States Pharmacopeia (USP) standards, the nationally recognized quality benchmarks compounding pharmacies are held to, with real laboratory testing behind the claim rather than a label assertion alone.</p>
+    <p>None of that testing infrastructure exists at the third tier described above. A grey-market peptide may be manufactured in a facility with no clean-room standard, no validated sterilization step, and no batch-by-batch endotoxin testing at all, and there is no inspector, no license, and no public record that would ever surface that fact before a vial reaches a buyer. The consequence, when it goes wrong, is not abstract. An injection that introduces live bacteria into tissue or the bloodstream can cause a localized abscess at the injection site, a bloodstream infection, or, in a severe case, sepsis, a life-threatening systemic response to infection. An injection that introduces bacterial endotoxin, even from bacteria that never survived the manufacturing process, can trigger fever, chills, a sharp drop in blood pressure, and, at high enough exposure, a life-threatening reaction, because the immune system responds to the endotoxin molecule itself, not to whether the bacteria that produced it are still alive.</p>
+    <p>The single most catastrophic documented illustration of what happens when this exact failure occurs at scale did not come from the internet peptide market at all, and that is precisely why it is worth knowing. According to Kainer et al. (2012), a 2012 outbreak traced to a single United States compounding pharmacy that had shipped fungus-contaminated methylprednisolone, a corticosteroid, for epidural and paraspinal injection resulted in 66 documented cases of fungal meningitis, stroke, spinal infection, or epidural abscess across the cohort the study described, with eight deaths, and with symptom onset arriving a median of 18 days after the injection, long enough that many patients and clinicians did not immediately connect a new headache or stiff neck back to an injection weeks earlier. That outbreak involved a licensed, inspected United States compounding pharmacy operating inside the second tier described above, not an unregulated overseas research-chemical seller, and it still produced a mass-casualty contamination event that regulators did not catch until people were already sick. That fact is not a reason to conclude sterile compounding is hopeless. It is a reason to take seriously what sterility failure looks like even inside a system with real oversight, and to reason honestly about how much less margin for error exists in a tier with no oversight at all.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="From vial to bloodstream, contamination points along the way" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>From vial to bloodstream: where contamination can enter</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="28" fill="#aab8d2" font-size="13" letter-spacing="1.5">FROM VIAL TO BLOODSTREAM: WHERE CONTAMINATION CAN ENTER</text>
+<defs>
+<marker id="arwg" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#7f8fab"/>
+</marker>
+</defs>
+<rect x="30" y="58" width="130" height="80" rx="8" fill="#132a45" stroke="#e88a7a" stroke-width="1.8"/>
+<text x="95" y="82" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">Manufacturing</text>
+<text x="95" y="98" fill="#cdd8ea" font-size="9" text-anchor="middle">no clean-room</text>
+<text x="95" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">standard, no batch</text>
+<text x="95" y="126" fill="#cdd8ea" font-size="9" text-anchor="middle">endotoxin testing</text>
+<line x1="160" y1="98" x2="192" y2="98" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwg)"/>
+<rect x="198" y="58" width="130" height="80" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="263" y="82" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">The vial</text>
+<text x="263" y="98" fill="#cdd8ea" font-size="9" text-anchor="middle">identity, dose, and</text>
+<text x="263" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">purity unverified by</text>
+<text x="263" y="126" fill="#cdd8ea" font-size="9" text-anchor="middle">any outside party</text>
+<line x1="328" y1="98" x2="360" y2="98" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwg)"/>
+<rect x="366" y="58" width="130" height="80" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="431" y="82" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">Reconstitution</text>
+<text x="431" y="98" fill="#cdd8ea" font-size="9" text-anchor="middle">non-sterile water</text>
+<text x="431" y="112" fill="#cdd8ea" font-size="9" text-anchor="middle">or technique can</text>
+<text x="431" y="126" fill="#cdd8ea" font-size="9" text-anchor="middle">introduce contaminants</text>
+<line x1="496" y1="98" x2="528" y2="98" stroke="#7f8fab" stroke-width="2" marker-end="url(#arwg)"/>
+<rect x="534" y="58" width="76" height="80" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="572" y="86" fill="#7fd18a" font-size="10.5" font-weight="700" text-anchor="middle">Injection</text>
+<text x="572" y="102" fill="#cdd8ea" font-size="8.5" text-anchor="middle">tissue and</text>
+<text x="572" y="114" fill="#cdd8ea" font-size="8.5" text-anchor="middle">bloodstream</text>
+<rect x="60" y="180" width="520" height="110" rx="8" fill="#1a2e22" stroke="#3a5578" stroke-width="1.2"/>
+<text x="320" y="204" fill="#aab8d2" font-size="11" font-weight="700" text-anchor="middle">What a regulated pathway adds at every one of those steps</text>
+<text x="320" y="226" fill="#cdd8ea" font-size="10" text-anchor="middle">GMP-inspected facility &#8226; validated sterilization &#8226; batch endotoxin testing</text>
+<text x="320" y="244" fill="#cdd8ea" font-size="10" text-anchor="middle">pharmacist verification &#8226; USP-standard reconstitution instructions</text>
+<text x="320" y="262" fill="#cdd8ea" font-size="10" text-anchor="middle">a recall mechanism if a batch turns out to be contaminated</text>
+<text x="320" y="336" fill="#7f8fab" font-size="10.5" text-anchor="middle">Each step is a place a problem can enter, and a place oversight can catch it, or not.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 2</span> <em>From vial to bloodstream. Contamination can enter at manufacturing, inside the vial itself, during reconstitution, or through injection technique. A regulated pathway adds a specific safeguard at every one of those points; an unapproved research chemical adds none of them.</em></figcaption>
+    </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that a peptide vial "looks fine," is clear, has no visible particles, and is therefore sterile. Bacterial endotoxin is not a visible contaminant. It survives heat that kills the bacteria that produced it, it does not cloud a solution, and it cannot be detected by inspecting a vial with the naked eye. The only way to know a product is free of clinically significant endotoxin is a validated laboratory test, the same test a licensed manufacturer or compounding pharmacy is required to run, and a grey-market seller has no obligation, and frequently no facility, to run at all.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Mislabeling: what the vial actually contains</h2>
+    <p>Sterility is one axis of risk. A second, entirely separate axis is identity: whether the compound in the vial is actually the compound the label says it is, at the concentration the label says it is. These are not hypothetical concerns raised for rhetorical effect. Independent analytical testing of unregulated products sold as research chemicals and dietary supplements has repeatedly documented both problems, in different product categories, across different countries, using different laboratory methods, which is itself a meaningful pattern. This is not one lab's unusual finding. It is a recurring result wherever anyone has actually tested these products.</p>
+    <p>According to Jendrzejewska et al. (2025), applying a combination of Raman spectroscopy, differential scanning calorimetry, thermogravimetry, and X-ray powder diffraction to sixteen samples of unregistered sports supplements sold online with a declared selective androgen receptor modulator (SARM) content, testolone, ostarine, or andarine, the researchers confirmed the presence of the declared compound in only nine of the sixteen samples, with the remaining seven containing no reliably detectable amount of the substance named on the label at all. Put plainly, in that sample, close to half of the products did not contain what their own label claimed. This is not a peptide-specific study, but it is directly relevant, because it demonstrates the same structural failure this chapter has been describing throughout: a seller operating outside any regulatory testing requirement has no external check forcing label accuracy, and the resulting products, across an entire unregulated product category, show it.</p>
+    <p>The broader dietary supplement literature tells a closely related story, and it matters here because peptides marketed online frequently sit in exactly the same unregulated commercial space as the supplements this research covers, sold through the same kinds of vendor sites, with the same absence of premarket testing requirements. According to Tucker, Fischer, Upjohn, Mazzera, and Kumar (2018), analyzing a decade of United States Food and Drug Administration warnings for dietary supplements found to contain undeclared pharmaceutical ingredients, 776 adulterated products from 146 different companies were identified between 2007 and 2016 alone, with muscle-building products among the categories most frequently found to contain undisclosed synthetic steroids or steroid-like ingredients, and more than a third of adulterated samples in the study's most recent years identified specifically through online sampling and international mail inspection, the exact commercial channel most grey-market peptides move through. That pattern did not close out with their study window. Adulteration with undisclosed pharmaceutical ingredients has remained a persistent, ongoing problem in the years since, not a phenomenon regulators have managed to eliminate through enforcement alone, with products marketed for weight loss and muscle building remaining among the categories most frequently affected.</p>
+    <p>What both bodies of evidence point to together is a consistent structural finding, not a claim about any single vendor or any single product: whenever an independent party has actually tested products sold outside the regulated pharmaceutical and compounding pathways, for identity, purity, or undisclosed content, a meaningful fraction of what gets tested does not match its own label. That does not mean every grey-market peptide vial is mislabeled. It means a buyer has no independent way to know, for any specific vial, whether they are holding the fraction that matches its label or the fraction that does not, and unlike a sterility failure, an identity or dosing failure will not necessarily produce any dramatic, obvious symptom that flags the problem. A vial containing far less peptide than declared simply produces no noticeable effect and gets quietly written off as "not working." A vial containing an entirely different, unlisted compound can produce an effect, sometimes an unwanted or dangerous one, that gets attributed to the wrong molecule entirely, because nobody involved has any reason to suspect the label was wrong in the first place.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner reports that a grey-market peptide "clearly worked," describing an effect consistent with the compound named on the label. Using only what this chapter and the evidence ladder from Chapter 1 of this course have covered, what would it actually take to distinguish "the vial contained what it said and worked as expected" from "the vial contained something else that happened to produce a noticeable, unrelated effect," or from a placebo response entirely. Is that distinction something an individual user, without laboratory access, can reliably make on their own?</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Heavy metals and process impurities</h2>
+    <p>A third contamination category is subtler than a missing peptide or a fever-inducing endotoxin load, because it produces no acute symptom at all and can take years to manifest: heavy metal and process-impurity contamination carried over from an unregulated manufacturing process. Peptide synthesis, whether by solid-phase chemical synthesis or by recombinant biological production, uses reagents, catalysts, and purification steps that can leave trace residues behind if the manufacturing process is not deliberately controlled and tested to remove them. Lead, cadmium, mercury, and arsenic are the four metals of greatest documented health concern in pharmaceutical and supplement contexts, and other metals introduced through catalysts or equipment, including chromium, nickel, and various platinum-group metals used in some synthesis chemistry, can also appear as residual impurities if a manufacturer is not specifically screening for and limiting them.</p>
+    <p>According to Abernethy, Destefano, Cecil, Zaidi, and Williams (2010), writing from the United States Pharmacopeia's own documentary standards division, setting appropriate limits for metal impurities in medicines and dietary supplements is a genuine, ongoing technical challenge even within the regulated pharmaceutical system, precisely because these metals are ubiquitous in the environment and because reliably detecting them at clinically meaningful thresholds requires real analytical infrastructure, not a visual inspection or a vendor's assurance. That is the standard a licensed pharmaceutical manufacturer is expected to meet, with a United States Pharmacopeia compendium, a regulatory inspection process, and a battery of validated analytical methods behind the expectation. A grey-market peptide manufacturer has none of that infrastructure and no external requirement to build it, and unlike a sterility failure, which frequently produces a fast, attributable illness, chronic low-level heavy metal exposure tends to accumulate quietly, contributing to kidney, neurological, or cardiovascular harm over a timescale long enough, and diffuse enough in its presentation, that almost nobody would ever trace it back to a specific vial from months or years earlier.</p>
+    <p>Peptide-specific impurities carry a related but distinct concern. Solid-phase peptide synthesis can produce truncated sequences, where the chain terminates early and an incomplete peptide ends up in the final product, or deletion and substitution sequences, where one or more amino acids in the intended chain are missing or swapped for the wrong residue, alongside the correctly assembled target peptide. A rigorous manufacturing process uses high-performance liquid chromatography and mass spectrometry to separate the correct sequence from these byproducts and verify what remains meets a defined purity threshold, exactly the kind of testing a legitimate research-reagent supplier or pharmaceutical manufacturer performs and documents on a certificate of analysis. Whether any specific grey-market vial received that same level of purification and verification is, once again, simply not something a buyer can know from the outside, and an impure or truncated peptide is not a smaller version of the intended compound. It is frequently a different molecule altogether, with its own uncharacterized biological activity, or none at all.</p>
+  </section>
+
+  <div class="ch-widget" id="risk-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Grey-Market Risk Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a documented finding from this chapter. Sort it into the risk category it belongs to, then reveal the explanation. The goal is separating three genuinely different problems that often get lumped together as one vague worry.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Finding</span>
+        <select class="ch-widget-select" id="rs-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Risk category</span>
+        <select class="ch-widget-select" id="rs-bin">
+          <option value="sterility">Sterility and Infection Risk</option>
+          <option value="identity">Identity and Dosing Risk</option>
+          <option value="oversight">Oversight and Accountability Risk</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="rs-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rs-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="rs-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rs-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rs-feedback">Choose a finding and a category, then submit to see the explanation.</p>
+
+    <button class="ch-widget-btn" id="rs-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The regulatory response, and why it is tightening</h2>
+    <p>It is tempting to treat the grey market as a fixed, permanent feature of this landscape, but the regulatory picture around compounded and unapproved peptides has moved substantially in the past few years, almost entirely in the direction of tighter restriction, and it is worth understanding why. The clearest recent example runs through the GLP-1 peptides covered in Chapter 6 of this course. When semaglutide and tirzepatide shortages made the approved, brand-name products difficult to obtain, the Food and Drug Administration's own shortage rules temporarily allowed broader compounding of those molecules under the 503A and 503B pathways described earlier in this chapter, precisely because the shortage exception exists to let compounders fill a genuine, documented gap in supply. That compounding activity produced real clinical benefit for some patients, and it also carried real legal and safety concerns the whole time, since compounded incretins never went through the Food and Drug Administration's own approval process regardless of the shortage designation.</p>
+    <p>Once the shortage was formally resolved, the legal basis for broad compounding narrowed sharply, and according to Trainer (2026), "the regulatory window closes on mass compounding" of these specific molecules, leaving only a narrow, legitimate role for compounding patients with documented allergies or a genuine need for a formulation the approved product cannot provide. What has not gone away is the demand the shortage-era compounding boom created, and Trainer (2026) documents patients continuing to seek "microdosing" and unsupervised strategies through compounded vials and, increasingly, through the unapproved research chemical tier this chapter has spent most of its length describing, driven by the same affordability and access pressure that made compounding attractive in the first place. According to Belcourt, Sapowadia, and White (2026), surveying compounding pharmacy websites directly, many of the "unique" products compounders are now legally required to offer, meaning products that differ from the approved medicine in formulation rather than simply substituting for it, combine the peptide with additional ingredients such as vitamins or anti-nausea medication with little published justification, and fewer than a fifth of the products they reviewed disclosed basic information about storage conditions or how long the preparation remains stable after it is made.</p>
+    <p>The pharmacovigilance evidence available so far reinforces why regulators are moving this direction rather than the opposite one. According to McCall et al. (2025), analyzing adverse event reports submitted to the Food and Drug Administration's own surveillance system between 2018 and 2024, compounded GLP-1 products were associated with substantially higher reporting odds than non-compounded, approved products across several serious categories: a reporting odds ratio of 19.00 for contamination, 8.51 for compounding or manufacturing issues, 48.92 for preparation errors, and 2.35 for hospitalization. Those numbers describe the second tier in this chapter's framework, licensed compounding pharmacies operating under real state and federal oversight, not the unregulated research-chemical tier that has no oversight at all. If a regulated compounding pathway produces measurably elevated risk relative to an approved medicine, the honest, evidence-based expectation for a tier with no equivalent oversight whatsoever is that the gap runs considerably wider, not narrower.</p>
+    <p>The throughline across every regulatory action this section has described is the same distinction this chapter opened with: a product being legal for a seller to manufacture or sell under one label, as a research chemical, as a compounded preparation under a shortage exception, is a separate question from whether it is legal, or safe, for a specific individual to use. Those two facts get collapsed into one another constantly in online discussion, and they are not the same fact. A seller's compliance with the specific regulatory lane they are operating in says nothing about whether a buyer's actual use of the product falls inside any lane at all, and it says nothing whatsoever about whether the specific vial in front of that buyer is sterile, correctly identified, or free of the impurities the preceding sections of this chapter have described in detail.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A frequent argument treats a "legal to sell" label as functionally equivalent to "legal and safe to use." A research-chemical seller staying inside a legal lane for selling an unapproved compound to a buyer who claims a research purpose does not make the buyer's actual, undisclosed intended use, injecting it into a human body outside any clinical or regulatory oversight, legal in most jurisdictions, and it says nothing at all about whether that specific vial is safe. Two separate legal questions, the seller's and the buyer's, and a third, entirely separate safety question, are routinely compressed into one reassuring sentence that does not hold up under any of the three.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Halvard and the question underneath the question</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Halvard is a learner who has worked through this entire course, chapter by chapter, and built a genuinely solid understanding of receptor pharmacology, the honest evidence grade behind each compound family, and the mechanisms that make each peptide in this course's library do what it does. He arrived at this final chapter still weighing whether to order a specific compound for himself, and his question was direct: now that he understands the biology this well, does that understanding tell him enough to make the sourcing decision safely on his own.</p>
+    </aside>
+    <p>Running Halvard's question back through this chapter resolves it the same way this course has resolved every earlier misconception, by tracing it back to mechanism rather than dismissing it outright. His instinct that biochemical literacy matters is correct, and this course has not spent nine chapters building that literacy for no reason. A learner who understands how a growth hormone secretagogue engages its receptor, why a GLP-1 analog produces the effects it produces, and where a specific compound sits on the evidence ladder introduced in Chapter 1, is unambiguously better equipped to evaluate a claim, ask a precise question, and recognize overconfident marketing language than a learner with none of that background.</p>
+    <p>Where his instinct needed correcting is the assumption that this same literacy extends to a question this chapter has spent its entire length answering: what is actually in the vial, and can that be verified without a laboratory. Understanding a peptide's receptor pharmacology tells a learner nothing about whether a specific seller's manufacturing facility validates sterility, whether an independent lab has ever tested that seller's product for label accuracy, or whether the vial that arrives in an envelope was synthesized to a purity standard anyone outside the seller has ever verified. Those are not biochemistry questions. They are supply chain, manufacturing, and regulatory questions, and no amount of mechanism knowledge, however genuine, substitutes for the testing infrastructure this chapter has described: sterility validation, endotoxin testing, high-performance liquid chromatography purity verification, that a licensed manufacturer or compounding pharmacy is required to maintain and an unregulated seller is not.</p>
+    <p>What Halvard actually walked away with matters more than a yes-or-no answer to his original question, because a flat yes or no was never something this course could responsibly give him. He left understanding that his hard-won mechanistic knowledge answers one part of a much larger decision, whether a compound's biology makes sense given a specific goal, and leaves an entirely separate part of that decision, whether any specific product he could actually obtain matches what he thinks he is getting, still open, still unanswerable by mechanism alone, and squarely inside the territory this closing chapter exists to name honestly: the sourcing and legal question that sits underneath every compound this course has covered, answerable only by the kind of oversight a grey-market product structurally does not have, or by a licensed clinician working inside a system built to provide exactly that oversight.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this course closes: the boundary</h2>
+    <p>Nine chapters ago, this course opened with an evidence ladder, a simple, honest tool for calibrating how much confidence a specific claim about a specific peptide actually deserves: human randomized controlled trials at the top, smaller human studies below that, animal and preclinical evidence below that, and anecdote and vendor marketing at the bottom. It is worth returning to that ladder explicitly here, at the close, because this chapter's entire subject, contamination, mislabeling, and legal status, sits on top of it rather than beside it, and seeing the two together is the most honest way to end this course.</p>
+    <p>Consider what the evidence ladder actually describes for most of the compounds this course has covered. A handful, the GLP-1 peptides covered in Chapter 6 chief among them, sit genuinely near the top rung, backed by large randomized controlled trials and full regulatory approval. Most of the rest of this course's library, the growth hormone secretagogues, the growth factor peptides, the myostatin-pathway compounds, the HPG axis peptides outside their approved clinical indications, sit meaningfully lower, on animal evidence, small uncontrolled human studies, or a mixture of mechanism-based reasoning and anecdote. That is not a criticism of the compounds, or of this course for covering them. It is the honest evidentiary reality this course has tried to state plainly in every chapter rather than obscure behind confident language. Now layer this chapter's subject on top of that picture. Even for the compounds that sit reasonably high on the evidence ladder in terms of what clinical research has shown a properly manufactured, correctly dosed version of the molecule can do, a grey-market vial adds an entirely separate layer of uncertainty the evidence ladder was never built to measure at all. A randomized controlled trial establishes what semaglutide does. It says nothing about what is actually in an unverified vial sold outside the system that ran that trial.</p>
+    <p>This is the single idea this closing chapter, and in a real sense this entire course, has been building toward: understanding a compound's mechanism, however thoroughly, answers the biology question. It does not answer the manufacturing question, and it does not answer the legal question, and treating strong mechanistic understanding as though it substitutes for either is the exact error this chapter has spent its length correcting. The legal status of any specific peptide varies by jurisdiction, by whether it holds regulatory approval, and by how it is being sourced, and this course does not offer legal advice of any kind. What this course can responsibly offer, and what every chapter before this one has tried to build, is the biochemical and evidentiary literacy to ask a sharper question, of a source, of a seller, of a claim, and to recognize precisely the point at which that literacy runs out and a different kind of expertise has to take over.</p>
+
+    <figure class="ch-figure">
+      <div class="ch-figbox" style="height:auto;padding:0;">
+        <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The evidence ladder from Chapter 1, with a sourcing uncertainty layer this chapter adds on top" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The evidence ladder, plus the sourcing layer this chapter adds</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="26" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE EVIDENCE LADDER, PLUS THE SOURCING LAYER</text>
+<rect x="30" y="46" width="330" height="42" rx="6" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="195" y="71" fill="#7fd18a" font-size="10.5" font-weight="700" text-anchor="middle">Human randomized controlled trials (RCT)</text>
+<rect x="30" y="94" width="330" height="42" rx="6" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="195" y="119" fill="#5aaff5" font-size="10.5" font-weight="700" text-anchor="middle">Smaller human studies</text>
+<rect x="30" y="142" width="330" height="42" rx="6" fill="#132a45" stroke="#e0873a" stroke-width="1.6"/>
+<text x="195" y="167" fill="#e0873a" font-size="10.5" font-weight="700" text-anchor="middle">Animal / preclinical studies</text>
+<rect x="30" y="190" width="330" height="42" rx="6" fill="#132a45" stroke="#c94b3a" stroke-width="1.6"/>
+<text x="195" y="215" fill="#e88a7a" font-size="10.5" font-weight="700" text-anchor="middle">Anecdote and vendor marketing</text>
+<text x="195" y="256" fill="#7f8fab" font-size="10" text-anchor="middle">Ranks confidence in what the molecule does, in a verified sample</text>
+<rect x="392" y="46" width="216" height="186" rx="8" fill="#1a2e22" stroke="#e88a7a" stroke-width="1.8" stroke-dasharray="4 3"/>
+<text x="500" y="70" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">This chapter's layer:</text>
+<text x="500" y="88" fill="#e88a7a" font-size="11" font-weight="700" text-anchor="middle">sourcing uncertainty</text>
+<text x="500" y="112" fill="#cdd8ea" font-size="9.5" text-anchor="middle">Applies on top of every rung.</text>
+<text x="500" y="130" fill="#cdd8ea" font-size="9.5" text-anchor="middle">A trial proves what the</text>
+<text x="500" y="146" fill="#cdd8ea" font-size="9.5" text-anchor="middle">molecule does. It says nothing</text>
+<text x="500" y="162" fill="#cdd8ea" font-size="9.5" text-anchor="middle">about an unverified vial sold</text>
+<text x="500" y="178" fill="#cdd8ea" font-size="9.5" text-anchor="middle">outside the system that ran it:</text>
+<text x="500" y="198" fill="#cdd8ea" font-size="9.5" text-anchor="middle">identity, sterility, and dose</text>
+<text x="500" y="214" fill="#cdd8ea" font-size="9.5" text-anchor="middle">stay unverified either way.</text>
+<text x="320" y="336" fill="#7f8fab" font-size="10.5" text-anchor="middle">A high rung tells you what the molecule can do. It does not tell you what is in your vial.</text>
+</svg>
+      </div>
+      <figcaption><span class="ch-fig-num">Fig. 3</span> <em>The evidence ladder from Chapter 1, with the sourcing uncertainty this chapter adds layered on top. Strong evidence about a molecule's clinical effect and strong confidence in a specific vial's identity and purity are two different questions, and grey-market sourcing leaves the second one unanswered regardless of how high the first sits.</em></figcaption>
+    </figure>
+
+    <p>That handoff point is not a failure of this course, or of anything a learner has built across nine chapters of real, hard-won understanding. A licensed clinician can evaluate a specific person's actual health history, order and interpret real bloodwork, and make a judgment about a specific medical decision in a way no course, however thorough, is built to do. A regulatory system, however imperfectly it functions in practice, exists specifically to apply the testing and manufacturing standards this chapter has described, sterility validation, endotoxin testing, purity verification, at a scale and with an authority no individual buyer can replicate alone. Recognizing that those two things, clinical judgment and regulatory infrastructure, sit outside what any course can substitute for is not a hedge tacked onto the end of this material. It is the actual, hard-earned conclusion nine chapters of honest mechanism, evidence grading, and now this closing chapter's harm-reduction accounting, all point toward.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the discipline this course has tried to model in every chapter, not only this closing one. Mechanism explains what a molecule does, in general, under conditions a researcher controlled and verified. It cannot verify what is inside one specific vial in one specific learner's hands, and it cannot substitute for the clinical judgment a real medical decision, for a real person with a real health history, actually requires. That is not a smaller use for everything this course has built across nine chapters. It is, if anything, the most responsible use available, and it is exactly what a course built on honest mechanism and honest evidence grading was always meant to produce.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone finishing this course, having built exactly the kind of mechanistic literacy Halvard built, asks whether that understanding is now enough to source and use a specific peptide safely on their own. Using only what this closing chapter has covered, what does an honest, complete answer to that question actually include, and what, specifically, does it still need to hand off to someone else?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A "research use only, not for human consumption" label is a liability shield that shifts legal exposure toward the buyer. It certifies nothing about a specific vial's sterility, identity, or purity, regardless of how the product is actually being marketed and sold.</li>
+      <li>Peptide products occupy three structurally different tiers: an FDA-approved medicine (New Drug Application review plus Good Manufacturing Practice, GMP, inspected manufacturing), a compounded product (503A patient-specific compounding or a 503B FDA-registered outsourcing facility), and an unapproved research chemical (no review, no inspection, no pharmacist, no batch record any regulator has seen).</li>
+      <li>Sterility and bacterial endotoxin failures are invisible to inspection and have produced documented mass-casualty outbreaks, fungal meningitis and endophthalmitis among them, even inside licensed, inspected United States compounding pharmacies. An unregulated research-chemical manufacturer carries the same risk with none of the safeguards that exist inside a regulated pathway.</li>
+      <li>Independent analytical testing of unregulated supplements and research chemicals has repeatedly found products that do not match their own label, missing the declared compound, containing an undisclosed pharmaceutical ingredient, or under-dosed relative to the labeled amount, a pattern documented across multiple product categories and multiple countries.</li>
+      <li>Heavy metal and peptide-synthesis impurities (truncated, deleted, or substituted sequences) require dedicated analytical testing to detect and produce no acute symptom, which means they can go unnoticed for years even when a product is genuinely causing harm.</li>
+      <li>Regulatory oversight of compounded and unapproved peptides has been tightening, not loosening, following the resolution of GLP-1 shortages and documented, measurably elevated adverse event and contamination reporting rates for compounded products relative to approved medicines. "Legal to sell as research" is a separate question from "legal to use" and from "safe to use," and none of the three should be assumed to answer the other two.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Course Complete</div>
+    <p>This closes the nine-chapter arc of Peptides I: Growth, Metabolic, and Body Composition. The mechanisms taught here, growth hormone secretagogue and ghrelin-receptor pharmacology, the growth-factor and myostatin pathways, GLP-1 and incretin biology, metabolic and mitochondrial compounds, HPG axis peptides, and now the sourcing, contamination, and legal picture in this final chapter, forms the shared foundation this catalog's companion peptide module, covering repair, immune, neuro, and systemic peptides, builds on, including this same evidence ladder and this same clinician and legal boundary.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Abernethy, D. R., Destefano, A. J., Cecil, T. L., Zaidi, K., &amp; Williams, R. L. (2010). Metal impurities in food and drugs. <em>Pharmaceutical Research, 27</em>(5), 750-755. https://doi.org/10.1007/s11095-010-0080-3</p>
+    <p>Belcourt, J., Sapowadia, A., &amp; White, C. M. (2026). Compounded semaglutide and tirzepatide products use unique formulations but efficacy and safety largely unknown. <em>Annals of Pharmacotherapy, 60</em>(9), 902-906. https://doi.org/10.1177/10600280261421979</p>
+    <p>Jendrzejewska, I., Cehlarik, L., Goryczka, T., Pietrasik, E., Pawlik, N., &amp; Jampilek, J. (2025). Rapid detection of illegal selective androgen receptor modulators in unregistered supplements using a combination of selected solid-state analytical methods. <em>ADMET &amp; DMPK, 13</em>(3), 2685. https://doi.org/10.5599/admet.2685</p>
+    <p>Kainer, M. A., Reagan, D. R., Nguyen, D. B., Wiese, A. D., Wise, M. E., Ward, J., Park, B. J., Kanago, M. L., Baumblatt, J., Schaefer, M. K., Berger, B. E., Marder, E. P., Min, J. Y., Dunn, J. R., Smith, R. M., Dreyzehner, J., &amp; Jones, T. F. (2012). Fungal infections associated with contaminated methylprednisolone in Tennessee. <em>New England Journal of Medicine, 367</em>(23), 2194-2203. https://doi.org/10.1056/NEJMoa1212972</p>
+    <p>Leo, F., Poisson, P., Sinclair, C. S., &amp; Tallentire, A. (2004). Evaluation of Blow/Fill/Seal extrusion through processing polymer contaminated with bacterial spores and endotoxin. <em>PDA Journal of Pharmaceutical Science and Technology, 58</em>(3), 147-158. https://pubmed.ncbi.nlm.nih.gov/15233254/</p>
+    <p>McCall, K. L., Mastro Dwyer, K. A., Casey, R. T., Samana, T. N., Sulicz, E. K., Tso, S. Y., Yalanzhi, E. R., &amp; Piper, B. J. (2025). Safety analysis of compounded GLP-1 receptor agonists: A pharmacovigilance study using the FDA adverse event reporting system. <em>Expert Opinion on Drug Safety, 25</em>(3), 581-588. https://doi.org/10.1080/14740338.2025.2499670</p>
+    <p>Trainer, N. (2026). The "microdosing" dilemma: Balancing patient anecdotes with clinical safety amid GLP-1 compounding restrictions. <em>Journal of the American Association of Nurse Practitioners</em>. Advance online publication. https://doi.org/10.1097/JXX.0000000000001296</p>
+    <p>Tucker, J., Fischer, T., Upjohn, L., Mazzera, D., &amp; Kumar, M. (2018). Unapproved pharmaceutical ingredients included in dietary supplements associated with US Food and Drug Administration warnings. <em>JAMA Network Open, 1</em>(6), e183337. https://doi.org/10.1001/jamanetworkopen.2018.3337</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 9 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('tier-classifier');
+    if(!root) return;
+    var cards = [
+      {t:"A GLP-1 pen dispensed by a retail pharmacy under a brand name, with an FDA-approved package insert and dosing label", v:"approved", e:"FDA-approved medicine. Full New Drug Application review, controlled trial data behind the label, and Good Manufacturing Practice (GMP) inspected manufacturing all stand behind this product."},
+      {t:"A tirzepatide preparation mixed by a state-licensed 503A pharmacy for one named patient with a documented allergy to an inactive ingredient in the approved product", v:"compounded", e:"Compounded product. A 503A pharmacy compounding a patient-specific preparation under state pharmacy board oversight is real, licensed medicine, though it has not passed through the controlled trials behind an approved label."},
+      {t:"A vial labeled 'for laboratory research purposes only, not for human use,' sold with no prescription requirement on a site that also links to injection-site diagrams and dosing charts", v:"research", e:"Unapproved research chemical. The label is a liability shield; the actual marketing and sales channel targets individual human use with no prescription, no pharmacist, and no manufacturing oversight behind it."},
+      {t:"A sermorelin product manufactured at a 503B outsourcing facility registered with and inspected by the FDA, shipped in bulk to a clinic", v:"compounded", e:"Compounded product. A registered, FDA-inspected 503B facility operates under current Good Manufacturing Practice standards similar in spirit to an approved manufacturer, even without individual patient prescriptions for each batch."},
+      {t:"A peptide sold with no FDA-registered facility, no certificate of analysis, and no prescription pathway, marketed with bodybuilding-forum language despite a 'research only' disclaimer on the product page", v:"research", e:"Unapproved research chemical. No review, no inspection, and marketing language that contradicts the disclaimer's stated purpose. This is the tier with the least verification standing behind it."},
+      {t:"Semaglutide sold under its approved brand name, with a specific FDA-cleared indication, dose, and prescribing label", v:"approved", e:"FDA-approved medicine. The molecule, the manufacturer, the facility, and the label have all been reviewed and approved through the full regulatory pathway."},
+      {t:"A peptide obtained from a compounding pharmacy currently operating under an active FDA warning letter for quality violations", v:"compounded", e:"Still a compounded product by regulatory category, but a warning letter is exactly the kind of oversight signal this tier makes possible and the unapproved research-chemical tier has no equivalent mechanism to ever generate."},
+      {t:"A growth hormone secretagogue marketed on a vendor site next to community dosing charts, despite a 'not for human consumption' disclaimer printed on the same page", v:"research", e:"Unapproved research chemical. A disclaimer sitting on the same page as human dosing instructions does not change which tier the product actually occupies, only which tier the seller is claiming to occupy."}
+    ];
+    var cardSel = document.getElementById('tc-card');
+    var binSel = document.getElementById('tc-bin');
+    var fb = document.getElementById('tc-feedback');
+    var btn = document.getElementById('tc-submit');
+    var fillS = document.getElementById('tc-fill-sorted');
+    var fillA = document.getElementById('tc-fill-acc');
+    var numS = document.getElementById('tc-num-sorted');
+    var numA = document.getElementById('tc-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={approved:'FDA-Approved Medicine',compounded:'Compounded Product',research:'Unapproved Research Chemical'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('risk-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"The vial was filled in a facility with no batch-by-batch bacterial endotoxin testing and no sterility certificate on record", v:"sterility", e:"Sterility and infection risk. No endotoxin testing or sterility validation means there is no way to rule out a fever-inducing or infection-causing contaminant before the product reaches a buyer."},
+      {t:"Independent laboratory testing found the vial contained a different compound than the one declared on the label", v:"identity", e:"Identity and dosing risk. Analytical testing of unregulated products has repeatedly documented exactly this failure, an undeclared or substituted compound in place of, or alongside, the labeled ingredient."},
+      {t:"The product was reconstituted with non-sterile water and stored at room temperature for weeks before use", v:"sterility", e:"Sterility and infection risk. Reconstitution technique and storage conditions are exactly the kind of step a regulated pathway controls with validated instructions, and an unregulated product typically leaves entirely to the buyer's own judgment."},
+      {t:"Analytical testing found the vial contained only a fraction of the peptide mass declared on the label", v:"identity", e:"Identity and dosing risk. An under-dosed product does not necessarily cause acute harm, but it means the effect a buyer expects and the effect they actually get are not reliably connected to each other."},
+      {t:"No physician is aware the compound is being used, so any clinical problem it eventually causes will not be connected back to it", v:"oversight", e:"Oversight and accountability risk. Without a clinician in the loop, an adverse effect can go unrecognized, unreported, and untreated as what it actually is, and no regulator or manufacturer will ever hear about it either."},
+      {t:"The seller operates from a jurisdiction with no mechanism for a buyer to report an adverse reaction to any regulatory authority", v:"oversight", e:"Oversight and accountability risk. A regulated pathway includes a mechanism, an adverse event reporting system, a pharmacy board, a manufacturer recall process, for a problem to be caught, tracked, and acted on. The research-chemical tier has none of that."},
+      {t:"The vial tested positive for bacterial endotoxin above the threshold generally considered acceptable for injectable use", v:"sterility", e:"Sterility and infection risk. Endotoxin does not require live bacteria to cause harm, and its presence above a safe threshold is precisely what routine, required batch testing in a regulated pathway is designed to catch before a vial ever ships."},
+      {t:"A compounded product's manufacturer added an unlisted ingredient with no published rationale, and did not disclose the preparation's beyond-use date or storage requirements", v:"oversight", e:"Oversight and accountability risk. Even inside the more regulated compounded tier, incomplete disclosure and unexplained formulation choices are an accountability gap, one a fully approved product's reviewed label does not carry."}
+    ];
+    var cardSel = document.getElementById('rs-card');
+    var binSel = document.getElementById('rs-bin');
+    var fb = document.getElementById('rs-feedback');
+    var btn = document.getElementById('rs-submit');
+    var fillS = document.getElementById('rs-fill-sorted');
+    var fillA = document.getElementById('rs-fill-acc');
+    var numS = document.getElementById('rs-num-sorted');
+    var numA = document.getElementById('rs-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={sterility:'Sterility and Infection Risk',identity:'Identity and Dosing Risk',oversight:'Oversight and Accountability Risk'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

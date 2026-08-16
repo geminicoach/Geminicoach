@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peptide Foundations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Peptides II &middot; Chapter 1</div>
+    <h1 class="ch-title">One Foundation, <em>Seven</em> Families</h1>
+    <p class="ch-subtitle">Peptides I built the shared vocabulary: what a peptide is, how it signals, how to grade a claim. This module spends that vocabulary on repair, skin, inflammation, immunity, the nervous system, pigmentation, and longevity, a set of families where honest grading matters more than almost anywhere else in this catalog.</p>
+    <div class="ch-meta">
+      <span>48 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>7 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">W</span>illa spent four months in physical therapy for a stubborn Achilles tendon that would not fully settle down, and somewhere around month two she started reading. A recovery forum mentioned "BPC" and "TB-500" in the same breath as her physical therapist's exercises, credited by strangers with tendon recovery that sounded faster than anything her own clinic had promised. A coworker, unrelated to any of that, mentioned her dermatologist had recommended a "copper peptide" serum for the fine lines around her eyes. Her cousin, a nurse, mentioned in passing that a relative recovering from a serious infection had been given something called "thymosin" as part of his hospital care. And a friend who worked long, foggy night shifts swore that a nasal spray called "semax" was the only thing that got her through a shift without falling apart. Four completely different situations, a tendon, a wrinkle, an infection, a foggy brain, and one word sitting underneath all four of them: peptide.</p>
+    <p>That collision is exactly the terrain this module covers, and this first chapter exists to make sure a learner can walk into it steady on their feet, whether or not they have taken this platform's companion module on growth, metabolic, and body-composition peptides first. This chapter re-establishes, in condensed form, the three ideas every later chapter in this module leans on: what a peptide structurally is, and how it differs from a small molecule on one side and a full protein on the other; how a peptide typically signals, mostly by knocking at a receptor sitting on the outside of a cell rather than slipping inside it; and the evidence ladder, a way of asking exactly how much a specific claim about a specific compound is actually worth. Then, because this module's territory is genuinely different from the growth and metabolic compounds covered elsewhere on this platform, this chapter orients a learner to what lies ahead: tissue repair, cosmetic and regenerative peptides, anti-inflammatory and antimicrobial peptides, immune modulators, neuro and cognitive peptides, the melanocortin family, and a final cluster of longevity and systemic compounds. Say the honest part up front, because the rest of this module will keep returning to it: a large share of the compounds in these seven families sit low on the evidence ladder, resting on rodent data, cell-culture experiments, and enthusiastic anecdote rather than completed human trials. Grading each claim honestly, rather than borrowing the confidence that belongs to a stronger claim somewhere else, is the actual skill this module is built to teach.</p>
+    <p>Willa is 31, generally healthy, and not taking any peptide product herself. She is not here to be talked into or out of anything, and this module will not push her, or you, toward a decision either way. What she wants, and what brought her to this course, is the literacy to hold her tendon, her coworker's serum, her cousin's hospital story, and her friend's nasal spray in her head at the same time without treating them as four data points on the same curve. They are not. Figuring out exactly why, and building the habit of asking the same sharp questions of every peptide claim she meets from here forward, is what this chapter, and this module, exists to give her.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>A short chain, not a small molecule and not a protein</h2>
+    <p>Start where any honest treatment of this subject has to start. A <span class="ch-key">peptide</span> is a short chain of amino acids joined by peptide bonds, the specific chemical link formed when the carboxyl group of one amino acid reacts with the amino group of the next, releasing a water molecule and leaving the two joined head to tail. String enough of these together, one bond at a time, and a backbone forms, with each amino acid contributing its own distinct side chain hanging off that backbone. The identity of a given peptide, its shape, its charge, and ultimately what it does once it reaches a receptor, comes down almost entirely to the specific sequence of those side chains, drawn from the same shared alphabet of twenty naturally occurring amino acids that builds every peptide and protein in the human body.</p>
+    <p>What separates a peptide from its two chemical neighbors comes down mostly to size. According to Fosgerau and Hoffmann (2015), pharmaceutical research has long split its catalog into small molecule drugs, typically under about 500 daltons (a dalton being a unit of molecular mass, roughly the mass of a single hydrogen atom) and generally compact enough to be absorbed through the gut and taken as a standard pill, and much larger biologic drugs, typically folded proteins well over 5,000 daltons that usually cannot survive digestion and must be injected. A working definition used throughout this module places a peptide in the gap between those two worlds, roughly two to fifty amino acids, short enough that it does not reliably fold into the complex, self-supporting three-dimensional architecture that defines a true protein, but long enough, and structurally specific enough, that it behaves nothing like a simple small molecule such as aspirin or testosterone. Fosgerau and Hoffmann (2015) note that this middle territory has drawn substantial and growing pharmaceutical interest precisely because a peptide can combine some of a large biologic's selectivity with some of a small molecule's manufacturing simplicity, and by the time of their review, approximately 140 peptide therapeutics were already in active human clinical development.</p>
+    <p>This module's own compounds sit across a wide stretch of that range, and naming a few now previews the territory ahead. GHK-Cu, the copper-binding tripeptide behind the cosmetic serum Willa's coworker mentioned, is only three amino acids long, about as short as a peptide gets. BPC-157, the tendon-and-gut compound behind her forum reading, runs fifteen amino acids. Thymosin alpha-1, the immune-modulating peptide behind her cousin's hospital story, runs twenty-eight. Semax, behind her friend's nasal spray, is a seven-amino-acid fragment related to a much larger pituitary hormone. Across that entire span, three residues to twenty-eight, the same defining features hold: a chain of amino acids linked by peptide bonds, too small to fold into a stable protein architecture, too large and too structurally specific to behave like a compact small molecule you could reasonably expect a stomach to leave intact.</p>
+    <p>That size and structure carries a direct practical consequence worth naming before the next section makes it explicit: almost every compound in this module arrives as an injectable, a nasal spray, or a topical formulation rather than a swallowed tablet, because a chain of amino acids carrying charged, polar side chains is both too large and too chemically fragile to survive the digestive tract intact in most cases. A small number of peptide medicines have been engineered with absorption enhancers and protective coatings to survive oral delivery, but they remain the exception this module will flag by name when it applies, not the default a learner should assume for any given compound.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Small molecule, peptide, and protein compared, with examples from this module" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Small molecule, peptide, and protein compared</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">SAME VOCABULARY, THREE DIFFERENT SIZE CLASSES</text>
+<rect x="24" y="60" width="180" height="250" rx="10" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="114" y="86" fill="#5aaff5" font-size="13" font-weight="700" text-anchor="middle">SMALL MOLECULE</text>
+<circle cx="114" cy="148" r="10" fill="#5aaff5"/>
+<text x="114" y="182" fill="#cdd8ea" font-size="10" text-anchor="middle">~150-350 Da</text>
+<text x="114" y="200" fill="#7f8fab" font-size="9" text-anchor="middle">not amino acid chains</text>
+<text x="114" y="214" fill="#7f8fab" font-size="9" text-anchor="middle">often taken orally</text>
+<text x="114" y="250" fill="#cdd8ea" font-size="9.5" text-anchor="middle">aspirin</text>
+<text x="114" y="264" fill="#cdd8ea" font-size="9.5" text-anchor="middle">metformin</text>
+<text x="114" y="278" fill="#cdd8ea" font-size="9.5" text-anchor="middle">testosterone</text>
+<rect x="228" y="60" width="184" height="250" rx="10" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="320" y="86" fill="#e0873a" font-size="13" font-weight="700" text-anchor="middle">PEPTIDE</text>
+<circle cx="270" cy="148" r="7" fill="#e0873a"/>
+<line x1="277" y1="148" x2="293" y2="148" stroke="#e0873a" stroke-width="2"/>
+<circle cx="300" cy="148" r="7" fill="#e0873a"/>
+<line x1="307" y1="148" x2="323" y2="148" stroke="#e0873a" stroke-width="2"/>
+<circle cx="330" cy="148" r="7" fill="#e0873a"/>
+<line x1="337" y1="148" x2="353" y2="148" stroke="#e0873a" stroke-width="2"/>
+<circle cx="360" cy="148" r="7" fill="#e0873a"/>
+<text x="320" y="182" fill="#cdd8ea" font-size="10" text-anchor="middle">~200-5,000 Da</text>
+<text x="320" y="200" fill="#7f8fab" font-size="9" text-anchor="middle">2 to 50 amino acids</text>
+<text x="320" y="214" fill="#7f8fab" font-size="9" text-anchor="middle">usually injected or sprayed</text>
+<text x="320" y="250" fill="#cdd8ea" font-size="9.5" text-anchor="middle">GHK-Cu</text>
+<text x="320" y="264" fill="#cdd8ea" font-size="9.5" text-anchor="middle">BPC-157</text>
+<text x="320" y="278" fill="#cdd8ea" font-size="9.5" text-anchor="middle">thymosin alpha-1</text>
+<rect x="436" y="60" width="180" height="250" rx="10" fill="#132a45" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="526" y="86" fill="#7fd18a" font-size="13" font-weight="700" text-anchor="middle">PROTEIN</text>
+<path d="M500,128 C480,148 480,173 505,183 C480,193 490,218 515,213 C540,223 550,193 535,173 C555,163 545,133 520,138 C525,123 505,118 500,128 Z" fill="none" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="526" y="182" fill="#cdd8ea" font-size="10" text-anchor="middle">~6,000+ Da</text>
+<text x="526" y="200" fill="#7f8fab" font-size="9" text-anchor="middle">folded 3D structure</text>
+<text x="526" y="214" fill="#7f8fab" font-size="9" text-anchor="middle">almost always injected</text>
+<text x="526" y="250" fill="#cdd8ea" font-size="9.5" text-anchor="middle">growth hormone</text>
+<text x="526" y="264" fill="#cdd8ea" font-size="9.5" text-anchor="middle">antibodies</text>
+<text x="526" y="278" fill="#cdd8ea" font-size="9.5" text-anchor="middle">collagen</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">Chain length and folding decide the category, not what a vendor's label calls the product.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Small molecule, peptide, and protein compared. This module's compounds, GHK-Cu, BPC-157, thymosin alpha-1, and the rest, sit in the middle size class: too large and structurally specific to behave like aspirin, too short and unfolded to behave like an antibody.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>Growth hormone, at 191 amino acids folded into a single compact structure, is routinely called a "peptide hormone" in casual conversation, and technically its amino acid backbone puts it in the same broad chemical family as everything else in this module. But by the working size definition this module uses, a chain that long, folded that specifically, sits past peptide territory and into small-protein territory. The label people reach for is not always the label chemistry would assign. When precision matters, count the residues and ask whether the chain folds into a stable structure, rather than trusting whichever word happened to attach itself to a given product first.</p>
+    </aside>
+
+    <p>One more piece of vocabulary matters before moving on, because Willa's four stories will not make sense without it. "Peptide" describes a molecular shape, nothing more. It does not describe a regulatory status, a safety rating, or a level of evidence, and a compound can be, chemically, a peptide whether it is a government-approved medicine studied in tens of thousands of patients, a physician's off-label prescription of an already-approved compound, or an unregulated vial sold from a website with no independent verification of what is actually inside it. This module's companion course on growth and metabolic peptides covers that three-world split, approved medicine, off-label use, and grey-market product, in full. Here, the short version is enough: knowing that a compound is a peptide tells a learner its rough size and shape. It tells them nothing about how strong the evidence behind a specific claim about that compound actually is, which is exactly the gap the rest of this chapter exists to close.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Mostly a knock at the door: how a peptide signals</h2>
+    <p>A steroid hormone like testosterone, covered in depth in this platform's companion course on anabolic-androgenic steroids, is lipid soluble and can diffuse directly through a cell's outer membrane, reaching a receptor waiting inside the cytoplasm before traveling into the nucleus to alter gene transcription over days to weeks. A peptide almost never gets to use that route. Peptides are built from amino acids carrying charged and polar side chains, which makes most peptides <span class="ch-key">hydrophilic</span>, water soluble, and largely unable to slip through the fatty, water-repelling interior of a cell membrane the way a compact steroid can. A peptide arriving at a cell is, chemically, stopped at the door.</p>
+    <p>Stopped at the door does not mean unable to act, it means the signal has to be relayed rather than delivered directly. The large majority of peptide hormones and peptide drugs, including nearly every compound this module covers, act on receptors sitting on the outer surface of the cell. The single largest family of these surface receptors is the <span class="ch-key">G protein-coupled receptor (GPCR)</span> family, a group of proteins that weave back and forth across the cell membrane seven times, presenting a binding pocket to the outside world and a signaling face to the cell's interior. According to Hauser et al. (2017), roughly a third of all medicines approved by the United States Food and Drug Administration act at a GPCR, making this receptor family, by a wide margin, the single most successful drug target class in modern pharmacology, and a large share of that success has come specifically through peptide and peptide-like ligands binding these surface receptors. When a peptide binds that outer pocket, the receptor changes shape, activates an associated G protein just inside the membrane, and that G protein switches on an intracellular relay, often a shift in a small signaling molecule called cyclic adenosine monophosphate (cyclic AMP), a change in intracellular calcium, or a cascade of enzyme-activating kinases. The peptide itself never has to cross the membrane to produce an effect.</p>
+    <p>This architecture matters for a reason this module will return to constantly: it explains why the compounds ahead cluster into families by the receptor system they engage rather than by what they are marketed to do. BPC-157 and thymosin beta-4, covered in the next chapter, are proposed to act through growth-factor and angiogenesis-related signaling. GHK-Cu, covered in Chapter 3, engages copper-transport and matrix-remodeling pathways in skin and connective tissue. KPV, covered in Chapter 4, is a fragment of a much larger melanocortin precursor and shares signaling territory with the melanocortin receptors covered later in Chapter 7. Thymosin alpha-1 and the other immune modulators in Chapter 5 act on receptors expressed across the immune system's own cell surface. None of these are separate, unrelated categories of chemistry. They are the same basic surface-receptor logic, applied to different receptor families expressed in different tissue, which is exactly the same lesson this platform's steroid-focused course teaches about the androgen receptor, one core mechanism, read differently by whatever tissue happens to be listening.</p>
+    <p>The practical, felt consequence of surface-receptor signaling is speed, and it is worth being precise about what that does and does not promise. A second-messenger cascade triggered at the membrane can alter an already-existing enzyme's activity within seconds to minutes, because the machinery doing the work is already sitting in the cell, waiting to be switched on. That is categorically faster than a steroid's genomic route, which has to alter gene transcription and then wait for new protein to accumulate over days to weeks. But fast at the receptor does not automatically mean fast, or large, at the level of a whole tendon healing, a whole immune system recovering, or a whole mood shifting. Those outcomes still depend on the cascade being sustained, repeated, and layered onto everything else a living tissue is doing, and this module will be careful, compound by compound, to separate how quickly a receptor responds from how quickly, or whether, a person is likely to notice anything at all.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A peptide knocking at a cell surface receptor and triggering a fast intracellular relay" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>How a peptide knocks: the surface-receptor relay</title>
+<rect x="1" y="1" width="638" height="298" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">HOW A PEPTIDE KNOCKS: THE SURFACE-RECEPTOR RELAY</text>
+<defs>
+<marker id="arwq" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+</defs>
+<line x1="90" y1="56" x2="90" y2="230" stroke="#3a5578" stroke-width="1" stroke-dasharray="2 4"/>
+<text x="90" y="50" fill="#7f8fab" font-size="9" text-anchor="middle">MEMBRANE</text>
+<text x="46" y="150" fill="#cdd8ea" font-size="10.5" text-anchor="middle">peptide</text>
+<text x="46" y="166" fill="#cdd8ea" font-size="10.5" text-anchor="middle">(hydrophilic,</text>
+<text x="46" y="182" fill="#cdd8ea" font-size="10.5" text-anchor="middle">stopped here)</text>
+<rect x="110" y="120" width="140" height="70" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="180" y="146" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">Binds GPCR</text>
+<text x="180" y="162" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">on cell surface</text>
+<line x1="250" y1="155" x2="290" y2="155" stroke="#5aaff5" stroke-width="2.5" marker-end="url(#arwq)"/>
+<rect x="296" y="120" width="150" height="70" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="371" y="144" fill="#cdd8ea" font-size="10" text-anchor="middle">G protein activates,</text>
+<text x="371" y="160" fill="#cdd8ea" font-size="10" text-anchor="middle">second-messenger</text>
+<text x="371" y="176" fill="#cdd8ea" font-size="10" text-anchor="middle">cascade begins</text>
+<line x1="446" y1="155" x2="486" y2="155" stroke="#5aaff5" stroke-width="2.5" marker-end="url(#arwq)"/>
+<rect x="492" y="120" width="120" height="70" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="552" y="150" fill="#7fd18a" font-size="11.5" font-weight="700" text-anchor="middle">Seconds</text>
+<text x="552" y="166" fill="#7fd18a" font-size="11.5" font-weight="700" text-anchor="middle">to minutes</text>
+<text x="320" y="256" fill="#7f8fab" font-size="10.5" text-anchor="middle">Different peptide families dock at different receptor systems (GPCRs, growth-factor, cytokine), same basic relay logic.</text>
+<text x="320" y="274" fill="#7f8fab" font-size="9.5" text-anchor="middle">A steroid, by contrast, diffuses through the membrane and acts on a receptor already waiting inside the cell.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>The surface-receptor relay. Most peptides in this module bind a receptor on the outside of a cell and trigger a fast intracellular cascade, in contrast to a lipid-soluble steroid, which diffuses through the membrane and acts on a receptor already inside.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Willa's friend describes a nasal-spray peptide as giving her focus "within about twenty minutes." A peptide-hormone medication her coworker takes for a chronic condition is described by her physician as needing "weeks to show its full effect." Using only the mechanism in this section, both claims can be true at once and describe entirely different things: a fast receptor-level signal and a slower, cumulative, whole-body outcome are not the same clock. Before the next section, consider which of those two claims, the fast one or the slow one, is easier to test rigorously in a small trial, and which one is easier to describe convincingly in a single enthusiastic paragraph without ever running a trial at all.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="pep-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Peptide, Small Molecule, or Protein?</div>
+    </div>
+    <p class="ch-widget-sub">Sort each compound into the size class it structurally belongs to, then reveal the reasoning. The goal is not memorizing a list of names, it is seeing how consistently chain length and folding, not a marketing label, decide the category.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Compound</span>
+        <select class="ch-widget-select" id="ps-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="ps-bin">
+          <option value="small">Small Molecule</option>
+          <option value="peptide">Peptide</option>
+          <option value="protein">Protein</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="ps-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ps-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="ps-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ps-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ps-feedback">Choose a compound and a category, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="ps-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The evidence ladder, and why this module needs it more than most</h2>
+    <p>This chapter's real deliverable is not a fact, it is a tool: a consistent way of asking, for any specific claim about any specific peptide, exactly what kind of evidence actually stands behind that sentence. Call it the <span class="ch-key">evidence ladder</span>. According to Murad et al. (2016), the traditional image for this idea, a pyramid with weaker evidence at a wide base and stronger evidence at a narrow peak, has served as an influential teaching tool in medicine for decades, even as researchers continue refining exactly how its layers should be organized and weighted against each other. For the purposes of grading a single peptide claim, a simplified four-rung version does the job.</p>
+    <p>At the top rung sits the human <span class="ch-key">randomized controlled trial (RCT)</span>, or a systematic review pooling several of them. Participants are randomly assigned to receive either the compound being tested or a comparison, often a placebo, that assignment is concealed from participants and frequently from investigators too (a design feature called blinding), and the outcome is measured in a prespecified, objective way. Randomization is what allows a researcher to reasonably attribute a difference between groups to the compound itself rather than to some other, unmeasured difference between the people who happened to land in each group. The next rung down holds smaller human studies, open-label trials without a control group, small pilot studies, and case series. These generate genuine human data and are often a legitimate, necessary step toward a larger trial, but without a control group, blinding, or a large enough sample, they remain considerably more vulnerable to placebo effect and chance than a well-designed randomized trial.</p>
+    <p>Below that sits animal and preclinical evidence, rodent studies, zebrafish and other model-organism studies, and cell-culture experiments run entirely outside a living organism. This is frequently where a compound's mechanism gets first characterized, and it is genuinely indispensable for early safety screening and hypothesis generation. But a result in a mouse, or in a dish of isolated cells, is not a result in a human, for reasons of species-specific metabolism, receptor distribution, and whole-body physiology, and this module, more than almost any other on this platform, will be repeating that distinction constantly, because so much of what fills the chapters ahead sits precisely on this rung. At the bottom rung sits anecdote and vendor marketing, individual self-reports, forum testimonials, before-and-after stories, and a manufacturer's or vendor's own product-page claims. None of it carries any built-in control for placebo effect, expectation, concurrent lifestyle change, or selective reporting, and a vendor's financial stake in describing its own product favorably is about as large a conflict of interest as exists anywhere in this subject.</p>
+    <p>None of the lower rungs are worthless, and this chapter is not asking anyone to dismiss them. A rodent study is real evidence. A forum thread full of independently, consistently reported experiences is worth noticing. The actual skill being taught is calibration, matching the confidence a learner extends to a claim with the rung that claim actually rests on, rather than treating every sentence that sounds scientific as though it automatically occupied the top of the ladder.</p>
+
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The evidence ladder, from human randomized controlled trials to anecdote and vendor marketing" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The evidence ladder</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="28" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE EVIDENCE LADDER: CALIBRATE CONFIDENCE BY RUNG</text>
+<rect x="220" y="52" width="200" height="50" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="2"/>
+<text x="320" y="72" fill="#7fd18a" font-size="11.5" font-weight="700" text-anchor="middle">Human randomized</text>
+<text x="320" y="88" fill="#7fd18a" font-size="11.5" font-weight="700" text-anchor="middle">controlled trials (RCT)</text>
+<rect x="160" y="118" width="320" height="50" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="138" fill="#5aaff5" font-size="11.5" font-weight="700" text-anchor="middle">Smaller human studies</text>
+<text x="320" y="154" fill="#5aaff5" font-size="10" text-anchor="middle">pilot trials, case series, open-label</text>
+<rect x="100" y="184" width="440" height="50" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="320" y="204" fill="#e0873a" font-size="11.5" font-weight="700" text-anchor="middle">Animal / preclinical studies</text>
+<text x="320" y="220" fill="#e0873a" font-size="10" text-anchor="middle">rodent, zebrafish, cell-culture data</text>
+<rect x="40" y="250" width="560" height="50" rx="8" fill="#132a45" stroke="#c94b3a" stroke-width="1.8"/>
+<text x="320" y="270" fill="#e88a7a" font-size="11.5" font-weight="700" text-anchor="middle">Anecdote and vendor marketing</text>
+<text x="320" y="286" fill="#e88a7a" font-size="10" text-anchor="middle">forum posts, testimonials, product-page claims</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">Most of this module's repair, cosmetic, and neuro compounds cluster on the bottom two rungs.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 3</span> <em>The evidence ladder. Randomization and blinding at the top rung control for placebo effect and chance; anecdote and vendor marketing at the bottom control for neither. Most of this module's families sit lower on this ladder than a casual reader would guess.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A rodent study showing a peptide speeds tendon healing, or a zebrafish study showing a peptide calms an inflammatory pathway, frequently gets repackaged online as though it were equivalent to a finding in a human patient. It is not. Species differ in receptor distribution, metabolism, immune signaling, and dose sensitivity in ways that can shrink, change, or eliminate an effect seen in an animal model once the same compound reaches a human body. A promising animal result is a legitimate reason to fund a human trial. It is not a substitute for one, no matter how confidently a product description borrows the word "studied."</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Seven families, one honest warning</h2>
+    <p>With the shared foundation in place, this chapter can now do the job specific to this module: orient a learner to what the next eight chapters actually cover, and preview, honestly, where each family tends to sit on the ladder just described. This module groups its compounds into seven working families, organized by mechanism and intended use rather than by marketing category, and every single one of them will be treated the same way in the chapters ahead, its plainly stated intended use next to its receptor-level mechanism next to its evidence grade, so a learner can hold all three at once.</p>
+    <p>The first family, covered in Chapter 2, is tissue repair, led by BPC-157 and thymosin beta-4 (also called TB-500). Both are proposed to act through angiogenesis, the growth of new blood vessels into damaged tissue, and through growth-factor signaling relevant to tendon, ligament, and gut lining recovery, the exact territory Willa's forum reading fell into. According to Park et al. (2020), BPC-157's proposed cytoprotective and gut-barrier effects rest overwhelmingly on rodent and cell-based research, with essentially no completed human randomized controlled trial evidence behind the specific tendon and soft-tissue claims that circulate most widely online. The mechanism is genuinely interesting. The evidence, at the time of this writing, sits low on the ladder.</p>
+    <p>The second family, Chapter 3, is cosmetic and regenerative peptides, led by GHK-Cu, the copper-binding tripeptide behind Willa's coworker's serum. GHK-Cu is a naturally occurring peptide whose circulating levels decline with age, and it has been studied for collagen-signaling and wound-healing properties in skin. According to Hu et al. (2026), a recent study using a zebrafish inflammation model found that GHK-Cu reduced markers of oxidative stress and pro-inflammatory cytokine expression, real, peer-reviewed, mechanistically informative evidence, and also a clear illustration of this family's general position: promising animal and cell-based signal, a long history of topical cosmetic use, and comparatively thin controlled human trial data behind many of its more specific injectable claims.</p>
+    <p>The third family, Chapter 4, is anti-inflammatory and antimicrobial peptides, led by KPV, a small fragment derived from a larger melanocortin precursor, and LL-37, a naturally occurring human host-defense peptide. Both are proposed to calm inflammatory signaling and, in LL-37's case, to interfere directly with microbial membranes, work relevant to gut and skin conditions. The fourth family, Chapter 5, is immune modulators, led by thymosin alpha-1, the compound behind Willa's cousin's hospital story, and related thymic peptides thymulin and thymalin. Thymosin alpha-1 is notably further along the evidence ladder than most of this module's other compounds. According to Liu et al. (2016), a systematic review pooling nineteen randomized controlled trials found that thymosin alpha-1 treatment was associated with significantly reduced mortality in sepsis patients compared with control treatment, real human randomized trial evidence, even though the review's authors were careful to flag that trial quality and sample sizes still limited how confidently that finding could be generalized. This family is a useful reminder that "low evidence" is not a blanket rule for every compound in this module, and Chapter 5 will draw the line clearly between thymosin alpha-1 and thymosin beta-4 (from Chapter 2), two differently numbered, differently acting peptides that get confused constantly online purely because they share a first name.</p>
+    <p>The fifth family, Chapter 6, is neuro and cognitive peptides, led by semax, selank, DSIP (delta sleep-inducing peptide), and cerebrolysin, the compounds behind Willa's friend's nasal spray and the broader "nootropic peptide" conversation. These compounds carry proposed mechanisms involving neurotrophic signaling and neurotransmitter tone, and, with a small number of exceptions in specific clinical contexts abroad, the human evidence behind most of their attention, mood, and sleep claims remains thin, small, and short-term. The sixth family, Chapter 7, is the melanocortin peptides, led by PT-141 (bremelanotide) and melanotan II, which act on melanocortin receptors relevant to sexual function and skin pigmentation, alongside specific, well-documented risks around blood pressure and unwanted pigmentation change. This family also contains this module's clearest example of a compound sitting genuinely near the top of the ladder: according to Islam et al. (2026), setmelanotide, a melanocortin-4 receptor agonist, has been approved by the United States Food and Drug Administration for specific genetic obesity syndromes based on completed clinical trial data, standing in sharp contrast to melanotan II, a chemically related but unregulated compound sold outside any such pathway.</p>
+    <p>The seventh and final family, Chapter 8, is a longevity and systemic miscellany, epithalon, humanin, ARA-290 (cibinetide), and vasoactive intestinal peptide (VIP), proposed to touch telomerase activity, mitochondrial protection, and tissue-protective signaling respectively. This is, honestly, the family sitting lowest on the ladder as a group, resting almost entirely on preclinical and mechanistic research at the time of this writing. Chapter 9 then closes the module the way this platform's other deep courses close, with a shared examination of grey-market sourcing, contamination risk, legality, and the clinician boundary that applies across every family covered in between.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two compounds in this module, thymosin alpha-1 and setmelanotide, sit meaningfully higher on the evidence ladder than most of their neighbors. Before the next section, consider what those two compounds actually have in common that BPC-157, GHK-Cu, and melanotan II do not, and what that difference implies about why some peptides accumulate strong human trial evidence while chemically similar relatives, marketed in nearly identical language, do not.</p>
+    </aside>
+
+    <p>Notice the pattern sitting underneath all seven families, because it is the real content of this section, more than any specific compound name. A compelling receptor-level mechanism is not the same thing as a randomized trial, and this module will keep the two visibly separate in every chapter that follows. According to Fosgerau and Hoffmann (2015), developing a compound through the full regulatory approval pathway, preclinical safety work followed by phase 1 through phase 3 human trials, requires an enormous, sustained financial investment that a company generally only makes when a compound is patentable and can realistically earn back its cost through a controlled, exclusive market. A compound sold as an unregulated "research chemical" has often never had anyone with the financial incentive, or the legal standing, to fund that level of human testing at all, regardless of how promising its underlying biology looks in a rodent or a dish of cells. Low evidence, across most of this module, is frequently a statement about who could afford to run the trial, not a statement about whether the mechanism itself is real or interesting.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A detailed, biologically plausible explanation of how a peptide is supposed to work often gets treated, emotionally, as though it were itself the proof that the peptide works. It is not, and the two should never be allowed to blur together. A mechanism explains what a compound could plausibly do if the rest of the evidence holds up. Only a well-designed human trial can show whether it actually does, in an actual human body, at a rate better than placebo. This module will describe plenty of genuinely interesting mechanisms in the chapters ahead. Interesting mechanism and proven effect are two different sentences, and only one of them is usually true for the compounds that dominate marketing in this particular corner of the peptide world.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="d4-ladder">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Evidence Ladder Placement: Repair, Immune &amp; Neuro Claims</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a piece of evidence behind a claim from this module's families. Place it on the rung it actually belongs on, then reveal the reasoning. The goal is calibrating confidence, not memorizing a verdict on any one compound.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Evidence card</span>
+        <select class="ch-widget-select" id="dl-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your placement</span>
+        <select class="ch-widget-select" id="dl-bin">
+          <option value="rct">Human RCT (or a review of several)</option>
+          <option value="smaller_human">Smaller Human Study</option>
+          <option value="animal">Animal / Preclinical Study</option>
+          <option value="anecdote">Anecdote or Vendor Marketing</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Placed</span>
+        <span class="ch-meter-bar"><span id="dl-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="dl-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="dl-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="dl-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="dl-feedback">Choose an evidence card and a rung, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="dl-submit">Submit placement</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Willa and the four stories that were not one story</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Willa is 31, generally healthy, and not taking any peptide product herself. Over a few months she collected four separate stories, each using the word "peptide": a recovery forum's confident claims about BPC-157 and TB-500 for her healing Achilles tendon, a coworker's dermatologist-recommended copper-peptide serum, a cousin's account of thymosin used in a relative's hospital care, and a friend's enthusiasm for a nootropic nasal spray called semax. She came to this module wanting to know whether these four things belonged in the same sentence, and if not, how to tell them apart the next time a fifth story showed up.</p>
+    </aside>
+    <p>Running Willa's four stories back through this chapter resolves each of them in turn, and walking through that resolution explicitly is the real point, more than any single fact about any single compound. Her first, mostly unspoken assumption was that "peptide" itself was doing useful descriptive work, that calling something a peptide told her roughly what kind of product she was dealing with. Section one replaces that with the accurate picture: peptide describes a size and shape, a chain of somewhere around two to fifty amino acids, nothing about regulatory status, safety, or evidence. GHK-Cu at three amino acids, BPC-157 at fifteen, thymosin alpha-1 at twenty-eight, and semax at seven are all, structurally, peptides, and that fact alone tells her almost nothing useful about which of her four stories she should trust more than the others.</p>
+    <p>Her second assumption, closer to the surface, was that a fast-acting nasal spray and a hospital-administered treatment for a serious infection were doing roughly the same kind of thing to the body, just through different delivery methods. Section two replaces that with the mechanism itself: most peptides in this module act at a receptor on the outside of a cell, triggering a relay that can begin within minutes, but how quickly a receptor fires and how much a whole system changes as a result are two different questions, answered differently for different compounds, different doses, and different outcomes being measured.</p>
+    <p>Her third assumption, the one this chapter spent the most time on, was that "there's research on it" functioned as a single, satisfying stopping point, the same weight whether the source was a landmark clinical trial or a single rodent experiment linked from a product page. Section three, and the family-by-family preview that followed it, replace that with the evidence ladder: thymosin alpha-1, the compound behind her cousin's story, has real pooled randomized trial evidence behind its use in sepsis, according to Liu et al. (2016). BPC-157, the compound behind her Achilles research, and GHK-Cu, the compound in her coworker's serum, rest overwhelmingly on rodent and cell-based data, real evidence, but a different rung entirely. Semax, behind her friend's nasal spray, sits lower still, with human evidence that remains thin, small, and short-term. Four peptides, four genuinely different positions on the same ladder, and no way to tell them apart without actually climbing down and checking.</p>
+    <p>What Willa actually walked away with matters more than any verdict on any one of her four compounds, because it is the real product of this chapter. She did not leave with a ranking of which peptide is "best," a recommendation about her tendon, or an opinion about anyone else's medical care. She left with a habit: given any peptide name, ask what family it belongs to and what receptor system it is proposed to engage, ask what the strongest available evidence for the specific claim actually is, not the compound's reputation in general, and place that evidence honestly on the ladder before deciding how much confidence it has earned. That habit will not resolve every question this module raises in the chapters ahead. It gives her, and every learner working through this foundation, the tool to ask sharper questions of each one as this module gets there, which is exactly what a foundation chapter is for.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this module stops: understanding is not permission</h2>
+    <p>Before this chapter closes, the frame governing this entire module needs to be stated plainly, because it shapes what these nine chapters are for and, just as importantly, what they are not for. This is education and harm reduction. Across repair, cosmetic, anti-inflammatory, immune, neuro, melanocortin, and longevity peptides alike, this module explains the biochemistry, the mechanism, the plainly stated intended use, and the honest evidence grade behind each claim, descriptively. It does not provide dosing guidance, stacking or combination protocols, or sourcing recommendations, and nothing in this chapter, or any chapter ahead, is meant to function as a green light or a how-to guide for using any compound discussed here.</p>
+    <p>That boundary is not a legal formality bolted onto the biology, it follows directly from it. Everything covered in this chapter, the size and structure that separates a peptide from a small molecule and a protein, the surface-receptor mechanism most of these compounds share, the evidence ladder, and the honest preview of where this module's seven families currently sit on it, is true independent of any individual's decision about whether to ever use any of these compounds. That understanding has value on its own, whether the person doing the learning ever acts on it, whether they are a learner like Willa trying to make sense of a forum thread, a coworker's serum, and a cousin's hospital story, a clinician wanting a plain-language mechanism refresher, or simply someone who wants to be able to evaluate a confident claim with real knowledge behind the evaluation. The legal and regulatory status of specific compounds varies by jurisdiction and by product, and this module does not offer legal advice of any kind.</p>
+    <p>Decisions about whether to use any peptide product, for tendon recovery, skin, immune support, cognitive focus, or anything else covered in the chapters ahead, and the ongoing medical evaluation of anyone already doing so, belong with a licensed clinician who can assess an individual's actual health history, actual symptoms, and actual risk profile. That remains true no matter how thoroughly a learner understands the mechanism, the family, or the evidence grade behind a given compound. Mechanism and evidence grade explain what a compound is and how strong the case for it currently is, in general. Neither one can tell a specific person, with a specific body and a specific history, what is safe or appropriate for them, and no chapter in this module will pretend otherwise.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the discipline Willa's four stories called for, more than any specific fact about BPC-157, GHK-Cu, thymosin alpha-1, or semax. Sorting through claims made about her own recovering tendon, a coworker's skincare routine, a relative's hospital treatment, and a friend's nasal spray does not call for a diagnosis or a recommendation from this module, and it would not have called for one even if she had asked for it directly. What this chapter can responsibly give her, and what it is built to give every learner working through it, is the structural and evidentiary literacy to recognize an overconfident claim when she meets one, to ask a more precise question of a source, and to know exactly where her own understanding needs to hand off to a qualified clinician rather than to another forum post or product page. That handoff point is not a gap in what she has learned today. It is the single most useful thing this chapter can leave her with, and this module will keep returning to it, family by family, as the specifics get more detailed and the marketing gets louder.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone tells you a specific repair, immune, or neuro peptide is "basically risk-free" because it is "just amino acids the body already makes." Using only what this chapter covered, what does an accurate, honest, non-clinical answer sound like, and where, specifically, does that answer need to stop and hand off to a qualified clinician?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A peptide is a short chain of amino acids, roughly two to fifty residues, joined by peptide bonds. It sits structurally between a compact small molecule (like aspirin or testosterone) and a large, folded protein (like growth hormone or an antibody), and this module's own compounds span that entire range, from three-residue GHK-Cu to twenty-eight-residue thymosin alpha-1.</li>
+      <li>Because most peptides are hydrophilic, they cannot diffuse across the cell membrane the way a lipid-soluble steroid can. The large majority act on receptors sitting on the outside of the cell, frequently a G protein-coupled receptor (GPCR), triggering a fast intracellular relay rather than the slower, gene-transcription route steroids use.</li>
+      <li>"Peptide" is a chemistry term describing molecular size and shape, not a regulatory status, safety rating, or evidence grade. The same word covers government-approved medicines, off-label prescriptions, and unregulated grey-market products with no independent verification of content.</li>
+      <li>The evidence ladder runs from human randomized controlled trials (RCTs) at the top, through smaller human studies, down to animal and preclinical evidence, and finally anecdote and vendor marketing at the bottom. A mechanism explaining how a compound could work is not evidence that it does.</li>
+      <li>This module covers seven working families: tissue repair, cosmetic and regenerative peptides, anti-inflammatory and antimicrobial peptides, immune modulators, neuro and cognitive peptides, melanocortin peptides, and longevity and systemic compounds. Most sit low on the evidence ladder; a small number, like thymosin alpha-1 in sepsis and the approved melanocortin agonist setmelanotide, sit considerably higher.</li>
+      <li>This module is education and harm reduction, not a protocol source. Understanding mechanism and evidence grade is valuable on its own and does not replace the judgment of a licensed clinician for any individual decision or health concern.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>With the shared vocabulary and the evidence ladder in place, Chapter 2 puts both tools to work on the family Willa's own forum reading fell into: tissue repair. BPC-157 and thymosin beta-4 (TB-500) carry some of the most confident marketing language of any compounds in this module, and some of the thinnest completed human evidence behind that confidence. Chapter 2 traces their proposed angiogenesis and growth-factor mechanisms in detail, and grades exactly what the current evidence does and does not support.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Fosgerau, K., &amp; Hoffmann, T. (2015). Peptide therapeutics: Current status and future directions. <em>Drug Discovery Today, 20</em>(1), 122-128. https://doi.org/10.1016/j.drudis.2014.10.003</p>
+    <p>Hauser, A. S., Attwood, M. M., Rask-Andersen, M., Schi&ouml;th, H. B., &amp; Gloriam, D. E. (2017). Trends in GPCR drug discovery: New agents, targets and indications. <em>Nature Reviews Drug Discovery, 16</em>(12), 829-842. https://doi.org/10.1038/nrd.2017.178</p>
+    <p>Hu, J., Zhang, C., &amp; Wang, F. (2026). Glycyl-L-histidyl-L-lysine-Cu2+ (GHK-Cu) attenuates CuSO4- or LPS-induced inflammation in zebrafish larvae model. <em>European Journal of Pharmacology, 1023</em>, 178880. https://doi.org/10.1016/j.ejphar.2026.178880</p>
+    <p>Islam, M. T., Amorim, M. R., &amp; Polotsky, V. Y. (2026). Melanocortin 4 receptor signalling in sleep-disordered breathing. <em>The Journal of Physiology, 604</em>(10), 3728-3737. https://doi.org/10.1113/JP290177</p>
+    <p>Liu, F., Wang, H. M., Wang, T., Zhang, Y. M., &amp; Zhu, X. (2016). The efficacy of thymosin &alpha;1 as immunomodulatory treatment for sepsis: A systematic review of randomized controlled trials. <em>BMC Infectious Diseases, 16</em>, 488. https://doi.org/10.1186/s12879-016-1823-5</p>
+    <p>Murad, M. H., Asi, N., Alsawas, M., &amp; Alahdab, F. (2016). New evidence pyramid. <em>Evidence-Based Medicine, 21</em>(4), 125-127. https://doi.org/10.1136/ebmed-2016-110401</p>
+    <p>Park, J. M., Lee, H. J., Sikiric, P., &amp; Hahm, K. B. (2020). BPC 157 rescued NSAID-cytotoxicity via stabilizing intestinal permeability and enhancing cytoprotection. <em>Current Pharmaceutical Design, 26</em>(25), 2971-2981. https://doi.org/10.2174/1381612826666200523180301</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 1 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('pep-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Aspirin (acetylsalicylic acid), about 180 daltons", v:"small", e:"Small molecule. Compact enough to be absorbed through the gut and taken as a standard tablet, and not built from a chain of amino acids at all."},
+      {t:"BPC-157, a 15-amino-acid fragment studied for tendon and gut repair", v:"peptide", e:"Peptide. Fifteen amino acids sits comfortably inside the roughly two-to-fifty range that separates a peptide from a small molecule on one side and a folded protein on the other."},
+      {t:"GHK-Cu (glycyl-L-histidyl-L-lysine bound to a copper ion), 3 amino acids", v:"peptide", e:"Peptide, and about as short as this module's compounds get. Three amino acids plus a bound copper ion is still a peptide by chain-length definition, even though it is far shorter than a hormone like insulin."},
+      {t:"Growth hormone, 191 amino acids folded into a single compact structure", v:"protein", e:"Protein. At 191 residues, folded into a defined three-dimensional shape held together by internal bonding, growth hormone sits well past peptide territory and is generally classified as a small protein hormone."},
+      {t:"Thymosin alpha-1, a 28-amino-acid fragment of a larger thymic protein", v:"peptide", e:"Peptide. Twenty-eight residues, unfolded, water-soluble, acting at a cell-surface receptor, exactly the profile this module's compounds share."},
+      {t:"Testosterone, a four-ring steroid built from cholesterol", v:"small", e:"Small molecule, and not built from amino acids at all. Testosterone belongs to an entirely different chemical family, the steroids, covered in this platform's companion course on anabolic-androgenic steroids."},
+      {t:"An antibody (immunoglobulin G), roughly 1,320 amino acids across four linked chains", v:"protein", e:"Protein, and a large one. Antibodies are the textbook example of a folded, multi-chain protein biologic, far beyond peptide territory."},
+      {t:"Semax, a 7-amino-acid fragment related to a pituitary hormone", v:"peptide", e:"Peptide. Seven residues is short even by this module's standards, but the amino acid chain structure and surface-receptor mechanism place it squarely in peptide territory."},
+      {t:"Metformin, a small synthetic molecule used for blood sugar management", v:"small", e:"Small molecule. Metformin is a compact synthetic compound absorbed as a standard oral tablet, structurally unrelated to any amino acid chain."},
+      {t:"Collagen, a structural protein built from three intertwined chains of well over 1,000 amino acids each", v:"protein", e:"Protein. Collagen's triple-helix architecture is the definition of a folded structural protein, though short collagen-signaling peptide fragments, covered in Chapter 3, are a different, much smaller story."}
+    ];
+    var cardSel = document.getElementById('ps-card');
+    var binSel = document.getElementById('ps-bin');
+    var fb = document.getElementById('ps-feedback');
+    var btn = document.getElementById('ps-submit');
+    var fillS = document.getElementById('ps-fill-sorted');
+    var fillA = document.getElementById('ps-fill-acc');
+    var numS = document.getElementById('ps-num-sorted');
+    var numA = document.getElementById('ps-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={small:'Small Molecule',peptide:'Peptide',protein:'Protein'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is a <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('d4-ladder');
+    if(!root) return;
+    var cards = [
+      {t:"A pooled analysis of 19 randomized controlled trials found thymosin alpha-1 reduced mortality in sepsis patients compared with control treatment.", v:"rct", e:"Human RCT tier. This is a systematic review pooling nineteen randomized controlled trials, exactly the top-rung evidence this ladder is built to recognize (see Liu et al., 2016), even though the reviewers still flagged trial-quality limits on how far the finding should generalize."},
+      {t:"Setmelanotide, a melanocortin-4 receptor agonist, is approved by regulators for specific genetic obesity syndromes based on completed clinical trial data.", v:"rct", e:"Human RCT tier. Regulatory approval for a specific indication requires completed, reviewed human trial data, standing in sharp contrast to melanotan II, a related but unregulated compound with no such approval behind it."},
+      {t:"In a rat Achilles-tendon transection model, BPC-157 administration was associated with faster recovery of tendon strength than in untreated controls.", v:"animal", e:"Animal / preclinical tier. This is real, mechanistically informative rodent data, and it is the kind of evidence essentially all of BPC-157's tendon and ligament claims currently rest on. No completed human randomized trial exists behind this specific claim."},
+      {t:"A zebrafish inflammation model found that GHK-Cu reduced pro-inflammatory cytokine expression and markers of oxidative stress.", v:"animal", e:"Animal / preclinical tier. A zebrafish model (see Hu et al., 2026) is a legitimate, informative early step, but it sits several species and several evidentiary rungs away from a claim about human skin or wound healing."},
+      {t:"A user on a fitness forum posted that a research-chemical vendor's melanotan II product gave them a “noticeably deeper tan in a week with zero side effects.”", v:"anecdote", e:"Anecdote / vendor-marketing tier. One uncontrolled self-report, describing a product bought outside any regulated pathway, with an obvious incentive, the vendor's and the poster's own investment in the product working, to describe it favorably."},
+      {t:"A small, open-label pilot study of ten participants reported subjective improvements in sustained attention after several weeks of a nootropic peptide.", v:"smaller_human", e:"Smaller human study tier. Real human data, worth attention, but a ten-person, uncontrolled, open-label design cannot rule out placebo effect, expectation, or simple chance, and should not be read as confirmed."},
+      {t:"A supplement vendor's landing page describes its “proprietary repair peptide blend” as “clinically proven” and links to a single in-vitro cell-culture experiment.", v:"anecdote", e:"Anecdote / vendor-marketing tier, despite the scientific-sounding language. A single cell-culture experiment is preclinical evidence at best, and “clinically proven” is doing persuasive work the citation does not actually support."},
+      {t:"A small case series of five patients receiving an immune-modulating peptide alongside standard treatment reported improved white blood cell recovery, with no comparison group.", v:"smaller_human", e:"Smaller human study tier. Five patients and no control group is genuine human data and a legitimate early signal, but it sits well below a randomized trial in how much confidence it can support."}
+    ];
+    var cardSel = document.getElementById('dl-card');
+    var binSel = document.getElementById('dl-bin');
+    var fb = document.getElementById('dl-feedback');
+    var btn = document.getElementById('dl-submit');
+    var fillS = document.getElementById('dl-fill-sorted');
+    var fillA = document.getElementById('dl-fill-acc');
+    var numS = document.getElementById('dl-num-sorted');
+    var numA = document.getElementById('dl-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={rct:'Human RCT',smaller_human:'Smaller Human Study',animal:'Animal / Preclinical Study',anecdote:'Anecdote or Vendor Marketing'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. The evidence-based placement is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
