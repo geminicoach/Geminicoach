@@ -201,35 +201,72 @@
           + '</div></div>';
       }
 
-      body.innerHTML = startBtn + '<div id="prog-slot">' + progressHTML() + '</div>'
-        + '<div id="list-slot">' + listHTML() + '</div>' + included + '<div id="ce-slot">' + ceHTML() + '</div>';
-
       function repaint(){
         var ls=document.getElementById("list-slot"); if(ls) ls.innerHTML=listHTML();
         var ps=document.getElementById("prog-slot"); if(ps) ps.innerHTML=progressHTML();
         var cs=document.getElementById("ce-slot"); if(cs) cs.innerHTML=ceHTML();
       }
-      body.addEventListener("change", function(e){
-        var t=e.target;
-        if (t && t.classList && t.classList.contains("donecb")){
-          toggleDone(Number(t.getAttribute("data-pos")));
-          var row=t.closest(".ch"); if(row) row.classList.toggle("done", t.checked);
-          repaint();
-        }
-      });
-      body.addEventListener("click", function(e){
-        var a=e.target;
-        if (a && a.classList && a.classList.contains("read")){
-          var row=a.closest(".ch"); if(row) markDone(Number(row.getAttribute("data-pos")));
-        }
-      });
 
-      // tester bypass for allowlisted accounts: unlock the exam button without ticking chapters
-      var BYPASS_EMAILS = ["parker.gemini.coach@gmail.com"];
-      if (!bypass && window.GEM && window.GEM.ready) {
-        window.GEM.getUser().then(function(u){
-          if (u && u.email && BYPASS_EMAILS.indexOf(u.email.toLowerCase())!==-1) { bypass = true; repaint(); }
+      function renderCourse(){
+        body.innerHTML = startBtn + '<div id="prog-slot">' + progressHTML() + '</div>'
+          + '<div id="list-slot">' + listHTML() + '</div>' + included + '<div id="ce-slot">' + ceHTML() + '</div>';
+        body.addEventListener("change", function(e){
+          var t=e.target;
+          if (t && t.classList && t.classList.contains("donecb")){
+            toggleDone(Number(t.getAttribute("data-pos")));
+            var row=t.closest(".ch"); if(row) row.classList.toggle("done", t.checked);
+            repaint();
+          }
         });
+        body.addEventListener("click", function(e){
+          var a=e.target;
+          if (a && a.classList && a.classList.contains("read")){
+            var row=a.closest(".ch"); if(row) markDone(Number(row.getAttribute("data-pos")));
+          }
+        });
+        // tester bypass for allowlisted accounts: unlock the exam button without ticking chapters
+        var BYPASS_EMAILS = ["parker.gemini.coach@gmail.com"];
+        if (!bypass && window.GEM && window.GEM.ready) {
+          window.GEM.getUser().then(function(u){
+            if (u && u.email && BYPASS_EMAILS.indexOf(u.email.toLowerCase())!==-1) { bypass = true; repaint(); }
+          });
+        }
+      }
+
+      function renderPaywall(){
+        body.innerHTML =
+          '<style>'
+          + '.paywall{display:flex;justify-content:center;padding:24px 0 40px}'
+          + '.pw-card{max-width:520px;width:100%;background:linear-gradient(160deg,#0f2138,#0b1830);border:1px solid #1c3354;border-radius:20px;padding:34px 32px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.45)}'
+          + '.pw-badge{display:inline-block;font-family:\'Barlow Condensed\',sans-serif;letter-spacing:3px;font-weight:700;color:#0a1628;background:linear-gradient(135deg,#f6cf6a,#e0a43a);padding:5px 14px;border-radius:999px;font-size:13px;margin-bottom:14px}'
+          + '.pw-card h2{font-family:\'Bebas Neue\',sans-serif;color:#fff;font-size:34px;letter-spacing:.5px;margin:4px 0 10px}'
+          + '.pw-card p{color:#aab8d2;font-size:15px;line-height:1.6;margin:0 auto 18px;max-width:420px}'
+          + '.pw-price{margin:6px 0 20px}.pw-amt{font-family:\'Bebas Neue\',sans-serif;color:#fff;font-size:52px;line-height:1}.pw-per{color:#8aa0c2;font-size:16px;margin-left:6px}'
+          + '.pw-btn{cursor:pointer;border:0;border-radius:12px;padding:15px 30px;font-size:17px;font-weight:800;color:#fff;background:linear-gradient(135deg,#2e8de8,#1a6fc4);box-shadow:0 10px 26px rgba(26,111,196,.45);transition:transform .12s}'
+          + '.pw-btn:hover{transform:translateY(-2px)}.pw-btn:disabled{opacity:.7;cursor:default;transform:none}'
+          + '.pw-note{color:#7f93b4;font-size:13px;margin-top:16px}'
+          + '</style>'
+          + '<div class="paywall"><div class="pw-card">'
+          + '<div class="pw-badge">GELL MEMBERSHIP</div>'
+          + '<h2>Unlock the full library</h2>'
+          + '<p>' + esc(c.title) + ' is part of the Gemini Education Learning Library — every course, quiz, weekly challenge, and certificate exam under one membership.</p>'
+          + '<div class="pw-price"><span class="pw-amt">$50</span><span class="pw-per">/ month</span></div>'
+          + '<button class="pw-btn" id="pwSub">Subscribe &amp; unlock &nbsp;→</button>'
+          + '<div class="pw-note">Cancel anytime · includes $50/mo off coaching with Parker</div>'
+          + '</div></div>';
+        var b=document.getElementById("pwSub");
+        if(b) b.onclick=function(){ b.disabled=true; b.textContent="Redirecting to secure checkout…"; window.GEM.startCheckout(); };
+      }
+
+      // ── access gate: charter members + active subscribers only ──
+      if (bypass) { renderCourse(); }
+      else if (window.GEM && window.GEM.ready && window.GEM.access) {
+        window.GEM.access().then(function(acc){
+          if (!acc.signedIn) { location.replace("login.html?next=" + encodeURIComponent(location.pathname + location.search)); return; }
+          if (acc.ok) { renderCourse(); } else { renderPaywall(); }
+        }, function(){ renderCourse(); });
+      } else {
+        renderCourse();
       }
     })();
   </script>

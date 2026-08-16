@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Parent Molecule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Anabolic-Androgenic Steroids &middot; Chapter 1</div>
+    <h1 class="ch-title">The <em>Parent</em> Molecule</h1>
+    <p class="ch-subtitle">Testosterone wrote the rulebook long before any chemist touched it, and every anabolic-androgenic steroid on earth still has to play by that one receptor's rules.</p>
+    <div class="ch-meta">
+      <span>55 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>7 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">O</span>pen any forum thread about anabolic-androgenic steroids (AAS) and within a few posts you will meet a number. Someone drops a table: testosterone rated 100 to 100, one compound rated 125 to 37, another rated well over 300 to 24, and the argument takes off from there, this one is "more anabolic," that one is "basically pure muscle with none of the androgenic baggage." The numbers look precise, and precision reads as authority. Almost nobody in the thread stops to ask where the numbers actually came from, what they were measured in, or whether the tissue they were measured in has anything to do with a grown adult human doing a set of squats. That question, more than any brand name or dosage debate, is where an honest education in this subject has to start, because the number is a symptom of a much bigger habit: treating testosterone and its derivatives as a catalog of separate personalities rather than as variations on one conserved biological signal.</p>
+    <p>This chapter is not about any single compound. It is about the molecule that makes every other chapter in this course possible to understand: testosterone itself, the four-ring steroid it is built from, the single receptor that reads it, and the two-word split, anabolic and androgenic, that the entire field uses constantly and almost nobody defines precisely. Get this chapter right and every compound-specific chapter that follows, the esters, the DHT-derivatives, the 19-nortestosterones, the aromatase inhibitors, will read as variations on a known theme instead of thirteen unrelated mysteries. Get it wrong, or skip it, and you are exactly the person the marketing language on a hundred different product pages is counting on.</p>
+    <p>Our thread through this chapter is a learner named Priya, 27, who came to this course after a few months of reading exactly those forum threads. A friend of a friend was using testosterone under a physician's care for a diagnosed medical condition, and it started Priya down a rabbit hole of comparison charts, compound reputations, and confident claims about which steroids were "clean" and which were "harsh." She is not here to be coached toward a decision about using anything, and this course will not push her, or you, toward one. She wanted the biology underneath the arguments before she trusted any of them, and that is exactly the right instinct. We will follow her confusions through this chapter, not because her situation is unique, but because the errors she picked up along the way are close to universal, and correcting them is the actual content of this first class.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>A steroid built from cholesterol</h2>
+    <p>Start with the word itself. A <span class="ch-key">steroid</span> is not a category of drug or a legal classification, it is a structural description. Chemically, a steroid is any molecule built on a specific carbon skeleton: four fused rings, three of them six-carbon rings and one a five-carbon ring, welded together into a single rigid, compact frame. Biochemists call this backbone the cyclopentanoperhydrophenanthrene nucleus, a name nobody needs to memorize, but the idea behind it matters enormously: cholesterol, cortisol, estradiol, progesterone, aldosterone, and testosterone all share this exact same four-ring frame. They are not a loose family of vaguely similar chemicals. They are the same architectural blueprint, decorated differently at a handful of specific positions on the rings. According to Miller and Auchus (2011), the entire steroidogenic system in the human body, adrenal, ovarian, testicular, and placental, is best understood not as separate glands each inventing their own chemistry, but as one repeated biochemical process, cholesterol converted stepwise by a shared toolkit of enzymes, with the specific enzymes present in a given cell determining which final hormone comes out the other end.</p>
+    <p>Testosterone's starting material is cholesterol itself, the same lipid your body uses to build cell membranes and that shows up on every blood panel. In the Leydig cells of the testes, cholesterol is imported into the mitochondria and converted to a molecule called pregnenolone by an enzyme named CYP11A1, sometimes called the cholesterol side-chain cleavage enzyme because that is literally its job, it snips off part of the cholesterol side chain to leave the bare four-ring core behind. From pregnenolone, a short sequence of further enzymatic steps, described in detail by Miller and Auchus (2011), converts that intermediate through progesterone-related compounds and finally into testosterone. None of this is protein synthesis in the sense you might picture from a textbook diagram of a gene turning into a protein. It is small-molecule chemistry, an enzymatic assembly line tailoring a lipid, one functional group at a time, the same way a machinist might take a single block of aluminum and mill it down into several differently shaped, differently purposed parts.</p>
+    <p>What actually makes testosterone testosterone, as opposed to cortisol or estradiol sharing the identical four rings, comes down to a small set of decorations layered onto that shared frame. Testosterone is a 19-carbon steroid, carrying a hydroxyl group at carbon 17 (a hydroxyl is simply an oxygen-hydrogen pair attached to the ring), a ketone (an oxygen double-bonded to carbon) at carbon 3, and a double bond between carbons 4 and 5. Move any one of those features and you get a structurally related but functionally different molecule: remove carbon 19 entirely and you get the "19-nor" compounds this course will cover later; add a double bond in the wrong place and the ring becomes a substrate for a different enzyme, aromatase, and estrogen comes out instead. The point to hold onto here is that the four rings are the shared chassis every steroid hormone in your body drives around in, and the handful of chemical decorations bolted onto that chassis are what steer it toward one biological identity rather than another. This is also, not incidentally, exactly what a chemist does when synthesizing a new AAS: they are not inventing a new engine, they are re-decorating the same chassis.</p>
+    <p>One more structural fact matters before we leave the molecule itself, because it explains everything in the rest of this chapter: testosterone is built from a lipid, which makes it <span class="ch-key">lipophilic</span>, fat soluble, able to dissolve into and pass through the fatty membrane that surrounds every cell in your body. This single fact separates it categorically from a hormone like insulin or growth hormone, both of which are proteins built from chains of amino acids, water soluble, and physically unable to cross a cell membrane on their own. Those hormones have to dock on a receptor sitting on the outside of the cell and trigger a relay of signals inward. Testosterone does not need a doorman. It walks straight through the wall. Once in the bloodstream, most circulating testosterone travels bound to two carrier proteins, mainly a protein called sex hormone-binding globulin (SHBG) and, more loosely, to albumin, with only a small fraction circulating unbound, or "free." It is this free fraction that is actually available to diffuse into a target cell at any given moment, a detail that matters when you eventually interpret a hormone panel (a topic this course connects to the bloodwork material in an earlier course in this catalog), but for now the essential point is simpler: because testosterone is a lipid-derived molecule and not a protein, it can enter essentially any cell in the body that it reaches, and what happens next depends entirely on what is waiting for it inside.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The steroid nucleus, one skeleton, many hormones" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The steroid nucleus: one skeleton, many hormones</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="34" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE STEROID NUCLEUS: ONE SKELETON, MANY HORMONES</text>
+<g>
+<rect x="34" y="70" width="180" height="220" rx="10" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="124" y="96" fill="#5aaff5" font-size="14" font-weight="700" text-anchor="middle">CHOLESTEROL</text>
+<polygon points="80,140 108,124 136,140 136,168 108,184 80,168" fill="none" stroke="#cdd8ea" stroke-width="1.6"/>
+<polygon points="136,140 164,124 192,140 192,168 164,184 136,168" fill="none" stroke="#cdd8ea" stroke-width="1.6"/>
+<polygon points="80,168 108,184 108,212 80,228" fill="none" stroke="#cdd8ea" stroke-width="1.6"/>
+<polygon points="108,212 136,196 158,210 158,236 136,250 108,236" fill="none" stroke="#cdd8ea" stroke-width="1.4"/>
+<line x1="158" y1="218" x2="188" y2="204" stroke="#cdd8ea" stroke-width="1.6"/>
+<text x="124" y="272" fill="#aab8d2" font-size="10.5" text-anchor="middle">4-ring lipid, side chain intact</text>
+</g>
+<line x1="220" y1="180" x2="270" y2="180" stroke="#2e8de8" stroke-width="2.5" marker-end="url(#arwn)"/>
+<defs>
+<marker id="arwn" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#2e8de8"/>
+</marker>
+</defs>
+<text x="245" y="164" fill="#cdd8ea" font-size="9.5" text-anchor="middle">enzymatic</text>
+<text x="245" y="200" fill="#cdd8ea" font-size="9.5" text-anchor="middle">tailoring</text>
+<g>
+<rect x="276" y="70" width="330" height="220" rx="10" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="441" y="96" fill="#e0873a" font-size="14" font-weight="700" text-anchor="middle">TESTOSTERONE</text>
+<polygon points="330,150 358,134 386,150 386,178 358,194 330,178" fill="none" stroke="#e8edf5" stroke-width="1.8"/>
+<polygon points="386,150 414,134 442,150 442,178 414,194 386,178" fill="none" stroke="#e8edf5" stroke-width="1.8"/>
+<polygon points="330,178 358,194 358,222 330,238" fill="none" stroke="#e8edf5" stroke-width="1.8"/>
+<polygon points="358,222 386,206 408,220 408,246 386,260 358,246" fill="none" stroke="#e8edf5" stroke-width="1.6"/>
+<line x1="342" y1="146" x2="342" y2="128" stroke="#e0873a" stroke-width="1.8"/>
+<text x="342" y="120" fill="#e0873a" font-size="9.5" text-anchor="middle">C3 ketone</text>
+<line x1="400" y1="216" x2="424" y2="228" stroke="#e0873a" stroke-width="1.8"/>
+<text x="452" y="234" fill="#e0873a" font-size="9.5" text-anchor="middle">C17 hydroxyl</text>
+<text x="490" y="150" fill="#aab8d2" font-size="9.5" text-anchor="middle">19 carbons total</text>
+<text x="490" y="168" fill="#aab8d2" font-size="9.5" text-anchor="middle">C4-C5 double bond</text>
+<text x="441" y="272" fill="#aab8d2" font-size="10.5" text-anchor="middle">same 4-ring chassis, new decorations</text>
+</g>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">Cortisol, estradiol, and every AAS share this frame. The decorations, not the rings, decide identity.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Cholesterol supplies the four-ring frame shared by every steroid hormone. Testosterone is that frame carrying a specific set of decorations, a ketone at carbon 3, a hydroxyl at carbon 17, and a double bond between carbons 4 and 5.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Insulin and growth hormone are proteins that must dock on a receptor sitting on the outside of a cell. Testosterone is a lipid that can cross directly into any cell it reaches. Before reading the next section, guess what that single structural difference might mean for how fast each hormone can act, and how many different tissues each one is capable of reaching at once.</p>
+    </aside>
+
+    <p>Priya's first misconception, and it is an extremely common one in the communities she had been reading, was that a compound like oxandrolone (better known by its trade name, Anavar) is "not really a steroid," more a supplement with a steroid-sounding name attached for marketing punch. It is worth naming plainly why that is false. Oxandrolone carries the identical four-ring frame described above, modified at specific positions, and it is definitionally an anabolic-androgenic steroid regardless of how mild the branding around it sounds. Marketing language is not a structural category. The four rings either are present or they are not, and once they are present, the molecule inherits everything the rest of this chapter describes.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Crossing the membrane: how a steroid signals</h2>
+    <p>Because testosterone is lipophilic, it does not need a surface receptor, a transporter, or a doorway of any kind to get into a cell. It simply diffuses across the fatty membrane, the same way a drop of oil moves through another oily substance, and arrives in the cell's cytoplasm intact. This is the first and most fundamental fact about how steroid hormones work, and it is worth sitting with, because it is the opposite of how most other hormones you may have learned about behave. A peptide hormone like insulin binds a receptor sitting on the outside of the cell, which triggers a cascade of chemical messengers inside the cell without the hormone itself ever entering. Testosterone skips that whole relay. It goes straight to where the action happens.</p>
+    <p>Once inside the cytoplasm, testosterone (or, in tissues where the enzyme 5-alpha-reductase is active, a locally converted, more potent derivative called dihydrotestosterone, or DHT) encounters the <span class="ch-key">androgen receptor (AR)</span>, a protein that in its resting state sits bound to a group of chaperone proteins, including one called heat shock protein 90 (HSP90). This chaperone complex holds the receptor in an inactive, ligand-ready shape, essentially keeping the lock in position and waiting for the correct key. When testosterone or DHT binds the receptor's ligand-binding pocket, the receptor changes shape, releases its chaperone proteins, and pairs up with a second, identically activated AR molecule in a process called dimerization. That paired unit then travels into the cell's nucleus, the compartment where the cell's DNA is stored.</p>
+    <p>This is the step that makes AR fundamentally different from a light switch, and it is the single most important mechanistic idea in this entire chapter. Inside the nucleus, the activated AR dimer binds to specific short DNA sequences called <span class="ch-key">androgen response elements (ARE)</span>, positioned near genes whose activity androgens are capable of controlling. Bound at an ARE, AR functions as what biologists call a ligand-activated transcription factor: it recruits a set of helper proteins known as coactivators, described in detail by Heinlein and Chang (2002), along with the cell's general transcriptional machinery, and it adjusts how frequently the nearby gene is copied into messenger RNA (mRNA). That mRNA is then read by the cell's protein-building machinery and translated into new, physical protein, contractile filament proteins in a muscle cell, structural proteins in a hair follicle, secretory proteins in the prostate, depending entirely on which cell type the AR happens to be sitting in and which genes that particular cell type has available to switch on.</p>
+    <p>Notice what this mechanism implies about timing, because it directly corrects a second misconception Priya carried into this course. She had pictured AAS acting something like a stimulant, flipping a switch and producing an immediate effect. The genomic pathway described above cannot work that way, structurally. Altering how often a gene is transcribed, waiting for that transcript to be translated into protein, and then waiting for enough of that new protein to accumulate and change a tissue's physical structure, is a process that unfolds over days and weeks, not seconds. This is categorically different from a fast-acting signal like adrenaline, which produces its effects within moments by activating enzymes that already exist inside the cell. According to Kicman (2008), AR signaling does include some faster, non-genomic effects at the cell membrane in certain tissues, an active area of ongoing research, but the dominant, best-established mechanism by which androgens reshape tissue over time is exactly the slow, transcription-driven pathway described here. A steroid does not build muscle by itself in the way flipping a switch turns on a light. It changes the instructions a cell is reading, and it still takes the whole rest of the cell's machinery, and in living muscle tissue, an actual training stimulus and adequate nutrition, to turn altered instructions into new tissue.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Androgen receptor signaling cascade" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>From membrane to nucleus: the androgen receptor signaling cascade</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">AR SIGNALING: A GENOMIC PATHWAY, NOT A SWITCH</text>
+<defs>
+<marker id="arw2" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+</defs>
+<rect x="24" y="70" width="112" height="240" fill="#132a45" stroke="#3a5578" stroke-width="1.2"/>
+<text x="80" y="60" fill="#7f8fab" font-size="10" text-anchor="middle">CELL MEMBRANE</text>
+<line x1="80" y1="70" x2="80" y2="310" stroke="#3a5578" stroke-width="1" stroke-dasharray="2 4"/>
+<text x="80" y="192" fill="#cdd8ea" font-size="10.5" text-anchor="middle">testosterone</text>
+<text x="80" y="208" fill="#cdd8ea" font-size="10.5" text-anchor="middle">diffuses through</text>
+<line x1="136" y1="190" x2="176" y2="190" stroke="#5aaff5" stroke-width="2.5" marker-end="url(#arw2)"/>
+<g>
+<rect x="182" y="150" width="140" height="80" rx="8" fill="#12314f" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="252" y="174" fill="#5aaff5" font-size="12" font-weight="700" text-anchor="middle">AR + HSP90</text>
+<text x="252" y="192" fill="#cdd8ea" font-size="9.5" text-anchor="middle">ligand binds,</text>
+<text x="252" y="206" fill="#cdd8ea" font-size="9.5" text-anchor="middle">chaperones release,</text>
+<text x="252" y="220" fill="#cdd8ea" font-size="9.5" text-anchor="middle">receptor dimerizes</text>
+</g>
+<line x1="322" y1="190" x2="362" y2="190" stroke="#5aaff5" stroke-width="2.5" marker-end="url(#arw2)"/>
+<rect x="368" y="60" width="248" height="250" fill="#1a2e22" stroke="#3a5578" stroke-width="1.2"/>
+<text x="492" y="50" fill="#7f8fab" font-size="10" text-anchor="middle">NUCLEUS</text>
+<g>
+<rect x="384" y="140" width="216" height="66" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="492" y="164" fill="#7fd18a" font-size="12" font-weight="700" text-anchor="middle">Binds ARE on DNA</text>
+<text x="492" y="182" fill="#cdd8ea" font-size="9.5" text-anchor="middle">recruits coactivators,</text>
+<text x="492" y="196" fill="#cdd8ea" font-size="9.5" text-anchor="middle">acts as transcription factor</text>
+</g>
+<line x1="492" y1="206" x2="492" y2="234" stroke="#7fd18a" stroke-width="2.5" marker-end="url(#arw2)"/>
+<g>
+<rect x="404" y="240" width="176" height="52" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.6"/>
+<text x="492" y="262" fill="#e0873a" font-size="11.5" font-weight="700" text-anchor="middle">mRNA &#8594; new protein</text>
+<text x="492" y="278" fill="#cdd8ea" font-size="9.5" text-anchor="middle">days to weeks, not seconds</text>
+</g>
+<text x="320" y="340" fill="#7f8fab" font-size="11" text-anchor="middle">Same cascade in every tissue that expresses AR. The outcome depends on which genes that tissue can read.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>The androgen receptor (AR) signaling cascade. Testosterone diffuses through the membrane, activates cytoplasmic AR, and the receptor dimer travels to the nucleus to bind an androgen response element (ARE), altering gene transcription rather than flipping an instant switch.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats AAS as if they act like a stimulant, an instant on-switch for muscle growth. Mechanistically that cannot be true. AR signaling works by changing how often specific genes get transcribed into mRNA and then translated into protein, a process that plays out over days and weeks. The hormone changes the instructions. Building the actual tissue still requires the cell's full protein-synthesis machinery, and in skeletal muscle specifically, a genuine mechanical training stimulus and adequate nutrition on top of it.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Anabolic and androgenic: two faces, one receptor</h2>
+    <p>With the mechanism in place, we can finally define the two words that give this course its name precisely, rather than the way they usually get used, as vague vibes attached to a marketing pitch. <span class="ch-key">Anabolic</span> effects are tissue-building effects: increased nitrogen retention (a marker of the body holding onto more protein-building material than it excretes, generally read as a proxy for a positive protein balance), increased muscle protein synthesis, increased bone mineral density, and effects on red blood cell production that this course will examine in detail in a later chapter. <span class="ch-key">Androgenic</span> effects are masculinizing effects: growth of facial and body hair, deepening of the voice through growth of the laryngeal cartilage, stimulation of the sebaceous glands (a driver of acne), growth of the prostate gland, growth of external genitalia during puberty, and, in genetically susceptible scalps, temporal hair recession.</p>
+    <p>Here is the fact the entire "anabolic rating" culture tends to obscure: both categories of effect are produced by the exact same androgen receptor, described in the previous section, simply expressed in different tissues. Muscle cells carry AR. So do hair follicles. So does the prostate. So does the larynx. So does the skin. When a circulating androgen binds and activates AR inside a muscle cell, the genes that get switched on build contractile and structural muscle protein, an anabolic outcome. When the identical binding event happens inside a hair follicle or the prostate, the genes available to switch on are completely different, and the outcome is androgenic. The molecule itself does not carry two separate settings, an anabolic dial and an androgenic dial, that a clever chemist can turn independently. It carries one binding event, read differently depending entirely on which tissue, and which genes, happen to be listening.</p>
+    <p>This raises the obvious question: if it is genuinely one receptor, why do different compounds get reputations for being "more anabolic" or "more androgenic" at all? The honest answer is tissue-specific processing downstream of the receptor, not a fundamentally different kind of drug. Two enzymes do most of this work. The first is 5-alpha-reductase, an enzyme concentrated in skin, hair follicles, and the prostate, which converts testosterone into the considerably more AR-potent DHT, amplifying the androgenic signal specifically in those tissues. The second is aromatase, which converts testosterone into estradiol and opens up an entirely separate branch of effects this course covers in its own chapter. A synthetic AAS's chemical structure can make it a comparatively poor substrate for 5-alpha-reductase, or resistant to it, blunting that specific amplification in skin, scalp, and prostate tissue without necessarily reducing its affinity for AR in muscle. According to Kicman (2008), this partial dissociation between "myotrophic" (muscle-building) and androgenic activity in certain synthetic compounds is real and mechanistically explainable, driven by differences in AR expression across tissues, differences in how a given molecule is metabolized intracellularly, and differences in how the ligand-bound receptor's shape affects which coactivator proteins it recruits.</p>
+    <p>The word that matters most in that last sentence is partial. No AAS achieves a complete separation of anabolic from androgenic activity in a living human, because you cannot structurally delete AR from the prostate, the vocal cords, or hair follicles, and any androgen circulating in sufficient quantity will eventually find receptors in those tissues too, whether or not the marketing language for that particular compound describes it as "mild." This is precisely why virilizing effects, voice change, increased facial or body hair, clitoral changes, remain a documented risk for women using even the compounds most heavily marketed as gentle, and why acne, changes in scalp hair, and effects on the prostate remain real considerations for men on any AAS, independent of how favorable that compound's reputation sounds in a forum thread. The receptor does not read marketing copy. It reads ligand-binding events, tissue by tissue.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The androgen receptor is expressed in cardiac muscle and in liver tissue, not only in skeletal muscle, skin, and the prostate. Before this course reaches its chapters on cardiovascular and hepatic risk, take a moment to consider what that single fact implies about any claim that a compound is "purely" muscle-building, with no other tissue involved at all.</p>
+    </aside>
+
+    <p>This is close to where Priya's second major misconception lived. She had read a specific claim that methenolone (marketed as Primobolan) is "basically anabolic-only," treated in several threads as an established fact rather than a marketing shorthand for a real but partial and dose-dependent dissociation. The shared-receptor logic above is the correction, and this course will return to methenolone specifically, alongside the other DHT-derivatives, in a dedicated later chapter. What matters here is the general principle, not the specific compound: the receptor is one thing. The tissue expressing it is what differs. Every claim about a compound's anabolic-to-androgenic balance is ultimately a claim about tissue-specific enzyme activity and receptor behavior, and it should be evaluated as one.</p>
+  </section>
+
+  <div class="ch-widget" id="effect-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Anabolic vs. Androgenic Effect Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Sort each physiological effect into the bin it belongs in, then reveal the receptor-level explanation. The goal is not to memorize a list, it is to see how consistently the answer traces back to one receptor read by different tissue.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Current effect</span>
+        <select class="ch-widget-select" id="es-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="es-bin">
+          <option value="anabolic">Primarily Anabolic</option>
+          <option value="androgenic">Primarily Androgenic</option>
+          <option value="both">Both / Tissue-Dependent</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="es-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="es-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="es-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="es-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="es-feedback">Choose an effect and a bin, then submit to see the receptor-level explanation.</p>
+
+    <button class="ch-widget-btn" id="es-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where the ratio numbers actually come from</h2>
+    <p>Now we can trace the number that opened this chapter back to its source. In the 1930s through the 1950s, endocrinologists working on synthetic androgens needed a way to screen candidate compounds before they were ever given to a person. The goal, particularly for compounds intended for use in women, in children, or in patients with wasting illness, was to find molecules that built tissue without producing unwanted virilizing effects. To compare candidates on any consistent basis, researchers needed a standardized bioassay, a repeatable laboratory test that could stand in for the two outcomes they cared about.</p>
+    <p>The assay that became the field's reference standard, and the direct ancestor of every anabolic:androgenic ratio still quoted online today, was described by Hershberger, Shipley, and Meyer (1953). The design was straightforward. Young male rats were castrated, removing their own endogenous testosterone so it could not confound the results, then dosed daily with a candidate compound for roughly a week to ten days. At the end of the dosing period, the animals were euthanized and specific tissues were dissected and weighed. The levator ani muscle, a small striated muscle located near the base of the tail that is unusually responsive to androgens, was used as the proxy for anabolic, or myotrophic, activity, because it visibly and measurably grows under androgen exposure. Meanwhile the ventral prostate and seminal vesicles, both androgen-dependent accessory sex glands, were weighed as the proxy for androgenic activity. The test compound's ratio of levator ani growth to prostate and seminal vesicle growth was then standardized against testosterone propionate, arbitrarily assigned a rating of 100 to 100, and that comparison produced the anabolic:androgenic ratio that still circulates, largely unchanged, more than seventy years later.</p>
+    <p>It is worth being precise about what this assay actually proved, because it was a genuinely useful screening tool for its era, and being crude is not the same as being fraudulent. But several features of the original design make the resulting numbers far shakier than the confident decimal-point precision with which they get repeated today. First, there is a serious species and tissue problem. The rat levator ani is not a general stand-in for human skeletal muscle. It is a small, highly specialized, unusually androgen-sensitive perineal muscle that some researchers have questioned even including under the umbrella of ordinary skeletal muscle at all, precisely because of how disproportionately responsive it is compared to muscle elsewhere in the rodent's body. Extrapolating from "how much this compound grows a rat's pelvic floor muscle in ten days" to "how much this compound will grow a human's muscle mass over months of training" is a very large, largely untested leap that the original researchers never claimed to make.</p>
+    <p>Second, the assay captured a single dose, at a single time point, in a single strain of animal. Modern pharmacology insists on dose-response curves precisely because a compound's apparent ratio of effects is not fixed, it can shift depending on how much is given and for how long. A number generated once, in one experimental condition, in the 1950s, has nonetheless been treated in the decades since as if it were a fixed, universal physical constant of the molecule. Third, the assay ignores pharmacokinetics almost entirely. Whether a compound is esterified, how it is absorbed, how it survives (or fails to survive) first-pass metabolism through the liver, and how long it remains active in circulation are all central to how a person actually experiences a compound, and none of it shows up in a week-long rodent tissue-weight comparison. Chapter 2 of this course covers exactly this territory.</p>
+    <p>Fourth, and perhaps most importantly for anyone reading these numbers today, the assay cannot capture human-specific receptor and metabolic biology. Humans and rats differ in the tissue distribution of 5-alpha-reductase and aromatase, in the relative density of AR across different organs, and in coactivator expression, all of which shape how a given molecular structure actually behaves once it is inside a person rather than a rodent. According to Kicman (2008) and according to Hartgens and Kuipers (2004), the popular reputations attached to specific compounds in strength-sport and bodybuilding culture rest on a surprisingly thin, often decades-old body of controlled human data, layered underneath a much larger volume of individual self-report, anecdote, and expectation. Hartgens and Kuipers (2004), reviewing the human evidence directly, found that many laboratory studies did not even test the doses actually used by athletes, meaning much of what does exist may not generalize to real-world use in either direction.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Hershberger assay, the origin of the anabolic androgenic ratio" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Where the ratio comes from: the Hershberger assay</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE HERSHBERGER ASSAY (1953): SOURCE OF THE CLASSIC RATIO</text>
+<text x="320" y="58" fill="#cdd8ea" font-size="11" text-anchor="middle">Castrated immature male rat &#8226; dosed daily &#8226; 7 to 10 days &#8226; tissues weighed</text>
+<g>
+<rect x="60" y="90" width="230" height="110" rx="10" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="175" y="118" fill="#5aaff5" font-size="14" font-weight="700" text-anchor="middle">Levator ani muscle</text>
+<text x="175" y="140" fill="#cdd8ea" font-size="10.5" text-anchor="middle">weighed as the proxy for</text>
+<text x="175" y="156" fill="#cdd8ea" font-size="10.5" text-anchor="middle">"anabolic" (myotrophic) activity</text>
+<text x="175" y="180" fill="#7f8fab" font-size="9.5" text-anchor="middle">a small, atypically androgen-sensitive</text>
+<text x="175" y="194" fill="#7f8fab" font-size="9.5" text-anchor="middle">perineal muscle, not general skeletal muscle</text>
+</g>
+<g>
+<rect x="350" y="90" width="230" height="110" rx="10" fill="#132a45" stroke="#e0873a" stroke-width="1.8"/>
+<text x="465" y="118" fill="#e0873a" font-size="14" font-weight="700" text-anchor="middle">Ventral prostate +</text>
+<text x="465" y="136" fill="#e0873a" font-size="14" font-weight="700" text-anchor="middle">seminal vesicles</text>
+<text x="465" y="158" fill="#cdd8ea" font-size="10.5" text-anchor="middle">weighed as the proxy for</text>
+<text x="465" y="174" fill="#cdd8ea" font-size="10.5" text-anchor="middle">"androgenic" activity</text>
+</g>
+<text x="320" y="150" fill="#5aaff5" font-size="20" font-weight="700" text-anchor="middle">:</text>
+<line x1="175" y1="200" x2="175" y2="240" stroke="#3a5578" stroke-width="1.4"/>
+<line x1="465" y1="200" x2="465" y2="240" stroke="#3a5578" stroke-width="1.4"/>
+<line x1="175" y1="240" x2="465" y2="240" stroke="#3a5578" stroke-width="1.4"/>
+<rect x="220" y="250" width="200" height="56" rx="8" fill="#2a1f16" stroke="#e0873a" stroke-width="1.6"/>
+<text x="320" y="272" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">Ratio standardized to</text>
+<text x="320" y="290" fill="#cdd8ea" font-size="11" text-anchor="middle">testosterone propionate = 100:100</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">One rat muscle, one time point, one strain, 1953. Still recycled today with false decimal precision.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 3</span> <em>The Hershberger assay. A 1950s rodent bioassay compared rat levator-ani growth against rat prostate and seminal-vesicle growth to produce the anabolic:androgenic ratio still quoted today, a number never measured in human tissue.</em></figcaption>
+  </figure>
+
+    <blockquote class="ch-quote">
+      <p>"It is important not to exaggerate the medical risks associated with their administration for sporting or bodybuilding purposes but to emphasize to users that an attitude of personal invulnerability to their adverse effects is certainly misguided."</p>
+      <cite>Andrew T. Kicman, <em>British Journal of Pharmacology</em> (2008)</cite>
+    </blockquote>
+
+    <p>None of this means the ratio numbers were invented or dishonest. They came from a real, historically important screening method that genuinely helped mid-century researchers narrow a large field of candidate molecules. But they were never validated as predictors of a specific human being's actual anabolic and androgenic experience, and they are still passed around today, seventy-plus years on, with a false air of laboratory precision, "322 to 24," that the original assay never possessed and was never designed to deliver.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A widespread belief holds that a high anabolic:androgenic ratio number is a reliable guarantee that a compound will build tissue in a human with proportionally fewer masculinizing effects. The number describes a rat's pelvic-floor muscle weight compared against its prostate weight, in a single 1950s experiment. In an actual human, dose, individual receptor sensitivity, aromatization, 5-alpha-reduction, duration of use, and genetics all matter more than the marketed ratio, and none of those variables are captured by the number at all.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="rating-check">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Rating Reality Check</div>
+    </div>
+    <p class="ch-widget-sub">Each card shows a classic, widely-repeated anabolic:androgenic rating. Judge how reliably that number predicts a "clean" human experience, then reveal the evidence-based verdict.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Rating card</span>
+        <select class="ch-widget-select" id="rc-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your call</span>
+        <select class="ch-widget-select" id="rc-bin">
+          <option value="reliable">Reliable human predictor</option>
+          <option value="unreliable">Not reliable, rodent-derived</option>
+          <option value="partial">Partially informative at best</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Rated</span>
+        <span class="ch-meter-bar"><span id="rc-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rc-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="rc-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rc-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rc-feedback">Choose a rating card and a call, then submit to see the verdict.</p>
+
+    <button class="ch-widget-btn" id="rc-submit">Submit verdict</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What makes a molecule "steroidal": structure sets the boundary</h2>
+    <p>We can now close the loop on the definition this whole chapter has been building toward. A molecule is "steroidal" in the strict, structural sense used throughout this course simply if it is built on the four-ring carbon skeleton described in the first section, derived from cholesterol. That is a chemistry definition, not a legal or marketing one, and it applies whether or not a given compound is approved for medical use anywhere in the world. An <span class="ch-key">anabolic-androgenic steroid (AAS)</span>, specifically, is a steroid that binds and activates the androgen receptor and produces, to some measurable degree, both of the effect categories defined earlier in this chapter. Endogenous testosterone is the reference AAS, the original. Every synthetic AAS that this course will cover in later chapters is, at the level of pure chemistry, a modification of that same testosterone scaffold, engineered to shift some property of the molecule, how it is absorbed, how long it survives, how strongly and where it binds AR, without ever escaping the underlying fact that it still, fundamentally, activates the identical receptor described in section two.</p>
+    <p>It is useful, before the rest of this course walks through specific compound families in depth, to see the broad categories of structural modification chemists actually use, described here purely as mechanism, with no claim about how or whether to use any of it. Esterification attaches a fatty acid chain to the molecule's 17-beta hydroxyl group, which changes how the compound is absorbed and cleared from the body, its pharmacokinetics, without changing what happens once free testosterone reaches the receptor. Chapter 2 of this course treats esterification as its own topic in full. Alkylation at carbon 17, most commonly with a methyl group, protects the molecule from being destroyed on its first pass through the liver, which is what allows certain AAS to be taken orally rather than injected, at a structural cost to the liver that Chapter 7 of this course examines directly. Modifications that affect how readily 5-alpha-reductase can act on the molecule shift how much additional androgenic amplification occurs specifically in skin, scalp, and prostate tissue, the subject of Chapter 4. Removing carbon 19 entirely, producing the so-called 19-nor compounds, changes how the molecule interacts with the progesterone receptor in addition to AR, producing a distinct side-effect signature covered in Chapter 5. And modifications to the A-ring that block or preserve the molecule's ability to be converted by aromatase shape an entirely separate branch of effects, the subject of Chapter 3.</p>
+    <p>The unifying point, worth holding onto as this course moves forward, is that none of these modifications escape the fundamental mechanism established in section two of this chapter. Every single one of these structurally distinct molecules still ultimately signals through AR as a ligand-activated transcription factor, still crosses the cell membrane by simple diffusion because it is still lipid-derived, and still produces its downstream effects, whatever specific balance of anabolic and androgenic those effects take, through gene transcription rather than an instant switch. The chemistry that gets argued about at length online is chemistry layered on top of one conserved biological mechanism, not a family of unrelated drugs each operating by its own private rules. Understanding that one thing, more than memorizing any specific compound's reputation, is what will let a learner evaluate a genuinely new claim about a genuinely new compound later in this course, or anywhere else, by asking the right question: what, specifically, is different about this molecule's absorption, its metabolism, and its receptor engagement, rather than treating each new name as an unrelated mystery substance with its own private rules.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A chemist attaches a single fatty-acid ester to testosterone's 17-beta hydroxyl group. That one change does not create a "new hormone," the molecule that eventually reaches the receptor is still testosterone. But it does create a genuinely different pharmacological product in terms of absorption and duration. Hold that distinction in mind, it is exactly the subject of the next chapter.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Priya and the myth of the pure compound</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Priya is 27, generally healthy, and not on any hormone therapy herself. She began reading about anabolic-androgenic steroids after a friend of a friend mentioned being on testosterone under a physician's supervision for a diagnosed medical condition, and one forum thread led to another. Within a few weeks she had absorbed a comparison chart of anabolic:androgenic ratings, a firm belief that certain compounds were "basically anabolic-only," and an assumption that steroid effects worked something like a fast-acting supplement. She arrived at this course wanting to separate what was actually established biology from what was community folklore repeated so often it had started to feel like fact.</p>
+    </aside>
+    <p>Running Priya's situation back through this chapter resolves each of her three confusions in turn, and it is worth walking through the resolution explicitly, because the pattern of correction is the real skill this chapter is teaching, not any single fact. Her first assumption was that "anabolic" and "androgenic" describe two separate mechanisms that a sufficiently clever chemist could fully split apart. Section three replaces that with the correct model: one androgen receptor, expressed differently across tissue types, so that the same ligand-binding event reads as tissue-building in a muscle cell and masculinizing in a hair follicle or the prostate. Dissociation between the two categories is real but structurally partial, driven by tissue-specific enzymes like 5-alpha-reductase, never a clean, complete split.</p>
+    <p>Her second assumption was that the anabolic:androgenic ratio numbers she had been comparing across a forum spreadsheet functioned something like clinical trial results. Section four replaces that with the actual history: a 1953 rodent bioassay, Hershberger, Shipley, and Meyer's levator-ani-versus-prostate comparison in castrated rats, standardized once against testosterone propionate and repeated ever since with a precision the original method never earned. According to Kicman (2008) and Hartgens and Kuipers (2004), the human evidence behind many specific compound reputations remains considerably thinner than the confidence with which those reputations circulate. Priya's spreadsheet was not fabricated. It was a seventy-year-old rat experiment wearing the costume of modern data.</p>
+    <p>Her third assumption, that AAS act quickly, something like a stimulant, is corrected by the genomic mechanism described in section two. Androgen receptor signaling works by altering gene transcription, a process that plays out over days and weeks as new protein slowly accumulates in a tissue, not a switch that flips in the moment a compound is taken. Nothing about that mechanism changes based on which specific AAS is involved, because every AAS, regardless of its structural modifications, ultimately signals through that same slow, transcription-driven pathway.</p>
+    <p>What Priya actually walked away with matters more than any specific fact she picked up along the way, because it is the real product of this chapter. She did not leave with a verdict on any compound, a ranking of which AAS is "cleanest," or an opinion about whether anyone should use one. She left with a working model: testosterone is a lipid-derived steroid built on cholesterol's four-ring frame, it signals by diffusing into cells and acting on one receptor as a slow, gene-altering transcription factor, its anabolic and androgenic effects are two readings of that same one receptor across different tissue, and the ratio numbers she had trusted as fact are a crude, seventy-year-old rodent screening tool that was never validated in humans. That model does not resolve every question this course will eventually raise about specific compounds. It gives her the tools to ask better questions about each one as this course reaches it, which is exactly what this foundation chapter is for.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this course stops: understanding is not permission</h2>
+    <p>Before this chapter closes, we need to be explicit about the frame governing this entire course, because it shapes what these thirteen chapters are for and, just as importantly, what they are not for. This is education and harm reduction. We explain the biochemistry, the mechanism, the honest risk and benefit picture, and the reasons a compound is used in the bodybuilding and performance-enhancement context, descriptively. We do not provide dosing guidance, cycle or stack designs, or post-cycle protocols, and nothing in this course, including today's foundation, is meant to function as a green light or a how-to guide.</p>
+    <p>That boundary is not a legal formality bolted onto the biology. It follows directly from it. Everything covered today, cholesterol's conversion to testosterone, the androgen receptor's cytoplasm-to-nucleus signaling, the shared-receptor logic behind anabolic and androgenic effects, the crude history behind the ratio numbers, is true independent of any individual's decision about whether to ever use an AAS. Understanding this biology has value on its own, whether the person doing the learning ever acts on it or not, whether they are a learner like Priya trying to make sense of a friend's medical situation, a person weighing a decision for themselves, or simply someone who wants to be able to evaluate a confident claim on a forum with actual knowledge behind the evaluation. The legal status of AAS varies considerably by jurisdiction, and this course does not offer legal advice of any kind. What it does offer is the biochemical foundation that makes every later, more specific chapter legible, including the chapters this course eventually devotes to systemic risk, monitoring, and the honest limits of what harm reduction can and cannot do.</p>
+    <p>Decisions about whether to use any hormone or ancillary compound, and the ongoing medical monitoring of anyone already doing so, belong with a licensed physician who can order and interpret the relevant bloodwork in the context of an individual's actual health history. That is true regardless of how thoroughly a person understands the mechanism described in this chapter. Mechanism explains what a molecule does in general. It cannot tell a specific person, with a specific medical history, what is safe for them, and no chapter in this course will pretend otherwise.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the discipline Priya needed more than any specific compound fact. Her actual situation, sorting through claims made about a friend's medical treatment, does not call for a diagnosis or a recommendation from this course, and it would not have called for one even if she had asked for it directly. What this chapter can responsibly give her, and what it is built to give every learner working through it, is the biochemical literacy to recognize an overconfident claim when she encounters one, to ask a more precise question of a source, and to know exactly where her own understanding needs to hand off to a qualified clinician rather than to another forum post. That handoff point is not a weakness in what she has learned today. It is the single most professional thing carried out of this chapter, and the rest of this course will keep returning to it, compound by compound, as the specifics get more detailed and the stakes of getting the framing wrong get higher.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone asks you whether a specific AAS is "basically safe" because its anabolic:androgenic rating looks favorable on a chart. Using only what this chapter covered, what does an accurate, honest, non-clinical answer sound like, and where, specifically, does that answer need to stop?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Testosterone is a steroid: a molecule built on the same four-ring carbon frame, derived from cholesterol, shared by cortisol, estradiol, and every other steroid hormone. Specific chemical decorations, not the rings themselves, determine identity.</li>
+      <li>Because it is lipid-derived, testosterone is lipophilic and diffuses directly across the cell membrane, binding a cytoplasmic androgen receptor (AR) that then dimerizes and travels to the nucleus, where it acts as a ligand-activated transcription factor at androgen response elements (ARE). This genomic mechanism unfolds over days to weeks, not seconds.</li>
+      <li>Anabolic (tissue-building) and androgenic (masculinizing) effects are both produced by the same androgen receptor, simply expressed in different tissue. Structural modifications can partially shift the balance through enzymes like 5-alpha-reductase, but no AAS achieves a complete separation of the two in a living human.</li>
+      <li>The classic anabolic:androgenic rating numbers trace back to the Hershberger assay (1953), a rodent bioassay comparing levator-ani muscle growth against prostate and seminal-vesicle growth in castrated rats. The numbers are historically real but were never validated as predictors of a specific human's experience.</li>
+      <li>A molecule is "steroidal" by structure, not by marketing language. An anabolic-androgenic steroid (AAS) is any steroid that activates AR and produces both effect categories; every synthetic AAS is a chemical modification of the same testosterone scaffold, still signaling through the identical receptor.</li>
+      <li>This course is education and harm reduction, not a protocol source. Understanding mechanism is valuable on its own and does not replace the judgment of a licensed clinician for any individual decision or health concern.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>If every AAS signals through the same receptor by the same core mechanism, the next obvious question is why so many different esters and delivery forms of testosterone even exist, propionate, enanthate, cypionate, undecanoate, and blends like Sustanon among them. Chapter 2 answers that question directly: ester theory is kinetics, not different hormones, and understanding it is what makes the rest of this course's compound-specific chapters make sense.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Gao, W., Bohl, C. E., &amp; Dalton, J. T. (2005). Chemistry and structural biology of androgen receptor. <em>Chemical Reviews, 105</em>(9), 3352-3370. https://doi.org/10.1021/cr020456u</p>
+    <p>Hartgens, F., &amp; Kuipers, H. (2004). Effects of androgenic-anabolic steroids in athletes. <em>Sports Medicine, 34</em>(8), 513-554. https://doi.org/10.2165/00007256-200434080-00003</p>
+    <p>Heinlein, C. A., &amp; Chang, C. (2002). Androgen receptor (AR) coregulators: An overview. <em>Endocrine Reviews, 23</em>(2), 175-200. https://doi.org/10.1210/edrv.23.2.0460</p>
+    <p>Hershberger, L. G., Shipley, E. G., &amp; Meyer, R. K. (1953). Myotrophic activity of 19-nortestosterone and other steroids determined by modified levator ani muscle method. <em>Proceedings of the Society for Experimental Biology and Medicine, 83</em>(1), 175-180. https://doi.org/10.3181/00379727-83-20301</p>
+    <p>Kicman, A. T. (2008). Pharmacology of anabolic steroids. <em>British Journal of Pharmacology, 154</em>(3), 502-521. https://doi.org/10.1038/bjp.2008.165</p>
+    <p>Miller, W. L., &amp; Auchus, R. J. (2011). The molecular biology, biochemistry, and physiology of human steroidogenesis and its disorders. <em>Endocrine Reviews, 32</em>(1), 81-151. https://doi.org/10.1210/er.2010-0013</p>
+    <p>Mooradian, A. D., Morley, J. E., &amp; Korenman, S. G. (1987). Biological actions of androgens. <em>Endocrine Reviews, 8</em>(1), 1-28. https://doi.org/10.1210/edrv-8-1-1</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 1 of 13</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('effect-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Increased nitrogen retention in skeletal muscle", v:"anabolic", e:"Anabolic. A positive nitrogen balance is a classic proxy for net protein accretion, the tissue-building side of AR activation in muscle."},
+      {t:"Deepening of the voice (laryngeal cartilage growth)", v:"androgenic", e:"Androgenic. AR activation in laryngeal cartilage drives growth of the voice box, a masculinizing, not tissue-building, outcome."},
+      {t:"Increased muscle protein synthesis", v:"anabolic", e:"Anabolic. This is AR-driven gene transcription in muscle tissue increasing the rate of new contractile protein production."},
+      {t:"Growth of the prostate gland", v:"androgenic", e:"Androgenic. The prostate is a classic androgen-dependent accessory gland, historically used as the reference tissue for androgenic activity in the Hershberger assay."},
+      {t:"Increased bone mineral density", v:"anabolic", e:"Anabolic. Bone is a tissue-building target of androgen signaling, supporting mineral accrual."},
+      {t:"Facial and body hair growth", v:"androgenic", e:"Androgenic. Hair follicle AR activation, often amplified by local 5-alpha-reductase conversion to DHT, drives this masculinizing effect."},
+      {t:"Sebaceous gland stimulation (acne)", v:"androgenic", e:"Androgenic. Sebaceous glands are androgen-sensitive and respond to AR activation with increased oil production, a common androgenic side effect."},
+      {t:"Increased red blood cell production (erythropoiesis)", v:"both", e:"Both / tissue-dependent. Androgen signaling in bone marrow and kidney tissue increases erythropoiesis through a mix of direct and indirect AR-mediated pathways, not cleanly filed under either classic bucket."},
+      {t:"Temporal hair recession in a genetically susceptible scalp", v:"androgenic", e:"Androgenic. Scalp hair follicle miniaturization driven by DHT-AR activation in genetically predisposed follicles is a textbook androgenic effect."},
+      {t:"Growth of external genitalia during puberty", v:"androgenic", e:"Androgenic. This is a defining masculinizing (virilizing) effect of androgen exposure during development."},
+      {t:"Every one of these effects is mediated by the same androgen receptor", v:"both", e:"Both / tissue-dependent, and true of the whole list. Anabolic and androgenic outcomes are two readings of one receptor, decided entirely by which tissue is expressing it."}
+    ];
+    var cardSel = document.getElementById('es-card');
+    var binSel = document.getElementById('es-bin');
+    var fb = document.getElementById('es-feedback');
+    var btn = document.getElementById('es-submit');
+    var fillS = document.getElementById('es-fill-sorted');
+    var fillA = document.getElementById('es-fill-acc');
+    var numS = document.getElementById('es-num-sorted');
+    var numA = document.getElementById('es-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={anabolic:'Primarily Anabolic',androgenic:'Primarily Androgenic',both:'Both / Tissue-Dependent'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('rating-check');
+    if(!root) return;
+    var cards = [
+      {t:"Testosterone, rated 100:100 (the reference standard itself)", v:"unreliable", e:"Even the reference point is a rodent-assay artifact. Testosterone was arbitrarily set at 100:100 by definition, which makes every other rating a comparison to a rat experiment, not to a fixed human benchmark."},
+      {t:"A 19-nor compound historically rated around 125:37", v:"unreliable", e:"Not reliable. The number reflects one rodent muscle compared to rodent accessory glands in the 1950s. In humans, this compound class carries its own distinct progestogenic and cardiac considerations, covered in a later chapter, that the ratio says nothing about."},
+      {t:"An oral compound historically rated in the 300s to 24", v:"unreliable", e:"Not reliable, despite the dramatic-looking gap. A large numeric spread from a single rodent bioassay does not translate into a proportionally 'safer' human androgenic profile, and oral 17-alpha-alkylated compounds carry hepatic risks the ratio never measured at all."},
+      {t:"A compound reputation built mostly on decades of user self-report", v:"partial", e:"Partially informative at best. Self-report captures real lived experience, but it is confounded by dose, individual AR sensitivity, expectation, and simultaneous use of other substances, none of which a single rating number or a forum consensus controls for."},
+      {t:"A rating figure quoted with a precise decimal-style number (e.g., '322:24')", v:"unreliable", e:"Not reliable. The apparent precision is misleading. A tissue-weight ratio from one small rodent study seventy years ago was never capable of the exactness implied by repeating it as a clean, specific figure today."},
+      {t:"A modern structural argument about 5-alpha-reductase and aromatase substrate preference", v:"partial", e:"Partially informative, and considerably more useful than the ratio itself. Mechanism-level reasoning about tissue-specific enzymes explains real, partial dissociation, but it still cannot predict any one individual's exact outcome."}
+    ];
+    var cardSel = document.getElementById('rc-card');
+    var binSel = document.getElementById('rc-bin');
+    var fb = document.getElementById('rc-feedback');
+    var btn = document.getElementById('rc-submit');
+    var fillS = document.getElementById('rc-fill-sorted');
+    var fillA = document.getElementById('rc-fill-acc');
+    var numS = document.getElementById('rc-num-sorted');
+    var numA = document.getElementById('rc-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={reliable:'Reliable human predictor',unreliable:'Not reliable, rodent-derived',partial:'Partially informative at best'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. The evidence-based verdict is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

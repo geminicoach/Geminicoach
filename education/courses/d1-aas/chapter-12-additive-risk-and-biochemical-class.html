@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Additive Risk and Biochemical Class</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Anabolic-Androgenic Steroids &middot; Chapter 12</div>
+    <h1 class="ch-title">The <em>Multiplied</em> Risk</h1>
+    <p class="ch-subtitle">Two compounds that share a biochemical base do not add their risks together like line items on a checklist. They concentrate strain on one organ system twice over, and the same biochemistry that explains why also explains how a different base can spread that strain out instead.</p>
+    <div class="ch-meta">
+      <span>63 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">R</span>euben, 34, has been working through this course chapter by chapter for two months, and by his own account he has done the reading properly. He can tell you, without hesitating, that 17-alpha-alkylated oral compounds share a hepatic risk signature because the same carbon-17 modification that lets them survive first-pass metabolism is what forces liver cells to process them directly, repeatedly, chapter by chapter. He can tell you that aromatizing androgens raise estradiol, that estradiol is not optional in a male body, and that crashing it with an aromatase inhibitor trades one problem for a different one. He can tell you that boldenone and testosterone and a handful of other sufficiently potent androgens all raise hematocrit through the same three converging pathways, and that thicker blood is a cardiovascular liability, not a bonus. He can tell you that 19-nortestosterone-derived compounds bind the progesterone receptor in addition to the androgen receptor, and that this is the real explanation behind a cluster of symptoms popularly blamed on prolactin. Ask him any single fact from any single chapter of this course and he will produce it correctly. Ask him a slightly different question, the one this chapter exists to answer, and the wheels come off.</p>
+    <p>The question is simple to state and easy to get wrong: when a person is weighing two or more compounds together rather than one compound in isolation, how does the risk of the combination relate to the risk of each compound alone? Reuben's working assumption, and it is close to the universal default assumption in the communities this course exists partly to correct, is that risk behaves like a running total. Compound A carries some risk. Compound B carries some risk. Use them together and, in his words, "you're just carrying both risks at once, so you watch for both." It is an intuitive model. It is also the single most consequential biochemical error a person can carry into a real-world decision about combining compounds, because it treats every risk as if it were an independent, separately-filed line item, when in fact the compounds this course has spent eleven chapters teaching you to recognize by structure share a much smaller number of underlying mechanisms than they share brand names. Two compounds can look completely different on a label and still be pulling on the exact same biochemical lever, and when that happens, the combination is not addition. It is concentration.</p>
+    <p>This chapter is the reasoning capstone of the course, and it does not introduce a single new compound. Every fact in it has already been taught, in Chapter 3 on the aromatization pathway, Chapter 5 on the 19-nortestosterones and progestins, Chapter 6 on boldenone and the erythropoiesis story, Chapter 7 on the 17-alpha-alkylated orals, and Chapter 8 on aromatase inhibitors. What this chapter adds is not new content but a new operation performed on content you already have: how to look at any two compounds side by side, ask what biochemical base and what signature harm pathway each one runs through, and predict, correctly, whether combining them concentrates a single organ's strain or distributes strain across several organs instead. That operation, done correctly, is close to the single most protective thing a person can carry out of this entire course. Done incorrectly, the way Reuben has been doing it without realizing it, it produces a false sense of security that looks exactly like competence from the outside.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The classes this course has already built</h2>
+    <p>Before this chapter can teach the reasoning, it has to make explicit something that has been implicit since Chapter 3: this course has not actually been teaching you thirteen unrelated compounds. It has been teaching you a small number of biochemical classes, each one defined by a shared structural feature and a shared downstream consequence, with individual compounds slotting into those classes the way a specific make and model slots into a broader category of vehicle. Naming those classes plainly, in one place, is the necessary first step before any reasoning about combining them can proceed correctly.</p>
+    <p>The first class is the <span class="ch-key">17-alpha-alkylated orals</span>, covered in full in Chapter 7. What defines the class is not a shared trade name or a shared reputation but one specific structural modification: a methyl or ethyl group attached at carbon 17 of the steroid ring, which sterically shields that position from the hepatic oxidizing enzymes that would otherwise destroy the molecule on its first pass through the liver. That single modification is what allows a steroid to survive being swallowed rather than requiring injection, and it is also, mechanistically, the entire reason every compound carrying it shares a hepatic and lipid risk signature, cholestasis, elevated transaminases, and a suppressed high-density lipoprotein profile, regardless of how different those compounds look on any other axis.</p>
+    <p>The second class is <span class="ch-key">aromatizing androgens</span>, covered in Chapter 3. What defines the class is a structural A-ring that remains available to the enzyme aromatase, which converts the androgen into estradiol. Aromatization is not a side effect bolted onto certain compounds by accident, it is normal physiology, and Chapter 3 established that estradiol supports bone density, mood, cognition, libido, and a favorable lipid profile in a male body. What Chapter 8 then established is the other half of the same story: managing an aromatizing load with an aromatase inhibitor is not a cost-free correction, because pushing estradiol too far in the other direction produces its own, separately documented harms to bone, lipids, joints, and possibly mood and cognition. This class, uniquely among the four covered in this chapter, has two failure directions rather than one, too much estrogenic signal in one direction, too little in the other, both routed through the identical estrogen-receptor-bearing tissue.</p>
+    <p>The third class is compounds with a pronounced <span class="ch-key">erythropoietic effect</span>, covered in Chapter 6. What defines the class is not any single structural feature but a functional one: sufficient androgen receptor activation in kidney and bone marrow tissue to meaningfully raise erythropoietin production, stimulate marrow erythroid progenitor cells directly, and suppress hepcidin, freeing iron for hemoglobin synthesis. Chapter 6 was explicit that this is a class-wide androgen effect documented in mainstream clinical testosterone research, not a quirk unique to any one compound's marketing reputation, and that the resulting rise in hematocrit and hemoglobin increases whole blood viscosity in an accelerating, non-linear way, raising cardiac and vascular workload rather than simply delivering free oxygen-carrying capacity.</p>
+    <p>The fourth class is the <span class="ch-key">19-nortestosterones and related progestogenic compounds</span>, covered in Chapter 5. What defines the class is the removal of the angular methyl group at carbon 19, which allows the resulting molecule to bind the progesterone receptor in addition to the androgen receptor, something testosterone itself does poorly. Progesterone receptor activation in the hypothalamus and pituitary can elevate prolactin by reducing the dopaminergic tone that normally suppresses its release, producing effects on libido, arousal, and breast tissue that are mechanistically independent of testosterone or estrogen level entirely.</p>
+    <p>Four classes, four distinct signature harms, four distinct primary organ or system targets: the liver, the estrogen-receptor axis (in both directions), the cardiovascular system by way of blood viscosity, and the prolactin axis together with its downstream neurological and breast-tissue effects. Holding these four classes side by side, rather than as thirteen separate compound profiles memorized independently, is what the rest of this chapter is built on.</p>
+    <p>It is worth being explicit about what these four classes are not. They are not a ranking of which compounds are worst, and this chapter will not produce one. They are not a complete inventory of every possible harm this course has covered, mood and psychiatric effects, fertility and hypothalamic-pituitary-testicular axis suppression, and the general cardiovascular and lipid picture beyond hematocrit alone all belong to the final chapter of this course rather than to this one. What these four classes are is the specific subset of harms that behave in the particular way this chapter is built to teach: each one is driven by a shared, identifiable structural or functional feature, each one has already been taught compound by compound earlier in this course, and each one concentrates predictably when two compounds carrying that same feature are used together. Choosing these four deliberately, rather than trying to reason about every possible harm at once, is what makes the reasoning teachable rather than an overwhelming list of everything that could conceivably go wrong.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Four biochemical classes and their primary organ-stress targets" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Four classes, four primary organ-stress targets</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">FOUR CLASSES, FOUR PRIMARY STRESS TARGETS</text>
+<text x="320" y="52" fill="#7f8fab" font-size="10.5" text-anchor="middle">Each class is defined by structure. Each structure routes strain through one dominant system.</text>
+<g>
+<rect x="26" y="76" width="136" height="86" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="94" y="98" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">17-alpha-alkylated</text>
+<text x="94" y="112" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">orals</text>
+<text x="94" y="134" fill="#7f8fab" font-size="9" text-anchor="middle">Ch. 7</text>
+<text x="94" y="150" fill="#cdd8ea" font-size="9" text-anchor="middle">resists hepatic clearance</text>
+</g>
+<line x1="94" y1="162" x2="94" y2="190" stroke="#5aaff5" stroke-width="2"/>
+<rect x="34" y="192" width="120" height="40" rx="6" fill="#1a2f22" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="94" y="216" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">LIVER</text>
+<g>
+<rect x="182" y="76" width="136" height="86" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.6"/>
+<text x="250" y="98" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">Aromatizing</text>
+<text x="250" y="112" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">androgens</text>
+<text x="250" y="134" fill="#7f8fab" font-size="9" text-anchor="middle">Ch. 3 &amp; 8</text>
+<text x="250" y="150" fill="#cdd8ea" font-size="9" text-anchor="middle">too much or too little E2</text>
+</g>
+<line x1="250" y1="162" x2="250" y2="190" stroke="#e0873a" stroke-width="2"/>
+<rect x="182" y="192" width="136" height="40" rx="6" fill="#1a2f22" stroke="#e0873a" stroke-width="1.4"/>
+<text x="250" y="210" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">ESTROGEN-RECEPTOR</text>
+<text x="250" y="224" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">TISSUE (bone, lipid, mood)</text>
+<g>
+<rect x="338" y="76" width="136" height="86" rx="8" fill="#132a45" stroke="#c93b2a" stroke-width="1.6"/>
+<text x="406" y="98" fill="#e07a6c" font-size="11" font-weight="700" text-anchor="middle">Erythropoietic</text>
+<text x="406" y="112" fill="#e07a6c" font-size="11" font-weight="700" text-anchor="middle">androgens</text>
+<text x="406" y="134" fill="#7f8fab" font-size="9" text-anchor="middle">Ch. 6</text>
+<text x="406" y="150" fill="#cdd8ea" font-size="9" text-anchor="middle">EPO, marrow, hepcidin</text>
+</g>
+<line x1="406" y1="162" x2="406" y2="190" stroke="#c93b2a" stroke-width="2"/>
+<rect x="338" y="192" width="136" height="40" rx="6" fill="#1a2f22" stroke="#c93b2a" stroke-width="1.4"/>
+<text x="406" y="210" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">BLOOD VISCOSITY /</text>
+<text x="406" y="224" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">CARDIOVASCULAR LOAD</text>
+<g>
+<rect x="494" y="76" width="122" height="86" rx="8" fill="#132a45" stroke="#9a7fe0" stroke-width="1.6"/>
+<text x="555" y="98" fill="#b6a3ea" font-size="11" font-weight="700" text-anchor="middle">19-nor /</text>
+<text x="555" y="112" fill="#b6a3ea" font-size="11" font-weight="700" text-anchor="middle">progestogenic</text>
+<text x="555" y="134" fill="#7f8fab" font-size="9" text-anchor="middle">Ch. 5</text>
+<text x="555" y="150" fill="#cdd8ea" font-size="9" text-anchor="middle">binds PR, not only AR</text>
+</g>
+<line x1="555" y1="162" x2="555" y2="190" stroke="#9a7fe0" stroke-width="2"/>
+<rect x="494" y="192" width="122" height="40" rx="6" fill="#1a2f22" stroke="#9a7fe0" stroke-width="1.4"/>
+<text x="555" y="210" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">PROLACTIN AXIS /</text>
+<text x="555" y="224" fill="#7fd18a" font-size="10" font-weight="700" text-anchor="middle">CNS-BREAST</text>
+<text x="320" y="270" fill="#cdd8ea" font-size="10.5" text-anchor="middle">Same androgen receptor mechanism from Chapter 1 underlies all four.</text>
+<text x="320" y="288" fill="#cdd8ea" font-size="10.5" text-anchor="middle">What differs is which downstream pathway a compound's structure routes strain through.</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">Class membership, not brand reputation, predicts which system absorbs the strain.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Four biochemical classes built across this course, each defined by a structural feature and routed toward one dominant organ or system. The estrogen-receptor axis carries risk in both directions, too much aromatization and too much suppression alike.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, try to state Reuben's error in one sentence of your own. He is not wrong about any individual fact from Chapters 3 through 8. He is wrong about how those facts combine. What, specifically, is the difference between "carrying two risks at once" and "concentrating one risk twice"?</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Why doubling a base multiplies, it does not add</h2>
+    <p>Here is the mechanistic reasoning underneath this chapter's central claim, and it is worth being precise about it, because the difference between addition and multiplication is not a rhetorical flourish, it is a direct consequence of how organ systems actually process a chemical load. Addition is the correct model when two inputs are handled by two separate, non-interacting systems. If one compound stressed the liver and a second, structurally unrelated compound stressed only the kidney through an entirely separate pathway, it would be reasonable to describe the combined risk picture as "watch the liver, and also watch the kidney," two independent line items, each proceeding on its own track. That is not what happens when two compounds share a biochemical class.</p>
+    <p>When two compounds are both 17-alpha-alkylated, they are not stressing the liver through two separate mechanisms that happen to land in the same organ. They are running through the identical rate-limiting step: hepatocytes attempting to process a structurally hindered steroid molecule that resists the oxidative machinery normally used to clear it. A liver cell does not have a separate processing line for "compound A's alkyl group" and "compound B's alkyl group." It has one hepatic oxidation and bile-export system, already working against the structural resistance built into this entire class, and two simultaneous alkylated substrates compete for and burden that same limited machinery at the same time. The organ is not absorbing two separate insults. It is absorbing one insult, delivered through two doors that open onto the same room.</p>
+    <p>The same logic holds for each of the other three classes, and it is worth walking through why, because the specific bottleneck differs even though the underlying pattern does not. Two aromatizing compounds are not two separate estrogenic signals arriving at two separate sets of receptors, they are two substrates competing for and driving output through the same aromatase enzyme pool, converging on the identical estrogen-receptor-bearing tissue in bone, brain, and cardiovascular endothelium described in Chapter 3. Two erythropoietic androgens are not two separate calls for more red blood cells landing on two separate marrow compartments, they are two simultaneous signals converging on the same renal erythropoietin response, the same marrow erythroid progenitor pool, and the same hepcidin-mediated iron gate described in Chapter 6, pushing hematocrit up a curve that Chapter 6 was explicit becomes non-linearly more dangerous to blood viscosity as it climbs, not a steady, predictable increment per additional compound. Two 19-nortestosterone-derived compounds are not two separate prolactin nudges that a person can average together, they are two simultaneous ligands competing for and activating the same progesterone receptor population in the hypothalamus and pituitary described in Chapter 5, compounding the same dopaminergic suppression through the same physical structure.</p>
+    <p>This is the reasoning that replaces Reuben's checklist model with the correct one. The relevant question when evaluating any combination is never simply "what is compound A's individual risk, and what is compound B's individual risk." It is "what shared pathway, enzyme pool, receptor population, or organ-clearance system do compound A and compound B both run through, and what happens to that one shared system when it is asked to process two simultaneous inputs instead of one." According to Pope and colleagues (2014), reviewing the medical consequences of performance-enhancing drug use broadly, users of these compounds frequently combine multiple substances and display additional associated risk factors simultaneously, a pattern the statement identifies as a central reason the true health burden of this kind of use is difficult to characterize from any single compound's profile in isolation. That difficulty is not a data-collection inconvenience. It is the direct clinical shadow of the mechanism just described: combined use routed through a shared pathway produces a risk picture that a compound-by-compound review, of the kind Reuben was doing, cannot see.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption treats risk like a shopping list: keep track of what each compound individually does, and the combined picture is just the sum of the list. That model only holds when the risks in question route through genuinely separate systems. When two compounds share a biochemical class, the shared pathway does not process two separate inputs in parallel, it processes one concentrated load through a single bottleneck, and the resulting strain on that one organ or system is not well described by addition at all.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Walking the four classes through the concentration principle</h2>
+    <h3>Two hepatotoxic orals, one liver</h3>
+    <p>Chapter 7 established that 17-alpha-alkylation is a structural modification, not a brand-specific quirk, present across methandrostenolone, oxymetholone, stanozolol, methasterone, and chlorodehydromethyltestosterone alike, and that the entire class shares a documented hepatic and lipid signature: cholestasis, elevated transaminases, and in rarer cases peliosis hepatis or hepatic adenoma, alongside a consistent, well-documented negative shift in the lipid profile, HDL-C suppression paired with LDL-C elevation. When a person combines two compounds from this class, whatever their individual marketed reputations for mildness or potency, the liver is not presented with two separate, moderate challenges it can process on two separate tracks. It is presented with one continuous, structurally resistant substrate load, doubled, moving through the identical bile-export and oxidative-clearance machinery at the same time. The organ does not know, and cannot act as though, one alkylated molecule came from a product marketed as gentle and the other from a product marketed as harsh. It processes structure, not reputation, and two structurally hindered substrates compress into one compounded hepatic burden.</p>
+
+    <h3>Two aromatizing compounds, and the trap of over-correcting</h3>
+    <p>Chapter 3 established that aromatization is normal physiology, not a malfunction, and that estradiol supports bone density, mood, lipid balance, and libido in a male body. Combining two heavily aromatizing compounds multiplies the aromatase substrate load converging on that single enzyme pool, driving estradiol meaningfully higher than either compound would produce alone, with the downstream risks Chapter 3 described, gynecomastia, water and sodium retention, blood pressure changes, following directly from that elevated signal. This is where the reasoning in this chapter has to go one step further than the other three classes, because the estrogen-receptor axis is the one class with two separate failure directions rather than one, and the temptation to correct an elevated estrogenic load by reaching for an aromatase inhibitor, covered in full in Chapter 8, creates a second, entirely distinct concentrated risk rather than resolving the first one. Chapter 8 was explicit that aromatase inhibitors do not return estradiol to some idealized zero-risk baseline, they suppress an enzyme whose ongoing output the body was actively using, and pushing that suppression far enough to compensate for a doubled aromatizing load risks trading a documented excess-estrogen problem for a documented deficiency problem, cost to bone mineral density, HDL cholesterol, joint comfort, and plausibly mood and cognition, on the same estrogen-receptor-bearing tissue described in Chapter 3. This is the trap worth naming precisely: fixing one problem by concentrating a fix hard enough to create a second, different problem on the identical downstream tissue is not a solution to the concentration principle, it is another instance of it.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A frequent pattern treats an aromatase inhibitor as a universal correction tool: raise the aromatizing load as high as needed, then suppress estrogen back down with an inhibitor to compensate. Chapter 8's U-shaped harm curve means that correction is not free. Pushing suppression hard enough to offset a doubled aromatizing load risks moving the same estrogen-receptor tissue from one documented harm direction into the other, not out of harm's way entirely.</p>
+    </aside>
+
+    <h3>Two erythropoietic compounds, one vascular bed</h3>
+    <p>Chapter 6 established that raising hematocrit is a class-wide androgen effect, mediated through three converging pathways, renal erythropoietin production, direct marrow stimulation, and hepcidin suppression freeing iron for hemoglobin synthesis, and that the resulting rise in blood viscosity is non-linear, meaning each additional increment of hematocrit above a certain point raises cardiac and vascular workload disproportionately more than the increment before it. Two compounds that each independently drive this same three-pathway process do not produce two moderate, additive nudges to hematocrit that a person can mentally average. They produce one compounded push on the identical erythropoietin, marrow, and hepcidin machinery, and because the resulting viscosity curve accelerates rather than climbing in a straight line, the combined effect on cardiovascular workload can land considerably further out on that curve than either compound would reach alone. This is a case where the concentration principle is not just qualitatively but quantitatively more dangerous than the addition model would predict, because the underlying physiology itself is non-linear.</p>
+
+    <h3>Two 19-nortestosterone compounds, one receptor population</h3>
+    <p>Chapter 5 established that removing the carbon-19 methyl group opens access to the progesterone receptor in the hypothalamus and pituitary, producing effects on prolactin, libido, arousal, and breast tissue that run independently of testosterone or estrogen level. Combining two compounds from this class does not produce two separate, trackable progestogenic signals. It produces two simultaneous ligands competing for and activating the identical, finite population of progesterone receptors in that same neuroendocrine tissue, compounding the same dopaminergic suppression through the same physical structure, and correspondingly compounding the risk of the symptom cluster, low libido, blunted arousal, breast tenderness or glandular changes, that Chapter 5 traced back to prolactin rather than to testosterone or estrogen.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Blood viscosity rises non-linearly with hematocrit, meaning the harm from a given increase is not constant, it gets steeper the higher the starting point. Now consider the liver, aromatase enzyme pool, and progesterone receptor population described above. Which of those systems do you expect also behaves non-linearly under a doubled load, and which might behave closer to a straightforward, proportional increase? What would you need to know to answer that with any confidence, and where does that knowledge live?</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="stress-matcher">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Organ-System Stress Matcher</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a pharmacological pattern built from this course's four classes. Match it to the system that absorbs the concentrated strain, then reveal the reasoning. This is a mechanism exercise, not a guide to any specific combination.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Pattern</span>
+        <select class="ch-widget-select" id="sm-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Primary strain target</span>
+        <select class="ch-widget-select" id="sm-bin">
+          <option value="liver">Hepatic (liver)</option>
+          <option value="estrogen">Estrogen-receptor axis (bone, lipid, mood, cardiovascular)</option>
+          <option value="viscosity">Blood viscosity / cardiovascular load</option>
+          <option value="prolactin">Prolactin axis / CNS-breast tissue</option>
+          <option value="distributed">Distributed, no single concentrated target</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Matched</span>
+        <span class="ch-meter-bar"><span id="sm-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sm-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="sm-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="sm-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="sm-feedback">Choose a pattern and a target system, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="sm-submit">Submit match</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The constructive corollary: different bases distribute the load</h2>
+    <p>Everything so far in this chapter has walked through the mechanism by which risk concentrates. That is only half of what a person needs to reason well about their own risk picture, and it is the less useful half on its own, because a list of things not to double is a warning, not a way of thinking. The constructive half of this chapter, and the reason it belongs at the center of this course's harm-reduction mission rather than at the margins, is this: understanding the biochemical bases built across this course also lets a person understand how compounds built on genuinely different bases can distribute organ stress across different systems instead of concentrating it onto one.</p>
+    <p>Recall from Chapter 1 that every anabolic-androgenic steroid, regardless of its specific structural modifications, ultimately signals through the identical androgen receptor. That shared mechanism is why every compound in this course's catalog carries some baseline androgen-receptor-mediated load. But the four classes built in this chapter are not defined by the receptor they share, they are defined by the specific additional structural features, the 17-alpha-alkyl group, the aromatizable A-ring, the erythropoietic potency, the carbon-19 deletion opening access to the progesterone receptor, layered on top of that shared receptor mechanism. A testosterone base carries a meaningful aromatization load and a meaningful erythropoietic effect, but it is not 17-alpha-alkylated and it does not bind the progesterone receptor. A dihydrotestosterone-derivative of the kind covered in Chapter 4 does not aromatize to any significant degree and, depending on the specific compound, may carry a comparatively modest erythropoietic and hepatic signature, but this varies by exactly which structural modifications that specific compound carries, which is precisely why Chapter 4 treated no two DHT-derivatives as interchangeable. A 19-nortestosterone carries progestogenic and prolactin-related risk that a testosterone base and a DHT-derivative largely do not share, precisely because it alone underwent the carbon-19 deletion that opens that separate receptor.</p>
+    <p>The reasoning skill this chapter is built to teach is exactly this: use the biochemistry from this course to understand how compounds with different bases, a testosterone base, a DHT-derivative, a 19-nortestosterone, can mitigate concentrating a single class-specific harm onto one organ, whereas doubling one base multiplies that base's signature harm on the same system. This is not a claim that combining different bases eliminates risk, reduces total androgen-receptor-mediated load, or produces some kind of safety through variety. Every compound still carries the baseline androgen receptor mechanism from Chapter 1, and every compound still carries whatever structural features it individually carries, in full. What changes, when the bases genuinely differ, is which specific organ or system absorbs each compound's signature strain. Two 17-alpha-alkylated orals concentrate hepatic strain twice over on one liver. A testosterone base and a DHT-derivative that is not itself 17-alpha-alkylated do not concentrate hepatic strain in the same way, because only one of the two structural features that drive that specific harm is present at all. The liver, in that second scenario, is not asked to process two structurally resistant substrates through the identical bottleneck. It is asked to process one.</p>
+    <p>This is precisely the distinction between addition and distribution that the earlier sections of this chapter set up. Distribution is not the absence of risk, every compound still carries its own full, individually-taught risk profile, and this course has never claimed otherwise about any single compound covered in Chapters 2 through 11. Distribution is the absence of concentration, the absence of two structurally similar loads converging on the identical rate-limiting step inside one organ. According to Kicman (2008), the structural logic distinguishing one AAS from another rests on real, mechanistically explainable differences in tissue-specific enzyme activity and receptor engagement, not on marketing language, and that same structural logic is exactly what a learner needs in order to reason correctly about which specific harm pathway any two compounds do or do not share.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="One base doubled concentrates strain, different bases distribute it" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>Concentrated versus distributed strain</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">ONE BASE DOUBLED VS. DIFFERENT BASES, DISTRIBUTED</text>
+<line x1="320" y1="46" x2="320" y2="330" stroke="#3a5578" stroke-width="1" stroke-dasharray="3 5"/>
+<text x="160" y="66" fill="#e0873a" font-size="12" font-weight="700" text-anchor="middle">ONE BASE, DOUBLED</text>
+<rect x="90" y="82" width="140" height="40" rx="6" fill="#132a45" stroke="#e0873a" stroke-width="1.4"/>
+<text x="160" y="106" fill="#cdd8ea" font-size="10.5" text-anchor="middle">Class X, compound 1</text>
+<rect x="90" y="132" width="140" height="40" rx="6" fill="#132a45" stroke="#e0873a" stroke-width="1.4"/>
+<text x="160" y="156" fill="#cdd8ea" font-size="10.5" text-anchor="middle">Class X, compound 2</text>
+<line x1="140" y1="122" x2="160" y2="210" stroke="#e0873a" stroke-width="3"/>
+<line x1="180" y1="172" x2="160" y2="210" stroke="#e0873a" stroke-width="3"/>
+<rect x="95" y="214" width="130" height="52" rx="8" fill="#2a1f16" stroke="#e0873a" stroke-width="2"/>
+<text x="160" y="236" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">ONE ORGAN</text>
+<text x="160" y="252" fill="#cdd8ea" font-size="9.5" text-anchor="middle">signature harm multiplied</text>
+<text x="480" y="66" fill="#7fd18a" font-size="12" font-weight="700" text-anchor="middle">DIFFERENT BASES</text>
+<rect x="410" y="82" width="140" height="34" rx="6" fill="#132a45" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="480" y="103" fill="#cdd8ea" font-size="10" text-anchor="middle">Testosterone base</text>
+<rect x="410" y="126" width="140" height="34" rx="6" fill="#132a45" stroke="#7fd18a" stroke-width="1.4"/>
+<text x="480" y="147" fill="#cdd8ea" font-size="10" text-anchor="middle">DHT-derivative</text>
+<rect x="410" y="170" width="140" height="34" rx="6" fill="#132a45" stroke="#9a7fe0" stroke-width="1.4"/>
+<text x="480" y="191" fill="#cdd8ea" font-size="10" text-anchor="middle">19-nortestosterone</text>
+<line x1="450" y1="116" x2="430" y2="230" stroke="#5aaff5" stroke-width="1.6"/>
+<line x1="480" y1="160" x2="490" y2="240" stroke="#7fd18a" stroke-width="1.6"/>
+<line x1="480" y1="204" x2="545" y2="230" stroke="#9a7fe0" stroke-width="1.6"/>
+<rect x="398" y="234" width="66" height="34" rx="6" fill="#1a2f22" stroke="#5aaff5" stroke-width="1.2"/>
+<text x="431" y="255" fill="#7fd18a" font-size="8.5" text-anchor="middle">liver, mild</text>
+<rect x="456" y="244" width="66" height="34" rx="6" fill="#1a2f22" stroke="#7fd18a" stroke-width="1.2"/>
+<text x="489" y="265" fill="#7fd18a" font-size="8.5" text-anchor="middle">est./visc.</text>
+<rect x="514" y="234" width="66" height="34" rx="6" fill="#1a2f22" stroke="#9a7fe0" stroke-width="1.2"/>
+<text x="547" y="255" fill="#7fd18a" font-size="8.5" text-anchor="middle">prolactin</text>
+<text x="160" y="300" fill="#aab8d2" font-size="10" text-anchor="middle">Two doors into the same room</text>
+<text x="480" y="300" fill="#aab8d2" font-size="10" text-anchor="middle">Three rooms, each holding less</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">Neither side removes any compound's own risk. The difference is concentration versus distribution.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>Doubling within one biochemical class routes two loads through a single organ's rate-limiting step. Reasoning across genuinely different bases routes each compound's signature harm toward a different primary system instead, without erasing any single compound's own risk.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where This Reasoning Is Not a Loophole</div>
+      <p>Distributing strain across different bases is not the same claim as reducing total risk to zero, and it is not permission to combine more compounds on the theory that variety is inherently protective. Every compound still carries its own individually documented profile in full. The reasoning in this section explains why concentration on one organ is avoidable in a way that each compound's own baseline risk is not, nothing more.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="base-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Concentrates or Distributes?</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a pharmacological pattern at the level of mechanism, not a specific product or protocol. Sort it by what it does to organ-system strain, then reveal the reasoning.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Pattern</span>
+        <select class="ch-widget-select" id="bs-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your call</span>
+        <select class="ch-widget-select" id="bs-bin">
+          <option value="concentrates">Concentrates strain on one system</option>
+          <option value="distributes">Distributes strain across systems</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="bs-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bs-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="bs-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="bs-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="bs-feedback">Choose a pattern and a call, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="bs-submit">Submit call</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where the reasoning stops predicting</h2>
+    <p>Everything this chapter has taught so far is a mechanism-level reasoning tool, and like every reasoning tool built on population-level biochemistry, it has real limits that need to be stated plainly rather than glossed over. The concentration principle correctly predicts which organ or system will absorb the strain from two compounds sharing a class. It does not, and cannot, predict how much strain any one specific individual can absorb before that strain becomes clinically significant, because that number depends on variables this course has flagged throughout but never pretended to resolve for any one learner: baseline liver function and any pre-existing hepatic condition, baseline lipid panel and cardiovascular history, baseline hematocrit and any personal or family history of clotting disorders, individual variation in hepatic enzyme activity, individual variation in aromatase and 5-alpha-reductase expression described back in Chapter 1, and concurrent use of alcohol, other medications, or other substances that independently stress any of the same four systems.</p>
+    <p>This matters because the reasoning skill this chapter teaches can be misapplied in exactly the same way Reuben misapplied the checklist model, just one level up. A person who correctly identifies that two compounds belong to different biochemical classes and therefore distribute rather than concentrate strain can still be wrong about their own personal risk, because distribution across systems is not the same claim as safety within any one of those systems. A testosterone base still carries its own aromatization load and its own erythropoietic effect, in full, exactly as Chapter 3 and Chapter 6 described. Pairing it with a DHT-derivative that does not aromatize does not make that testosterone base's own aromatization or erythropoietic signature smaller. It simply means those two effects are not being doubled by a second compound running through the identical pathway. A person with a baseline hematocrit already at the upper edge of a normal reference range does not get a pass on monitoring simply because their combination of compounds happens to distribute rather than concentrate strain elsewhere in the body.</p>
+    <p>According to Kanayama and Pope (2017), reviewing the history and epidemiology of anabolic-androgenic steroid use broadly, patterns of use have shifted substantially over recent decades toward younger, non-competitive populations using these compounds for appearance rather than sport, a population less likely, on average, to have any baseline clinical monitoring in place before beginning. That population detail matters directly here: the reasoning this chapter teaches is only as useful as the baseline information a person has about their own liver, lipids, blood count, and cardiovascular history before applying it, and biochemical reasoning about class and structure cannot substitute for the bloodwork and clinical history that establishes that baseline in the first place. Reasoning correctly about which system absorbs concentrated strain is a genuinely valuable skill. It is not, and this chapter does not claim it to be, a personal risk calculator that replaces monitoring with logic.</p>
+    <p>There is a second, quieter limit worth naming, because it cuts against the instinct to treat this chapter's reasoning as a complete safety framework once learned. Genetics shapes several of the variables that determine how much a given concentrated load actually costs a specific person, the density and sensitivity of androgen receptors across tissue, the baseline activity of the hepatic enzymes doing the clearance work described in Chapter 7, the individual set point of erythropoietin and hepcidin regulation described in Chapter 6, none of which is visible from the outside and none of which this course, or any course, can assess for a specific reader. Two people combining the identical pair of compounds from the identical biochemical class can land in meaningfully different places on the resulting risk curve, not because the mechanism differs between them, but because the tissue receiving that mechanism differs. That variability is not a reason to distrust the class-level reasoning this chapter has built. It is a reason to treat that reasoning as the first step in a decision process that has to end with individualized clinical information, never as the last step on its own.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Reuben and the checklist he could not see past</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Reuben is 34, has completed this course's first eleven chapters, and can accurately recite the hepatic, estrogenic, hematologic, and progestogenic mechanisms behind every compound family covered so far. He arrived at this chapter confident that understanding each compound individually was the whole task, describing his approach to any combination as "know what each one does, then just watch for both lists of symptoms." He was not asking this course for a stack, a dose, or a protocol, and this course would not have provided one had he asked. What he wanted, and what this chapter's case study exists to walk through, was help seeing why his own accurate, chapter-by-chapter knowledge was not translating into accurate reasoning about combinations.</p>
+    </aside>
+    <p>Running Reuben's situation back through this chapter resolves the gap cleanly, and the resolution is worth walking through explicitly because the pattern of correction, not any single fact, is the actual content of this capstone chapter. His error was not a gap in factual knowledge. He had every fact this chapter drew on already, correctly, from Chapters 3 through 8. His error was a gap in the operation performed on those facts: he was treating each compound's risk profile as a closed, self-contained unit to be filed separately, rather than asking the connecting question this chapter has spent its length building, what shared pathway, enzyme pool, or receptor population do two compounds run through together, and what happens to that shared system under a doubled load.</p>
+    <p>Applying the concentration principle to the four classes he already understood gave Reuben a genuinely different way of reading his own accumulated knowledge. Two compounds sharing the 17-alpha-alkyl modification are not two separate hepatic risks to track, they are one hepatic bottleneck asked to process a doubled structurally-resistant load. Two aromatizing compounds are not two separate estrogenic effects to monitor in parallel, they are one aromatase enzyme pool and one estrogen-receptor tissue absorbing a multiplied signal, with the added trap that correcting that signal too aggressively with an aromatase inhibitor creates a second, distinct concentrated harm on the same tissue rather than resolving the first. Two erythropoietic compounds are not two moderate pushes on hematocrit that average out, they are one accelerating, non-linear viscosity curve being driven further out by a doubled input. Two 19-nortestosterone-derived compounds are not two separate prolactin nudges, they are one finite receptor population in the hypothalamus and pituitary being activated by two competing ligands at once. And, on the constructive side, compounds drawn from genuinely different bases, a testosterone base's aromatization and erythropoietic profile, a DHT-derivative's largely non-aromatizing and comparatively modest hepatic and hematologic profile depending on its specific structure, a 19-nortestosterone's distinct progestogenic profile, do not erase any one compound's own documented risk, but they also do not stack two loads onto the identical rate-limiting step the way doubling within one class does.</p>
+    <p>What Reuben actually walked away with was not a verdict on any specific combination, a stack design, or a personal recommendation, and this course would not have given him one under any circumstances. He walked away with the operation itself: given any two compounds, ask what biochemical class each one belongs to, ask what shared pathway connects them if any, and predict whether the resulting picture concentrates strain on one system or distributes it across several, while remembering that distribution is not the same claim as safety and that his own baseline health status is not something biochemical reasoning alone can establish. That operation, applied correctly and combined with the bloodwork and clinical monitoring this course discusses in its next and final chapter, is a genuinely protective habit of mind. Applied the way he had been applying it before this chapter, treating compounds as independent line items on a checklist, it was a habit of mind that looked like diligence and functioned like a blind spot.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this reasoning has to hand off</h2>
+    <p>This chapter has taught a way of thinking, and it is worth being exact about what that way of thinking can and cannot do, because this is the single chapter in this course where getting that boundary wrong carries the highest cost. The concentration and distribution principle correctly predicts which organ or system a given combination is likely to stress, based on shared structural class. It cannot tell any one individual whether their liver, their lipid panel, their hematocrit, or their prolactin axis can currently tolerate that stress, because that answer depends on a personal medical history, a current set of laboratory values, and a clinical judgment that this course, by design, does not and cannot provide. According to Pope and colleagues (2014), randomized controlled trials cannot ethically replicate the supraphysiologic doses and combined-substance patterns seen in real-world use, which means the observational and mechanistic evidence this chapter has drawn on describes population-level patterns and biochemical logic, not a personalized risk score for any one reader.</p>
+    <p>That gap between population-level mechanism and individual risk is exactly where a licensed clinician's role begins and this course's role ends. Bloodwork exists precisely because biochemical class reasoning, however correctly applied, cannot substitute for a direct measurement of what is actually happening inside one specific body: a liver panel showing whether hepatic strain has crossed from theoretical into measurable, a lipid panel showing where HDL and LDL actually stand, a complete blood count showing where hematocrit actually sits on that non-linear viscosity curve, a prolactin level when the specific symptom cluster this course has tied to progesterone receptor activation is present. Chapter 13, the final chapter of this course, covers exactly that monitoring picture in detail. This chapter's job was narrower and, in a real sense, prior to that one: to make sure the reasoning a person brings to their own risk picture, before any bloodwork is ever drawn, is built on correct biochemistry rather than an intuitive but mistaken checklist model.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is the discipline the entire course has been building toward, and this chapter is where it becomes most concrete, because reasoning about combined risk is precisely the point at which understanding and permission are most easily, and most dangerously, confused. Knowing that two compounds from different biochemical classes distribute rather than concentrate strain is real, useful, mechanistically grounded knowledge. It is not, and this chapter has tried at every turn not to let it be mistaken for, a green light, a stack recommendation, or a substitute for the specific bloodwork and clinical judgment that determine whether any strain, concentrated or distributed, is currently something one particular body can tolerate. The biochemistry in this chapter equips a learner to ask sharper questions of a source, of a lab result, and of themselves. It does not, and was never built to, answer those questions on a clinician's behalf.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner tells you they are considering combining two compounds and have checked that neither one, individually, has a bad reputation. Using only the reasoning from this chapter, what is the single most important follow-up question you would ask before saying anything else, and why does that question matter more than either compound's individual reputation?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Risk from combining anabolic-androgenic steroids and ancillaries does not add like a checklist. When two compounds share a biochemical class, they route through the same enzyme pool, receptor population, or organ-clearance bottleneck, and the resulting strain concentrates on one system rather than distributing across two independent tracks.</li>
+      <li>Four classes built across this course each carry a distinct signature harm and primary target: 17-alpha-alkylated orals concentrate hepatic strain (Chapter 7); aromatizing compounds concentrate estrogen-receptor-axis strain in either direction, too much or, from over-correction with an aromatase inhibitor, too little (Chapters 3 and 8); erythropoietic androgens concentrate blood-viscosity and cardiovascular strain on a non-linear curve (Chapter 6); 19-nortestosterone-derived compounds concentrate progesterone-receptor and prolactin-axis strain (Chapter 5).</li>
+      <li>Correcting one concentrated harm by aggressively suppressing its pathway, most notably crashing estrogen with an aromatase inhibitor to compensate for a doubled aromatizing load, does not eliminate risk. It routes a new, distinct harm through the same downstream tissue.</li>
+      <li>Reasoning across genuinely different biochemical bases, a testosterone base, a DHT-derivative, a 19-nortestosterone, can distribute organ stress across different systems rather than concentrating it, because each base carries a different combination of the specific structural features that drive each class-specific harm. This does not erase any single compound's own documented risk.</li>
+      <li>This reasoning predicts which system is likely to absorb concentrated strain. It cannot predict how much strain one specific body can currently tolerate, which depends on baseline health status, individual enzyme and receptor variation, and concurrent substance use that only clinical history and bloodwork can establish.</li>
+      <li>This chapter is a way of thinking, not a stack, a dose, or a protocol, and it was built to sharpen the questions a learner asks, not to answer them in place of a licensed clinician.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter taught the reasoning; the final chapter of this course puts numbers behind it. Chapter 13 covers systemic risk in full, the cardiovascular and lipid picture, hepatic and endocrine monitoring, hypothalamic-pituitary-testicular axis suppression and fertility, and mental health, along with exactly which bloodwork gets watched, how often, and why, closing the course with the harm-reduction and legal boundary this course has returned to in every chapter along the way.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bond, P., Smit, D. L., &amp; de Ronde, W. (2022). Anabolic-androgenic steroids: How do they work and what are the risks? <em>Frontiers in Endocrinology, 13</em>, 1059473. https://doi.org/10.3389/fendo.2022.1059473</p>
+    <p>Bond, P., Smit, D. L., Verdegaal, T., &amp; de Ronde, W. (2026). Preventing atherosclerotic cardiovascular disease in young male androgen abusers. <em>Clinical Cardiology, 49</em>(2), e70257. https://doi.org/10.1002/clc.70257</p>
+    <p>Finkelstein, J. S., Lee, H., Burnett-Bowie, S. M., Pallais, J. C., Yu, E. W., Borges, L. F., Jones, B. F., Barry, C. V., Wulczyn, K. E., Thomas, B. J., &amp; Leder, B. Z. (2013). Gonadal steroids and body composition, strength, and sexual function in men. <em>The New England Journal of Medicine, 369</em>(11), 1011-1022. https://doi.org/10.1056/NEJMoa1206168</p>
+    <p>Hurley, B. F., Seals, D. R., Hagberg, J. M., Goldberg, A. C., Ostrove, S. M., Holloszy, J. O., Wiest, W. G., &amp; Goldberg, A. P. (1984). High-density-lipoprotein cholesterol in bodybuilders v powerlifters. Negative effects of androgen use. <em>JAMA, 252</em>(4), 507-513. https://pubmed.ncbi.nlm.nih.gov/6737643/</p>
+    <p>Kanayama, G., &amp; Pope, H. G. (2017). History and epidemiology of anabolic androgens in athletes and non-athletes. <em>Molecular and Cellular Endocrinology, 464</em>, 4-13. https://doi.org/10.1016/j.mce.2017.02.039</p>
+    <p>Kanayama, G., Hudson, J. I., &amp; Pope, H. G. (2010). Illicit anabolic-androgenic steroid use. <em>Hormones and Behavior, 58</em>(1), 111-121. https://doi.org/10.1016/j.yhbeh.2009.09.006</p>
+    <p>Kicman, A. T. (2008). Pharmacology of anabolic steroids. <em>British Journal of Pharmacology, 154</em>(3), 502-521. https://doi.org/10.1038/bjp.2008.165</p>
+    <p>Pope, H. G., Wood, R. I., Rogol, A., Nyberg, F., Bowers, L., &amp; Bhasin, S. (2014). Adverse health consequences of performance-enhancing drugs: An Endocrine Society scientific statement. <em>Endocrine Reviews, 35</em>(3), 341-375. https://doi.org/10.1210/er.2013-1058</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 12 of 13</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('stress-matcher');
+    if(!root) return;
+    var cards = [
+      {t:"Two 17-alpha-alkylated oral compounds used together", v:"liver", e:"Hepatic. Both share the identical structural resistance to first-pass clearance described in Chapter 7, so both are processed by the same limited hepatic oxidation and bile-export machinery at the same time."},
+      {t:"A single 17-alpha-alkylated oral compound on its own", v:"liver", e:"Hepatic. Even one compound from this class carries the documented cholestasis, transaminase, and lipid signature from Chapter 7, the baseline load this chapter's reasoning is built on top of."},
+      {t:"Two compounds that are both strong aromatase substrates, used together", v:"estrogen", e:"Estrogen-receptor axis. Both converge on the same aromatase enzyme pool from Chapter 3, multiplying estradiol's downstream signal to the identical estrogen-receptor-bearing tissue."},
+      {t:"An aromatase inhibitor pushed hard enough to compensate for a doubled aromatizing load", v:"estrogen", e:"Estrogen-receptor axis, in the opposite direction. Chapter 8's U-shaped harm curve means aggressive suppression routes a new, distinct harm, bone, lipid, joint, through the same downstream tissue rather than clearing it."},
+      {t:"Two compounds that each independently raise hematocrit through erythropoietin, marrow, and hepcidin pathways", v:"viscosity", e:"Blood viscosity / cardiovascular. Both drive the identical three-pathway process from Chapter 6, pushing hematocrit further out along a non-linear viscosity curve than either compound alone."},
+      {t:"Two 19-nortestosterone-derived compounds, each with its own progesterone-receptor affinity, used together", v:"prolactin", e:"Prolactin axis / CNS-breast tissue. Both compete for and activate the identical, finite progesterone-receptor population in the hypothalamus and pituitary described in Chapter 5."},
+      {t:"A testosterone base paired with a DHT-derivative that is not 17-alpha-alkylated and does not aromatize significantly", v:"distributed", e:"Distributed. Each base carries its own documented profile, but they do not both drive the same hepatic bottleneck, so hepatic strain specifically is not concentrated the way doubling within the oral class would concentrate it."},
+      {t:"A testosterone base paired with a 19-nortestosterone, reasoned about by biochemical class rather than assumed safe by variety", v:"distributed", e:"Distributed, with a caveat. The progestogenic and prolactin-related load is not doubled the way it would be pairing two 19-nor compounds, but the testosterone base's own aromatization and erythropoietic profile still applies in full."},
+      {t:"Every compound in this course's catalog, regardless of class", v:"distributed", e:"Trick option, and worth noticing why. Every AAS shares the baseline androgen receptor mechanism from Chapter 1, so no compound is risk-free by default. Class membership determines which additional, class-specific harm layers on top of that shared baseline."}
+    ];
+    var cardSel = document.getElementById('sm-card');
+    var binSel = document.getElementById('sm-bin');
+    var fb = document.getElementById('sm-feedback');
+    var btn = document.getElementById('sm-submit');
+    var fillS = document.getElementById('sm-fill-sorted');
+    var fillA = document.getElementById('sm-fill-acc');
+    var numS = document.getElementById('sm-num-sorted');
+    var numA = document.getElementById('sm-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={liver:'Hepatic (liver)',estrogen:'Estrogen-receptor axis',viscosity:'Blood viscosity / cardiovascular load',prolactin:'Prolactin axis / CNS-breast tissue',distributed:'Distributed, no single concentrated target'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. The primary target is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('base-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Doubling within the 17-alpha-alkylated oral class", v:"concentrates", e:"Concentrates. Both compounds resist the same hepatic clearance machinery, compounding strain on one liver rather than splitting it across two systems."},
+      {t:"Doubling within the strongly aromatizing class", v:"concentrates", e:"Concentrates. Both compounds converge on the same aromatase enzyme pool and the same estrogen-receptor tissue described in Chapter 3."},
+      {t:"Doubling within the erythropoietic (hematocrit-raising) class", v:"concentrates", e:"Concentrates, and non-linearly so. Both compounds drive the identical erythropoietin, marrow, and hepcidin pathway from Chapter 6, pushing viscosity further out along an accelerating curve."},
+      {t:"Doubling within the 19-nortestosterone / progestogenic class", v:"concentrates", e:"Concentrates. Both compounds compete for the same finite progesterone-receptor population in the hypothalamus and pituitary described in Chapter 5."},
+      {t:"Layering an aromatase inhibitor on top of an already-doubled aromatizing load to compensate for the resulting estrogenic rise", v:"concentrates", e:"Still concentrates, just in the opposite direction. Chapter 8's U-shaped harm curve means aggressive suppression routes a new, distinct harm through the same estrogen-receptor tissue rather than resolving the first one."},
+      {t:"Reasoning across a testosterone base, a DHT-derivative, and a 19-nortestosterone, each contributing a different primary structural feature", v:"distributes", e:"Distributes. Each base carries a different combination of the specific structural features, alkylation, aromatizability, carbon-19 status, that drive each class-specific harm, so no single organ absorbs two concentrated hits."},
+      {t:"Pairing a base that is not 17-alpha-alkylated with one that does not raise hematocrit meaningfully, when the goal is understanding which system each one stresses", v:"distributes", e:"Distributes, for those two specific harm pathways. Each compound still carries its own full, individually documented risk profile; what changes is that hepatic and hematologic strain specifically are not being doubled on the same bottleneck."},
+      {t:"Assuming that combining more compounds is inherently safer because the risks must be spreading out", v:"concentrates", e:"This is the trap, not the corollary. Without checking biochemical class first, added compounds are just as likely to double a shared pathway as to distribute across separate ones. Variety alone is not the mechanism, matching different structural bases is."}
+    ];
+    var cardSel = document.getElementById('bs-card');
+    var binSel = document.getElementById('bs-bin');
+    var fb = document.getElementById('bs-feedback');
+    var btn = document.getElementById('bs-submit');
+    var fillS = document.getElementById('bs-fill-sorted');
+    var fillA = document.getElementById('bs-fill-acc');
+    var numS = document.getElementById('bs-num-sorted');
+    var numA = document.getElementById('bs-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={concentrates:'Concentrates strain on one system',distributes:'Distributes strain across systems'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This one <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

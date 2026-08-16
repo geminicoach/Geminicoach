@@ -177,6 +177,12 @@
       return;
     }
 
+    document.addEventListener("click", function(e){
+      var t=e.target; if(!t) return;
+      var hit=(t.id==="acctSub") || (t.closest && t.closest("#acctSub"));
+      if(hit && window.GEM && GEM.startCheckout){ e.preventDefault(); GEM.startCheckout(); }
+    });
+
     GEM.getUser().then(function(user){
       if(!user){ location.replace("login.html"); return; }
       var so=document.getElementById("signout"); so.style.display=""; so.onclick=function(){ GEM.signOut().then(function(){ location.replace("login.html"); }); };
@@ -194,13 +200,14 @@
 
       Promise.all([
         GEM.listCertificates(),
-        GEM.listExamAttempts ? GEM.listExamAttempts() : Promise.resolve([])
+        GEM.listExamAttempts ? GEM.listExamAttempts() : Promise.resolve([]),
+        (isComp || !GEM.hasActiveSubscription) ? Promise.resolve(false) : GEM.hasActiveSubscription()
       ]).then(function(res){
-        var certs=res[0]||[], attempts=res[1]||[];
+        var certs=res[0]||[], attempts=res[1]||[], isSub=res[2]===true;
         var certSlugs={}; certs.forEach(function(c){ certSlugs[c.course_slug]=c; });
         var examBest={}; attempts.forEach(function(a){ if(examBest[a.course_slug]==null||a.score>examBest[a.course_slug]) examBest[a.course_slug]=a.score; });
         var ceu=certs.reduce(function(s,c){ return s+(parseFloat(c.ceu_value)||0); },0);
-        render({user:user,first:first,initial:initial,isComp:isComp,started:started,sumDone:sumDone,sumTotal:sumTotal,overall:overall,completedCount:completedCount,certs:certs,certSlugs:certSlugs,examBest:examBest,ceu:ceu});
+        render({user:user,first:first,initial:initial,isComp:isComp,isSub:isSub,started:started,sumDone:sumDone,sumTotal:sumTotal,overall:overall,completedCount:completedCount,certs:certs,certSlugs:certSlugs,examBest:examBest,ceu:ceu});
       });
     });
 
@@ -226,8 +233,13 @@
       html+='<div class="hero"><div class="wrap heroin">'+
         '<div class="avatar">'+esc(d.initial)+'</div>'+
         '<div><div class="eyebrow">Your learning</div><h1>Welcome back, '+esc(d.first)+'.</h1>'+
-        '<div class="statusrow"><span class="chip member">★ '+(d.isComp?"Charter member":"GELL member")+'</span>'+
-        '<span class="chip email">'+esc(d.user.email)+'</span></div></div>'+
+        '<div class="statusrow">'+
+          (d.isComp
+            ? '<span class="chip charter" style="background:linear-gradient(135deg,#f6cf6a,#e0a43a);color:#1a1205;font-weight:800;border:1px solid #f0d488;box-shadow:0 6px 18px rgba(224,164,58,.38);padding:8px 18px;border-radius:999px;letter-spacing:.5px;font-size:13px">★ CHARTER MEMBER</span>'
+            : d.isSub
+              ? '<span class="chip member">★ GELL Member</span>'
+              : '<span class="chip" style="background:#12233a;color:#aab8d2;border:1px solid #1c3354">Free account</span><button id="acctSub" class="chip" style="cursor:pointer;background:linear-gradient(135deg,#2e8de8,#1a6fc4);color:#fff;border:0;font-weight:700;padding:8px 18px;border-radius:999px">Subscribe · $50/mo →</button>')+
+          '<span class="chip email">'+esc(d.user.email)+'</span></div></div>'+
       '</div></div>';
 
       html+='<div class="wrap">';

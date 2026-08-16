@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Systemic Risk, Monitoring, and the Boundary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Anabolic-Androgenic Steroids &middot; Chapter 13</div>
+    <h1 class="ch-title">The <em>Handoff</em></h1>
+    <p class="ch-subtitle">Twelve chapters walked through one organ system, one enzyme, one compound class at a time, because that is the only way biochemistry can be taught clearly. The body was never reading it one chapter at a time, and the last skill this course can give you is knowing exactly where your own understanding has to stop and a clinician's has to begin.</p>
+    <div class="ch-meta">
+      <span>70 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>7 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">Y</span>ara, 31, arrives at this final chapter with a spreadsheet she built herself. She started this course twelve chapters ago knowing almost nothing about anabolic-androgenic steroids (AAS) beyond what she had absorbed from comment sections, and chapter by chapter she assembled something genuinely impressive: a working understanding of ester kinetics, the aromatization pathway, the specific hepatic signature carried by 17-alpha-alkylated oral compounds, the erythropoietic effect behind a rising hematocrit, the progestogenic quirks of the 19-nortestosterones, and the reasoning, from the previous chapter, that risk concentrates rather than simply adds when two compounds share a biochemical class. She read that chapter on additive risk twice. She redrew its four-class diagram from memory as a study exercise nobody assigned her. By any reasonable measure, she now understands the biochemistry of this subject better than most people who have used these compounds for years without ever opening a textbook.</p>
+    <p>What she asked afterward, in the discussion thread attached to this course, is the question this closing chapter exists to answer honestly, and it is more dangerous than any single fact she picked up along the way. "If I get my own bloodwork drawn every so often, and I already understand what each number means, am I not basically doing what a doctor would do anyway?" It is a fair question from someone who worked this hard, and it deserves a real answer rather than a reflexive no. The honest answer is that understanding what a number means, and knowing what to do about it safely, inside the full context of one specific body's entire history, are not the same skill, and the distance between those two skills is exactly where the practice of medicine lives. Closing this course without saying that plainly would waste everything the previous twelve chapters built.</p>
+    <p>This chapter has two jobs, and they are related. The first is synthesis: pulling the cardiovascular, hepatic, endocrine, hematologic, and mental health threads that ran separately through this course into one picture of what a single body carries when all of those systems are under load at the same time, because that is how a real body actually experiences it, not one risk category at a time. The second job is the handoff itself: an honest account of what a clinician actually watches on bloodwork and physical exam, why each marker earns its place on that list, and where a learner's own understanding, however thorough, has to stop and defer to someone licensed to diagnose and treat. We will follow Yara through both halves of that picture, because her question is close to universal among people who take this material seriously, and the answer to it is the real final lesson of this course.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The body does not read chapters separately</h2>
+    <p>Organizing a course by compound class and by organ system was a pedagogical choice, not a description of how a human body actually processes risk. Chapter 3 covered the aromatization pathway on its own terms. Chapter 6 covered erythropoiesis on its own terms. Chapter 7 covered the hepatic signature of 17-alpha-alkylated orals on its own terms. Chapter 9 covered hypothalamic-pituitary-testicular (HPT) axis suppression on its own terms, the three-part hormonal loop connecting the hypothalamus, the pituitary gland, and the testes that governs a man's own testosterone production. Each of those chapters had to isolate one mechanism to teach it well. A single circulatory system, a single liver, a single pituitary gland, and a single set of mood and behavior regulating circuits in the brain do not experience that isolation. They receive whatever load a person's actual pattern of use puts on them, concurrently, for as long as that pattern continues, and the honest picture of systemic risk is what happens when you stop reading those chapters one at a time and look at all five reporting systems at once.</p>
+    <p>It helps to name the five reporting systems plainly before walking through each one in turn, because the rest of this chapter, and the two widgets built into it, depend on being able to sort a given finding into the right bucket. The <span class="ch-key">cardiovascular system</span> reports through lipid values, blood pressure, and the physical structure and function of the heart muscle itself. The <span class="ch-key">hepatic system</span>, the liver, reports through enzymes released when liver cells are under strain and through markers of bile flow. The <span class="ch-key">endocrine system</span>, specifically the HPT axis, reports through the body's own hormone output, testosterone, luteinizing hormone (LH), and follicle-stimulating hormone (FSH), the two pituitary signals that respectively drive testicular testosterone production and sperm production. The <span class="ch-key">hematologic system</span> reports through the concentration of red blood cells circulating in the blood, most commonly read as hematocrit. And the fifth system, less often discussed with the same clinical precision as the other four but no less real, is <span class="ch-key">mental health and behavior</span>, which does not show up on a blood draw at all and has to be assessed by different means entirely.</p>
+    <p>None of these five systems operates in isolation from the others, and this course has already shown several of the connections directly. Chapter 12 walked through how doubling a compound within one biochemical class concentrates strain on that class's specific downstream system rather than simply adding a second, separate risk. This chapter extends that same logic one level further: even without doubling within a single class, a person's overall pattern of AAS use, and the individual physiology, genetics, training history, and baseline health that pattern interacts with, produces load on several of these five systems simultaneously, and the systems themselves are not sealed off from each other inside the body. A rising hematocrit thickens blood that the cardiovascular system then has to move against greater resistance. A suppressed HPT axis changes circulating hormone levels that influence mood regulation. A stressed liver changes how the body clears and processes other circulating compounds, including the very hormones the endocrine system is trying to regulate. This is not a list of five unrelated worries. It is one body, reporting through five different channels, and the rest of this chapter walks through what each channel is actually saying.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Systemic risk map: one body, five reporting systems" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>One body, five reporting systems</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">SYSTEMIC RISK MAP: ONE BODY, FIVE REPORTING SYSTEMS</text>
+<circle cx="320" cy="188" r="54" fill="#132a45" stroke="#fff3cf" stroke-width="1.8"/>
+<text x="320" y="182" fill="#fff3cf" font-size="11" font-weight="700" text-anchor="middle">ONE BODY,</text>
+<text x="320" y="198" fill="#fff3cf" font-size="11" font-weight="700" text-anchor="middle">ONE CIRCULATION</text>
+<g>
+<rect x="24" y="66" width="150" height="70" rx="8" fill="#132a45" stroke="#c93b2a" stroke-width="1.6"/>
+<text x="99" y="88" fill="#e07a6c" font-size="11" font-weight="700" text-anchor="middle">Cardiovascular</text>
+<text x="99" y="104" fill="#cdd8ea" font-size="9" text-anchor="middle">lipids, blood pressure,</text>
+<text x="99" y="118" fill="#cdd8ea" font-size="9" text-anchor="middle">wall thickness, rhythm</text>
+</g>
+<line x1="174" y1="120" x2="270" y2="168" stroke="#c93b2a" stroke-width="1.6"/>
+<g>
+<rect x="24" y="252" width="150" height="70" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.6"/>
+<text x="99" y="274" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">Hepatic</text>
+<text x="99" y="290" fill="#cdd8ea" font-size="9" text-anchor="middle">liver enzymes,</text>
+<text x="99" y="304" fill="#cdd8ea" font-size="9" text-anchor="middle">bilirubin, bile flow</text>
+</g>
+<line x1="174" y1="270" x2="270" y2="212" stroke="#5aaff5" stroke-width="1.6"/>
+<g>
+<rect x="466" y="66" width="150" height="70" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.6"/>
+<text x="541" y="88" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">Endocrine (HPT axis)</text>
+<text x="541" y="104" fill="#cdd8ea" font-size="9" text-anchor="middle">testosterone, LH, FSH,</text>
+<text x="541" y="118" fill="#cdd8ea" font-size="9" text-anchor="middle">estradiol, testicular size</text>
+</g>
+<line x1="466" y1="120" x2="370" y2="168" stroke="#e0873a" stroke-width="1.6"/>
+<g>
+<rect x="466" y="252" width="150" height="70" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.6"/>
+<text x="541" y="274" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">Hematologic</text>
+<text x="541" y="290" fill="#cdd8ea" font-size="9" text-anchor="middle">hematocrit,</text>
+<text x="541" y="304" fill="#cdd8ea" font-size="9" text-anchor="middle">hemoglobin, viscosity</text>
+</g>
+<line x1="466" y1="270" x2="370" y2="212" stroke="#7fd18a" stroke-width="1.6"/>
+<g>
+<rect x="220" y="6" width="200" height="46" rx="8" fill="#2a1f16" stroke="#9a7fe0" stroke-width="1.6"/>
+<text x="320" y="34" fill="#b6a3ea" font-size="11" font-weight="700" text-anchor="middle">Mental health and behavior: mood, dependence, body image</text>
+</g>
+<line x1="320" y1="52" x2="320" y2="134" stroke="#9a7fe0" stroke-width="1.6"/>
+<text x="320" y="340" fill="#7f8fab" font-size="11" text-anchor="middle">Five channels, one circulation. None of them report in isolation from the others.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>The five reporting systems this chapter synthesizes: cardiovascular, hepatic, endocrine (the HPT axis), hematologic, and mental health and behavior. Each was taught separately across this course. Inside one living body, all five are under load at once.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Twelve chapters treated cardiovascular, hepatic, endocrine, and hematologic risk as separate subjects, because that is the only way to teach mechanism clearly. Before reading further, consider what actually changes when all four of those mechanisms, plus the mental health dimension, are running concurrently in one bloodstream, rather than being encountered one chapter at a time.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Cardiovascular and lipid risk: the strain that often stays silent</h2>
+    <p>Start with the system that carries the largest body of controlled human evidence, because cardiovascular risk is where the research on long-term AAS use has moved furthest beyond anecdote. The lipid piece of this picture will feel familiar from earlier chapters on aromatizing compounds and 17-alpha-alkylated orals, and it is worth restating plainly here because it sits at the center of the systemic picture: AAS use is consistently associated with a fall in <span class="ch-key">high-density lipoprotein (HDL)</span> cholesterol, the fraction of circulating cholesterol most closely tied to clearing lipid buildup out of blood vessel walls, alongside a rise in <span class="ch-key">low-density lipoprotein (LDL)</span> cholesterol, the fraction most closely tied to depositing it there in the first place. A falling HDL number paired with a rising LDL number is not two separate pieces of good and bad news that cancel out. It is the same lipid system moving in the least favorable direction on both ends simultaneously, and sustained over months or years, that combination is a recognized contributor to atherosclerosis, the gradual buildup of plaque inside artery walls that narrows the vessel and stiffens it over time.</p>
+    <p>Blood pressure belongs in the same discussion, and for more than one reason. Androgens can promote sodium and water retention, and several compounds discussed earlier in this course carry a documented tendency to raise blood pressure through that mechanism and others still being worked out. A rising hematocrit, covered in its own section later in this chapter, adds a second, independent pressure toward higher blood pressure, because thicker blood is harder for the same heart to push through the same vessels. Elevated blood pressure sustained over time is not merely an uncomfortable number on a cuff reading. It is itself a direct mechanical stress on the heart muscle, and that stress is where the cardiovascular story in this chapter moves from blood chemistry into the structure of the heart itself.</p>
+    <p>This is the part of the cardiovascular picture that tends to surprise people who feel physically strong and are training harder than they ever have. According to Baggish and colleagues (2017), who compared experienced male weightlifters with at least two years of cumulative lifetime AAS use against non-using weightlifters using cardiac imaging, AAS users showed measurably reduced left ventricular systolic function and reduced diastolic function (the heart's ability to relax and fill with blood between beats, not just contract), along with a higher volume of coronary artery plaque, and the total lifetime duration of AAS use was strongly associated with the degree of that atherosclerotic burden. Separately, <span class="ch-key">left ventricular hypertrophy (LVH)</span>, a thickening of the heart's main pumping chamber wall in response to sustained mechanical or hormonal load, has been documented directly with imaging. According to Smit and colleagues (2021), in a study that followed strength athletes with echocardiography before, during, and after a defined period of AAS use, left ventricular mass increased in proportion to average weekly AAS dose, along with a decline in ejection fraction and a decline in the E/A ratio, a specific echocardiographic measure of diastolic filling, and encouragingly, these same measures returned toward baseline roughly eight months after AAS use was discontinued in the population that study followed. That reversibility is a genuinely important finding, and it should not be overstated into a promise that applies to everyone or to every duration and intensity of use, but it does show that at least some of this structural change is not necessarily permanent scarring, provided use stops and the heart is given time to recover.</p>
+    <p>Not every finding in this area is so reassuring, and it is worth naming the harder one directly, because it corrects a real misconception. According to Hammoud and colleagues (2023), when bodybuilders who had stopped AAS use for a period of time were assessed with a more sensitive imaging technique called global longitudinal strain, which measures the heart muscle's own deformation during each beat rather than relying only on the overall ejection fraction number, this subclinical measure of systolic function remained lower among prior users compared with non-users, even though standard ejection fraction looked essentially normal in both groups. In plain terms, a heart can look fine on the measurement most people are familiar with while still showing measurable impairment on a more sensitive one, and that impairment persisted after use had already stopped for a period. This is exactly the kind of finding that a person cannot assess in themselves by how strong or capable they feel day to day, because subclinical, by definition, means below the threshold of symptoms.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that cardiovascular risk from AAS use only applies to people who already have heart disease, or that feeling strong and capable in the gym is itself evidence that the heart is fine. Structural cardiac change, thickened ventricular walls, reduced diastolic filling, subclinical reductions in strain, can be present with no symptoms at all and no effect on training performance in the short term. Imaging findings like these are picked up on an echocardiogram ordered by a clinician, not by how a workout felt.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The liver, revisited</h2>
+    <p>Chapter 7 of this course covered the hepatic signature of 17-alpha-alkylated oral compounds in mechanistic depth, and it is worth recapping the core of that mechanism here rather than re-deriving it, because the liver's place in the systemic picture depends on remembering exactly why this class of compound behaves the way it does. Alkylation at carbon 17, most commonly with a methyl group, sterically shields that position of the steroid molecule from the hepatic enzymes that would otherwise destroy it on its first pass through the liver after being swallowed. That same structural feature, the one that allows the compound to survive being taken orally at all, is what forces liver cells to process a molecule they were never built to clear efficiently, and the result, documented across this entire compound class regardless of individual marketing reputation, is a consistent pattern: elevated liver transaminases (<span class="ch-key">alanine aminotransferase (ALT)</span> and <span class="ch-key">aspartate aminotransferase (AST)</span>, the two enzymes most commonly used as general markers of liver cell stress), cholestasis (a slowing or blockage of normal bile flow out of the liver), and in less common but more serious cases, structural liver changes such as peliosis hepatis or hepatic adenoma.</p>
+    <p>What this chapter adds to that earlier picture is not a new mechanism but a reminder of how the liver's strain connects outward to the other four systems in this synthesis. The liver is not only an organ that gets damaged by certain compounds, it is also the organ responsible for clearing and metabolizing circulating hormones, processing lipids into their transported forms, and synthesizing proteins the rest of the body depends on, including clotting factors and carrier proteins for circulating hormones. A liver already under strain from a hepatotoxic compound is a liver with reduced capacity to perform all of that other regulatory work cleanly, which is one of the mechanistic reasons the hepatic and lipid pictures described in the previous section tend to move together rather than independently, particularly with compounds that carry both a strong hepatic signature and a strong lipid-shifting effect. This is systemic risk in miniature: one organ's strain changing the baseline conditions the other systems are operating under, not five unrelated dials that happen to sit on the same body.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Chapter 7 established the hepatic signature of 17-alpha-alkylated orals as a liver story. The liver also processes lipids and clears circulating hormones for the rest of the body. Before moving on, consider what it means that a strained liver is not just one organ's problem in isolation, it is a change in the operating conditions every other system on this list depends on.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Endocrine: what suppression finally costs</h2>
+    <p>Chapter 9 of this course introduced the concept of HPT axis suppression and its recovery in mechanistic terms, without offering a protocol, and that same restraint applies here: this section explains what suppression costs a body over time and why recovery is not something a person can assume, not how to manage it. The mechanism itself is straightforward once the earlier chapters of this course are in place. Exogenous androgens, meaning testosterone or any AAS introduced from outside the body, signal to the hypothalamus and pituitary gland that circulating androgen levels are already adequate. In response, the hypothalamus reduces its release of gonadotropin-releasing hormone, the pituitary in turn reduces its release of luteinizing hormone (LH) and follicle-stimulating hormone (FSH), and because LH is the specific signal that drives the testes to produce their own testosterone, and FSH is the specific signal that supports sperm production, the downstream result is a testes that scales back both testosterone production and sperm production, sometimes dramatically, for as long as that external signal continues.</p>
+    <p>The physical and reproductive consequences of this suppression are not abstract. Sustained suppression of the testes' own hormonal signaling can produce testicular atrophy, a measurable reduction in testicular size and mass, and it substantially impairs sperm production, which is the direct mechanism behind AAS-associated infertility rather than some separate, unrelated effect. According to Desai and colleagues (2022), reviewing the suppression of spermatogenesis caused by exogenous testosterone and AAS, both agents reliably impair sperm production through this same HPT axis mechanism, and while natural recovery of sperm production is observed in many men after AAS use is stopped, the time frame for that recovery is highly variable and depends on several factors, including baseline testicular function before use began, the total duration of use, and age at the time use was stopped. In some men, stopping AAS use alone is not sufficient to restore spermatogenesis, and additional clinical intervention becomes necessary.</p>
+    <p>The word that matters most in the sentence above is variable, and it is worth being direct about why, because it corrects a genuinely common and genuinely consequential misconception. According to van Os and colleagues (2025), who examined prolonged hypogonadism following androgen abuse specifically, while most individuals do recover normal HPT axis function after stopping AAS use, a meaningful subset experiences prolonged hypogonadism, with low testosterone and associated symptoms persisting for months or, in some documented cases, years after use has already stopped. That research group proposed the term prolonged post-androgen abuse hypogonadism specifically because this pattern lacked a standardized clinical definition, which had been complicating both its diagnosis and its treatment. The existence of a term this specific, defined recently enough to still be actively debated in the endocrinology literature, is itself evidence against the assumption that recovery is a guaranteed, time-limited event that always resolves given enough patience. For some people, it is. For others, documented in the clinical literature, it is not, and there is currently no reliable way to know in advance which category a given individual will fall into.</p>
+    <p>This is precisely the kind of finding that belongs to a clinician's evaluation rather than to self-assessment, because the tools required to distinguish ordinary, slow, self-resolving suppression from a case that needs active management, hormonal bloodwork interpreted against reference ranges, a physical exam, sometimes semen analysis or imaging, are the same clinical tools introduced in the monitoring section later in this chapter. A learner who understands the mechanism of HPT axis suppression in detail, as this course has now equipped Yara and every other learner to do, still cannot look at their own body and reliably determine, from mechanism alone, which side of that recovery split they are on.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A frequent assumption treats HPT axis recovery as automatic: stop using, wait, and normal hormone production returns on its own timeline every time. The clinical literature on prolonged post-androgen abuse hypogonadism documents a real subset of cases where recovery is incomplete or delayed well beyond what "just wait" would predict. Distinguishing ordinary recovery from a case that needs active clinical management is a diagnostic judgment, made with bloodwork and an exam, not an assumption either direction can safely default to.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="risk-domain-matcher">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Risk Domain Matcher</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes a finding a clinician might observe on an exam or a report a learner might describe. Sort it into the system it belongs to, then reveal the reasoning. This is a mechanism exercise in recognizing patterns, not a tool for diagnosing yourself or anyone else.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Finding</span>
+        <select class="ch-widget-select" id="rdm-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="rdm-bin">
+          <option value="cardio">Cardiovascular</option>
+          <option value="hepatic">Hepatic</option>
+          <option value="endocrine">Endocrine (HPT axis)</option>
+          <option value="heme">Hematologic</option>
+          <option value="mental">Mental health / behavioral</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="rdm-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rdm-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="rdm-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="rdm-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="rdm-feedback">Choose a finding and a system, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="rdm-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Hematologic: the blood that thickened</h2>
+    <p>Chapter 6 of this course covered erythropoiesis, the production of red blood cells, in full mechanistic depth, and the systemic picture depends on carrying that mechanism forward rather than re-teaching it. Sufficient androgen receptor activation in the kidney and bone marrow raises circulating erythropoietin, stimulates marrow erythroid progenitor cells directly, and suppresses a hormone called hepcidin, which frees up iron for hemoglobin synthesis. Three converging pathways, one outcome: more red blood cells, read clinically as a rising hematocrit, the proportion of blood volume made up of red cells, most commonly assessed as part of a <span class="ch-key">complete blood count (CBC)</span>. This is not a compound-specific quirk. It is a class-wide androgen effect documented in mainstream clinical testosterone research, present to some degree with essentially any sufficiently potent androgen, and the phenomenon has a name, <span class="ch-key">erythrocytosis</span>, an excess of circulating red blood cells above the normal reference range.</p>
+    <p>What makes this system worth revisiting one more time in a chapter about systemic synthesis is the specific shape of its danger, because it is genuinely different from a straightforward linear increase. Blood viscosity, its thickness and resistance to flow, rises non-linearly as hematocrit climbs, meaning each additional increment of hematocrit above a certain point increases cardiac and vascular workload disproportionately more than the increment before it. This connects directly back to the cardiovascular section earlier in this chapter, and the connection is not incidental. A heart already managing elevated blood pressure and, in some cases, measurable structural change from the mechanisms described above, is being asked to push increasingly viscous blood through the same vessels, and the two burdens do not sit side by side as separate line items, they compound on the same pump and the same vascular bed. This is exactly the kind of interaction that a chapter-by-chapter education, taken one mechanism at a time, can leave invisible until it is stated explicitly like this: hematocrit is not only a hematologic marker, it is a cardiovascular one, read through a different test.</p>
+    <p>Unlike a liver enzyme or a hormone level, hematocrit is also one of the few systemic markers a person might reasonably notice indirectly, through symptoms like headache, unusual fatigue, or a ruddy complexion, though the correlation between symptoms and the actual degree of elevation is loose enough that symptoms cannot substitute for a measured number. It is also one of the more mechanically straightforward findings for a clinician to act on once measured, which is part of why it earns a place on the monitoring picture this chapter turns to next.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Blood viscosity rises non-linearly with hematocrit, meaning harm accelerates rather than climbing in a straight line as the number goes up. This chapter has now also described a heart carrying elevated blood pressure and, for some users, measurable structural change. What does it mean for the systemic picture that these are not separate risks arriving on separate tracks, but two loads landing on the identical pump and vascular bed at the same time?</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Mental health and dependence: the part that doesn't show up on a lab panel</h2>
+    <p>Four of the five systems this chapter has walked through report through a physical measurement, a blood draw, a blood pressure cuff, an echocardiogram. The fifth does not, and it deserves the same seriousness as the other four rather than being treated as a softer, secondary concern. AAS use interacts with mood, motivation, and the neuroendocrine circuits underlying both, through mechanisms that include direct androgen receptor activity in the brain, downstream effects of HPT axis suppression on a person's own hormone levels, and the well-documented influence that abruptly changing circulating androgen levels, in either direction, can have on mood stability. None of this is a character flaw or a sign of weak discipline. It is a predictable consequence of altering a signaling system that mood regulation, among many other functions, depends on.</p>
+    <p>Body image considerations deserve specific mention here, because they run in more than one direction and both directions matter. For some people, dissatisfaction with muscularity or physique is a factor that precedes and contributes to AAS use in the first place. For others, physical changes that come with AAS use, some wanted, some not, interact with an existing vulnerability to body image concerns in ways that can intensify rather than resolve them. This is not a moral judgment about anyone's motivations for using these compounds. It is a recognition that the psychological relationship a person has with their own body is itself a risk factor worth taking seriously, in both directions, alongside the physical mechanisms this chapter has already covered.</p>
+    <p>The most clinically significant mental health finding in this literature, and the one most likely to be underestimated by someone who feels fully in control of their own use, is <span class="ch-key">dependence syndrome</span>, a recognized pattern in which AAS use continues despite a person's own desire to stop or cut back, accompanied by symptoms on discontinuation and continued use despite awareness of harm, closely paralleling the diagnostic structure used for dependence on other substances. According to Kanayama, Pope, and Hudson (2018), who examined the relationships among AAS use, AAS dependence, body image disorder, and other behavioral conditions using a large sample of male weightlifters, both body image disorder and conduct disorder or sociopathy strongly contributed to the initial development of AAS use, and AAS use itself was shown to contribute significantly to the later development of opioid use disorder specifically, a pathway with real clinical weight given how often opioids and other classical substances of abuse show up alongside AAS use in the broader literature on this population. According to Pope and colleagues (2014), synthesizing the adverse health consequences of performance-enhancing drug use broadly in a scientific statement for the Endocrine Society, users of these compounds frequently combine multiple substances and carry additional associated risk factors at the same time, a pattern that statement identified as a central reason the true health burden of this kind of use is so difficult to characterize from any one compound or any one system in isolation, reinforcing exactly the systemic argument this chapter has been building.</p>
+    <p>What makes dependence syndrome genuinely difficult to self-assess is that its defining feature, continuing a behavior despite wanting to stop, is precisely the kind of thing a person experiencing it is often the least well positioned to judge accurately in themselves. This is not a special weakness of people who use AAS. It is a general feature of dependence on anything, and it is the specific reason this domain, more than any of the other four, benefits from an outside, trained perspective rather than self-report alone.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that dependence is something that happens to people who lack discipline, and that anyone rigorous enough to understand the biochemistry this course has covered is, by that same rigor, immune to it. Dependence syndrome has documented physiological and psychological components that operate independently of how disciplined, informed, or successful a person is in every other part of their life. Understanding a receptor mechanism in detail does not confer immunity to a syndrome that operates through that same neuroendocrine system.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What a clinician actually watches, and why</h2>
+    <p>Everything in this chapter so far has described mechanism and consequence. This section describes the specific tools a clinician uses to actually see those consequences before they become symptomatic, and it is worth being precise about the framing, because the difference between this section and a self-managed checklist is the entire point of this chapter. What follows is a description of what a clinician watches and why each marker earns its place, not a schedule, not a protocol, and not a substitute for that clinician's actual judgment about a specific patient's specific history. A learner who understands why a marker matters is better equipped to have an informed conversation with a clinician. That learner is not thereby equipped to order their own tests, interpret them without context, and manage the result alone.</p>
+    <p>The <span class="ch-key">lipid panel</span>, covering HDL, LDL, and triglycerides, is how the cardiovascular section of this chapter gets translated into an actual number a clinician can track over time, because the shift this course has described, falling HDL alongside rising LDL, is exactly what that panel is built to detect. A <span class="ch-key">complete blood count (CBC)</span>, and specifically the hematocrit value within it, is how the hematologic section becomes measurable rather than inferred from symptoms, and it is one of the more directly actionable findings on this entire list once identified. Liver enzymes, ALT and AST, along with markers of bile flow, are how the hepatic section from Chapter 7 gets tracked over time, watching for the specific signature this course has already described in detail. <span class="ch-key">Blood pressure</span> measurement, simple as it sounds, is a direct, repeatable window into the cardiovascular strain this chapter opened with, and its trend over multiple visits matters more than any single reading.</p>
+    <p>Hormonal bloodwork, specifically total and free testosterone alongside estradiol (the aromatized estrogen this course covered in Chapter 3), along with LH and FSH as the pituitary's own output signals, is how a clinician assesses HPT axis status directly rather than guessing at it from symptoms alone, and it is the specific tool that distinguishes ordinary suppression from the prolonged, clinically significant hypogonadism described in the endocrine section above. <span class="ch-key">Prostate-specific antigen (PSA)</span>, a protein produced by prostate tissue, is watched because the prostate is androgen receptor bearing tissue, the same shared-receptor logic this course established all the way back in Chapter 1, and elevated or rapidly rising PSA is a marker a clinician uses to evaluate prostate health, particularly relevant given the prostate's androgen sensitivity. And cardiac screening, most directly an echocardiogram assessing wall thickness and diastolic function, is how the structural cardiovascular findings described earlier in this chapter, thickened ventricular walls, reduced diastolic filling, actually get detected, because as this chapter already established, those changes can be entirely silent to the person carrying them.</p>
+    <p>None of these markers exist in isolation from the others, and a clinician does not read them that way either. A rising hematocrit changes how a lipid panel's cardiovascular meaning should be weighed. A liver already under strain changes how hormonal bloodwork gets interpreted, since the liver is involved in clearing and processing many of the same hormones being measured. This is the clinical mirror of the systemic argument this entire chapter has been making: the five reporting systems interact inside the body, and a clinician trained to read them together, against the specific context of one patient's full history, physical exam, and reported symptoms, is doing something categorically different from a person running through a list of numbers in isolation, however well that person understands the biochemistry behind each one. This course's earlier companion material on interpreting bloodwork, covered in this catalog's course on reading bloodwork, goes considerably deeper into what a reference range actually represents, why being inside a range is not the same as being optimal, and how confounding factors can shift a result independent of the thing it is supposedly measuring. That material is worth revisiting here, because it teaches literacy, and literacy is exactly what this chapter has been building toward without ever claiming that literacy replaces a clinician's trained judgment.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The monitoring panel mapped to the risk it tracks" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>What each test tracks, and why</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE MONITORING PANEL, MAPPED TO THE RISK IT TRACKS</text>
+<text x="320" y="50" fill="#7f8fab" font-size="10.5" text-anchor="middle">What a clinician orders. Not a self-managed schedule.</text>
+<g>
+<rect x="24" y="66" width="230" height="40" rx="6" fill="#132a45" stroke="#c93b2a" stroke-width="1.4"/>
+<text x="139" y="90" fill="#e07a6c" font-size="11" font-weight="700" text-anchor="middle">Lipid panel + blood pressure</text>
+</g>
+<line x1="254" y1="86" x2="386" y2="86" stroke="#c93b2a" stroke-width="1.6"/>
+<rect x="386" y="66" width="230" height="40" rx="6" fill="#1a2f22" stroke="#c93b2a" stroke-width="1.4"/>
+<text x="501" y="90" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">Cardiovascular strain</text>
+<g>
+<rect x="24" y="118" width="230" height="40" rx="6" fill="#132a45" stroke="#7fd18a" stroke-width="1.4"/>
+<text x="139" y="142" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">CBC / hematocrit</text>
+</g>
+<line x1="254" y1="138" x2="386" y2="138" stroke="#7fd18a" stroke-width="1.6"/>
+<rect x="386" y="118" width="230" height="40" rx="6" fill="#1a2f22" stroke="#7fd18a" stroke-width="1.4"/>
+<text x="501" y="142" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">Hematologic / blood viscosity</text>
+<g>
+<rect x="24" y="170" width="230" height="40" rx="6" fill="#132a45" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="139" y="194" fill="#5aaff5" font-size="11" font-weight="700" text-anchor="middle">ALT / AST + bile markers</text>
+</g>
+<line x1="254" y1="190" x2="386" y2="190" stroke="#5aaff5" stroke-width="1.6"/>
+<rect x="386" y="170" width="230" height="40" rx="6" fill="#1a2f22" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="501" y="194" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">Hepatic strain</text>
+<g>
+<rect x="24" y="222" width="230" height="40" rx="6" fill="#132a45" stroke="#e0873a" stroke-width="1.4"/>
+<text x="139" y="246" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">Testosterone, E2, LH, FSH</text>
+</g>
+<line x1="254" y1="242" x2="386" y2="242" stroke="#e0873a" stroke-width="1.6"/>
+<rect x="386" y="222" width="230" height="40" rx="6" fill="#1a2f22" stroke="#e0873a" stroke-width="1.4"/>
+<text x="501" y="246" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">HPT axis status</text>
+<g>
+<rect x="24" y="274" width="230" height="40" rx="6" fill="#132a45" stroke="#9a7fe0" stroke-width="1.4"/>
+<text x="139" y="298" fill="#b6a3ea" font-size="11" font-weight="700" text-anchor="middle">PSA + echocardiogram</text>
+</g>
+<line x1="254" y1="294" x2="386" y2="294" stroke="#9a7fe0" stroke-width="1.6"/>
+<rect x="386" y="274" width="230" height="40" rx="6" fill="#1a2f22" stroke="#9a7fe0" stroke-width="1.4"/>
+<text x="501" y="298" fill="#7fd18a" font-size="11" font-weight="700" text-anchor="middle">Prostate + cardiac structure</text>
+<text x="320" y="338" fill="#7f8fab" font-size="11" text-anchor="middle">Each test earns its place by tracking a mechanism this course has already taught.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>Each test on a monitoring panel exists to track a specific mechanism this course has covered. This maps the marker to the system it reports on, the reasoning a clinician uses, not a fixed testing calendar for a learner to run alone.</em></figcaption>
+  </figure>
+  </section>
+
+  <div class="ch-widget" id="lab-flag-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">What Does This Lab Flag Track? Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Each card names a test a clinician might order. Sort it into the risk domain it exists to track, then reveal the reasoning. Recognizing what a test is for is understanding, not a substitute for having it ordered and interpreted by a clinician.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Test</span>
+        <select class="ch-widget-select" id="lfs-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">What it tracks</span>
+        <select class="ch-widget-select" id="lfs-bin">
+          <option value="cardio">Cardiovascular</option>
+          <option value="hepatic">Hepatic</option>
+          <option value="endocrine">Endocrine (HPT axis)</option>
+          <option value="heme">Hematologic</option>
+          <option value="prostate">Prostate / androgen-sensitive tissue</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="lfs-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="lfs-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="lfs-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="lfs-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="lfs-feedback">Choose a test and a domain, then submit to see the reasoning.</p>
+
+    <button class="ch-widget-btn" id="lfs-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The boundary: where harm reduction ends and medicine begins</h2>
+    <p>Every chapter in this course has operated inside a deliberate frame: education and harm reduction, mechanism and honest risk, never dosing, never cycle design, never a protocol dressed up as information. That frame was not a legal formality bolted onto the biology, and closing this course without restating exactly why matters more here than anywhere else, because this chapter has just walked through the single body of knowledge most likely to tempt a well-informed learner into thinking they can manage their own case end to end. Understanding what a lipid panel means, what a rising hematocrit does to blood viscosity, why HPT axis recovery is not guaranteed, and why a heart can carry silent structural change, is genuinely valuable. It is also, on its own, not sufficient to safely manage any of it, and the difference between those two claims is the entire content of this closing section.</p>
+    <p>Here is the honest reasoning behind that distinction, stated plainly rather than as an appeal to authority. A clinician's judgment is not simply a larger pile of the same facts this course has taught. It is those facts applied inside the full context of one specific patient's complete medical history, family history, other medications, physical exam findings, and the accumulated pattern recognition that comes from evaluating many patients over years of supervised training, all of which shapes how a given lab value should actually be weighed for that one person. A slightly elevated liver enzyme means something different in a person with a prior history of liver disease than in a person without one. A given hematocrit carries different urgency depending on blood pressure, smoking history, and cardiovascular risk factors a clinician is trained to weigh together. Two people with identical lab reports can warrant two entirely different clinical responses, and knowing which response is correct for a specific person is precisely the judgment this course has never claimed to teach, and never will.</p>
+    <p>Legal status is worth naming here too, briefly and honestly, because it is a real part of the boundary even though it is a separate question from the biology. The legal status of AAS varies considerably by jurisdiction, and this course does not offer legal advice of any kind, in the same way it does not offer a substitute for a clinician's diagnosis and treatment. What this course has offered, across all thirteen chapters, is the biochemical literacy to understand what these compounds do, why they carry the risks they carry, and how to evaluate a claim about them with real knowledge rather than forum reputation. That literacy has genuine value entirely independent of what any individual reader decides to do with it, whether they use these compounds themselves, support someone who does, work in a field adjacent to this subject, or simply wanted to be able to evaluate a confident claim with something more solid underneath it than a spreadsheet of secondhand numbers.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>Harm reduction, the framing this entire course has operated inside, is not the same thing as risk elimination, and it was never meant to be. Harm reduction means giving a person accurate, honest information so that whatever decisions they make, or whatever decisions someone they care about makes, are made with real understanding rather than marketing language or forum folklore. It does not mean that understanding, however thorough, substitutes for the specific, individualized judgment of a licensed clinician who can examine a person directly, order and interpret the tests this chapter has described, and weigh them against a full history no course, however well built, can ever have access to. Recognizing exactly where that handoff needs to happen, and having the humility to make it, is not a failure of everything this course has taught. It is the single most responsible thing a person can do with everything this course has taught.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Yara and the honest limits of a spreadsheet</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Yara is 31, has completed this entire course chapter by chapter, and built her own reference spreadsheet tracking every compound class, mechanism, and risk signature covered along the way. She is not on any hormone therapy herself, and her interest in this material began after a training partner described using AAS under a physician's supervision for a diagnosed medical condition. Her question at the close of this course was direct: if she understands what each bloodwork marker means as well as she now believes she does, why would getting her own labs drawn periodically and reading them herself not be functionally equivalent to a clinician's monitoring.</p>
+    </aside>
+    <p>Running Yara's question back through this chapter resolves it the same way this course has resolved every prior misconception, by tracing it back to mechanism rather than dismissing it. Her instinct was not wrong that literacy matters. A person who understands why a lipid panel is drawn, why hematocrit matters to cardiovascular strain, why HPT axis suppression does not always resolve on its own, and why a heart can carry silent structural change, is unambiguously better equipped than a person with none of that background, whether they are managing their own health, supporting someone else's, or simply trying to think clearly about a subject surrounded by bad information. That part of her instinct, this course fully endorses.</p>
+    <p>Where her instinct needed correcting is the leap from literacy to equivalence. Reading a lipid panel and knowing that falling HDL alongside rising LDL is unfavorable is not the same skill as knowing what that specific combination means for a specific person's overall cardiovascular risk, given their blood pressure trend, their hematocrit, their family history, and their physical exam findings, all weighed together the way a clinician is trained to weigh them. Knowing that HPT axis suppression sometimes fails to resolve on its own is not the same as being able to distinguish, in one specific case, ordinary slow recovery from a case that needs active intervention. The gap between those two skills is not a gap in facts. Yara has the facts. It is a gap in the kind of judgment that comes from training, supervision, and direct examination of a patient, none of which a spreadsheet, however carefully built, can supply.</p>
+    <p>What Yara actually walked away with, once this was laid out plainly, mattered more than a verdict on her original question. She did not leave this course believing her spreadsheet was worthless, and it is not. She left understanding precisely what it is for: a tool that makes her a more informed participant in her own healthcare conversations, or in supporting someone she cares about through theirs, and a tool that tells her exactly when to bring a question to a clinician rather than try to answer it herself. That is not a smaller use for everything she learned across thirteen chapters. It is, if anything, the most responsible use available, and it is exactly what this course was built to produce.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Closing this course</h2>
+    <p>Thirteen chapters ago, this course opened with a different learner, Priya, and a forum thread full of confident numbers that turned out to trace back to a single rodent experiment from 1953. It closes with Yara, a spreadsheet built from genuine understanding, and a question that turned out to have a more honest answer than either equivalence or dismissal. Between those two learners sits everything this course actually set out to do: replace forum folklore and marketing language with real biochemistry, one mechanism at a time, without ever pretending that mechanism alone qualifies anyone, including the person who wrote these chapters, to diagnose or treat a specific human being.</p>
+    <p>That is not a limitation to apologize for. It is the honest shape of what education can responsibly offer on a subject this consequential. Everything covered across these thirteen chapters, cholesterol's conversion to testosterone, the androgen receptor's slow genomic signaling, the specific hepatic and lipid signature of 17-alpha-alkylated orals, the erythropoietic pathways behind a rising hematocrit, the progestogenic quirks of the 19-nortestosterones, the way risk concentrates within a shared biochemical class, and now the systemic picture and the clinical boundary this final chapter has laid out, is true independent of what any individual reader decides to do with it. That is what makes it worth teaching honestly rather than either glamorizing or moralizing about the subject.</p>
+    <p>If this course has done its job, a learner who finishes it should be measurably harder to mislead with a confident forum post, considerably more capable of asking a precise question of a clinician instead of a stranger online, and, above all, clear-eyed about exactly where their own understanding needs to stop and someone else's professional judgment needs to start. That handoff point, named plainly in this final chapter and threaded quietly through every chapter before it, is not the weakest part of what this course has built. It is the part worth carrying forward the longest.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Risk taught chapter by chapter, by compound class and organ system, is a teaching choice, not how a body actually experiences it. Cardiovascular, hepatic, endocrine, hematologic, and mental health effects run concurrently in one circulation and interact with each other, most directly through blood viscosity's effect on cardiovascular workload and the liver's role in clearing circulating hormones.</li>
+      <li>Cardiovascular risk includes falling HDL cholesterol paired with rising LDL cholesterol, elevated blood pressure, atherosclerosis, and structural cardiac change, left ventricular hypertrophy and diastolic dysfunction, that can be present with no symptoms and is detected through imaging, not how a person feels.</li>
+      <li>HPT axis suppression predictably reduces testosterone and sperm production through reduced LH and FSH signaling. Recovery is common but not universal or guaranteed; a documented subset of cases show prolonged hypogonadism that requires clinical evaluation to distinguish from ordinary, slower recovery.</li>
+      <li>Erythrocytosis (elevated hematocrit) raises blood viscosity non-linearly, compounding cardiovascular strain rather than sitting alongside it as a separate concern, and dependence syndrome is a real, physiologically grounded pattern independent of a person's discipline or expertise in every other part of their life.</li>
+      <li>The markers a clinician watches, lipid panel, complete blood count (CBC) and hematocrit, liver enzymes, testosterone and estradiol with LH and FSH, prostate-specific antigen (PSA), blood pressure, and cardiac imaging, each track a specific mechanism this course has taught. What a clinician does with those results, weighed against one person's full history and exam, is a different skill than understanding what each number means.</li>
+      <li>Harm reduction means giving accurate information so decisions are informed, not eliminating risk or replacing a clinician. This course builds understanding, not a license to diagnose or treat, in yourself or anyone else, and recognizing that boundary is the most responsible use of everything it has taught.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Course Complete</div>
+    <p>This closes the thirteen-chapter arc of Anabolic-Androgenic Steroids and Ancillaries: Education and Harm Reduction. The biochemistry taught here, the androgen receptor, ester kinetics, aromatization, the hepatic signature of alkylated orals, HPT axis suppression, erythropoiesis, additive risk within a biochemical class, and the systemic and clinical picture in this final chapter, forms the foundation this catalog's other courses build on, including the companion course on reading bloodwork, which goes deeper into interpreting the exact markers introduced here.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Baggish, A. L., Weiner, R. B., Kanayama, G., Hudson, J. I., Lu, M. T., Hoffmann, U., &amp; Pope, H. G. (2017). Cardiovascular toxicity of illicit anabolic-androgenic steroid use. <em>Circulation, 135</em>(21), 1991-2002. https://doi.org/10.1161/CIRCULATIONAHA.116.026945</p>
+    <p>Desai, A., Yassin, M., Cayetano, A., Tharakan, T., Jayasena, C. N., &amp; Minhas, S. (2022). Understanding and managing the suppression of spermatogenesis caused by testosterone replacement therapy (TRT) and anabolic-androgenic steroids (AAS). <em>Therapeutic Advances in Urology, 14</em>. https://doi.org/10.1177/17562872221105017</p>
+    <p>Hammoud, S., van den Bemt, B. J. F., Jaber, A., &amp; Kurdi, M. (2023). Chronic anabolic androgenic steroid administration reduces global longitudinal strain among off-cycle bodybuilders. <em>International Journal of Cardiology, 381</em>, 153-160. https://doi.org/10.1016/j.ijcard.2023.03.057</p>
+    <p>Kanayama, G., Pope, H. G., &amp; Hudson, J. I. (2018). Associations of anabolic-androgenic steroid use with other behavioral disorders: An analysis using directed acyclic graphs. <em>Psychological Medicine, 48</em>(15), 2601-2608. https://doi.org/10.1017/S0033291718000508</p>
+    <p>Pope, H. G., Wood, R. I., Rogol, A., Nyberg, F., Bowers, L., &amp; Bhasin, S. (2014). Adverse health consequences of performance-enhancing drugs: An Endocrine Society scientific statement. <em>Endocrine Reviews, 35</em>(3), 341-375. https://doi.org/10.1210/er.2013-1058</p>
+    <p>Smit, D. L., Voogel, A. J., den Heijer, M., &amp; de Ronde, W. (2021). Anabolic androgenic steroids induce reversible left ventricular hypertrophy and cardiac dysfunction: Echocardiography results of the HAARLEM study. <em>Frontiers in Reproductive Health, 3</em>, 732318. https://doi.org/10.3389/frph.2021.732318</p>
+    <p>van Os, J., Smit, D. L., Bond, P., &amp; de Ronde, W. (2025). Prolonged post-androgen abuse hypogonadism: Potential mechanisms and a proposed standardized diagnosis. <em>Frontiers in Endocrinology, 16</em>, 1621558. https://doi.org/10.3389/fendo.2025.1621558</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 13 of 13</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('risk-domain-matcher');
+    if(!root) return;
+    var cards = [
+      {t:"A falling HDL cholesterol paired with a rising LDL cholesterol", v:"cardio", e:"Cardiovascular. This is the classic unfavorable lipid shift this chapter opened with, a marker read directly off a lipid panel and tied to atherosclerotic risk over time."},
+      {t:"Elevated liver transaminases (ALT and AST) on a routine panel", v:"hepatic", e:"Hepatic. ALT and AST are the standard markers of liver cell strain, exactly the signature Chapter 7 traced back to the 17-alpha-alkylation structural modification."},
+      {t:"Suppressed luteinizing hormone (LH) and follicle-stimulating hormone (FSH)", v:"endocrine", e:"Endocrine. LH and FSH are the pituitary's own output signals to the testes, and their suppression is the direct mechanism behind HPT axis suppression covered in Chapter 9 and revisited here."},
+      {t:"A hematocrit climbing well above the normal reference range", v:"heme", e:"Hematologic, though it does not stop there, this chapter also connects it forward to cardiovascular strain through non-linear blood viscosity."},
+      {t:"A pattern of irritability, low mood, and preoccupation with training that does not resolve", v:"mental", e:"Mental health / behavioral. Mood instability is a documented, mechanistically grounded effect of altered androgen signaling, not a separate, unrelated concern."},
+      {t:"Left ventricular wall thickening seen on an echocardiogram", v:"cardio", e:"Cardiovascular. This is the structural cardiac remodeling, left ventricular hypertrophy, documented with imaging in this chapter's discussion of Baggish (2017) and Smit (2021)."},
+      {t:"Testicular atrophy noticed on physical exam", v:"endocrine", e:"Endocrine. Reduced testicular size follows directly from suppressed LH signaling to the testes, the same HPT axis mechanism behind reduced testosterone and sperm production."},
+      {t:"A resting blood pressure trending upward over successive visits", v:"cardio", e:"Cardiovascular. Sustained blood pressure elevation is a direct mechanical stress on the heart and a marker this chapter connects to both androgen effects and rising hematocrit."},
+      {t:"A learner reporting they cannot cut back despite wanting to", v:"mental", e:"Mental health / behavioral. This is the defining feature of dependence syndrome, continuing use despite a genuine desire to stop, which this chapter identified as especially hard to self-assess accurately."},
+      {t:"Cholestasis with unusual bilirubin elevation", v:"hepatic", e:"Hepatic. Cholestasis, a slowing of normal bile flow, is part of the same hepatic signature carried by 17-alpha-alkylated orals discussed in Chapter 7 and recapped in this chapter."},
+      {t:"Rising hemoglobin alongside rising hematocrit", v:"heme", e:"Hematologic. Hemoglobin and hematocrit move together because both reflect the same underlying rise in red blood cell mass driven by erythropoietin, marrow stimulation, and hepcidin suppression."}
+    ];
+    var cardSel = document.getElementById('rdm-card');
+    var binSel = document.getElementById('rdm-bin');
+    var fb = document.getElementById('rdm-feedback');
+    var btn = document.getElementById('rdm-submit');
+    var fillS = document.getElementById('rdm-fill-sorted');
+    var fillA = document.getElementById('rdm-fill-acc');
+    var numS = document.getElementById('rdm-num-sorted');
+    var numA = document.getElementById('rdm-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={cardio:'Cardiovascular',hepatic:'Hepatic',endocrine:'Endocrine (HPT axis)',heme:'Hematologic',mental:'Mental health / behavioral'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This is <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('lab-flag-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Lipid panel (HDL, LDL, triglycerides)", v:"cardio", e:"Cardiovascular. The lipid panel is how the falling-HDL, rising-LDL pattern described in this chapter gets turned into a trackable number over time."},
+      {t:"Hematocrit as part of a complete blood count (CBC)", v:"heme", e:"Hematologic. Hematocrit is the direct clinical readout of erythrocytosis, the class-wide androgen effect on red blood cell production covered in Chapter 6."},
+      {t:"ALT and AST liver enzymes", v:"hepatic", e:"Hepatic. These are the standard markers of hepatocyte strain, watched closely with 17-alpha-alkylated orals because of the mechanism covered in Chapter 7."},
+      {t:"Total and free testosterone alongside estradiol (E2)", v:"endocrine", e:"Endocrine. This is how a clinician assesses actual circulating hormone status, the direct readout of HPT axis function this chapter revisited from Chapter 9."},
+      {t:"Prostate-specific antigen (PSA)", v:"prostate", e:"Prostate / androgen-sensitive tissue. PSA reflects prostate tissue activity, the same androgen receptor bearing tissue this course traced back to Chapter 1's shared-receptor logic."},
+      {t:"Resting blood pressure measurement", v:"cardio", e:"Cardiovascular. Blood pressure trend over multiple visits is a direct, repeatable window into cardiovascular strain, whether from sodium retention, rising hematocrit, or both."},
+      {t:"Echocardiogram assessing wall thickness and diastolic function", v:"cardio", e:"Cardiovascular. Imaging is how silent structural changes, left ventricular hypertrophy and diastolic dysfunction, actually get detected, since this chapter established they often produce no symptoms."},
+      {t:"LH and FSH as pituitary output markers", v:"endocrine", e:"Endocrine. LH and FSH show whether the pituitary's own signaling to the testes is suppressed, distinguishing HPT axis status from the testosterone number alone."}
+    ];
+    var cardSel = document.getElementById('lfs-card');
+    var binSel = document.getElementById('lfs-bin');
+    var fb = document.getElementById('lfs-feedback');
+    var btn = document.getElementById('lfs-submit');
+    var fillS = document.getElementById('lfs-fill-sorted');
+    var fillA = document.getElementById('lfs-fill-acc');
+    var numS = document.getElementById('lfs-num-sorted');
+    var numA = document.getElementById('lfs-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={cardio:'Cardiovascular',hepatic:'Hepatic',endocrine:'Endocrine (HPT axis)',heme:'Hematologic',prostate:'Prostate / androgen-sensitive tissue'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This tracks <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

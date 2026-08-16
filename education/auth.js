@@ -129,6 +129,50 @@
           body: JSON.stringify({ slug: slug, answers: answers || [] })
         }).then(function (r) { return r.json(); });
       });
+    },
+
+    // ─── Subscription / access gate ──────────────────────────────────
+    // Charter members: early sign-ups comped for life. Free access, no Stripe row,
+    // shown a "Charter Member" label. Keep lowercase.
+    CHARTER: ["parker.gemini.coach@gmail.com", "ebylander01@gmail.com", "liamtsc1@gmail.com", "jademckenzie3256@gmail.com"],
+    PAYMENT_LINK: "https://buy.stripe.com/6oU14o0yncl87Z802c7bW01",
+
+    isCharter: function (email) {
+      return this.CHARTER.indexOf((email || "").trim().toLowerCase()) !== -1;
+    },
+
+    // true if the signed-in user has an active/trialing Stripe subscription
+    hasActiveSubscription: function () {
+      return sb.rpc("has_active_subscription").then(
+        function (r) { return !!(r && r.data === true); },
+        function () { return false; }
+      );
+    },
+
+    // resolves to { signedIn, email, isComp, isSub, ok } — ok = may open paid content
+    access: function () {
+      var self = this;
+      return this.getUser().then(function (user) {
+        if (!user) return { signedIn: false, email: null, isComp: false, isSub: false, ok: false };
+        var email = (user.email || "").toLowerCase();
+        if (self.isCharter(email)) return { signedIn: true, email: email, isComp: true, isSub: false, ok: true };
+        return self.hasActiveSubscription().then(function (isSub) {
+          return { signedIn: true, email: email, isComp: false, isSub: isSub, ok: isSub };
+        });
+      });
+    },
+
+    // send the signed-in user to Stripe Checkout ($50/mo); attaches their Supabase
+    // user id as client_reference_id so the webhook links the sub to the account.
+    startCheckout: function () {
+      var self = this;
+      return this.getUser().then(function (user) {
+        if (!user) { location.href = "login.html"; return; }
+        var url = new URL(self.PAYMENT_LINK);
+        url.searchParams.set("client_reference_id", user.id);
+        if (user.email) url.searchParams.set("prefilled_email", user.email);
+        location.href = url.toString();
+      });
     }
   };
 })();

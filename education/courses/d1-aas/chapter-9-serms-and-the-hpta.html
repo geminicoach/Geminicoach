@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Selective Switch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+<link rel="stylesheet" href="../../gem-theme-chapter.css">
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Anabolic-Androgenic Steroids &middot; Chapter 9</div>
+    <h1 class="ch-title">The Selective <em>Switch</em></h1>
+    <p class="ch-subtitle">The same molecule that silences an estrogen signal in breast tissue can switch that signal on in bone and liver, and that contradiction is not a flaw in the drug, it is the exact mechanism that lets a selective estrogen receptor modulator speak to the hypothalamus and the pituitary gland at all.</p>
+    <div class="ch-meta">
+      <span>49 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">O</span>pen almost any forum thread about anabolic-androgenic steroids (AAS) and you will find the word "SERM" doing at least three different jobs in the same conversation. One post calls tamoxifen "an estrogen blocker" for treating gynecomastia. Another calls clomiphene a drug that "restarts natural testosterone." A third lumps both compounds together with the aromatase inhibitors covered in the previous chapter, as if all of them are simply interchangeable "anti-estrogens" that do the same thing by the same mechanism. None of that is quite right, and the gap between the folk description and the actual pharmacology is the entire subject of this chapter. An aromatase inhibitor, the subject of Chapter 8, works upstream of the estrogen receptor (ER) entirely, blocking the enzyme that converts testosterone into estradiol so that less estrogen is made in the first place. A selective estrogen receptor modulator (SERM) does not touch estrogen production at all. It goes straight to the receptor estrogen would otherwise bind, occupies it instead, and then does something considerably stranger than simply blocking it: depending on which tissue that receptor happens to sit in, the exact same drug molecule can behave as an antagonist that shuts the estrogen signal down, or as an agonist that mimics it.</p>
+    <p>That single fact, tissue-selective action from one drug at one receptor, is what makes this drug class useful for two purposes that sound, on the surface, unrelated. The first is managing gynecomastia, glandular breast tissue growth in males, by blocking estrogen's proliferative signal specifically at the breast. The second is a conceptual mechanism for stimulating recovery of the hypothalamic-pituitary-testicular (HPT) axis, the hormonal chain of command that exogenous androgen use suppresses. This chapter builds toward that second purpose carefully and stops well short of turning it into a plan. We will define what a SERM actually is and how its tissue selectivity arises at the molecular level, then walk through the HPT axis in enough depth to understand what "suppression" and "shutdown" actually mean physiologically, and finally connect the two by explaining, as mechanism only, how blocking estrogen's negative feedback signal at the hypothalamus and pituitary is the reasoning behind why this drug class gets reached for in that context at all. Nothing in this chapter is a schedule, a dose, or a regimen. It is the biology underneath a term that gets thrown around constantly and explained rarely.</p>
+    <p>Our thread through this chapter is a learner named Omar, 34, who came to this course by way of a friend's fertility work-up. The friend and his partner had spent close to a year trying to conceive without success, and a reproductive endocrinologist eventually flagged a history of unsupervised androgen use as a likely contributor, using language like "suppressed hypothalamic-pituitary-testicular axis" and "secondary hypogonadism" that the friend did not fully understand and could not really explain back to Omar afterward. Omar is not on any hormone therapy himself and is not trying to coach his friend through anything. He wanted to understand, in plain and accurate terms, how a hormone a person takes can shut down an entire signaling axis, and why a decades-old breast cancer drug, tamoxifen, kept surfacing in the same conversation as a possible tool for getting that axis moving again. Those two questions turn out to be the same question, answered from opposite ends, and this chapter is built to answer both.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What a SERM actually is: one receptor, two readings</h2>
+    <p>Estrogen, principally estradiol in adults, signals through a nuclear receptor system in a manner directly parallel to the androgen receptor (AR) system this course has already covered in depth. There are two main estrogen receptor subtypes, ER-alpha and ER-beta, expressed in different proportions across different tissues, breast, bone, liver, the hypothalamus and pituitary, the cardiovascular system, and more. Estradiol is lipophilic, crosses the cell membrane by diffusion, binds the ER in the cytoplasm or nucleus, and the ligand-bound receptor then recruits a set of helper proteins, coactivators, and goes on to alter gene transcription, structurally the same genomic logic described for the androgen receptor in Chapter 1 of this course. Where a SERM differs from estradiol itself is not in which receptor it binds. It is in what happens to the receptor's shape once the SERM, rather than estradiol, is sitting in the binding pocket.</p>
+    <p>Every steroid hormone receptor has a mobile structural element near its ligand-binding pocket, a short segment of the protein commonly referred to in the literature as helix 12, that functions almost like a lid. When estradiol binds, helix 12 folds down over the pocket in a specific closed position that creates a docking surface on the receptor's exterior, a surface shaped precisely to grip a family of proteins called coactivators. Coactivators, once recruited, help assemble the cell's transcriptional machinery and switch nearby genes on. A SERM molecule is close enough in shape to estradiol to fit the same binding pocket, but its structure is different enough that it forces helix 12 into a different final position, one that creates a different exterior surface. That altered surface may fit a corepressor protein instead of a coactivator, in which case the bound receptor recruits machinery that suppresses transcription rather than driving it, producing an antagonist effect. Or the altered surface may still, imperfectly, accommodate a coactivator, in which case the SERM behaves as at least a partial agonist, mimicking some of what estradiol itself would do.</p>
+    <p><span class="ch-key">Selective estrogen receptor modulator (SERM)</span> is the name for exactly this behavior: a compound that binds the ER and produces antagonist effects in some tissues and agonist-like effects in others, within the same person, at the same time, from the same circulating drug level. According to Riggs and Hartmann (2003), the tissue-selective character of a SERM arises from a layered set of factors working together, the exact shape the ligand forces onto the receptor's helix 12 region, the relative local abundance of coactivator versus corepressor proteins in a given cell type, and even which of the two ER subtypes, alpha or beta, predominates in that tissue. A breast epithelial cell and a bone-forming osteoblast can express the identical estrogen receptor protein and still respond to the identical SERM molecule in opposite directions, because the surrounding coregulator environment inside each of those two cell types is different. According to Smith and O'Malley (2004), this coregulator-dependent logic is now understood to be the central mechanism behind selective receptor modulation generally, not an unusual quirk specific to estrogen, and the same framework has since been extended to explain tissue selectivity in several other nuclear hormone receptor systems.</p>
+    <p>It is worth being precise about what this means in practice, using the two oldest and best-studied SERMs as the illustration. Tamoxifen behaves as an ER antagonist in breast tissue, which is exactly why it has been used for decades in breast cancer treatment and prevention, blocking estradiol's proliferative signal in estrogen-receptor-positive breast cells. In the endometrium, the lining of the uterus, and in bone and in the liver's handling of circulating lipids, tamoxifen instead behaves as a partial estrogen agonist, mimicking rather than blocking estradiol's effect in those tissues. Raloxifene, a related but structurally distinct SERM, produces a different pattern again: it acts as an antagonist in both breast and endometrial tissue while still behaving as an agonist in bone, which is the combination that has made it useful specifically for osteoporosis prevention in postmenopausal women, since it supports bone density without carrying tamoxifen's endometrial stimulation. Same drug class, same receptor, genuinely different tissue-by-tissue behavior, because the molecular structure of each specific SERM forces a slightly different final shape onto the receptor.</p>
+    <p>It is also worth noting that ER-alpha and ER-beta are not distributed identically across the body, and that distribution shapes some of what a SERM does independent of coregulator balance alone. ER-alpha tends to predominate in the breast, uterus, and liver, while ER-beta is comparatively more prominent in bone, the cardiovascular system, and parts of the central nervous system, including hypothalamic tissue. A given SERM's relative affinity for one subtype over the other, layered on top of the conformational and coregulator effects already described, contributes another factor to why different SERMs land on different tissue-selectivity profiles even when their basic chemistry looks similar on paper. It is equally honest to note that "antagonist" and "agonist-like" are not always a clean binary in practice; the balance between the two readings in a given tissue can shift somewhat with dose and with the surrounding hormonal environment, which is part of why characterizing SERM pharmacology tissue by tissue has taken decades of careful clinical study rather than a single defining experiment.</p>
+    <p>This is also where clomiphene and its purified isomer, enclomiphene, enter the picture, and their relevance to this course's central concern, the HPT axis, starts to become visible. Clomiphene is itself a mixture of two isomers, enclomiphene and zuclomiphene, that behave somewhat differently from one another and are cleared from the body at different rates, a detail Section 5 of this chapter returns to directly. Both isomers act as ER antagonists at the hypothalamus and pituitary gland specifically. That single, narrow fact, antagonism at those two structures and nowhere else that matters for this discussion, is the entire conceptual bridge between "SERM" as a breast cancer drug class and "SERM" as a term that shows up constantly in discussions of axis recovery after androgen suppression. Before that bridge can make sense, though, this chapter needs to lay out exactly what the hypothalamus and pituitary are doing with estrogen signaling in the first place, which is the subject of the next section.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SERM tissue-selective action, antagonist in breast, agonist-like in bone and liver" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>One SERM, two tissue readings</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="30" fill="#aab8d2" font-size="13" letter-spacing="1.5">TISSUE-SELECTIVE ACTION: ONE LIGAND, TWO RECEPTOR OUTCOMES</text>
+<text x="320" y="52" fill="#cdd8ea" font-size="11" text-anchor="middle">Same SERM molecule, same estrogen receptor (ER), different local coregulator balance</text>
+<g>
+<rect x="40" y="80" width="255" height="230" rx="10" fill="#2a1f16" stroke="#e0873a" stroke-width="1.8"/>
+<text x="167" y="108" fill="#e0873a" font-size="13.5" font-weight="700" text-anchor="middle">BREAST TISSUE</text>
+<rect x="80" y="130" width="175" height="52" rx="8" fill="#12314f" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="167" y="152" fill="#5aaff5" font-size="10.5" text-anchor="middle">SERM binds ER,</text>
+<text x="167" y="167" fill="#5aaff5" font-size="10.5" text-anchor="middle">helix 12 folds into antagonist shape</text>
+<line x1="167" y1="182" x2="167" y2="204" stroke="#e0873a" stroke-width="2" marker-end="url(#arw9a)"/>
+<rect x="80" y="210" width="175" height="46" rx="8" fill="#132a45" stroke="#e0873a" stroke-width="1.4"/>
+<text x="167" y="230" fill="#e0873a" font-size="10.5" text-anchor="middle">Corepressor recruited</text>
+<text x="167" y="245" fill="#e0873a" font-size="10.5" text-anchor="middle">estrogen signal blocked</text>
+<text x="167" y="284" fill="#cdd8ea" font-size="11" font-weight="700" text-anchor="middle">Reading: ANTAGONIST</text>
+<text x="167" y="300" fill="#7f8fab" font-size="9.5" text-anchor="middle">proliferative signal shut off</text>
+</g>
+<defs>
+<marker id="arw9a" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto">
+<polygon points="0,0 7,4.5 0,9" fill="#e0873a"/>
+</marker>
+<marker id="arw9b" markerWidth="9" markerHeight="9" refX="6" refY="4.5" orient="auto">
+<polygon points="0,0 7,4.5 0,9" fill="#7fd18a"/>
+</marker>
+</defs>
+<g>
+<rect x="345" y="80" width="255" height="230" rx="10" fill="#1a2e22" stroke="#7fd18a" stroke-width="1.8"/>
+<text x="472" y="108" fill="#7fd18a" font-size="13.5" font-weight="700" text-anchor="middle">BONE / LIVER TISSUE</text>
+<rect x="385" y="130" width="175" height="52" rx="8" fill="#12314f" stroke="#5aaff5" stroke-width="1.4"/>
+<text x="472" y="152" fill="#5aaff5" font-size="10.5" text-anchor="middle">Same SERM binds ER,</text>
+<text x="472" y="167" fill="#5aaff5" font-size="10.5" text-anchor="middle">helix 12 folds into agonist-like shape</text>
+<line x1="472" y1="182" x2="472" y2="204" stroke="#7fd18a" stroke-width="2" marker-end="url(#arw9b)"/>
+<rect x="385" y="210" width="175" height="46" rx="8" fill="#132a45" stroke="#7fd18a" stroke-width="1.4"/>
+<text x="472" y="230" fill="#7fd18a" font-size="10.5" text-anchor="middle">Coactivator recruited</text>
+<text x="472" y="245" fill="#7fd18a" font-size="10.5" text-anchor="middle">estrogen-like signal switched on</text>
+<text x="472" y="284" fill="#cdd8ea" font-size="11" font-weight="700" text-anchor="middle">Reading: AGONIST-LIKE</text>
+<text x="472" y="300" fill="#7f8fab" font-size="9.5" text-anchor="middle">bone density and lipid handling supported</text>
+</g>
+<text x="320" y="338" fill="#7f8fab" font-size="11" text-anchor="middle">The receptor never changes. The local ratio of coactivator to corepressor protein decides the reading.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 1</span> <em>Tissue-selective action. The identical SERM molecule, bound to the identical estrogen receptor, produces an antagonist reading in breast tissue and an agonist-like reading in bone and liver tissue, because each tissue's local balance of coactivator and corepressor proteins interprets the same ligand-forced receptor shape differently.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>An aromatase inhibitor, covered in the previous chapter, reduces how much estrogen is made in the first place, everywhere in the body at once. A SERM does not change how much estrogen exists. It changes how one specific receptor reads the estrogen signal, tissue by tissue. Before reading further, consider what that distinction implies about why a person might reach for one drug class rather than the other, and why combining the two concepts under one vague label, "anti-estrogen," makes the mechanism harder to understand rather than easier.</p>
+    </aside>
+
+    <p>It is worth naming a common misreading directly, because it shows up constantly in the same communities where Omar's friend picked up the phrase "estrogen blocker." A SERM is not a weaker or more selective version of an aromatase inhibitor. The two drug classes act on entirely different points in the estrogen signaling pathway, one upstream at the enzyme that produces estradiol, the other downstream at the receptor that reads it, and a SERM cannot lower a person's circulating estradiol level at all. What it can do is make specific tissues behave, functionally, as though estradiol were not signaling there, while leaving other tissues fully or partially estrogen-responsive. That is a fundamentally different kind of intervention than reducing the hormone itself, and confusing the two leads directly to the kind of muddled forum language that opened this chapter.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The HPT axis, from hypothalamus to testes</h2>
+    <p>To understand why blocking an estrogen receptor at two specific structures in the brain matters at all, we need the full picture of the axis those structures sit at the top of. The <span class="ch-key">hypothalamic-pituitary-testicular (HPT) axis</span> is the hormonal chain of command that governs testosterone production and sperm development in a male body, and like most endocrine axes in this course, it is best understood as a chain, each link releasing a signal that drives the next link, with a feedback signal running back up the chain to keep the whole system in a stable operating range.</p>
+    <p>The chain begins in the hypothalamus, a small structure at the base of the brain, where specialized neurons release <span class="ch-key">gonadotropin-releasing hormone (GnRH)</span> in short, discrete pulses rather than as a steady stream. That pulsatile pattern is not incidental, it is functionally essential: the pituitary gland's GnRH receptors desensitize under constant, non-pulsatile exposure, which is precisely the pharmacological principle exploited by continuous GnRH-agonist therapy used elsewhere in medicine to deliberately shut the axis down. Under normal pulsatile signaling, GnRH travels a short distance through a dedicated local blood supply, the hypophyseal portal system, to reach the anterior pituitary gland, where it binds GnRH receptors on specialized cells called gonadotrophs.</p>
+    <p>Stimulated gonadotrophs release two hormones into the general circulation, both classified as gonadotropins because they act on the gonads. <span class="ch-key">Luteinizing hormone (LH)</span> travels through the bloodstream to the testes, where it binds receptors on Leydig cells and drives the enzymatic cascade, beginning with cholesterol import into the mitochondria, that this course detailed in Chapter 1, ultimately producing testosterone. <span class="ch-key">Follicle-stimulating hormone (FSH)</span> travels to the same organ but acts on a different cell population, the Sertoli cells that line the seminiferous tubules, supporting and regulating the process of spermatogenesis, sperm cell development, and maintaining the specialized microenvironment sperm cells require to mature properly. LH is therefore the primary driver of testosterone output, while FSH is the primary driver of fertility-relevant sperm production, and although the two hormones interact and support each other's downstream tissue, they are functionally distinct signals with distinct target cells.</p>
+    <p>One additional feedback signal deserves mention here, because it explains why FSH suppression under exogenous androgen exposure can behave somewhat independently of the testosterone-driven suppression already described for LH. Sertoli cells secrete a hormone called inhibin B in response to FSH stimulation, and inhibin B travels back to the pituitary to selectively suppress further FSH release, a narrower feedback loop layered on top of the broader testosterone-and-estradiol feedback that influences both LH and FSH together. This is part of why LH and FSH values do not always move in perfect lockstep on a hormone panel, and why a treating clinician reading that panel is interpreting more than one feedback signal at once, not a single unified number.</p>
+    <p>The final piece of the chain is the feedback loop that closes it. Rising testosterone acts directly on both the hypothalamus and the pituitary, reducing GnRH pulse frequency and reducing pituitary sensitivity to whatever GnRH signal does arrive, which in turn reduces LH and FSH output. A meaningful share of that suppressive signal, importantly, does not come from testosterone acting through the androgen receptor at all. A portion of circulating testosterone is locally aromatized to estradiol within the hypothalamus and pituitary themselves, and estradiol acting through the estrogen receptor at those two structures is, in fact, one of the more potent negative feedback signals in the entire axis. This is precisely the detail that makes SERMs mechanistically relevant to this discussion at all: if a meaningful share of the brake on GnRH, LH, and FSH release is being applied through the estrogen receptor rather than the androgen receptor, then a compound capable of selectively blocking the estrogen receptor at exactly those two structures has a plausible route to loosening that brake.</p>
+  <figure class="ch-figure">
+    <div class="ch-figbox" style="height:auto;padding:0;">
+      <svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The hypothalamic-pituitary-testicular axis with negative feedback loop" style="position:relative;display:block;width:100%;height:auto;font-family:'Barlow',system-ui,sans-serif;">
+<title>The HPT axis: chain of command and feedback loop</title>
+<rect x="1" y="1" width="638" height="358" rx="14" fill="#0f2138" stroke="#1c3354" stroke-width="2"/>
+<text x="24" y="28" fill="#aab8d2" font-size="13" letter-spacing="1.5">THE HPT AXIS: SIGNAL DOWN, FEEDBACK UP</text>
+<defs>
+<marker id="arw9c" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#5aaff5"/>
+</marker>
+<marker id="arw9d" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+<polygon points="0,0 8,5 0,10" fill="#e0873a"/>
+</marker>
+</defs>
+<rect x="230" y="46" width="180" height="54" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="68" fill="#5aaff5" font-size="12.5" font-weight="700" text-anchor="middle">HYPOTHALAMUS</text>
+<text x="320" y="84" fill="#cdd8ea" font-size="9.5" text-anchor="middle">pulsatile GnRH release</text>
+<line x1="320" y1="100" x2="320" y2="128" stroke="#5aaff5" stroke-width="2.2" marker-end="url(#arw9c)"/>
+<rect x="230" y="134" width="180" height="54" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="156" fill="#5aaff5" font-size="12.5" font-weight="700" text-anchor="middle">ANTERIOR PITUITARY</text>
+<text x="320" y="172" fill="#cdd8ea" font-size="9.5" text-anchor="middle">releases LH and FSH</text>
+<line x1="320" y1="188" x2="320" y2="216" stroke="#5aaff5" stroke-width="2.2" marker-end="url(#arw9c)"/>
+<rect x="220" y="222" width="200" height="60" rx="8" fill="#132a45" stroke="#5aaff5" stroke-width="1.8"/>
+<text x="320" y="242" fill="#5aaff5" font-size="12.5" font-weight="700" text-anchor="middle">TESTES</text>
+<text x="320" y="258" fill="#cdd8ea" font-size="9.5" text-anchor="middle">LH &#8594; Leydig cells &#8594; testosterone</text>
+<text x="320" y="272" fill="#cdd8ea" font-size="9.5" text-anchor="middle">FSH &#8594; Sertoli cells &#8594; spermatogenesis</text>
+<path d="M 220 250 C 100 250 90 120 224 66" fill="none" stroke="#e0873a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arw9d)"/>
+<path d="M 220 260 C 130 300 130 180 226 152" fill="none" stroke="#e0873a" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arw9d)"/>
+<text x="95" y="160" fill="#e0873a" font-size="10" text-anchor="middle">negative</text>
+<text x="95" y="174" fill="#e0873a" font-size="10" text-anchor="middle">feedback</text>
+<text x="95" y="188" fill="#e0873a" font-size="10" text-anchor="middle">(testosterone</text>
+<text x="95" y="202" fill="#e0873a" font-size="10" text-anchor="middle">+ local estradiol,</text>
+<text x="95" y="216" fill="#e0873a" font-size="10" text-anchor="middle">via AR and ER)</text>
+<rect x="450" y="134" width="150" height="80" rx="8" fill="#2a1f16" stroke="#e0873a" stroke-width="1.6"/>
+<text x="525" y="156" fill="#e0873a" font-size="11" font-weight="700" text-anchor="middle">Feedback targets</text>
+<text x="525" y="174" fill="#cdd8ea" font-size="9.5" text-anchor="middle">hypothalamus: GnRH</text>
+<text x="525" y="188" fill="#cdd8ea" font-size="9.5" text-anchor="middle">pulse frequency down</text>
+<text x="525" y="202" fill="#cdd8ea" font-size="9.5" text-anchor="middle">pituitary: LH/FSH down</text>
+<text x="320" y="336" fill="#7f8fab" font-size="11" text-anchor="middle">A working axis is a closed loop. Estrogen receptor signaling at the top two links is part of the brake.</text>
+</svg>
+    </div>
+    <figcaption><span class="ch-fig-num">Fig. 2</span> <em>The HPT axis. Pulsatile gonadotropin-releasing hormone (GnRH) from the hypothalamus drives luteinizing hormone (LH) and follicle-stimulating hormone (FSH) release from the anterior pituitary, which act on the testes. Rising testosterone, and estradiol locally aromatized from it, feed back to suppress GnRH, LH, and FSH at the top of the chain.</em></figcaption>
+  </figure>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common assumption holds that testosterone suppresses its own production entirely through the androgen receptor, meaning that a compound that does not aromatize to estrogen should leave the HPT axis largely undisturbed. That assumption does not hold up. Testosterone feeds back on the hypothalamus and pituitary through both the androgen receptor directly and through local aromatization to estradiol acting on the estrogen receptor at those same two structures. Any sufficiently potent exogenous androgen, aromatizing or not, still suppresses gonadotropin-releasing hormone (GnRH), luteinizing hormone (LH), and follicle-stimulating hormone (FSH) output, because the androgen receptor pathway alone is capable of applying meaningful negative feedback on its own.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="serm-tissue-sorter">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">SERM Tissue Reading Sorter</div>
+    </div>
+    <p class="ch-widget-sub">Each card names a SERM acting at a specific tissue. Decide whether the estrogen receptor is being read as an antagonist, an agonist, or mixed/dose-dependent at that site, then reveal the explanation. The point is not memorizing a table, it is recognizing that the drug never changes, only the tissue reading does.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Tissue context</span>
+        <select class="ch-widget-select" id="ts-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your classification</span>
+        <select class="ch-widget-select" id="ts-bin">
+          <option value="antagonist">ER Antagonist (blocks estrogen signal)</option>
+          <option value="agonist">ER Agonist-like (mimics estrogen signal)</option>
+          <option value="mixed">Mixed / Dose-Dependent</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sorted</span>
+        <span class="ch-meter-bar"><span id="ts-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ts-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="ts-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ts-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ts-feedback">Choose a tissue context and a reading, then submit to see the explanation.</p>
+
+    <button class="ch-widget-btn" id="ts-submit">Submit classification</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>How exogenous androgens shut the axis down</h2>
+    <p>With the axis mapped out, the mechanism behind AAS-related suppression follows directly from the feedback logic already described. When androgen enters the bloodstream from an outside source, whether prescribed testosterone or an unsupervised AAS regimen, the hypothalamus and pituitary read the resulting rise in circulating androgen, and in aromatizable compounds, the resulting rise in circulating estradiol, as evidence that the system already has plenty of hormone in circulation. Both signals converge on the same outcome: GnRH pulse frequency drops, pituitary sensitivity to GnRH drops, and LH and FSH output falls, in some cases dramatically. According to Rahnema and colleagues (2014), this suppression is a highly consistent, dose-related, and expected physiological response to sustained exogenous androgen exposure, not a rare complication or an unlucky individual reaction.</p>
+    <p>The downstream consequences follow the same two-branch structure the axis itself is built on. With LH output suppressed, Leydig cells lose their primary stimulus and testicular endogenous testosterone production falls sharply, frequently to a small fraction of an individual's typical baseline. Because Leydig cells and the surrounding testicular tissue are, in effect, no longer being driven to do their usual work, sustained suppression is also associated with measurable testicular atrophy, a reduction in testicular volume that reflects reduced cellular activity and blood flow rather than any direct toxic injury to the tissue. With FSH output simultaneously suppressed, Sertoli cell function and the broader spermatogenic environment are disrupted as well, which is the mechanism behind the impaired fertility and reduced sperm counts that can accompany AAS use, exactly the clinical picture that eventually prompted Omar's friend's fertility evaluation.</p>
+    <p>According to Rahnema, Crosnoe, and Kim (2015), this pattern is now understood to be common enough that unsupervised androgen use, including exposure through mislabeled or undisclosed "designer steroid" products sold as dietary supplements, may represent one of the more frequently underrecognized causes of hypogonadism in men of reproductive age, precisely because the history of use is often not volunteered to a treating physician. That underrecognition matters clinically. A man presenting with low testosterone, low LH, and low FSH after a period of AAS use has a physiological picture, laboratory findings included, that can closely resemble other causes of secondary hypogonadism, and an accurate history is frequently what separates an accurate diagnosis from a misdirected one.</p>
+    <p>It is worth being honest about the range of individual outcomes here rather than presenting suppression as a uniform, predictable event. The degree of suppression and, separately, the speed and completeness of eventual recovery once exogenous androgen exposure stops, both vary considerably from person to person, and depend on factors including the dose and duration of use, the specific compounds involved, individual differences in axis sensitivity, and baseline gonadal reserve before any use began at all. Some men's axes recover spontaneously and substantially over a period of weeks to months once exogenous exposure ends. Others experience a much slower or more incomplete recovery, and a smaller subset develop a persistent hypogonadal state requiring ongoing medical management. This variability, more than any single number, is the honest evidence-graded picture, and it is precisely why axis-directed treatment decisions belong with a physician who can order and track an individual's actual bloodwork over time, not with a fixed assumption drawn from someone else's experience or a forum consensus.</p>
+    <p>None of this is something a learner can meaningfully assess from symptoms alone. The laboratory picture that distinguishes a suppressed axis from other causes of low testosterone typically involves total testosterone, LH, and FSH measured together, since the pattern across all three, not any single number in isolation, is what tells a clinician whether a problem sits at the level of the testes themselves or further up the chain at the hypothalamus and pituitary. Earlier material in this catalog on reading bloodwork covers that interpretive skill in general terms; the point worth carrying into this chapter specifically is that an axis-suppression picture is a pattern across several hormones read together over time, not a single value a learner can look up and self-diagnose from.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Testicular atrophy under sustained axis suppression reflects reduced Leydig cell stimulation, not direct chemical damage to testicular tissue. Given that distinction, consider what it implies about the general shape of recovery once the suppressive signal is removed, compared to what recovery would look like if the tissue itself had been permanently injured. This chapter is not going to tell you a timeline. It is asking you to reason about the mechanism.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Why SERMs are used: two separate jobs, one drug class</h2>
+    <p>With both halves of the mechanism now on the table, tissue-selective estrogen receptor action on one side and the HPT axis's feedback structure on the other, we can state plainly, and separately, the two reasons this drug class appears repeatedly in AAS-related contexts. They are genuinely distinct applications of the same underlying pharmacology, and treating them as one undifferentiated "SERM use case" is part of what keeps the online discussion of this topic so muddled.</p>
+    <p>The first application is <span class="ch-key">gynecomastia</span> management, glandular breast tissue growth in males driven by estrogen's proliferative signal acting locally on breast tissue, whether that estrogen arrives from aromatization of exogenous androgen or from any other source of elevated estradiol. Because tamoxifen acts as a genuine ER antagonist specifically in breast tissue, as established in Section 1, it directly opposes the proliferative signal driving glandular growth at the site where that growth is actually occurring. Tamoxifen is formally approved for breast cancer treatment and risk reduction, and its off-label use for gynecomastia, including AAS-associated gynecomastia, is well documented in the clinical literature; according to Rahnema and colleagues (2014), SERMs are among the medical management strategies clinicians consider for AAS-associated gynecomastia specifically. It is important to be honest about the limits of that evidence, though. The clinical response depends heavily on how long the glandular tissue has been present and growing. Early, still-glandular tissue tends to respond meaningfully to hormonal intervention, because the tissue is still actively estrogen-responsive. Longer-standing gynecomastia frequently undergoes fibrosis, a structural, largely irreversible remodeling of the tissue, and fibrotic tissue does not meaningfully regress with SERM therapy or any other hormonal approach, at which point surgical removal becomes the only intervention with a realistic prospect of resolving it. This is a genuine evidence-graded distinction, not a marketing footnote, and it is precisely the kind of information a treating clinician needs to evaluate directly.</p>
+    <p>The second application is the conceptual reasoning behind HPT axis recovery. Because a meaningful share of the negative feedback that suppresses GnRH, LH, and FSH is applied through the estrogen receptor at the hypothalamus and pituitary, and because clomiphene and enclomiphene act as ER antagonists specifically at those two structures, blocking that receptor there removes part of the brake the axis is applying to itself. With less estrogen-mediated inhibitory signal reaching the hypothalamus, GnRH pulse frequency can increase; with less inhibitory signal reaching the pituitary directly, pituitary sensitivity to that GnRH signal can increase as well. Both changes point in the same direction, toward higher LH and FSH output, which in turn provides Leydig cells and Sertoli cells with a stronger stimulus than they were receiving under suppression. According to Shabsigh and colleagues (2005), in a cohort of hypogonadal men treated with clomiphene citrate, this mechanism translated into a measurable clinical effect: mean serum testosterone rose substantially over several weeks of treatment, alongside an improved testosterone-to-estrogen ratio, using the endogenous production pathway rather than exogenous testosterone administration. This is stated here strictly as mechanism, the reasoning for why this drug class is discussed in axis-recovery contexts, and specifically not as a schedule, a dose, or a protocol; this course does not provide any of those things, for this or any other application, and nothing about understanding the mechanism changes that boundary.</p>
+    <p>This distinction is also why axis-directed reasoning gets discussed at all in preference to simply administering exogenous testosterone. Exogenous testosterone reliably raises circulating androgen levels, but it does so by adding hormone from outside the system, which still engages the same negative feedback loop described in Section 2 and continues to suppress LH and FSH, and therefore continues to suppress spermatogenesis, for as long as it is used. A strategy built around blocking estrogen receptor feedback at the hypothalamus and pituitary instead raises testosterone by driving the body's own production pathway, LH and FSH included, which is precisely why it draws clinical interest specifically in men for whom preserving fertility is a relevant concern, a group exogenous testosterone therapy is generally a poor fit for.</p>
+
+    <blockquote class="ch-quote">
+      <p>"SERMs act as either estrogen agonists or antagonists, depending on the target tissue... this pharmacology has allowed the development of drugs that maximize the beneficial effects of estrogen while minimizing the harmful ones."</p>
+      <cite>B. Lawrence Riggs and Lynn C. Hartmann, <em>New England Journal of Medicine</em> (2003)</cite>
+    </blockquote>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A frequent claim holds that taking a SERM will "restart" a shut-down axis the way flipping a switch restarts a stalled engine, on a fixed and predictable timeline. The actual mechanism is narrower and slower than that image suggests: a SERM can reduce one specific inhibitory signal, estrogen receptor-mediated negative feedback at the hypothalamus and pituitary, which may allow GnRH, LH, and FSH output to rise. It does not repair tissue, it does not guarantee a particular outcome, and how completely or how quickly any individual axis responds depends on factors this chapter has already described as genuinely variable. Mechanism explains why a tool might work. It does not promise that it will, for any specific person.</p>
+    </aside>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Four names, four jobs: tamoxifen, raloxifene, clomiphene, enclomiphene</h2>
+    <p>It is worth closing the loop on the four named compounds this chapter opened with, because each occupies a genuinely distinct place in this pharmacology rather than being interchangeable versions of one idea. <span class="ch-key">Tamoxifen</span> is a first-generation SERM, approved for breast cancer treatment and risk reduction, and reached for off-label in gynecomastia management specifically because of its antagonist behavior in breast tissue described above. Its agonist-like activity in the endometrium is a well-documented consideration in its approved oncology use, tracked clinically over years of use in that population, and a reminder that "agonist-like elsewhere" is not a hypothetical footnote but a real, monitored clinical property of the molecule.</p>
+    <p><span class="ch-key">Raloxifene</span> is a second-generation SERM, structurally distinct from tamoxifen, approved for osteoporosis prevention and treatment in postmenopausal women and for reducing breast cancer risk in specific populations. Its selectivity profile differs from tamoxifen's in a clinically meaningful way: raloxifene behaves as an antagonist in both breast and endometrial tissue while still supporting bone density as a partial agonist there, which according to Riggs and Hartmann (2003) reflects genuinely distinct helix 12 conformational outcomes between the two molecules despite their shared drug class. Within AAS-related discussion, raloxifene appears less often than tamoxifen specifically for gynecomastia, and its evidence base in that off-label context is considerably thinner than tamoxifen's.</p>
+    <p><span class="ch-key">Clomiphene</span> occupies a different regulatory lane entirely. It is approved for inducing ovulation in women with certain forms of infertility, and its use in men for secondary hypogonadism and fertility preservation is off-label, though it has a long history of clinical use in that context specifically because it avoids suppressing endogenous sperm production the way exogenous testosterone administration does. As noted earlier, clomiphene is a mixture of two stereoisomers, enclomiphene, the trans isomer, and zuclomiphene, the cis isomer, and the two behave differently. According to Rodriguez, Pastuszak, and Lipshultz (2016), the bulk of clomiphene's beneficial effect on gonadotropin and testosterone levels is attributable to the enclomiphene component, while zuclomiphene clears the body far more slowly, accumulates with repeated dosing, and appears to contribute comparatively little to the intended endocrine effect while carrying its own separate estrogenic activity profile.</p>
+    <p>Clomiphene's own history is worth a brief note, because it illustrates how a compound migrates between uses once its receptor-level mechanism is understood. It was developed and approved in the 1960s specifically for ovulation induction, exploiting the same hypothalamic-pituitary estrogen receptor antagonism this chapter has focused on, applied in a female reproductive context where blocking that feedback signal raises GnRH and gonadotropin output enough to trigger ovulation. Its extension to male secondary hypogonadism decades later was a direct, mechanism-driven inference: if blocking estrogen receptor feedback at the hypothalamus and pituitary raises gonadotropin output in a woman's axis, the same blockade should raise gonadotropin output, and downstream testosterone, in a man's axis built on the same basic architecture. That inference has since been tested clinically for decades, which is part of why clomiphene's off-label use in men, despite never receiving a male-specific approval, rests on a comparatively mature evidence base.</p>
+    <p><span class="ch-key">Enclomiphene</span>, the isolated trans isomer, was developed specifically to separate that beneficial component from zuclomiphene's slower-clearing baggage. According to Earl and Kim (2019), early clinical work on enclomiphene showed it raises LH, FSH, and serum testosterone while, unlike direct testosterone administration, preserving spermatogenic parameters, making it a candidate specifically for men who need endogenous testosterone support without sacrificing fertility. It is worth being honest about where the evidence for enclomiphene currently stands, though: despite encouraging trial data stretching back over a decade, enclomiphene has not achieved the same long, stable, decades-deep regulatory and clinical track record that tamoxifen and clomiphene themselves carry, and it has moved through a complicated regulatory history in different jurisdictions. Evidence-grading this honestly means treating enclomiphene as a mechanistically well-reasoned and clinically promising compound with a real but still comparatively young human evidence base, not as a settled, fully mature standard of care.</p>
+    <p>Notice what unifies all four compounds despite their different approved indications and different regulatory histories: every one of them is doing the same underlying thing, occupying the estrogen receptor and forcing a tissue-dependent conformational outcome, with the specific clinical use in each case determined by which tissue's reading happens to be therapeutically useful for that particular purpose. Tamoxifen's usefulness in gynecomastia and clomiphene's usefulness in axis stimulation are not two different mechanisms bundled awkwardly into one drug class. They are the same mechanism, applied at two different points along the axis this chapter has spent its middle sections mapping out.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Clomiphene is a mixture of two isomers that behave differently and clear the body at different rates, while enclomiphene isolates the one considered more responsible for the endocrine effect researchers are interested in. Before moving on, consider why isolating a single isomer of an existing, decades-old drug can still count as a meaningfully different pharmacological product, even though the parent compound has been available for a very long time.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="axis-step-order">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">HPT Axis Sequence Builder</div>
+    </div>
+    <p class="ch-widget-sub">Each card describes one event in the hypothalamic-pituitary-testicular (HPT) axis's normal operating sequence. Assign each card to the step number where it belongs, then submit to check your sequence against the physiology.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sequence event</span>
+        <select class="ch-widget-select" id="ax-card"></select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Step number</span>
+        <select class="ch-widget-select" id="ax-bin">
+          <option value="1">Step 1</option>
+          <option value="2">Step 2</option>
+          <option value="3">Step 3</option>
+          <option value="4">Step 4</option>
+          <option value="5">Step 5</option>
+          <option value="6">Step 6</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Placed</span>
+        <span class="ch-meter-bar"><span id="ax-fill-sorted" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ax-num-sorted">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Accuracy</span>
+        <span class="ch-meter-bar"><span id="ax-fill-acc" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="ax-num-acc">0%</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ax-feedback">Choose an event and a step number, then submit to see whether it belongs there.</p>
+
+    <button class="ch-widget-btn" id="ax-submit">Submit placement</button>
+  </div>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Omar and the axis his friend never saw</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Omar is 34, not on any hormone therapy, and became interested in this material after a close friend's fertility evaluation surfaced a history of unsupervised androgen use as a likely contributor to the couple's difficulty conceiving. The reproductive endocrinologist used terms, "suppressed hypothalamic-pituitary-testicular axis," "secondary hypogonadism," that the friend absorbed without fully understanding, and Omar found himself trying to translate the clinical language into something he could actually follow, largely by reading forum threads that used the word "SERM" to mean at least three different things depending on the post. He arrived at this course wanting the actual biology, not a verdict on his friend's situation and not a plan for anyone.</p>
+    </aside>
+    <p>Running Omar's questions back through this chapter resolves them directly, and the resolution is worth walking through explicitly, because it mirrors exactly the kind of translation work a learner in his position actually needs. His first confusion was believing "SERM" and "aromatase inhibitor" described roughly the same kind of drug, both loosely filed under "anti-estrogen." Section 1 replaces that with the precise distinction: an aromatase inhibitor reduces estrogen production everywhere, while a SERM leaves estrogen production untouched and instead changes how specific tissues read the estrogen signal that is already there, reading as antagonist in some tissues and agonist-like in others depending on the local balance of coactivator and corepressor proteins recruited to the ligand-bound receptor.</p>
+    <p>His second confusion was not understanding, even conceptually, how a hormone one takes could suppress an entire hormonal axis. Sections 2 and 3 supply the missing chain: gonadotropin-releasing hormone (GnRH) pulses from the hypothalamus drive luteinizing hormone (LH) and follicle-stimulating hormone (FSH) release from the pituitary, LH and FSH drive Leydig cell testosterone production and Sertoli cell-supported spermatogenesis in the testes, and rising testosterone, along with estradiol locally aromatized from it, feeds back on the hypothalamus and pituitary to suppress the whole chain. Sustained exogenous androgen exposure engages that same feedback loop, suppressing GnRH, LH, and FSH and, downstream, both testicular testosterone output and sperm production, which is the physiological picture behind his friend's fertility evaluation specifically.</p>
+    <p>His third confusion, the one that had confused him most, was why a breast cancer drug kept coming up in a conversation about male fertility. Section 4 supplies that answer directly: because a meaningful share of the negative feedback suppressing the axis runs through the estrogen receptor at the hypothalamus and pituitary specifically, and because clomiphene and enclomiphene act as antagonists at that receptor at those two structures, the same tissue-selective mechanism that makes tamoxifen useful for breast tissue makes a related SERM mechanistically relevant to loosening that specific feedback brake. What Omar walked away with was not a plan for his friend, and this chapter was never going to hand him one. It was a working model of exactly which link in the chain gets discussed, why, and what "restarting an axis" actually refers to mechanistically, tools he can now bring to his friend's next conversation with their own physician, rather than to another forum thread.</p>
+  </section>
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where this chapter stops: mechanism is not a plan</h2>
+    <p>Everything in this chapter has been mechanism: what a SERM is structurally, how tissue selectivity arises from receptor conformation and coregulator recruitment, how the HPT axis is built and how exogenous androgens suppress it, and why blocking estrogen receptor signaling at the hypothalamus and pituitary is the conceptual reasoning connecting SERMs to axis recovery. None of that is a schedule, a dose, a compound selection, a duration, or a sequence of steps for any individual to follow. This course does not provide those things for this topic or for any other topic it covers, and understanding the biology in depth does not change that boundary, it exists precisely so that the biology can be understood honestly without becoming instructions.</p>
+    <p>That distinction matters more here than almost anywhere else in this course, because the application discussed in Section 4, using estrogen receptor blockade to support axis recovery after suppression, is frequently referred to in AAS communities using a specific shorthand, post-cycle intervention, and that shorthand usually arrives already attached to a detailed, confidently stated protocol, specific compounds, specific timing, specific durations. This chapter has deliberately stopped well short of any of that. What determines whether, when, and how any axis-directed intervention makes sense for a specific individual, including whether one is appropriate at all, depends on that person's actual hormone panel, actual history, actual health status, and actual goals, none of which a general mechanism chapter can know or should pretend to know on a reader's behalf.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is exactly the handoff Omar needed more than any additional fact about SERM pharmacology. His friend's situation, a documented history feeding into an actual fertility work-up with an actual reproductive endocrinologist, was never a question this course, or Omar personally, was positioned to answer with a recommendation. What this chapter can responsibly give him, and what it is built to give every learner working through it, is the ability to follow that specialist's reasoning, to ask sharper and more specific questions at the next appointment, and to recognize when a forum's confident protocol is standing in for a conversation that should be happening with a physician who can actually see the bloodwork. That recognition, more than any single mechanism covered in this chapter, is the skill this course keeps building, compound by compound, system by system, and it only gets more important as this course moves into the systemic risk and monitoring material still ahead.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner tells you they read that a SERM will "fix" a suppressed axis within a fixed, predictable window and asks whether that is accurate. Using only what this chapter covered, mechanism, the honest variability in individual recovery, and the clinician boundary, what does an accurate answer actually sound like, and where, specifically, does it need to stop?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A selective estrogen receptor modulator (SERM) binds the estrogen receptor (ER) and produces antagonist effects in some tissues and agonist-like effects in others, arising from how the ligand's structure shapes the receptor's helix 12 region and which coactivator or corepressor proteins that shape recruits in a given cell type.</li>
+      <li>Tamoxifen acts as an ER antagonist in breast tissue while behaving as a partial agonist in the endometrium, bone, and liver lipid handling; raloxifene is an antagonist in both breast and endometrial tissue while remaining agonist-like in bone, a genuinely different selectivity profile from tamoxifen despite the shared drug class.</li>
+      <li>The hypothalamic-pituitary-testicular (HPT) axis runs from pulsatile gonadotropin-releasing hormone (GnRH) release in the hypothalamus, to luteinizing hormone (LH) and follicle-stimulating hormone (FSH) release from the pituitary, to Leydig cell testosterone production and Sertoli cell-supported spermatogenesis in the testes, closed by a negative feedback loop running back to the hypothalamus and pituitary.</li>
+      <li>That feedback loop runs through both the androgen receptor and, via local aromatization of testosterone to estradiol, the estrogen receptor at the hypothalamus and pituitary. Sustained exogenous androgen exposure suppresses GnRH, LH, and FSH output through both pathways, producing reduced endogenous testosterone, testicular atrophy, and impaired fertility.</li>
+      <li>Clomiphene and enclomiphene act as ER antagonists specifically at the hypothalamus and pituitary, which is the mechanism, and only the mechanism, connecting this drug class to conceptual HPT axis recovery. This chapter describes that reasoning without providing any dose, timeline, or protocol.</li>
+      <li>Evidence quality varies across this drug class: tamoxifen and clomiphene carry decades of clinical use in their approved and off-label contexts respectively, while enclomiphene, though mechanistically well supported, has a comparatively younger and still-developing human evidence base.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This chapter has stayed close to a single receptor and a single axis. Chapter 10 shifts entirely outside the steroid and SERM framework this course has built so far, into a beta-2 adrenergic agonist, clenbuterol, used in the same performance-enhancement context for entirely different reasons: thermogenic and anticatabolic effects driven by a completely separate receptor system, alongside a distinct set of cardiac, tremor, and downregulation risks this course has not yet had reason to cover.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Earl, J. A., &amp; Kim, E. D. (2019). Enclomiphene citrate: A treatment that maintains fertility in men with secondary hypogonadism. <em>Expert Review of Endocrinology &amp; Metabolism, 14</em>(3), 157-165. https://doi.org/10.1080/17446651.2019.1612239</p>
+    <p>Rahnema, C. D., Crosnoe, L. E., &amp; Kim, E. D. (2015). Designer steroids, over-the-counter supplements and their androgenic component: Review of an increasing problem. <em>Andrology, 3</em>(2), 150-155. https://doi.org/10.1111/andr.307</p>
+    <p>Rahnema, C. D., Lipshultz, L. I., Crosnoe, L. E., Kovac, J. R., &amp; Kim, E. D. (2014). Anabolic steroid-induced hypogonadism, diagnosis and treatment. <em>Fertility and Sterility, 101</em>(5), 1271-1279. https://doi.org/10.1016/j.fertnstert.2014.02.002</p>
+    <p>Riggs, B. L., &amp; Hartmann, L. C. (2003). Selective estrogen-receptor modulators, mechanisms of action and application to clinical practice. <em>New England Journal of Medicine, 348</em>(7), 618-629. https://doi.org/10.1056/NEJMra022219</p>
+    <p>Rodriguez, K. M., Pastuszak, A. W., &amp; Lipshultz, L. I. (2016). Enclomiphene citrate for the treatment of secondary male hypogonadism. <em>Expert Opinion on Pharmacotherapy, 17</em>(11), 1561-1567. https://doi.org/10.1080/14656566.2016.1204294</p>
+    <p>Shabsigh, A., Kang, Y., Shabsigh, R., Gonzalez, M., Liberson, G., Fisch, H., &amp; Goluboff, E. (2005). Clomiphene citrate effects on testosterone/estrogen ratio in male hypogonadism. <em>Journal of Sexual Medicine, 2</em>(5), 716-721. https://doi.org/10.1111/j.1743-6109.2005.00075.x</p>
+    <p>Smith, C. L., &amp; O'Malley, B. W. (2004). Coregulator function, a key to understanding tissue specificity of selective receptor modulators. <em>Endocrine Reviews, 25</em>(1), 45-71. https://doi.org/10.1210/er.2003-0023</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">&para;</span>
+    <span class="ch-foot-meta">Gemini Education &middot; Chapter 9 of 13</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('serm-tissue-sorter');
+    if(!root) return;
+    var cards = [
+      {t:"Tamoxifen at breast epithelial tissue", v:"antagonist", e:"Antagonist. Tamoxifen's ligand-forced receptor shape recruits corepressor proteins in breast tissue, blocking estradiol's proliferative signal, the basis for its breast cancer and gynecomastia uses."},
+      {t:"Tamoxifen at the endometrium", v:"agonist", e:"Agonist-like. In endometrial tissue the same tamoxifen-bound receptor shape instead favors coactivator recruitment, stimulating rather than blocking the estrogen-responsive lining, a well-documented property tracked in tamoxifen's oncology use."},
+      {t:"Raloxifene at bone tissue", v:"agonist", e:"Agonist-like. Raloxifene supports bone density by acting as a partial agonist in osteoblasts, which is the basis for its use in postmenopausal osteoporosis prevention."},
+      {t:"Raloxifene at breast and endometrial tissue", v:"antagonist", e:"Antagonist at both sites, which is what distinguishes raloxifene's selectivity profile from tamoxifen's. It supports bone without tamoxifen's endometrial stimulation."},
+      {t:"Clomiphene and enclomiphene at the hypothalamus and pituitary", v:"antagonist", e:"Antagonist. Blocking the estrogen receptor at these two structures reduces one source of negative feedback on gonadotropin-releasing hormone (GnRH), luteinizing hormone (LH), and follicle-stimulating hormone (FSH) release, the mechanism behind this drug class's relevance to axis recovery."},
+      {t:"Tamoxifen's effect on circulating lipid handling in the liver", v:"agonist", e:"Agonist-like. Tamoxifen's partial estrogenic activity extends to hepatic lipid metabolism, another tissue where the molecule mimics rather than blocks estradiol's usual signal."},
+      {t:"A SERM's overall clinical profile across a person's whole body at once", v:"mixed", e:"Mixed and dose-dependent, and true of the whole drug class by definition. A SERM is never uniformly one or the other; its entire clinical value comes from reading differently in different tissues simultaneously."},
+      {t:"An aromatase inhibitor's effect on the estrogen receptor directly", v:"mixed", e:"Trick card: an aromatase inhibitor does not bind the estrogen receptor at all. It reduces how much estradiol is produced upstream, so it has no tissue-selective receptor reading to classify in the first place, a distinction worth holding onto from Section 1."}
+    ];
+    var cardSel = document.getElementById('ts-card');
+    var binSel = document.getElementById('ts-bin');
+    var fb = document.getElementById('ts-feedback');
+    var btn = document.getElementById('ts-submit');
+    var fillS = document.getElementById('ts-fill-sorted');
+    var fillA = document.getElementById('ts-fill-acc');
+    var numS = document.getElementById('ts-num-sorted');
+    var numA = document.getElementById('ts-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      var label={antagonist:'ER Antagonist',agonist:'ER Agonist-like',mixed:'Mixed / Dose-Dependent'}[c.v];
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct. ':'✗ Not quite. This reads as <strong>'+label+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+(function(){
+  try {
+    var root = document.getElementById('axis-step-order');
+    if(!root) return;
+    var cards = [
+      {t:"Hypothalamus releases gonadotropin-releasing hormone (GnRH) in discrete pulses", v:"1", e:"Step 1. The axis begins with pulsatile GnRH release from the hypothalamus, the pulsatility itself is essential, since constant exposure desensitizes the pituitary's GnRH receptors."},
+      {t:"GnRH travels the hypophyseal portal system to the anterior pituitary", v:"2", e:"Step 2. GnRH reaches gonadotroph cells in the anterior pituitary through a dedicated local blood supply before it can trigger the next release."},
+      {t:"Anterior pituitary releases luteinizing hormone (LH) and follicle-stimulating hormone (FSH)", v:"3", e:"Step 3. Stimulated gonadotrophs release both gonadotropins into general circulation, headed for the testes."},
+      {t:"LH stimulates Leydig cells and FSH stimulates Sertoli cells in the testes", v:"4", e:"Step 4. LH drives Leydig cell testosterone production, FSH supports Sertoli cell function and spermatogenesis, distinct target cells for the two gonadotropins."},
+      {t:"Rising testosterone, and estradiol locally aromatized from it, signal the hypothalamus and pituitary", v:"5", e:"Step 5. The feedback signal travels back up the chain, engaging both the androgen receptor and, via local aromatization, the estrogen receptor at the top two structures."},
+      {t:"GnRH pulse frequency and pituitary sensitivity both decrease", v:"6", e:"Step 6. The loop closes: negative feedback reduces GnRH pulsing and pituitary responsiveness, which is exactly the step exogenous androgen exposure engages to suppress the axis, and the step a SERM's estrogen receptor blockade is aimed at loosening."}
+    ];
+    var cardSel = document.getElementById('ax-card');
+    var binSel = document.getElementById('ax-bin');
+    var fb = document.getElementById('ax-feedback');
+    var btn = document.getElementById('ax-submit');
+    var fillS = document.getElementById('ax-fill-sorted');
+    var fillA = document.getElementById('ax-fill-acc');
+    var numS = document.getElementById('ax-num-sorted');
+    var numA = document.getElementById('ax-num-acc');
+    var done = {}, sorted = 0, correct = 0;
+    function fill(){
+      cardSel.innerHTML='';
+      cards.forEach(function(c,i){
+        var o=document.createElement('option');
+        o.value=i; o.textContent=(done[i]?'✓ ':'')+c.t;
+        cardSel.appendChild(o);
+      });
+    }
+    fill();
+    btn.addEventListener('click', function(){
+      var i=parseInt(cardSel.value,10);
+      var c=cards[i];
+      var choice=binSel.value;
+      var right=(choice===c.v);
+      if(!done[i]){
+        done[i]=true; sorted++; if(right) correct++;
+      }
+      fb.innerHTML=(right?'✓ Correct placement. ':'✗ Not quite that step. The correct spot is <strong>Step '+c.v+'</strong>. ')+c.e;
+      numS.textContent=sorted;
+      fillS.style.width=Math.round(sorted/cards.length*100)+'%';
+      var acc=sorted?Math.round(correct/sorted*100):0;
+      numA.textContent=acc+'%';
+      fillA.style.width=acc+'%';
+      fill();
+      cardSel.value=i;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
