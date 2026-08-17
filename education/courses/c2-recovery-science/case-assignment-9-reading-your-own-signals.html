@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Assignment, Chapter 9: Reading Your Own Signals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.6; }
+  .sheet{ max-width:850px; margin:0 auto; background:var(--paper); padding:54px 60px 70px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); position:relative; }
+  .sheet::before{ content:''; position:absolute; top:0; bottom:0; left:30px; width:1px; background:var(--accent); opacity:0.3; }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:30px; line-height:1.12; margin:12px 0 6px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:15px; margin:0 0 6px; }
+  .meta{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--faint); letter-spacing:0.04em; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:18px 0 26px; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:18px; font-weight:700; margin:30px 0 8px; } h2::before{ content:'§ '; color:var(--accent); }
+  .scenario{ background:#f1ece0; border:1px solid var(--line); border-left:3px solid var(--ink); padding:18px 20px; font-size:15.5px; margin:6px 0 8px; }
+  .scenario .who{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); margin-bottom:8px; }
+  ol.tasks{ padding-left:22px; } ol.tasks>li{ margin:0 0 10px; font-size:15px; }
+  textarea{ width:100%; min-height:230px; margin-top:8px; padding:14px; font-family:'IBM Plex Serif',serif; font-size:15px; line-height:1.6; border:1px solid var(--line); background:#fff; resize:vertical; }
+  .counter{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--faint); margin-top:6px; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:12px 16px; font-size:14px; margin:20px 0; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:20px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.05em; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; margin-right:8px; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:34px; border-top:1px solid var(--line); padding-top:12px; }
+  details.rubric{ margin-top:18px; font-size:13.5px; } details.rubric summary{ font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.05em; text-transform:uppercase; color:var(--faint); cursor:pointer; }
+  details.rubric ul{ margin:10px 0; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 12px; } .noprint{ display:none; } textarea{ min-height:120px; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<!--
+  AI-GRADER RUBRIC (machine-readable; not shown to learner by default)
+  course: c2-recovery-science | chapter: 9 | type: case-assignment
+  pass_threshold: 70
+  model_answer_thesis: >
+    Priya's single sharp overnight HRV drop after wine and a late dinner is a noisy, low-value reading
+    that should not by itself change her planned interval ride. Her separate, multi-day convergent trend,
+    resting heart rate creeping up, flat mood, and falling sleep quality across four consecutive mornings,
+    is a genuinely meaningful signal that calls for holding or backing off rather than pushing. Her sharp,
+    localized Achilles pain is a different category entirely: it sits outside training-fatigue monitoring
+    and warrants professional evaluation, not a deload or a readiness score adjustment. A responsible
+    response keeps these three signals analytically separate and does not diagnose the Achilles issue.
+  rubric_points:
+    - correctly identifies the single-morning HRV dip as low-value/noisy and explains at least one concrete noise source (alcohol, late meal, disrupted sleep) (20)
+    - correctly reads the multi-day convergent trend (resting heart rate, mood, sleep quality) as a genuine signal, referencing the convergence and baseline principles, and recommends hold or back off (30)
+    - correctly separates the sharp localized Achilles pain as outside monitoring scope and states it warrants professional evaluation, not a training adjustment (30)
+    - synthesizes into a clear, practical recommendation that distinguishes trend-reading from single-reading reactions (20)
+-->
+<div class="sheet">
+  <div class="eyebrow">Case Assignment &middot; C2 Recovery Science</div>
+  <h1>Chapter 9: Reason Through a Noisy Dashboard</h1>
+  <p class="sub">Use the six-signal framework and the convergence principle from the chapter to sort real readings from noise, and to spot the reading that is not a readiness signal at all.</p>
+  <p class="meta">Name: ____________________________   Date: __________   Est. time: 20 min</p>
+  <hr class="rule">
+
+  <h2>The Scenario</h2>
+  <div class="scenario">
+    <div class="who">Scenario &middot; Priya Chandran, 29</div>
+    Priya is a recreational cyclist who wears a fitness tracker and checks her readiness score most mornings. After a friend's birthday dinner, wine, a late meal, and a shorter night than usual, her tracker showed a sharp overnight drop in heart rate variability and flashed a low readiness score. She nearly canceled the next morning's planned interval ride. Separately, over the past four consecutive mornings, she has noticed her resting heart rate sitting five to six beats above her usual baseline, her mood has felt flat, and her sleep quality ratings have been lower than normal, alongside a general, non-specific tiredness. On top of all this, she mentions a sharp, localized pain on the outside of her ankle near her Achilles tendon that started during a recent run and has not gone away despite two easy days.
+  </div>
+
+  <h2>Your Tasks</h2>
+  <ol class="tasks">
+    <li>Evaluate the single overnight HRV drop on its own. Is it meaningful on its own, and why or why not?</li>
+    <li>Evaluate the four-day convergent trend in resting heart rate, mood, and sleep quality. What does this pattern indicate, and what action, push, hold, or back off, fits it best?</li>
+    <li>Address the Achilles pain separately from the readiness signals. Where does this fall relative to what a monitoring dashboard is built to interpret, and what should Priya do about it?</li>
+    <li>Bring it together into one practical recommendation for Priya's week, being explicit about which parts are a training-load decision and which part is not.</li>
+  </ol>
+
+  <h2>Your Response</h2>
+  <textarea id="resp" placeholder="Write your answer here. Aim for a few clear paragraphs that a non-specialist could actually understand."></textarea>
+  <div class="counter" id="count">0 words</div>
+
+  <div class="boundary"><b>Where education ends</b><br>You are demonstrating understanding of readiness-signal reasoning, not diagnosing or prescribing medical care. A responsible response explains the mechanism, identifies what if anything warrants professional evaluation, and does not diagnose. Diagnosis and treatment belong to a qualified clinician.</div>
+
+  <div class="noprint">
+    <button onclick="save()">Save my draft</button>
+    <button onclick="window.print()">Print / Save as PDF</button>
+  </div>
+
+  <details class="rubric"><summary>Instructor / self-check rubric</summary>
+    <ul>
+      <li>Identifies the single-morning HRV dip as low-value and noisy, and names a concrete source of noise (alcohol, late meal, disrupted sleep, unfamiliar conditions).</li>
+      <li>Reads the multi-day convergent trend in resting heart rate, mood, and sleep quality as a genuine signal, referencing convergence and baseline, and recommends hold or back off.</li>
+      <li>Separates the sharp, localized Achilles pain as outside monitoring scope and states it warrants professional evaluation, not a training-load adjustment.</li>
+      <li>Synthesizes into one clear, practical recommendation that distinguishes trend-reading from single-reading reactions.</li>
+    </ul>
+  </details>
+
+  <p class="foot">Gemini Education &middot; C2 Recovery Science &middot; Chapter 9 Case Assignment</p>
+</div>
+<script>
+  var t=document.getElementById('resp'), c=document.getElementById('count');
+  function upd(){ var w=t.value.trim()?t.value.trim().split(/\s+/).length:0; c.textContent=w+' words'; }
+  t.addEventListener('input',upd);
+  function save(){ try{ localStorage.setItem('gemHw:c2:case9', t.value); c.textContent=c.textContent+' (saved)'; }catch(e){ alert('Saving is not available here; use Print / Save as PDF.'); } }
+  try{ var s=localStorage.getItem('gemHw:c2:case9'); if(s){ t.value=s; } }catch(e){}
+  upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fuel for the Rebuild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 3 · Module 1</div>
+    <h1 class="ch-title">Fuel for the Rebuild</h1>
+    <p class="ch-subtitle">Nutrition as raw material and energy for adaptation, and why timing is mostly a rounding error.</p>
+    <div class="ch-meta">
+      <span>34 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> training stimulus is a demolition order. The bout you just finished disrupted proteins, drained fuel stores, and left behind a signal that reads, in effect, build back stronger. But a demolition order is not a building. To rebuild, and to rebuild <em>better</em> than before, the body needs two things it cannot conjure from nothing: raw materials for the new structure and energy to run the crew. That is what nutrition contributes to recovery. Not motivation, not magic, not a supplement stack. Bricks and electricity.</p>
+    <p>This chapter looks at food strictly through the recovery lens built in Chapter 1: adaptation is construction, and construction has a materials budget. We will not drift into general diet advice, and we will not touch dosing of supplements or drugs. The question in front of us is narrower and more useful: <em>what does the body need to actually complete the rebuild the training session ordered?</em></p>
+    <p>Throughout this chapter you will follow one learner, Marisol, a 34-year-old logistics coordinator who signed up for this course two months into training for her first half marathon while still holding onto the three weekly strength sessions she had built over the previous year. She runs before work three mornings a week, lifts on two evenings that sometimes land only a few hours after a run, and has started weighing her lunch on a kitchen scale because a podcast convinced her that "getting lean for race day" would make her faster. She is not a patient in this course and she is not a case to be solved. She is a stand-in for an extremely common situation: a person juggling two training demands, an inconsistent schedule, and a growing pile of nutrition advice that contradicts itself. Her story is a thread we will pick up at intervals, not a diagnosis, and we will be careful about that difference the whole way through.</p>
+    <p>Why spend a whole chapter on something as ordinary as eating? Because the cost of getting it wrong is invisible until it compounds. A single missed post-workout snack changes nothing measurable. A single humid long run without a fluid plan changes nothing measurable. But stack a chronically inadequate protein total, a fuel tank that never quite refills, a body running a slight and unnoticed fluid deficit most days, and a calorie intake trimmed just enough to undercut a rising training load, and months later a learner is standing in front of you asking why their progress stalled, why they are more tired than the training alone should explain, or why an injury showed up out of nowhere. Nutrition rarely fails loudly. It fails by a slow erosion of the margin the body needs to do its job, which is exactly why a framework, rather than a checklist of individual facts, is worth building carefully.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The construction metaphor, taken seriously</h2>
+    <p>Recall the core model. A stressor produces disruption; recovery restores and then overcompensates; the result is a slightly upgraded system. Nutrition sits squarely inside the recovery phase. If the stimulus is the blueprint, then <span class="ch-key">protein</span> supplies the structural material for the new tissue and <span class="ch-key">carbohydrate</span> restores the fuel spent doing the work. Sitting underneath both is a more fundamental question: does the body have enough <span class="ch-key">energy availability</span> to fund any construction project at all, and does it have the fluid and electrolyte balance to run the machinery that does the building?</p>
+    <p>Keep these jobs distinct in your mind, because they answer different questions. Protein answers "what is the building made of?" Carbohydrate answers "is the tank full for the next session?" Hydration answers "is the worksite running at the temperature and pressure it needs to get anything done?" Energy availability answers "is the whole enterprise solvent, or is it operating at a deficit that forces the body to cut corners?" Conflating these questions is the source of most bad nutrition advice aimed at people who train.</p>
+    <p>Marisol's situation is a useful preview of why the distinction matters. By her own account she has "good protein" and "good carbs" mostly figured out. What she has not figured out is how those two facts interact with a shrinking calorie target, a running habit that pulls fluid out of her faster than she replaces it, and a training week that sometimes asks her body to do two hard things eight hours apart. Every one of those complications gets a name and a framework in this chapter.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour editorial diagram in the register of an architect's field notebook, showing a partially rebuilt muscle depicted metaphorically as a small building under construction: scaffolding, stacked bricks labelled 'protein', a fuel drum labelled 'carbohydrate', and a power meter at the base labelled 'energy availability'. Warm earthy palette, ochre, muted brick red, slate grey, cream paper. Loose ink linework with soft watercolour washes, rule-of-thirds composition, generous margin space. Labels in small italic serif: 'protein', 'carbohydrate', 'energy availability'. No people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img1.jpg" alt="<em>Adaptation as construction: materials, fuel, and a solvent budget.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Adaptation as construction: materials, fuel, and a solvent budget.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Protein: the building blocks of repair and remodeling</h2>
+    <p>Exercise, particularly resistance exercise, elevates the rate of <span class="ch-key">muscle protein synthesis</span> (MPS), the process by which the body swaps out damaged proteins and lays down new, better-adapted ones, for hours after the bout. Van Vliet and colleagues (2018) describe how this elevated synthetic response, which can persist for 24 hours or more after an unaccustomed bout, is amplified when dietary protein is available to supply amino acids as substrate. Training turns the machinery on. Protein feeds it.</p>
+    <p>It is worth being precise about <em>what</em> is being remodeled, because "muscle repair" is a coarse phrase that hides more than it reveals. Van Vliet et al. (2018) distinguish the <span class="ch-key">myofibrillar</span> fraction (the contractile proteins usually meant by the word "muscle"), the <span class="ch-key">sarcoplasmic</span> fraction (enzymatic and metabolic proteins), and the <span class="ch-key">collagen and extracellular matrix</span> (ECM) fraction that gives tissue its structural scaffolding. These fractions turn over on different schedules and respond differently to loading and feeding. Recovery, in other words, is not one process but several overlapping renovations happening in the same building at once, on different timelines, with different material requirements.</p>
+
+    <h3>How much, and does the source matter?</h3>
+    <p>According to Jäger and colleagues (2017), whose International Society of Sports Nutrition (ISSN) position stand anchors this whole section, a total daily protein intake in the range of <span class="ch-key">1.4 to 2.0 grams per kilogram of body weight per day (g/kg/day)</span> is sufficient for most exercising individuals to support muscle protein balance and adaptation. Notice the emphasis on <em>total daily</em>. This is the big rock. Per-meal dose, on the order of roughly 0.25 g/kg, or an absolute range of about 20 to 40 grams, to maximally stimulate MPS at a given sitting, and distribution across the day in servings spaced roughly every three to four hours, are real but secondary levers. Tune them only after the daily total is already being met.</p>
+    <p>On source: the popular assumption that adaptation demands isolated powders is not supported by the evidence. Van Vliet et al. (2018) make the case that whole foods, with their fuller amino acid profiles and accompanying nutrients, support post-exercise remodeling at least as well as isolated protein, and plausibly better in some respects, since a whole food matrix arrives with the fats, fiber, vitamins, and minerals that a powder does not. The practical translation: hitting the daily target with ordinary food, chicken, eggs, yogurt, lentils, fish, is a legitimate, evidence-consistent strategy, not a compromise reserved for people who cannot afford supplements.</p>
+    <p>The reason distribution across the day appears in the ISSN recommendations at all, rather than being folded entirely into the total, comes down to a concept called the <span class="ch-key">leucine threshold</span>. Leucine is a single amino acid that appears to act as a trigger, switching on the cellular machinery that starts protein synthesis once a serving crosses a minimum amount, generally cited in a range of 700 to 3,000 milligrams per dose, or roughly what a 20 to 40 gram serving of a leucine-rich protein source supplies. A day's worth of protein consumed entirely in one enormous meal will not trigger this switch nearly as many times as the same total spread across three or four servings, which is the mechanistic reason "spread it out reasonably" outperforms "eat it all at once," even though both approaches can hit the identical daily gram target. This is a genuine, if secondary, timing effect, and it is worth distinguishing from the anabolic-window myth this chapter spends real time debunking later on: distributing protein across a day is not the same claim as insisting on a narrow post-workout minute count, and conflating the two is part of how the myth persists.</p>
+    <p>Marisol's protein intake, once she actually logged it for a full week instead of estimating, turned out to sit around 1.6 g/kg/day, comfortably inside the ISSN range, spread across four meals that already landed close to the every-three-to-four-hour pattern the position stand describes. Her mistake was not a protein mistake. It was assuming that because her protein number looked fine, everything else in her plan was automatically fine too, an assumption we will revisit once energy availability enters the picture.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner asks whether they "missed the window" because their post-session meal landed two hours late. Before answering, what is the single most important number you would want to know about their diet? Hint: it is not measured in minutes.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Carbohydrate: refilling the tank you emptied</h2>
+    <p>If protein is the building material, carbohydrate is the fuel account. Muscle and liver store carbohydrate as <span class="ch-key">glycogen</span>, a branched chain of glucose molecules held in reserve for exactly this purpose, and prolonged or repeated high-intensity exercise draws that reserve down. Glycogen depletion is a well-established fatigue mechanism: when the tank runs low, output falls, pace slows, and a session that felt manageable an hour earlier starts to feel like wading through sand (Craven et al., 2021). Restoring glycogen is therefore a genuine recovery task, distinct from tissue repair, and its urgency depends almost entirely on <em>when the next session needs the fuel</em>.</p>
+    <p>The meta-analytic picture on how to refuel is clear. Craven and colleagues (2021), pooling controlled studies in a systematic review and meta-analysis, found that carbohydrate provision significantly accelerates the rate of muscle glycogen resynthesis compared with no nutritional intake, an unsurprising result that nonetheless establishes the direction and size of the effect. More interesting is their second finding: co-ingesting protein <em>with</em> carbohydrate did not meaningfully enhance glycogen resynthesis compared with carbohydrate alone, once the two conditions were matched for total calories. In other words, the glycogen benefit sometimes credited to added protein looks, in the pooled data, like an artifact of the extra energy that protein brings along with it. Match the calories, and the added protein contributes little to the glycogen rate specifically.</p>
+    <p>It is worth flagging a genuine complication here, because pretending the science is tidier than it is would be its own kind of dishonesty. A handful of individual, tightly calorie-matched trials still detect a small edge for added protein, and the mechanism, possibly involving insulin response or differences in how quickly the stomach empties, remains debated. This is a footnote, not a rebuttal. It does not change the headline finding, and it is a fair example of how a meta-analysis can summarize a consistent average effect while individual studies still scatter around it. Do not let a small, contested, secondary effect crowd out the large, settled, primary one: carbohydrate is what refills the tank.</p>
+    <p>It helps to have a rough sense of scale here. A typical trained adult stores somewhere in the neighborhood of 400 to 500 grams of carbohydrate as muscle glycogen, distributed across the muscles that were actually used, plus a smaller liver store of roughly 80 to 100 grams that exists mainly to buffer blood glucose between meals rather than to fuel the muscles directly. A hard, prolonged session can draw muscle glycogen down substantially, and because the depletion is localized to the muscles doing the work, a runner's leg glycogen and a swimmer's shoulder glycogen empty at different rates even during a session that feels equally hard by perceived effort. This localized depletion is also why "carbohydrate" as a recovery target is really shorthand for restoring the specific stores that specific muscles just spent, not a single undifferentiated tank, even though treating it as one tank is a perfectly good simplification for everyday planning.</p>
+
+    <h3>When glycogen timing genuinely matters</h3>
+    <p>Here is the crucial context switch. Train once a day and eat adequately, and glycogen will be fully restored well before the next session. There is roughly 24 hours available, and total daily carbohydrate intake does the job with room to spare. The <em>rate</em> of resynthesis is almost irrelevant on that timescale. But compress the recovery window and the calculus changes. When two hard sessions fall within about <span class="ch-key">eight hours</span> of each other, the morning-and-evening reality of tournament play, two-a-day training blocks, or a runner who lifts a few hours after a hard run, there is not enough time for leisurely restoration, and aggressive early carbohydrate feeding becomes performance-relevant (Kerksick et al., 2017). Timing matters precisely where the clock is the binding constraint, and essentially nowhere else.</p>
+    <p>This is Marisol's actual situation on the two days a week when a morning run and an evening lift fall inside that eight-hour window. On those days, waiting until dinner to think about carbohydrate is a real mistake, not a theoretical one, because her lift will start before a leisurely refeed has had time to work. On every other day of her week, when 24 hours separate her sessions, the same "wait until dinner" habit costs her almost nothing. Same person, same habit, two completely different consequences, because the constraint that matters is the clock, not the food.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide style infographic showing two contrasting daily timelines stacked vertically, each a horizontal bar with sun icons marking morning and afternoon sessions. Top timeline: two training blocks spaced far apart with a fully-shaded fuel gauge between them, labelled 'ample recovery'. Bottom timeline: two training blocks close together with a half-empty fuel gauge between them, labelled 'compressed window'. Cool-warm mixed palette: teal, warm amber, charcoal, cream. Clean ink linework with flat gouache fills, generous whitespace. Short labels in italic serif: 'session', 'refuel', 'ample recovery', 'compressed window'. No numbers, no charts, no watermarks, no cropped text." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img2.jpg" alt="<em>Glycogen timing is a rounding error across a full day, and decisive across eight hours.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Glycogen timing is a rounding error across a full day, and decisive across eight hours.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="glycogen-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Glycogen Depletion &amp; Refuel Tracker</div>
+    </div>
+    <p class="ch-widget-sub">Schedule two sessions and choose how aggressively to refuel between them. Watch the tank, and the second session's output, respond in real time.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Gap between sessions</span>
+        <select class="ch-widget-select" id="gly-gap">
+          <option value="24">24 hours (once daily)</option>
+          <option value="8">8 hours</option>
+          <option value="4" selected>4 hours</option>
+          <option value="2">2 hours</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Session 1 depletion</span>
+        <select class="ch-widget-select" id="gly-depl">
+          <option value="40">Moderate (-40%)</option>
+          <option value="65" selected>Hard (-65%)</option>
+          <option value="85">Glycogen-crushing (-85%)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Refuel strategy</span>
+        <select class="ch-widget-select" id="gly-fuel">
+          <option value="0">Nothing (wait for dinner)</option>
+          <option value="1">Casual snack later</option>
+          <option value="2" selected>Prompt, deliberate carbs</option>
+          <option value="3">Aggressive early carbs</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Tank before session 2</span>
+        <span class="ch-meter-bar"><span id="gly-tank" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="gly-tank-num">60</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Modeled session-2 output</span>
+        <span class="ch-meter-bar"><span id="gly-out" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="gly-out-num">60</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="gly-btn">Run the day</button>
+    <p class="ch-widget-sub" id="gly-msg" style="margin-top:0.75rem;"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Nutrient timing, put in its proper place</h2>
+    <p>Now to the chapter's central move. Popular training culture is obsessed with the <span class="ch-key">anabolic window</span>, the notion that a narrow post-workout period, often quoted as thirty to sixty minutes, is when protein "counts" and outside of which the meal is wasted. It is a vivid idea. It is also, as a general rule, wrong.</p>
+    <p>The landmark critical review here is Aragon and Schoenfeld (2013), who examined the anabolic-window concept and found its importance, and in some framings its very existence, to be far less certain than folklore holds. Their key qualifier is <span class="ch-key">pre-exercise feeding</span>: eat a normal protein-containing meal in the hours before training, and amino acids are still elevated during and after the session, so there is no gaping window slamming shut the moment the bar goes back on the rack. The "window," they argue, is better understood as a wide and forgiving span governed by when a person last ate and when they will eat next, not a cliff edge.</p>
+    <p>The meta-analysis that settled the practical question is Schoenfeld, Aragon, and Krieger (2013). Pooling 23 hypertrophy studies and 20 strength studies, they found an apparent benefit of protein timing, until they statistically controlled for <em>total daily protein intake</em>. Once total intake was accounted for, the independent effect of timing on hypertrophy was not statistically significant. The timing "effect" visible in the raw data was largely timing studies inadvertently giving the timed groups more total protein. Control the big rock, and the small rock stops moving the needle.</p>
+    <p>According to the ISSN nutrient-timing position stand (Kerksick et al., 2017), the most recent comprehensive synthesis on the question, total daily protein is a higher priority than specific timing, the effect of timing on body composition is, in the authors' words, "at best minimal" for someone training once daily with adequate overall nutrition, and carbohydrate timing rises to genuine importance mainly when the recovery window between sessions is short. This is not a fringe reading of the evidence. It is the position statement of the field's professional society.</p>
+
+    <blockquote class="ch-quote">
+      <p>After controlling for covariates including total protein intake, the independent effect of protein timing on muscle hypertrophy was rendered non-significant.</p>
+      <cite>Paraphrasing Schoenfeld et al. (2013)</cite>
+    </blockquote>
+
+    <h3>Big rocks before small rocks</h3>
+    <p>You have met this shape before. In Chapter 2 the argument was that sleep's dominant lever is <em>total sufficiency</em>, and that fussing over sleep-hygiene micro-optimizations while chronically under-sleeping pours effort into a small rock while the big rock sits unplaced. Nutrition rehearses the identical hierarchy. Fill the container in the right order: <strong>energy availability</strong> and <strong>total daily protein and carbohydrate</strong> first, the big rocks that determine most of the outcome, and only then, if the situation calls for it, tune the small rock of timing. Placed first, the big rocks dominate. Placed last, timing can only fill the gaps between them.</p>
+    <p>This is also a first rehearsal of the honest-grading mindset that Chapter 6 will apply to recovery modalities. The intellectually honest question about any intervention is not "does it do anything?" but "how much does it move the outcome, relative to the things already being ignored?" Timing does something. It just does far less than a culture selling pre- and post-workout products would like people to believe, and almost nothing once the daily totals are handled.</p>
+    <p>It is worth being explicit about what falls outside this chapter's scope here, since the boundary matters. Creatine, caffeine, and other performance supplements sit in a different category entirely, dosing decisions rather than the food-and-fluid framework this chapter builds, and this course does not address supplement dosing at all. The point of the nutrient-timing discussion is narrower and more durable than any single product recommendation: it is a template for how to weigh a popular claim against its actual evidence base, a template that will resurface in Chapter 6 when the subject shifts to ice baths, compression gear, and other recovery modalities that make similarly outsized promises relative to their measured effect.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner trains once a day, hits 1.8 g/kg/day of protein spread across four meals, and eats plenty of carbohydrate, but sometimes their post-lift meal lands 90 minutes out. How much of their adaptation is genuinely at risk from that delay? What would the evidence predict?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="rocks-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Big Rocks Nutrition Simulator</div>
+    </div>
+    <p class="ch-widget-sub">You have 10 attention points. Spend them across the big rocks (total protein, energy availability) and the small rock (precise post-workout timing). Watch what actually moves recovery quality.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Total daily protein</span>
+        <select class="ch-widget-select" id="r-prot">
+          <option value="0">0 points</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4 points</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Energy availability</span>
+        <select class="ch-widget-select" id="r-ea">
+          <option value="0">0 points</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3 points</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Precise post-workout timing</span>
+        <select class="ch-widget-select" id="r-time">
+          <option value="0">0 points</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3" selected>3 points</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Points used</span>
+        <span class="ch-meter-bar"><span id="r-used" style="width:100%"></span></span>
+        <span class="ch-meter-num" id="r-used-num">10</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Recovery quality</span>
+        <span class="ch-meter-bar"><span id="r-score" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="r-score-num">60</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="r-btn">Evaluate allocation</button>
+    <p class="ch-widget-sub" id="r-msg" style="margin-top:0.75rem;"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Hydration: the fluid budget nobody puts on a macro tracker</h2>
+    <p>Water rarely gets billed as a recovery nutrient, which is strange given how much of the recovery machinery depends on it. Roughly half to sixty percent of total body mass is water, and that water is not a passive filler. It is the medium blood plasma moves through to deliver amino acids and glucose to working tissue, the solvent in which the enzymatic reactions behind protein synthesis and glycogen resynthesis actually take place, and the coolant that keeps core temperature inside a range where those reactions can run at all. Treat hydration as an afterthought, and the other two budgets in this chapter, protein and carbohydrate, become harder to spend well, no matter how carefully the grams are counted.</p>
+    <p>Sweat rate is where most of the confusion starts, because it varies enormously between individuals and even between sessions for the same person. Depending on heat, humidity, clothing, and exercise intensity, sweat losses can range from under half a liter per hour to well over two liters per hour. According to Casa and colleagues (2019), whose review focuses on the fluid needs of track and field athletes but generalizes well to anyone training hard, losing more than about two percent of body mass through sweat during exercise is associated with measurable declines in endurance performance and added strain on the cardiovascular system, since the heart has to work harder to circulate a smaller volume of blood. A 68-kilogram runner, for context, crosses that two percent threshold after losing roughly 1.4 kilograms of sweat, which for a moderate sweater on a warm day can happen well inside a single long run.</p>
+    <p>None of this means every session demands a hydration calculator. For most training, most of the time, drinking according to thirst is an adequate strategy, and the research on forced, scheduled overdrinking has its own downside: taking in far more fluid than sweat losses require, especially plain water without any sodium, can dilute blood sodium concentration and produce a genuine medical emergency called exercise-associated hyponatremia. This is rare, but it is not theoretical, and it is a useful reminder that "more hydration is always better" is exactly the kind of oversimplification this course keeps warning against. The goal is matching intake to loss, not maximizing intake.</p>
+    <p>The most useful practical tool here is embarrassingly simple: a bathroom scale. Weighing before and after a representative training session, ideally one that resembles the sessions a person actually cares about, in similar heat and at a similar intensity, turns an abstract sweat rate into a concrete number. A pound lost during a session is, for most purposes, close enough to a pint of fluid lost, and repeating this a few times across different conditions gives a far more individualized picture than any generic recommendation could. This single measurement also explains why blanket advice like "drink a gallon a day" fails so many people: a small, low-sweat individual training in a cool gym and a large, heavy-sweating individual training outdoors in summer heat can have sweat rates that differ by a factor of four or more, and a fixed daily number cannot serve both of them well.</p>
+    <p>Where a plan does earn its keep is around long or hot sessions and the days that follow them. Sweat carries sodium as well as water, and the loss varies by individual almost as much as the sweat rate itself does, which is why a single "drink an electrolyte tablet every session" rule fits some people and badly overshoots or undershoots others. After a session with meaningful fluid loss, replacing roughly the deficit, plus a margin to cover the fact that some of what is drunk will be lost again to urine before the body reaches equilibrium, restores hydration status faster than sipping the same volume slowly across the following day. That is a genuine, evidence-grounded timing effect, distinct from the mostly mythical anabolic window discussed earlier in this chapter, because unlike glycogen or protein, fluid balance is corrected on the order of hours, not a full day, and a session that starts already behind on fluid starts at a real disadvantage.</p>
+    <p>Marisol's cramping on her longest training run turned out to trace back here rather than to anything more exotic. She trains at 6 a.m. in a humid climate, sweats heavily by her own description, and had been replacing fluid only when she remembered to, which on a run longer than ninety minutes meant not nearly enough. Weighing herself before and after a representative long run showed a body mass loss of a bit over two percent, squarely inside the range Casa and colleagues associate with a real performance cost. The fix was not exotic either: a bottle carried on the longer runs, plain water for anything under an hour, something with sodium for anything longer or sweatier, and a habit of checking urine color as a rough, practical proxy for hydration status rather than trying to weigh in before every single run.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common belief holds that thirst cannot be trusted and that everyone needs a fixed daily fluid target, often quoted as a specific number of liters regardless of body size, climate, or sweat rate. Thirst is, in fact, a well-calibrated signal for most people in most situations, and a rigid, one-size-fits-all fluid target is more likely to produce overdrinking than to prevent underdrinking. The evidence-consistent approach matches intake to individual sweat losses, not to a number printed on a bottle.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Energy availability: the gate before everything</h2>
+    <p>Every budget discussed so far, protein, carbohydrate, even hydration, assumes the body is solvent, that it has enough total energy to fund construction in the first place. That assumption deserves its own scrutiny, because when it fails, everything downstream fails with it. <span class="ch-key">Energy availability</span> (EA) is dietary energy intake minus exercise energy expenditure, normalized to fat-free mass, conceptually the energy left over to run all the physiological processes that are <em>not</em> the workout itself. When that remainder is chronically too low, the body triages. It cannot fund a renovation it cannot pay for.</p>
+    <p>The current authoritative framework is the 2023 consensus statement from the International Olympic Committee (IOC) on <span class="ch-key">Relative Energy Deficiency in Sport</span> (REDs) (Mountjoy et al., 2023). It describes how sustained <span class="ch-key">low energy availability</span> (LEA) impairs a broad spectrum of functions, metabolic rate, protein synthesis, bone health, immune function, cardiovascular and endocrine systems among them. Notice that protein synthesis appears on that list. This is the recovery link made explicit: hit a protein target on paper, and if overall energy is deeply insufficient, the body downregulates the very synthetic machinery those amino acids were meant to feed. LEA is a <em>recovery gate</em>, a condition that determines whether adaptation can proceed at all, sitting logically upstream of protein dose, upstream of carbohydrate timing, and light years upstream of nutrient timing generally.</p>
+    <p>The 2023 statement also updates the conceptual model, framing LEA on a <em>spectrum</em> from adaptable to problematic rather than as a simple on-or-off state (Mountjoy et al., 2023). A brief, modest, intentional energy deficit, a controlled cut with a defined endpoint, is not the same as a prolonged, severe, unrecognized deprivation with no endpoint at all. This spectrum thinking is exactly the frame Chapter 8 will need, when stress and recovery debt accumulate along a similar continuum from tolerable load to genuine dysfunction. LEA is one of the clearest cases where a recovery input, pushed too far for too long, becomes a recovery-limiting stressor in its own right.</p>
+    <p>It also matters that REDs was originally described in female athletes and has since been recognized as relevant across sexes and a wide range of training backgrounds, from elite competitors to recreational learners juggling a training habit against a demanding job. The presenting picture varies with the individual: some people notice performance plateaus first, some notice frequent minor illnesses as immune function slips, some notice bone stress injuries that seem to appear out of nowhere in someone with no obvious impact-loading problem, and some notice changes to reproductive hormone signaling. None of these signs, taken alone, proves low energy availability is present, and none of them is something this course is equipped to interpret for a specific person. What the framework offers is a reason to ask the question rather than to assume that any one symptom has a single, obvious cause.</p>
+    <p>This is precisely the tension building in Marisol's plan. "Getting lean for race day" is not, on its own, an unreasonable goal, and a modest, time-limited deficit sits well within the adaptable end of the spectrum Mountjoy and colleagues describe. But she had stacked that deficit on top of a training volume that had also just increased, without adjusting her intake to account for the added running, which meant her actual energy availability was lower than she realized, not because she was trying to run a large deficit, but because she was underestimating the expenditure side of the equation while holding the intake side steady.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">A necessary boundary</div>
+      <p>Persistent under-fueling, preoccupation with food or body composition, loss of menstrual function, recurrent stress fractures, or other signs consistent with REDs are matters for qualified medical and dietetic evaluation, not something to self-manage from a training model. This chapter gives a working framework for how energy availability gates recovery. It is not a diagnostic tool, and any suspicion of disordered eating warrants professional referral.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Putting the pieces in order</h2>
+    <p>Assemble the hierarchy and it reads as a single, coherent priority list. First, <strong>be solvent</strong>: maintain sufficient energy availability so the body is in a position to adapt at all. Second, <strong>hit the totals</strong>: enough daily protein, roughly 1.4 to 2.0 g/kg/day, to supply building blocks, enough daily carbohydrate to refill the fuel spent, and enough fluid and sodium across the day to keep the whole system running at the right pressure. Third, and only third, <strong>tune timing where the context demands it</strong>: distribute protein reasonably across the day, refuel carbohydrate aggressively when a second hard session is coming within about eight hours, and prioritize fluid replacement quickly after a session with meaningful sweat loss.</p>
+    <p>Everything in this order is proportioned to how much it moves the outcome. The big rocks, energy and the daily totals, account for most of the variance in recovery quality. Timing is real but marginal, decisive only in the compressed-window edge cases where the clock, not the total, is the binding constraint. Grade it honestly, and attention gets spent where it actually buys adaptation, rather than where a marketing narrative says it should.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Marisol and the compressed week</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Marisol is 34, works a full-time logistics job with rotating shifts, and is eight weeks into training for her first half marathon while holding onto two of her usual three strength sessions. Most weeks she runs Monday, Wednesday, and Friday mornings before work and lifts Tuesday and Thursday evenings. On two of those days, a long or fast run in the morning is followed by a lift roughly eight hours later. She logs her food loosely, has recently started trimming her lunch portions to "lean out," and cramped badly on her longest run to date. She arrived at this chapter unsure whether her problem was protein, timing, or something else entirely.</p>
+    </aside>
+    <p>Run Marisol's week through the framework built across this chapter and the confusion resolves into a short, specific list, not a diagnosis, which is not this chapter's job to give, but a set of honest questions the podcasts and forums had skipped. Start with protein: her logged intake sits around 1.6 g/kg/day, inside the range Jäger and colleagues (2017) describe as sufficient for most exercising individuals. Protein was never her weak point, and no amount of further optimizing meal timing around it would have moved the needle much, a conclusion Schoenfeld et al. (2013) would predict directly.</p>
+    <p>Move to the two compressed-window days. Here the carbohydrate timing guidance in Kerksick et al. (2017) genuinely applies: an eight-hour gap between a hard run and a lift is exactly the scenario where waiting until dinner to refuel is a real cost, not a rounding error. A modest, deliberate carbohydrate snack between sessions, rather than nothing, is the one piece of timing advice in this whole chapter that earns its place in her specific week, precisely because her schedule creates the narrow window the evidence says matters.</p>
+    <p>Her cramping traces to hydration, not electrolytes in some exotic sense but simple underreplacement on a humid, 6 a.m. long run, confirmed by a body mass loss over the two percent threshold that Casa and colleagues (2019) associate with measurable performance decline. A carried bottle and a sodium-containing drink on her longer runs addresses this directly, and it is worth noting how ordinary the fix is once the mechanism is named.</p>
+    <p>The piece that actually deserves the most attention is the one she had least considered: energy availability. Trimming lunch portions while simultaneously increasing running volume compounds in a way that is easy to miss from the inside, because neither change looks dramatic on its own. Nothing in this chapter can tell Marisol whether her current intake constitutes a modest, adaptable deficit or something closer to the problematic end of the spectrum Mountjoy and colleagues (2023) describe, and that is exactly the kind of question that belongs with a sports dietitian or physician who can track her actual intake, training load, and any emerging signs over time, rather than with a self-audit against a chapter in a course. What this chapter can do, and has done, is hand her an accurate map of which of her habits are big rocks and which are small ones, so that if she does seek that evaluation, she arrives with better questions than "am I doing this right," and a clearer sense of what "right" would even mean.</p>
+    <p>There is a broader lesson in how Marisol's individual pieces interact, and it is worth stating plainly because it is easy to miss when each budget is discussed in its own section. None of her four issues, protein, compressed-window carbohydrate, hydration, energy availability, was severe on its own. Her protein was fine. Her carbohydrate mattered only on two days a week. Her fluid deficit was real but correctable with a bottle and a plan. Her energy availability was trending in a concerning direction but had not crossed into anything alarming. Stacked together, though, these small shortfalls interact: a body running a mild energy deficit recovers glycogen more slowly, is more prone to underestimating its own fluid needs because appetite and thirst signaling both blunt somewhat under sustained underfueling, and has less spare capacity to compensate for a compressed training window. The lesson is not that any single number in her plan was catastrophic. It is that recovery nutrition is a system of interacting budgets, and a small deficit in one account makes every other account harder to balance.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Marisol's protein and carbohydrate totals were both adequate on paper, yet she still cramped and still felt flat on her longer runs. What does that combination suggest about where to look first the next time a learner says their nutrition "should be working" but clearly is not?</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Protein supplies the building blocks for post-exercise remodeling across distinct tissue fractions (myofibrillar, sarcoplasmic, collagen and extracellular matrix); roughly 1.4 to 2.0 g/kg/day of <em>total</em> intake is the dominant lever, and whole foods are fully adequate (Jäger et al., 2017; Van Vliet et al., 2018).</li>
+      <li>Carbohydrate restores spent glycogen; provision clearly accelerates resynthesis, while adding protein contributes little once calories are matched (Craven et al., 2021).</li>
+      <li>The anabolic window is far wider and more forgiving than folklore claims; after controlling for total daily protein, the independent effect of timing on hypertrophy is not significant (Aragon and Schoenfeld, 2013; Schoenfeld et al., 2013).</li>
+      <li>Timing becomes genuinely important mainly when sessions are separated by eight hours or fewer, the compressed-window edge case (Kerksick et al., 2017).</li>
+      <li>Hydration status, not precise sip timing, is what matters; thirst-guided drinking covers most situations, and losses beyond about two percent of body mass carry a real performance cost worth actively managing (Casa et al., 2019).</li>
+      <li>Low energy availability gates recovery: sustained deficiency impairs protein synthesis and much else, sitting upstream of every other nutritional lever (Mountjoy et al., 2023).</li>
+      <li>Big rocks before small rocks: energy, protein and carbohydrate totals, and hydration status come first; timing sits at the margins, the same hierarchy as sleep in Chapter 2 and the honest grading of Chapter 6.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Materials, fuel, and the fluid and energy budgets that make use of them are now on the table. Chapter 4 turns to a related myth with the same shape as the anabolic window: the belief that muscle soreness is a reliable gauge of a good session, and what soreness can and cannot actually tell a person about the rebuild underway.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Aragon, A. A., &amp; Schoenfeld, B. J. (2013). Nutrient timing revisited: Is there a post-exercise anabolic window? <em>Journal of the International Society of Sports Nutrition, 10</em>(1), 5. https://doi.org/10.1186/1550-2783-10-5</p>
+    <p>Casa, D. J., Cheuvront, S. N., Galloway, S. D., &amp; Shirreffs, S. M. (2019). Fluid needs for training, competition, and recovery in track-and-field athletes. <em>International Journal of Sport Nutrition and Exercise Metabolism, 29</em>(2), 175-180. https://doi.org/10.1123/ijsnem.2018-0374</p>
+    <p>Craven, J., Desbrow, B., Sabapathy, S., Bellinger, P., McCartney, D., &amp; Irwin, C. (2021). The effect of consuming carbohydrate with and without protein on the rate of muscle glycogen re-synthesis during short-term post-exercise recovery: A systematic review and meta-analysis. <em>Sports Medicine - Open, 7</em>(1), 9. https://doi.org/10.1186/s40798-020-00297-0</p>
+    <p>Jäger, R., Kerksick, C. M., Campbell, B. I., Cribb, P. J., Wells, S. D., Skwiat, T. M., Purpura, M., Ziegenfuss, T. N., Ferrando, A. A., Arent, S. M., Smith-Ryan, A. E., Stout, J. R., Arciero, P. J., Ormsbee, M. J., Taylor, L. W., Wilborn, C. D., Kalman, D. S., Kreider, R. B., Willoughby, D. S., &amp; Antonio, J. (2017). International Society of Sports Nutrition position stand: Protein and exercise. <em>Journal of the International Society of Sports Nutrition, 14</em>, 20. https://doi.org/10.1186/s12970-017-0177-8</p>
+    <p>Kerksick, C. M., Arent, S., Schoenfeld, B. J., Stout, J. R., Campbell, B., Wilborn, C. D., Taylor, L., Kalman, D., Smith-Ryan, A. E., Kreider, R. B., Willoughby, D., Arciero, P. J., VanDusseldorp, T. A., Ormsbee, M. J., Wildman, R., Greenwood, M., Ziegenfuss, T. N., Aragon, A. A., &amp; Antonio, J. (2017). International Society of Sports Nutrition position stand: Nutrient timing. <em>Journal of the International Society of Sports Nutrition, 14</em>, 33. https://doi.org/10.1186/s12970-017-0189-4</p>
+    <p>Mountjoy, M., Ackerman, K. E., Bailey, D. M., Burke, L. M., Constantini, N., Hackney, A. C., Heikura, I. A., Melin, A., Pensgaard, A. M., Stellingwerff, T., Sundgot-Borgen, J. K., Torstveit, M. K., Jacobsen, A. U., Verhagen, E., Budgett, R., Engebretsen, L., &amp; Erdener, U. (2023). 2023 International Olympic Committee's (IOC) consensus statement on relative energy deficiency in sport (REDs). <em>British Journal of Sports Medicine, 57</em>(17), 1073-1097. https://doi.org/10.1136/bjsports-2023-106994</p>
+    <p>Schoenfeld, B. J., Aragon, A. A., &amp; Krieger, J. W. (2013). The effect of protein timing on muscle strength and hypertrophy: A meta-analysis. <em>Journal of the International Society of Sports Nutrition, 10</em>(1), 53. https://doi.org/10.1186/1550-2783-10-53</p>
+    <p>Van Vliet, S., Beals, J. W., Martinez, I. G., Skinner, S. K., &amp; Burd, N. A. (2018). Achieving optimal post-exercise muscle protein remodeling in physically active adults through whole food consumption. <em>Nutrients, 10</em>(2), 224. https://doi.org/10.3390/nu10020224</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 3 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('glycogen-widget');
+    if(!w) return;
+    var gap = w.querySelector('#gly-gap');
+    var depl = w.querySelector('#gly-depl');
+    var fuel = w.querySelector('#gly-fuel');
+    var tankBar = w.querySelector('#gly-tank');
+    var tankNum = w.querySelector('#gly-tank-num');
+    var outBar = w.querySelector('#gly-out');
+    var outNum = w.querySelector('#gly-out-num');
+    var msg = w.querySelector('#gly-msg');
+    var btn = w.querySelector('#gly-btn');
+
+    function run(){
+      var g = parseFloat(gap.value);
+      var d = parseFloat(depl.value);
+      var f = parseFloat(fuel.value);
+      // starting tank after session 1
+      var start = 100 - d;
+      // max refill capacity depends on time available and fuel strategy
+      // per-hour restoration base modulated by fuel aggressiveness
+      var fuelRate = [0, 2.5, 5.5, 8.5][f]; // %/hour effective
+      var restored = fuelRate * g;
+      var tank = start + restored;
+      if(tank > 100) tank = 100;
+      tank = Math.round(tank);
+      // output modeled: below ~50% tank, output degrades steeply
+      var out;
+      if(tank >= 85) out = 92 + (tank-85)*0.5;
+      else if(tank >= 50) out = 55 + (tank-50);
+      else out = 20 + (tank)*0.7;
+      out = Math.round(Math.max(15, Math.min(100, out)));
+
+      tankBar.style.width = tank + '%';
+      tankNum.textContent = tank;
+      outBar.style.width = out + '%';
+      outNum.textContent = out;
+
+      var m;
+      if(g >= 24){
+        m = 'A full day between sessions: the tank refills to the brim almost regardless of how you refuel. Timing is a rounding error here.';
+      } else if(tank >= 85){
+        m = 'Short window, but aggressive early carbs restored the tank in time. Session 2 barely notices, and this is the edge case where timing earns its keep.';
+      } else if(tank >= 55){
+        m = 'Partial refill. Session 2 output is dented but functional. Tighter windows reward more deliberate carbohydrate.';
+      } else {
+        m = 'The tank never recovered before session 2, and output collapses. Compressed windows plus hard depletion plus weak refueling is exactly when carbohydrate timing becomes decisive.';
+      }
+      msg.textContent = m;
+    }
+    btn.addEventListener('click', run);
+    [gap, depl, fuel].forEach(function(el){ el.addEventListener('change', run); });
+    run();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('rocks-widget');
+    if(!w) return;
+    var prot = w.querySelector('#r-prot');
+    var ea = w.querySelector('#r-ea');
+    var time = w.querySelector('#r-time');
+    var usedBar = w.querySelector('#r-used');
+    var usedNum = w.querySelector('#r-used-num');
+    var scoreBar = w.querySelector('#r-score');
+    var scoreNum = w.querySelector('#r-score-num');
+    var msg = w.querySelector('#r-msg');
+    var btn = w.querySelector('#r-btn');
+    var BUDGET = 10;
+
+    function evalr(){
+      var p = parseFloat(prot.value);
+      var e = parseFloat(ea.value);
+      var t = parseFloat(time.value);
+      var used = p + e + t;
+      usedBar.style.width = Math.min(100, (used/BUDGET)*100) + '%';
+      usedNum.textContent = used;
+
+      // Big rocks have high, saturating returns; timing has tiny returns
+      // and only counts once big rocks are reasonably filled.
+      function saturate(x, max){ return max * (1 - Math.exp(-x/1.6)); }
+      var eaScore = saturate(e, 45);       // up to 45
+      var protScore = saturate(p, 40);     // up to 40
+      // timing effectiveness scaled by how filled the big rocks are
+      var bigFill = Math.min(1, (e + p) / 8);
+      var timeScore = saturate(t, 15) * bigFill; // up to ~15, gated
+      var score = Math.round(eaScore + protScore + timeScore);
+      // penalty if over budget
+      var over = used > BUDGET;
+      if(over){ score = Math.round(score * 0.6); }
+      score = Math.max(0, Math.min(100, score));
+
+      scoreBar.style.width = score + '%';
+      scoreNum.textContent = score;
+
+      var m;
+      if(over){
+        m = 'You spent more than 10 points, and over-allocating strains the model (and, in life, your attention). Rebalance to 10 or fewer.';
+      } else if((e + p) < 5 && t >= 3){
+        m = 'You poured points into precise timing while the big rocks, energy availability and total protein, sit half-empty. Notice how little the score moved. Timing cannot rescue unfilled totals.';
+      } else if((e + p) >= 7 && t <= 1){
+        m = 'Big rocks filled first: the score is already high, and it got there with almost nothing spent on timing. This is the evidence-consistent order.';
+      } else if((e + p) >= 7 && t >= 2){
+        m = 'Big rocks are filled and some timing polish was added too, a small, real bump at the margin. Fine, but note that the last point of timing bought far less than the first point of energy availability.';
+      } else {
+        m = 'Balanced-ish. Try dragging points off timing and onto energy availability or total protein, and watch the score climb faster than you expect.';
+      }
+      msg.textContent = m;
+    }
+    btn.addEventListener('click', evalr);
+    [prot, ea, time].forEach(function(el){ el.addEventListener('change', evalr); });
+    evalr();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

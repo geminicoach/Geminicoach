@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>You Don't Grow in the Gym</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 1 · Module 1</div>
+    <h1 class="ch-title">You Don't Grow in the Gym</h1>
+    <p class="ch-subtitle">The workout is the question. Recovery is the answer.</p>
+    <div class="ch-meta">
+      <span>32 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">W</span>alk out of a genuinely hard training session and measure yourself honestly, and you will find that you are, in almost every way that matters, <em>worse</em> than when you walked in. Your force output has dropped. Your muscle glycogen is depleted in the fibers you recruited. Micro damage has been registered along sarcolemma and cytoskeleton. Circulating markers of inflammation are climbing. Your nervous system is less willing to drive a maximal contraction. If the workout were where you "got fitter," this would make no sense at all, since you would leave every session stronger than you arrived, and progress would be visible on the spot.</p>
+    <p>It isn't, and it isn't. The single most durable misconception in training is that the workout is where progress is made. It is not the site of progress. It is the site of <span class="ch-key">disruption</span>, a deliberate, dosed insult to homeostasis. What you did in the gym is a stressor with a bill attached. Whether that bill gets paid back with interest, paid back exactly even, or never quite paid off at all is decided later, in the hours and days afterward, while you are doing something that looks a lot like nothing.</p>
+    <p>Throughout this chapter you will follow one learner, Priya, a 34 year old marketing manager who signed up for her first half marathon after a decade away from structured exercise. Priya is diligent almost to a fault. She read that consistency beats everything, decided that consistency meant never missing a day, and built a schedule of six training sessions a week stacked on top of a demanding job. Within two months her times had stopped improving. Her legs felt heavy on days they should have felt fresh. She assumed the fix was more effort, so she added a seventh day. Priya is not a patient in this course and she is not a case to be solved. She is a stand in for one of the most common and most avoidable errors in all of training, the belief that the workout itself is the engine of progress, and by the end of this chapter you will understand her plateau more clearly than she did at the time. Her story is a thread, not a diagnosis, and this course will be careful about that difference throughout.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour editorial illustration, split into two panels side by side on warm cream paper. Left panel titled 'stress' shows a hand-drawn cross-section of striated skeletal muscle mid-disruption, fibers slightly disordered, small tears sketched, a scattering of tiny signaling dots drifting outward, drawn in muted red and rust tones. Right panel titled 'response' shows the same muscle cross-section during repair, fibers denser and better organized, new filaments forming, drawn in calm teal and sage green. A thin arrow labelled 'recovery' bridges the two panels. Loose ink linework, soft washes, a researcher's-notebook feel, generous margins. Only the words 'stress', 'recovery', and 'response' appear, in small italic serif. No people, no photorealism, no numeric charts." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch1-img1.jpg" alt="<em>Training disrupts; the body's reply is where structure changes.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Training disrupts; the body's reply is where structure changes.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Exercise as a controlled emergency</h2>
+    <p>Start at the cellular level, because it makes the logic unavoidable. According to Hawley and colleagues (2014), in a landmark <em>Cell</em> review, exercise is "a major challenge to whole-body homeostasis, provoking widespread perturbations in numerous cells, tissues, and organs." That phrasing is worth pausing on. A challenge to homeostasis is, biologically, a small emergency. The body does not experience your set of squats as "progress." It experiences it as a perturbation it must respond to, and it mounts, in Hawley's words, "multiple integrated and redundant responses" whose job is to blunt the disturbance and restore order.</p>
+    <p>Here is the pivot on which this entire course turns: <span class="ch-key">the response overshoots the restoration</span>. The body does not merely repair back to the prior baseline. When the stressor is appropriately dosed and the conditions afterward are favorable, the reconstruction leaves the tissue slightly better prepared for the next encounter than it was for the last. According to Egan and Zierath (2013), reviewing exercise metabolism in <em>Cell Metabolism</em>, "repeated, episodic bouts of muscle contraction, associated with frequent exercise training, are potent stimuli for physiological adaptation." Crucially, they locate the machinery of that adaptation not during contraction but during the hours <em>after</em> it: transient pulses of messenger RNA (mRNA), the molecule that carries a gene's instructions to the cell's protein-building machinery, rise during recovery from an acute bout, driving the protein synthesis and structural remodeling whose "net effect is to promote optimal performance during a future challenge."</p>
+    <p>Read that last clause again: <em>optimal performance during a future challenge</em>. That is a molecular definition of what a lay observer might call getting fitter, and it is written entirely in the future tense. The adaptation is a bet the body places on the next stressor, funded by the recovery period after this one. According to Egan and Sharples (2022), in a more recent <em>Physiological Reviews</em> synthesis that draws on two decades of molecular work, skeletal muscle plasticity, meaning the remodeling of size, force, endurance, and contractile velocity, "is underpinned by activation and/or repression of molecular pathways and processes in response to each individual acute exercise session." Notice the timing embedded in that sentence. The stimulus opens the signaling; the recovery period is where the signaling gets read out into new protein. Nothing about that sequence happens on the gym floor.</p>
+    <p>It helps to make this concrete rather than abstract. A demanding lower-body session might drop your ability to produce maximal force by ten to thirty percent for the next day or two, deplete the glycogen stored inside the muscle fibers you worked hardest, and trigger a wave of local inflammatory signaling that peaks roughly a day or two later. None of that is damage in the sense of an injury. It is closer to a demolition crew clearing a site before construction begins. The construction itself, the part that actually raises your capacity, runs on a slower clock, largely while you sleep, eat, and otherwise get on with your day. A learner who only ever evaluates a program by how a session felt in the moment is judging a building by the sound of the wrecking ball, and missing the months of quiet framing that follow.</p>
+    <p>This is also the reason a sore muscle is a poor proxy for a productive one, a point this course will return to in far more detail in a later chapter devoted entirely to soreness. Soreness and adaptive signaling overlap, but they are not the same event, and they do not rise and fall together in any dependable way. A session can produce meaningful adaptive signaling with almost no next-day soreness at all, particularly once a learner has repeated a given movement pattern many times, because the tissue has already built some resilience to that specific stimulus. Conversely, a session built around an unfamiliar movement can produce dramatic soreness with a comparatively modest adaptive stimulus behind it, simply because the tissue was caught by surprise. Chasing soreness as a training goal, in other words, is chasing the wrong signal, and it is a habit worth unlearning early, before it quietly starts to steer program design in ways that have nothing to do with adaptation.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If an acute session temporarily lowers your performance and only later raises it, what does that predict about how you should feel in the 24 hours after your hardest sessions of the week? Is feeling depleted evidence that something went wrong, or evidence that something went right?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The stimulus, recovery, adaptation loop</h2>
+    <p>We can now name the object that the rest of this course will study. Strip away the molecular detail and every training outcome runs through the same three-beat loop.</p>
+    <p><span class="ch-key">Stimulus.</span> A training bout imposes a stress large enough to disturb homeostasis. This is the workout. Its immediate effect is negative. You are, transiently, worse.</p>
+    <p><span class="ch-key">Recovery.</span> During the hours and days afterward, integrated repair and remodeling processes run. Given adequate raw materials, sleep, and time, they do not merely restore baseline, they overshoot it. This is where fitness is actually built.</p>
+    <p><span class="ch-key">Adaptation.</span> If the recovery completes before the next stimulus arrives, the overshoot is banked as a durable, if modest, upward shift in capacity. Repeat the loop hundreds of times with the stress just ahead of the adapting baseline, and you have a training career.</p>
+    <p>Notice what this framing does to the word "recovery." In everyday usage recovery means the absence of training, rest, downtime, doing nothing. In the loop it means something almost opposite: recovery is the <em>active biological work of adaptation</em>. It is when the transcription happens, when the protein turns over, when connective tissue and mitochondria and neural drive get rebuilt to a higher spec. Nothing is more consequential and less visible. You are not idling between sessions. You are constructing the athlete who will show up to the next one.</p>
+    <p>This is also why the loop can fail from either direction, and why "just train more" is not a strategy on its own. Skip the recovery, piling the next stimulus onto an incomplete repair, and you never bank the overshoot. You accumulate the debt instead. Leave too much time and let the overshoot decay untouched, and you adapt, then quietly give the adaptation back before you build on it. Progress lives in a moving window, and the whole craft of programming is learning to find that window again and again, session after session, week after week.</p>
+    <p>A learner new to this idea often assumes the loop is a fixed metronome, that a body always needs exactly forty-eight hours, or exactly one week, before the next stimulus can land productively. It is not that simple, and the rest of this course exists partly to dismantle that assumption. The loop's timing depends on which tissue and which system you are asking about, how large the stimulus was, how trained the person already is, and how well the levers covered in the coming chapters, sleep, nutrition, and stress management among them, are being pulled. What stays constant is the shape of the loop itself: disruption, then a recovery period that does the actual building, then a banked gain if the next disruption is timed well. Learn to see that shape underneath every program you ever encounter, and a great deal of confusing, contradictory training advice starts to resolve into a much smaller set of underlying questions.</p>
+    <p>It is also worth naming that "stimulus" is not one thing. A heavy set of five squats, an easy thirty-minute jog, and a long walk are all stimuli, but they disturb different systems to different degrees and on different clocks. Heavy resistance work tends to produce a large, localized disruption in the muscle fibers involved, with a recovery timeline often measured in one to several days depending on training status. Sustained aerobic work spreads a smaller disruption across a wider set of systems, cardiovascular, metabolic, and muscular, and tends to clear faster unless the duration or intensity is unusually high. Skill-heavy or highly novel movement adds a further layer, taxing the nervous system's capacity to coordinate new patterns, which recovers on its own separate schedule. None of this means a learner needs to track every system individually to train well. It means the loop is best applied per stimulus, not as a single number describing an entire week, and a program that varies its stimuli sensibly is, in effect, spreading its recovery demands across several different clocks instead of loading all of them at once.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner designs two versions of the same eight-week block. Version one applies the identical stimulus every single session and never varies it. Version two nudges the stimulus upward as capacity rises. Using the loop, explain why version two is far more likely to keep producing banked overshoot while version one is likely to stall.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-supercomp">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Supercompensation Timeline</div>
+    </div>
+    <p class="ch-widget-sub">Choose how you space your next stimulus relative to the recovery curve, then run the block and watch the long-run trend respond.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Session spacing</span>
+        <select class="ch-widget-select" id="sc-spacing">
+          <option value="early">Too soon, before recovery completes</option>
+          <option value="peak" selected>At the peak, overshoot is banked</option>
+          <option value="late">Too late, overshoot has faded</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Sessions in block</span>
+        <select class="ch-widget-select" id="sc-count">
+          <option>4</option>
+          <option selected>6</option>
+          <option>8</option>
+        </select>
+      </div>
+    </div>
+
+    <canvas id="sc-canvas" width="720" height="260" aria-label="Supercompensation timeline chart"></canvas>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">End preparedness vs. start</span>
+        <span class="ch-meter-bar"><span id="sc-bar-end" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="sc-num-end">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Peak reached in block</span>
+        <span class="ch-meter-bar"><span id="sc-bar-peak" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="sc-num-peak">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="sc-run">Run the block</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Supercompensation: a useful fiction</h2>
+    <p>The smooth curve you just watched, dip, rebound above baseline, decay, has a name. <span class="ch-key">Supercompensation</span> is the classic textbook picture of the loop: performance drops after a session, recovers past the prior level during rest, and settles back if no new stimulus arrives. It is a wonderful teaching device precisely because it makes the timing problem visible. Land the next stimulus on the crest of the rebound and the crests stack. Land it in the trough and they sink.</p>
+    <p>You should hold this model in exactly one hand, though, and keep the other hand skeptical. Real physiology does not produce a single clean performance curve that everyone rides. Different systems adapt on different clocks. A metabolic enzyme profile, a tendon, a myofibril, and the neural drive to recruit them all recover and remodel over different timescales. The tidy sinusoid is a composite, an average of many overlapping processes drawn as if it were one. Treat the supercompensation curve as a <em>working model</em>, a scaffold for reasoning about timing, not a literal ledger of your body. Throughout this course we will keep grading our models this honestly, using them where they illuminate, flagging them where they oversimplify.</p>
+    <p>The practical value of the model shows up most clearly when a learner is deciding how to sequence a week rather than a single session. If the curve teaches anything durable, it is that timing is a variable to be managed on purpose rather than left to chance or to how motivated a person happens to feel on a given morning. A learner who trains the same muscle group hard on consecutive days, with no attention to where that tissue sits on its own recovery curve, is essentially gambling on whether the second session lands near a peak or in a trough. Spacing sessions with the curve in mind, even a rough, qualitative sense of it rather than a precise number, converts that gamble into a deliberate choice. This is the entire logic behind concepts such as split routines, hard and easy day alternation, and deload weeks, all of which will reappear in later chapters. They are different tactical answers to the same underlying question the supercompensation curve first poses: where, on the rebound, is the next stimulus going to land.</p>
+
+    <h3>Selye's scaffold, and its critics</h3>
+    <p>The intellectual ancestor of the supercompensation idea is Hans Selye's <span class="ch-key">General Adaptation Syndrome</span> (GAS), the observation that an organism exposed to a stressor passes through alarm, resistance, and, if the stressor overwhelms it, exhaustion. According to Cunanan and colleagues (2018), who mount a careful defense of GAS as the conceptual foundation for periodization, "disturbance to the state of an organism is the driving force for biological adaptation." That single sentence is the throughline of everything above: no disturbance, no adaptation. They are frank about the model's limits, conceding that "despite its imprecisions, the GAS has proven to be an instructive framework," instructive, not exact.</p>
+    <p>It would be intellectually dishonest to present GAS without its sharpest critique. According to Buckner and colleagues (2017), importing Selye directly into resistance training is a category error. Selye's original alarm, resistance, exhaustion sequence came from dosing laboratory animals with toxic stressors, cold, injury, poisons, not from progressive, adaptive exercise. The mechanistic story GAS tells about <em>why</em> we adapt, they contend, has thinner empirical support in the training context than its popularity suggests, and the more parsimonious principle may simply be <span class="ch-key">progressive overload</span>: apply a stress the tissue is not yet adapted to, recover, then apply slightly more. A learner does not have to resolve this debate to train well. A learner does have to hold GAS the right way, as an intuitive scaffold for the loop, not as a proven mechanism to compute programming from.</p>
+    <blockquote class="ch-quote">
+      <p>Successful training must involve overload, but also must avoid the combination of excessive overload plus inadequate recovery.</p>
+      <cite>Meeusen et al. (2013), joint consensus statement of the European College of Sport Science (ECSS) and the American College of Sports Medicine (ACSM)</cite>
+    </blockquote>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common belief holds that recovery days are a concession, a break from the real work, something a sufficiently disciplined person could train through if they were tough enough. Priya believed exactly this when she added a seventh training day. But the loop shows the opposite. Recovery is not the absence of the work. It is the second half of the work, the half where the overshoot actually gets built. A schedule with "no days off" is not more disciplined than a schedule with planned recovery. It is a schedule that keeps demolishing the site before the crew can finish framing it.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Fatigue, fitness, and preparedness</h2>
+    <p>The supercompensation curve has a blind spot. It collapses everything into one line called "performance." But the reason performance behaves the way it does is that it is a <em>difference</em> between two hidden quantities that move on different timescales. This is the insight of the <span class="ch-key">fitness-fatigue model</span>, and it is the vocabulary you will use for the rest of this course.</p>
+    <p>According to Chiu and Barnes (2003), revisiting Banister's model for the strength and conditioning audience, performance at any instant is the net product of two aftereffects of training. <span class="ch-key">Fitness</span> is the positive adaptation, real, structural, and slow to decay. <span class="ch-key">Fatigue</span> is the negative residue of the recent training load, large in magnitude but comparatively fast to clear. Your measurable <span class="ch-key">preparedness</span>, what you could actually express if tested right now, is fitness minus fatigue.</p>
+    <p>This resolves the paradox we opened with. Immediately after a hard session, your fitness has genuinely gone <em>up</em>, the adaptive signaling is underway, yet your preparedness has cratered, because a large fatigue aftereffect is masking it. You are more fit and less able at the same moment, and there is no contradiction. As the fast fatigue term decays over the following days, the mask lifts, and the slower fitness gain is revealed as usable preparedness. Preparedness does not peak the instant fitness rises. It peaks once fatigue has cleared enough to unveil it.</p>
+    <p>Two consequences follow immediately. First, feeling wrecked the day after a session tells you about your fatigue, not your fitness, and those are different accounts entirely. Second, if you always test or compete under heavy accumulated fatigue, you will chronically underestimate the fitness you have actually built. The applied field has taken this seriously enough to build an entire monitoring discipline around it. According to Bourdon and colleagues (2017), in the international consensus on training-load monitoring, practitioners are encouraged to operationalize precisely this fitness, fatigue, preparedness vocabulary so they can quantify load and readiness rather than guess, and so the loop functions as intended and not as an accumulating stress spiral.</p>
+    <p>It is worth sitting with why this distinction matters so much in practice. A learner who schedules a demanding fitness test the day after the hardest session of the week is not measuring fitness at all. They are measuring fitness with a large, temporary fatigue penalty subtracted from it, and if the result looks disappointing, the natural but wrong conclusion is that the training is not working. The correct conclusion is usually that the timing of the test was poor. This is one of the most common and most fixable errors in self-directed training: mistaking a fatigue problem for a fitness problem, and responding to a timing issue as though it were a program failure.</p>
+    <p>The model also explains a pattern many learners notice but rarely name correctly, the sensation of feeling flat or heavy for a stretch of days that then resolves, almost overnight, into a session that feels unexpectedly light and fast. That is not luck, and it is not a sudden burst of new fitness arriving out of nowhere. It is the fatigue term finally decaying below the level of the fitness term that had already been quietly accumulating underneath it the whole time. Coaches sometimes describe this as a session where everything clicked, but the fitness-fatigue model offers a less mystical explanation, that the fog lifted and the gains that had already been earned became visible. Recognizing this pattern for what it is matters practically, because it keeps a learner from making a rash decision, cutting a program short or overhauling it entirely, during a stretch that is actually an ordinary and temporary trough in the fatigue curve rather than a sign that the underlying plan has failed.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner tests their five-kilometer time the morning after the single hardest interval session of their training block and comes away disappointed with the result. Using the fitness-fatigue model, explain what is most likely being measured, and what a fairer test of their actual fitness would look like.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-ff">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Fitness-Fatigue Mixer</div>
+    </div>
+    <p class="ch-widget-sub">A single hard bout raises both a slow-decaying fitness aftereffect and a large, fast-decaying fatigue aftereffect. Their difference is preparedness. Find where preparedness peaks.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fitness gain (slow decay)</span>
+        <input type="range" class="ch-widget-select" id="ff-fit" min="20" max="100" value="55">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Fatigue cost (fast decay)</span>
+        <input type="range" class="ch-widget-select" id="ff-fat" min="20" max="120" value="90">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Read at (days since session)</span>
+        <select class="ch-widget-select" id="ff-day">
+          <option>0</option>
+          <option>1</option>
+          <option selected>3</option>
+          <option>5</option>
+          <option>7</option>
+          <option>10</option>
+        </select>
+      </div>
+    </div>
+
+    <canvas id="ff-canvas" width="720" height="260" aria-label="Fitness fatigue preparedness chart"></canvas>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fitness (at readout)</span>
+        <span class="ch-meter-bar"><span id="ff-bar-fit" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="ff-num-fit">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fatigue (at readout)</span>
+        <span class="ch-meter-bar"><span id="ff-bar-fat" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="ff-num-fat">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Preparedness (fitness minus fatigue)</span>
+        <span class="ch-meter-bar"><span id="ff-bar-prep" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="ff-num-prep">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="ff-reset">Reset to a hard session</button>
+  </div>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn editorial diagram in the style of a sports scientist's field notebook on cream paper, ink and light watercolour wash. Show two overlapping curves rising from a common point at the left: one broad, low, and long labelled 'fitness' in muted teal that decays very slowly across the page; one tall, narrow, and steep labelled 'fatigue' in rust red that spikes then falls away quickly. Beneath them draw a third curve labelled 'preparedness' in charcoal that starts low, dips, then rises to a gentle crest only after the red fatigue curve has fallen. Axes are unlabeled with no numeric ticks, sketched loosely as if drawn freehand. Small handwritten note in the margin reads 'peaks once fatigue clears'. Only the words 'fitness', 'fatigue', 'preparedness', and that margin note appear. No photorealism, no data tables, no gridlines." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch1-img2.jpg" alt="<em>Preparedness is a difference between two clocks, not a single line.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Preparedness is a difference between two clocks, not a single line.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Why the same stimulus lands differently in different people</h2>
+    <p>One question the loop invites almost immediately is why two learners can run an identical program and come away with very different results. If stimulus, recovery, and adaptation were a fixed equation, the outputs would be uniform. They plainly are not, and understanding why is essential before we can diagnose failures rather than guess at them.</p>
+    <p>Part of the answer is training history. A tissue that has already adapted through many prior cycles has less room left to overshoot on any single bout, and it also tends to recover faster from a given stimulus because the underlying repair machinery has itself been upregulated by repeated exposure. A beginner, by contrast, often shows large, fast gains early on precisely because almost any reasonable stimulus is novel enough to disturb homeostasis meaningfully. This is not a reason to chase novelty for its own sake later in a training career. It is a reason to expect the size of the banked overshoot to shrink as a learner becomes better trained, even when the effort involved stays high or climbs.</p>
+    <p>A second, larger part of the answer is that the recovery period is not a passive waiting room. It is actively shaped by everything else happening in a learner's life during those hours, and this is precisely the terrain the remaining chapters of this course exist to map. Sleep duration and quality change how much of the anabolic signaling described earlier in this chapter actually gets expressed. Total energy and protein intake determine whether the raw materials for rebuilding are even available. Psychological stress, illness, and poor recovery between unrelated life demands can all raise a background load that competes with training for the same limited recovery capacity. Two learners doing the same workout are rarely doing the same recovery, and the loop cares about the whole picture, not just the stimulus half of it.</p>
+    <p>A third factor, easy to overlook, is the size and novelty of the stimulus relative to what a learner's tissues are prepared to handle. A large jump in volume, intensity, or an unfamiliar movement pattern produces a proportionally larger disruption, which in turn demands a proportionally larger and slower recovery. Programming that increases difficulty gradually respects this relationship. Programming that lurches, a sedentary month followed by a sudden ambitious block, asks the recovery side of the loop to do in days what it may need weeks to accomplish, and that mismatch is where a great deal of frustration, and a fair amount of injury risk, tends to originate.</p>
+    <p>A fourth factor worth naming explicitly is age and life stage, since it is one of the questions learners ask most often. Recovery capacity does tend to shift across a lifespan, with tissue repair and hormonal signaling generally becoming somewhat slower with advancing age, and this is a fair, mechanistically grounded reason for an older learner to expect a program to look different rather than simply less ambitious. It is not, however, a reason to treat age as destiny. Training history, baseline health, sleep habits, and the other recovery levers covered later in this course typically explain far more of the variation between two learners of the same age than age explains on its own. A well-managed program for an older learner is not a smaller version of a younger learner's program. It is a program built with a clearer respect for the same loop this chapter has been describing throughout, with a bit more attention paid to spacing and a bit less tolerance for stacking stimulus on incomplete recovery.</p>
+    <p>Finally, recovery capacity itself is not a fixed number a learner is issued at birth and stuck with forever. It responds to training in its own right. A learner who has spent months or years exposing a system to well-managed stress tends to develop faster clearance of fatigue and a more efficient repair response than a learner encountering that same system for the first time, which is part of why advanced athletes can often absorb a training load that would flatten a beginner. This is not a license to rush the process. It is, if anything, an argument for patience: recovery capacity itself is one of the things this whole course is quietly training, one well-timed cycle of the loop at a time, and it builds on the same schedule as everything else, slowly, and mostly while you are not looking.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The classic failure mode: stimulus on incomplete recovery</h2>
+    <p>Now we can diagnose the mistake that this whole course exists to help a learner avoid. It is not laziness. It is the opposite. It is the disciplined person who reasons, plausibly but wrongly, that if one hard session produces adaptation, then more hard sessions, closer together, must produce more. Stack stimulus on top of stimulus before the recovery completes, and the fatigue aftereffect never fully clears between bouts. Preparedness sinks lower and lower even as the person works harder and harder. The loop stops banking overshoot and starts accumulating debt.</p>
+    <p>The overtraining literature gives this a precise vocabulary. According to Meeusen and colleagues (2013), in the ECSS and ACSM consensus, a brief, deliberate overload followed by adequate recovery yields <span class="ch-key">functional overreaching</span>, a short-term performance dip that, once a learner backs off, rebounds to a higher level. This is a tool, not a mistake. It is the loop run slightly hot on purpose. Push further, though, more overload, less recovery, and you slide into <span class="ch-key">non-functional overreaching</span>, where the rebound stalls and performance stays suppressed for weeks with no upside to show for it. Push further still and you reach <span class="ch-key">overtraining syndrome</span>, whose keyword, the consensus notes, is "prolonged maladaptation" spanning biological, neurochemical, and hormonal regulation, a hole measured in months rather than days.</p>
+    <p>The difference between the beneficial version and the destructive version is not the size of the stimulus alone. It is the size of the stimulus <em>relative to the recovery that follows it</em>. That relationship, stress against recovery, over and over, is the axis every remaining chapter in this course is organized around. It is also exactly where Priya's plateau lived. Her stimulus had not become unreasonable overnight. What had changed was the ratio between what she was asking her body to absorb and the recovery time she was giving it to do so.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two learners perform the identical training week. One sleeps nine hours a night and eats well. The other sleeps five and skips meals. Using the loop, explain why the <em>same</em> stimulus could be functional overreaching for one and non-functional for the other. What variable did the stimulus not change?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Case study: Priya and the plateau that was not toughness</h2>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Case</div>
+      <p>Priya is 34 and training for her first half marathon after roughly a decade without structured exercise. She built a plan of six running and strength sessions a week, then added a seventh when her pace stopped improving in week seven. By week nine her resting heart rate was running a few beats higher each morning, her legs felt heavy from the first mile, and a run that used to feel challenging but manageable now felt simply hard, with no sense of building toward anything. She had not gotten hurt. She had not missed a session. By every measure of effort she could see, she was doing everything right, and she could not understand why the results had stalled and then reversed.</p>
+    </aside>
+    <p>Run Priya's plateau through this chapter and most of the confusion dissolves, not into a diagnosis, which is not this course's to give, but into a set of honest questions her schedule had never asked. Start with the decision to add a seventh day. Under the stimulus, recovery, adaptation loop, a stimulus that lands before the prior one's recovery has completed does not add to progress. It interrupts it. Priya had assumed more sessions meant more adaptation, when the honest accounting is that adaptation happens in the gap between sessions, not in the sessions themselves. Adding a seventh day did not give her body more opportunity to build. It gave her body less time to do the building the other six sessions had already set in motion.</p>
+    <p>Move to her rising resting heart rate and the heavy-legged feeling that had crept in by week nine. Neither of those is, on its own, a diagnosis of anything. But read against the fitness-fatigue model, they are exactly the signature you would expect from fatigue accumulating faster than it can clear: a large, still-growing negative aftereffect stacked on top of whatever fitness gains her training was producing, so that her true preparedness, fitness minus fatigue, kept sliding even while her underlying fitness may not have been the problem at all. She had, in effect, been testing herself under an ever-thickening fog of fatigue and concluding that the fog was proof her training had stopped working.</p>
+    <p>Then there is the plateau in pace itself. According to Meeusen and colleagues (2013), a performance dip under a deliberate, brief overload with adequate recovery is functional overreaching, a normal and even useful part of a well-built program. Priya's dip did not have adequate recovery attached to it. Extended across weeks with a seventh day layered on rather than backed off, her pattern matches the earlier stage of what the consensus describes as non-functional overreaching far more closely than it matches simple bad luck or insufficient effort. The honest read is not that Priya trained too little or cared too little. It is that she had quietly crossed from the loop's productive side to its unproductive side, and nothing in her felt sense of effort was built to warn her about that line, because from the inside both sides of it feel like hard work.</p>
+    <p>Here is the part that matters most, and it is where this chapter's boundary, discussed next, does real work. Nothing above tells us whether Priya's rising heart rate or persistent heaviness reflects ordinary non-functional overreaching that would resolve with a planned deload, or something else worth a professional look, such as anemia, an infection, or a cardiovascular question a heart rate trend alone cannot answer. This chapter cannot and does not sort that out, and neither should a learner sort it out alone from a framework built for training stress. What this chapter can do is exactly what it did for Priya: replace a vague, self-blaming story, that she must not be tough enough, with an accurate, mechanistic one, that she had likely tipped the ratio between stimulus and recovery too far, and a clear next step, back the training off, protect the recovery levers covered later in this course, and if the physical signs persist or worsen, take them to a clinician rather than to a training plan. That is a sturdier outcome than a guess, because it does not depend on Priya simply trying harder at the thing that was already the problem.</p>
+    <p>It is worth imagining, briefly, what a better-timed version of Priya's block might have looked like, not as a prescription, since a specific program for a specific person is outside what this chapter can responsibly offer, but as an illustration of the loop working as intended. Six sessions a week is not, by itself, an unreasonable target for a learner with her background. The problem was never the number of sessions in isolation. It was the absence of any planned recovery response once the early warning signs, the stalled pace, the rising morning heart rate, had already appeared. A version of the same block that treated week seven's plateau as information rather than as a challenge to push through, that traded the seventh session for an easier week and let the fatigue term catch up to the fitness she had already built, would likely have produced the rebound that functional overreaching is supposed to produce. The difference between a productive hard patch and a costly one is rarely the peak difficulty reached. It is what happens in the one or two decisions made immediately after the first honest signal appears.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The boundary of this course</h2>
+    <p>Before we go further, one line must be drawn clearly, because it defines what this course is and is not. We reason here about <span class="ch-key">training stress and the recovery levers a learner controls</span>, the load applied, and the sleep, nutrition, spacing, and management that determine whether that load becomes adaptation. Across the next eight chapters we will grade the modalities honestly, keeping the good evidence and discarding the marketing.</p>
+    <p>What we will <em>not</em> do is interpret pain or dysfunction. A sharp or persistent pain, a joint that does not move the way it should, a resting heart rate trend that keeps climbing, a symptom that outlasts the ordinary rhythm of training fatigue, these are not puzzles to solve with a recovery lever. They are signals that warrant evaluation by a qualified professional. Treating them as programming problems is exactly the kind of category error we just warned against with GAS. Throughout this course, when a learner meets that boundary, the correct move is to route the question to someone credentialed to answer it, not to reason about it from a model built for training stress. Everything that follows lives on the training side of that line.</p>
+    <p>This boundary is not a formality tacked onto the end of a chapter. It follows directly from the physiology already covered. The fitness-fatigue model explains why a learner might feel worse before feeling better, and the overreaching continuum explains how a normal dip can, if mismanaged, slide into something that takes months to resolve. Neither model was built to distinguish ordinary accumulated fatigue from an underlying medical issue that happens to produce similar symptoms, and neither should be stretched to do a job it was never designed for. Knowing the mechanism well enough to recognize when a question has left the mechanism's territory is not a limitation of this course. It is the single most protective habit a learner can take from it, because it is what keeps sound physiology from being misapplied to a situation it cannot actually explain.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A learner describes a rising resting heart rate, persistent heaviness in the legs, and a training plateau lasting several weeks, and asks whether this is simply non-functional overreaching. What does an educated, evidence-based, non-clinical response sound like, and just as importantly, where does it stop? The place it stops is the boundary this whole section is about.</p>
+    </aside>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The workout is a controlled disruption that temporarily makes you worse. Progress is the body's overshooting <em>response</em> to that disruption during recovery, not the disruption itself.</li>
+      <li>The stimulus, recovery, adaptation loop is the object of the entire course. Adaptation is banked only when recovery completes before the next stimulus lands.</li>
+      <li>Supercompensation and Selye's General Adaptation Syndrome are useful working scaffolds for reasoning about timing, instructive despite their imprecisions, and not literal mechanisms to compute from (Cunanan et al., 2018; Buckner et al., 2017).</li>
+      <li>Preparedness equals fitness minus fatigue. Immediately after a hard session fitness has risen, yet preparedness is low because a large, fast-decaying fatigue aftereffect masks it. Preparedness peaks only once fatigue clears (Chiu &amp; Barnes, 2003).</li>
+      <li>The same stimulus lands differently across learners because training history, sleep, nutrition, life stress, and the novelty of the stimulus all shape how well the recovery half of the loop can do its job.</li>
+      <li>The classic failure mode is stacking stimulus on incomplete recovery, sliding from functional overreaching into non-functional overreaching and, ultimately, prolonged maladaptation (Meeusen et al., 2013).</li>
+      <li>Pain, dysfunction, or a persistently climbing heart rate trend is a signal for professional evaluation, never something to interpret with a recovery lever alone.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>If recovery is where adaptation actually happens, then the question becomes ruthlessly practical: what governs the <em>quality</em> of that recovery window? We begin with the single most powerful and most neglected lever, sleep, and ask what the evidence really shows about how the night after training shapes the person who wakes up.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Bourdon, P. C., Cardinale, M., Murray, A., Gastin, P., Kellmann, M., Varley, M. C., Gabbett, T. J., Coutts, A. J., Burgess, D. J., Gregson, W., &amp; Cable, N. T. (2017). Monitoring athlete training loads: Consensus statement. <em>International Journal of Sports Physiology and Performance, 12</em>(s2), S2-161 to S2-170. https://doi.org/10.1123/IJSPP.2017-0208</p>
+    <p>Buckner, S. L., Mouser, J. G., Dankel, S. J., Jessee, M. B., Mattocks, K. T., &amp; Loenneke, J. P. (2017). The General Adaptation Syndrome: Potential misapplications to resistance exercise. <em>Journal of Science and Medicine in Sport, 20</em>(11), 1015 to 1017. https://doi.org/10.1016/j.jsams.2017.02.012</p>
+    <p>Chiu, L. Z. F., &amp; Barnes, J. L. (2003). The fitness-fatigue model revisited: Implications for planning short- and long-term training. <em>Strength and Conditioning Journal, 25</em>(6), 42 to 51. https://doi.org/10.1519/1533-4295(2003)025&lt;0042:TFMRIF&gt;2.0.CO;2</p>
+    <p>Cunanan, A. J., DeWeese, B. H., Wagle, J. P., Carroll, K. M., Sausaman, R., Hornsby, W. G., Haff, G. G., Triplett, N. T., Pierce, K. C., &amp; Stone, M. H. (2018). The General Adaptation Syndrome: A foundation for the concept of periodization. <em>Sports Medicine, 48</em>(4), 787 to 797. https://doi.org/10.1007/s40279-017-0855-3</p>
+    <p>Egan, B., &amp; Sharples, A. P. (2022). Molecular responses to acute exercise and their relevance for adaptations in skeletal muscle to exercise training. <em>Physiological Reviews, 103</em>(3), 2057 to 2170. https://doi.org/10.1152/physrev.00054.2021</p>
+    <p>Egan, B., &amp; Zierath, J. R. (2013). Exercise metabolism and the molecular regulation of skeletal muscle adaptation. <em>Cell Metabolism, 17</em>(2), 162 to 184. https://doi.org/10.1016/j.cmet.2012.12.012</p>
+    <p>Hawley, J. A., Hargreaves, M., Joyner, M. J., &amp; Zierath, J. R. (2014). Integrative biology of exercise. <em>Cell, 159</em>(4), 738 to 749. https://doi.org/10.1016/j.cell.2014.10.029</p>
+    <p>Meeusen, R., Duclos, M., Foster, C., Fry, A., Gleeson, M., Nieman, D., Raglin, J., Rietjens, G., Steinacker, J., &amp; Urhausen, A. (2013). Prevention, diagnosis and treatment of the overtraining syndrome: Joint consensus statement of the European College of Sport Science (ECSS) and the American College of Sports Medicine (ACSM). <em>European Journal of Sport Science, 13</em>(1), 1 to 24. https://doi.org/10.1080/17461391.2012.730061</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 1 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-supercomp');
+    if(!root) return;
+    var cv = root.querySelector('#sc-canvas');
+    var ctx = cv.getContext('2d');
+    var spacingSel = root.querySelector('#sc-spacing');
+    var countSel = root.querySelector('#sc-count');
+    var runBtn = root.querySelector('#sc-run');
+    var numEnd = root.querySelector('#sc-num-end');
+    var numPeak = root.querySelector('#sc-num-peak');
+    var barEnd = root.querySelector('#sc-bar-end');
+    var barPeak = root.querySelector('#sc-bar-peak');
+
+    var css = getComputedStyle(document.body);
+    var ink = css.color || '#333';
+
+    function build(){
+      var spacing = spacingSel.value;
+      var n = parseInt(countSel.value,10);
+      // gap (in arbitrary time units) between sessions
+      var gap = spacing==='early' ? 3 : spacing==='peak' ? 6 : 11;
+      var dip = 22;         // immediate drop
+      var overshootAt = 6;  // time of peak overshoot
+      var overshootAmt = 14;
+      var decayStart = 8;
+
+      // Model each session's contribution as a curve; baseline shifts by banked amount
+      var baseline = 0;
+      var sessions = [];
+      var t = 4;
+      for(var i=0;i<n;i++){ sessions.push(t); t += gap; }
+      var total = t + 6;
+      var pts = [];
+      var peakVal = -999;
+      for(var x=0;x<=total;x+=0.25){
+        // find current baseline: sum of banked overshoots from sessions whose recovery completed before x
+        var b = 0;
+        var acute = 0;
+        for(var s=0;s<sessions.length;s++){
+          var st = sessions[s];
+          if(x < st) continue;
+          var d = x - st;
+          // acute response curve relative to that session's own baseline contribution
+          // shape: drop then rise to overshoot then decay toward banked level
+          var resp;
+          if(d < overshootAt){
+            // from -dip up to +overshoot
+            resp = -dip + (dip+overshootAmt)*(d/overshootAt);
+          } else if(d < decayStart){
+            resp = overshootAmt;
+          } else {
+            resp = overshootAmt * Math.exp(-(d-decayStart)/7);
+          }
+          // banked: how much of overshoot persists as baseline once next session lands
+          // if session s+1 lands near the peak, most overshoot banked
+          if(s < sessions.length-1){
+            var nextGap = sessions[s+1]-st;
+            var bankFactor;
+            if(nextGap <= overshootAt-1){ bankFactor = -0.4; } // too soon -> partial loss
+            else if(nextGap <= decayStart){ bankFactor = 1.0; } // near peak -> full bank
+            else { bankFactor = Math.exp(-(nextGap-decayStart)/7); } // late -> faded
+            if(x >= sessions[s+1]){
+              b += overshootAmt * bankFactor;
+              continue;
+            }
+          }
+          acute += resp;
+        }
+        var val = b + acute;
+        if(val>peakVal) peakVal = val;
+        pts.push({x:x, v:val});
+      }
+      return {pts:pts, total:total, sessions:sessions, peak:peakVal, end:pts[pts.length-1].v};
+    }
+
+    function draw(){
+      var d = build();
+      var W = cv.width, H = cv.height, pad=30;
+      ctx.clearRect(0,0,W,H);
+      // scale
+      var minV=999,maxV=-999;
+      d.pts.forEach(function(p){ if(p.v<minV)minV=p.v; if(p.v>maxV)maxV=p.v; });
+      minV = Math.min(minV,-25); maxV = Math.max(maxV,20);
+      var xr = d.total;
+      function X(t){ return pad + (t/xr)*(W-2*pad); }
+      function Y(v){ return H-pad - ((v-minV)/(maxV-minV))*(H-2*pad); }
+      // baseline zero line
+      ctx.strokeStyle = 'rgba(128,128,128,0.4)';
+      ctx.lineWidth=1; ctx.setLineDash([4,4]);
+      ctx.beginPath(); ctx.moveTo(pad,Y(0)); ctx.lineTo(W-pad,Y(0)); ctx.stroke();
+      ctx.setLineDash([]);
+      // performance curve
+      ctx.strokeStyle = ink; ctx.lineWidth=2;
+      ctx.beginPath();
+      d.pts.forEach(function(p,i){ var xx=X(p.x),yy=Y(p.v); if(i===0)ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); });
+      ctx.stroke();
+      // session markers
+      d.sessions.forEach(function(st){
+        ctx.strokeStyle='rgba(200,70,50,0.7)'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(X(st),pad-6); ctx.lineTo(X(st),H-pad); ctx.stroke();
+      });
+      // trend line start->end
+      ctx.strokeStyle='rgba(60,150,140,0.9)'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(X(0),Y(0)); ctx.lineTo(X(d.total),Y(d.end)); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // meters
+      var endPct = Math.max(2, Math.min(98, 50 + d.end*1.6));
+      var peakPct = Math.max(2, Math.min(98, 50 + d.peak*1.6));
+      barEnd.style.width = endPct+'%';
+      barPeak.style.width = peakPct+'%';
+      numEnd.textContent = (d.end>0?'+':'')+Math.round(d.end);
+      numPeak.textContent = (d.peak>0?'+':'')+Math.round(d.peak);
+    }
+    runBtn.addEventListener('click', draw);
+    spacingSel.addEventListener('change', draw);
+    countSel.addEventListener('change', draw);
+    draw();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-ff');
+    if(!root) return;
+    var cv = root.querySelector('#ff-canvas');
+    var ctx = cv.getContext('2d');
+    var fitS = root.querySelector('#ff-fit');
+    var fatS = root.querySelector('#ff-fat');
+    var daySel = root.querySelector('#ff-day');
+    var reset = root.querySelector('#ff-reset');
+    var css = getComputedStyle(document.body);
+    var ink = css.color || '#333';
+
+    var tauFit = 22;  // slow decay
+    var tauFat = 4;   // fast decay
+
+    function fitAt(t){ return parseFloat(fitS.value) * Math.exp(-t/tauFit); }
+    function fatAt(t){ return parseFloat(fatS.value) * Math.exp(-t/tauFat); }
+
+    function draw(){
+      var W=cv.width,H=cv.height,pad=30;
+      ctx.clearRect(0,0,W,H);
+      var days=14;
+      var maxV = Math.max(parseFloat(fitS.value), parseFloat(fatS.value));
+      var minV = -maxV*0.6;
+      function X(t){ return pad + (t/days)*(W-2*pad); }
+      function Y(v){ return H-pad - ((v-minV)/(maxV-minV))*(H-2*pad); }
+      // zero line
+      ctx.strokeStyle='rgba(128,128,128,0.4)'; ctx.setLineDash([4,4]); ctx.lineWidth=1;
+      ctx.beginPath(); ctx.moveTo(pad,Y(0)); ctx.lineTo(W-pad,Y(0)); ctx.stroke(); ctx.setLineDash([]);
+      function curve(fn,color,w){
+        ctx.strokeStyle=color; ctx.lineWidth=w; ctx.beginPath();
+        for(var t=0;t<=days;t+=0.1){ var xx=X(t),yy=Y(fn(t)); if(t===0)ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy); }
+        ctx.stroke();
+      }
+      curve(fitAt,'rgba(60,150,140,0.9)',2);           // fitness teal
+      curve(fatAt,'rgba(200,70,50,0.85)',2);           // fatigue red
+      curve(function(t){return fitAt(t)-fatAt(t);}, ink, 2.5); // preparedness
+
+      // readout marker
+      var rd = parseFloat(daySel.value);
+      ctx.strokeStyle='rgba(120,120,120,0.7)'; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(X(rd),pad-4); ctx.lineTo(X(rd),H-pad); ctx.stroke(); ctx.setLineDash([]);
+
+      // meters
+      var f=fitAt(rd), g=fatAt(rd), p=f-g;
+      root.querySelector('#ff-num-fit').textContent=Math.round(f);
+      root.querySelector('#ff-num-fat').textContent=Math.round(g);
+      root.querySelector('#ff-num-prep').textContent=(p>0?'+':'')+Math.round(p);
+      root.querySelector('#ff-bar-fit').style.width=Math.max(2,Math.min(98,(f/120)*100))+'%';
+      root.querySelector('#ff-bar-fat').style.width=Math.max(2,Math.min(98,(g/120)*100))+'%';
+      root.querySelector('#ff-bar-prep').style.width=Math.max(2,Math.min(98,50+p*0.8))+'%';
+    }
+    fitS.addEventListener('input',draw);
+    fatS.addEventListener('input',draw);
+    daySel.addEventListener('change',draw);
+    reset.addEventListener('click',function(){ fitS.value=55; fatS.value=90; daySel.value='3'; draw(); });
+    draw();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
