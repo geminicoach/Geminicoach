@@ -1,0 +1,2743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tissue Repair and Healing , Weekly Challenge</title>
+    <style>
+        /* ─── Timing Constants (CSS) ─── */
+        :root {
+            --advance-delay: 800ms;
+            --celebration-duration: 1800ms;
+            --slide-duration: 400ms;
+            --shake-duration: 400ms;
+            --boss-intro-duration: 2000ms;
+
+            /* Theme */
+            --accent: #c93b2a;
+            --accent-light: #d35e50;
+            --warm-accent: #fff3cf;
+            --bg-page: #fbf9f3;
+            --bg-card: #cad7e3;
+            --bg-elevated: #cad7e3;
+            --text-primary: #1a2238;
+            --text-secondary: #626774;
+            --text-muted: #96989f;
+            --success: #3d5c33;
+            --error: #ef4444;
+            --gold: #f59e0b;
+            --blue: #3b82f6;
+            --on-accent: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+            --font-heading: IBM Plex Mono;
+            --font-body: IBM Plex Serif;
+
+            /* Tier colors */
+            --tier-warmup: var(--blue);
+            --tier-core: var(--accent);
+            --tier-challenge: var(--gold);
+            --tier-boss: var(--warm-accent);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: var(--font-body);
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-page);
+            padding: 20px;
+            min-height: 100vh;
+            font-size: 16px;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .hidden { display: none !important; }
+
+        /* ─── Welcome Screen ─── */
+        .welcome-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 48px 40px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .welcome-card h1 {
+            font-family: var(--font-heading);
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .welcome-card .subtitle {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+
+        .welcome-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        .welcome-stat {
+            text-align: center;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 16px 20px;
+            min-width: 90px;
+        }
+
+        .welcome-stat .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .welcome-stat .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .welcome-rules {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 20px 24px;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .welcome-rules h3 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .welcome-rules ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .welcome-rules li {
+            padding: 4px 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .welcome-rules li::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        /* ─── Buttons ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            border-radius: 12px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-heading);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            outline: none;
+        }
+
+        .btn:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--on-accent);
+            border-bottom: 4px solid rgba(0,0,0,0.15);
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:active {
+            border-bottom-width: 0;
+            transform: translateY(3px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            filter: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+            color: var(--on-accent);
+        }
+
+        /* ─── Question Screen ─── */
+        .question-screen {
+            animation: fadeIn 0.3s ease;
+        }
+
+        .progress-header {
+            background: var(--bg-card);
+            border-radius: 16px 16px 0 0;
+            padding: 18px 24px 14px;
+            box-shadow: var(--shadow);
+        }
+
+        .progress-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .question-counter {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+            letter-spacing: 0.01em;
+        }
+
+        .score-display {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--accent);
+            background: rgba(30,58,95,0.06);
+            padding: 3px 12px;
+            border-radius: 999px;
+        }
+
+        .score-display .points {
+            font-size: 16px;
+        }
+
+        /* Progress bar with segments */
+        .progress-bar {
+            display: flex;
+            gap: 2px;
+            height: 6px;
+        }
+
+        .progress-segment {
+            flex: 1;
+            border-radius: 3px;
+            background: var(--bg-elevated);
+            transition: background 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+        }
+
+        .progress-segment.active {
+            animation: progressPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 6px rgba(30,58,95,0.2);
+        }
+
+        .progress-segment.correct { background: var(--success); }
+        .progress-segment.incorrect { background: var(--error); opacity: 0.6; }
+        .progress-segment.skipped { background: var(--text-muted); opacity: 0.3; }
+
+        .progress-segment[data-tier="warmup"].active { box-shadow: 0 0 8px var(--tier-warmup); }
+        .progress-segment[data-tier="core"].active { box-shadow: 0 0 8px var(--tier-core); }
+        .progress-segment[data-tier="challenge"].active { box-shadow: 0 0 8px var(--tier-challenge); }
+        .progress-segment[data-tier="boss"].active { box-shadow: 0 0 8px var(--tier-boss); }
+
+        .tier-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 8px;
+        }
+
+        .tier-badge[data-tier="warmup"] { background: rgba(59,130,246,0.15); color: var(--tier-warmup); }
+        .tier-badge[data-tier="core"] { background: rgba(30,58,95,0.1); color: var(--tier-core); }
+        .tier-badge[data-tier="challenge"] { background: rgba(245,158,11,0.15); color: var(--tier-challenge); }
+        .tier-badge[data-tier="boss"] { background: rgba(245,158,11,0.2); color: var(--tier-boss); }
+
+        .question-body {
+            background: var(--bg-card);
+            border-radius: 0 0 16px 16px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+        }
+
+        #question-area {
+            animation: slideIn var(--slide-duration) ease;
+        }
+
+        .question-stem {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .spaced-review-badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(245,158,11,0.15);
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        /* ─── MCQ Options ─── */
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .option-card {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: var(--bg-elevated);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 15px;
+            line-height: 1.4;
+            user-select: none;
+        }
+
+        .option-card:hover:not(.disabled) {
+            border-color: rgba(0,0,0,0.18);
+            background: rgba(0,0,0,0.02);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .option-card:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .option-card.selected {
+            border-width: 2px;
+            border-color: var(--accent);
+            padding: 13px 15px; /* compensate for thicker border */
+            background: rgba(30,58,95,0.05);
+        }
+
+        .option-card.correct {
+            border-color: var(--success);
+            background: rgba(22,101,52,0.06);
+            animation: pulse 0.3s ease;
+        }
+
+        .option-card.incorrect {
+            border-color: var(--error);
+            background: rgba(239,68,68,0.06);
+            animation: shake var(--shake-duration) ease;
+        }
+
+        .option-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .option-letter {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 15px;
+            background: rgba(0,0,0,0.06);
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .option-card.selected .option-letter {
+            background: var(--accent);
+            color: var(--on-accent);
+        }
+
+        .option-card.correct .option-letter {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .option-card.incorrect .option-letter {
+            background: var(--error);
+            color: #fff;
+        }
+
+        .option-text { flex: 1; }
+
+        .submit-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .submit-row .btn {
+            min-width: 180px;
+        }
+
+        /* ─── Two-Stage ─── */
+        .stage-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 24px 0 16px;
+            color: var(--text-muted);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stage-divider::before,
+        .stage-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: rgba(0,0,0,0.1);
+        }
+
+        .justification-panel {
+            animation: slideIn var(--slide-duration) ease;
+        }
+
+        .locked-answer {
+            padding: 12px 16px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.08);
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+        }
+
+        .locked-answer .label {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        /* ─── Assertion-Reason ─── */
+        .statement-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .statement-card {
+            padding: 16px 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+            background: var(--bg-elevated);
+        }
+
+        .statement-card .label {
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .statement-card.reason-card {
+            border-left-color: var(--warm-accent);
+        }
+
+        .statement-card.reason-card .label {
+            color: var(--warm-accent);
+        }
+
+        .relationship-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .relationship-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.06);
+            background: var(--bg-elevated);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .relationship-option:hover:not(.disabled) {
+            border-color: var(--accent);
+        }
+
+        .relationship-option:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .relationship-option.selected {
+            border-color: var(--accent);
+            background: rgba(30,58,95,0.06);
+        }
+
+        .relationship-option.correct {
+            border-color: var(--success);
+            background: rgba(22,101,52,0.06);
+        }
+
+        .relationship-option.incorrect {
+            border-color: var(--error);
+            background: rgba(239,68,68,0.06);
+        }
+
+        .radio-dot {
+            flex-shrink: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 1px;
+            transition: all 0.2s ease;
+        }
+
+        .relationship-option.selected .radio-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+        }
+
+        .relationship-option.selected .radio-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--on-accent);
+        }
+
+        /* ─── Agreement Matrix ─── */
+        .matrix-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .matrix-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 6px;
+        }
+
+        .matrix-table thead th {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            padding: 8px 12px;
+            text-align: center;
+        }
+
+        .matrix-table thead th:first-child {
+            text-align: left;
+            width: 55%;
+        }
+
+        .matrix-table tbody td {
+            padding: 12px;
+            background: var(--bg-elevated);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .matrix-table tbody td:first-child {
+            border-radius: 10px 0 0 10px;
+            padding-left: 16px;
+        }
+
+        .matrix-table tbody td:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .matrix-table tbody td:not(:first-child) {
+            text-align: center;
+        }
+
+        .matrix-radio {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .matrix-radio:checked {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: inset 0 0 0 3px var(--bg-elevated);
+        }
+
+        .matrix-radio:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .matrix-row.correct td { background: rgba(22,101,52,0.04); }
+        .matrix-row.incorrect td { background: rgba(239,68,68,0.04); }
+
+        /* ─── Confidence Selector ─── */
+        .confidence-panel {
+            animation: slideIn var(--slide-duration) ease;
+            margin-top: 20px;
+        }
+
+        .confidence-prompt {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .confidence-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .confidence-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 2px solid rgba(0,0,0,0.08);
+            background: var(--bg-elevated);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            max-width: 140px;
+        }
+
+        .confidence-btn:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .confidence-btn:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .confidence-btn .emoji { font-size: 28px; }
+        .confidence-btn .conf-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* ─── Slider Estimation ─── */
+        .slider-container {
+            padding: 20px 0;
+        }
+
+        .slider-value-display {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .slider-current-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .slider-unit {
+            font-size: 20px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .slider-track-wrapper {
+            position: relative;
+            padding: 0 12px;
+        }
+
+        .slider-input {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--bg-elevated);
+            outline: none;
+            cursor: pointer;
+        }
+
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 3px solid var(--bg-card);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: transform 0.15s ease;
+        }
+
+        .slider-input::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .slider-input::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 3px solid var(--bg-card);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .slider-input:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 4px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .slider-result-overlay {
+            position: relative;
+            height: 40px;
+            margin-top: 16px;
+        }
+
+        .slider-correct-marker {
+            position: absolute;
+            top: 0;
+            width: 3px;
+            height: 24px;
+            background: var(--success);
+            border-radius: 2px;
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slider-correct-label {
+            position: absolute;
+            top: 28px;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--success);
+            white-space: nowrap;
+        }
+
+        .slider-range-highlight {
+            position: absolute;
+            top: 4px;
+            height: 16px;
+            background: rgba(34,197,94,0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(34,197,94,0.2);
+        }
+
+        /* ─── Feedback Screen ─── */
+        .feedback-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 32px;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .feedback-icon {
+            font-size: 56px;
+            margin-bottom: 12px;
+        }
+
+        .feedback-verdict {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .feedback-verdict.correct { color: var(--success); }
+        .feedback-verdict.incorrect { color: var(--error); }
+        .feedback-verdict.partial { color: var(--gold); }
+
+        .feedback-points {
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+            background: rgba(30,58,95,0.06);
+            padding: 4px 14px;
+            border-radius: 999px;
+            margin-bottom: 20px;
+        }
+
+        .points-float {
+            position: fixed;
+            pointer-events: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            animation: floatUp 1s ease forwards;
+            z-index: 100;
+        }
+
+        .feedback-explanation {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 16px 20px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .feedback-explanation strong {
+            color: var(--text-primary);
+        }
+
+        /* ─── Boss Intro Screen ─── */
+        .boss-intro {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .boss-intro-content {
+            text-align: center;
+            animation: bossEntrance var(--boss-intro-duration) cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .boss-intro-icon {
+            font-size: 72px;
+            margin-bottom: 16px;
+            animation: bossPulse 1.5s ease-in-out infinite;
+        }
+
+        .boss-intro-title {
+            font-family: var(--font-heading);
+            font-size: 36px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--warm-accent);
+            text-shadow: 0 0 30px rgba(245,158,11,0.4);
+        }
+
+        .boss-intro-subtitle {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            margin-top: 8px;
+        }
+
+        .boss-question-wrapper {
+            border: 2px solid var(--warm-accent);
+            border-radius: 14px;
+            padding: 16px;
+            box-shadow: 0 0 24px rgba(245,158,11,0.08);
+            animation: bossGlow 2s ease-in-out infinite;
+        }
+
+        /* ─── Results Screen ─── */
+        .results-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .results-header {
+            padding: 48px 32px;
+            text-align: center;
+            background: var(--bg-elevated);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .mastery-icon {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+
+        .mastery-verdict {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .mastery-verdict.passed { color: var(--success); }
+        .mastery-verdict.failed { color: var(--text-secondary); }
+
+        .mastery-score {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 8px 0;
+        }
+
+        .mastery-threshold {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .results-body {
+            padding: 32px;
+        }
+
+        .results-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .result-stat {
+            text-align: center;
+            padding: 20px 16px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+        }
+
+        .result-stat .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-stat .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .tier-breakdown {
+            margin-bottom: 32px;
+        }
+
+        .tier-breakdown h3 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .tier-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .tier-bar-label {
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 100px;
+            width: auto;
+            white-space: nowrap;
+            text-align: right;
+            display: inline-flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 3px;
+        }
+
+        .tier-bar-track {
+            flex: 1;
+            height: 10px;
+            background: var(--bg-elevated);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .tier-bar-fill {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            min-width: 4px;
+        }
+
+        .tier-bar-value {
+            font-size: 13px;
+            font-weight: 600;
+            width: 48px;
+            text-align: right;
+        }
+
+        /* ─── Review Section ─── */
+        .reflection-summary {
+            background: rgba(30,58,95,0.03);
+            border: 1px solid rgba(30,58,95,0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+
+        .reflection-summary h3 {
+            font-family: var(--font-heading);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        .reflection-summary .refl-row {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+
+        .reflection-summary .refl-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .reflection-summary .refl-label {
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 12px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .review-section {
+            border-top: 1px solid rgba(0,0,0,0.06);
+            padding-top: 24px;
+        }
+
+        .review-section h3 {
+            font-family: var(--font-heading);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .review-item {
+            padding: 14px 14px 14px 18px;
+            border-radius: 10px;
+            background: var(--bg-elevated);
+            margin-bottom: 10px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .review-item .review-q-num {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .review-item .review-stem {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .review-answer {
+            font-size: 13px;
+            padding: 6px 0;
+        }
+
+        .review-answer.user-correct { color: var(--success); }
+        .review-answer.user-incorrect { color: var(--error); }
+        .review-answer.correct-was { color: var(--success); opacity: 0.8; }
+
+        .review-feedback {
+            margin-top: 8px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.02);
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .results-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            padding: 24px 32px;
+        }
+
+        /* ─── Confetti Canvas ─── */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 200;
+        }
+
+        /* ─── Keyframe Animations ─── */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            15% { transform: translateX(-6px); }
+            30% { transform: translateX(5px); }
+            45% { transform: translateX(-4px); }
+            60% { transform: translateX(3px); }
+            75% { transform: translateX(-2px); }
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            50% { opacity: 1; transform: translateY(-30px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
+        }
+
+        @keyframes bossEntrance {
+            0% { opacity: 0; transform: scale(0.5); }
+            60% { opacity: 1; transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bossPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes bossGlow {
+            0%, 100% { box-shadow: 0 0 24px rgba(245,158,11,0.1); }
+            50% { box-shadow: 0 0 40px rgba(245,158,11,0.2); }
+        }
+
+        @keyframes celebrationPop {
+            0% { opacity: 0; transform: scale(0.5); }
+            60% { transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* ─── Streak Display ─── */
+        .streak-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--gold);
+            background: rgba(245,158,11,0.08);
+            padding: 3px 10px;
+            border-radius: 999px;
+            margin-right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .streak-display.visible {
+            opacity: 1;
+        }
+
+        .streak-display.pop {
+            animation: streakPop 0.4s ease;
+        }
+
+        @keyframes streakPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .streak-reset-msg {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-card);
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow-lg);
+            z-index: 60;
+            animation: fadeIn 0.2s ease;
+            pointer-events: none;
+        }
+
+        /* ─── Rapid-Guess Warning ─── */
+        .rapid-guess-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 70;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .rapid-guess-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .rapid-guess-card .warning-icon { font-size: 40px; margin-bottom: 12px; }
+
+        .rapid-guess-card h3 {
+            font-family: var(--font-heading);
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .rapid-guess-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* ─── Reflection Screen ─── */
+        .reflection-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            box-shadow: var(--shadow);
+            padding: 40px 32px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .reflection-card h2 {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .reflection-card .reflection-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 28px;
+        }
+
+        .reflection-question {
+            margin-bottom: 24px;
+        }
+
+        .reflection-question label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .reflection-select,
+        .reflection-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 2px solid rgba(0,0,0,0.08);
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .reflection-select:focus,
+        .reflection-textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .reflection-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .confidence-scale {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .confidence-scale-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            border: 2px solid rgba(0,0,0,0.08);
+            background: var(--bg-elevated);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confidence-scale-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(30,58,95,0.04);
+        }
+
+        .confidence-scale-btn.selected {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--on-accent);
+            transform: scale(1.08);
+            box-shadow: 0 2px 8px rgba(30,58,95,0.2);
+        }
+
+        .reflection-actions {
+            display: flex;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        /* ─── Reduced Motion ─── */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            body { padding: 12px; }
+            .welcome-card { padding: 32px 20px; }
+            .welcome-stats { gap: 20px; }
+            .question-body { padding: 16px; }
+            .feedback-card { padding: 24px; }
+            .results-body { padding: 20px; }
+            .results-actions { padding: 16px 20px; }
+            .results-stats { grid-template-columns: repeat(2, 1fr); }
+            .confidence-buttons { flex-direction: column; align-items: center; }
+            .confidence-btn { max-width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .question-stem { font-size: 16px; }
+            .option-card { padding: 12px 14px; font-size: 14px; }
+            .mastery-score { font-size: 36px; }
+            .matrix-table { font-size: 13px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="welcome-card">
+            <h1 id="welcome-title"></h1>
+            <p class="subtitle" id="welcome-subtitle"></p>
+            <div class="welcome-stats">
+                <div class="welcome-stat">
+                    <div class="stat-value" id="stat-questions">-</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="welcome-stat">
+                    <div class="stat-value" id="stat-time">-</div>
+                    <div class="stat-label">Minutes</div>
+                </div>
+                <div class="welcome-stat">
+                    <div class="stat-value">85%</div>
+                    <div class="stat-label">Mastery</div>
+                </div>
+            </div>
+            <div class="welcome-rules">
+                <h3>How It Works</h3>
+                <ul>
+                    <li>Mixed question types test understanding, not just recall</li>
+                    <li>Questions progress from warm-up to challenge to a boss question</li>
+                    <li>Score 85% or higher to demonstrate mastery</li>
+                    <li>Unlimited retakes with shuffled questions</li>
+                </ul>
+            </div>
+            <button class="btn btn-primary" id="btn-start" style="min-width:200px">Begin Challenge</button>
+        </div>
+
+        <!-- Question Screen -->
+        <div id="question-screen" class="question-screen hidden">
+            <div class="progress-header">
+                <div class="progress-top-row">
+                    <span class="question-counter" id="question-counter">Question 1 of 10</span>
+                    <span style="display:flex;align-items:center;gap:0">
+                        <span class="streak-display" id="streak-display"></span>
+                        <span class="score-display"><span class="points" id="score-value">0</span> pts</span>
+                    </span>
+                </div>
+                <div class="progress-bar" id="progress-bar" role="progressbar" aria-label="Challenge progress"></div>
+                <span class="tier-badge" id="tier-badge" data-tier="warmup"></span>
+            </div>
+            <div class="question-body">
+                <div id="question-area" aria-live="polite"></div>
+            </div>
+        </div>
+
+        <!-- Feedback Screen -->
+        <div id="feedback-screen" class="hidden">
+            <div class="feedback-card">
+                <div class="feedback-icon" id="feedback-icon"></div>
+                <div class="feedback-verdict" id="feedback-verdict"></div>
+                <div class="feedback-points" id="feedback-points"></div>
+                <div class="feedback-explanation" id="feedback-explanation"></div>
+                <button class="btn btn-primary" id="btn-continue">Continue</button>
+            </div>
+        </div>
+
+        <!-- Boss Intro Screen -->
+        <div id="boss-intro" class="boss-intro hidden" aria-live="polite">
+            <div class="boss-intro-content">
+                <div class="boss-intro-icon">&#128293;</div>
+                <div class="boss-intro-title">Boss Question</div>
+                <div class="boss-intro-subtitle">Synthesise everything you've learned</div>
+            </div>
+        </div>
+
+        <!-- Reflection Screen -->
+        <div id="reflection-screen" class="hidden">
+            <div class="reflection-card">
+                <h2>Reflect on Your Learning</h2>
+                <p class="reflection-subtitle">Take a moment before seeing your results</p>
+                <div class="reflection-question">
+                    <label>Which topic from this challenge do you most want to review?</label>
+                    <textarea class="reflection-textarea" id="reflection-review" placeholder="e.g. I'm still unsure about the difference between..." rows="2"></textarea>
+                </div>
+                <div class="reflection-question">
+                    <label>How confident do you feel about this week's material overall?</label>
+                    <div class="confidence-scale" id="reflection-confidence">
+                        <button class="confidence-scale-btn" data-val="1">1</button>
+                        <button class="confidence-scale-btn" data-val="2">2</button>
+                        <button class="confidence-scale-btn" data-val="3">3</button>
+                        <button class="confidence-scale-btn" data-val="4">4</button>
+                        <button class="confidence-scale-btn" data-val="5">5</button>
+                    </div>
+                </div>
+                <div class="reflection-actions">
+                    <button class="btn btn-primary" id="btn-to-results">See My Results</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden">
+            <div class="results-card">
+                <div class="results-header">
+                    <div class="mastery-icon" id="mastery-icon"></div>
+                    <div class="mastery-verdict" id="mastery-verdict"></div>
+                    <div class="mastery-score" id="mastery-score"></div>
+                    <div class="mastery-threshold" id="mastery-threshold"></div>
+                </div>
+                <div class="results-body">
+                    <div class="results-stats" id="results-stats"></div>
+                    <div class="tier-breakdown" id="tier-breakdown"></div>
+                    <div class="review-section" id="review-section">
+                        <h3>Question Review</h3>
+                        <div id="review-list"></div>
+                    </div>
+                </div>
+                <div class="results-actions">
+                    <button class="btn btn-primary" id="btn-retake">Retake Challenge</button>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="confetti-canvas"></canvas>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        'use strict';
+
+        /* ─── Timing Constants ─── */
+        const ADVANCE_DELAY = 800;
+        const CELEBRATION_DURATION = 1800;
+        const SHAKE_DURATION = 400;
+        const BOSS_INTRO_DURATION = 2000;
+        const MASTERY_THRESHOLD = 0.85;
+        const CONFETTI_COUNT = 40;
+        const CONFETTI_MIN_DURATION = 2000;
+        const CONFETTI_MAX_DURATION = 3500;
+
+        /* Scoring */
+        const BASE_POINTS = { 1: 100, 2: 150, 3: 200 };
+        const CONFIDENCE_MULTIPLIERS = {
+            'high':   { correct: 1.5,  incorrect: -0.25 },
+            'medium': { correct: 1.0,  incorrect: 0 },
+            'low':    { correct: 0.5,  incorrect: 0.25 }
+        };
+        const TWO_STAGE_PARTIAL = 0.5;
+        const MATRIX_CORRECT_THRESHOLD = 0.8;
+
+        /* Rapid-guess minimum times (ms) */
+        const MIN_TIME = {
+            'mcq': 3000,
+            'confidence-weighted': 4000,
+            'assertion-reason': 4000,
+            'two-stage': 6000,
+            'agreement-matrix': 6000,
+            'slider-estimation': 3000,
+            'boss': 8000,
+        };
+
+        /* Streak thresholds */
+        const STREAK_LEVELS = [
+            { min: 3, label: '\uD83D\uDD25 ' },
+            { min: 5, label: '\uD83D\uDD25\uD83D\uDD25 ' },
+            { min: 7, label: '\uD83D\uDD25\uD83D\uDD25\uD83D\uDD25 ' },
+        ];
+
+        const TIER_ORDER = ['warmup', 'core', 'challenge', 'boss'];
+        const TIER_LABELS = { warmup: 'Warm-Up', core: 'Core', challenge: 'Challenge', boss: 'Boss' };
+        const TIER_ICONS = { warmup: '\u2600\uFE0F', core: '\u26A1', challenge: '\u2B50', boss: '\uD83D\uDD25' };
+
+        const RELATIONSHIP_LABELS = {
+            'both-true-reason-explains': 'Both true \u2014 the reason correctly explains the assertion',
+            'both-true-reason-independent': 'Both true \u2014 the reason does NOT explain the assertion',
+            'a-true-b-false': 'The assertion is true; the reason is false',
+            'a-false-b-true': 'The assertion is false; the reason is true',
+            'both-false': 'Both the assertion and the reason are false'
+        };
+        const RELATIONSHIP_KEYS = Object.keys(RELATIONSHIP_LABELS);
+
+        /* ─── Data ─── */
+        const CHALLENGE_DATA = {"metadata": {"chapterTitle": "Tissue Repair and Healing", "weekNumber": 2, "estimatedMinutes": 9}, "questions": [{"type": "mcq", "tier": "warmup", "stem": "What is BPC-157, according to this chapter?", "options": ["A synthetic 15-amino-acid peptide engineered as a partial sequence derived from a protein found in human gastric juice", "A naturally occurring 43-amino-acid peptide released by platelets at a wound site", "A folded protein of over 100 amino acids approved as a wound-care medicine", "An enzyme that directly builds new collagen fibers in tendon tissue"], "feedback": {"correct": "BPC-157 is a synthetic pentadecapeptide (15 amino acids), engineered as a partial sequence derived from a 'body protection compound' identified in human gastric juice. It is not a molecule the body produces and secretes as a finished, free-standing peptide.", "incorrect": "That description fits thymosin beta-4, the naturally occurring 43-amino-acid peptide covered later in the chapter, not BPC-157, which is a synthetic 15-amino-acid fragment derived from a gastric protein."}, "difficulty": 1, "variants": [{"stem": "What is thymosin beta-4, as the chapter describes its origin and size?", "options": ["A naturally occurring, highly conserved 43-amino-acid peptide present in essentially every cell type, especially concentrated in platelets and wound fluid", "A synthetic 15-amino-acid fragment engineered from a gastric protein", "A large folded protein of over 500 amino acids", "A small molecule unrelated to any amino acid chain"], "feedback": {"correct": "Thymosin beta-4 is a naturally occurring, 43-amino-acid peptide, unusually conserved across species, present in essentially every cell type and especially concentrated in platelets and the fluid at a wound site.", "incorrect": "That description fits BPC-157, the synthetic 15-amino-acid gastric-derived fragment. Thymosin beta-4 is naturally occurring, 43 amino acids, and highly conserved across species."}, "_oCI": "Rw=="}], "_oCI": "Rw=="}, {"type": "mcq", "tier": "warmup", "stem": "What does the name 'TB-500' refer to in this chapter?", "options": ["The name under which a synthetic version, often a shorter fragment, of thymosin beta-4 is marketed", "The official generic medical name for thymosin alpha-1", "An FDA-approved brand name for an injectable wound medicine", "A separate, unrelated peptide with no connection to thymosin beta-4"], "feedback": {"correct": "TB-500 is the marketed name for a synthetic version of thymosin beta-4, or in many products a shorter fragment believed to retain its active binding region, not a verified, full-length copy of the native molecule.", "incorrect": "TB-500 is not an FDA-approved brand, not thymosin alpha-1's generic name, and not unrelated to thymosin beta-4. It is the marketed name for a synthetic, often fragment-based, version of it."}, "difficulty": 1, "variants": [{"stem": "BPC-157 picked up the nickname 'the wolverine peptide' online. What does the chapter say this nickname captures about the compound's marketing?", "options": ["Fast, near-total tissue repair delivered by injection, referencing a fictional superhero who heals from almost anything", "A confirmed, FDA-approved regenerative capability matching the character's abilities", "A warning label used by regulators to flag the compound's danger", "A reference to BPC-157's origin in a Wisconsin research laboratory"], "feedback": {"correct": "The nickname captures the pitch precisely: fast, near-total tissue repair, delivered by injection, with no surgeon involved, borrowing the confidence of a fictional healing power rather than a demonstrated human result.", "incorrect": "The nickname is marketing shorthand referencing a fictional superhero's healing ability, not a regulatory designation or a geographic reference, and it does not reflect confirmed FDA approval."}, "_oCI": "Rw=="}], "_oCI": "Rw=="}, {"type": "two-stage", "tier": "core", "stem": "A rat tendon fibroblast study finds that BPC-157 increases growth hormone receptor expression in isolated cells. A forum post treats this as proof that 'BPC-157 heals a human Achilles tendon faster.' What is the most accurate assessment?", "options": ["The finding is a documented cell-level result in rodent tissue; extrapolating it to a whole human tendon healing outcome is several biological steps removed and unsupported by the study itself", "The finding directly proves faster human tendon healing, since fibroblasts behave identically in rats and humans", "The finding is irrelevant, because growth hormone receptors do not exist in tendon tissue", "The finding should be dismissed entirely, because it was conducted in isolated cells rather than a living animal"], "justifications": ["Mechanism and outcome are not interchangeable; a documented cell-culture or rodent finding must still be confirmed in properly designed human trials before it supports a human healing claim", "Rodent and cell-culture findings are automatically transferable to any human tissue without further testing", "The study should be ignored outright, because isolated-cell research is never scientifically informative", "Growth hormone receptor findings only matter for gastric tissue, not for tendons"], "feedback": {"correct": "This is the chapter's central warning: a rat tendon fibroblast expressing more growth hormone receptor in a dish is a documented finding, not the same claim as a human Achilles tendon healing faster. Mechanism and outcome sit on different rungs of the evidence ladder.", "incorrect": "The chapter treats this cell-level finding as genuine, published, peer-reviewed biology, not proof of a human outcome, and dismissing it outright as worthless is its own overcorrection.", "wrongReason": "You may have landed on the right explanation but reasoned that the finding was meaningless rather than simply insufficient on its own to support a human tendon-healing claim."}, "difficulty": 2, "variants": [{"stem": "Thymosin beta-4's actin-sequestering mechanism is described as genuinely well-established cell biology. A vendor uses this fact to claim its TB-500 injectable product is therefore proven to accelerate human muscle recovery. What is the most accurate assessment?", "options": ["The underlying actin-regulation science is solid and well-documented, but that says nothing about whether an injectable product marketed as TB-500 reliably reproduces those effects in a living human at a meaningful clinical scale", "Since the cell biology is well established, any product marketed under the name TB-500 is automatically proven effective", "The actin-sequestering mechanism is irrelevant to wound healing or muscle recovery of any kind", "The claim should be dismissed entirely, because thymosin beta-4's cell biology has never been studied rigorously"], "justifications": ["A well-established basic mechanism does not guarantee that a specific commercial injectable product, especially one that may be a synthesized fragment rather than a verified full-length peptide, reproduces that mechanism's benefits in a human at a meaningful scale", "Any product sharing a name with a well-studied molecule automatically inherits that molecule's full evidence base", "Cell biology findings about actin regulation have no bearing on any tissue-repair process", "The chapter treats thymosin beta-4's actin-sequestering mechanism as unstudied and speculative"], "feedback": {"correct": "The chapter draws exactly this line: the native molecule's actin-buffering biology is genuinely deep and long-standing, but whether a commercial TB-500 product, of uncertain identity and purity, reproduces that biology in a human at clinical scale is a separate, largely untested question.", "incorrect": "Well-established basic biology does not automatically validate a specific marketed product's claims, and the underlying mechanism is not irrelevant, it is simply a different question from whether the injectable delivers a human outcome.", "wrongReason": "Right instinct that the claim overreaches, but the reasoning should center on the gap between verified basic biology and an unverified commercial product's outcome, not on dismissing the biology itself."}, "_oCI": "Rw==", "_oJI": "Rw=="}], "_oCI": "Rw==", "_oJI": "Rw=="}, {"type": "assertion-reason", "tier": "core", "stem": "Evaluate the relationship between these two statements:", "assertion": "BPC-157 being temporarily placed on, then removed from, the World Anti-Doping Agency's prohibited list is not the same as regulatory proof that the compound is safe or effective.", "reason": "An anti-doping authority evaluates precautionary potential for performance enhancement and exogenous administration, not completed human efficacy and safety data of the kind a medical regulator like the FDA requires.", "feedback": {"correct": "Both statements are true, and the reason explains the assertion: WADA's bar is precaution and category membership, so a compound's doping-list status can shift administratively while the actual state of the human safety and efficacy evidence underneath it does not move at all.", "incorrect": "The reason is not a separate, unrelated fact, it directly explains why doping status and medical proof diverge: the two systems are answering different questions entirely."}, "difficulty": 2, "variants": [{"stem": "Evaluate the relationship between these two statements:", "assertion": "Thymosin beta-4 and BPC-157 belong to the same family of peptides with essentially interchangeable evidence behind them.", "reason": "Both compounds were first identified and characterized by the same Croatian research group in the 1970s.", "feedback": {"correct": "Both statements are false: the chapter explicitly rejects treating the two compounds as interchangeable, since their origins, sizes, and evidence bases genuinely differ, and thymosin beta-4's discovery as a naturally occurring, highly conserved actin-binding peptide has a separate history from BPC-157's identification by Sikiric's Zagreb-based group.", "incorrect": "The assertion is false, not true, since the chapter draws a sharp distinction between the two compounds' origins and evidence, and the reason misattributes thymosin beta-4's discovery to the same research history as BPC-157's."}, "_oCR": "FQxGH05UFg9BEg=="}], "_oCR": "FQxGH05GBRZXWhFXFhBdGU5XDxNeFgpcBA=="}, {"type": "confidence-weighted", "tier": "core", "stem": "According to the chapter, why do BPC-157 and thymosin beta-4's pro-angiogenic, pro-proliferative mechanisms raise a legitimate theoretical safety question?", "options": ["Angiogenesis and cell proliferation are general biological programs, the same programs a growing tumor depends on to establish its own blood supply and expand", "Because both compounds have been directly shown to cause cancer in completed long-term human trials", "Because angiogenesis only occurs in cancerous tissue and never in normal healing", "Because the FDA has already banned both compounds due to confirmed carcinogenicity"], "feedback": {"correct": "The chapter is careful to frame this as a legitimate, biologically grounded theoretical concern, not a causal claim: no controlled long-term human data exists to establish cancer risk in either direction, but the mechanisms amplifying pro-growth, pro-vascular signaling are the same general programs a tumor depends on.", "incorrect": "The chapter explicitly states no controlled long-term human data exists showing either compound causes cancer, and neither compound is FDA-approved at all, let alone banned for confirmed carcinogenicity. Angiogenesis is also a normal part of healthy healing, not exclusive to cancer."}, "difficulty": 2, "variants": [{"stem": "The chapter states that 'absence of evidence is not the same thing as evidence of absence' regarding long-term cancer risk. What does this principle mean in the context of six-week rodent tendon studies?", "options": ["A study designed to measure healing over days to a few weeks cannot also answer whether years of exposure to pro-angiogenic signaling changes cancer risk, since it was never built to detect that slower signal", "It means six-week rodent studies have already proven both compounds are completely safe long-term", "It means researchers are hiding evidence that both compounds definitely cause cancer", "It means short-term studies and long-term safety questions are exactly the same thing"], "feedback": {"correct": "The chapter is precise here: nobody has published a study demonstrating either compound promotes tumor growth, but nobody has published a study ruling that out either, because the long-term controlled human trials capable of answering that question have never been run.", "incorrect": "The principle is not that short-term studies prove long-term safety, nor that evidence is being suppressed. It is that a six-week healing study was never designed to detect a slow-developing safety signal in the first place."}, "_oCI": "Rw=="}], "_oCI": "Rw=="}, {"type": "agreement-matrix", "tier": "challenge", "stem": "Classify each statement about BPC-157 and thymosin beta-4 / TB-500 evidence:", "statements": [{"text": "BPC-157's tendon, ligament, and muscle healing studies to date have been performed in small rodent models", "_oC": "Fg9FFhpB"}, {"text": "Thymosin beta-4's G-actin sequestering mechanism is well established, independent of whether a marketed TB-500 product reproduces it", "_oC": "Fg9FFhpB"}, {"text": "BPC-157 is approved as a medicine by the FDA or any other global regulatory authority", "_oC": "GQZEEhE="}, {"text": "A compound's absence from a current anti-doping prohibited list is proof that it has been shown safe and effective in humans", "_oC": "GQZEEhE="}, {"text": "A compound's doping-list status can change administratively while the underlying human evidence stays the same", "_oC": "BAxfEhdbGgZB"}, {"text": "Absence of a reported problem in a six-week rodent study is equivalent to evidence of long-term human safety", "_oC": "GQZEEhE="}, {"text": "A small, controlled human pilot study, like the ten-patient thymosin beta-4 cardiac trial, can offer real evidence while still being too narrow to generalize broadly", "_oC": "BAxfEhdbGgZB"}], "feedback": {"correct": "The reliable truths: BPC-157's healing claims rest on rodent-only data, thymosin beta-4's actin science is solid regardless of TB-500's own uncertainty, and neither compound is FDA-approved. Doping-list status and small pilot studies are context-dependent, 'sometimes' cases. Treating absent bans or short studies as proof of safety is always false.", "incorrect": "Watch the boundary: facts about what has and has not been demonstrated hold generally, while claims about what regulatory or small-study signals prove are either 'sometimes' true in a limited sense or flatly false."}, "difficulty": 3, "variants": [{"stem": "Classify each statement about the two compounds' broader claims and marketing:", "statements": [{"text": "Growth-factor and angiogenesis claims for BPC-157 and thymosin beta-4 both currently rest overwhelmingly on animal data for general tissue-healing outcomes", "_oC": "Fg9FFhpB"}, {"text": "WADA's prohibited list evaluates precaution and enhancement potential rather than completed proof of human efficacy", "_oC": "Fg9FFhpB"}, {"text": "TB-500 as sold commercially reliably reproduces the native 43-amino-acid thymosin beta-4 molecule's documented effects", "_oC": "BAxfEhdbGgZB"}, {"text": "Vendor marketing language about either compound accurately reflects the underlying peer-reviewed evidence", "_oC": "BAxfEhdbGgZB"}, {"text": "Thymosin beta-4 and BPC-157 are simply two names for the same molecule", "_oC": "GQZEEhE="}, {"text": "A biologically plausible pro-growth mechanism proves a compound is safe for long-term human use", "_oC": "GQZEEhE="}, {"text": "The research literature behind BPC-157 comes from a wide, independent range of unaffiliated laboratories worldwide", "_oC": "GQZEEhE="}], "feedback": {"correct": "Both compounds' general healing claims rest on animal data, and WADA's bar is precautionary by design, both hold generally. Whether a specific commercial product or marketing claim accurately reflects the science varies case by case. Equating the two compounds, treating mechanism as proof of safety, or claiming broad independent replication are all false.", "incorrect": "The key boundary: general facts about the evidence base and WADA's evaluative standard hold consistently, while claims about specific products or marketing accuracy vary, and the false statements ignore what this chapter explicitly corrects."}}]}, {"type": "slider-estimation", "tier": "challenge", "stem": "The chapter cites a number of sources to support its claims. Estimate how many cited sources are noted in the chapter's header.", "unit": "sources", "sliderMin": 0, "sliderMax": 20, "feedback": {"correct": "The chapter header lists 8 cited sources, grounding this chapter's mechanism and evidence review of BPC-157 and thymosin beta-4.", "incorrect": "The header states 8 cited sources. Estimates far above or below suggest not attending to the chapter's framing details."}, "difficulty": 3, "variants": [{"stem": "Estimate the stated reading time of this chapter as given in its header.", "unit": "minutes", "sliderMin": 0, "sliderMax": 80, "feedback": {"correct": "The header lists a 50-minute read, reflecting the depth needed to cover two compounds' mechanisms, evidence bases, and safety questions in one chapter.", "incorrect": "The stated reading time is 50 minutes. This is a longer chapter given the two-compound comparison it covers."}, "_oCV": "QlM=", "_oAR": "LFcAW1YKKg=="}], "_oCV": "Tw==", "_oAR": "LFUeRlNv"}, {"type": "boss", "tier": "boss", "stem": "Lars, recovering from an Achilles tendon injury, read forum claims that BPC-157 has 'basically been proven' to heal tendons, and separately that TB-500 is simply another name for the same well-studied biology as thymosin beta-4. Using this chapter's evidence and mechanism review, which statement best corrects both beliefs?", "options": ["BPC-157's tendon claims rest on rodent and cell studies with no completed human trial confirming the effect, and TB-500 is a marketed, often fragment-based product whose identity and purity differ from the well-characterized native 43-amino-acid thymosin beta-4, adding a further layer of uncertainty beyond the animal-only evidence gap", "Both compounds have already been confirmed effective in large completed human trials, so the forum claims are accurate as stated", "TB-500 and thymosin beta-4 are identical in every marketed batch, so no additional uncertainty exists beyond the shared mechanism itself", "Since BPC-157 is not currently listed on WADA's prohibited list, its tendon-healing claim must be scientifically settled"], "justifications": ["Separating a compound's mechanism from its actual outcome evidence, and separating a native molecule's biology from a commercial product's verified identity, are both necessary steps before accepting a grey-market healing claim", "Doping status and medical approval status are governed by the same regulatory process, so one implies the other", "A rodent or cell-culture finding is functionally equivalent to a completed human randomized trial", "Any peptide with a well-documented natural mechanism can be assumed safe and effective once sold under a marketed name"], "feedback": {"correct": "This integrates the whole chapter: BPC-157's tendon-healing mechanism is real but animal-only, thymosin beta-4's actin biology is genuinely solid, and TB-500 as a commercial product carries its own separate identity-and-purity uncertainty on top of the shared animal-only evidence gap.", "incorrect": "Neither compound has completed human trials confirming general tissue-healing claims, TB-500 products are not guaranteed to match the native molecule, and doping-list absence reflects an administrative, precautionary standard, not a scientific verdict on efficacy.", "wrongReason": "You may have correctly sensed the forum claims overreach, but the precise reasoning has to separate mechanism from outcome and separate the well-studied native molecule from an unverified commercial product, not simply assume doping status settles the question."}, "difficulty": 3, "variants": [{"stem": "A vendor claims that because no published study has ever shown BPC-157 or thymosin beta-4 causing tumor growth, both compounds can be considered safe for long-term pro-healing use. Which response best applies this chapter's full reasoning?", "options": ["Absence of evidence is not evidence of absence; nearly all published studies run over days to a few weeks, which is not the timescale needed to detect a slow-developing safety signal like tumor promotion, so the long-term question remains genuinely open", "The vendor is correct: since no study has found a problem, the compounds must be safe for long-term use", "The pro-growth mechanism described in this chapter has nothing to do with cancer biology at all", "Since BPC-157 has been used in gastric ulcer research, long-term cancer safety in tendons is automatically established"], "justifications": ["A precautionary reading of a pro-angiogenic, pro-proliferative mechanism does not require assuming the worst, but it does require honestly noting that short-duration rodent studies were never designed to answer a years-long safety question", "Any mechanism study lasting under a year automatically proves long-term human safety", "Cancer risk is entirely unrelated to angiogenesis or cell-proliferation signaling pathways", "Research in one tissue context, like gastric ulcers, automatically covers long-term safety in an unrelated tissue context, like tendons"], "feedback": {"correct": "This is the chapter's precise closing argument: nobody has shown either compound causes tumor growth, and nobody has ruled it out either, because the long-term controlled trials needed to answer that question have never been run on the timescale required.", "incorrect": "The vendor's logic mistakes a short study window for a completed safety verdict, and it wrongly assumes findings in one tissue context, or the absence of a signal, settle a question that specifically requires years of controlled human follow-up.", "wrongReason": "You may have correctly rejected the vendor's safety claim but attributed the gap to the wrong cause, the mechanism being unrelated to cancer, rather than to the actual issue: short study durations that were never built to detect a slow safety signal."}, "_oCI": "Rw==", "_oJI": "Rw=="}], "_oCI": "Rw==", "_oJI": "Rw=="}]};
+
+        /* ─── State ─── */
+        const state = {
+            questions: [],
+            currentIndex: 0,
+            answers: [],
+            score: 0,
+            maxPossibleScore: 0,
+            totalCorrect: 0,
+            streak: 0,
+            bestStreak: 0,
+            questionStartTime: 0,
+            reflectionData: { review: '', confidence: 0 },
+        };
+
+        /* ─── DOM References ─── */
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const questionScreen = document.getElementById('question-screen');
+        const feedbackScreen = document.getElementById('feedback-screen');
+        const bossIntro = document.getElementById('boss-intro');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionArea = document.getElementById('question-area');
+        const progressBar = document.getElementById('progress-bar');
+        const tierBadge = document.getElementById('tier-badge');
+        const questionCounter = document.getElementById('question-counter');
+        const scoreValue = document.getElementById('score-value');
+        const reflectionScreen = document.getElementById('reflection-screen');
+        const streakDisplay = document.getElementById('streak-display');
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const confettiCtx = confettiCanvas.getContext('2d');
+
+        /* ─── Helpers ─── */
+        function shuffleArray(arr) {
+            const a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function showScreen(id) {
+            [welcomeScreen, questionScreen, feedbackScreen, reflectionScreen, resultsScreen].forEach(
+                el => el.classList.add('hidden')
+            );
+            document.getElementById(id).classList.remove('hidden');
+        }
+
+        function escapeHtml(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
+        /* ─── Answer obfuscation ─── */
+        function obfuscate(val) {
+            const s = String(val);
+            const key = 'wc' + CHALLENGE_DATA.metadata.weekNumber;
+            let out = '';
+            for (let i = 0; i < s.length; i++) {
+                out += String.fromCharCode(s.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return btoa(out);
+        }
+        function deobfuscate(encoded) {
+            const key = 'wc' + CHALLENGE_DATA.metadata.weekNumber;
+            const decoded = atob(encoded);
+            let out = '';
+            for (let i = 0; i < decoded.length; i++) {
+                out += String.fromCharCode(decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+            }
+            return out;
+        }
+
+        /* ─── Initialize ─── */
+        function init() {
+            const data = CHALLENGE_DATA;
+            const rawQuestions = data.questions || [];
+
+            // Apply variant selection: for each question, randomly pick base or a variant
+            const instantiated = rawQuestions.map(q => {
+                if (q.variants && q.variants.length > 0) {
+                    const pool = [null, ...q.variants]; // null = use base
+                    const pick = pool[Math.floor(Math.random() * pool.length)];
+                    if (pick) {
+                        // Merge variant fields over base (shallow merge, skip structural fields)
+                        const merged = Object.assign({}, q);
+                        delete merged.variants;
+                        Object.keys(pick).forEach(k => { merged[k] = pick[k]; });
+                        return merged;
+                    }
+                }
+                const copy = Object.assign({}, q);
+                delete copy.variants;
+                return copy;
+            });
+
+            // Sort by tier order, shuffle within tiers
+            const byTier = {};
+            instantiated.forEach(q => {
+                const tier = q.tier || 'core';
+                if (!byTier[tier]) byTier[tier] = [];
+                byTier[tier].push(q);
+            });
+
+            state.questions = [];
+            TIER_ORDER.forEach(tier => {
+                if (byTier[tier]) {
+                    state.questions.push(...shuffleArray(byTier[tier]));
+                }
+            });
+
+            // Shuffle options (answers already obfuscated at build time)
+            state.questions.forEach(q => {
+                if (['mcq', 'two-stage', 'confidence-weighted', 'boss'].includes(q.type)) {
+                    // Decode the correct index to know which option is correct, then re-encode after shuffling
+                    const origCorrectIdx = parseInt(deobfuscate(q._oCI), 10);
+                    const opts = q.options.map((text, i) => ({ text, origIndex: i }));
+                    const shuffled = shuffleArray(opts);
+                    q._shuffledOptions = shuffled.map(o => o.text);
+                    const newCorrectIdx = shuffled.findIndex(o => o.origIndex === origCorrectIdx);
+                    q._oCI = obfuscate(newCorrectIdx);
+
+                    if (q.justifications && q._oJI) {
+                        const origJustIdx = parseInt(deobfuscate(q._oJI), 10);
+                        const justs = q.justifications.map((text, i) => ({ text, origIndex: i }));
+                        const shuffledJ = shuffleArray(justs);
+                        q._shuffledJustifications = shuffledJ.map(j => j.text);
+                        const newJustIdx = shuffledJ.findIndex(j => j.origIndex === origJustIdx);
+                        q._oJI = obfuscate(newJustIdx);
+                    }
+                }
+                if (q.type === 'agreement-matrix' && q.statements) {
+                    q._shuffledStatements = shuffleArray(q.statements.map((s, i) => ({ ...s, origIndex: i })));
+                }
+            });
+
+            // Calculate max possible score
+            state.maxPossibleScore = 0;
+            state.questions.forEach(q => {
+                const base = BASE_POINTS[q.difficulty] || 100;
+                if (q.type === 'confidence-weighted') {
+                    state.maxPossibleScore += base * CONFIDENCE_MULTIPLIERS.high.correct;
+                } else {
+                    state.maxPossibleScore += base;
+                }
+            });
+
+            state.currentIndex = 0;
+            state.answers = [];
+            state.score = 0;
+            state.totalCorrect = 0;
+            state.streak = 0;
+            state.bestStreak = 0;
+            state.reflectionData = { review: '', confidence: 0 };
+            streakDisplay.classList.remove('visible');
+            streakDisplay.innerHTML = '';
+
+            // Populate welcome
+            document.getElementById('welcome-title').textContent = data.metadata.chapterTitle || 'Weekly Challenge';
+            document.getElementById('welcome-subtitle').textContent = "The Adaptation Advantage: How Recovery Turns Training Into Progress" + ' \u2014 Week ' + (data.metadata.weekNumber || '');
+            document.getElementById('stat-questions').textContent = state.questions.length;
+            document.getElementById('stat-time').textContent = '~' + (data.metadata.estimatedMinutes || 8);
+
+            // Build progress segments
+            progressBar.innerHTML = '';
+            state.questions.forEach((q, i) => {
+                const seg = document.createElement('div');
+                seg.className = 'progress-segment';
+                seg.dataset.tier = q.tier || 'core';
+                seg.dataset.index = i;
+                progressBar.appendChild(seg);
+            });
+
+            showScreen('welcome-screen');
+        }
+
+        /* ─── Progress & UI Updates ─── */
+        function updateProgress() {
+            const idx = state.currentIndex;
+            progressBar.querySelectorAll('.progress-segment').forEach((seg, i) => {
+                seg.classList.remove('active', 'correct', 'incorrect');
+                if (i < state.answers.length) {
+                    seg.classList.add(state.answers[i].isCorrect ? 'correct' : 'incorrect');
+                } else if (i === idx) {
+                    seg.classList.add('active');
+                }
+            });
+            questionCounter.textContent = 'Question ' + (idx + 1) + ' of ' + state.questions.length;
+            scoreValue.textContent = Math.max(0, Math.round(state.score));
+        }
+
+        function updateTierBadge(tier) {
+            tierBadge.dataset.tier = tier;
+            tierBadge.innerHTML = (TIER_ICONS[tier] || '') + ' ' + (TIER_LABELS[tier] || tier);
+        }
+
+        /* ─── Rapid-Guess Detection ─── */
+        function checkRapidGuess(q) {
+            const elapsed = Date.now() - state.questionStartTime;
+            const threshold = MIN_TIME[q.type] || 3000;
+            if (elapsed < threshold) {
+                // Show warning overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'rapid-guess-overlay';
+                overlay.innerHTML = '<div class="rapid-guess-card">'
+                    + '<div class="warning-icon">\u23F3</div>'
+                    + '<h3>Take your time</h3>'
+                    + '<p>Read each question carefully before answering. Quick guesses don\u2019t count toward mastery.</p>'
+                    + '<button class="btn btn-primary" id="btn-dismiss-rapid">Try Again</button>'
+                    + '</div>';
+                document.body.appendChild(overlay);
+                overlay.querySelector('#btn-dismiss-rapid').addEventListener('click', () => {
+                    overlay.remove();
+                    state.questionStartTime = Date.now(); // reset timer
+                });
+                return true; // blocked
+            }
+            return false; // ok
+        }
+
+        /* ─── Streak ─── */
+        function updateStreak(isCorrect) {
+            if (isCorrect) {
+                state.streak++;
+                if (state.streak > state.bestStreak) state.bestStreak = state.streak;
+            } else {
+                if (state.streak >= 3) {
+                    // Show brief reset message
+                    const msg = document.createElement('div');
+                    msg.className = 'streak-reset-msg';
+                    msg.textContent = 'Good run! ' + state.streak + ' in a row';
+                    document.body.appendChild(msg);
+                    setTimeout(() => msg.remove(), 1200);
+                }
+                state.streak = 0;
+            }
+
+            // Update display
+            const level = STREAK_LEVELS.slice().reverse().find(l => state.streak >= l.min);
+            if (level) {
+                streakDisplay.innerHTML = level.label + state.streak;
+                streakDisplay.classList.add('visible');
+                streakDisplay.classList.remove('pop');
+                void streakDisplay.offsetHeight;
+                streakDisplay.classList.add('pop');
+            } else {
+                streakDisplay.classList.remove('visible');
+            }
+        }
+
+        /* ─── Show Question ─── */
+        function showQuestion() {
+            if (state.currentIndex >= state.questions.length) {
+                showReflection();
+                return;
+            }
+
+            const q = state.questions[state.currentIndex];
+
+            // Boss intro
+            if (q.tier === 'boss') {
+                bossIntro.classList.remove('hidden');
+                setTimeout(() => {
+                    bossIntro.classList.add('hidden');
+                    renderQuestionScreen(q);
+                }, BOSS_INTRO_DURATION);
+                return;
+            }
+
+            renderQuestionScreen(q);
+        }
+
+        function renderQuestionScreen(q) {
+            showScreen('question-screen');
+            updateProgress();
+            updateTierBadge(q.tier || 'core');
+            state.questionStartTime = Date.now();
+
+            questionArea.innerHTML = '';
+            questionArea.style.animation = 'none';
+            void questionArea.offsetHeight; // force reflow
+            questionArea.style.animation = '';
+
+            const isBoss = q.tier === 'boss';
+            const wrapper = isBoss ? document.createElement('div') : null;
+            if (wrapper) {
+                wrapper.className = 'boss-question-wrapper';
+                questionArea.appendChild(wrapper);
+            }
+            const target = wrapper || questionArea;
+
+            const renderers = {
+                'mcq': renderMcq,
+                'two-stage': renderTwoStage,
+                'assertion-reason': renderAssertionReason,
+                'agreement-matrix': renderAgreementMatrix,
+                'confidence-weighted': renderConfidenceWeighted,
+                'slider-estimation': renderSliderEstimation,
+                'boss': renderTwoStage,
+            };
+            const render = renderers[q.type] || renderMcq;
+            render(q, target);
+
+            // Focus the stem for screen readers
+            const stem = target.querySelector('.question-stem');
+            if (stem) stem.focus();
+        }
+
+        /* ─── MCQ Renderer ─── */
+        function renderMcq(q, container) {
+            let selected = -1;
+            const options = q._shuffledOptions || q.options;
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="options-list">';
+            options.forEach((opt, i) => {
+                const letter = String.fromCharCode(65 + i);
+                html += '<div class="option-card" tabindex="0" data-index="' + i + '">'
+                    + '<span class="option-letter">' + letter + '</span>'
+                    + '<span class="option-text">' + escapeHtml(opt) + '</span></div>';
+            });
+            html += '</div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-submit" disabled>Submit</button></div>';
+            container.innerHTML = html;
+
+            const cards = container.querySelectorAll('.option-card');
+            const submitBtn = container.querySelector('#btn-submit');
+
+            function selectOption(i) {
+                selected = i;
+                cards.forEach((c, ci) => c.classList.toggle('selected', ci === i));
+                submitBtn.disabled = false;
+            }
+
+            cards.forEach((card, i) => {
+                card.addEventListener('click', () => selectOption(i));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOption(i); }
+                });
+            });
+
+            submitBtn.addEventListener('click', () => {
+                if (selected < 0) return;
+                if (checkRapidGuess(q)) return;
+                submitBtn.disabled = true;
+                cards.forEach(c => c.classList.add('disabled'));
+
+                const correctIdx = parseInt(deobfuscate(q._oCI), 10);
+                const isCorrect = selected === correctIdx;
+                const base = BASE_POINTS[q.difficulty] || 100;
+                const points = isCorrect ? base : 0;
+
+                cards[correctIdx].classList.add('correct');
+                if (!isCorrect) cards[selected].classList.add('incorrect');
+                updateStreak(isCorrect);
+
+                recordAnswer(q, isCorrect, points);
+
+                setTimeout(() => showFeedback(q, isCorrect, points), ADVANCE_DELAY);
+            });
+        }
+
+        /* ─── Two-Stage / Boss Renderer ─── */
+        function renderTwoStage(q, container) {
+            let selectedAnswer = -1;
+            let selectedJust = -1;
+            let answerLocked = false;
+            const options = q._shuffledOptions || q.options;
+            const justifications = q._shuffledJustifications || q.justifications;
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="options-list" id="ts-options">';
+            options.forEach((opt, i) => {
+                const letter = String.fromCharCode(65 + i);
+                html += '<div class="option-card" tabindex="0" data-index="' + i + '">'
+                    + '<span class="option-letter">' + letter + '</span>'
+                    + '<span class="option-text">' + escapeHtml(opt) + '</span></div>';
+            });
+            html += '</div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-ts-answer" disabled>Lock Answer</button></div>';
+            html += '<div id="justification-area"></div>';
+            container.innerHTML = html;
+
+            const cards = container.querySelectorAll('#ts-options .option-card');
+            const answerBtn = container.querySelector('#btn-ts-answer');
+            const justArea = container.querySelector('#justification-area');
+
+            function selectAnswer(i) {
+                if (answerLocked) return;
+                selectedAnswer = i;
+                cards.forEach((c, ci) => c.classList.toggle('selected', ci === i));
+                answerBtn.disabled = false;
+            }
+
+            cards.forEach((card, i) => {
+                card.addEventListener('click', () => selectAnswer(i));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectAnswer(i); }
+                });
+            });
+
+            answerBtn.addEventListener('click', () => {
+                if (selectedAnswer < 0 || answerLocked) return;
+                answerLocked = true;
+                answerBtn.classList.add('hidden');
+                cards.forEach(c => c.classList.add('disabled'));
+
+                // Show justification panel
+                let jhtml = '<div class="justification-panel">';
+                jhtml += '<div class="stage-divider">Why is this correct?</div>';
+                jhtml += '<div class="locked-answer"><div class="label">Your answer</div>' + escapeHtml(options[selectedAnswer]) + '</div>';
+                jhtml += '<div class="options-list" id="ts-justifications">';
+                justifications.forEach((j, i) => {
+                    const letter = String.fromCharCode(65 + i);
+                    jhtml += '<div class="option-card" tabindex="0" data-index="' + i + '">'
+                        + '<span class="option-letter">' + letter + '</span>'
+                        + '<span class="option-text">' + escapeHtml(j) + '</span></div>';
+                });
+                jhtml += '</div>';
+                jhtml += '<div class="submit-row"><button class="btn btn-primary" id="btn-ts-submit" disabled>Submit</button></div>';
+                jhtml += '</div>';
+                justArea.innerHTML = jhtml;
+
+                const jCards = justArea.querySelectorAll('.option-card');
+                const submitBtn = justArea.querySelector('#btn-ts-submit');
+
+                function selectJust(i) {
+                    selectedJust = i;
+                    jCards.forEach((c, ci) => c.classList.toggle('selected', ci === i));
+                    submitBtn.disabled = false;
+                }
+
+                jCards.forEach((card, i) => {
+                    card.addEventListener('click', () => selectJust(i));
+                    card.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectJust(i); }
+                    });
+                });
+
+                submitBtn.addEventListener('click', () => {
+                    if (selectedJust < 0) return;
+                    if (checkRapidGuess(q)) return;
+                    submitBtn.disabled = true;
+                    jCards.forEach(c => c.classList.add('disabled'));
+
+                    const correctAns = parseInt(deobfuscate(q._oCI), 10);
+                    const correctJust = parseInt(deobfuscate(q._oJI), 10);
+                    const ansCorrect = selectedAnswer === correctAns;
+                    const justCorrect = selectedJust === correctJust;
+
+                    const base = BASE_POINTS[q.difficulty] || 100;
+                    let points = 0;
+                    let isCorrect = false;
+
+                    if (ansCorrect && justCorrect) {
+                        points = base;
+                        isCorrect = true;
+                    } else if (ansCorrect) {
+                        points = Math.round(base * TWO_STAGE_PARTIAL);
+                    }
+
+                    // Show correct/incorrect on both
+                    cards[correctAns].classList.add('correct');
+                    if (!ansCorrect) cards[selectedAnswer].classList.add('incorrect');
+                    jCards[correctJust].classList.add('correct');
+                    if (!justCorrect) jCards[selectedJust].classList.add('incorrect');
+                    updateStreak(isCorrect);
+
+                    recordAnswer(q, isCorrect, points);
+
+                    const feedbackType = ansCorrect && !justCorrect ? 'wrongReason' : (isCorrect ? 'correct' : 'incorrect');
+                    setTimeout(() => showFeedback(q, isCorrect, points, feedbackType), ADVANCE_DELAY);
+                });
+            });
+        }
+
+        /* ─── Assertion-Reason Renderer ─── */
+        function renderAssertionReason(q, container) {
+            let selected = '';
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="statement-cards">';
+            html += '<div class="statement-card"><div class="label">Assertion</div>' + escapeHtml(q.assertion) + '</div>';
+            html += '<div class="statement-card reason-card"><div class="label">Reason</div>' + escapeHtml(q.reason) + '</div>';
+            html += '</div>';
+            html += '<div class="relationship-options">';
+            RELATIONSHIP_KEYS.forEach(key => {
+                html += '<div class="relationship-option" tabindex="0" data-value="' + key + '">'
+                    + '<span class="radio-dot"></span>'
+                    + '<span>' + escapeHtml(RELATIONSHIP_LABELS[key]) + '</span></div>';
+            });
+            html += '</div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-ar-submit" disabled>Submit</button></div>';
+            container.innerHTML = html;
+
+            const opts = container.querySelectorAll('.relationship-option');
+            const submitBtn = container.querySelector('#btn-ar-submit');
+
+            function selectRel(val) {
+                selected = val;
+                opts.forEach(o => o.classList.toggle('selected', o.dataset.value === val));
+                submitBtn.disabled = false;
+            }
+
+            opts.forEach(opt => {
+                opt.addEventListener('click', () => selectRel(opt.dataset.value));
+                opt.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectRel(opt.dataset.value); }
+                });
+            });
+
+            submitBtn.addEventListener('click', () => {
+                if (!selected) return;
+                if (checkRapidGuess(q)) return;
+                submitBtn.disabled = true;
+                opts.forEach(o => o.classList.add('disabled'));
+
+                const correctRel = deobfuscate(q._oCR);
+                const isCorrect = selected === correctRel;
+                const base = BASE_POINTS[q.difficulty] || 100;
+                const points = isCorrect ? base : 0;
+
+                opts.forEach(o => {
+                    if (o.dataset.value === correctRel) o.classList.add('correct');
+                    if (!isCorrect && o.dataset.value === selected) o.classList.add('incorrect');
+                });
+                updateStreak(isCorrect);
+
+                recordAnswer(q, isCorrect, points);
+                setTimeout(() => showFeedback(q, isCorrect, points), ADVANCE_DELAY);
+            });
+        }
+
+        /* ─── Agreement Matrix Renderer ─── */
+        function renderAgreementMatrix(q, container) {
+            const statements = q._shuffledStatements || q.statements;
+            const categories = ['always', 'sometimes', 'never'];
+            const catLabels = { always: 'Always True', sometimes: 'Sometimes True', never: 'Never True' };
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="matrix-container"><table class="matrix-table"><thead><tr>';
+            html += '<th>Statement</th>';
+            categories.forEach(c => { html += '<th>' + catLabels[c] + '</th>'; });
+            html += '</tr></thead><tbody>';
+            statements.forEach((s, i) => {
+                html += '<tr class="matrix-row" data-index="' + i + '">';
+                html += '<td>' + escapeHtml(s.text) + '</td>';
+                categories.forEach(c => {
+                    html += '<td><input type="radio" class="matrix-radio" name="stmt-' + i + '" value="' + c + '"'
+                        + ' aria-label="' + escapeHtml(s.text) + ' - ' + catLabels[c] + '"></td>';
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table></div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-matrix-submit" disabled>Submit</button></div>';
+            container.innerHTML = html;
+
+            const submitBtn = container.querySelector('#btn-matrix-submit');
+            const radios = container.querySelectorAll('.matrix-radio');
+
+            radios.forEach(r => {
+                r.addEventListener('change', () => {
+                    // Enable submit only when all rows have a selection
+                    const answered = new Set();
+                    radios.forEach(radio => { if (radio.checked) answered.add(radio.name); });
+                    submitBtn.disabled = answered.size < statements.length;
+                });
+            });
+
+            submitBtn.addEventListener('click', () => {
+                if (checkRapidGuess(q)) return;
+                submitBtn.disabled = true;
+                radios.forEach(r => { r.disabled = true; });
+
+                let correctCount = 0;
+                const rows = container.querySelectorAll('.matrix-row');
+                statements.forEach((s, i) => {
+                    const sel = container.querySelector('input[name="stmt-' + i + '"]:checked');
+                    const userVal = sel ? sel.value : '';
+                    const correctVal = deobfuscate(s._oC);
+                    const isRight = userVal === correctVal;
+                    if (isRight) correctCount++;
+                    rows[i].classList.add(isRight ? 'correct' : 'incorrect');
+                });
+
+                const ratio = correctCount / statements.length;
+                const base = BASE_POINTS[q.difficulty] || 100;
+                const points = Math.round(base * ratio);
+                const isCorrect = ratio >= MATRIX_CORRECT_THRESHOLD;
+                updateStreak(isCorrect);
+
+                recordAnswer(q, isCorrect, points);
+                setTimeout(() => showFeedback(q, isCorrect, points, null, correctCount + '/' + statements.length + ' correct'), ADVANCE_DELAY);
+            });
+        }
+
+        /* ─── Confidence-Weighted Renderer ─── */
+        function renderConfidenceWeighted(q, container) {
+            let selectedAnswer = -1;
+            let answerLocked = false;
+            const options = q._shuffledOptions || q.options;
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="options-list" id="cw-options">';
+            options.forEach((opt, i) => {
+                const letter = String.fromCharCode(65 + i);
+                html += '<div class="option-card" tabindex="0" data-index="' + i + '">'
+                    + '<span class="option-letter">' + letter + '</span>'
+                    + '<span class="option-text">' + escapeHtml(opt) + '</span></div>';
+            });
+            html += '</div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-cw-answer" disabled>Lock Answer</button></div>';
+            html += '<div id="confidence-area"></div>';
+            container.innerHTML = html;
+
+            const cards = container.querySelectorAll('#cw-options .option-card');
+            const answerBtn = container.querySelector('#btn-cw-answer');
+            const confArea = container.querySelector('#confidence-area');
+
+            function selectOpt(i) {
+                if (answerLocked) return;
+                selectedAnswer = i;
+                cards.forEach((c, ci) => c.classList.toggle('selected', ci === i));
+                answerBtn.disabled = false;
+            }
+
+            cards.forEach((card, i) => {
+                card.addEventListener('click', () => selectOpt(i));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOpt(i); }
+                });
+            });
+
+            answerBtn.addEventListener('click', () => {
+                if (selectedAnswer < 0 || answerLocked) return;
+                answerLocked = true;
+                answerBtn.classList.add('hidden');
+                cards.forEach(c => c.classList.add('disabled'));
+
+                // Show confidence selector
+                let chtml = '<div class="confidence-panel">';
+                chtml += '<div class="confidence-prompt">How confident are you?</div>';
+                chtml += '<div class="confidence-buttons">';
+                chtml += '<button class="confidence-btn" tabindex="0" data-level="low"><span class="emoji">\uD83E\uDD14</span><span class="conf-label">Not Sure</span></button>';
+                chtml += '<button class="confidence-btn" tabindex="0" data-level="medium"><span class="emoji">\uD83D\uDE42</span><span class="conf-label">Somewhat</span></button>';
+                chtml += '<button class="confidence-btn" tabindex="0" data-level="high"><span class="emoji">\uD83D\uDE0E</span><span class="conf-label">Very Sure</span></button>';
+                chtml += '</div></div>';
+                confArea.innerHTML = chtml;
+
+                confArea.querySelectorAll('.confidence-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (checkRapidGuess(q)) return;
+                        const level = btn.dataset.level;
+                        const correctIdx = parseInt(deobfuscate(q._oCI), 10);
+                        const ansCorrect = selectedAnswer === correctIdx;
+                        const base = BASE_POINTS[q.difficulty] || 100;
+                        const mult = CONFIDENCE_MULTIPLIERS[level];
+                        const points = Math.round(base * (ansCorrect ? mult.correct : mult.incorrect));
+                        const isCorrect = ansCorrect;
+
+                        cards[correctIdx].classList.add('correct');
+                        if (!ansCorrect) cards[selectedAnswer].classList.add('incorrect');
+                        updateStreak(isCorrect);
+
+                        recordAnswer(q, isCorrect, points, null, level);
+
+                        const confLabel = level === 'high' ? 'Very Sure' : level === 'medium' ? 'Somewhat Sure' : 'Not Sure';
+                        setTimeout(() => showFeedback(q, isCorrect, points, null, confLabel), ADVANCE_DELAY);
+                    });
+                });
+            });
+        }
+
+        /* ─── Slider Estimation Renderer ─── */
+        function renderSliderEstimation(q, container) {
+            const mid = Math.round((q.sliderMin + q.sliderMax) / 2);
+
+            let html = '';
+            if (q.isSpacedReview) html += '<div class="spaced-review-badge">Review Question</div>';
+            html += '<h3 class="question-stem" tabindex="-1">' + escapeHtml(q.stem) + '</h3>';
+            html += '<div class="slider-container">';
+            html += '<div class="slider-value-display">';
+            html += '<span class="slider-current-value" id="slider-val">' + mid + '</span>';
+            html += '<span class="slider-unit">' + escapeHtml(q.unit) + '</span>';
+            html += '</div>';
+            html += '<div class="slider-track-wrapper">';
+            html += '<input type="range" class="slider-input" id="slider-input"'
+                + ' min="' + q.sliderMin + '" max="' + q.sliderMax + '" value="' + mid + '"'
+                + ' aria-label="' + escapeHtml(q.stem) + '"'
+                + ' aria-valuemin="' + q.sliderMin + '" aria-valuemax="' + q.sliderMax + '"'
+                + ' aria-valuenow="' + mid + '">';
+            html += '</div>';
+            html += '<div class="slider-labels">';
+            html += '<span>' + q.sliderMin + ' ' + escapeHtml(q.unit) + '</span>';
+            html += '<span>' + q.sliderMax + ' ' + escapeHtml(q.unit) + '</span>';
+            html += '</div>';
+            html += '<div class="slider-result-overlay hidden" id="slider-result"></div>';
+            html += '</div>';
+            html += '<div class="submit-row"><button class="btn btn-primary" id="btn-slider-submit">Submit</button></div>';
+            container.innerHTML = html;
+
+            const slider = container.querySelector('#slider-input');
+            const valDisplay = container.querySelector('#slider-val');
+            const submitBtn = container.querySelector('#btn-slider-submit');
+            const resultOverlay = container.querySelector('#slider-result');
+
+            slider.addEventListener('input', () => {
+                valDisplay.textContent = slider.value;
+                slider.setAttribute('aria-valuenow', slider.value);
+            });
+
+            submitBtn.addEventListener('click', () => {
+                if (checkRapidGuess(q)) return;
+                submitBtn.disabled = true;
+                slider.disabled = true;
+
+                const userVal = parseFloat(slider.value);
+                const correctValue = parseFloat(deobfuscate(q._oCV));
+                const acceptableRange = JSON.parse(deobfuscate(q._oAR));
+                const distance = Math.abs(userVal - correctValue);
+                const rangeLo = acceptableRange[0];
+                const rangeHi = acceptableRange[1];
+                const halfRange = (rangeHi - rangeLo) / 2;
+                const base = BASE_POINTS[q.difficulty] || 100;
+
+                let points;
+                if (distance <= halfRange) {
+                    points = base;
+                } else if (distance <= halfRange * 2) {
+                    points = Math.round(base * (1 - (distance - halfRange) / halfRange));
+                } else {
+                    points = 0;
+                }
+                points = Math.max(0, points);
+                const isCorrect = points >= base * 0.5;
+
+                updateStreak(isCorrect);
+
+                // Show correct value indicator
+                const range = q.sliderMax - q.sliderMin;
+                const correctPct = ((correctValue - q.sliderMin) / range) * 100;
+                const rangeLoPct = ((rangeLo - q.sliderMin) / range) * 100;
+                const rangeHiPct = ((rangeHi - q.sliderMin) / range) * 100;
+
+                resultOverlay.classList.remove('hidden');
+                resultOverlay.innerHTML = '<div class="slider-range-highlight" style="left:' + rangeLoPct + '%;width:' + (rangeHiPct - rangeLoPct) + '%"></div>'
+                    + '<div class="slider-correct-marker" style="left:' + correctPct + '%"></div>'
+                    + '<div class="slider-correct-label" style="left:' + correctPct + '%">' + correctValue + ' ' + escapeHtml(q.unit) + '</div>';
+
+                recordAnswer(q, isCorrect, points);
+                setTimeout(() => showFeedback(q, isCorrect, points, null, 'You estimated: ' + userVal + ' ' + q.unit), ADVANCE_DELAY);
+            });
+        }
+
+        /* ─── Record Answer ─── */
+        function recordAnswer(q, isCorrect, points, _response, extra) {
+            state.answers.push({
+                questionIndex: state.currentIndex,
+                isCorrect: isCorrect,
+                pointsEarned: points,
+                extra: extra || null,
+            });
+            state.score += points;
+            if (isCorrect) state.totalCorrect++;
+            updateProgress();
+        }
+
+        /* ─── Feedback Screen ─── */
+        function showFeedback(q, isCorrect, points, feedbackType, extraText) {
+            showScreen('feedback-screen');
+
+            const icon = document.getElementById('feedback-icon');
+            const verdict = document.getElementById('feedback-verdict');
+            const pointsEl = document.getElementById('feedback-points');
+            const explanation = document.getElementById('feedback-explanation');
+
+            if (isCorrect) {
+                icon.textContent = '\u2705';
+                verdict.textContent = 'Correct!';
+                verdict.className = 'feedback-verdict correct';
+            } else if (points > 0) {
+                icon.textContent = '\u2796';
+                verdict.textContent = 'Partial Credit';
+                verdict.className = 'feedback-verdict partial';
+            } else {
+                icon.textContent = '\u274C';
+                verdict.textContent = 'Not Quite';
+                verdict.className = 'feedback-verdict incorrect';
+            }
+
+            const sign = points >= 0 ? '+' : '';
+            pointsEl.textContent = sign + points + ' points' + (extraText ? ' \u2014 ' + extraText : '');
+
+            // Choose feedback text
+            let fbKey = isCorrect ? 'correct' : 'incorrect';
+            if (feedbackType === 'wrongReason' && q.feedback.wrongReason) {
+                fbKey = 'wrongReason';
+            }
+            explanation.innerHTML = '<strong>' + (isCorrect ? 'Why this is correct:' : 'Key insight:') + '</strong> ' + escapeHtml(q.feedback[fbKey] || q.feedback.incorrect || '');
+
+            // Float points animation
+            if (points > 0) {
+                const floater = document.createElement('div');
+                floater.className = 'points-float';
+                floater.textContent = '+' + points;
+                floater.style.left = '50%';
+                floater.style.top = '40%';
+                document.body.appendChild(floater);
+                setTimeout(() => floater.remove(), 1000);
+            }
+
+            // Confetti on correct challenge/boss questions
+            if (isCorrect && (q.tier === 'challenge' || q.tier === 'boss')) {
+                fireConfetti();
+            }
+
+            const continueBtn = document.getElementById('btn-continue');
+            const newBtn = continueBtn.cloneNode(true);
+            continueBtn.parentNode.replaceChild(newBtn, continueBtn);
+            newBtn.addEventListener('click', () => {
+                state.currentIndex++;
+                if (state.currentIndex >= state.questions.length) {
+                    showReflection();
+                } else {
+                    showQuestion();
+                }
+            });
+        }
+
+        /* ─── Reflection Screen ─── */
+        function showReflection() {
+            showScreen('reflection-screen');
+
+            // Confidence scale buttons
+            document.querySelectorAll('#reflection-confidence .confidence-scale-btn').forEach(btn => {
+                btn.classList.remove('selected');
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('#reflection-confidence .confidence-scale-btn').forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                    state.reflectionData.confidence = parseInt(this.dataset.val, 10);
+                });
+            });
+
+            const toResultsBtn = document.getElementById('btn-to-results');
+            const newBtn = toResultsBtn.cloneNode(true);
+            toResultsBtn.parentNode.replaceChild(newBtn, toResultsBtn);
+            newBtn.addEventListener('click', () => {
+                const textarea = document.getElementById('reflection-review');
+                state.reflectionData.review = textarea ? textarea.value : '';
+                showResults();
+            });
+        }
+
+        /* ─── Results Screen ─── */
+        function showResults() {
+            showScreen('results-screen');
+
+            const pct = state.maxPossibleScore > 0 ? state.score / state.maxPossibleScore : 0;
+            const passed = pct >= MASTERY_THRESHOLD;
+
+            document.getElementById('mastery-icon').textContent = passed ? '\uD83C\uDFC6' : '\uD83D\uDCAA';
+            const verdictEl = document.getElementById('mastery-verdict');
+            verdictEl.textContent = passed ? 'Mastery Achieved!' : 'Keep Practicing';
+            verdictEl.className = 'mastery-verdict ' + (passed ? 'passed' : 'failed');
+            document.getElementById('mastery-score').textContent = Math.round(pct * 100) + '%';
+            document.getElementById('mastery-threshold').textContent = passed
+                ? 'You met the 85% mastery threshold'
+                : 'You need 85% to demonstrate mastery \u2014 you can retake anytime';
+
+            // Stats
+            const statsEl = document.getElementById('results-stats');
+            statsEl.innerHTML = '<div class="result-stat"><div class="stat-value">' + Math.max(0, Math.round(state.score)) + '</div><div class="stat-label">Points</div></div>'
+                + '<div class="result-stat"><div class="stat-value">' + state.totalCorrect + '/' + state.questions.length + '</div><div class="stat-label">Correct</div></div>'
+                + '<div class="result-stat"><div class="stat-value">' + Math.round(pct * 100) + '%</div><div class="stat-label">Score</div></div>'
+                + (state.bestStreak >= 3 ? '<div class="result-stat"><div class="stat-value">\uD83D\uDD25 ' + state.bestStreak + '</div><div class="stat-label">Best Streak</div></div>' : '');
+
+            // Tier breakdown
+            const tierBreakdown = document.getElementById('tier-breakdown');
+            let tbHtml = '<h3>Performance by Tier</h3>';
+            TIER_ORDER.forEach(tier => {
+                const tierQs = state.questions.map((q, i) => ({ q, a: state.answers[i] })).filter(x => x.q.tier === tier);
+                if (tierQs.length === 0) return;
+                const tierCorrect = tierQs.filter(x => x.a && x.a.isCorrect).length;
+                const tierPct = Math.round((tierCorrect / tierQs.length) * 100);
+                const color = tier === 'warmup' ? 'var(--tier-warmup)' : tier === 'core' ? 'var(--tier-core)' : tier === 'challenge' ? 'var(--tier-challenge)' : 'var(--tier-boss)';
+                tbHtml += '<div class="tier-bar-row">'
+                    + '<span class="tier-bar-label" style="color:' + color + '">' + (TIER_ICONS[tier] || '') + ' ' + (TIER_LABELS[tier] || tier) + '</span>'
+                    + '<div class="tier-bar-track"><div class="tier-bar-fill" style="width:' + tierPct + '%;background:' + color + '"></div></div>'
+                    + '<span class="tier-bar-value">' + tierPct + '%</span>'
+                    + '</div>';
+            });
+            tierBreakdown.innerHTML = tbHtml;
+
+            // Reflection summary (shown back to the student)
+            const reviewSection = document.getElementById('review-section');
+            const existingSummary = document.querySelector('.reflection-summary');
+            if (existingSummary) existingSummary.remove();
+            if (state.reflectionData.review || state.reflectionData.confidence) {
+                const summaryDiv = document.createElement('div');
+                summaryDiv.className = 'reflection-summary';
+                let sHtml = '<h3>Your Reflection</h3>';
+                if (state.reflectionData.review) {
+                    sHtml += '<div class="refl-row"><span class="refl-label">Want to review</span>' + escapeHtml(state.reflectionData.review) + '</div>';
+                }
+                if (state.reflectionData.confidence) {
+                    const stars = '\u2B50'.repeat(state.reflectionData.confidence);
+                    sHtml += '<div class="refl-row"><span class="refl-label">Confidence</span>' + stars + ' ' + state.reflectionData.confidence + '/5</div>';
+                }
+                summaryDiv.innerHTML = sHtml;
+                reviewSection.parentNode.insertBefore(summaryDiv, reviewSection);
+            }
+
+            // Review
+            const reviewList = document.getElementById('review-list');
+            let rHtml = '';
+            state.questions.forEach((q, i) => {
+                const a = state.answers[i];
+                if (!a) return;
+                rHtml += '<div class="review-item">';
+                rHtml += '<div class="review-q-num">' + (TIER_ICONS[q.tier] || '') + ' Question ' + (i + 1) + ' \u2014 ' + q.type.replace(/-/g, ' ') + '</div>';
+                rHtml += '<div class="review-stem">' + escapeHtml(q.stem) + '</div>';
+                rHtml += '<div class="review-answer ' + (a.isCorrect ? 'user-correct' : 'user-incorrect') + '">'
+                    + (a.isCorrect ? '\u2705 Correct' : '\u274C Incorrect') + ' (' + (a.pointsEarned >= 0 ? '+' : '') + a.pointsEarned + ' pts)'
+                    + (a.extra ? ' \u2014 ' + escapeHtml(String(a.extra)) : '') + '</div>';
+                rHtml += '<div class="review-feedback">' + escapeHtml(a.isCorrect ? q.feedback.correct : q.feedback.incorrect) + '</div>';
+                rHtml += '</div>';
+            });
+            reviewList.innerHTML = rHtml;
+
+            // Retake button
+            const retakeBtn = document.getElementById('btn-retake');
+            const newRetake = retakeBtn.cloneNode(true);
+            retakeBtn.parentNode.replaceChild(newRetake, retakeBtn);
+            newRetake.addEventListener('click', () => {
+                init();
+                showScreen('welcome-screen');
+            });
+
+            // Fire confetti on mastery!
+            if (passed) {
+                setTimeout(() => fireConfetti(), 300);
+                setTimeout(() => fireConfetti(), 800);
+            }
+
+            // SCORM reporting
+            reportToSCORM(pct, passed);
+        }
+
+        /* ─── Confetti ─── */
+        function fireConfetti() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+
+            const pieces = [];
+            const colors = [
+                getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#8b5cf6',
+                getComputedStyle(document.documentElement).getPropertyValue('--success').trim() || '#22c55e',
+                getComputedStyle(document.documentElement).getPropertyValue('--gold').trim() || '#f59e0b',
+                getComputedStyle(document.documentElement).getPropertyValue('--warm-accent').trim() || '#f59e0b',
+                getComputedStyle(document.documentElement).getPropertyValue('--accent-light').trim() || '#a78bfa',
+            ];
+
+            for (let i = 0; i < CONFETTI_COUNT; i++) {
+                pieces.push({
+                    x: Math.random() * confettiCanvas.width,
+                    y: -10 - Math.random() * 50,
+                    w: 6 + Math.random() * 6,
+                    h: 4 + Math.random() * 4,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    rotation: Math.random() * 360,
+                    rotSpeed: (Math.random() - 0.5) * 8,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: 2 + Math.random() * 3,
+                    delay: Math.random() * 500,
+                    shape: Math.random() > 0.5 ? 'rect' : 'circle',
+                });
+            }
+
+            const startTime = performance.now();
+            const duration = CONFETTI_MAX_DURATION + 500;
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                if (elapsed > duration) {
+                    confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+                    return;
+                }
+
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+                pieces.forEach(p => {
+                    const t = Math.max(0, elapsed - p.delay);
+                    if (t <= 0) return;
+                    const progress = t / (CONFETTI_MAX_DURATION - p.delay);
+
+                    const x = p.x + p.vx * t * 0.05;
+                    const y = p.y + p.vy * t * 0.08;
+                    const rotation = p.rotation + p.rotSpeed * t * 0.05;
+                    const alpha = Math.max(0, 1 - progress);
+
+                    confettiCtx.save();
+                    confettiCtx.translate(x, y);
+                    confettiCtx.rotate((rotation * Math.PI) / 180);
+                    confettiCtx.globalAlpha = alpha;
+                    confettiCtx.fillStyle = p.color;
+
+                    if (p.shape === 'circle') {
+                        confettiCtx.beginPath();
+                        confettiCtx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+                        confettiCtx.fill();
+                    } else {
+                        confettiCtx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                    }
+                    confettiCtx.restore();
+                });
+
+                requestAnimationFrame(animate);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        /* ─── SCORM 2004 Wrapper ─── */
+        function findSCORM2004API(win) {
+            let attempts = 0;
+            while (win && attempts < 10) {
+                if (win.API_1484_11) return win.API_1484_11;
+                if (win === win.parent) break;
+                win = win.parent;
+                attempts++;
+            }
+            return null;
+        }
+
+        // findSCORM2004API walks up to window.parent; in a sandboxed / cross-
+        // origin embed (e.g. Gemini Education's preview iframe, which has no
+        // allow-same-origin) reading win.API_1484_11 on the parent throws a
+        // SecurityError. Without this guard the throw aborts init before the
+        // "Begin Challenge" button is wired, so the preview looks dead while the
+        // downloaded file (not sandboxed) works. Guard it: a missing LMS just
+        // means run standalone.
+        let scormAPI = null;
+        try { scormAPI = findSCORM2004API(window); } catch (e) { scormAPI = null; }
+        let scormConnected = false;
+
+        function scormInit() {
+            if (!scormAPI) return;
+            try {
+                const result = scormAPI.Initialize('');
+                scormConnected = (result === 'true' || result === true);
+            } catch (e) { /* no SCORM environment */ }
+        }
+
+        function scormSetValue(key, value) {
+            if (!scormConnected || !scormAPI) return;
+            try { scormAPI.SetValue(key, String(value)); } catch (e) { /* ignore */ }
+        }
+
+        function scormCommit() {
+            if (!scormConnected || !scormAPI) return;
+            try { scormAPI.Commit(''); } catch (e) { /* ignore */ }
+        }
+
+        function scormTerminate() {
+            if (!scormConnected || !scormAPI) return;
+            try { scormAPI.Terminate(''); scormConnected = false; } catch (e) { /* ignore */ }
+        }
+
+        function reportToSCORM(scaledScore, mastery) {
+            scormSetValue('cmi.score.scaled', scaledScore.toFixed(2));
+            scormSetValue('cmi.score.raw', Math.round(state.score));
+            scormSetValue('cmi.score.min', '0');
+            scormSetValue('cmi.score.max', Math.round(state.maxPossibleScore));
+            scormSetValue('cmi.completion_status', 'completed');
+            scormSetValue('cmi.success_status', mastery ? 'passed' : 'failed');
+            scormSetValue('cmi.suspend_data', JSON.stringify({
+                answers: state.answers,
+                score: state.score,
+                bestStreak: state.bestStreak,
+                reflection: state.reflectionData,
+                completed: true,
+            }));
+            scormCommit();
+        }
+
+        window.addEventListener('beforeunload', function() {
+            if (scormConnected) {
+                if (state.answers.length > 0 && state.answers.length < state.questions.length) {
+                    scormSetValue('cmi.suspend_data', JSON.stringify({
+                        currentIndex: state.currentIndex,
+                        answers: state.answers,
+                        score: state.score,
+                        completed: false,
+                    }));
+                    scormCommit();
+                }
+                scormTerminate();
+            }
+        });
+
+        /* ─── Start ─── */
+        scormInit();
+        init();
+
+        document.getElementById('btn-start').addEventListener('click', () => {
+            showScreen('question-screen');
+            showQuestion();
+        });
+    });
+    </script>
+</body>
+
+</html>
