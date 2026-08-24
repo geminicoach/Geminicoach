@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rewriting the Signal: Contraception by Mechanism</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 5 · Module 2</div>
+    <h1 class="ch-title">Rewriting the Signal: Contraception by Mechanism</h1>
+    <p class="ch-subtitle">Once you know the axis and the cycle, every method becomes a legible intervention in a system you already understand.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> question arrives in almost every conversation about hormonal contraception, usually phrased with more worry than the situation warrants: "My bleeding changed. Is something wrong with me?" If you have worked through the earlier chapters, you are unusually well equipped to answer. You know that the bleed at the end of a natural cycle is the visible consequence of an ovulation that already happened, weeks earlier, upstream. You know that the hypothalamic-pituitary-ovarian axis (hereafter the axis) runs the whole show through a rhythm of feedback. So when a method quiets that bleed or scrambles it, you can ask the right question: is the axis still cycling underneath, or has the method rewritten the signal on purpose?</p>
+    <p>That single reframe is the work of this chapter. We will not memorize brand names. We will sort methods by what they actually do to four things people most want to understand: ovulation, the cycle, bleeding, and the return of fertility after stopping. And we will keep one boundary firm throughout. This is education about mechanism. It is never advice about choosing, starting, or stopping any method. Those decisions belong to a person and their clinician.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The frame: four questions, one axis</h2>
+    <p>Before the methods, the refresh. A natural ovulatory cycle is a conversation. The hypothalamus releases gonadotropin-releasing hormone in pulses. The pituitary answers with two gonadotropins: <span class="ch-key">follicle-stimulating hormone</span> and <span class="ch-key">luteinizing hormone</span>. Rising estrogen from a maturing follicle eventually flips a switch, and the pituitary fires a sharp <span class="ch-key">luteinizing hormone surge</span>. That surge is the trigger. Ovulation follows within roughly a day. The emptied follicle becomes the corpus luteum, which secretes progesterone to prepare the uterine lining, and if no pregnancy occurs, that lining is shed. The bleed you see is the closing punctuation of a sentence that began with the surge.</p>
+    <p>Every contraceptive we will discuss intervenes somewhere in that sentence. To keep the analysis honest, hold four questions ready for each method:</p>
+    <p><em>One:</em> does it stop ovulation? <em>Two:</em> does it leave the natural cycle running, or replace it? <em>Three:</em> what does it do to bleeding, and is that bleeding a real menstrual period or an induced event? <em>Four:</em> how quickly does fertility return after stopping? Answer those four, grade the confidence of each answer, and you understand the method.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on, predict: if a method abolishes the luteinizing hormone surge, what happens to ovulation, and therefore to the corpus luteum, and therefore to progesterone? Trace the chain forward. You already know it.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial diagram of the hypothalamic-pituitary-ovarian feedback loop, drawn in the style of a scientist's clean notebook plate. Three simple nodes connected by curved arrows: a small brain region at top labelled 'hypothalamus', a rounded gland below it labelled 'pituitary', and a stylized ovary at the base labelled 'ovary'. Warm sepia ink lines over soft teal and ochre washes on cream paper. A dotted feedback arrow curves back upward from ovary to hypothalamus, labelled 'feedback'. Composition centred, generous margins, textbook clarity." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch5-img1.jpg" alt="<em>The loop every method edits: signal down, feedback up.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The loop every method edits: signal down, feedback up.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Combined hormonal methods: overriding the axis</h2>
+    <p><span class="ch-key">Combined hormonal methods</span> deliver both an estrogen and a progestin. This is the pill most people picture, and the mechanism extends to the combined patch and the combined vaginal ring, which differ in delivery route rather than in principle. The strategy is elegant and blunt at the same time: supply steady levels of both hormones from outside, and the axis reads the environment as already handled.</p>
+    <p>Here is the causal chain. Constant exogenous estrogen and progestin suppress the pituitary's output of gonadotropins. With follicle-stimulating hormone held low, follicles do not mature normally. Critically, the steady hormonal background prevents the estrogen spike that would otherwise trigger the luteinizing hormone surge. No surge, no ovulation. A mathematical model of the hormonal cycle showed this explicitly: synthetic estrogen and progestin prevent ovulation by suppressing pituitary gonadotropin output and blocking the luteinizing hormone surge, and the simulations reproduced how quickly a non-ovulatory state is established (Wright et al., 2020).</p>
+    <p>The ESHRE Capri Workshop Group (2001) added an important nuance that this course should not flatten. The main mode of action is inhibition of ovulation, driven chiefly by the estrogen dose in combined oral contraceptives. Lower-dose formulations, which are now the norm for safety reasons, lean more heavily on suppression of the luteinizing hormone surge and on disruption of the endometrial cycle to make up the difference. In other words, the lower the estrogen, the more the method depends on that final surge-blocking step rather than on shutting follicles down entirely.</p>
+    <p>This matters because ovarian activity is not fully switched off. A systematic review of 48 studies, using hormonal markers (follicle-stimulating hormone, luteinizing hormone, estradiol, anti-Mullerian hormone) and ultrasound markers (antral follicle count, ovarian volume), found that follicular development continues during hormonal contraceptive use but is significantly suppressed, with gonadotropin and estradiol levels reduced (D'Arpe et al., 2016). Lower-dose formulations allowed more "follicular escape," meaning some follicular growth slips through, which is exactly why the surge-blocking mechanism carries more of the load in those pills. The system is dialed down, not deleted.</p>
+    <h3>What you see: the withdrawal bleed</h3>
+    <p>Now the point this course is uniquely positioned to make. On a standard combined regimen, you take active hormone for a stretch and then either take placebo pills or remove the ring or patch for a hormone-free interval. During that interval, hormone levels drop, the lining that was maintained can no longer be sustained, and it sheds. That bleed is a <span class="ch-key">withdrawal bleed</span>. It is not a menstrual period.</p>
+    <p>The distinction is not pedantic. A true menstrual period is the downstream consequence of an ovulation that occurred. A withdrawal bleed is the response to a scheduled drop in externally supplied hormones. No ovulation preceded it. It carries no information about whether you ovulated, because you did not. This is why continuous or extended regimens, which skip the hormone-free interval, can safely reduce or eliminate bleeding altogether: there is no ovulatory event whose shedding you are obligated to complete. Continued combined use is associated with a thin, atrophic endometrium (The ESHRE Capri Workshop Group, 2001), and a thin lining simply has less to shed.</p>
+    <p>Keep this filed carefully, because it is the load-bearing idea for a later chapter. An absent or altered bleed on a combined method is an expected, medically induced change. It is a different phenomenon from a cycle going quiet because the axis is underfed. We will return to that contrast.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="axis-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">What Happened to the Axis?</div>
+    </div>
+    <p class="ch-widget-sub">Select a method and watch the axis reconfigure. The side panel names the resulting bleed as natural or medically induced.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Method</span>
+        <select class="ch-widget-select" id="axis-method">
+          <option value="none">Natural cycle (no method)</option>
+          <option value="combined">Combined hormonal (pill, patch, ring)</option>
+          <option value="pop">Progestin-only pill</option>
+          <option value="implant">Etonogestrel implant</option>
+          <option value="lng">Hormonal intrauterine device (levonorgestrel)</option>
+          <option value="copper">Copper intrauterine device</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Gonadotropin output</span>
+        <span class="ch-meter-bar"><span id="axis-gonad" style="width:80%"></span></span>
+        <span class="ch-meter-num" id="axis-gonad-n">8</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Luteinizing hormone surge</span>
+        <span class="ch-meter-bar"><span id="axis-surge" style="width:90%"></span></span>
+        <span class="ch-meter-num" id="axis-surge-n">9</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Ovulation likelihood</span>
+        <span class="ch-meter-bar"><span id="axis-ovu" style="width:90%"></span></span>
+        <span class="ch-meter-num" id="axis-ovu-n">9</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cervical mucus barrier</span>
+        <span class="ch-meter-bar"><span id="axis-mucus" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="axis-mucus-n">2</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="axis-readout"><strong>Axis intact.</strong> The natural loop runs freely. Any bleed here is a true menstrual period following ovulation.</p>
+
+    <button class="ch-widget-btn" id="axis-btn">Reconfigure axis</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>Progestin-only methods: same hormone family, quieter footprint</h2>
+    <p>Remove the estrogen and keep only a progestin, and the mechanism shifts. <span class="ch-key">Progestin-only methods</span> include the progestin-only pill (sometimes called the mini-pill), the injectable, the implant, and the hormonal intrauterine device. Grouping them together is convenient but slightly misleading, because they differ dramatically in dose, in delivery, and therefore in how much of their effect is systemic versus local. This is where sorting by mechanism earns its keep.</p>
+    <p>Progestins act through several overlapping routes. They can suppress ovulation by dampening the gonadotropins and blunting the luteinizing hormone surge. They thicken cervical mucus into a barrier that impedes sperm. They thin and alter the endometrial lining, making it less receptive. Different progestin methods rely on these routes in different proportions, and often more than one operates at once. The honest position is that the relative contribution of each route is not equally well established, a point we will grade as we go.</p>
+    <h3>The progestin-only pill</h3>
+    <p>Traditional progestin-only pills deliver a low dose and are frequently described as working chiefly through cervical mucus thickening, with inconsistent ovulation suppression. Here the evidence deserves a caution. A pointed review examined the assumption that cervical mucus thickening is a reliable contraceptive mechanism and found that, despite how often it is cited, surprisingly little direct experimental evidence confirms the contraceptive effect of mucus changes for progestin-only methods (Han et al., 2017). The mechanism is plausible and probably real, but "probably real" is not the same as "well demonstrated." Newer progestin-only pills using drospirenone suppress ovulation more consistently, shifting the balance back toward the axis-level mechanism.</p>
+    <h3>The etonogestrel implant</h3>
+    <p>The subdermal implant is a different animal, and a much more effective one. A systematic review of 51 studies concluded that the implant achieves contraception primarily by suppressing ovulation, secondarily by altering cervical mucus and modifying the endometrium (Moray et al., 2021). Because it delivers a steady, sufficient dose of etonogestrel, ovulation suppression is its dominant and dependable route, which places it among the most effective reversible methods available. Its main drawback is not effectiveness but tolerability: irregular bleeding is the leading reason people discontinue it.</p>
+    <p>And that irregular bleeding is the same conceptual point again, in a new costume. On the implant, bleeding can be unpredictable, prolonged, infrequent, or absent. None of these patterns signals a problem with the axis or with fertility. They reflect the endometrium responding to a continuous progestin with no cyclic estrogen to organize it. The lining is being managed pharmacologically, so its behavior no longer reports on an underlying cycle.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A person on the implant has had no bleeding for four months and is worried. Using the four questions, how would you explain, calmly and without diagnosing, why an absent bleed here is an expected medicated effect rather than evidence of a health problem? What would you decline to do?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Two devices, same shape, opposite logic</h2>
+    <p>Both intrauterine devices sit in the uterus, but they operate on entirely different principles. This is the cleanest illustration in the whole chapter of why mechanism, not appearance, is the right sorting key.</p>
+    <h3>The hormonal intrauterine device</h3>
+    <p>The <span class="ch-key">levonorgestrel intrauterine system</span> releases a progestin locally, right at the endometrium. Because the dose is delivered where it acts, the systemic effect is comparatively small. A landmark review established that this device works predominantly through local endometrial effects, including glandular atrophy, decidualization of the stroma, and thickening of cervical mucus, with only minimal systemic ovarian suppression (Ortiz & Croxatto, 2007). For many users, ovulation continues. The natural cycle upstream is largely intact; the intervention is concentrated at the lining and the cervix.</p>
+    <p>The molecular signature confirms how active that local intervention is. Endometrial transcriptional profiling found that the levonorgestrel system produces pronounced changes in 2,509 genes, predominantly in immune and inflammatory pathways (Gemzell-Danielsson et al., 2020). The lining is not merely thinned; it is transformed. This is why bleeding on the hormonal device typically becomes much lighter over time, and often stops. That reduction in bleeding is again a medically induced change at the endometrium, and it can coexist with continued ovulation upstream. A person can be ovulating and barely bleeding at the same time. If the earlier chapters made bleeding feel like a reliable readout of the cycle, this is the case that complicates it.</p>
+    <h3>The copper intrauterine device</h3>
+    <p>The <span class="ch-key">copper intrauterine device</span> uses no hormones at all. Copper ions provoke a local inflammatory response and reach spermicidal concentrations in the fluids throughout the reproductive tract, primarily preventing fertilization while leaving the natural ovulatory cycle intact (Ortiz & Croxatto, 2007). Read that last clause carefully. The axis keeps cycling. Ovulation still happens. The luteinizing hormone surge still fires. The lining still builds and sheds on its own schedule.</p>
+    <p>The transcriptome study drives the contrast home in striking fashion: while the hormonal device rewrote thousands of genes, the copper device produced an endometrial transcriptome indistinguishable from ordinary luteal-phase endometrium (Gemzell-Danielsson et al., 2020). Molecularly, the copper device barely disturbs the lining's normal program. This is also why its most common side effect runs in the opposite direction from the hormonal device: bleeding tends to be heavier or more crampy, because the natural period is still occurring and the local inflammatory environment can amplify it. Two devices of the same shape, and the copper one leaves you with a real menstrual period while the hormonal one often abolishes bleeding entirely.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide comparison plate on cream paper, two panels side by side, in the register of a vintage scientific illustration with fine ink linework and muted watercolour. Left panel shows a T-shaped intrauterine device wrapped in fine copper-coloured wire, labelled 'copper IUD' in small serif italics, with a tiny caption 'natural cycle intact'. Right panel shows a T-shaped device with a small hormone reservoir at its stem in soft teal, labelled 'hormonal IUD', with a tiny caption 'lining altered'. Warm ochre, copper, and pale teal palette. Balanced composition, generous margins, no other text, no watermarks." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch5-img2.jpg" alt="<em>Same silhouette, opposite logic: one edits the lining, the other leaves the cycle running.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Same silhouette, opposite logic: one edits the lining, the other leaves the cycle running.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Return of fertility: reassuringly boring</h2>
+    <p>The fourth question is often the most emotionally loaded, and the evidence here is unusually clean and calming. A systematic review and meta-analysis of 22 studies covering 14,884 people found a pooled pregnancy rate of 83.1 percent (95 percent confidence interval 78.2 to 88 percent) within the first 12 months after discontinuing reversible contraception (Tadele Girum & Abebaw Wasie, 2018). Return of fertility did not differ significantly between hormonal methods and intrauterine device users. Neither the type of progestin nor the duration of oral contraceptive use significantly influenced the time to return of fertility.</p>
+    <p>Translate that into practice. For reversible methods, fertility comes back, and it comes back on a broadly similar timeline regardless of how long the method was used. The persistent worry that years on the pill "use up" fertility or cause a lasting delay is not supported. The mechanistic model discussed earlier reinforces the biology: once combined treatment ends, the cycle returns to normal function relatively quickly (Wright et al., 2020).</p>
+    <p>One honest asterisk belongs here. The injectable progestin is the recognized exception, with a longer and more variable delay before ovulation resumes after the last dose. That is a property of that specific method's pharmacology, not a general feature of hormonal contraception, and it does not indicate damage. Beyond that caveat, the headline stands: for the reversible methods in this chapter, return of fertility is reassuringly boring.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="matrix-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Method Mechanism Matrix</div>
+    </div>
+    <p class="ch-widget-sub">Predict each cell for a method, then reveal the evidence-graded answer. The confidence badge keeps the honest-grading habit alive.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Method</span>
+        <select class="ch-widget-select" id="mx-method">
+          <option value="combined">Combined hormonal</option>
+          <option value="pop">Progestin-only pill</option>
+          <option value="implant">Etonogestrel implant</option>
+          <option value="lng">Hormonal intrauterine device</option>
+          <option value="copper">Copper intrauterine device</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your prediction: effect on ovulation</span>
+        <select class="ch-widget-select" id="mx-ovu">
+          <option value="stops">Stops it reliably</option>
+          <option value="partial">Suppresses it partly</option>
+          <option value="intact">Leaves it intact</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your prediction: the bleed is</span>
+        <select class="ch-widget-select" id="mx-bleed">
+          <option value="withdrawal">Induced withdrawal bleed</option>
+          <option value="altered">Medically altered, often lighter or absent</option>
+          <option value="natural">A true menstrual period</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="mx-readout">Make your two predictions, then reveal the graded answer.</p>
+
+    <button class="ch-widget-btn" id="mx-btn">Reveal graded answer</button>
+  </div>
+
+  <section class="ch-section">
+    <h2>The confusion this course is built to correct</h2>
+    <p>We can now state the central clarification plainly. There are two very different reasons a bleed might disappear or change, and they must not be confused.</p>
+    <p>The first is a <span class="ch-key">medically induced change</span>. A combined method suppresses the axis and produces a scheduled withdrawal bleed, which can be minimized deliberately. A progestin method thins or reorganizes the lining so that bleeding becomes irregular, light, or absent. In every one of these cases, the altered bleed is the expected, designed consequence of the method. It is a sign the method is doing its job. It is not evidence of a health problem, and it carries no implication about future fertility.</p>
+    <p>The second is a cycle going quiet because the axis itself has powered down, most often when energy availability is chronically too low. That is a fundamentally different situation, and it is the subject of the amenorrhea chapter ahead. It can be a signal worth taking seriously, sometimes as part of the pattern known as Relative Energy Deficiency in Sport (RED-S). The recognize-and-refer skill you are building is to notice that pattern and understand it may warrant professional evaluation, never to diagnose or treat it.</p>
+    <p>Here is why keeping the two apart is so important, and where you must be especially disciplined. On a hormonal method, the axis is already being managed pharmacologically, so an absent bleed cannot serve as a window onto energy status. The signal has been overwritten. You cannot read an underfed axis through a bleed that the method has already silenced. This is precisely the kind of situation where the clinician boundary is firmest. Your role is to explain mechanism clearly and without alarm. It is not to interpret an individual's bleeding as healthy or unhealthy, and it is certainly not to advise anyone on choosing, starting, continuing, or stopping contraception. A note of humility fits well here: this course distills the research, but clinical judgment and lived female experience carry knowledge that no summary can replace.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The main mode of action of combined oral contraceptives is inhibition of ovulation. Lower-dose formulations depend more on suppression of the luteinizing hormone surge and disruption of the endometrial cycle.</p>
+    <cite>Paraphrased from The ESHRE Capri Workshop Group (2001)</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Sort methods by mechanism, not brand. Ask four questions of each: does it stop ovulation, does it leave the natural cycle running, what does it do to bleeding, and how fast does fertility return.</li>
+      <li>Combined hormonal methods override the axis by supplying steady estrogen and progestin, suppressing gonadotropins and abolishing the luteinizing hormone surge. The bleed you see is an induced withdrawal bleed, not a menstrual period.</li>
+      <li>Progestin-only methods work through overlapping routes: ovulation suppression, cervical mucus thickening, and endometrial thinning. The implant suppresses ovulation dependably; the mucus mechanism is widely cited but not strongly demonstrated.</li>
+      <li>The two intrauterine devices are opposites. The hormonal device transforms the lining locally while often leaving ovulation intact; the copper device uses no hormones and leaves the natural cycle, and a real period, fully running.</li>
+      <li>For reversible methods, fertility returns on a broadly similar timeline regardless of duration of use, with roughly 83 percent conceiving within a year; the injectable is the notable exception.</li>
+      <li>An altered or absent bleed on a hormonal method is a medically induced change, not a sign of a problem, and it is a different phenomenon from a cycle silenced by an underfed axis. Explaining that difference is your role; interpreting or advising on the method is not.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We separated the two ways a bleed can go quiet and set one of them aside as induced by design. Next we turn to the other one: the cycle that falls silent because the axis has powered down. The amenorrhea chapter builds the recognize-and-refer skill in earnest, including its links to energy availability and Relative Energy Deficiency in Sport, and it asks you to hold the clinician boundary as firmly there as you did here.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>D'Arpe, S., Di Feliciantonio, M., Candelieri, M., Franceschetti, S., Piccioni, M. G., & Bastianelli, C. (2016). Ovarian function during hormonal contraception assessed by endocrine and sonographic markers: A systematic review. Reproductive BioMedicine Online, 33(4), 436 to 448. https://doi.org/10.1016/j.rbmo.2016.07.010</p>
+    <p>Gemzell-Danielsson, K., Berger, C., Lalitkumar, P. G. L., Lindblom, L., Mork, C., & Borg Lundh, G. (2020). Differential effects of the hormonal and copper intrauterine device on the endometrial transcriptome. Scientific Reports, 10, Article 6088. https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7181869/</p>
+    <p>Han, L., Taub, R., & Jensen, J. T. (2017). Cervical mucus and contraception: What we know and what we don't. Contraception, 96(5), 310 to 321. https://doi.org/10.1016/j.contraception.2017.07.168</p>
+    <p>Moray, K. V., Chaurasia, H., Sachin, O., & Joshi, B. (2021). A systematic review on clinical effectiveness, side-effect profile and meta-analysis on continuation rate of etonogestrel contraceptive implant. Reproductive Health, 18, Article 4. https://doi.org/10.1186/s12978-020-01054-y</p>
+    <p>Ortiz, M. E., & Croxatto, H. B. (2007). Copper-T intrauterine device and levonorgestrel intrauterine system: Biological bases of their mechanism of action. Contraception, 75(6 Suppl.), S16 to S30. https://doi.org/10.1016/j.contraception.2007.01.020</p>
+    <p>Tadele Girum, & Abebaw Wasie. (2018). Return of fertility after discontinuation of contraception: A systematic review and meta-analysis. Contraception and Reproductive Medicine, 3, Article 9. https://doi.org/10.1186/s40834-018-0064-y</p>
+    <p>The ESHRE Capri Workshop Group. (2001). Ovarian and endometrial function during hormonal contraception. Human Reproduction, 16(7), 1527 to 1535. https://doi.org/10.1093/humrep/16.7.1527</p>
+    <p>Wright, A. A., Fayad, G. N., Selgrade, J. F., & Olufsen, M. S. (2020). Mechanistic model of hormonal contraception. PLoS Computational Biology, 16(6), Article e1007848. https://doi.org/10.1371/journal.pcbi.1007848</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 5 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('axis-widget');
+    if(!w) return;
+    var sel = w.querySelector('#axis-method');
+    var btn = w.querySelector('#axis-btn');
+    var readout = w.querySelector('#axis-readout');
+    var bars = {
+      gonad: w.querySelector('#axis-gonad'),
+      surge: w.querySelector('#axis-surge'),
+      ovu: w.querySelector('#axis-ovu'),
+      mucus: w.querySelector('#axis-mucus')
+    };
+    var nums = {
+      gonad: w.querySelector('#axis-gonad-n'),
+      surge: w.querySelector('#axis-surge-n'),
+      ovu: w.querySelector('#axis-ovu-n'),
+      mucus: w.querySelector('#axis-mucus-n')
+    };
+    var data = {
+      none: {gonad:8,surge:9,ovu:9,mucus:2, txt:"<strong>Axis intact.</strong> The natural loop runs freely. Any bleed here is a true menstrual period following ovulation."},
+      combined: {gonad:2,surge:1,ovu:1,mucus:6, txt:"<strong>Axis overridden.</strong> Gonadotropins suppressed, the luteinizing hormone surge abolished, no ovulation. The scheduled bleed is a <em>medically induced withdrawal bleed</em>, not a period."},
+      pop: {gonad:5,surge:5,ovu:5,mucus:7, txt:"<strong>Axis partly dampened.</strong> Ovulation suppression is inconsistent for older progestin-only pills; the cervical mucus barrier carries much of the load (though this route is more assumed than proven). Bleeding is <em>medically altered</em>, often irregular."},
+      implant: {gonad:3,surge:2,ovu:2,mucus:7, txt:"<strong>Axis suppressed dependably.</strong> The implant's dominant route is ovulation suppression, backed by mucus and endometrial change. Bleeding is <em>medically altered</em>: irregular, light, or absent by design."},
+      lng: {gonad:7,surge:7,ovu:7,mucus:8, txt:"<strong>Axis largely intact, lining transformed.</strong> Ovulation often continues; the action is local at the endometrium and cervix. Bleeding becomes <em>medically altered</em>, usually much lighter or absent, even while ovulation persists."},
+      copper: {gonad:8,surge:9,ovu:9,mucus:3, txt:"<strong>Axis fully intact, no hormones.</strong> Copper prevents fertilization locally; ovulation and the surge continue. The bleed is a <em>true menstrual period</em>, sometimes heavier."}
+    };
+    function apply(){
+      var d = data[sel.value] || data.none;
+      ['gonad','surge','ovu','mucus'].forEach(function(k){
+        bars[k].style.width = (d[k]*10)+'%';
+        nums[k].textContent = d[k];
+      });
+      readout.innerHTML = d.txt;
+    }
+    btn.addEventListener('click', apply);
+    sel.addEventListener('change', apply);
+    apply();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('matrix-widget');
+    if(!w) return;
+    var method = w.querySelector('#mx-method');
+    var pOvu = w.querySelector('#mx-ovu');
+    var pBleed = w.querySelector('#mx-bleed');
+    var readout = w.querySelector('#mx-readout');
+    var btn = w.querySelector('#mx-btn');
+    var ans = {
+      combined: {ovu:'stops', bleed:'withdrawal', conf:'High confidence',
+        txt:"Ovulation stops reliably through gonadotropin suppression and an abolished luteinizing hormone surge. The bleed is an induced withdrawal bleed. Return of fertility is prompt (Wright et al., 2020)."},
+      pop: {ovu:'partial', bleed:'altered', conf:'Moderate confidence',
+        txt:"Older progestin-only pills suppress ovulation inconsistently and are said to rely on cervical mucus, though that route is weakly demonstrated (Han et al., 2017). Bleeding is medically altered and often irregular."},
+      implant: {ovu:'stops', bleed:'altered', conf:'High confidence',
+        txt:"The implant's primary route is dependable ovulation suppression, with mucus and endometrial effects secondary (Moray et al., 2021). Bleeding is medically altered; irregularity is the top reason for discontinuation."},
+      lng: {ovu:'intact', bleed:'altered', conf:'High confidence',
+        txt:"The hormonal device acts locally on the endometrium and cervix with minimal ovarian suppression, so ovulation often continues (Ortiz & Croxatto, 2007). Bleeding is medically altered, usually lighter or absent."},
+      copper: {ovu:'intact', bleed:'natural', conf:'High confidence',
+        txt:"Copper prevents fertilization without hormones and leaves the ovulatory cycle intact (Ortiz & Croxatto, 2007). The bleed is a true menstrual period, sometimes heavier or crampier."}
+    };
+    btn.addEventListener('click', function(){
+      var a = ans[method.value];
+      if(!a){ return; }
+      var ovuOk = pOvu.value === a.ovu;
+      var bleedOk = pBleed.value === a.bleed;
+      var verdict;
+      if(ovuOk && bleedOk){ verdict = "Both predictions match."; }
+      else if(ovuOk || bleedOk){ verdict = "One prediction matched, one did not."; }
+      else { verdict = "Neither prediction matched, worth a second look."; }
+      readout.innerHTML = "<strong>["+a.conf+"] "+verdict+"</strong> "+a.txt;
+    });
+    method.addEventListener('change', function(){
+      readout.innerHTML = "Make your two predictions, then reveal the graded answer.";
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

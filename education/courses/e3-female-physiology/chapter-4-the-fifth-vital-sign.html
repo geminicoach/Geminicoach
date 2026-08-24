@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fifth Vital Sign</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 4 · Module 2</div>
+    <h1 class="ch-title">The Fifth Vital Sign</h1>
+    <p class="ch-subtitle">Reading the menstrual cycle as a signal of whole-system health, without overreading a single month.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">W</span>hen a nurse takes your pulse, your blood pressure, your temperature, and counts your breaths, nobody thinks those numbers are the whole story of your health. They are quick, cheap windows into whether the machinery underneath is running. A resting heart rate of forty can mean an endurance athlete or a failing conduction system, and the number alone does not tell you which. It tells you where to look. That is exactly the spirit in which a growing body of clinical opinion asks us to read the menstrual cycle: as a recurring, low-cost, remarkably informative window into whether the whole reproductive axis is well fed, well rested, and doing its job.</p>
+    <p>This chapter teaches you to read that window with both curiosity and restraint. A regularly ovulatory cycle says something real. A single strange month usually does not. Learning the difference is most of the skill.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why "vital sign" is more than a slogan</h2>
+    <p>In 2015 the American College of Obstetricians and Gynecologists, working through its Committee on Adolescent Health Care and endorsed by the American Academy of Pediatrics, formally asked clinicians to treat the menstrual cycle as an additional vital sign in girls and adolescents (American College of Obstetricians and Gynecologists, 2015). Their argument was pragmatic: just as an abnormal blood pressure or heart rate can surface a serious condition early, an abnormal menstrual pattern can flag a health concern that would otherwise go unnoticed for years.</p>
+    <p>A 2025 systematic review pushed the idea from slogan to criteria. Rosen Vollmar and colleagues (2025) checked the cycle against the standard tests a measurement must pass to earn the title <span class="ch-key">vital sign</span>: does it predict health outcomes, indicate when treatment is needed, let you monitor a clinical course, help identify pathology, affirm wellness when it is normal, and respond to environmental exposures? The cycle does all six, from the first period through the years after the last one. That is a high bar, and it is worth pausing on why the cycle clears it.</p>
+    <p>The reason is architectural. A predictable, ovulatory cycle is not produced by the ovaries alone. It is the visible output of a conversation that runs from the hypothalamus in the brain, to the pituitary gland just below it, to the ovaries, and back again. This loop is called the <span class="ch-key">hypothalamic-pituitary-ovarian axis</span>, or the reproductive axis for short. The hypothalamus releases gonadotropin-releasing hormone, abbreviated GnRH, in carefully timed pulses. Those pulses tell the pituitary when to release its two gonadotropins. The ovaries respond, and their hormones feed back to fine-tune the brain. When you see a regular cycle with genuine ovulation, you are seeing evidence that this entire chain has enough energy, enough rest, and enough signaling integrity to complete a month-long negotiation on schedule. That is why the cycle reports on the whole system and not just the uterus.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A vital sign earns its status by pointing you somewhere, not by diagnosing on its own. Before reading further, ask yourself: what does a resting heart rate <em>not</em> tell you? Hold that same humility as we move to the cycle.</p>
+    </aside>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour anatomical diagram in the style of a vintage scientific plate, showing the communication loop of the reproductive axis. Three simple stylized structures stacked vertically: a brain region at top labeled 'hypothalamus', a small gland just beneath labeled 'pituitary', and an ovary at the bottom labeled 'ovary'. Curved arrows show a downward signaling path and an upward feedback path, forming a loop. Warm sepia ink lines with muted teal and ochre wash, cream paper background, subtle aged texture. Labels in small italic serif: 'hypothalamus', 'pituitary', 'ovary', and one arrow labeled 'feedback'. No numbers, no watermarks, no cropped letters, no people." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img1.jpg" alt="<em>The cycle is the visible output of a three-part conversation.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The cycle is the visible output of a three-part conversation.</em></figcaption></figure>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>What the gonadotropins and ovulation actually tell you</h2>
+    <p>Two pituitary hormones do most of the timing work, and they are worth refreshing because their names get used loosely. <span class="ch-key">Follicle-stimulating hormone</span> rises at the transition from one cycle's luteal phase into the next cycle's follicular phase. As the name says, it stimulates a cohort of follicles to begin growing and prompts them to secrete inhibin B. In the mid-follicular phase, one follicle is selected to become dominant while the others regress (Mihm et al., 2011). <span class="ch-key">Luteinizing hormone</span> is the trigger. A sharp surge in luteinizing hormone is what actually causes the dominant follicle to release its egg. Ovulation follows the surge by roughly a day.</p>
+    <p>Here is what these hormones honestly indicate, and where folk wisdom oversells them. A luteinizing hormone surge is the best widely available real-time sign that ovulation is <em>about to</em> happen, which is why urine-based ovulation predictor kits detect it. But a surge is a prediction, not a confirmation. It tells you the trigger has been pulled; it does not prove the egg was released or that a functional corpus luteum formed afterward. Genuine confirmation of ovulation comes from downstream evidence, most reliably a sustained rise in progesterone in the luteal phase, and it is that confirmed ovulation, not the surge alone, that certifies the axis completed its work.</p>
+    <p>The most important myth to retire is that a regular, normal-length cycle is automatically an ovulatory one. It is not. In a population-based study of 3,709 spontaneously menstruating women in Norway, none using hormonal contraception, Prior and colleagues (2015) assessed 1,545 women in their presumed luteal phase and found that only 63.3 percent were ovulatory. Thirty-seven percent were anovulatory in the month studied. Strikingly, the ovulatory and anovulatory groups did not differ meaningfully in age, body mass index, cycle length, age at first period, smoking, or self-reported health. In other words, a woman with a textbook-looking cycle can have a month without ovulation and show no outward tell. Regularity is reassuring, but it is not proof.</p>
+    <p>This matters for how you talk about fertility. Ovulation is necessary for natural conception, so confirmed ovulation is genuinely good news about that month. But a cycle is a snapshot of function, not a guarantee of outcome. It does not measure egg quality, tubal patency, a partner's contribution, or the many other factors conception depends on. Reading a cycle can tell you the axis is working. It cannot tell any specific person that they will conceive, or when. That last leap is clinical territory, and it belongs to a clinician who can order the right tests and see the whole person.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A friend gets a positive result on an ovulation predictor kit and says "so I definitely ovulated." What is the single most accurate correction you could offer, using the surge-versus-confirmation distinction above?</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="fw-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Fertile Window with Honest Uncertainty</div>
+    </div>
+    <p class="ch-widget-sub">Estimate the fertile window on a cycle, then reveal how far it can shift when ovulation timing varies. Compare a very regular cycle with a more variable one.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Typical cycle length (days)</span>
+        <select class="ch-widget-select" id="fw-length">
+          <option value="26">26</option>
+          <option value="28" selected>28</option>
+          <option value="30">30</option>
+          <option value="32">32</option>
+          <option value="34">34</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Cycle regularity</span>
+        <select class="ch-widget-select" id="fw-var">
+          <option value="regular" selected>Very regular (plus or minus 1 day)</option>
+          <option value="variable">More variable (plus or minus 5 days)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Best estimate of ovulation day</span>
+        <span class="ch-meter-bar"><span id="fw-bar-est" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="fw-num-est">14</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Uncertainty band (days it could fall on)</span>
+        <span class="ch-meter-bar"><span id="fw-bar-band" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="fw-num-band">3</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Confidence in the estimate</span>
+        <span class="ch-meter-bar"><span id="fw-bar-conf" style="width:80%"></span></span>
+        <span class="ch-meter-num" id="fw-num-conf">High</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="fw-btn">Reveal uncertainty</button>
+    <p class="ch-widget-sub" id="fw-readout" style="margin-top:14px;"></p>
+  </div>
+
+  <section class="ch-section">
+    <p>The widget makes a point that calendar math tends to hide. The fertile phase spans roughly the five days before ovulation through the day of ovulation itself, because sperm can survive several days in the reproductive tract while the egg is viable for less than a day (Mihm et al., 2011). If you knew the exact day of ovulation, that window would be tight and confident. But you rarely know it in advance. The moment cycle length varies from month to month, the plausible ovulation day smears across a range, and the honest fertile window widens with it. This is not a flaw in your estimate. It is the true state of the knowledge, and pretending otherwise is how well-meaning advice goes wrong.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>How wide is normal, really</h2>
+    <p>If there is one number to unlearn, it is twenty-eight. The idea of a fixed twenty-eight-day cycle is a historical convenience, not a biological rule, and the data have said so for more than half a century. The foundational evidence comes from the TREMIN study begun at the University of Minnesota, in which Treloar and colleagues (1967) tracked roughly 2,700 women across about 25,825 person-years of menstrual records. They showed that population variability in cycle length is greatest right after the first period and again in the years just before menopause, and that average cycle length gently declines from around thirty days at age twenty to just under twenty-seven days approaching perimenopause. In the first year after menarche, the range covering the middle 95 percent of cycles spanned an astonishing 65 days.</p>
+    <p>Modern datasets, drawn from hundreds of thousands of tracked cycles, confirm and sharpen the picture. Bull and colleagues (2019) analyzed 612,613 confirmed ovulatory cycles from 124,648 users of a fertility-tracking application. The mean cycle length was 29.3 days, not 28. And even within these confirmed ovulatory cycles the internal variation was large: the follicular phase averaged 16.9 days with a 95 percent confidence interval spanning 10 to 30 days, while the luteal phase averaged 12.4 days with a confidence interval of 7 to 17 days. Cycle length shortened by about 0.18 days per year of age between 25 and 45, and its variability increased sharply above age 40.</p>
+    <p>The Apple Women's Health Study, reported by Li and colleagues (2023), added demographic texture across 165,668 cycles from 12,608 participants. Average cycle length shortened with age until about 50 and then lengthened. Asian and Hispanic participants had slightly longer cycles on average than non-Hispanic white participants. Participants with a body mass index at or above 40 kilograms per square meter had cycles about 1.5 days longer. And variability followed a U-shape across the lifespan: lowest in the 35 to 39 age band and considerably higher, by roughly 46 percent, among those under 20 and those between 45 and 49.</p>
+    <p>Put these together and a practical picture emerges. A great deal of what looks like an alarming change is simply the wide, normal texture of a healthy cycle, especially in the years just after the first period and in the approach to menopause. The physiological reviews frame the everyday normal band as roughly 26 to 35 days with about five days of bleeding (Mihm et al., 2011), but the tails are genuinely wide and shift with age. Literacy here means holding two facts at once: normal is wider than most people believe, and it is not infinitely wide.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn editorial illustration in the style of a naturalist's field notebook, conveying how the spread of menstrual cycle length changes across the lifespan. A horizontal ribbon or band that is wide at the left (early reproductive years), narrows in the middle (mid reproductive years), and widens again at the right (approach to menopause), suggesting a U-shaped variability without any numerical axis ticks. Soft ochre and dusty rose wash over ink linework, cream paper, gentle stippling texture. Small handwritten italic serif labels only: 'after first period' at left, 'mid years' in centre, 'toward menopause' at right. No numbers, no charts, no gridlines, no watermarks, no people." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch4-img2.jpg" alt="<em>Variability is widest at the two ends of the reproductive years and narrowest in the middle.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Variability is widest at the two ends of the reproductive years and narrowest in the middle.</em></figcaption></figure>
+  </section>
+
+  <div class="ch-widget" id="nr-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Normal Range Explorer</div>
+    </div>
+    <p class="ch-widget-sub">Set a cycle pattern and see whether it sits comfortably within the wide normal range, near its edge, or in a zone where a clinician conversation makes sense. This tool never diagnoses; it explains where the boundaries sit and why.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Average cycle length (days)</span>
+        <select class="ch-widget-select" id="nr-length">
+          <option value="19">19</option>
+          <option value="22">22</option>
+          <option value="26">26</option>
+          <option value="29" selected>29</option>
+          <option value="33">33</option>
+          <option value="37">37</option>
+          <option value="42">42</option>
+          <option value="50">50</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Days of bleeding</span>
+        <select class="ch-widget-select" id="nr-bleed">
+          <option value="2">2</option>
+          <option value="4">4</option>
+          <option value="5" selected>5</option>
+          <option value="7">7</option>
+          <option value="9">9</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Month-to-month swing (days)</span>
+        <select class="ch-widget-select" id="nr-swing">
+          <option value="2" selected>Small (about 2)</option>
+          <option value="6">Moderate (about 6)</option>
+          <option value="12">Large (about 12)</option>
+          <option value="25">Very large (about 25)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cycle length placement</span>
+        <span class="ch-meter-bar"><span id="nr-bar-len" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="nr-num-len">OK</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Bleed length placement</span>
+        <span class="ch-meter-bar"><span id="nr-bar-bleed" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="nr-num-bleed">OK</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Variability placement</span>
+        <span class="ch-meter-bar"><span id="nr-bar-swing" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="nr-num-swing">OK</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="nr-btn">Assess the pattern</button>
+    <p class="ch-widget-sub" id="nr-readout" style="margin-top:14px;"></p>
+  </div>
+
+  <section class="ch-section">
+    <p>Notice what the explorer does and does not do. It labels regions, it never labels a person. The boundaries it uses are drawn from the literature above: cycles reliably shorter than about 21 days or longer than about 35 to 45 days, bleeding beyond about seven to eight days, or month-to-month swings large enough that you cannot predict the next period, are the patterns that reviews and guidelines flag as worth a professional look (Rosen Vollmar et al., 2025; American College of Obstetricians and Gynecologists, 2015). The tool is education. What it flags is a reason to <em>ask</em>, not an answer.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Signal versus a change worth a clinician's attention</h2>
+    <p>The whole practical value of the fifth vital sign lives in one distinction: telling ordinary variation apart from a change that warrants professional evaluation. Get this wrong in the alarmist direction and you frighten someone over a single late period that a stressful week fully explains. Get it wrong in the dismissive direction and you wave off a pattern that deserved attention months ago. Neither serves the person in front of you, and neither is your call to make on their behalf. Your job is to notice well and to know where the boundary of your role sits.</p>
+    <p>A workable frame is to weigh three things: the size of the deviation, its persistence, and its context. A one-month oddity, even a fairly dramatic one, is usually noise, because healthy cycles are genuinely noisy. The signals that deserve a clinician's eye are the ones that persist and cluster. Consistently very short or very long cycles, bleeding that is consistently very heavy or very prolonged, cycles that stop for several months, or a clear and sustained departure from a person's own established pattern: these are patterns, not blips, and patterns are what vital signs are for.</p>
+    <h3>The one recognize-and-refer thread</h3>
+    <p>Two related conditions deserve special naming because they hide inside "my cycle just got irregular" and because they connect the axis directly to energy and stress. The first is <span class="ch-key">amenorrhea</span>, the absence of menstruation, whether periods never started or stopped for several months in someone who previously menstruated. The second is <span class="ch-key">Relative Energy Deficiency in Sport</span>, abbreviated RED-S, a syndrome in which chronically low energy availability disrupts many body systems, the reproductive axis among them.</p>
+    <p>The mechanism is not mysterious, and it is one of the better-established findings in the whole field. Loucks and Thuma (2003) manipulated energy availability, defined as dietary energy intake minus exercise energy expenditure, in 29 regularly menstruating young women, and found that the pulsatile release of luteinizing hormone is disrupted once energy availability falls below a threshold of roughly 30 kilocalories per kilogram of lean body mass per day. The relationship is a threshold, not a gentle slope: above the line the axis is fine, and below it the brain quiets the pulses that drive the whole cycle. This is why a cycle that grows irregular or disappears can be the first visible sign that the system is underfed or overtrained. The cycle is doing exactly its job as a vital sign, reporting that the whole organism is short on fuel.</p>
+    <p>Here is the firm line. Learning to <em>notice</em> the possibility of amenorrhea or RED-S is squarely within your reach and is the point of this chapter. Diagnosing either, or interpreting them for a specific person, or deciding what to do about them, is clinical work that belongs to a qualified professional. The same firmness applies to three areas where the temptation to interpret is especially strong and the stakes are especially high: contraception, which changes the cycle by design and rewrites every rule above; amenorrhea itself; and the postpartum period, where the axis is doing something genuinely different and normal ranges do not transfer. In all three, the correct move when something looks off is to recognize it and to point toward professional evaluation, not to explain it away and not to explain it yourself.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone tells you their previously clockwork cycle has vanished for four months while they have ramped up training and cut calories. Which two things from this section have you learned to <em>notice</em>, and what is the single appropriate next step, given that diagnosis is not yours to make?</p>
+    </aside>
+    <h3>A note on the evidence, and on humility</h3>
+    <p>It would be dishonest to leave you with more certainty than the science supports. The claim that a regularly ovulatory cycle reflects whole-system health is well grounded, and the energy-availability threshold is a genuinely strong result. But a large and popular industry of cycle-based training schedules, phase-specific diets, and symptom-timed supplements rests on weak, inconsistent, or contradictory data. Much of it extrapolates far beyond what the studies actually show, often from small samples with loose control of confounders. When you encounter a confident claim that you should eat, train, or supplement a particular way on a particular cycle day, the appropriate default is skepticism, not adoption. Grade the evidence honestly and say so plainly.</p>
+    <p>Finally, a word of humility that the course itself takes seriously. What you are reading is a distillation of research, and a distillation is not the territory. Clinical expertise and the lived experience of women reading their own bodies carry knowledge that no review captures. The fifth vital sign is a powerful lens precisely because it is simple and cheap, but a lens is for looking, not for concluding. Notice well, hold the boundary, and hand the interpreting to those whose role it is.</p>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>Identification of abnormal menstrual patterns in adolescence may improve early identification of potential health concerns for the rest of the reproductive years and beyond.</p>
+    <cite>American College of Obstetricians and Gynecologists Committee on Adolescent Health Care, 2015</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A regularly ovulatory cycle is a vital sign because it reports on the whole reproductive axis, the loop running from the hypothalamus to the pituitary to the ovaries, and it meets all six standard criteria for a vital sign.</li>
+      <li>Follicle-stimulating hormone recruits and grows follicles; a luteinizing hormone surge triggers ovulation. A surge predicts ovulation but does not confirm it; confirmation comes from downstream progesterone.</li>
+      <li>A regular, normal-length cycle is not automatically ovulatory. In one population study, 37 percent of assessed cycles were anovulatory with no outward tell.</li>
+      <li>Normal is far wider than twenty-eight days. Average length runs closer to 29 to 30 days, variability is greatest just after the first period and near menopause, and the everyday band spans roughly 26 to 35 days.</li>
+      <li>Distinguish a change worth attention from ordinary noise by weighing size, persistence, and context. Single odd months are usually noise; persistent, clustered patterns are signal.</li>
+      <li>Recognize, do not diagnose: amenorrhea and Relative Energy Deficiency in Sport can hide inside "my cycle got irregular," and low energy availability disrupts luteinizing hormone pulsatility below about 30 kilocalories per kilogram of lean body mass per day. Refer.</li>
+      <li>Keep the clinician boundary firm around contraception, amenorrhea, and the postpartum period, and stay skeptical of cycle-based training and nutrition claims built on weak data.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have named amenorrhea and Relative Energy Deficiency in Sport and traced them back to the energy-availability threshold. Next we follow that thread all the way down: what happens across the axis when the system runs short of fuel, why the body treats reproduction as optional under scarcity, and how to recognize the early signs long before a period disappears, all while keeping firmly to the recognize-and-refer role that this chapter established.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>American College of Obstetricians and Gynecologists Committee on Adolescent Health Care. (2015). <em>Menstruation in girls and adolescents: Using the menstrual cycle as a vital sign</em> (Committee Opinion No. 651). https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2015/12/menstruation-in-girls-and-adolescents-using-the-menstrual-cycle-as-a-vital-sign</p>
+    <p>Bull, J. R., Rowland, S. P., Scherwitzl, E. B., Scherwitzl, R., Danielsson, K. G., & Harper, J. (2019). Real-world menstrual cycle characteristics of more than 600,000 menstrual cycles. <em>npj Digital Medicine, 2</em>, 83. https://doi.org/10.1038/s41746-019-0152-7</p>
+    <p>Li, H., Gibson, E. A., Jukic, A. M. Z., Baird, D. D., Wilcox, A. J., Curry, C. L., Fischer-Colbrie, T., Onnela, J. P., Williams, M. A., Hauser, R., Coull, B. A., & Mahalingaiah, S. (2023). Menstrual cycle length variation by demographic characteristics from the Apple Women's Health Study. <em>npj Digital Medicine, 6</em>, 100. https://doi.org/10.1038/s41746-023-00848-1</p>
+    <p>Loucks, A. B., & Thuma, J. R. (2003). Luteinizing hormone pulsatility is disrupted at a threshold of energy availability in regularly menstruating women. <em>The Journal of Clinical Endocrinology & Metabolism, 88</em>(1), 297–311. https://doi.org/10.1210/jc.2002-020369</p>
+    <p>Mihm, M., Gangooly, S., & Muttukrishna, S. (2011). The normal menstrual cycle in women. <em>Animal Reproduction Science, 124</em>(3–4), 229–236. https://doi.org/10.1016/j.anireprosci.2010.08.030</p>
+    <p>Prior, J. C., Naess, M., Langhammer, A., & Forsmo, S. (2015). Ovulation prevalence in women with spontaneous normal-length menstrual cycles: A population-based cohort from HUNT3, Norway. <em>PLOS ONE, 10</em>(8), e0134473. https://doi.org/10.1371/journal.pone.0134473</p>
+    <p>Rosen Vollmar, A., Wang, S., Wallace, R., & Mahalingaiah, S. (2025). The menstrual cycle as a vital sign: A comprehensive review. <em>Fertility and Sterility Reviews</em>. https://doi.org/10.1016/j.xfnr.2024.100081</p>
+    <p>Treloar, A. E., Boynton, R. E., Behn, B. G., & Brown, B. W. (1967). Variation of the human menstrual cycle through reproductive life. <em>International Journal of Fertility, 12</em>(1, Pt. 2), 77–126. https://pubmed.ncbi.nlm.nih.gov/5419031/</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 4 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('fw-widget');
+    if(!root) return;
+    var lenSel = root.querySelector('#fw-length');
+    var varSel = root.querySelector('#fw-var');
+    var btn = root.querySelector('#fw-btn');
+    var barEst = root.querySelector('#fw-bar-est');
+    var numEst = root.querySelector('#fw-num-est');
+    var barBand = root.querySelector('#fw-bar-band');
+    var numBand = root.querySelector('#fw-num-band');
+    var barConf = root.querySelector('#fw-bar-conf');
+    var numConf = root.querySelector('#fw-num-conf');
+    var readout = root.querySelector('#fw-readout');
+
+    function update(revealed){
+      var len = parseInt(lenSel.value,10);
+      // ovulation estimate ~ luteal phase of 14 days before next period
+      var ov = len - 14;
+      var swing = varSel.value === 'regular' ? 1 : 5;
+      // band: fertile window is 6 days; add uncertainty of ovulation timing on each side
+      var band = 6 + (swing*2);
+      var estPct = Math.max(10, Math.min(90, (ov/len)*100));
+      barEst.style.width = estPct.toFixed(0)+'%';
+      numEst.textContent = 'day '+ov;
+
+      if(!revealed){
+        barBand.style.width = '10%';
+        numBand.textContent = '?';
+        barConf.style.width = '10%';
+        numConf.textContent = '?';
+        readout.textContent = 'You have placed your best single guess at ovulation on day '+ov+'. Press reveal to see how wide the honest fertile window really is.';
+        return;
+      }
+      var bandPct = Math.max(15, Math.min(100, (band/len)*100));
+      barBand.style.width = bandPct.toFixed(0)+'%';
+      numBand.textContent = band+' days';
+      var conf = varSel.value === 'regular' ? 82 : 34;
+      barConf.style.width = conf+'%';
+      numConf.textContent = varSel.value === 'regular' ? 'High' : 'Low';
+      if(varSel.value === 'regular'){
+        readout.textContent = 'With a very regular cycle the fertile window is fairly tight, about '+band+' days, and your confidence is reasonably high. But note: even here the window is a range, not a single fertile day.';
+      } else {
+        readout.textContent = 'With a more variable cycle the plausible ovulation day smears out, so the honest fertile window balloons to about '+band+' days and confidence collapses. Calendar prediction alone cannot rescue this. That widening is the truth of the estimate, not a mistake in it.';
+      }
+    }
+
+    lenSel.addEventListener('change', function(){ update(false); });
+    varSel.addEventListener('change', function(){ update(false); });
+    btn.addEventListener('click', function(){ update(true); });
+    update(false);
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('nr-widget');
+    if(!root) return;
+    var lenSel = root.querySelector('#nr-length');
+    var bleedSel = root.querySelector('#nr-bleed');
+    var swingSel = root.querySelector('#nr-swing');
+    var btn = root.querySelector('#nr-btn');
+    var barLen = root.querySelector('#nr-bar-len');
+    var numLen = root.querySelector('#nr-num-len');
+    var barBleed = root.querySelector('#nr-bar-bleed');
+    var numBleed = root.querySelector('#nr-num-bleed');
+    var barSwing = root.querySelector('#nr-bar-swing');
+    var numSwing = root.querySelector('#nr-num-swing');
+    var readout = root.querySelector('#nr-readout');
+
+    // returns {level:0commonly normal,1worth watching,2consult, pct, label}
+    function assessLength(len){
+      if(len>=24 && len<=35) return {level:0,pct:45,label:'Commonly normal'};
+      if((len>=21 && len<24) || (len>35 && len<=42)) return {level:1,pct:70,label:'Worth watching'};
+      return {level:2,pct:95,label:'Consider consulting'};
+    }
+    function assessBleed(b){
+      if(b>=2 && b<=7) return {level:0,pct:45,label:'Commonly normal'};
+      if(b===8 || b===9) return {level:1,pct:72,label:'Worth watching'};
+      if(b>9) return {level:2,pct:95,label:'Consider consulting'};
+      return {level:1,pct:70,label:'Worth watching'};
+    }
+    function assessSwing(s){
+      if(s<=4) return {level:0,pct:30,label:'Commonly normal'};
+      if(s<=9) return {level:1,pct:60,label:'Worth watching'};
+      return {level:2,pct:95,label:'Consider consulting'};
+    }
+
+    function apply(bar,num,res){
+      bar.style.width = res.pct+'%';
+      num.textContent = res.label;
+    }
+
+    function update(){
+      var len = parseInt(lenSel.value,10);
+      var b = parseInt(bleedSel.value,10);
+      var s = parseInt(swingSel.value,10);
+      var rl = assessLength(len), rb = assessBleed(b), rs = assessSwing(s);
+      apply(barLen,numLen,rl);
+      apply(barBleed,numBleed,rb);
+      apply(barSwing,numSwing,rs);
+
+      var top = Math.max(rl.level, rb.level, rs.level);
+      var msg = '';
+      if(top===0){
+        msg = 'This pattern sits comfortably inside the wide normal range. Cycles of about 24 to 35 days, up to seven days of bleeding, and small month-to-month swings are what healthy variation looks like. Nothing here calls for a clinician on its own.';
+      } else if(top===1){
+        msg = 'This pattern sits near the edge of normal. It is not a diagnosis and often reflects age, stress, or an ordinary run of variable months, but it is worth watching over a few cycles to see whether it settles or persists.';
+      } else {
+        msg = 'One or more elements fall in a zone that would reasonably prompt a conversation with a clinician: for example, cycles reliably shorter than about 21 days or longer than about 42, bleeding beyond nine days, or swings so large you cannot predict the next period. This is a reason to ask, not an answer. Interpreting it for a specific person is clinical work.';
+      }
+      readout.textContent = msg;
+    }
+
+    lenSel.addEventListener('change', update);
+    bleedSel.addEventListener('change', update);
+    swingSel.addEventListener('change', update);
+    btn.addEventListener('click', update);
+    update();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rebuilding and Individualizing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 10 · Module 5</div>
+    <h1 class="ch-title">Rebuilding and Individualizing</h1>
+    <p class="ch-subtitle">The postpartum rebuild, and the final turn from the average to the actual person.</p>
+    <div class="ch-meta">
+      <span>19 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">A</span> body that has carried and delivered a pregnancy is not a body that broke and needs fixing. It is a body that did something extraordinary and is now remodeling the tissues it borrowed to do it. That distinction matters for everything that follows in this final chapter, because the language we use shapes the expectations we hold, and the single most common error in the postpartum conversation is treating recovery as a switch that flips back on at some fixed date rather than a staged biological process that unfolds over months.</p>
+    <p>This chapter closes the course with two movements. First, a respectful overview of what happens to the abdominal wall and pelvic floor after birth, offered so that you can recognize the terrain, not so that you can prescribe a path across it. Second, the turn the whole course has been building toward: from the population average to the individual person, who may well be you.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Set the boundary first, then walk the terrain</h2>
+    <p>Let us be exact about what this chapter is and is not, because the honest posture here is the whole lesson. Postpartum care sits squarely inside the clinical boundary. Nothing below is a rehabilitation plan, an exercise protocol, or a timeline you should apply to any real person, including yourself. It is an overview for informed understanding. The appropriate stance is to recognize what is happening in the tissues, to appreciate why patience is not optional, and to know when professional guidance is warranted.</p>
+    <p>This is not caution for its own sake. The evidence base itself refuses to support a universal protocol. A recent scoping review of twenty-eight studies on rehabilitation for <span class="ch-key">diastasis recti abdominis</span>, the separation of the two halves of the outermost abdominal muscle, found promising results across several approaches but concluded there is no consensus on the most effective program design, with substantial variability in diagnostic criteria, severity, and time since birth across the literature (Mamas et al., 2024). When the research cannot name a single best path, no chapter honestly can either.</p>
+    <p>So we will do the thing the evidence does support: describe the system, grade the confidence, and mark the edges of your role.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The abdominal wall as a pressure canister</h2>
+    <p>Refresh the anatomy briefly, because the rebuild only makes sense once the working system is clear. Picture the trunk as a soft cylinder, a pressure-managing canister. The <span class="ch-key">diaphragm</span> forms the top. The deep abdominal wall, chiefly the transversus abdominis wrapping around the sides and front, forms the walls. The <span class="ch-key">pelvic floor</span>, a hammock of muscle slung across the base of the pelvis, forms the bottom. When you lift, cough, laugh, or brace, these three structures coordinate to raise and distribute <span class="ch-key">intra-abdominal pressure</span>, the internal pressure that stiffens the trunk and protects the spine.</p>
+    <p>Coordination is the operative word. Intra-abdominal bracing is not one muscle firing hard. It is a canister managing pressure evenly, top and bottom and walls moving together so that force is shared rather than dumped onto the weakest surface. This is why the parts cannot be understood in isolation, and why an injury to one wall changes the behavior of the whole.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour anatomical diagram of the human trunk shown as a soft vertical cylinder or canister, cross-section from the side. The dome of the diaphragm forms the lid at the top, the deep abdominal wall wraps the front and sides, and the pelvic floor forms a curved hammock at the base. Soft arrows inside the cylinder suggest evenly distributed internal pressure. Muted earthy palette of warm ochre, terracotta, sage green, and slate grey on cream paper. Small neat italic serif labels: 'diaphragm' at top, 'deep abdominal wall' at the side, 'pelvic floor' at the base. Clean field-guide plate style, no photorealism, no people, no watermarks." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch10-img1.jpg" alt="<em>The trunk as a coordinated pressure canister: lid, walls, and floor working together.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The trunk as a coordinated pressure canister: lid, walls, and floor working together.</em></figcaption></figure>
+
+    <h3>What pregnancy and birth ask of the wall</h3>
+    <p>Across pregnancy, the growing uterus stretches and thins the midline connective tissue, the <span class="ch-key">linea alba</span>, that joins the two halves of the rectus abdominis down the front of the abdomen. Some degree of separation is nearly universal in late pregnancy. It is an adaptation, not a pathology. The clinical question is what happens afterward: how far the gap narrows, how well the connective tissue regains tension, and how well the deep wall relearns to generate and share pressure.</p>
+    <p>Prevalence estimates for persistent diastasis recti after birth range widely, from roughly thirty to sixty-eight percent, depending on how and when it is measured (multiple authors, 2024). That range is itself a teaching point. The condition is common, its measurement is inconsistent, and its profile is shaped by multiple interacting individual characteristics. In that same two-year cohort, advanced maternal age, higher parity, higher pre-pregnancy body mass index, and cesarean delivery all emerged as significant risk factors, which tells you immediately that no two rebuilds start from the same place.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If some abdominal separation is nearly universal by late pregnancy, why is "closing the gap" a poor sole measure of recovery? What is the canister actually meant to do that a gap measurement alone cannot capture?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Diastasis recti is a system problem, not a local one</h2>
+    <p>The temptation is to treat diastasis recti as a cosmetic concern about a visible gap or a bulge. The evidence points somewhere more important. A cross-sectional study directly linking separation severity to pelvic floor muscle activity, measured by electromyography, which records the electrical signals of muscle contraction, found that greater separation was associated with altered pelvic floor signals and altered anatomical structures (Fu et al., 2025). In other words, when the front wall of the canister loses tension, the floor of the canister changes how it works. The authors concluded that strategies should be tailored to severity and to individual factors such as delivery mode and parity, a conclusion you will hear echoed at every turn in this literature.</p>
+    <p>A second cross-sectional study using ultrasound imaging alongside pelvic floor electromyography reinforced the same point, reporting measurable differences in both the width of the muscle separation and the size of the levator ani muscle hiatus, the opening in the pelvic floor, between women with diastasis and controls (multiple authors, 2024). The message across these studies is consistent: the abdominal wall and the pelvic floor recover as a linked system, not as independent parts. This is exactly why the first widget below lets you watch pressure behave differently when one wall of the canister is compromised.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="brace-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Intra-Abdominal Bracing Visualizer</div>
+    </div>
+    <p class="ch-widget-sub">See how the diaphragm, deep abdominal wall, and pelvic floor share pressure, and how that sharing changes when the front wall loses tension. Explanatory only. This is not a rehabilitation or exercise plan.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Abdominal wall state</span>
+        <select class="ch-widget-select" id="brace-state">
+          <option value="intact">Coordinated wall</option>
+          <option value="mild">Mild separation</option>
+          <option value="marked">Marked separation</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Demand</span>
+        <select class="ch-widget-select" id="brace-demand">
+          <option value="quiet">Quiet breathing</option>
+          <option value="brace">Coordinated brace</option>
+          <option value="cough">Sudden cough or lift</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Front wall containment</span>
+        <span class="ch-meter-bar"><span id="brace-front" style="width:80%"></span></span>
+        <span class="ch-meter-num" id="brace-front-n">8</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Pelvic floor load</span>
+        <span class="ch-meter-bar"><span id="brace-floor" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="brace-floor-n">3</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Pressure sharing (evenness)</span>
+        <span class="ch-meter-bar"><span id="brace-share" style="width:85%"></span></span>
+        <span class="ch-meter-num" id="brace-share-n">9</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="brace-btn">Simulate pressure</button>
+    <p class="ch-widget-sub" id="brace-note">Choose a wall state and a demand, then simulate.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Pelvic floor recovery: the real clinical burden</h2>
+    <p>The pelvic floor deserves its own attention, because the numbers here are not small and the tissue is often quietly dysfunctional after birth. A large meta-analysis pooling thirteen studies and more than 1.5 million participants reported postpartum prevalence of urinary incontinence at 27.9 percent, pelvic organ prolapse at 14.2 percent, and anal incontinence at 0.4 percent (Barca et al., 2021). Vaginal delivery carried significantly higher odds of all three compared with cesarean delivery, yet the same analysis was careful to note that cesarean delivery does not provide complete protection. Pregnancy itself, not only the mode of birth, loads the floor.</p>
+    <p>A clinical commentary presenting a phased rehabilitation timeline underscored that pelvic floor muscles are typically dysfunctional postpartum with respect to strength, motor control, and endurance, and observed that referral to physical therapy in the prenatal and postnatal period is still not standard of care despite clear benefit (Selman et al., 2022). Read that twice. The tissue commonly needs support, effective support exists, and most people are never routinely offered it. That gap is precisely where your literacy matters. You are not the person who provides the assessment. You may well be the person who recognizes that one is warranted and says so.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Urinary incontinence sits near twenty-eight percent postpartum, yet it is frequently normalized as "just what happens after a baby." How does normalizing a common symptom quietly prevent someone from seeking care that could help?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why the return to load is staged, and why it is mindful</h2>
+    <p>Now to the part that most tempts overreach: getting back to training. The honest state of the evidence is that recommendations vary enormously, from full rest to blanket exercise clearance at six weeks, which reveals the gap between evidence and practice rather than a settled answer (Selman et al., 2022). A fixed calendar date is a poor tool for a biological process that remodels at an individual pace.</p>
+    <p>The most widely adopted guidance for higher-impact return comes from a set of postnatal running guidelines that reframed the question from "how many weeks" to "is the system ready." Those guidelines established that high-impact exercise carries roughly a 4.59-fold increased risk of pelvic floor dysfunction compared with low-impact exercise in postnatal women, recommended against running before twelve weeks postpartum, and advocated individualized pelvic floor physiotherapy assessment for all postnatal women regardless of delivery mode (Goom et al., 2019). Crucially, they tied progression to symptoms and to strength and pelvic floor readiness rather than to a fixed time threshold.</p>
+    <p>Hold two ideas together. There are sensible floors, such as not running before twelve weeks, and there is no universal ceiling or schedule, because readiness is individual and criteria-based. A staged return means moving from early recovery, to restoring breathing and coordinated bracing, to low-load control, to progressively higher load, advancing only as the tissue demonstrates it can manage each demand without symptoms. On program design specifically, a network meta-analysis of twenty-seven randomized controlled trials covering 1,340 women found that combined exercise approaches generally outperform single-modality programs, with limited benefit from abdominal binders and kinesio taping, while still concluding that high variability in program design limits definitive recommendations (Bigdeli et al., 2025). Exercise is primary; the precise recipe is not settled.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="An isometric infographic illustration of a staged return-to-activity pathway, drawn as a gently rising series of four stepped platforms from lower-left to upper-right, in the style of a hand-drawn editorial diagram. Each step is a simple flat platform with a small emblematic object resting on it: the lowest a resting figure of a rolled blanket, the next a pair of walking shoes, the next a light resistance band, the highest a running shoe. No numbers, no dates, no data axes. Warm muted palette of clay, olive, dusty blue, and cream on soft paper texture. Small neat italic serif labels along the base reading 'early recovery', 'restore control', 'low load', 'higher load'. Editorial illustration, not photorealistic, no people's faces, no watermarks." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch10-img2.jpg" alt="<em>A staged return moves from recovery toward load as readiness is demonstrated, not as a calendar dictates.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>A staged return moves from recovery toward load as readiness is demonstrated, not as a calendar dictates.</em></figcaption></figure>
+
+    <p>"Mindful" is not a soft word here. It means attending to the actual signals a body sends during and after activity, rather than pushing through them because a plan said today was the day. Heaviness or pressure in the pelvic floor, leaking, a visible doming or bulging along the midline under load, and pain are not to be worked through. They are information that the current demand exceeds current readiness. The correct response is to reduce load and, where these signs persist, to seek professional evaluation.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="stage-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Staged Return and Referral Signposts</div>
+    </div>
+    <p class="ch-widget-sub">Order the general phases of a conceptual return, then read the signs that would warrant professional evaluation at each stage. This tool will not produce a personalized program. Postpartum care belongs to qualified clinicians.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Place phase into sequence</span>
+        <select class="ch-widget-select" id="stage-pick">
+          <option value="">Choose a phase to add</option>
+          <option value="recover">Early recovery and rest</option>
+          <option value="breathe">Restore breathing and coordinated bracing</option>
+          <option value="lowload">Low-load movement and control</option>
+          <option value="higherload">Progressive higher load</option>
+          <option value="impact">Return to higher impact</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Phases placed in order</span>
+        <span class="ch-meter-bar"><span id="stage-prog" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="stage-prog-n">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="stage-btn">Add to timeline</button>
+    <p class="ch-widget-sub" id="stage-note">Your ordered timeline will appear here, with referral signposts for each stage.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>From the average to the actual person</h2>
+    <p>Here is the second movement of the chapter, and the honest lesson of the entire course. Every principle we have covered describes an average, and no person is the average. Cycle length, symptom patterns, responses to hormonal contraception, energy needs, bone trajectories across the reproductive years, and recovery timelines after birth all vary, sometimes enormously, between people who look demographically identical.</p>
+    <p>This is not a hedge. It is a documented feature of human physiology. A comprehensive review of exercise-response variation in <em>Cell Metabolism</em> showed that inter-individual variability is driven by both extrinsic factors, such as timing, dose, sleep, diet, and medications, and intrinsic factors, such as sex, age, hormonal status, ancestry, and genetics. Strikingly, the same review documented that within a single person, one outcome may improve substantially from a given stimulus while another does not change or even worsens (Noone et al., 2024). Population averages, in other words, do not reliably predict what will happen in the individual in front of you.</p>
+    <p>So what does literacy actually mean? It means holding the general model firmly enough to be useful and lightly enough to be corrected by the person. The model tells you what to look for and what is plausible. The person tells you what is true for them. When those two disagree, the person wins.</p>
+
+    <blockquote class="ch-quote">
+      <p>The average is a map. The person is the territory. A good map keeps you from getting lost; it does not tell you which stone you are standing on.</p>
+      <cite>A working principle for individualizing</cite>
+    </blockquote>
+
+    <h3>How to individualize without overstepping</h3>
+    <p>Individualizing well is a discipline, not a license. A few frames make it practical. Treat every general claim as a hypothesis about a person, not a verdict. Weight the person's own tracked pattern over the textbook default, because their history is the highest-resolution data you have. Notice when a response departs from what the average predicted, and treat that departure as information rather than as noncompliance. And separate cleanly the things you can support through education from the things that require a clinician, so that individualizing never becomes a back door to diagnosis or prescription.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The clinical boundary, one last time</h2>
+    <p>Throughout this course, one thread has recurred: recognize, and refer. It is worth stating in its final form. There is a category of things you learn to notice, and a category of things you must never diagnose or treat. Literacy lives entirely in the first category.</p>
+    <p>The clinical boundary is firmest around three areas, and each has appeared in this course for a reason. <span class="ch-key">Contraception</span> is a prescribing decision with individual medical considerations; your role is understanding, never recommending a method or a change to one. <span class="ch-key">Amenorrhea</span>, the absence of menstrual periods, is the recognize-and-refer thread we have carried from the start. When periods are absent or have stopped, particularly alongside high training loads, low energy availability, or restrictive eating, that pattern may signal <span class="ch-key">relative energy deficiency in sport</span>, a state in which the body is not taking in enough energy to support its functions. Notice it. Understand that it may warrant professional evaluation. Do not diagnose it and do not treat it. And <span class="ch-key">postpartum recovery</span>, the whole first half of this chapter, belongs to qualified clinicians for assessment and for any rehabilitation plan.</p>
+    <p>Notice how much of the evidence in this chapter pointed the same direction. Diastasis strategies should be tailored to severity and individual factors (Fu et al., 2025). Pelvic floor assessment is recommended for all postnatal women regardless of delivery mode (Goom et al., 2019). Referral to physical therapy remains underused despite clear benefit (Selman et al., 2022). The research does not merely permit referral. It practically insists on it.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone you know mentions that their periods stopped several months ago while they ramped up training and cut back on eating. What is inside your role here, and what is firmly outside it? Practice saying the sentence that stays on the right side of that line.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Grading the evidence honestly</h2>
+    <p>A closing word on confidence, because a literate reader deserves the truth about the ground under their feet. A great deal of cycle-based training and nutrition advice rests on weak or contradictory data. Where this chapter drew on stronger evidence, such as the meta-analytic prevalence of postpartum pelvic floor dysfunction (Barca et al., 2021), it said so. Where the evidence is genuinely unsettled, such as the best design for a diastasis rehabilitation program, it said that too, repeatedly, because the reviews themselves refuse to name a single answer (Mamas et al., 2024; Bigdeli et al., 2025). Confident-sounding protocols in this space often outrun their data. Part of your fluency is the ability to tell the difference.</p>
+    <p>This is the humility the course opened with, returning at the end. This material distills research. A distillation is useful and it is also lossy. Clinical judgment, built over years of seeing individual bodies, and lived female expertise, built over a lifetime inside one, both carry an authority that no distillation can replace. You leave this course fluent in the system, honest about the evidence, and clear about the edge of your role. That combination, and not any protocol, is what competence looks like here.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The abdominal wall, diaphragm, and pelvic floor work as one pressure canister; when the front wall loses tension after birth, pressure sharing and pelvic floor behavior change with it.</li>
+      <li>Some abdominal separation is nearly universal in late pregnancy; persistent diastasis recti is common, variably measured, and shaped by individual factors such as age, parity, body mass index, and delivery mode.</li>
+      <li>Postpartum pelvic floor dysfunction carries a genuine clinical burden, and effective assessment exists but is routinely underoffered, which is exactly where recognition and referral matter.</li>
+      <li>A staged, mindful return means progressing by demonstrated readiness and symptom signals, not by a fixed calendar; sensible floors exist, but no universal schedule does.</li>
+      <li>Every principle in this course is an average, and no person is the average; individualizing means holding the general model lightly enough to be corrected by the person.</li>
+      <li>The clinical boundary is firmest around contraception, amenorrhea and relative energy deficiency in sport, and postpartum recovery: recognize and refer, never diagnose or treat.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This is where the course ends and your practice begins. You now hold a working model of female physiology across the reproductive years, a clear sense of where the evidence is strong and where it is thin, and a firm map of the line between education and care. Carry all three lightly and use them in service of the actual person in front of you, who is never the average, and who may be yourself.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Barca, J. A., Bravo, C., Pintado-Recarte, M. P., Asúnsolo, Á., Cueto-Hernández, I., Ruiz-Labarta, J., Buján, J., Álvarez-Mon, M., Ortega, M. A., & De León-Luis, J. A. (2021). Pelvic floor morbidity following vaginal delivery versus cesarean delivery: Systematic review and meta-analysis. <em>Journal of Clinical Medicine, 10</em>(8), 1652. https://doi.org/10.3390/jcm10081652</p>
+    <p>Bigdeli, N., et al. (2025). An evidence-based comparison of rehabilitation strategies for diastasis recti abdominis in postpartum women: A systematic review and network meta-analysis. <em>Scientific Reports, 15</em>. https://doi.org/10.1038/s41598-025-22574-2</p>
+    <p>Fu, F., Zhang, S., Zhang, H., Xuan, Z., Zhang, N., & Xie, Z. (2025). Effects of postpartum diastasis recti abdominis on multisite pelvic floor electromyography and anatomical structure: A cross-sectional study. <em>PMC.</em> https://pmc.ncbi.nlm.nih.gov/articles/PMC12212815/</p>
+    <p>Goom, T., Donnelly, G., & Brockwell, E. (2019). <em>Returning to running postnatal: Guidelines for medical, health and fitness professionals managing this population.</em> https://absolute.physio/wp-content/uploads/2019/09/returning-to-running-postnatal-guidelines.pdf</p>
+    <p>Mamas, T., Manolas, A., Koulouras, A., et al. (2024). Diastasis recti abdominis rehabilitation in the postpartum period: A scoping review of current clinical practice. <em>PMC.</em> https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11023973/</p>
+    <p>Multiple authors. (2024). Ultrasonographic evaluation of diastasis recti abdominis and its association with pelvic floor dysfunction in postpartum women: A cross-sectional study of a two-year retrospective cohort. <em>PMC.</em> https://www.ncbi.nlm.nih.gov/pmc/articles/PMC11655187/</p>
+    <p>Noone, J., et al. (2024). Understanding the variation in exercise responses to guide personalized physical activity prescriptions. <em>Cell Metabolism, 36</em>(4). https://doi.org/10.1016/j.cmet.2023.12.025</p>
+    <p>Selman, R., Early, K., Battles, B., Seidenburg, M., Wendel, E., & Westerlund, S. (2022). Maximizing recovery in the postpartum period: A timeline for rehabilitation from pregnancy through return to sport. <em>International Journal of Sports Physical Therapy, 17</em>(6). https://doi.org/10.26603/001c.37863</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 10 of 10</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('brace-widget');
+    if(!w) return;
+    var stateSel = w.querySelector('#brace-state');
+    var demandSel = w.querySelector('#brace-demand');
+    var front = w.querySelector('#brace-front');
+    var floor = w.querySelector('#brace-floor');
+    var share = w.querySelector('#brace-share');
+    var frontN = w.querySelector('#brace-front-n');
+    var floorN = w.querySelector('#brace-floor-n');
+    var shareN = w.querySelector('#brace-share-n');
+    var note = w.querySelector('#brace-note');
+    var btn = w.querySelector('#brace-btn');
+
+    function clamp(v){ return Math.max(1, Math.min(10, Math.round(v))); }
+
+    function run(){
+      var st = stateSel.value;
+      var dm = demandSel.value;
+      var containBase = st === 'intact' ? 9 : st === 'mild' ? 6 : 3;
+      var demandLoad = dm === 'quiet' ? 2 : dm === 'brace' ? 6 : 9;
+
+      // front wall containment: strong when intact, drops with separation and rising demand
+      var frontVal = clamp(containBase - (demandLoad - 2) * (st === 'intact' ? 0.2 : st === 'mild' ? 0.6 : 1.0));
+      // pelvic floor load: rises with demand and rises further when front wall cannot contain
+      var floorVal = clamp(demandLoad + (10 - containBase) * 0.5);
+      // pressure sharing evenness: high when intact, degrades as wall separates, worse under sudden demand
+      var shareVal = clamp(containBase - (dm === 'cough' ? 2 : dm === 'brace' ? 0 : 0.5));
+
+      front.style.width = (frontVal*10)+'%'; frontN.textContent = frontVal;
+      floor.style.width = (floorVal*10)+'%'; floorN.textContent = floorVal;
+      share.style.width = (shareVal*10)+'%'; shareN.textContent = shareVal;
+
+      var msg;
+      if(st === 'intact'){
+        msg = 'A coordinated wall contains pressure and shares it evenly. Under sudden demand the floor takes some load, but the canister holds together.';
+      } else if(st === 'mild'){
+        msg = 'With mild separation the front wall contains less. More pressure is directed toward the pelvic floor and sharing becomes less even, most visibly under sudden demand.';
+      } else {
+        msg = 'With marked separation the front wall contains poorly. Pressure concentrates on the pelvic floor and evenness drops sharply. This is why diastasis is a system problem, not a local one.';
+      }
+      note.textContent = 'Explanatory only, not a rehabilitation or exercise plan. ' + msg;
+    }
+
+    btn.addEventListener('click', run);
+    stateSel.addEventListener('change', run);
+    demandSel.addEventListener('change', run);
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('stage-widget');
+    if(!w) return;
+    var pick = w.querySelector('#stage-pick');
+    var prog = w.querySelector('#stage-prog');
+    var progN = w.querySelector('#stage-prog-n');
+    var note = w.querySelector('#stage-note');
+    var btn = w.querySelector('#stage-btn');
+
+    var order = ['recover','breathe','lowload','higherload','impact'];
+    var labels = {
+      recover: 'Early recovery and rest',
+      breathe: 'Restore breathing and coordinated bracing',
+      lowload: 'Low-load movement and control',
+      higherload: 'Progressive higher load',
+      impact: 'Return to higher impact'
+    };
+    var signposts = {
+      recover: 'Refer if there is heavy bleeding, fever, severe pain, or signs of low mood or distress.',
+      breathe: 'Refer if breathing and bracing cannot coordinate, or if there is persistent pelvic pressure at rest.',
+      lowload: 'Refer if leaking, a heavy dragging sensation, or a visible midline doming appears under gentle load.',
+      higherload: 'Refer if symptoms return as load rises, or if a bulge or pain appears with effort. Do not push through.',
+      impact: 'Refer for pelvic floor assessment before higher impact regardless of delivery mode; higher impact carries markedly greater pelvic floor risk.'
+    };
+
+    var placed = [];
+
+    function render(){
+      progN.textContent = placed.length;
+      prog.style.width = (placed.length/order.length*100)+'%';
+
+      if(placed.length === 0){
+        note.textContent = 'Your ordered timeline will appear here, with referral signposts for each stage.';
+        return;
+      }
+
+      // check order correctness against canonical sequence of placed items
+      var expected = order.filter(function(k){ return placed.indexOf(k) !== -1; });
+      var correct = placed.join(',') === expected.join(',');
+
+      var lines = placed.map(function(k,i){
+        return (i+1) + '. ' + labels[k] + ' \u2014 Signpost: ' + signposts[k];
+      }).join('  ');
+
+      var prefix = correct
+        ? 'Order looks sensible so far. '
+        : 'Note: these phases generally run from recovery toward load. Reconsider the sequence. ';
+
+      note.textContent = prefix + lines + '  This tool will not output a personalized program. Postpartum care belongs to qualified clinicians, and readiness is judged by criteria and symptoms, never by a fixed date.';
+    }
+
+    btn.addEventListener('click', function(){
+      var v = pick.value;
+      if(!v) return;
+      if(placed.indexOf(v) !== -1){
+        note.textContent = 'That phase is already on your timeline.';
+        return;
+      }
+      placed.push(v);
+      pick.value = '';
+      render();
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

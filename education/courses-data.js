@@ -1111,7 +1111,7 @@ window.GEMINI_COURSES = {
       description:"How the body makes and uses energy at every level, plus body composition.", level:"Core", published:false },
     { slug:"e2-immune-inflammation", code:"E2", track:"E", title:"Immune System & Inflammation", image:"covers/e2.png",
       description:"How immunity and inflammation work, and how training, stress, gut, and food shape them.", level:"Core", published:false },
-    { slug:"e3-female-physiology", code:"E3", track:"E", title:"Female Physiology & the Menstrual Cycle", image:"covers/e3.png",
-      description:"Female-specific physiology done properly: the cycle, life stages, and their training and nutrition effects.", level:"Core", published:false }
+    { slug:"e3-female-physiology", code:"E3", track:"E", title:"Female Physiology, the Cycle & Reproductive Health", image:"covers/e3.png",
+      description:"How the female body works across the reproductive years: the menstrual cycle as real endocrinology, fertility, contraception, amenorrhea and RED-S, bone health, and cycle-aware training and nutrition, taught as education with a firm clinician boundary.", level:"Advanced", published:false }
   ]
 };

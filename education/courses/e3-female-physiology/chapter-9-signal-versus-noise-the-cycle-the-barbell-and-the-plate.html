@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Signal Versus Noise: The Cycle, the Barbell, and the Plate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 9 · Module 3</div>
+    <h1 class="ch-title">Signal Versus Noise: The Cycle, the Barbell, and the Plate</h1>
+    <p class="ch-subtitle">Grading the cycle-syncing industry honestly, and finding the parts that actually hold.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">O</span>pen any fitness app built in the last few years and there is a good chance it will offer to tell you when to lift heavy, when to back off, when to eat more carbohydrate, and when to protect your recovery, all keyed to the day of your menstrual cycle. The promise is seductive because it sounds like precision. It sounds like science finally taking female physiology seriously instead of treating a woman as a smaller man. And it arrives with the confidence of a settled field.</p>
+    <p>Here is the uncomfortable thing this chapter asks you to sit with: much of that confidence is manufactured. When you actually open the studies underneath the marketing, you find small samples, cycle phases guessed at rather than measured, confounders left uncontrolled, and results that contradict each other from one paper to the next. This is the chapter where our honest-grading commitment has to do its hardest work, because grading honestly here means telling you that a large and profitable industry is selling more certainty than the evidence can buy.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What "cycle syncing" actually claims</h2>
+    <p>Let us name the claim precisely, because vague claims are impossible to grade. The <span class="ch-key">strong version of phase-based prescription</span> holds that you should change what you do based on cycle phase: lift heavier and chase adaptation in the follicular phase when estrogen is rising, then deload, switch to lighter work, or prioritize recovery in the luteal phase when progesterone dominates. Some versions extend this to nutrition, prescribing different macronutrient targets or calorie levels by phase. The underlying logic is that the sex hormones estrogen and progesterone swing predictably across roughly a month, and that these swings must therefore move the needle on strength, power, hypertrophy, and recovery enough to justify rewriting your program.</p>
+    <p>The logic is not absurd. Estrogen and progesterone do have plausible mechanistic effects on muscle, connective tissue, substrate use, and the central nervous system. The question is never whether an effect could exist in theory. The question is whether the effect is large enough, consistent enough, and well enough measured to change what a real person should do on a Tuesday. That is a much higher bar, and it is the bar the evidence has to clear.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink editorial illustration in a restrained, notebook-margin style: on the left, a tidy calendar grid with a barbell icon and a fork-and-plate icon placed neatly on specific days, drawn with confident bold lines suggesting false certainty; on the right, the same information dissolving into loose, scattered, uncertain sketch marks and question marks. A thin vertical divider separates the two halves. Muted palette of slate grey, warm ochre, and off-white paper. Small handwritten label 'signal?' near the scattered side and 'prescription' near the tidy side, in a plain italic hand. No people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img1.jpg" alt="<em>The gap between how confident phase-based advice looks and how firm its evidence actually is.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The gap between how confident phase-based advice looks and how firm its evidence actually is.</em></figcaption></figure>
+
+    <h3>The measurement problem underneath everything</h3>
+    <p>Before we look at outcomes, we have to look at how researchers even know which phase a participant was in. This sounds like a technicality. It is actually the crack that runs through the whole foundation. A review of cycle-verification methods in exercise studies published between 2008 and 2018 found that only 44 percent of studies actually measured estrogen and progesterone in the blood (Janse de Jonge et al., 2019). The rest relied on counting calendar days, which assumes a textbook cycle that many people simply do not have.</p>
+    <p>Why does this matter so much? Because a cycle can look regular on a calendar and still be <span class="ch-key">anovulatory</span>, meaning no egg was released and progesterone never rose the way the model assumes. Or it can have a short, inadequate luteal phase. If you sort participants into a "luteal" group by calendar date and some of them never actually entered a proper luteal hormonal state, you have blended two different physiologies into one bucket and called it data. Janse de Jonge and colleagues recommend a three-method verification approach: calendar tracking, plus testing for the luteinizing hormone surge that precedes ovulation, plus a blood measurement of the hormones themselves. Very few studies do all three. Most do the weakest one.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If a study sorted people into cycle phases using only a calendar, and a meaningful fraction of those people had anovulatory cycles that month, what direction would that push the measured "difference between phases"? Toward finding a real effect, or toward blurring one into noise? Sit with why either answer complicates the headline.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Reading the evidence plainly</h2>
+    <p>Now the outcomes. Start with performance broadly. A large systematic review and Bayesian meta-analysis of cycle phase and exercise performance in regularly menstruating women concluded that performance <em>might</em> be trivially reduced in the early follicular phase compared with other phases (McNulty et al., 2020). Read that carefully. The word is "might," the effect is "trivial," and the authors state directly that the evidence base is insufficient to generate exercise guidelines for women. That is the responsible reading of the most-cited meta-analysis in this space: a possible tiny effect, and an explicit refusal to prescribe from it.</p>
+    <p>Narrow to strength and resistance training, where phase-based lifting advice concentrates. An umbrella review, which is a review of other reviews and meta-analyses, examined the whole body of work on cycle phase and resistance exercise (Colenso-Semple et al., 2023). Its verdict was blunt: the evidence is scant, low in quality, and largely inconsistent. It found no persuasive case that short-term hormonal fluctuations appreciably influence either acute strength performance or the longer-term adaptations you actually train for, and it documented a pervasive pattern of poor and inconsistent methods across the literature. In other words, the highest-level synthesis available says the strong claim is not supported.</p>
+
+    <h3>So why does anyone still believe it?</h3>
+    <p>Because the literature genuinely contradicts itself, and you can find a paper for almost any position. A 2024 systematic review and meta-analysis of 22 studies covering 433 participants reported small-to-medium effects favouring the late follicular and ovulation phases for isometric and isokinetic strength, with only small effects for dynamic strength (Niering et al., 2024). Taken alone, that sounds like support for phasing. But the same authors acknowledge their pool is small and heterogeneous, and their finding sits in direct tension with the Colenso-Semple umbrella review. This is not a case where one side is lying. It is a case where the underlying studies are individually weak enough that pooling them different ways produces different answers. That instability is itself the finding.</p>
+    <p>The deepest diagnosis comes from a methodological working guide for research on women in sport and exercise science (Elliott-Sale et al., 2021). Its authors document that the great majority of high-quality sport science data still come from male-only studies, and that the field has lacked agreed standards for female-specific variables such as cycle phase verification, hormonal contraceptive use, and reproductive changes across the lifespan. The result is an evidence base that is not merely thin but structurally unreliable, one that cannot yet support confident guidelines for female exercisers. When the tool that measures the world is miscalibrated, you do not fix it by collecting more measurements with the same tool.</p>
+
+    <blockquote class="ch-quote">
+      <p>It is premature to state that short-term hormonal fluctuations appreciably influence acute performance or longer-term adaptations to resistance exercise training.</p>
+      <cite>Paraphrasing the conclusion of Colenso-Semple et al. (2023)</cite>
+    </blockquote>
+
+    <p>Notice what the honest verdict is and is not. It is not "the cycle does nothing." It is "the strong, confident, calendar-driven prescription outruns the data, badly." Those are very different statements, and keeping them distinct is the whole discipline of this chapter.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="w-studyquality">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Study Quality Inspector</div>
+    </div>
+    <p class="ch-widget-sub">Examine a simplified cycle-syncing study, rate its strength, then reveal the expert critique. Watch how a stack of weak studies still fails to add up to strong evidence.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Choose a study card</span>
+        <select class="ch-widget-select" id="sq-study">
+          <option value="0">Study A: "Lift heavy in follicular phase"</option>
+          <option value="1">Study B: "Luteal phase kills strength"</option>
+          <option value="2">Study C: "Follicular training builds more muscle"</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your strength rating</span>
+        <select class="ch-widget-select" id="sq-rating">
+          <option value="strong">Strong evidence</option>
+          <option value="moderate">Moderate evidence</option>
+          <option value="weak">Weak evidence</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Sample size</span>
+        <span class="ch-meter-bar"><span id="sq-m-sample" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="sq-n-sample">n=14</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Phase verification</span>
+        <span class="ch-meter-bar"><span id="sq-m-verify" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="sq-n-verify">2/10</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Confounder control</span>
+        <span class="ch-meter-bar"><span id="sq-m-conf" style="width:25%"></span></span>
+        <span class="ch-meter-num" id="sq-n-conf">3/10</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Cumulative case strength</span>
+        <span class="ch-meter-bar"><span id="sq-m-cum" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="sq-n-cum">15%</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="sq-btn">Reveal expert critique</button>
+    <p class="ch-widget-sub" id="sq-out" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>The honest posture: load-and-recovery mindfulness</h2>
+    <p>If calendar prescription is not supported, what is the defensible stance? The course calls it <span class="ch-key">load-and-recovery mindfulness</span>. The idea is simple and it respects both the evidence and your own experience. You do not rewrite your movements by phase. You stay attentive to the signals that actually predict how a session will go: energy, sleep quality, mood, motivation, joint comfort, and perceived readiness. When those signals say you are ready, you push. When they say you are flat, you adjust the session in front of you. This is autoregulation, and it is what good training has always done. It simply does not need a calendar to work.</p>
+    <p>The distinction is worth making sharp because it changes what you notice. A phase prescription tells you in advance that day 22 will be a bad day, which can become a small self-fulfilling prophecy or an excuse waiting to be used. Load-and-recovery mindfulness makes no prediction. It asks you to read today's actual state and respond to it. If your luteal phase reliably brings poorer sleep and lower drive, you will feel that and adjust, and you will have learned something true about your own body rather than borrowing a claim from a shaky literature. Some people do notice real, repeatable patterns across their cycle. The honest move is to treat those as personal data worth respecting, not as a universal law worth prescribing.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>What is the practical difference between "I train lighter in my luteal phase because an app told me to" and "I read low readiness today and adjusted"? Both might produce a lighter session. Only one of them keeps you honest about cause and effect. Why does that distinction matter over months of training?</p>
+    </aside>
+
+    <h3>The one thread that is not autoregulation: recognize and refer</h3>
+    <p>Everything above is about ordinary variation in a healthy, regularly menstruating body. There is one situation where "read your readiness and adjust" is not enough, and it is important to name the boundary clearly. If menstruation stops for months in someone who is not pregnant and not postpartum and not in menopause, that is <span class="ch-key">amenorrhea</span>, and it is not a training tweak spot to push through. It can be a sign of <span class="ch-key">Relative Energy Deficiency in Sport</span>, a state in which the body is not getting enough energy to cover both training and basic physiological function, with downstream effects on hormones, bone, and much else.</p>
+    <p>Your job as an educated observer is to recognize the pattern, not to diagnose it and certainly not to treat it. A missing period across several months, alongside persistent fatigue, frequent injury, or a very restricted intake, is a signal that warrants evaluation by a qualified clinician. That is the entire scope: notice, take it seriously, and understand that it may need professional care. This chapter, and this course, stops firmly at that line. The same firm boundary applies to anything involving hormonal contraception, the interpretation of amenorrhea, and the postpartum period. Those are clinical territory, full stop. Education can help you ask better questions; it cannot replace the person qualified to answer them.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where the ground is firmer: iron and the bleed</h2>
+    <p>Having spent the first half of this chapter deflating overclaims, honesty now cuts the other way. There is a part of the cycle-and-lifestyle story that rests on much firmer ground, and it deserves to be taken seriously precisely because we were willing to reject the weak parts. That part is <span class="ch-key">iron</span>.</p>
+    <p>The logic here is not statistical hairsplitting; it is basic accounting. Menstrual bleeding removes blood, blood contains iron, and this happens month after month for decades. That recurring loss is why iron deficiency is substantially more common in female athletes than in male athletes, and the difference is largely attributable to menstruation during the premenopausal years (Badenhorst et al., 2021). Iron is not a boutique concern. It sits at the center of oxygen transport, and low iron status can quietly drag down energy and performance well before it becomes a diagnosable anemia.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration plate in warm watercolour and fine ink line, showing a stylized cross-section of red blood cells drifting across the frame, with a small elegant hourglass motif in the lower corner suggesting recurring monthly loss over time. Palette of deep iron-red, rust ochre, warm cream paper, and a touch of slate. Small italic serif labels 'iron in transit' near the cells and 'recurring cost' near the hourglass, kept minimal. Composition uses rule of thirds with cells in the upper two-thirds. No charts, no numbers, no people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img2.jpg" alt="<em>Menstrual iron loss is small each month but repeats for years, which is what makes it worth understanding.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Menstrual iron loss is small each month but repeats for years, which is what makes it worth understanding.</em></figcaption></figure>
+
+    <p>A recent exploratory longitudinal study followed regularly menstruating female football players and measured iron and blood-production markers across the cycle (Nolte et al., 2025). It found that menstrual blood loss was significantly associated with lower ferritin, the storage form of iron, and with increased production of new red blood cells, evidence that menstruation is a direct physiological trigger for the body to adapt its iron handling. The same paper made a telling observation about the field itself: 65 percent of iron supplementation studies fail even to report participants' cycle phase or status. Once again the measurement culture is part of the problem, but the underlying signal, that the bleed costs iron and the body responds, is real.</p>
+
+    <h3>How to hold this without overstating it</h3>
+    <p>Here is the careful framing. The goal is <em>understanding and awareness</em>, not a supplementation protocol. Knowing that recurring menstrual loss is a genuine iron cost lets you make sense of unexplained fatigue, understand why iron status is worth monitoring, and ask a clinician the right question at the right time. Badenhorst and colleagues note that for people with a history of iron deficiency, periodic screening makes sense, on the order of a few times a year during heavy training. But screening, interpretation, and any decision to supplement are clinical acts. Iron is not a harmless nutrient to megadose on a hunch; too much carries its own risks. So the mature stance is: take the cost seriously, stay aware, get proper testing when it is warranted, and leave the treatment decision to a professional who can see your actual numbers.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Why is iron a stronger claim than phase-based lifting, even though both involve the cycle? What does the iron story have that the training story lacks? Consider the difference between a plausible mechanism and a measured, repeatable, physically accountable loss.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-iron">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Iron Balance Over Time</div>
+    </div>
+    <p class="ch-widget-sub" style="font-weight:600">This is an educational illustration only. It is not a supplementation plan, not medical advice, and not a substitute for proper iron testing by a clinician.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Monthly bleed (conceptual)</span>
+        <select class="ch-widget-select" id="ir-bleed">
+          <option value="1">Lighter</option>
+          <option value="2" selected>Typical</option>
+          <option value="3">Heavier</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Dietary iron intake (conceptual)</span>
+        <select class="ch-widget-select" id="ir-intake">
+          <option value="1">Low</option>
+          <option value="2" selected>Moderate</option>
+          <option value="3">Generous</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Stored iron now</span>
+        <span class="ch-meter-bar"><span id="ir-m-store" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="ir-n-store">60</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Trend over 6 cycles</span>
+        <span class="ch-meter-bar"><span id="ir-m-trend" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="ir-n-trend">stable</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="ir-btn">Advance six cycles</button>
+    <p class="ch-widget-sub" id="ir-out" style="margin-top:1rem"></p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Energy and appetite: real experience, unsettled numbers</h2>
+    <p>The last piece sits between the firm iron ground and the shaky training ground. Many people report that appetite and energy intake shift across the cycle, often feeling hungrier and eating more in the luteal phase and somewhat less around the follicular phase. Is this real? The first narrative review to synthesize the literature on dietary energy intake across cycle phases found that intake does appear lower in the follicular phase and higher in the luteal phase, with the sharpest dip around ovulation (Rogan & Black, 2022). So the direction of the pattern has support.</p>
+    <p>But the same review is candid that the magnitude is not yet clearly quantifiable and that the evidence base has large gaps and methodological limits. This is the right place to practice the chapter's core skill. The <span class="ch-key">lived experience</span> of appetite change is reported often enough, and consistently enough in direction, to take seriously. The <span class="ch-key">established mechanism and precise magnitude</span> are not settled. Both statements are true at once, and mature reasoning holds them together rather than collapsing into either "it is all in your head" or "your body demands exactly 300 extra calories on day 24."</p>
+    <p>What does that mean in practice? It means that if you notice a reliable uptick in hunger in the back half of your cycle, you can trust your own observation and respond to it flexibly, without needing a rigid phase-based meal plan to authorize it. Eating a bit more when genuinely hungrier is not a diet failure; it may be a sensible response to a real fluctuation. The honest posture toward appetite is the same as toward training: notice your own signal, respect it, and do not dress it up as a precise scientific law it has not earned.</p>
+
+    <blockquote class="ch-quote">
+      <p>Energy intake appears lower in the follicular phase and higher in the luteal phase, but the magnitude of these fluctuations is not yet clearly quantifiable.</p>
+      <cite>Paraphrasing Rogan and Black (2022)</cite>
+    </blockquote>
+  </section>
+
+  <section class="ch-section">
+    <h2>A decision frame you can carry</h2>
+    <p>When the next cycle-based training or nutrition claim reaches you, and it will, run it through four questions. First, how was cycle phase determined, by blood measurement or merely by calendar? Second, how many participants, and were regularly ovulating cycles actually confirmed? Third, are the results consistent with the broader body of work, or do they contradict the higher-level reviews? Fourth, and most important, is the effect large enough to change what a real person should do, or is it a statistically detectable but trivial blip? A claim that survives all four is rare. Most collapse at the first.</p>
+    <p>That skepticism is not cynicism. It is respect. Female physiology deserves rigorous study, not a rushed marketing story that borrows the authority of science while skipping its discipline. And a note of humility belongs here too: this course distills research, but the research itself is incomplete, and the lived and clinical expertise of women and their care providers fills gaps the papers cannot. The most honest thing an educator can do is tell you where the map is firm, where it is blank, and where someone has drawn confident roads that were never actually surveyed.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The strong version of phase-based training prescription is not well supported; the highest-level review found scant, low-quality, and contradictory evidence, and performance meta-analyses find at most trivial effects (Colenso-Semple et al., 2023; McNulty et al., 2020).</li>
+      <li>The literature's core flaw is measurement: fewer than half of studies verify cycle phase with actual hormone testing, which blurs any real effect and destabilizes conclusions (Janse de Jonge et al., 2019; Elliott-Sale et al., 2021).</li>
+      <li>Load-and-recovery mindfulness, reading today's actual energy, sleep, and readiness, is a more honest stance than rewriting your movements by calendar.</li>
+      <li>Iron is a genuine, recurring cost of menstruation and a stronger claim than phase-based lifting; the posture is understanding, awareness, and proper testing when warranted, never self-directed supplementation (Badenhorst et al., 2021; Nolte et al., 2025).</li>
+      <li>Appetite and energy intake shifts across phases are credible as lived experience with an established direction but unsettled magnitude (Rogan & Black, 2022).</li>
+      <li>Recognize and refer: prolonged absence of menstruation may signal amenorrhea or Relative Energy Deficiency in Sport and warrants professional evaluation. Contraception, amenorrhea, and postpartum questions are clinical territory.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Next we carry this evidence-graded posture into the perimenopausal transition, where the signal changes character entirely: the cycle itself becomes irregular, and the question shifts from reading a predictable rhythm to interpreting a system in flux. The same discipline applies, but the terrain is new.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Badenhorst, C. E., Goto, K., O'Brien, W. J., & Sims, S. (2021). Iron status in athletic females, a shift in perspective on an old paradigm. <em>Journal of Sports Sciences, 39</em>(14), 1565–1575. https://doi.org/10.1080/02640414.2021.1885782</p>
+    <p>Colenso-Semple, L. M., D'Souza, A. C., Elliott-Sale, K. J., & Phillips, S. M. (2023). Current evidence shows no influence of women's menstrual cycle phase on acute strength performance or adaptations to resistance exercise training. <em>Frontiers in Sports and Active Living, 5</em>, 1054542. https://doi.org/10.3389/fspor.2023.1054542</p>
+    <p>Elliott-Sale, K. J., Minahan, C. L., Janse de Jonge, X. A. K., Ackerman, K. E., Sipilä, S., Constantini, N. W., Lebrun, C. M., & Hackney, A. C. (2021). Methodological considerations for studies in sport and exercise science with women as participants: A working guide for standards of practice for research on women. <em>Sports Medicine, 51</em>(5), 843–861. https://doi.org/10.1007/s40279-021-01435-8</p>
+    <p>Janse de Jonge, X., Thompson, B., & Han, A. (2019). Methodological recommendations for menstrual cycle research in sports and exercise. <em>Medicine &amp; Science in Sports &amp; Exercise, 51</em>(12), 2610–2617. https://doi.org/10.1249/mss.0000000000002073</p>
+    <p>McNulty, K. L., Elliott-Sale, K. J., Dolan, E., Swinton, P. A., Ansdell, P., Goodall, S., Thomas, K., & Hicks, K. M. (2020). The effects of menstrual cycle phase on exercise performance in eumenorrheic women: A systematic review and meta-analysis. <em>Sports Medicine, 50</em>(10), 1813–1827. https://doi.org/10.1007/s40279-020-01319-3</p>
+    <p>Niering, M., Wolf-Belala, N., Seifert, J., Tovar, O., Coldewey, J., Kuranda, J., & Muehlbauer, T. (2024). The influence of menstrual cycle phases on maximal strength performance in healthy female adults: A systematic review with meta-analysis. <em>Sports, 12</em>(1), 31. https://doi.org/10.3390/sports12010031</p>
+    <p>Nolte, S., Krüger, K., Ringseis, R., & Mooren, F. C. (2025). Menstrual blood loss as an initial trigger for adaptation of iron metabolism in eumenorrheic female athletes: An exploratory study. <em>Physiological Reports, 13</em>(16), e70522. https://doi.org/10.14814/phy2.70522</p>
+    <p>Rogan, M. M., &amp; Black, K. E. (2022). Dietary energy intake across the menstrual cycle: A narrative review. <em>Nutrition Reviews, 81</em>(7), 869–886. https://doi.org/10.1093/nutrit/nuac094</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 9 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-studyquality');
+    if(!root) return;
+    var studies = [
+      {
+        sample:14, sampleTxt:'n=14', verify:2, verifyTxt:'2/10', conf:3, confTxt:'3/10',
+        critique:'Expert critique: Phase was assigned by calendar only, with no hormone testing, so anovulatory cycles may have been miscounted as follicular. With 14 participants and no control for training history, sleep, or nutrition, the "lift heavy in follicular" headline rests on a difference that could easily be noise. Weak evidence.'
+      },
+      {
+        sample:11, sampleTxt:'n=11', verify:3, verifyTxt:'3/10', conf:2, confTxt:'2/10',
+        critique:'Expert critique: A small crossover with luteinizing hormone strips but no serum hormone confirmation. Several participants likely had short luteal phases. The reported strength drop was within normal day-to-day variation. The "luteal phase kills strength" claim overreads a trivial, unstable effect. Weak evidence.'
+      },
+      {
+        sample:19, sampleTxt:'n=19', verify:4, verifyTxt:'4/10', conf:3, confTxt:'3/10',
+        critique:'Expert critique: A longer study, but hypertrophy was measured indirectly and only some cycles were hormonally verified. The between-group difference did not survive when dropouts were accounted for, and it conflicts with the umbrella-review conclusion. The "follicular training builds more muscle" headline is not supported. Weak evidence.'
+      }
+    ];
+    var sel = root.querySelector('#sq-study');
+    var mSample = root.querySelector('#sq-m-sample'), nSample = root.querySelector('#sq-n-sample');
+    var mVerify = root.querySelector('#sq-m-verify'), nVerify = root.querySelector('#sq-n-verify');
+    var mConf = root.querySelector('#sq-m-conf'), nConf = root.querySelector('#sq-n-conf');
+    var mCum = root.querySelector('#sq-m-cum'), nCum = root.querySelector('#sq-n-cum');
+    var out = root.querySelector('#sq-out');
+    var btn = root.querySelector('#sq-btn');
+    var inspected = [];
+
+    function render(){
+      var s = studies[parseInt(sel.value,10)];
+      mSample.style.width = Math.min(100, Math.round(s.sample/40*100)) + '%';
+      nSample.textContent = s.sampleTxt;
+      mVerify.style.width = (s.verify*10) + '%'; nVerify.textContent = s.verifyTxt;
+      mConf.style.width = (s.conf*10) + '%'; nConf.textContent = s.confTxt;
+    }
+    function updateCum(){
+      // stacking weak studies never exceeds a low ceiling
+      var count = inspected.length;
+      var cum = Math.min(30, 15 + count*4);
+      mCum.style.width = cum + '%';
+      nCum.textContent = cum + '%';
+    }
+    sel.addEventListener('change', render);
+    btn.addEventListener('click', function(){
+      var idx = parseInt(sel.value,10);
+      var s = studies[idx];
+      if(inspected.indexOf(idx) === -1) inspected.push(idx);
+      updateCum();
+      var tail = inspected.length >= 3
+        ? ' You have now inspected all three. Notice the cumulative meter: a stack of weak studies still does not climb into strong-evidence territory. Volume is not quality.'
+        : ' Cumulative case strength barely moved. Adding another weak study does not rescue a weak literature.';
+      out.textContent = s.critique + tail;
+    });
+    render();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-iron');
+    if(!root) return;
+    var bleedSel = root.querySelector('#ir-bleed');
+    var intakeSel = root.querySelector('#ir-intake');
+    var mStore = root.querySelector('#ir-m-store'), nStore = root.querySelector('#ir-n-store');
+    var mTrend = root.querySelector('#ir-m-trend'), nTrend = root.querySelector('#ir-n-trend');
+    var out = root.querySelector('#ir-out');
+    var btn = root.querySelector('#ir-btn');
+    var store = 60;
+
+    function net(){
+      var loss = parseInt(bleedSel.value,10) * 6;   // 6,12,18
+      var gain = parseInt(intakeSel.value,10) * 6;   // 6,12,18
+      return gain - loss; // per cycle conceptual delta
+    }
+    function paint(){
+      store = Math.max(0, Math.min(100, store));
+      mStore.style.width = store + '%';
+      nStore.textContent = Math.round(store);
+      var d = net();
+      if(d > 1){ mTrend.style.width='75%'; nTrend.textContent='rising'; }
+      else if(d < -1){ mTrend.style.width='25%'; nTrend.textContent='falling'; }
+      else { mTrend.style.width='50%'; nTrend.textContent='stable'; }
+    }
+    function message(){
+      var d = net();
+      var base = 'Educational illustration only. ';
+      if(d < -1){
+        if(store <= 15) return base + 'Stored iron has drifted low over these cycles because monthly loss outpaced intake. In a real person this is exactly the pattern that warrants proper testing by a clinician, never a self-started supplement.';
+        return base + 'With loss outpacing intake, stored iron trends down slowly, cycle after cycle. The point is the drift over time, not any single month.';
+      }
+      if(d > 1) return base + 'Here intake exceeds the conceptual loss, so stores hold or recover. Notice how much the picture depends on both sides of the ledger.';
+      return base + 'Loss and intake roughly balance here, so stores stay steady. Change the bleed or the intake to see how the recurring cost can gradually shift the balance.';
+    }
+    btn.addEventListener('click', function(){
+      store += net(); // six cycles applied stepwise but net is per cycle; amplify
+      store += net()*2; // total ~ six cycles of drift
+      paint();
+      out.textContent = message();
+    });
+    bleedSel.addEventListener('change', paint);
+    intakeSel.addEventListener('change', paint);
+    paint();
+    out.textContent = 'Educational illustration only. Set a conceptual bleed and intake, then advance six cycles to watch stored iron drift. This is not a supplementation or medical plan.';
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

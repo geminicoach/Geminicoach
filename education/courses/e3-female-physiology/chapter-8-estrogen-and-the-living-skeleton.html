@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Estrogen and the Living Skeleton</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+<div class="ch-eyebrow">Class 8 · Module 3</div>
+<h1 class="ch-title">Estrogen and the Living Skeleton</h1>
+<p class="ch-subtitle">Why bone health is a female-physiology story, and why a quiet cycle can be a skeletal warning.</p>
+<div class="ch-meta">
+<span>18 min read</span>
+<span class="ch-meta-dot"></span>
+<span>9 cited sources</span>
+</div>
+</header>
+
+<section class="ch-hook">
+<p><span class="ch-dropcap">A</span> stress fracture in the foot of a nineteen-year-old distance runner looks, on the surface, like an overuse problem. Rest it, adjust the training load, come back in six weeks. But if that same runner has not had a menstrual period in eight months, the fracture is telling a second story, one about the tissue itself. Her bone may be under-built and under-defended, and the missing period and the cracked metatarsal share a common upstream cause. To read that story correctly, you have to stop thinking of the skeleton as scaffolding and start thinking of it as an organ that is alive, hungry, and constantly rebuilding itself.</p>
+<p>This chapter is where two earlier threads in this course, the quiet cycle of functional hypothalamic amenorrhea and the energy shortfall of relative energy deficiency in sport, arrive at a destination with lifelong consequences. The link runs through a single hormone: estradiol.</p>
+</section>
+
+<section class="ch-section">
+<h2>The actionable core, first</h2>
+<p>Before the mechanism, the practice. Here is what matters most for anyone applying this material, whether you are teaching, writing, advising in a non-clinical role, or simply trying to understand your own body.</p>
+<p>First, <span class="ch-key">bone is built early and defended continuously</span>. The window for accumulating peak bone mass closes in the late teens to late twenties, and what is not laid down then is difficult to recover later. Second, <span class="ch-key">estradiol is the skeleton's primary brake on bone breakdown</span> across the whole reproductive lifespan. When estradiol is chronically low, that brake releases. Third, <span class="ch-key">a persistently absent or irregular cycle in a younger person is a plausible signal of low estrogen exposure, and therefore a plausible signal about bone</span>, and it is a reason to encourage professional evaluation rather than to reassure, train through, or treat.</p>
+<p>That third point is the recognize-and-refer thread of this course, seen from a new and more sobering angle. You are learning to notice a pattern, not to diagnose it. The distinction matters enormously here, because the assessment tools for bone, the interpretation of them, and any decisions about care belong firmly with a qualified clinician.</p>
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>Why might a stress fracture and a missing menstrual period in the same young athlete be better understood as two symptoms of one problem than as two separate problems? Hold your answer as you read.</p>
+</aside>
+</section>
+
+<section class="ch-section">
+<h2>Bone is a living, self-renewing tissue</h2>
+<p>The image of the skeleton as dry, inert framework is wrong in a way that changes everything. Adult bone renews itself continuously through a process called <span class="ch-key">remodeling</span>: old bone is dissolved and removed, and new bone is manufactured to replace it, in coordinated cycles that repeat across the entire skeleton throughout life. In a landmark synthesis, Manolagas (2000) framed the adult skeleton as a tissue kept alive by the birth, work, and death of specialized cells arranged in teams.</p>
+<p>Two cell types do the heavy work. <span class="ch-key">Osteoclasts</span> are the demolition crew; they resorb, meaning they dissolve and clear away, existing bone. <span class="ch-key">Osteoblasts</span> are the construction crew; they lay down new bone matrix, which then mineralizes and hardens. A third cell, the <span class="ch-key">osteocyte</span>, is a former osteoblast that has become embedded in the bone it built, where it acts as a sensor and a signaling hub, coordinating the other two crews in response to mechanical strain and hormonal messages (Almeida et al., 2017).</p>
+<p>In a healthy young adult these crews are balanced. Roughly as much bone is removed as is replaced, so density holds steady. This balance is the single most useful concept in the chapter, because everything that harms bone does so by tipping it. When resorption outpaces formation, even slightly, and does so month after month, bone is lost. Manolagas (2000) and Almeida et al. (2017) both emphasize that the rate at which these cells are born and die, not just how hard they work, sets the direction of the balance.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A vintage scientific illustration plate, pen-and-ink with restrained watercolour wash in warm ochre, rust, and slate blue, showing a cross-section of trabecular bone as a delicate honeycomb lattice. In the foreground, two small groups of stylized cells at work on the bone surface: one cluster excavating a shallow pit labeled 'osteoclasts', another cluster laying down new layered matrix labeled 'osteoblasts', with a single embedded sensor cell in the bone labeled 'osteocyte'. Composition is a clean textbook plate, rule-of-thirds, soft even lighting as if lit for study. Labels set in small italic serif. No watermarks, no cropped letters, no people." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img1.jpg" alt="<em>The remodeling unit: demolition and construction crews working the same bone surface.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The remodeling unit: demolition and construction crews working the same bone surface.</em></figcaption></figure>
+
+<section class="ch-section">
+<h2>Estradiol restrains the demolition crew</h2>
+<p>Now bring in the hormone. Among all the signals that reach bone, estradiol, the principal estrogen of the reproductive years, is one of the most powerful, and its dominant role is protective. Khosla and colleagues (2012) summarized the mechanism cleanly: estrogen's primary effect on the skeleton is to <em>inhibit remodeling</em>, restraining the overall turnover rate, and it does this in part by acting on the osteocyte. Estrogen also directly suppresses osteoclast activity, the demolition crew, and it reduces the premature death, called apoptosis, of osteoblasts, the construction crew. The net effect is a hormone that both slows breakdown and preserves the builders.</p>
+<p>When estradiol is present at adequate levels, the balance holds. When it falls and stays low, the brake on the osteoclasts releases. Resorption speeds up, formation cannot keep pace, and what Khosla et al. (2012) call a <span class="ch-key">resorption-formation gap</span> opens. That gap, sustained over time, is bone loss. This is the mechanistic heart of the whole chapter, and it is well established: across the research literature, estrogen is identified as the major hormonal regulator of bone metabolism, in women and, notably, in men as well (Khosla et al., 2012; Almeida et al., 2017).</p>
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>If estrogen mainly works by restraining breakdown rather than by driving construction, what would you predict happens to bone in the first few years after estrogen drops sharply at menopause? Fast loss or slow loss? Why?</p>
+</aside>
+</section>
+
+<div class="ch-widget" id="w-balance">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Remodeling Balance Simulator</div>
+</div>
+<p class="ch-widget-sub">Move estradiol up or down and watch the balance between breakdown and building tip. The density meter shows the cumulative effect over simulated months.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Estradiol exposure</span>
+<select class="ch-widget-select" id="w-balance-est">
+<option value="high">Adequate (regular cycle)</option>
+<option value="mid">Reduced (irregular cycle)</option>
+<option value="low">Low (absent cycle / post-menopause)</option>
+</select>
+</div>
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Simulated months</span>
+<select class="ch-widget-select" id="w-balance-mo">
+<option value="6">6 months</option>
+<option value="12" selected>12 months</option>
+<option value="24">24 months</option>
+</select>
+</div>
+</div>
+
+<div class="ch-widget-meters">
+<div class="ch-meter">
+<span class="ch-meter-label">Breakdown (osteoclasts)</span>
+<span class="ch-meter-bar"><span id="w-balance-break" style="width:50%"></span></span>
+<span class="ch-meter-num" id="w-balance-break-n">50</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Building (osteoblasts)</span>
+<span class="ch-meter-bar"><span id="w-balance-build" style="width:50%"></span></span>
+<span class="ch-meter-num" id="w-balance-build-n">50</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Bone density after period</span>
+<span class="ch-meter-bar"><span id="w-balance-dens" style="width:100%"></span></span>
+<span class="ch-meter-num" id="w-balance-dens-n">100</span>
+</div>
+</div>
+
+<button class="ch-widget-btn" id="w-balance-run">Run the months</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>The lifespan arc: build, hold, then lose</h2>
+<p>Estrogen and bone play out over a lifetime in three broad acts. Understanding the arc is what turns a mechanism into a practical frame for recognizing risk at the right moments.</p>
+
+<h3>Act one: the youth building window</h3>
+<p>Bone mass is not accumulated evenly across childhood. It surges in the years around puberty. The National Osteoporosis Foundation position statement, based on a systematic review by Weaver and colleagues (2016), found that the roughly four years surrounding the age of peak bone mineral accretion, the fastest phase of bone gain, capture about thirty-nine percent of total body bone mineral. Read that again: nearly two-fifths of the adult skeleton's mineral is laid down in a four-year sprint that mostly happens in the mid-teens.</p>
+<p>The same review graded the evidence for lifestyle factors and found Grade A evidence, the strongest tier, that calcium intake and physical activity, especially weight-bearing activity during the late childhood and peripubertal years, are critical for maximizing peak bone mineral accrual (Weaver et al., 2016). This is one of the more solid findings in the entire field, and it deserves to be stated plainly rather than hedged.</p>
+<p>The total amount of bone a person carries out of young adulthood is called <span class="ch-key">peak bone mass</span>. It is the reserve from which the rest of life draws down. A higher peak means more margin before density falls into a range associated with fracture. Anything that suppresses estrogen or restricts the energy and nutrients available for building during this window lowers the peak, and because the window does not reopen, a lower peak is carried forward for life.</p>
+
+<h3>Act two: the reproductive years of protection</h3>
+<p>Through the reproductive decades, a regular ovulatory cycle produces the cyclical estradiol exposure that keeps the remodeling balance level and defends the peak that was built. This is the quiet, steady work of maintenance. It is also, importantly, where the reproductive cycle stops being only a fertility signal and becomes a skeletal one. When the cycle is regular, bone is generally being protected. When it goes quiet for reasons other than pregnancy, that protection may be weakening.</p>
+
+<h3>Act three: the menopause transition and after</h3>
+<p>Then estradiol falls, sharply, over the few years of the menopause transition and after. Riggs, Khosla, and Melton (1998) proposed what they called a <span class="ch-key">unitary model</span> of involutional osteoporosis, arguing that estrogen deficiency is the central cause of both the early accelerated phase of bone loss right after menopause and the slower phase that continues into later life. In their framing, menopause is not one of several contributors to osteoporosis in women; it is the central driver. The Lancet seminar by Compston and colleagues (2019) reinforces the downstream stakes: osteoporosis-related fractures become increasingly common in women after about age fifty-five and carry substantial burden, including elevated mortality after major fractures such as those of the hip.</p>
+<p>The clinical importance of the transition cannot be overstated, and it is exactly where the boundary of your role is firmest. Decisions about bone density scanning, fracture-risk assessment, hormone therapy, and any medication belong with a clinician. Your task is to understand the arc well enough to recognize when someone's situation warrants that professional conversation.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn editorial illustration in the style of a researcher's notebook, warm cream paper with graphite and a single teal accent wash, depicting bone density across a human lifespan as a rising-then-falling curve. The curve climbs steeply through youth to a rounded peak in early adulthood, holds roughly level through midlife, then bends downward more steeply at the far right. Three phases suggested by soft shading beneath the curve labeled only 'build', 'hold', and 'lose' in small handwritten serif. Axes are unlabeled with no numerical ticks, sketched loosely as if in a margin. Rule-of-thirds composition, soft daylight. No watermarks, no cropped letters, no people, no fabricated numbers." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch8-img2.jpg" alt="<em>The lifespan trajectory: a peak built early, held through the reproductive years, then drawn down.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The lifespan trajectory: a peak built early, held through the reproductive years, then drawn down.</em></figcaption></figure>
+
+<div class="ch-widget" id="w-traj">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Lifespan Bone Density Trajectory</div>
+</div>
+<p class="ch-widget-sub">Adjust the youth building window, sustained estrogen exposure, and a stretch of low energy availability, and watch the whole trajectory reshape. Each factor carries an evidence-strength badge.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Youth building window</span>
+<select class="ch-widget-select" id="w-traj-youth">
+<option value="strong">Strong (activity + adequate nutrition)</option>
+<option value="typical" selected>Typical</option>
+<option value="weak">Compromised</option>
+</select>
+</div>
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Stretch of low energy availability in youth</span>
+<select class="ch-widget-select" id="w-traj-red">
+<option value="none" selected>None</option>
+<option value="mild">Some (irregular cycle)</option>
+<option value="severe">Prolonged (amenorrhea)</option>
+</select>
+</div>
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Reproductive-years estrogen exposure</span>
+<select class="ch-widget-select" id="w-traj-est">
+<option value="full" selected>Sustained (regular cycles)</option>
+<option value="interrupted">Interrupted (episodes of amenorrhea)</option>
+</select>
+</div>
+</div>
+
+<div class="ch-widget-meters">
+<div class="ch-meter">
+<span class="ch-meter-label">Peak bone mass reached</span>
+<span class="ch-meter-bar"><span id="w-traj-peak" style="width:90%"></span></span>
+<span class="ch-meter-num" id="w-traj-peak-n">90</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Density entering menopause</span>
+<span class="ch-meter-bar"><span id="w-traj-mid" style="width:82%"></span></span>
+<span class="ch-meter-num" id="w-traj-mid-n">82</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Density in later life</span>
+<span class="ch-meter-bar"><span id="w-traj-late" style="width:64%"></span></span>
+<span class="ch-meter-num" id="w-traj-late-n">64</span>
+</div>
+</div>
+
+<button class="ch-widget-btn" id="w-traj-run">Redraw the trajectory</button>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>Where the threads converge: the quiet cycle and the under-built skeleton</h2>
+<p>Now we can close the loop with Chapters 6 and 7. The chain of reasoning is direct, and each link is supported.</p>
+<p>Start with energy. The Female Athlete Triad, defined in the American College of Sports Medicine position stand by Nattiv and colleagues (2007), describes the interrelationship among three things on a spectrum from health to disease: <span class="ch-key">energy availability</span>, meaning the energy left over for the body's functions after exercise is fueled; <span class="ch-key">menstrual function</span>; and <span class="ch-key">bone mineral density</span>. The initiating event is low energy availability. When the body does not have enough energy, it downregulates the reproductive axis, the cycle goes quiet, estrogen falls, and bone suffers. The three are not a coincidence; they are one causal cascade.</p>
+<p>The International Olympic Committee consensus statement by Mountjoy and colleagues (2014) broadened this into <span class="ch-key">relative energy deficiency in sport</span>, a wider syndrome in which low energy availability impairs many systems at once, including metabolic rate, immunity, cardiovascular health, and bone. The relabeling matters because it recognizes that the harm extends beyond menstruation and bone, and that it affects people of any gender, but the bone consequence remains a central one.</p>
+<p>The specific danger for a young person is timing. A recent review by Wong and colleagues (2025) synthesized the evidence that functional hypothalamic amenorrhea in adolescent female athletes, driven by low energy availability, excessive exercise, or psychological stress, produces low estrogen and impairs bone mineral accrual during exactly the crucial window of skeletal development, with an associated increase in fracture risk. Put the pieces together: the very years when nearly two-fifths of bone mineral should be laid down (Weaver et al., 2016) are the years when a quiet cycle can prevent it from being laid down. And what is not built in that window is not easily recovered.</p>
+<p>This is why a runner's absent period is not a badge of training discipline and not something to wait out. It is a plausible signal of a skeleton that is not being built or maintained, at the worst possible time for that to be true.</p>
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>A twenty-two-year-old tells you she stopped having periods about a year ago when she increased her training and cut back on eating, and she feels fine. Nothing hurts. Which parts of that sentence would you weigh most heavily, and what is the one action that is clearly within your role?</p>
+</aside>
+</section>
+
+<section class="ch-section">
+<h2>Grading the evidence honestly</h2>
+<p>This course commits to distinguishing what is well established from what is not, and bone is a good place to practice that discipline, because the estrogen-bone relationship is unusually solid compared with much of the cycle-based training and nutrition advice circulating today.</p>
+<p><span class="ch-key">Well established.</span> That estrogen restrains bone remodeling and that its deficiency drives bone loss is supported by convergent mechanistic and clinical evidence across decades (Manolagas, 2000; Riggs et al., 1998; Khosla et al., 2012; Almeida et al., 2017). That the peripubertal years are decisive for peak bone mass, and that calcium and physical activity in those years matter, carries the strongest evidence grade in the field (Weaver et al., 2016). That low energy availability is the initiating driver of the Triad and of relative energy deficiency in sport, with bone as a downstream consequence, is the consensus position of major sports-medicine bodies (Nattiv et al., 2007; Mountjoy et al., 2014).</p>
+<p><span class="ch-key">Less certain, and worth flagging.</span> Precisely how much peak bone mass an individual can gain from a specific intervention, how completely bone deficits from a period of amenorrhea can be recovered after energy status and cycles are restored, and the exact fracture risk carried by any one person are all harder to state with confidence. Recovery of bone after prolonged amenorrhea in youth appears to be incomplete in at least some cases, which is precisely why prevention and early recognition matter more than the hope of later repair. And a great deal of popular guidance that claims to tailor training or eating to cycle phases for bone or performance benefit rests on weak, small, or contradictory studies. Where the data are thin, say so, and do not let a strong finding about estrogen and bone lend false authority to unrelated claims.</p>
+<p>A note of humility belongs here. This chapter distills a research literature; it does not replace the judgment of clinicians who assess and treat bone, nor the lived and professional expertise of women and the practitioners who work with them. The strength of the estrogen-bone relationship is a reason to take the recognize-and-refer thread seriously, not a license to act beyond an educational role.</p>
+</section>
+
+<blockquote class="ch-quote">
+<p>The adult skeleton is not a finished structure but a tissue in perpetual renewal, and its fate is written in the balance between the cells that tear it down and the cells that build it back.</p>
+<cite>After Manolagas (2000)</cite>
+</blockquote>
+
+<section class="ch-section">
+<h2>Holding the clinical boundary</h2>
+<p>Because the stakes are real, the boundary must be clear. Recognizing a pattern is educational. Assessing, diagnosing, and treating are clinical. The line is especially firm here around anything touching amenorrhea, hormonal contraception, and the postpartum period, all of which alter estrogen exposure in ways that interact with bone and require individualized clinical judgment.</p>
+<p>What is within an educational role: understanding remodeling and estrogen's part in it, understanding the lifespan arc, and being able to notice when a persistently quiet cycle, especially alongside signs of low energy availability, is a reason to encourage someone to seek evaluation. What is not within it: interpreting a bone density scan, deciding whether hormone therapy or contraception is appropriate, prescribing training or nutrition as treatment, or offering reassurance that a missed-period pattern is harmless. When in doubt, the safe move is always the same: name what you notice, without alarm and without diagnosis, and point toward qualified care.</p>
+</section>
+
+<section class="ch-takeaways">
+<h2>Key Takeaways</h2>
+<ul>
+<li>Bone is living tissue in constant remodeling, with osteoclasts dissolving old bone and osteoblasts building new bone; density is set by the balance between them.</li>
+<li>Estradiol's dominant role is to restrain breakdown, mainly by inhibiting remodeling and suppressing osteoclast activity; when it falls and stays low, a resorption-formation gap opens and bone is lost.</li>
+<li>Nearly two-fifths of adult bone mineral is accumulated in the roughly four years around peak accretion in the mid-teens, and this youth building window does not reopen.</li>
+<li>Low energy availability initiates a cascade of quiet cycle, low estrogen, and impaired bone, described by the Female Athlete Triad and relative energy deficiency in sport frameworks.</li>
+<li>In adolescents, amenorrhea can prevent bone from being built during the very window it should be built fastest, raising fracture risk and leaving deficits that may not fully recover.</li>
+<li>The estrogen-bone relationship is well established; many cycle-based training and nutrition claims are not, and the difference should be stated plainly.</li>
+<li>Recognize the pattern, especially a persistently quiet cycle in a younger person, and refer; do not assess, diagnose, or treat.</li>
+</ul>
+</section>
+
+<section class="ch-lookahead">
+<div class="ch-lookahead-label">Looking Ahead</div>
+<p>If falling estrogen at menopause is the central driver of bone loss in women, it is also the hinge of a much broader transition. In the next chapter we follow estrogen's withdrawal beyond the skeleton into the many systems it quietly supported, and we ask what the evidence actually says, and does not say, about navigating that change.</p>
+</section>
+
+<section class="ch-refs">
+<h2>References</h2>
+<p>Almeida, M., Laurent, M. R., Dubois, V., Claessens, F., O'Brien, C. A., Bouillon, R., Vanderschueren, D., &amp; Manolagas, S. C. (2017). Estrogens and androgens in skeletal physiology and pathophysiology. <em>Physiological Reviews, 97</em>(1), 135–187. https://doi.org/10.1152/physrev.00033.2015</p>
+<p>Compston, J. E., McClung, M. R., &amp; Leslie, W. D. (2019). Osteoporosis. <em>The Lancet, 393</em>(10169), 364–376. https://doi.org/10.1016/S0140-6736(18)32112-3</p>
+<p>Khosla, S., Oursler, M. J., &amp; Monroe, D. G. (2012). Estrogen and the skeleton. <em>Trends in Endocrinology &amp; Metabolism, 23</em>(11), 576–581. https://doi.org/10.1016/j.tem.2012.03.008</p>
+<p>Manolagas, S. C. (2000). Birth and death of bone cells: Basic regulatory mechanisms and implications for the pathogenesis and treatment of osteoporosis. <em>Endocrine Reviews, 21</em>(2), 115–137. https://doi.org/10.1210/edrv.21.2.0395</p>
+<p>Mountjoy, M., Sundgot-Borgen, J., Burke, L., Carter, S., Constantini, N., Lebrun, C., Meyer, N., Sherman, R., Steffen, K., Budgett, R., &amp; Ljungqvist, A. (2014). The IOC consensus statement: Beyond the Female Athlete Triad—Relative Energy Deficiency in Sport (RED-S). <em>British Journal of Sports Medicine, 48</em>(7), 491–497. https://doi.org/10.1136/bjsports-2014-093502</p>
+<p>Nattiv, A., Loucks, A. B., Manore, M. M., Sanborn, C. F., Sundgot-Borgen, J., &amp; Warren, M. P. (2007). The female athlete triad. <em>Medicine &amp; Science in Sports &amp; Exercise, 39</em>(10), 1867–1882. https://doi.org/10.1249/mss.0b013e318149f111</p>
+<p>Riggs, B. L., Khosla, S., &amp; Melton, L. J., III. (1998). A unitary model for involutional osteoporosis: Estrogen deficiency causes both type I and type II osteoporosis in postmenopausal women and contributes to bone loss in aging men. <em>Journal of Bone and Mineral Research, 13</em>(5), 763–773. https://doi.org/10.1359/jbmr.1998.13.5.763</p>
+<p>Weaver, C. M., Gordon, C. M., Janz, K. F., Kalkwarf, H. J., Lappe, J. M., Lewis, R., O'Karma, M., Wallace, T. C., &amp; Zemel, B. S. (2016). The National Osteoporosis Foundation's position statement on peak bone mass development and lifestyle factors: A systematic review and implementation recommendations. <em>Osteoporosis International, 27</em>(4), 1281–1386. https://doi.org/10.1007/s00198-015-3440-3</p>
+<p>Wong, H. K., et al. (2025). Functional hypothalamic amenorrhea in adolescent athletes impairs bone accrual and increases fracture risk. <em>Frontiers in Endocrinology, 16</em>, 1709695. https://www.frontiersin.org/journals/endocrinology/articles/10.3389/fendo.2025.1709695/full</p>
+</section>
+
+<footer class="ch-foot">
+<span class="ch-foot-mark">¶</span>
+<span class="ch-foot-meta">ClassBuild · Chapter 8 of 12</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-balance');
+    if(!root) return;
+    var est = root.querySelector('#w-balance-est');
+    var mo = root.querySelector('#w-balance-mo');
+    var breakBar = root.querySelector('#w-balance-break');
+    var buildBar = root.querySelector('#w-balance-build');
+    var densBar = root.querySelector('#w-balance-dens');
+    var breakN = root.querySelector('#w-balance-break-n');
+    var buildN = root.querySelector('#w-balance-build-n');
+    var densN = root.querySelector('#w-balance-dens-n');
+    var btn = root.querySelector('#w-balance-run');
+
+    var profiles = {
+      high: {brk:50, bld:50, perMonth:0.0},
+      mid:  {brk:62, bld:48, perMonth:-0.4},
+      low:  {brk:78, bld:44, perMonth:-1.1}
+    };
+
+    function update(){
+      var p = profiles[est.value];
+      var months = parseInt(mo.value,10);
+      breakBar.style.width = p.brk + '%';
+      buildBar.style.width = p.bld + '%';
+      breakN.textContent = p.brk;
+      buildN.textContent = p.bld;
+      var dens = 100 + (p.perMonth * months);
+      if(dens < 40) dens = 40;
+      dens = Math.round(dens*10)/10;
+      densBar.style.width = Math.max(0,Math.min(100,dens)) + '%';
+      densN.textContent = dens;
+    }
+    est.addEventListener('change', update);
+    mo.addEventListener('change', update);
+    btn.addEventListener('click', update);
+    update();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-traj');
+    if(!root) return;
+    var youth = root.querySelector('#w-traj-youth');
+    var red = root.querySelector('#w-traj-red');
+    var estEx = root.querySelector('#w-traj-est');
+    var peakBar = root.querySelector('#w-traj-peak');
+    var midBar = root.querySelector('#w-traj-mid');
+    var lateBar = root.querySelector('#w-traj-late');
+    var peakN = root.querySelector('#w-traj-peak-n');
+    var midN = root.querySelector('#w-traj-mid-n');
+    var lateN = root.querySelector('#w-traj-late-n');
+    var btn = root.querySelector('#w-traj-run');
+
+    var youthBase = {strong:96, typical:90, weak:82};
+    var redPenalty = {none:0, mild:5, severe:12};
+    var estPenalty = {full:0, interrupted:7};
+
+    function clamp(v){ return Math.max(0,Math.min(100,Math.round(v*10)/10)); }
+
+    function update(){
+      var peak = youthBase[youth.value] - redPenalty[red.value];
+      peak = clamp(peak);
+      // density entering menopause: peak minus normal reproductive-years drift and any interruptions
+      var mid = peak - 6 - estPenalty[estEx.value];
+      mid = clamp(mid);
+      // later life: menopause transition steepens loss (~20 point drop)
+      var late = mid - 20;
+      late = clamp(late);
+
+      peakBar.style.width = peak + '%';
+      midBar.style.width = mid + '%';
+      lateBar.style.width = late + '%';
+      peakN.textContent = peak;
+      midN.textContent = mid;
+      lateN.textContent = late;
+    }
+    youth.addEventListener('change', update);
+    red.addEventListener('change', update);
+    estEx.addEventListener('change', update);
+    btn.addEventListener('click', update);
+    update();
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

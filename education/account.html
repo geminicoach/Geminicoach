@@ -137,7 +137,7 @@
   <script>
     (function(){ var K="gemEduPreviewUnlocked";
       function u(){ try{return sessionStorage.getItem(K)==="yes";}catch(e){return false;} }
-      if(!u()) location.replace("coming-soon.html");
+      if(!u()) void 0; /* passcode curtain retired at launch */
     })();
   </script>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -147,7 +147,11 @@
   (function(){
     var app = document.getElementById("app");
     var esc = function(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];}); };
-    var COMP = ["parker.gemini.coach@gmail.com","ebylander01@gmail.com","liamtsc1@gmail.com","jademckenzie3256@gmail.com"];
+    var CHARTER = ["parker.gemini.coach@gmail.com","ebylander01@gmail.com","liamtsc1@gmail.com","jademckenzie3256@gmail.com"];
+    var FLAGSHIP = ["connor@calibrated-strength.us","kobie@calibrated-strength.us"];
+    function compTier(email){ var e=(email||"").toLowerCase(); if(CHARTER.indexOf(e)!==-1) return "charter"; if(FLAGSHIP.indexOf(e)!==-1) return "flagship"; return null; }
+    var FOUNDING_LIMIT = 50;                 // first N registered accounts get the reward
+    var FOUNDING_CODE  = "FOUNDING50";       // TODO: replace with the real Stripe coaching promo code
     var COURSES = (window.GEMINI_COURSES && window.GEMINI_COURSES.courses) || [];
     var COLORS = {A:{c:"#36c98d",c2:"#1f8f63"},B:{c:"#2e8de8",c2:"#1a6fc4"},C:{c:"#22b6c4",c2:"#147f8a"},D:{c:"#e8a23a",c2:"#b9781f"},E:{c:"#9a6cf0",c2:"#6a44c0"}};
 
@@ -190,7 +194,7 @@
       var name=(user.user_metadata && user.user_metadata.full_name)||"";
       var first=name?name.split(" ")[0]:"there";
       var initial=(name?name.charAt(0):(user.email||"?").charAt(0)).toUpperCase();
-      var isComp=COMP.indexOf((user.email||"").toLowerCase())!==-1;
+      var tier=compTier(user.email); var isComp=tier!==null;
 
       var started=COURSES.filter(function(c){ return c.published && pct(c)>0; }).sort(function(a,b){ return pct(b)-pct(a); });
       var sumDone=0,sumTotal=0;
@@ -201,13 +205,16 @@
       Promise.all([
         GEM.listCertificates(),
         GEM.listExamAttempts ? GEM.listExamAttempts() : Promise.resolve([]),
-        (isComp || !GEM.hasActiveSubscription) ? Promise.resolve(false) : GEM.hasActiveSubscription()
+        (isComp || !GEM.hasActiveSubscription) ? Promise.resolve(false) : GEM.hasActiveSubscription(),
+        GEM.foundingNumber ? GEM.foundingNumber() : Promise.resolve(null)
       ]).then(function(res){
         var certs=res[0]||[], attempts=res[1]||[], isSub=res[2]===true;
+        var founding=(typeof res[3]==="number")?res[3]:null;
+        var isFounding=(founding!==null && founding>0 && founding<=FOUNDING_LIMIT);
         var certSlugs={}; certs.forEach(function(c){ certSlugs[c.course_slug]=c; });
         var examBest={}; attempts.forEach(function(a){ if(examBest[a.course_slug]==null||a.score>examBest[a.course_slug]) examBest[a.course_slug]=a.score; });
         var ceu=certs.reduce(function(s,c){ return s+(parseFloat(c.ceu_value)||0); },0);
-        render({user:user,first:first,initial:initial,isComp:isComp,isSub:isSub,started:started,sumDone:sumDone,sumTotal:sumTotal,overall:overall,completedCount:completedCount,certs:certs,certSlugs:certSlugs,examBest:examBest,ceu:ceu});
+        render({user:user,first:first,initial:initial,isComp:isComp,tier:tier,isSub:isSub,founding:founding,isFounding:isFounding,started:started,sumDone:sumDone,sumTotal:sumTotal,overall:overall,completedCount:completedCount,certs:certs,certSlugs:certSlugs,examBest:examBest,ceu:ceu});
       });
     });
 
@@ -234,15 +241,28 @@
         '<div class="avatar">'+esc(d.initial)+'</div>'+
         '<div><div class="eyebrow">Your learning</div><h1>Welcome back, '+esc(d.first)+'.</h1>'+
         '<div class="statusrow">'+
-          (d.isComp
+          (d.tier==="charter"
             ? '<span class="chip charter" style="background:linear-gradient(135deg,#f6cf6a,#e0a43a);color:#1a1205;font-weight:800;border:1px solid #f0d488;box-shadow:0 6px 18px rgba(224,164,58,.38);padding:8px 18px;border-radius:999px;letter-spacing:.5px;font-size:13px">★ CHARTER MEMBER</span>'
+            : d.tier==="flagship"
+              ? '<span class="chip flagship" style="background:linear-gradient(135deg,#8fe3ff,#2e8de8);color:#06263f;font-weight:800;border:1px solid #b7e6ff;box-shadow:0 6px 18px rgba(46,141,232,.4);padding:8px 18px;border-radius:999px;letter-spacing:.5px;font-size:13px">★ FLAGSHIP</span>'
             : d.isSub
               ? '<span class="chip member">★ GELL Member</span>'
               : '<span class="chip" style="background:#12233a;color:#aab8d2;border:1px solid #1c3354">Free account</span><button id="acctSub" class="chip" style="cursor:pointer;background:linear-gradient(135deg,#2e8de8,#1a6fc4);color:#fff;border:0;font-weight:700;padding:8px 18px;border-radius:999px">Subscribe · $50/mo →</button>')+
+          (d.isFounding ? '<span class="chip founding" style="background:linear-gradient(135deg,#9a6cf0,#6a44c0);color:#fff;font-weight:800;border:1px solid #b79bff;box-shadow:0 6px 18px rgba(106,68,192,.4);padding:8px 16px;border-radius:999px;letter-spacing:.4px;font-size:12px">★ FOUNDING 50 · #'+d.founding+'</span>' : '')+
           '<span class="chip email">'+esc(d.user.email)+'</span></div></div>'+
       '</div></div>';
 
       html+='<div class="wrap">';
+
+      if(d.isFounding){
+        html+='<div class="foundcard" style="margin:0 0 18px;background:linear-gradient(135deg,#241640,#160e2a);border:1px solid #6a44c0;border-radius:16px;padding:18px 22px;box-shadow:0 12px 30px rgba(0,0,0,.4)">'+
+          '<div style="font-family:\'Barlow Condensed\',sans-serif;letter-spacing:2px;color:#c9b3ff;font-size:12px">FOUNDING 50 REWARD</div>'+
+          '<div style="color:#fff;font-size:17px;line-height:1.5;margin:4px 0 10px">You\'re founding member <b>#'+d.founding+'</b> — thank you for being early. Here\'s <b>$50/mo off your first 2 months of coaching</b> with Parker.</div>'+
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
+            '<code style="background:#0e1f38;border:1px dashed #7c5ad0;color:#e6dbff;padding:8px 14px;border-radius:8px;font-size:16px;letter-spacing:1px">'+esc(FOUNDING_CODE)+'</code>'+
+            '<span style="color:#9fb0cc;font-size:13px">Use at coaching checkout with this email.</span>'+
+          '</div></div>';
+      }
 
       var last=lastCourse();
       if(last && last.slug){

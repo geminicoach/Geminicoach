@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Cost of Running on Empty</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 7 · Module 3</div>
+    <h1 class="ch-title">The Cost of Running on Empty</h1>
+    <p class="ch-subtitle">When the fuel left over for the body's own work runs short, physiology starts making hard choices.</p>
+    <div class="ch-meta">
+      <span>18 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">I</span>magine a person training hard, eating what feels like a full plate, and doing everything a committed athlete is supposed to do. Their splits are stagnant. They catch every passing cold. A stress reaction shows up in a foot. And their period, which used to arrive quietly and reliably, has gone silent for months. Nobody is starving themselves. Nobody skipped meals on purpose. And yet the body is behaving as though a famine has arrived.</p>
+    <p>This is not a rare edge case. It is one of the most common and most under-recognized problems in sport, and it is the single most important health topic in this course. It also happens to be widely misread as vanity, as an eating disorder, or as simple overtraining. It is often none of those. To understand it, we have to look at what is left in the tank after the workout is done.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>What energy availability actually means</h2>
+    <p>In the previous chapter we traced how the menstrual cycle works as a functional signal, quiet or loud, depending on what the body is coping with. Now we follow that signal to its most powerful upstream cause: <span class="ch-key">energy availability</span>.</p>
+    <p>Energy availability is not the same as how much you eat, and it is not the same as energy balance. It is defined as dietary energy intake minus the energy burned during exercise, and then normalized to fat-free mass, usually expressed in kilocalories per kilogram of fat-free mass per day (Areta et al., 2020). Put plainly, it is the energy left over for everything the body does that is not exercise: repairing tissue, thinking, fighting infection, regulating hormones, keeping bone alive, and running reproduction.</p>
+    <p>The mental model that matters is a household budget. Income is what you eat. One large, non-negotiable expense is the training you have already committed to. Energy availability is what is left in the account after that expense clears, and it is that remainder, not the gross income, that has to cover rent, utilities, and groceries for the rest of the body. You can eat what looks like plenty and still leave the core functions underfunded, simply because exercise took the larger share first.</p>
+    <p>This distinction is the whole game. A person can be in apparent energy balance, weight stable on the scale, and still be running their internal systems on a deficit, because the body has quietly downshifted those systems to make the math work (Areta et al., 2020). Weight stability reassures people that everything is fine. It is not a reliable reassurance.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Two people eat the same 2,400 kilocalories in a day. One does an easy 30-minute walk; the other completes a two-hour training session. Same intake, same body size. Why might only one of them be at risk of low energy availability, and why would the bathroom scale fail to reveal it?</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn pen-and-watercolour editorial diagram in the style of a researcher's notebook, showing a household-budget metaphor for energy availability. On the left, a coin jar labeled 'intake' pours energy into a wide bowl. A large pipe drains off a portion labeled 'exercise' to the side. What remains in the bowl is labeled 'left for core function'. Warm earthy palette of ochre, sage green, and muted terracotta on cream paper. Loose ink linework, soft washes, no numerical values, no charts. Labels in small italic serif: 'intake', 'exercise', 'left for core function'. No people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch7-img1.jpg" alt="<em>Energy availability is the remainder, not the intake.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Energy availability is the remainder, not the intake.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Low, intentional, and unintentional</h2>
+    <p><span class="ch-key">Low energy availability</span> is what happens when that remainder falls too far, for too long. Crucially, it arrives by several different roads, and the road matters for how we think about it, though not for how firmly we hand assessment to professionals.</p>
+    <p>Sometimes low energy availability is <span class="ch-key">intentional</span>: deliberate weight cutting for a weight-class sport, a physique-sport push toward extreme leanness, or restrictive eating tied to a psychological condition. Sometimes it is entirely <span class="ch-key">unintentional</span>: a dedicated person increases training volume across a season and simply never scales intake to match, or has an appetite that does not keep pace with output, or follows well-meant advice to "stay lean" without understanding the cost (Nattiv et al., 2007). The unintentional path is important precisely because it can happen to a thoughtful, disciplined person who believes they are doing everything right.</p>
+    <p>The landmark position stand from the American College of Sports Medicine made this point explicitly: low energy availability can be inadvertent, intentional, or driven by disordered eating, and it is the low energy availability itself, with or without an eating disorder, that drives the downstream harm (Nattiv et al., 2007). This is why it is a mistake to collapse this topic entirely into "disordered eating." The two can overlap, and often do, but they are not the same thing, and treating them as identical causes us to miss the person who is undereating for their output without any eating pathology at all.</p>
+
+    <h3>Where the threshold sits, and how sure we are</h3>
+    <p>The most-cited number in this field comes from a controlled experiment by Loucks and Thuma (2003), who studied 29 regularly menstruating women and found that <span class="ch-key">luteinizing hormone</span> pulsatility, the pulsing hormonal signal from the brain that drives the ovarian cycle, was disrupted when energy availability dropped below roughly 30 kilocalories per kilogram of fat-free mass per day. Above that threshold, the pulses held steady; below it, pulse frequency fell. This experiment is the mechanistic backbone of the whole framework, showing a direct line from the energy budget to the brain's control of reproduction.</p>
+    <p>Here honesty is required. That 30 kilocalorie threshold is a useful landmark, but it is not a bright line that applies identically to every person. It emerged from short-term laboratory manipulations in a specific group, and individual variation is large. The most current International Olympic Committee consensus deliberately moved away from a single magic number, distinguishing instead between <span class="ch-key">adaptable</span> low energy availability, which the body can tolerate for a while, and <span class="ch-key">problematic</span> low energy availability, which produces harm, and noting that where that line falls depends on the individual (Mountjoy et al., 2023). Much of the evidence beyond short-term studies is associative rather than causal (Areta et al., 2020). So use the threshold as a concept, not as a diagnostic cutoff you can apply to yourself or anyone else.</p>
+  </section>
+
+  <div class="ch-widget" id="ea-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Energy Availability Concept Model</div>
+    </div>
+    <p class="ch-widget-sub">Move the conceptual inputs and watch where the leftover energy lands. This shows the idea and the research landmarks only. It is not a diagnostic, planning, or personal-recommendation tool.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Energy taken in</span>
+        <select class="ch-widget-select" id="ea-intake">
+          <option value="1600">Modest</option>
+          <option value="2200" selected>Moderate</option>
+          <option value="2800">High</option>
+          <option value="3400">Very high</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Energy spent in exercise</span>
+        <select class="ch-widget-select" id="ea-exercise">
+          <option value="200">Light</option>
+          <option value="500" selected>Moderate</option>
+          <option value="900">Heavy</option>
+          <option value="1300">Very heavy</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Body size (fat-free mass)</span>
+        <select class="ch-widget-select" id="ea-mass">
+          <option value="40">Smaller</option>
+          <option value="50" selected>Mid</option>
+          <option value="60">Larger</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Leftover for core function</span>
+        <span class="ch-meter-bar"><span id="ea-fill" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="ea-num">30</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="ea-zone">Zone: adequate for full function.</p>
+    <button class="ch-widget-btn" id="ea-btn">Recalculate concept</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>From a quiet cycle to a whole-body triage</h2>
+    <p>When the leftover falls too low, the body does not fail everywhere at once. It triages. It protects the functions needed for immediate survival and dials down the ones it can defer. Reproduction is expensive and, from a strict survival standpoint, deferrable, so it is often first to be sacrificed (Nattiv et al., 2007; Ihalainen et al., 2024). This is exactly why the menstrual cycle is such an honest early signal: it is the canary, going quiet before louder alarms sound.</p>
+    <p>But framing this purely as a menstrual issue badly understates its reach. That was the central insight behind the shift from the older <span class="ch-key">female athlete triad</span> to a broader framework. The triad, as formalized by the American College of Sports Medicine, described three interrelated points on a spectrum: energy availability, menstrual function, and bone mineral density (Nattiv et al., 2007). It was a major advance, but it left out much of what low energy availability actually touches, and it was framed around female athletes only.</p>
+    <p>In 2014 the International Olympic Committee introduced <span class="ch-key">Relative Energy Deficiency in Sport</span>, abbreviated RED-S, to capture the full picture: not just menstrual and bone effects but impaired metabolic rate, immunity, protein synthesis, cardiovascular health, and more, in both female and male athletes (Mountjoy et al., 2014). The 2023 update integrated more than 170 new studies and refined the models further, but the core idea held: one upstream cause, many downstream systems, all connected (Mountjoy et al., 2023).</p>
+
+    <blockquote class="ch-quote">
+      <p>Relative Energy Deficiency in Sport refers to impaired physiological function caused by relative energy deficiency, and includes impairments of metabolic rate, menstrual function, bone health, immunity, protein synthesis, and cardiovascular health.</p>
+      <cite>Mountjoy et al., 2014, IOC consensus statement</cite>
+    </blockquote>
+
+    <h3>The systems, one by one</h3>
+    <p>It helps to name what gets affected, because the whole point of the framework is that these are not separate problems.</p>
+    <p><strong>Menstrual and reproductive.</strong> The disruption of luteinizing hormone pulsatility described by Loucks and Thuma (2003) suppresses the downstream cycle. This can range from subtle shortening of the luteal phase, to skipped ovulation, to full <span class="ch-key">amenorrhea</span>, the absence of menstrual periods. A promising line of thinking suggests that subtle markers, such as a missing luteinizing hormone surge or low luteal-phase progesterone, may reveal dysfunction before periods stop entirely (Ihalainen et al., 2024). This is a topic for qualified evaluation, not self-tracking to a conclusion.</p>
+    <p><strong>Bone.</strong> This is the thread we carry directly into the next chapter. Reproductive hormones, estrogen in particular, are protective of bone. When low energy availability suppresses those hormones and simultaneously deprives bone of the raw energy and nutrients it needs to remodel, bone mineral density can fall and the risk of <span class="ch-key">bone stress injuries</span> rises (Nattiv et al., 2007; Gallant et al., 2024). A quiet cycle and weakening bone are not two coincidences. They share one cause.</p>
+    <p><strong>Endocrine and metabolic.</strong> Beyond the reproductive axis, low energy availability lowers resting metabolic rate and disrupts thyroid signaling, appetite hormones, and other endocrine axes, part of the body's coordinated downshift (Mountjoy et al., 2014; Ihalainen et al., 2024). Iron status can also suffer, with knock-on effects on energy and performance.</p>
+    <p><strong>Immune.</strong> The person who catches every cold is not imagining it. Impaired immunity and higher illness burden are documented consequences, and the meta-analysis by Gallant et al. (2024) found increased illness-related absence among athletes with low energy availability.</p>
+    <p><strong>Performance.</strong> This is the cruel irony at the center of the topic, which we take up next.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific-illustration plate, ink-and-wash on aged paper, depicting a central glowing node labeled 'low energy availability' with delicate radiating lines connecting to six smaller labeled nodes arranged around it. The six nodes read: 'menstrual', 'bone', 'endocrine', 'metabolic', 'immune', 'performance'. Interconnecting thin lines also link the outer nodes to one another, suggesting a web. Muted palette of indigo ink, sepia, and pale gold on cream. Elegant hand-lettered small serif labels only, exactly the seven phrases quoted, no other text, no numbers, no charts, no watermarks." data-aspect="square"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch7-img2.jpg" alt="<em>One upstream cause, many connected systems.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>One upstream cause, many connected systems.</em></figcaption></figure>
+
+  <div class="ch-widget" id="web-widget">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The RED-S Systems Web</div>
+    </div>
+    <p class="ch-widget-sub">Select a system to see how low energy availability reaches it and which other systems it connects to. Switch to quiz mode to reconstruct the links from memory.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">System</span>
+        <select class="ch-widget-select" id="web-node">
+          <option value="menstrual">Menstrual</option>
+          <option value="bone">Bone</option>
+          <option value="endocrine">Endocrine</option>
+          <option value="metabolic">Metabolic</option>
+          <option value="immune">Immune</option>
+          <option value="performance">Performance</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Mode</span>
+        <select class="ch-widget-select" id="web-mode">
+          <option value="explore">Explore</option>
+          <option value="quiz">Quiz</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters" id="web-body">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Center</span>
+        <span class="ch-meter-bar"><span style="width:100%"></span></span>
+        <span class="ch-meter-num">LEA</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="web-text">Every link traces back to one center: low energy availability.</p>
+    <button class="ch-widget-btn" id="web-btn">Reveal connections</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The leanness trap: when less fuel dims performance</h2>
+    <p>Perhaps the most damaging myth in leanness-focused sport is the belief that getting lighter or leaner always makes you faster or better. Within a healthy range, favorable body composition can help. But past a point, low energy availability actively degrades the very performance it is supposed to serve, and the person experiencing it often cannot feel the trade happening.</p>
+    <p>The evidence here has grown sharper. The first systematic review and meta-analysis on the topic pooled 59 studies covering 6,118 athletes and found that 44.7 percent had low energy availability, roughly comparable in female athletes (44.2 percent) and male athletes (49.4 percent) (Gallant et al., 2024). Athletes with low energy availability showed decreased running performance, blunted training response, reduced endurance, and declines in coordination, concentration, explosive power, and agility, along with more time lost to illness (Gallant et al., 2024). An earlier narrative review documented prevalence in the range of 22 to 58 percent across sports and reached similar conclusions about the performance cost (Logue et al., 2020).</p>
+    <p>So the leanness push can produce a person who is lighter, who believes leanness is helping, and who is measurably slower, weaker, and more injury-prone than they would otherwise be. The body is not being stubborn. It is doing exactly what a household in a budget crisis does: it stops investing in the future to pay the bills today, and adaptation, the thing training is supposed to buy, is a future investment.</p>
+    <p>One more honest note about the evidence. That same review by Logue et al. (2020) found that knowledge of RED-S and its performance implications remains low among athletes and coaches. So the pattern is common, costly, and poorly understood by the very people surrounded by it. That combination is why normalization is such a danger.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A committed distance runner has lost weight over a season, believes they are in the best shape of their life, and yet their times have plateaued and a stress reaction has appeared. Which pieces of the RED-S picture might be present here, and which single word describes what you would do with that observation?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why the early signs get normalized</h2>
+    <p>Sport cultures that prize leanness create the perfect conditions to miss this. A skipped period gets reframed as convenient. Constant hunger gets praised as discipline. Frequent minor illness gets shrugged off as bad luck. Cold hands, low mood, poor sleep, and stalled progress each get an isolated, benign explanation. Because low energy availability so often arrives unintentionally and without any dramatic eating pathology, there is no obvious villain to point to, and the individual pieces look small.</p>
+    <p>The framework's gift is that it teaches you to see the pieces as a set. A quiet cycle plus a nagging bone injury plus frequent illness plus stalled performance is not four small stories. It may be one story with one cause. Screening tools exist, such as the Low Energy Availability in Females Questionnaire, but these are instruments for trained professionals, and even they have limitations (Logue et al., 2020). Recognizing the constellation is within reach for an educated observer. Interpreting it, confirming it, and doing anything about it are not.</p>
+
+    <h3>The recognize-and-refer boundary</h3>
+    <p>This is the firmest line in the course, and it belongs especially around amenorrhea and RED-S. What this chapter equips you to do is <span class="ch-key">recognize the pattern and understand its reach</span>. What it does not do, and what you must not do, is diagnose, assess energy availability in a real person, prescribe intake or training changes, or manage the condition. The absence of periods in particular has many possible causes, some benign and some serious, and sorting them out is medical work.</p>
+    <p>The reasons for the boundary are not bureaucratic. Assessment requires clinical measurement and history. Care is genuinely multidisciplinary, often involving a physician, a registered dietitian, and a mental-health professional working together (Nattiv et al., 2007; Mountjoy et al., 2023). And getting it wrong carries real harm, both from missing a serious cause and from mishandling a fragile situation. Your role is to notice, to take it seriously, and to understand that what you have noticed may warrant professional evaluation. Then you hand it on.</p>
+    <p>A note of humility fits here too. This course distills a research literature that is still evolving, that leans heavily on short-term studies, and that has genuine gaps. Clinical expertise and lived female experience carry knowledge the studies have not captured. Holding the pattern lightly, and the boundary firmly, is the mature response to both.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Energy availability is the energy left for core body functions after exercise is paid for, normalized to fat-free mass. It is not intake and not energy balance, and weight can stay stable while it runs low.</li>
+      <li>Low energy availability can be intentional, from weight cutting or physique demands, or entirely unintentional in a committed person who simply undereats for their output. It is not the same thing as an eating disorder, though the two can overlap.</li>
+      <li>The suppression of luteinizing hormone pulsatility below roughly 30 kilocalories per kilogram of fat-free mass per day is the mechanistic landmark, but it is a concept, not a personal cutoff, and individual variation is large.</li>
+      <li>Relative Energy Deficiency in Sport, or RED-S, ties menstrual, bone, endocrine, metabolic, immune, and performance effects to one upstream cause. A quiet cycle and weakening bone share that cause.</li>
+      <li>Low energy availability is common, affecting roughly 45 percent of athletes in pooled data, and it degrades performance even as leanness feels like an advantage.</li>
+      <li>Your role is to recognize the pattern and its reach and to understand it may warrant professional evaluation. Assessment, diagnosis, and care belong to qualified professionals, never to you, especially with amenorrhea and RED-S.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We flagged bone as the thread running out of this chapter. Next we follow it directly: how estrogen protects the skeleton, why low energy availability and a suppressed cycle put bone at risk during the very years bone should be at its strongest, and what a lifetime of that trade-off can cost. The canary and the scaffolding, it turns out, answer to the same signal.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Areta, J. L., Taylor, H. L., & Koehler, K. (2020). Low energy availability: History, definition and evidence of its endocrine, metabolic and physiological effects in prospective studies in females and males. <em>European Journal of Applied Physiology, 121</em>(1), 1–21. https://doi.org/10.1007/s00421-020-04516-0</p>
+    <p>Gallant, T. L., Ong, L. F., Wong, L., Sparks, M., Wilson, E., Puglisi, J. L., & Gerriets, V. A. (2024). Low energy availability and relative energy deficiency in sport: A systematic review and meta-analysis. <em>Sports Medicine.</em> https://doi.org/10.1007/s40279-024-02130-0</p>
+    <p>Ihalainen, J. K., Mikkonen, R. S., Ackerman, K. E., Heikura, I. A., Mjøsund, K., Valtonen, M., & Hackney, A. C. (2024). Beyond menstrual dysfunction: Does altered endocrine function caused by problematic low energy availability impair health and sports performance in female athletes? <em>Sports Medicine, 54</em>(9), 2267–2289. https://doi.org/10.1007/s40279-024-02065-6</p>
+    <p>Logue, D. M., Madigan, S. M., Melin, A., Delahunt, E., Heinen, M., Donnell, S. M., & Corish, C. A. (2020). Low energy availability in athletes 2020: An updated narrative review of prevalence, risk, within-day energy balance, knowledge, and impact on sports performance. <em>Nutrients, 12</em>(3), 835. https://doi.org/10.3390/nu12030835</p>
+    <p>Loucks, A. B., & Thuma, J. R. (2003). Luteinizing hormone pulsatility is disrupted at a threshold of energy availability in regularly menstruating women. <em>The Journal of Clinical Endocrinology & Metabolism, 88</em>(1), 297–311. https://doi.org/10.1210/jc.2002-020369</p>
+    <p>Mountjoy, M., Sundgot-Borgen, J., Burke, L., Carter, S., Constantini, N., Lebrun, C., Meyer, N., Sherman, R., Steffen, K., Budgett, R., & Ljungqvist, A. (2014). The IOC consensus statement: Beyond the female athlete triad—Relative Energy Deficiency in Sport (RED-S). <em>British Journal of Sports Medicine, 48</em>(7), 491–497. https://doi.org/10.1136/bjsports-2014-093502</p>
+    <p>Mountjoy, M., Ackerman, K. E., Bailey, D. M., Burke, L. M., Constantini, N., Hackney, A. C., Heikura, I. A., Melin, A., Pensgaard, A. M., Stellingwerff, T., Sundgot-Borgen, J. K., Torstveit, M. K., Jacobsen, A. U., Verhagen, E., Budgett, R., Engebretsen, L., & Erdener, U. (2023). 2023 International Olympic Committee's (IOC) consensus statement on Relative Energy Deficiency in Sport (REDs). <em>British Journal of Sports Medicine, 57</em>(17), 1073–1097. https://doi.org/10.1136/bjsports-2023-106994</p>
+    <p>Nattiv, A., Loucks, A. B., Manore, M. M., Sanborn, C. F., Sundgot-Borgen, J., & Warren, M. P. (2007). The female athlete triad. <em>Medicine & Science in Sports & Exercise, 39</em>(10), 1867–1882. https://doi.org/10.1249/mss.0b013e318149f111</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">ClassBuild · Chapter 7 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('ea-widget');
+    if(!w) return;
+    var intake = w.querySelector('#ea-intake');
+    var ex = w.querySelector('#ea-exercise');
+    var mass = w.querySelector('#ea-mass');
+    var fill = w.querySelector('#ea-fill');
+    var num = w.querySelector('#ea-num');
+    var zone = w.querySelector('#ea-zone');
+    var btn = w.querySelector('#ea-btn');
+    function calc(){
+      var i = parseFloat(intake.value);
+      var e = parseFloat(ex.value);
+      var m = parseFloat(mass.value);
+      var ea = Math.max(0, (i - e) / m);
+      var display = Math.round(ea);
+      num.textContent = display;
+      // scale: 0 to 55 kcal/kg FFM/day maps to 0-100% width
+      var pct = Math.max(4, Math.min(100, (ea / 55) * 100));
+      fill.style.width = pct.toFixed(0) + '%';
+      var label;
+      if(ea >= 45){ label = 'Zone: adequate for full function.'; }
+      else if(ea >= 30){ label = 'Zone: generally adequate, above the research landmark.'; }
+      else if(ea >= 20){ label = 'Zone: below the research landmark and likely to compromise function.'; }
+      else { label = 'Zone: low and likely to compromise function across systems.'; }
+      zone.textContent = label + ' Concept only, not a diagnostic or planning tool.';
+    }
+    btn.addEventListener('click', calc);
+    intake.addEventListener('change', calc);
+    ex.addEventListener('change', calc);
+    mass.addEventListener('change', calc);
+    calc();
+  } catch(err){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('web-widget');
+    if(!w) return;
+    var node = w.querySelector('#web-node');
+    var mode = w.querySelector('#web-mode');
+    var text = w.querySelector('#web-text');
+    var btn = w.querySelector('#web-btn');
+    var data = {
+      menstrual: {
+        effect: 'Low energy availability suppresses luteinizing hormone pulsatility, so ovulation and the cycle quiet down. This is often the earliest visible signal.',
+        links: ['bone','endocrine']
+      },
+      bone: {
+        effect: 'Suppressed estrogen plus a shortage of energy and nutrients for remodeling lowers bone mineral density and raises bone stress injury risk.',
+        links: ['menstrual','endocrine']
+      },
+      endocrine: {
+        effect: 'Multiple hormonal axes downshift together, including thyroid and appetite signaling, coordinating the wider triage.',
+        links: ['menstrual','bone','metabolic']
+      },
+      metabolic: {
+        effect: 'Resting metabolic rate drops and iron status can fall as the body conserves, feeding back into performance and energy.',
+        links: ['endocrine','performance']
+      },
+      immune: {
+        effect: 'Immunity is impaired, raising illness burden and time lost to being sick.',
+        links: ['performance']
+      },
+      performance: {
+        effect: 'Endurance, explosive power, coordination, concentration, and training response all decline, even as leanness feels like an advantage.',
+        links: ['metabolic','immune','bone']
+      }
+    };
+    function reveal(){
+      if(mode.value === 'quiz'){
+        text.textContent = 'Quiz mode: name how low energy availability reaches "' + node.value + '", then name at least two systems it connects to. Switch to Explore to check yourself.';
+        return;
+      }
+      var d = data[node.value];
+      text.textContent = d.effect + ' Connected systems: ' + d.links.join(', ') + '. Every link traces back to low energy availability at the center.';
+    }
+    btn.addEventListener('click', reveal);
+    node.addEventListener('change', reveal);
+    mode.addEventListener('change', reveal);
+    reveal();
+  } catch(err){}
+})();
+</script>
+</body>
+</html>

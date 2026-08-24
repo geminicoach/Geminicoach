@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>When the Cycle Goes Quiet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* ClassBuild chapter theme — notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: '— '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+<div class="ch-eyebrow">Class 6 · Module 2</div>
+<h1 class="ch-title">When the Cycle Goes Quiet</h1>
+<p class="ch-subtitle">A missing period is not a diagnosis. It is a question, and the answer matters enormously.</p>
+<div class="ch-meta">
+<span>18 min read</span>
+<span class="ch-meta-dot"></span>
+<span>8 cited sources</span>
+</div>
+</header>
+
+<section class="ch-hook">
+<p><span class="ch-dropcap">T</span>hree people tell you their cycle has gone silent. The first started a progestin-only contraceptive method four months ago and has had no bleed since. The second is a physique competitor twelve weeks out from a show, eating in a deep deficit and training twice a day; her last period was in the spring. The third is thirty-four, eats plenty, trains moderately, is not on any hormonal method, and has simply stopped bleeding for the past four months with no explanation she can find.</p>
+<p>Three quiet cycles. On the surface they look almost identical. Underneath, they could not mean more different things. One is expected and benign. One is the body powering down its reproductive machinery to conserve resources. One is a genuine unknown that needs a clinician. Confusing them is not a small error. It is the kind of error that delays care for someone who needs it, or manufactures alarm for someone who does not. This chapter is about learning to tell them apart at the level of recognition, and then knowing exactly where your job ends.</p>
+</section>
+
+<section class="ch-section">
+<h2>Amenorrhea is a symptom, not a disease</h2>
+<p>Start with vocabulary, because precision here prevents most of the trouble. <span class="ch-key">Amenorrhea</span> simply means the absence of menstruation. Clinicians split it into two forms. <span class="ch-key">Primary amenorrhea</span> is the failure to begin menstruating by the expected age in adolescence. <span class="ch-key">Secondary amenorrhea</span> is the stopping of periods in someone who previously had them. The 2025 update to the Female Athlete Triad Coalition consensus statement notes that in adolescents, sustained energy deficiency can itself delay the first period or cause primary amenorrhea, so the two categories are not as cleanly separated as the labels suggest (De Souza et al., 2025).</p>
+<p>Here is the single most important idea in the chapter, and everything else hangs from it: amenorrhea is a symptom, not a diagnosis. It is the smoke, not the fire. A clinical review in <em>American Family Physician</em> frames the menstrual pattern as an indicator of overall health, a vital sign that reflects the state of the whole system rather than a disease in its own right (Klein et al., 2019). When the cycle goes quiet, the correct first response is not "what is the treatment" but "what is this a sign of." That reframing, from answer to question, is the entire posture this chapter asks you to adopt.</p>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial illustration in the style of a natural-history field-guide plate, showing three stylized human silhouettes standing side by side, each with a small glowing lantern held at the pelvis representing the reproductive axis. The left lantern is deliberately dimmed by a hand turning a small dial, labeled 'induced' in small italic serif. The middle lantern is fading on its own as fuel visibly runs low, labeled 'functional'. The right lantern flickers with a question mark of smoke rising above it, labeled 'unclear'. Warm earthy palette of ochre, sage green, and muted terracotta on cream paper, soft single key light from upper left, rule-of-thirds composition. No watermarks, no cropped letters, no extra text beyond the three quoted labels." data-aspect="wide-landscape"><div class="ch-figbox" style="display:flex;align-items:center;justify-content:center;"><span class="ch-figbox-tag">image unavailable</span></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Three quiet cycles, three very different underlying states.</em></figcaption></figure>
+
+<h3>Three categories that look alike and mean different things</h3>
+<p>Sort the causes of a quiet cycle into three broad buckets. You are not diagnosing which bucket a real person belongs in; you are learning that the buckets exist and that they are not interchangeable.</p>
+<p>The first is a <span class="ch-key">medically induced change</span>. This is the absent bleed from the progestin-based contraceptive methods you met in the previous chapter. The hormonal input is deliberately altering the endometrial lining so that there is little or nothing to shed. The reproductive axis may be doing exactly what the medication intends. This is expected, it is documented, and on its own it is benign. It is the one category where a quiet cycle is not a warning.</p>
+<p>The second is a <span class="ch-key">functional or hypothalamic pattern</span>. Here the axis has not been switched off by a drug; it has quietly powered itself down in response to a signal that resources are scarce. This is the pattern that sits squarely in the middle of everything this course cares about, because it lives at the intersection of training load, nutrition, and the hypothalamic-pituitary-ovarian axis. We will spend most of the chapter here.</p>
+<p>The third is a <span class="ch-key">pathological cause</span>. This is the quiet cycle that reflects underlying disease: a pituitary tumor, a thyroid disorder, primary ovarian insufficiency, polycystic ovary syndrome, an outflow-tract problem, or another organic condition. This category is precisely why you do not diagnose. Some of its members are serious, some are treatable only if caught, and none of them can be ruled in or out by looking at training logs and food diaries.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>Before reading on: which of the three categories can you confidently identify from the outside, using only information a non-clinician would have? And which category is defined precisely by the fact that it can only be confirmed by ruling the others out?</p>
+</aside>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>The functional or hypothalamic pattern, up close</h2>
+<p>Recall the machinery from earlier in the course. The hypothalamus releases <span class="ch-key">gonadotropin-releasing hormone</span> in pulses. Those pulses drive the pituitary to release the two gonadotropins, <span class="ch-key">luteinizing hormone</span> and <span class="ch-key">follicle-stimulating hormone</span>. Those in turn drive the ovary to grow a follicle, produce <span class="ch-key">estradiol</span>, ovulate, and produce progesterone. The whole cadence depends on the pulse generator in the hypothalamus keeping time.</p>
+<p><span class="ch-key">Functional hypothalamic amenorrhea</span> is what happens when that pulse generator slows down. The pulses become sparse and irregular, luteinizing hormone secretion loses its rhythm, the gonadotropins fall, estradiol drops, and the cycle fades to silence. Crucially, nothing is broken. There is no tumor, no failed ovary, no structural fault. The system is intact and is choosing, in effect, to spend less on reproduction because it has read the environment as one of scarcity or threat. A peer-reviewed review describes functional hypothalamic amenorrhea as a reversible disorder driven by suppression of gonadotropin-releasing hormone pulsatility, arising from low energy availability, psychological stress, disordered eating, excessive exercise, or some combination of these (Morrison et al., 2021).</p>
+<p>How common is this pattern? More common than most people assume. That same review identifies functional hypothalamic amenorrhea as the most common cause of secondary amenorrhea in women of reproductive age (Morrison et al., 2021). A Mayo Clinic Proceedings review puts it at roughly one-third of all secondary amenorrhea cases and, importantly, notes that it is frequently under-recognized and under-treated (Sowmya et al., 2023). That combination, common and overlooked, is exactly why a course like this asks you to learn to notice it.</p>
+
+<h3>Energy availability, not body fat, is the lever</h3>
+<p>For decades the folk model held that women stop menstruating when they get "too lean," as if body fat percentage were the switch. The evidence dismantled that story. The pivotal work here belongs to Anne Loucks, whose research established that reproductive function is regulated by <span class="ch-key">energy availability</span>, defined as dietary energy intake minus the energy expended in exercise, expressed relative to lean body mass. When energy availability falls below a threshold of roughly twenty to thirty kilocalories per kilogram of lean body mass per day, the disruption of luteinizing hormone pulsatility appears. Body fatness, per se, is not the regulator (Loucks, 2003).</p>
+<p>Two consequences of that finding are worth holding onto. First, exercise itself has no suppressive effect on the menstrual cycle beyond its energy cost. The problem is not that training is inherently harmful to the cycle; the problem is the arithmetic of intake minus expenditure. You can create a deficit large enough to matter through eating too little, training too much, or both, and the axis responds to the net figure, not to the training in isolation (Loucks, 2003). Second, because the driver is a signal about resources rather than a structural injury, the pattern is generally reversible when energy availability is restored. That is a hopeful fact, but it is a clinical fact, not a license for you to prescribe a fix.</p>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="An isometric hand-drawn infographic in warm pencil-and-watercolour style depicting energy availability as a simple balance beam. On one pan sits a plate of food labeled 'intake' in small italic serif; on the other pan sits a running figure labeled 'exercise cost'. The beam tilts so the exercise side is heavy, and beneath the low side a small hypothalamus-and-ovary axis illustration shows a lantern dimming. A dashed threshold line runs horizontally across the lower third of the image with the label '~20 to 30 kcal/kg lean mass/day' in small clean serif, no other numbers. Muted palette of sage, ochre, slate blue on cream. Soft even light, clean editorial notebook aesthetic. No watermarks, no cropped letters, no invented numbers beyond the quoted threshold." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch6-img1.jpg" alt="<em>The regulator is the net energy left over, not the number on a body-fat caliper.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The regulator is the net energy left over, not the number on a body-fat caliper.</em></figcaption></figure>
+
+<h3>Weight-cutting and physique sport</h3>
+<p>Certain contexts concentrate this risk. Sports and pursuits that reward leanness, restrict intake, or demand large training volumes push energy availability down almost by design. Physique sport is a clear example. A cross-sectional study of one hundred and four female physique athletes found that 58.65 percent reported menstrual cycle disorders, defined as amenorrhea of three or more consecutive months, and 46.15 percent screened as at risk of low energy availability on the Low Energy Availability in Females Questionnaire. The women reporting menstrual disturbance were younger and trained more per week, and menstrual changes tracked with increased exercise intensity, frequency, and duration (Witkoś et al., 2024). When more than half of a population reports a silent or disrupted cycle, the pattern is not an anomaly. It is close to an occupational feature.</p>
+<p>This is the domain where your recognition skills matter most, because it is where you are most likely to encounter someone in the functional pattern, and where the surrounding culture is most likely to treat a missing period as a badge of dedication rather than a signal worth acting on. Learning to see it plainly, without either panic or dismissal, is the skill.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>A person who eats very little but trains lightly, and a person who eats a large amount but trains enormously, could arrive at the same low energy availability. Why does this make "she looks like she eats enough" an unreliable way to judge risk?</p>
+</aside>
+</section>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>Widening the lens: Relative Energy Deficiency in Sport</h2>
+<p>Menstrual disruption is rarely a solitary event. The older framework called this cluster the Female Athlete Triad, linking energy status, reproductive function, and bone health. The 2025 update to that consensus statement retains the three interrelated components, adds the idea of metabolic compensation to the energy-status continuum, and broadens the reproductive-function continuum to include the full range of ovarian steroid hormone exposure and functional hypothalamic oligo-amenorrhea, meaning infrequent as well as absent cycles (De Souza et al., 2025).</p>
+<p>The International Olympic Committee took the concept further under the name <span class="ch-key">Relative Energy Deficiency in Sport</span>. The 2023 consensus statement expands the model beyond women to both sexes and across all levels of participation, and frames low energy availability as a spectrum running from adaptable, where the body adjusts without lasting harm, to problematic, where health and function suffer. Menstrual dysfunction sits as a central consequence within that model, and the statement provides structured clinical assessment tools for risk stratification (Mountjoy et al., 2023). The reason to know this framework is not so you can score anyone on it. It is so you understand that a quiet cycle in this context is often the visible tip of a larger disturbance touching bone, cardiovascular health, and more, which is one more reason it belongs with a clinician rather than with you.</p>
+
+<blockquote class="ch-quote">
+<p>Reproductive disruption in exercising women is driven by energy availability falling below a threshold, and not by body fatness per se. Exercise has no suppressive effect on menstrual function beyond its energy cost.</p>
+<cite>After Loucks, 2003</cite>
+</blockquote>
+</section>
+
+<div class="ch-widget" id="axis-sim">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Axis Power-Down Simulator</div>
+</div>
+<p class="ch-widget-sub">Lower energy availability and watch the axis quiet down. Then flip to the induced-change view to see a silent bleed with a fully running axis underneath.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Scenario</span>
+<select class="ch-widget-select" id="sim-mode">
+<option value="functional">Functional: adjust energy availability</option>
+<option value="induced">Induced: progestin method, axis intact</option>
+</select>
+</div>
+<div class="ch-widget-field" id="ea-field">
+<span class="ch-widget-fieldlabel">Energy availability (kcal/kg lean mass/day)</span>
+<select class="ch-widget-select" id="sim-ea">
+<option value="45">45 (ample)</option>
+<option value="35">35 (adequate)</option>
+<option value="25">25 (marginal)</option>
+<option value="15">15 (deep deficit)</option>
+</select>
+</div>
+</div>
+
+<div class="ch-widget-meters">
+<div class="ch-meter">
+<span class="ch-meter-label">GnRH pulse frequency</span>
+<span class="ch-meter-bar"><span id="m-pulse" style="width:90%"></span></span>
+<span class="ch-meter-num" id="n-pulse">9</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Luteinizing hormone</span>
+<span class="ch-meter-bar"><span id="m-lh" style="width:85%"></span></span>
+<span class="ch-meter-num" id="n-lh">8</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Estradiol</span>
+<span class="ch-meter-bar"><span id="m-e2" style="width:85%"></span></span>
+<span class="ch-meter-num" id="n-e2">8</span>
+</div>
+<div class="ch-meter">
+<span class="ch-meter-label">Cycle activity</span>
+<span class="ch-meter-bar"><span id="m-cyc" style="width:90%"></span></span>
+<span class="ch-meter-num" id="n-cyc">9</span>
+</div>
+</div>
+
+<button class="ch-widget-btn" id="sim-btn">Read the axis</button>
+<p class="ch-widget-sub" id="sim-out">Set a scenario and read the axis. Notice what stays lit and what goes dark.</p>
+</div>
+
+<hr class="ch-divider">
+
+<section class="ch-section">
+<h2>Recognize and refer: where your job ends</h2>
+<p>This is the heart of the chapter, and it is worth stating flatly. Your job is to recognize when a quiet cycle is not the expected result of contraception and may signal something worth professional evaluation. The limit of your job is exactly there. Evaluation belongs to a clinician. You do not diagnose, you do not treat, and you do not position yourself to manage the situation.</p>
+<p>The reason this boundary is non-negotiable is written into the definition of the functional pattern itself. Every serious clinical source treats functional hypothalamic amenorrhea as a <span class="ch-key">diagnosis of exclusion</span>. The Endocrine Society clinical practice guideline is explicit: the diagnosis can only be made after anatomic and organic pathology have been ruled out, and it sets specific thresholds, a cycle interval persistently longer than forty-five days or amenorrhea of three months or more, as the point at which evaluation is warranted (Gordon et al., 2017). "Diagnosis of exclusion" means you cannot arrive at it by recognizing the functional pattern. You arrive at it only by first excluding the pathological causes, and excluding those requires examination, laboratory work, and imaging that are entirely outside your scope. When you look at a physique competitor in a deep deficit and think "this looks functional," you may well be right, and you are still not entitled to conclude it, because the tumor and the thyroid disorder and the ovarian insufficiency can wear the same face.</p>
+<p>So the correct action, whenever a quiet cycle is not a clearly expected induced change, is the same regardless of how confident your pattern-recognition feels: encourage evaluation by a qualified clinician. Not because you failed to figure it out, but because figuring it out was never your task, and because the guideline authors, the people who wrote the diagnostic criteria, built exclusion into the definition on purpose.</p>
+
+<h3>Why the boundary protects the person, not just you</h3>
+<p>It is tempting to read "recognize and refer" as professional self-protection, a way to stay out of trouble. It is more than that. Functional hypothalamic amenorrhea carries real downstream consequences: hypoestrogenism, bone loss, and elevated cardiovascular risk, with additional effects on cognition and mental health described in the literature (Morrison et al., 2021; Sowmya et al., 2023). The guideline recommends a multidisciplinary approach to treatment precisely because the condition reaches into several body systems at once (Gordon et al., 2017). Someone in this pattern needs coordinated professional care, not a well-meaning adjustment to their diet or training from a person without the training to manage the whole picture. Referring is not passing the buck. It is routing the person to the level of care the condition actually requires.</p>
+
+<aside class="ch-callout">
+<div class="ch-callout-label">Think About It</div>
+<p>If functional hypothalamic amenorrhea is often reversible by restoring energy availability, why is it still wrong for a non-clinician to simply advise someone to eat more and train less and call it handled? What could that miss?</p>
+</aside>
+
+<h3>A word on the evidence</h3>
+<p>Honesty about the science is part of the job. The energy-availability threshold from Loucks is robust and foundational, and the recognition of functional hypothalamic amenorrhea as common and under-treated is well supported. But a great deal of the popular advice built around the menstrual cycle, the training periodization schemes keyed to cycle phases, the phase-specific nutrition protocols, rests on weak, inconsistent, or contradictory data. The frameworks in this chapter, the Triad and Relative Energy Deficiency in Sport, are consensus statements, which means they represent expert synthesis and are revised as evidence accumulates, not settled physical law. Hold the strong findings firmly and the speculative ones loosely, and remember that clinical judgment and the lived expertise of the person in front of the science both matter alongside the distilled research.</p>
+</section>
+
+<div class="ch-widget" id="cause-explorer">
+<div class="ch-widget-head">
+<div class="ch-widget-label">Interactive</div>
+<div class="ch-widget-title">Cause Category Explorer</div>
+</div>
+<p class="ch-widget-sub">Read each scenario and sort it. The tool never diagnoses. It confirms the category, explains the reasoning, and, for anything but a clearly induced change, reminds you that professional evaluation is warranted.</p>
+
+<div class="ch-widget-row">
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Scenario</span>
+<select class="ch-widget-select" id="ce-scenario">
+<option value="0">A: No bleed for 4 months on a progestin-only method started 4 months ago</option>
+<option value="1">B: Physique competitor, deep deficit, twice-daily training, no period since spring</option>
+<option value="2">C: 34, eats well, trains moderately, no method, periods stopped 4 months ago</option>
+<option value="3">D: Distance runner increasing volume, eating less, cycles now &gt;45 days apart</option>
+<option value="4">E: Sudden amenorrhea with headaches and milky nipple discharge</option>
+</select>
+</div>
+<div class="ch-widget-field">
+<span class="ch-widget-fieldlabel">Your category</span>
+<select class="ch-widget-select" id="ce-guess">
+<option value="induced">Expected induced change</option>
+<option value="functional">Possible functional or hypothalamic pattern</option>
+<option value="unclear">Unclear, warrants clinician</option>
+</select>
+</div>
+</div>
+
+<button class="ch-widget-btn" id="ce-btn">Check my sorting</button>
+<p class="ch-widget-sub" id="ce-out">Choose a scenario and a category, then check your sorting.</p>
+</div>
+
+<section class="ch-takeaways">
+<h2>Key Takeaways</h2>
+<ul>
+<li>A quiet cycle is a symptom and a question, never a diagnosis in itself. The menstrual pattern functions as a vital sign of overall health.</li>
+<li>Sort quiet cycles into three buckets that look alike but mean different things: an expected medically induced change, a functional or hypothalamic pattern, and a possible pathological cause.</li>
+<li>Functional hypothalamic amenorrhea is the most common cause of secondary amenorrhea, is often under-recognized, and reflects suppressed gonadotropin-releasing hormone pulsatility, not a broken system.</li>
+<li>Energy availability, roughly intake minus exercise energy expenditure per kilogram of lean mass, is the regulator. Below about twenty to thirty kilocalories per kilogram of lean mass per day, the cycle is disrupted. Body fatness is not the switch, and exercise does not suppress the cycle beyond its energy cost.</li>
+<li>Physique sport and weight-cutting contexts concentrate this risk; in one physique-athlete sample, over half reported menstrual disorders.</li>
+<li>Functional hypothalamic amenorrhea is a diagnosis of exclusion. You can recognize the pattern, but you cannot conclude it, because the pathological causes wear the same face and can only be ruled out clinically.</li>
+<li>Recognize and refer. For any quiet cycle that is not a clearly expected induced change, encourage clinician evaluation. Do not diagnose, do not treat, do not manage.</li>
+<li>Grade the evidence honestly: the energy-availability threshold is strong, but much cycle-based training and nutrition advice rests on weak or contradictory data.</li>
+</ul>
+</section>
+
+<section class="ch-lookahead">
+<div class="ch-lookahead-label">Looking Ahead</div>
+<p>We have named energy availability as the lever behind the functional pattern and left it mostly as a single number. Next, we open that number up. The following chapter is a deep dive into energy availability itself, how it is conceived, why the threshold behaves the way it does, and what the spectrum from adaptable to problematic really looks like in practice, so that the pattern you learned to recognize here gains the depth to make your recognition sharper and your referral more grounded.</p>
+</section>
+
+<section class="ch-refs">
+<h2>References</h2>
+<p>De Souza, M. J., Koltun, K. J., Williams, N. I., Nattiv, A., Ackerman, K. E., Mallinson, R. J., Joy, E., Misra, M., Gibbs, J. C., Southmayd, E. A., & Kraus, E. (2025). 2025 update to the Female Athlete Triad Coalition consensus statement part 1: State of the science and introduction of a new adolescent model. <em>Sports Medicine</em>. https://link.springer.com/article/10.1007/s40279-025-02333-z</p>
+<p>Gordon, C. M., Ackerman, K. E., Berga, S. L., Kaplan, J. R., Mastorakos, G., Misra, M., Murad, M. H., Santoro, N. F., & Warren, M. P. (2017). Functional hypothalamic amenorrhea: An Endocrine Society clinical practice guideline. <em>The Journal of Clinical Endocrinology & Metabolism, 102</em>(5), 1413-1439. https://doi.org/10.1210/jc.2017-00131</p>
+<p>Klein, D. A., Paradise, S. L., & Reeder, R. M. (2019). Amenorrhea: A systematic approach to diagnosis and management. <em>American Family Physician, 100</em>(1), 39-48. https://pubmed.ncbi.nlm.nih.gov/31259490/</p>
+<p>Loucks, A. B. (2003). Energy availability, not body fatness, regulates reproductive function in women. <em>Exercise and Sport Sciences Reviews, 31</em>(3), 144-148. https://doi.org/10.1097/00003677-200307000-00008</p>
+<p>Morrison, A. E., Fleming, S., & Levy, M. J. (2021). A review of the pathophysiology of functional hypothalamic amenorrhoea in women subject to psychological stress, disordered eating, excessive exercise or a combination of these factors. <em>Clinical Endocrinology, 95</em>(2), 229-238. https://doi.org/10.1111/cen.14399</p>
+<p>Mountjoy, M., Ackerman, K. E., Bailey, D. M., Burke, L. M., Constantini, N., Hackney, A. C., Heikura, I. A., Melin, A., Pensgaard, A. M., Stellingwerff, T., Sundgot-Borgen, J. K., Torstveit, M. K., Jacobsen, A. U., Verhagen, E., Budgett, R., Engebretsen, L., & Erdener, U. (2023). 2023 International Olympic Committee's (IOC) consensus statement on Relative Energy Deficiency in Sport (REDs). <em>British Journal of Sports Medicine, 57</em>(17), 1073-1097. https://doi.org/10.1136/bjsports-2023-106994</p>
+<p>Sowmya, S., Muthu, S., & others. (2023). Functional hypothalamic amenorrhea: Recognition and management of a challenging diagnosis. <em>Mayo Clinic Proceedings.</em> https://www.mayoclinicproceedings.org/article/S0025-6196(23)00282-3/fulltext</p>
+<p>Witkoś, J., Błażejewski, G., & Gierach, M. (2024). Menstrual cycle disorders as an early symptom of energy deficiency among female physique athletes assessed using the Low Energy Availability in Females Questionnaire (LEAF-Q). <em>PLoS ONE, 19</em>(5), e0303703. https://doi.org/10.1371/journal.pone.0303703</p>
+</section>
+
+<footer class="ch-foot">
+<span class="ch-foot-mark">¶</span>
+<span class="ch-foot-meta">ClassBuild · Chapter 6 of 12</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('axis-sim');
+    if(!w) return;
+    var mode = w.querySelector('#sim-mode');
+    var ea = w.querySelector('#sim-ea');
+    var eaField = w.querySelector('#ea-field');
+    var btn = w.querySelector('#sim-btn');
+    var out = w.querySelector('#sim-out');
+    var mPulse = w.querySelector('#m-pulse'), nPulse = w.querySelector('#n-pulse');
+    var mLh = w.querySelector('#m-lh'), nLh = w.querySelector('#n-lh');
+    var mE2 = w.querySelector('#m-e2'), nE2 = w.querySelector('#n-e2');
+    var mCyc = w.querySelector('#m-cyc'), nCyc = w.querySelector('#n-cyc');
+
+    var eaTable = {
+      '45': {pulse:9, lh:8, e2:8, cyc:9, note:'Ample energy availability. Pulse generator keeps a normal cadence, gonadotropins and estradiol are healthy, the cycle runs.'},
+      '35': {pulse:8, lh:7, e2:7, cyc:8, note:'Adequate energy availability. The axis holds up; cycles are typically preserved above the threshold.'},
+      '25': {pulse:5, lh:4, e2:4, cyc:4, note:'Marginal energy availability, near the ~20 to 30 kcal/kg lean mass/day threshold. Pulsatility starts to falter and cycles may lengthen or become irregular.'},
+      '15': {pulse:2, lh:1, e2:1, cyc:1, note:'Deep deficit. Gonadotropin-releasing hormone pulses slow, luteinizing hormone loses rhythm, estradiol drops, and the cycle fades to silence. This is the functional shutdown. It is a signal to refer, not to manage.'}
+    };
+
+    function setBar(bar,num,val){ bar.style.width = (val*10)+'%'; num.textContent = val; }
+
+    function render(){
+      if(mode.value === 'induced'){
+        eaField.style.display = 'none';
+        setBar(mPulse,nPulse,9);
+        setBar(mLh,nLh,8);
+        setBar(mE2,nE2,8);
+        setBar(mCyc,nCyc,2);
+        out.textContent = 'Induced change on a progestin method. The axis underneath runs normally: pulses, gonadotropins, and estradiol are intact. Only the bleed is quiet, because the medication is altering the lining. Contrast this with the deep-deficit functional view, where the whole axis goes dark. Same silent bleed, opposite cause.';
+      } else {
+        eaField.style.display = '';
+        var d = eaTable[ea.value];
+        setBar(mPulse,nPulse,d.pulse);
+        setBar(mLh,nLh,d.lh);
+        setBar(mE2,nE2,d.e2);
+        setBar(mCyc,nCyc,d.cyc);
+        out.textContent = d.note;
+      }
+    }
+    mode.addEventListener('change', render);
+    ea.addEventListener('change', render);
+    btn.addEventListener('click', render);
+    render();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var w = document.getElementById('cause-explorer');
+    if(!w) return;
+    var sc = w.querySelector('#ce-scenario');
+    var guess = w.querySelector('#ce-guess');
+    var btn = w.querySelector('#ce-btn');
+    var out = w.querySelector('#ce-out');
+
+    var refer = ' Professional evaluation by a clinician is warranted. Your role is to notice and encourage that evaluation, not to diagnose or manage.';
+
+    var data = [
+      {ans:'induced', why:'A newly started progestin-only method commonly produces an absent bleed by design. With the timing matching the method and nothing else concerning, this is the expected induced change and is benign on its own.'},
+      {ans:'functional', why:'Deep deficit plus very high training volume points strongly to low energy availability and the functional pattern. But remember: functional hypothalamic amenorrhea is a diagnosis of exclusion. You recognize the pattern; you cannot conclude it.'+refer},
+      {ans:'unclear', why:'No hormonal method, adequate intake, moderate training, and no obvious energy-availability explanation. This does not fit the induced or the classic functional picture, so it is genuinely unclear.'+refer},
+      {ans:'functional', why:'Rising volume, reduced intake, and cycles now longer than 45 days match the functional or hypothalamic pattern and the threshold flagged in clinical guidance. Recognize it; do not diagnose it.'+refer},
+      {ans:'unclear', why:'Headaches plus milky nipple discharge are red-flag features that can accompany a pituitary cause. This is exactly why functional cannot be assumed. It reads as unclear and needs prompt clinical attention.'+refer}
+    ];
+
+    btn.addEventListener('click', function(){
+      var d = data[parseInt(sc.value,10)];
+      var picked = guess.value;
+      var correct = (picked === d.ans);
+      var labels = {induced:'expected induced change', functional:'possible functional or hypothalamic pattern', unclear:'unclear, warrants clinician'};
+      var msg = correct ? 'Correct category: ' + labels[d.ans] + '. ' : 'Reconsider. The better fit is: ' + labels[d.ans] + '. ';
+      out.textContent = msg + d.why;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>

@@ -135,11 +135,18 @@
     // Charter members: early sign-ups comped for life. Free access, no Stripe row,
     // shown a "Charter Member" label. Keep lowercase.
     CHARTER: ["parker.gemini.coach@gmail.com", "ebylander01@gmail.com", "liamtsc1@gmail.com", "jademckenzie3256@gmail.com"],
+    FLAGSHIP: ["connor@calibrated-strength.us", "kobie@calibrated-strength.us"],
     PAYMENT_LINK: "https://buy.stripe.com/6oU14o0yncl87Z802c7bW01",
 
-    isCharter: function (email) {
-      return this.CHARTER.indexOf((email || "").trim().toLowerCase()) !== -1;
+    // returns "charter" | "flagship" | null — both tiers get free access
+    compTier: function (email) {
+      var e = (email || "").trim().toLowerCase();
+      if (this.CHARTER.indexOf(e) !== -1) return "charter";
+      if (this.FLAGSHIP.indexOf(e) !== -1) return "flagship";
+      return null;
     },
+    isCharter: function (email) { return this.compTier(email) === "charter"; },
+    isComp: function (email) { return this.compTier(email) !== null; },
 
     // true if the signed-in user has an active/trialing Stripe subscription
     hasActiveSubscription: function () {
@@ -149,15 +156,24 @@
       );
     },
 
+    // caller's 1-based registration number (1 = first account ever). null if signed out.
+    foundingNumber: function () {
+      return sb.rpc("founding_number").then(
+        function (r) { return (r && typeof r.data === "number") ? r.data : null; },
+        function () { return null; }
+      );
+    },
+
     // resolves to { signedIn, email, isComp, isSub, ok } — ok = may open paid content
     access: function () {
       var self = this;
       return this.getUser().then(function (user) {
-        if (!user) return { signedIn: false, email: null, isComp: false, isSub: false, ok: false };
+        if (!user) return { signedIn: false, email: null, isComp: false, tier: null, isSub: false, ok: false };
         var email = (user.email || "").toLowerCase();
-        if (self.isCharter(email)) return { signedIn: true, email: email, isComp: true, isSub: false, ok: true };
+        var tier = self.compTier(email);
+        if (tier) return { signedIn: true, email: email, isComp: true, tier: tier, isSub: false, ok: true };
         return self.hasActiveSubscription().then(function (isSub) {
-          return { signedIn: true, email: email, isComp: false, isSub: isSub, ok: isSub };
+          return { signedIn: true, email: email, isComp: false, tier: null, isSub: isSub, ok: isSub };
         });
       });
     },

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Cycle, Two Acts, One Pivot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 3 · Module 1</div>
+    <h1 class="ch-title">One Cycle, Two Acts, One Pivot</h1>
+    <p class="ch-subtitle">Reading the menstrual cycle as a story your feedback logic already predicts.</p>
+    <div class="ch-meta">
+      <span>34 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">I</span>magine you are handed two numbers about the same person: their cycle was 26 days long in March and 34 days long in June. Nothing is wrong. Most of that eight day swing happened in the first half of the cycle, before ovulation, while the second half barely moved at all. If you can explain why, you already understand the single most useful asymmetry in reproductive physiology, and you will avoid the most common mistakes people make about fertile windows, about what an app should be allowed to flag as abnormal, and about what actually counts as a normal cycle in the first place.</p>
+    <p>Throughout this chapter you will follow one learner, Naledi, a 29 year old recreational runner who started charting her cycle after a training app promised to predict her fastest training days from her hormones. Her first three charted cycles ran 25, 33, and 27 days, and the app flagged every single one of them as irregular, with a small red exclamation mark that made her worry something in her body had gone wrong. Naledi is not a patient in this course and she is not a case to be solved. She is a stand in for an extremely common experience: watching a number swing and assuming that swing means dysfunction. By the end of this chapter you will be able to read her three numbers more precisely than the app that alarmed her, and you will understand exactly why a lay algorithm built on a single average gets a real body wrong. Her story is a thread we return to, not a diagnosis, and we will be careful about that difference the whole way through.</p>
+    <p>Last class you learned the feedback loop that connects the hypothalamus, the pituitary gland, and the ovary, the small relay of signals sent back and forth like a conversation. This class we set that loop in motion and watch it produce an actual cycle, hormone by hormone, day by day. The reward is fluency. By the end you should be able to walk through a full cycle from memory and predict how a shift in any one hormone reshapes the whole timeline, which is exactly the skill Naledi's app was trying, and largely failing, to fake with a single number.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The cast, refreshed in one minute</h2>
+    <p>Before we start the story, a quick refresh of the players, because the rest of the chapter assumes you can hold them all in your head at once and picture how they talk to each other across the body.</p>
+    <p>The <span class="ch-key">hypothalamus</span> releases <span class="ch-key">gonadotropin-releasing hormone</span> (abbreviated GnRH) in pulses. Those pulses tell the pituitary gland to secrete two messengers: <span class="ch-key">follicle-stimulating hormone</span> (abbreviated FSH) and <span class="ch-key">luteinizing hormone</span> (abbreviated LH). Both act on the ovary. In response, the ovary produces two steroid hormones you will track all chapter: <span class="ch-key">estradiol</span> (the main estrogen of the reproductive years) and <span class="ch-key">progesterone</span>. Those two ovarian hormones feed back to the brain, sometimes turning it down and, at one dramatic moment, turning it up.</p>
+    <p>One detail from last class is worth restating here because it resurfaces constantly this chapter. GnRH does not arrive at the pituitary gland as a steady drip. It arrives in discrete pulses, and the pituitary reads the frequency of those pulses almost as carefully as it reads their size. Slower, more widely spaced pulses tend to favor the release of follicle-stimulating hormone. Faster, more closely spaced pulses tend to favor luteinizing hormone. You do not need to memorize the wiring behind that difference to use this chapter, but you do need to remember that the difference exists, because it is a large part of why the two halves of the cycle feel hormonally distinct even though the same two letters, FSH and LH, are technically present in both.</p>
+    <p>That is the whole cast. The cycle is simply what happens when this small loop runs across roughly a month, and it divides cleanly into two acts joined by one pivot: a <span class="ch-key">follicular phase</span> that recruits and ripens a single follicle, an ovulatory surge that releases the egg it contains, and a <span class="ch-key">luteal phase</span> that transforms the emptied follicle into a temporary hormone factory and then decides, based on a single piece of incoming information, whether to keep the whole system running or let it reset.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading on: which two hormones does the ovary send back to the brain, and in the previous chapter, what was their usual effect on GnRH pulsing? Hold your answer. One of those effects is about to reverse, briefly and dramatically, and the entire cycle pivots on that reversal.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn field-guide plate in warm watercolour and fine ink, showing the human menstrual cycle as a two-act theatrical stage laid out left to right on a single horizontal timeline. On the left, a small ovarian follicle growing larger across several frames toward a bright rounded dominant follicle; a single vertical spotlight beam at centre marks the moment of release; on the right, a folded golden-yellow gland representing the corpus luteum. Beneath, a thickening striated band representing the uterine lining growing taller across the timeline. Muted palette of terracotta, ochre, sage green, and cream. Small handwritten labels in italic serif: 'follicular' on the left third, 'ovulation' at the centre beam, 'luteal' on the right third. No numbers, no people, no watermarks." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img1.jpg" alt="<em>The cycle as two acts joined by a single pivot.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The cycle as two acts joined by a single pivot.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Act one: the follicular phase</h2>
+    <p>The first act begins on the day bleeding starts, which by convention is day one of the cycle. At this moment estradiol and progesterone are both low, and that low is not a pause in the story, it is itself a signal. With little estrogen restraining the brain, follicle-stimulating hormone climbs. This early FSH rise is the opening move of the entire cycle, and according to Mihm, Gangooly, and Muttukrishna (2011), every normally cycling woman shows this same luteal to follicular transition rise regardless of exactly how long her individual cycle turns out to run.</p>
+    <p>FSH does exactly what its name promises: it stimulates follicles. Each ovary carries a reserve of small, fluid filled structures called <span class="ch-key">antral follicles</span>, each one housing an immature egg suspended mid development. The FSH rise recruits a cohort of these antral follicles into an active growth phase. Interestingly, the older idea that a single tidy cohort is recruited once per cycle and nothing else happens has given way to a more complex picture. Reviewing more than two hundred studies, Baerwald, Adams, and Pierson (2011) concluded that antral follicles actually develop in overlapping <span class="ch-key">waves</span> across the cycle, most commonly two waves and sometimes three, with typically only one of those waves producing the follicle that goes on to ovulate. For your purposes the practical takeaway is simpler than the underlying wave physiology: FSH gets multiple follicles growing at once, and only one of them is destined to finish the job.</p>
+    <h3>The two cell system behind the estrogen rise</h3>
+    <p>It helps to know, at least in outline, where the estradiol in this act actually comes from, because the mechanism is elegant and it explains a detail you will need again in the luteal phase. Each growing follicle contains two cooperating cell layers. An outer layer of <span class="ch-key">theca cells</span> responds to luteinizing hormone by converting cholesterol into androgens, the same broad hormone family that includes testosterone. An inner layer of <span class="ch-key">granulosa cells</span>, which line the fluid filled cavity around the egg, responds to follicle-stimulating hormone by taking up those androgens and converting them into estradiol through an enzyme called aromatase. Neither cell layer can make estradiol alone. The theca cells have the raw material but not the converting enzyme in useful quantity, and the granulosa cells have the enzyme but not direct access to enough raw material without the theca layer's help. This division of labor is sometimes called the two cell, two gonadotropin system, and it is worth remembering because it means a follicle's estradiol output is really a joint product of two separate signals, LH and FSH, arriving on two separate cell populations at once. When you understand this cooperation, the follicular phase stops looking like a single hormone rising in isolation and starts looking like what it actually is, a small, self-organizing factory that only runs when both inputs are present.</p>
+    <p>As the recruited follicles grow, their granulosa cells also secrete a hormone called <span class="ch-key">inhibin B</span>, which selectively suppresses FSH without touching LH (Mihm et al., 2011). This is the first act of pruning. As FSH availability dips, most of the recruited follicles cannot keep growing on the shrinking supply, and they stall and eventually die off in a process called atresia. One follicle, typically the one that is most sensitive to FSH and has built the richest blood supply for itself, keeps growing anyway even as its neighbors fall behind. This is the <span class="ch-key">dominant follicle</span>, and it is selected around the middle of the follicular phase (Reed and Carr, 2018; Baerwald et al., 2011). Selection is a genuinely competitive process. The follicles are, in a real sense, racing each other for a shrinking pool of stimulation, and only the fittest contender survives it.</p>
+    <p>From selection onward, the dominant follicle becomes an estradiol factory almost on its own, since it now has the richest supply of both LH driven androgen and FSH driven aromatase activity in the ovary. Across the week before ovulation, estradiol climbs steeply, and its rise is no longer gradual, it accelerates. Several things happen in parallel as a result, and each one matters for practice. In the uterus, rising estradiol drives the lining, called the <span class="ch-key">endometrium</span>, to thicken and proliferate, rebuilding the tissue that was shed during the menstrual bleed that opened this act. At the cervix, rising estradiol changes the character of the mucus produced there, making it thinner, clearer, and more stretchable, a quality classically described as spinnbarkeit, so that it becomes easier for sperm to travel through around the time of ovulation rather than acting as a barrier (Owen, 1975). And in the brain, that same rising estradiol is quietly setting up the single most elegant event in the whole cycle, the pivot you will meet in the next section.</p>
+    <h3>Why this act refuses to keep a schedule</h3>
+    <p>Here is the theme that will return all course long. The follicular phase is where cycle length is decided, because the time it takes to recruit, prune, and ripen a dominant follicle is genuinely variable from one cycle to the next, even within the same body. Anything that nudges FSH availability or follicle sensitivity, and that includes ordinary life stress, illness, travel across time zones, poor sleep, and shifts in how much energy is available relative to what training and daily life demand, tends to lengthen or shorten this act. This is almost certainly what happened in Naledi's three charted cycles. A follicular phase that runs a few days long in a demanding training block and a few days short in an easy recovery week is not a malfunction her app should be flagging with an exclamation mark, it is the follicular phase behaving exactly the way healthy follicular phases behave. The second act, as you will see, does not have nearly that same freedom to stretch and compress.</p>
+    <p>It is worth separating two ideas that get blurred together constantly outside a course like this one: how many follicles are recruited into growth this month, and how many eggs remain in reserve overall. Every cycle draws down a small number of antral follicles from a much larger, slowly shrinking reserve that was largely set before birth, and the vast majority of any given cohort is never destined to ovulate regardless of how healthy the cycle is. Losing follicles to atresia every single month is not a sign that something is going wrong, it is the ordinary cost of running the selection process described above. A low visible antral follicle count on a given scan, or a cycle that recruited a smaller cohort than usual, is a separate question from whether ovulation itself will happen on schedule, and conflating the two is a common source of unnecessary alarm.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>It is tempting to picture one egg quietly maturing alone each month. In reality, several follicles are recruited every cycle and most are pruned away by the FSH decline described above, with usually only one reaching ovulation. That pruning is not waste and it is not a warning sign. It is the selection mechanism working as intended, and it happens in every healthy cycle, every time.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-scrubber">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Cycle Timeline Scrubber</div>
+    </div>
+    <p class="ch-widget-sub">Drag the day marker across a full cycle. Watch four hormones, the follicle, and the lining move together. Then stretch the follicular phase and notice what stays put.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Follicular length</span>
+        <select class="ch-widget-select" id="scrub-foll">
+          <option value="11">Short (11 days)</option>
+          <option value="14" selected>Typical (14 days)</option>
+          <option value="21">Long (21 days)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Luteal length (fixed)</span>
+        <select class="ch-widget-select" id="scrub-lut" disabled>
+          <option value="14" selected>Stable (14 days)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Day of cycle</span>
+        <input type="range" class="ch-widget-select" id="scrub-day" min="1" max="28" value="1" step="1">
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Follicle-stimulating hormone</span>
+        <span class="ch-meter-bar"><span id="m-fsh" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="n-fsh">2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Estradiol</span>
+        <span class="ch-meter-bar"><span id="m-e2" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="n-e2">1</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Luteinizing hormone</span>
+        <span class="ch-meter-bar"><span id="m-lh" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="n-lh">1</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Progesterone</span>
+        <span class="ch-meter-bar"><span id="m-p4" style="width:5%"></span></span>
+        <span class="ch-meter-num" id="n-p4">0</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Follicle / corpus luteum</span>
+        <span class="ch-meter-bar"><span id="m-fol" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="n-fol">•</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Uterine lining</span>
+        <span class="ch-meter-bar"><span id="m-lin" style="width:8%"></span></span>
+        <span class="ch-meter-num" id="n-lin">thin</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="scrub-caption" style="width:100%"><strong>Day 1.</strong> Bleeding begins. Estradiol and progesterone are low, and that low is precisely what lets follicle-stimulating hormone start to climb.</p>
+
+    <button class="ch-widget-btn" id="scrub-reset">Reset to day 1</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The pivot: an estradiol-triggered surge</h2>
+    <p>This is the single most elegant moment in the cycle, and it is where last chapter's feedback logic pays off in full. Throughout most of the cycle, estradiol suppresses the brain. This is <span class="ch-key">negative feedback</span>: more estradiol, less GnRH, less LH. But when estradiol is not just high but high <em>and sustained</em>, the sign of that feedback flips entirely. It becomes <span class="ch-key">positive feedback</span>: estradiol now drives the brain to release a large burst of GnRH, which triggers a massive spike of LH, along with a smaller, less dramatic co-rise in FSH. That spike is the <span class="ch-key">LH surge</span>, and it is the pivot on which the whole cycle turns.</p>
+    <p>How high, and for how long? The classic threshold is instructive. Estradiol must exceed roughly 200 picograms per milliliter and stay above that level for about fifty hours to flip the switch (Reed and Carr, 2018). This is why a single tall estradiol reading taken on one day is not enough to trigger anything on its own. The system is not measuring a peak, it is measuring a sustained state, which is a far more reliable signal that a follicle is genuinely mature and ready than any single snapshot could be.</p>
+    <p>The mechanism connecting estradiol to the surge is worth naming because it dissolves what would otherwise look like a mystery. Kauffman (2022) reviews the neuroendocrine circuitry behind this switch and points to a population of <span class="ch-key">kisspeptin</span> neurons in the hypothalamus as the intermediary that converts rising, sustained estradiol into the GnRH surge. These neurons sit upstream of the GnRH-releasing cells themselves and appear to function as the actual site where the feedback sign flips from negative to positive. The same review notes a circadian component to this switch, meaning the surge is not purely estradiol-gated, it is also biased by time of day, which is one small reason surge timing has some natural wobble to it even in an otherwise textbook cycle.</p>
+    <p>Once the surge fires, it sets off a cascade inside the dominant follicle that is worth walking through, because ovulation is not a passive popping open, it is an active, enzyme-driven event. LH acting on the follicle triggers a local release of proteolytic enzymes and prostaglandins that digest and weaken the follicular wall at one specific point. At the same time, the egg itself resumes a process of division called meiosis that had been arrested since before birth, completing its first meiotic division and extruding a small structure called the first polar body, so that by the time of rupture the egg is a genuinely different, more mature cell than it was the day before. When the weakened wall finally gives way, the egg and its surrounding cluster of cells are released, not violently ejected but gently extruded, to be caught by the finger-like projections at the end of the fallopian tube.</p>
+    <p>Notice, too, that the co-rise in follicle-stimulating hormone at the same moment is not a stray signal without a purpose. A small periovulatory FSH bump helps recruit the very next wave of antral follicles that will eventually compete for dominance in a future cycle, even while the current cycle's dominant follicle is being released. The system is, in effect, already seeding its own next round before the present round has finished, which is one more reason the ovary is better understood as a continuously running process than as a series of isolated, unconnected months.</p>
+    <p>Two points of practical fluency follow from this. First, the surge is a <em>consequence</em>, not an independent event you must memorize in isolation. It happens because estradiol crossed a sustained threshold, so if you know the shape of the estradiol trace, you can anticipate the surge before it happens. Second, ovulation follows the surge with a real lag. The follicle does not release the egg the instant LH spikes. Rupture occurs roughly a day to a day and a half after the surge begins. Understanding that lag is the difference between a good prediction and a lucky guess, which is exactly what the next widget lets you practice.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If the same feedback molecule, estradiol, can either suppress or stimulate the brain, what single variable decides which one happens? Say it in one sentence before moving on.</p>
+    </aside>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>Ovulation predictor kits and many charting apps do not detect ovulation itself. They detect the luteinizing hormone surge in urine, which is a real and useful signal, but it precedes egg release by roughly a day to a day and a half. Treating the day a test turns positive as the day of ovulation is a common, understandable mistake, and it can meaningfully shift how someone interprets their own timing. This is educational context about how the underlying physiology behaves, not guidance for planning or avoiding a pregnancy, which is a decision that belongs with a qualified clinician who knows the full picture.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="w-predict">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Predict the Surge</div>
+    </div>
+    <p class="ch-widget-sub">You can see estradiol rising. The luteinizing hormone trace is hidden. Drag the marker to the day you think ovulation happens, then reveal the truth. Try several cycle lengths.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Practice cycle</span>
+        <select class="ch-widget-select" id="pred-cycle">
+          <option value="24">Short cycle (24 days)</option>
+          <option value="28" selected>Typical cycle (28 days)</option>
+          <option value="35">Long cycle (35 days)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your predicted ovulation day</span>
+        <input type="range" class="ch-widget-select" id="pred-day" min="6" max="34" value="14" step="1">
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Estradiol (visible)</span>
+        <span class="ch-meter-bar"><span id="pm-e2" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="pn-e2">-</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Estradiol threshold (~200 pg/mL)</span>
+        <span class="ch-meter-bar"><span id="pm-thr" style="width:70%"></span></span>
+        <span class="ch-meter-num">thr</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Luteinizing hormone (hidden)</span>
+        <span class="ch-meter-bar"><span id="pm-lh" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="pn-lh">?</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="pred-caption" style="width:100%">Move the estradiol marker with the day slider to read its level, then choose your predicted ovulation day and reveal.</p>
+
+    <button class="ch-widget-btn" id="pred-reveal">Reveal the surge and ovulation day</button>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Act two: the luteal phase</h2>
+    <p>After the surge fires and the follicle ruptures, the story does not end, it transforms. The emptied follicle does not simply close up and disappear. Its residual cells, the granulosa and theca cells that only a day earlier were cooperating to make estradiol, undergo a rapid structural change called luteinization and reorganize into a temporary hormone-producing gland called the <span class="ch-key">corpus luteum</span>, which is Latin for yellow body, named for its distinctive color (Niswender et al., 2000). This structure is the engine of the second act, and it exists for one purpose and one purpose only.</p>
+    <p>Niswender and colleagues (2000) describe the mature corpus luteum as containing at least two distinct working cell types, inherited from the two follicular cell layers that formed it. Small luteal cells, descended from the theca layer, respond directly to LH by ramping up progesterone output through a fast internal signaling pathway. Large luteal cells, descended from the granulosa layer, produce even more progesterone on their own and, importantly, carry the receptors that will eventually receive the signal that ends the corpus luteum's life. Together these two cell types make the corpus luteum the single most productive progesterone source in the body during the second half of the cycle.</p>
+    <p>Progesterone takes the estradiol-thickened lining and finishes it, converting a merely proliferated endometrium into a <span class="ch-key">secretory</span> one: glands that actively secrete nutrients, a supportive stroma rich in glycogen, and a receptive surface prepared for a possible embryo (Tesarik et al., 2020; Niswender et al., 2000). But progesterone's reach extends well beyond the uterus, and two of its other effects are worth knowing because they resurface directly in the next chapter of this course. At the cervix, progesterone reverses the estrogen-driven changes from act one, thickening the mucus back into a scant, sticky barrier. In the hypothalamus, progesterone has a mild thermogenic effect, nudging the body's temperature set point upward by a few tenths of a degree for the remainder of the luteal phase, which is the physiological basis for basal body temperature as a marker of ovulation having already occurred, a signal you will learn to read properly soon. And back at the level of the brain, progesterone slows GnRH pulse frequency, which keeps the loop quiet and prevents a new follicular wave from ramping up while the current cycle's outcome is still pending.</p>
+    <p>The corpus luteum is also, gram for gram, one of the most richly vascularized structures the body builds and then dismantles inside of two weeks. Because progesterone is made from cholesterol delivered by the bloodstream rather than stored in advance, the luteal cells need an unusually dense capillary network to keep pace with their own output, and that vascular growth happens with striking speed once luteinization begins. This detail matters clinically as well as conceptually. Tesarik and colleagues (2020) note that in assisted reproductive technology, where ovulation is often triggered artificially and the normal LH support pattern is disrupted by the medications used to prevent premature ovulation, the corpus luteum frequently ends up under-supported, a condition called luteal phase deficiency, which is why fertility treatment protocols routinely include supplemental progesterone or additional LH-like support after egg retrieval. That clinical workaround only makes sense once you understand what the corpus luteum is doing under normal, unmedicated conditions in the first place, which is precisely the physiology this chapter has just walked through.</p>
+    <p>There is a crucial dependency here that surprises people the first time they encounter it. The corpus luteum needs continued LH to survive. It is not self-sustaining, and it cannot simply run on its own momentum once it forms. LH from the pituitary gland maintains its structural integrity and its progesterone output for as long as it lasts (Niswender et al., 2000; Tesarik et al., 2020). This single dependency, the corpus luteum's reliance on a signal it does not control, sets up the fork in the road that decides how the entire cycle ends.</p>
+    <h3>The fork: rescue or regression</h3>
+    <p>If pregnancy does not occur, the corpus luteum has a built-in lifespan. After roughly two weeks it undergoes <span class="ch-key">luteolysis</span>, a programmed regression rather than a slow fade. Niswender and colleagues (2000) note that in most non-primate mammals this regression is driven by a uterine signal, but in primates the trigger appears to be ovarian in origin, likely a local prostaglandin, though the exact pathway in humans is still not completely settled. What is well established is the outcome: the luteal cells undergo a form of programmed cell death, progesterone and estradiol fall sharply, the endometrium loses its hormonal support, its blood vessels constrict and spasm, and the lining is shed. That shedding is menstruation, and its arrival marks day one of the next cycle. The fall in ovarian hormones also releases the brake on FSH, which is why follicle-stimulating hormone is already climbing again as bleeding starts, closing the loop and reopening it in the same motion.</p>
+    <p>If pregnancy does occur, the outcome flips entirely. The developing embryo's outer layer, once it implants in the freshly prepared endometrium, secretes <span class="ch-key">human chorionic gonadotropin</span> (abbreviated hCG), a hormone that is structurally similar enough to LH to bind the same receptor and effectively rescue the corpus luteum from its scheduled regression (Tesarik et al., 2020). The rescued corpus luteum keeps producing progesterone, the lining is maintained rather than shed, and menstruation does not come. This is, incidentally, the hormone that home pregnancy tests detect, which is why a positive test is really a positive read on a message the embryo itself is sending to keep the corpus luteum alive. The corpus luteum does not have to carry this responsibility indefinitely. Over the following weeks the placenta develops its own capacity to produce progesterone directly, and around seven to ten weeks into a pregnancy a transition called the luteal-placental shift occurs, after which the placenta has taken over progesterone production and the corpus luteum is no longer essential to maintaining the pregnancy.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>The corpus luteum depends on LH to survive, yet hCG, a completely different hormone from a completely different source, can rescue it just as well. What does that tell you about how a receptor decides which molecules count as a valid signal, and why a pregnancy test built to detect hCG works at all?</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A vintage scientific illustration in the style of a 19th-century medical plate, ink line work with restrained watercolour wash, cross-section of a single ovary showing the same structure at three stages left to right: a mature fluid-filled follicle bulging at the surface, then a ruptured follicle at the moment of release, then a folded golden-yellow glandular corpus luteum with visible internal folds and blood vessels. Aged cream paper background, sepia ink, muted gold and dusky rose accents. Small italic serif labels: 'mature follicle', 'ovulation', 'corpus luteum'. No numbers, no people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch3-img2.jpg" alt="<em>One structure, three stages: follicle to rupture to corpus luteum.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>One structure, three stages: follicle to rupture to corpus luteum.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The asymmetry, quantified</h2>
+    <p>Now we can be precise about the swing you met in the opening, and about the swing that alarmed Naledi's app. Why did most of that variation live in the first act rather than the second?</p>
+    <p>This asymmetry is not a recent discovery. Owen (1975), in one of the earliest syntheses of hormone assay data mapped onto the physical changes of the cycle, already described the basic shape: estrogen rises through the follicular phase while other hormones stay low, an LH and FSH surge accompanies falling estrogen at ovulation, and progesterone together with estrogen then characterizes a luteal phase that ends in menstruation. That description, half a century old, still holds up because the underlying biology has not changed, only the precision of our measurements has.</p>
+    <p>The classical teaching, still a useful anchor, is that the luteal phase is roughly constant at about fourteen days while the follicular phase ranges from about ten to sixteen days, so total cycle length variation comes mostly from the follicular side (Reed and Carr, 2018). The reason is structural, and it follows directly from everything in this chapter. Follicle recruitment and ripening is a competitive, feedback-sensitive process that can genuinely take longer or shorter depending on how quickly a dominant follicle emerges from the pack. The corpus luteum, by contrast, is a gland with a built-in clock ticking down from the moment it forms, so its lifespan is far more constrained by its own internal biology than by outside circumstances.</p>
+    <p>Large modern datasets sharpen this considerably, and here honesty about the evidence matters as much as the headline finding. Analyzing more than six hundred thousand cycles from a fertility-tracking application, Bull and colleagues (2019) found that when cycles were longer, the follicular phase stretched by up to sixty-six percent while the luteal phase extended by only about five percent. That is the asymmetry made quantitative: the follicular phase does almost all of the work of changing cycle length, and the luteal phase barely moves by comparison.</p>
+    <p>But note two corrections to the tidy textbook version, because a good course teaches you where the simplification bends. First, the same large dataset reported a mean follicular phase near seventeen days and a mean luteal phase near twelve days, with wide confidence intervals around both, so fourteen and fourteen is a teaching simplification, not a law carved into every body. Second, a careful prospective study by Henry and colleagues (2024), following fifty three healthy women across roughly seven hundred cycles with validated temperature analysis, found real within-person variability in both phases. The luteal phase was <em>not</em> fixed at thirteen to fourteen days as classically assumed. Their finding was more nuanced and more honest: the luteal phase was consistently <em>less</em> variable than the follicular phase, but it was not rigid. Median within-person variability was about 5.2 days for the follicular phase versus about 3.0 days for the luteal phase. The same study also found that even in women prescreened to have normal, ovulatory cycles, twenty nine percent of all cycles recorded showed some kind of subclinical ovulatory disturbance, most often a short luteal phase, and fifty five percent of the women experienced at least one such cycle over the course of a year. Variability, in other words, is not the exception in this data. It is close to the norm, even among healthy, carefully screened participants.</p>
+    <p>So the durable claim, the one you should carry into practice, is comparative rather than absolute. The luteal phase is the steadier of the two acts. It is not a metronome, and it is not perfectly interchangeable across cycles or across people. Anyone who tells you the luteal phase is always exactly fourteen days is overselling a simplification, and that overselling is the source of a great deal of confusion about timing, including the confusion baked into apps like the one Naledi was using. Her 25, 33, and 27 day cycles, viewed through this lens, are almost certainly a story about a follicular phase moving around while a luteal phase held comparatively steady underneath it, which is not irregularity, it is the expected texture of a healthy cycle doing exactly what the physiology in this chapter predicts.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>A person reports cycles of 25, 31, and 28 days over three months. Where, most likely, did that variation come from, and which phase would you expect to have held relatively steadier? What would you <em>not</em> claim with certainty, given what you now know about the range in even large, well-designed studies?</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Turning fluency into judgment</h2>
+    <p>You now have the mechanism. The harder skill is knowing what it does and does not license you to say to someone else, or to conclude about your own body. A few decision frames.</p>
+    <h3>On fertile windows and cycle-timed advice</h3>
+    <p>Because ovulation timing rides on the variable follicular phase, the fertile window does not sit on a fixed calendar day, and a method that simply counts a set number of days forward from the start of bleeding is quietly assuming a fixed follicular phase, which the evidence above says you cannot assume. This is educational context about how the underlying physiology behaves, not a method for planning or avoiding pregnancy, and it is not medical guidance for any individual situation.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A calendar or rhythm style method that counts forward a fixed number of days from the last period assumes the luteal phase length backward from a fixed ovulation day, or assumes the follicular phase is fixed forward from day one. Either assumption breaks down for exactly the reason this chapter has spent so much time on: the follicular phase is the variable act, and even the steadier luteal phase is not perfectly fixed. A method built on a fixed number is only ever as accurate as that number's underlying assumption, and this chapter has just shown you how often that assumption fails in real data.</p>
+    </aside>
+    <p>The same variability also has a quieter, more immediate practical implication worth naming plainly: hormonal contraception works, in large part, by deliberately overriding the very feedback logic this chapter has spent so much time describing, holding estradiol and progesterone at levels that prevent the sustained threshold needed for a surge from ever being reached, so ovulation simply does not occur. That is a mechanism worth understanding on its own terms, and this course will return to it directly in a later chapter. For now, the only point worth carrying forward is that any specific method, its effectiveness, its side effects, and whether it suits a particular body, is a conversation for a qualified clinician, not a conclusion to draw from a physiology chapter.</p>
+    <p>This also bears directly on the wave of cycle-based training and nutrition advice you have likely encountered somewhere online. Grade that evidence honestly. Much of it rests on small studies, inconsistent phase definitions from one paper to the next, and findings that do not replicate when someone else tries to repeat them. The physiology in this chapter, the follicular rise, the pivot, the luteal transformation, is well established and consistent across a large body of research. The leap from these hormones change across the cycle to therefore eat or train this specific way on this specific day is frequently weak or outright contradictory in the data. You can hold both truths at once: the cycle is real and orderly, and confident, day-specific prescriptions built on top of it often outrun their evidence by a wide margin. Saying so plainly, rather than pretending more certainty exists than actually does, is part of respecting the person you are teaching or informing.</p>
+    <h3>The one recognize-and-refer thread</h3>
+    <p>There is a pattern worth learning to notice, and only to notice. When cycles become very long, very irregular, or stop altogether, the term for absent menstruation is <span class="ch-key">amenorrhea</span>. When that absence occurs alongside low energy availability, meaning intake that does not cover the combined demands of training and daily life, it can be part of a broader condition called <span class="ch-key">Relative Energy Deficiency in Sport</span> (abbreviated RED-S). Mechanistically this fits everything above without needing a single new concept: insufficient energy suppresses GnRH pulsing, which starves the whole loop from its very first step, so follicles do not ripen properly, estradiol never builds to a sustained threshold, the surge never fires, and the cycle stalls in an extended act one that never reaches its pivot. You will meet this pattern again, in much more depth, in the chapters on when the cycle goes quiet and on the cost of running on empty later in this course.</p>
+    <p>Your job here is narrow and firm. Recognize the pattern. Understand that it may warrant professional evaluation. Refer. It is not your role to diagnose it, to treat it, or to reassure someone that it is fine on the basis of what you have learned in this chapter. This clinician boundary is especially firm around amenorrhea, around anything involving contraception, and around the postpartum period, each of which involves altered physiology and individual risk that belongs with a qualified clinician. The course distills the research, but clinical judgment and lived female expertise carry weight the research alone cannot, and a note of humility here is appropriate rather than optional.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where Education Ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+  </section>
+
+  <blockquote class="ch-quote">
+    <p>The luteal phase was not fixed at thirteen to fourteen days as classically assumed, yet it was consistently less variable than the follicular phase.</p>
+    <cite>Paraphrasing Henry, Shirin, Goshtasebi, and Prior (2024)</cite>
+  </blockquote>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>The cycle is two acts and one pivot: a follicular phase that recruits and ripens a follicle, an ovulatory surge that releases the egg, and a luteal phase that transforms the lining and decides the outcome.</li>
+      <li>Estradiol in the follicular phase is a joint product of theca cells, which respond to luteinizing hormone and supply androgen, and granulosa cells, which respond to follicle-stimulating hormone and convert that androgen into estradiol. Neither cell type can do it alone.</li>
+      <li>The luteinizing hormone surge is not a fact to memorize but a consequence to predict: sustained estradiol above roughly 200 picograms per milliliter for about fifty hours flips feedback from negative to positive and triggers it, via kisspeptin neurons acting as the switch.</li>
+      <li>Ovulation lags the surge by about a day to a day and a half, so the surge, and any test that detects it, predicts but does not equal follicle release.</li>
+      <li>The corpus luteum forms from the emptied follicle, secretes progesterone from two cooperating cell types, depends on continued luteinizing hormone, and either regresses through luteolysis (menstruation) or is rescued by human chorionic gonadotropin (pregnancy) until the placenta takes over.</li>
+      <li>Cycle length varies mainly because the follicular phase varies. The luteal phase is the steadier act, but it is not rigidly fixed, and claiming otherwise oversells the evidence, as do calendar-counting methods built on that assumption.</li>
+      <li>Much cycle-timed training and nutrition advice rests on weak or contradictory data; the physiology is solid, the day-specific prescriptions built on top of it often are not.</li>
+      <li>Amenorrhea and Relative Energy Deficiency in Sport are the recognize-and-refer thread: notice the pattern, understand it may warrant evaluation, and refer. Do not diagnose or treat, especially around amenorrhea, contraception, and the postpartum period.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>You can now walk the cycle hormone by hormone and predict how a shift in one changes the timeline. You also met two physical signs, tucked inside this chapter, that most people never learn to read correctly: the estrogen-driven shift in cervical mucus during the follicular phase, and the small progesterone-driven rise in basal body temperature after ovulation. Next class we turn those two signs into a genuine skill, treating temperature as what fertility researchers sometimes call the fifth vital sign, and asking how much a body can honestly tell you about itself once you know how to listen for the right pattern at the right time.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Baerwald, A. R., Adams, G. P., & Pierson, R. A. (2011). Ovarian antral folliculogenesis during the human menstrual cycle: A review. <em>Human Reproduction Update, 18</em>(1), 73-91. https://doi.org/10.1093/humupd/dmr039</p>
+    <p>Bull, J. R., Rowland, S. P., Scherwitzl, E. B., Scherwitzl, R., Danielsson, K. G., & Harper, J. (2019). Real-world menstrual cycle characteristics of more than 600,000 menstrual cycles. <em>npj Digital Medicine, 2</em>, 83. https://doi.org/10.1038/s41746-019-0152-7</p>
+    <p>Henry, S., Shirin, S., Goshtasebi, A., & Prior, J. C. (2024). Prospective 1-year assessment of within-woman variability of follicular and luteal phase lengths in healthy women prescreened to have normal menstrual cycle and luteal phase lengths. <em>Human Reproduction, 39</em>(11), 2565-2574. https://doi.org/10.1093/humrep/deae215</p>
+    <p>Kauffman, A. S. (2022). Neuroendocrine mechanisms underlying estrogen positive feedback and the LH surge. <em>Frontiers in Neuroscience, 16</em>, 953252. https://doi.org/10.3389/fnins.2022.953252</p>
+    <p>Mihm, M., Gangooly, S., & Muttukrishna, S. (2011). The normal menstrual cycle in women. <em>Animal Reproduction Science, 124</em>(3-4), 229-236. https://doi.org/10.1016/j.anireprosci.2010.08.030</p>
+    <p>Niswender, G. D., Juengel, J. L., Silva, P. J., Rollyson, M. K., & McIntush, E. W. (2000). Mechanisms controlling the function and life span of the corpus luteum. <em>Physiological Reviews, 80</em>(1), 1-29. https://doi.org/10.1152/physrev.2000.80.1.1</p>
+    <p>Owen, J. A. (1975). Physiology of the menstrual cycle. <em>The American Journal of Clinical Nutrition, 28</em>(4), 333-338. https://doi.org/10.1093/ajcn/28.4.333</p>
+    <p>Reed, B. G., & Carr, B. R. (2018). The normal menstrual cycle and the control of ovulation. In <em>Endotext</em>. MDText.com. https://www.ncbi.nlm.nih.gov/books/NBK279054/</p>
+    <p>Tesarik, J., Conde-Lopez, C., Galan-Lazaro, M., & Mendoza-Tesarik, R. (2020). Luteal phase in assisted reproductive technology. <em>Frontiers in Reproductive Health, 2</em>, 595183. https://doi.org/10.3389/frph.2020.595183</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 3 of 10</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-scrubber');
+    if(!root) return;
+    var follSel = root.querySelector('#scrub-foll');
+    var daySlider = root.querySelector('#scrub-day');
+    var cap = root.querySelector('#scrub-caption');
+    var reset = root.querySelector('#scrub-reset');
+
+    var els = {
+      fsh: root.querySelector('#m-fsh'), nfsh: root.querySelector('#n-fsh'),
+      e2: root.querySelector('#m-e2'), ne2: root.querySelector('#n-e2'),
+      lh: root.querySelector('#m-lh'), nlh: root.querySelector('#n-lh'),
+      p4: root.querySelector('#m-p4'), np4: root.querySelector('#n-p4'),
+      fol: root.querySelector('#m-fol'), nfol: root.querySelector('#n-fol'),
+      lin: root.querySelector('#m-lin'), nlin: root.querySelector('#n-lin')
+    };
+
+    function clamp(v){ return Math.max(0, Math.min(100, v)); }
+
+    function model(day, foll){
+      var lut = 14;
+      var ov = foll + 1;            // ovulation day
+      var total = foll + lut;
+      var f = {};
+
+      // FSH: high early, dips mid, small mid-cycle bump, low luteal, rising at very end
+      var fsh;
+      if(day <= foll){
+        fsh = 55 - (day/foll)*35;               // falls across follicular
+        if(Math.abs(day-ov) <= 1) fsh += 25;    // periovulatory bump
+      } else {
+        var frac = (day-foll)/lut;
+        fsh = 18 + (frac>0.85 ? (frac-0.85)*180 : 0); // rises at end
+      }
+      f.fsh = clamp(fsh);
+
+      // Estradiol: rises across follicular, peaks day before ovulation, dips, secondary luteal rise
+      var e2;
+      if(day <= foll){
+        e2 = 8 + Math.pow(day/foll, 2.2)*80;
+        if(day === foll) e2 = 90;               // peak just before ovulation
+      } else {
+        var lf = (day-foll)/lut;
+        e2 = 30 + Math.sin(Math.PI*lf)*35;      // secondary hump
+        if(lf>0.9) e2 = 12;
+      }
+      f.e2 = clamp(e2);
+
+      // LH: low, sharp surge at ovulation, low after
+      var lh = 8;
+      if(Math.abs(day-ov) < 0.6) lh = 100;
+      else if(Math.abs(day-ov) <= 1) lh = 60;
+      else if(day > foll+1){ var lg=(day-foll)/lut; lh = 12 + Math.sin(Math.PI*lg)*6; }
+      f.lh = clamp(lh);
+
+      // Progesterone: low follicular, rises after ovulation, peaks mid-luteal, falls before menses
+      var p4;
+      if(day <= ov){ p4 = 3; }
+      else {
+        var pl = (day-ov)/(total-ov);
+        p4 = 8 + Math.sin(Math.PI*pl)*82;
+        if(pl>0.9) p4 = 8;
+      }
+      f.p4 = clamp(p4);
+
+      // Follicle size / corpus luteum
+      var fol, folTxt;
+      if(day < ov){ fol = 15 + (day/foll)*70; folTxt = 'growing'; }
+      else if(Math.abs(day-ov)<=0.6){ fol = 100; folTxt = 'release'; }
+      else { var cl=(day-ov)/(total-ov); fol = 70 - cl*40; folTxt = 'corpus luteum'; if(cl>0.9){fol=20;folTxt='regressing';} }
+      f.fol = clamp(fol); f.folTxt = folTxt;
+
+      // Lining
+      var lin, linTxt;
+      if(day <= 5){ lin = 8; linTxt = 'shedding'; }
+      else if(day <= foll){ lin = 15 + (day/foll)*45; linTxt = 'proliferating'; }
+      else { lin = 65 + ((day-foll)/lut)*30; linTxt = 'secretory'; }
+      f.lin = clamp(lin); f.linTxt = linTxt;
+
+      f.ov = ov; f.total = total; f.foll = foll;
+      return f;
+    }
+
+    function caption(day, m){
+      if(day <= 5) return '<strong>Day '+day+'.</strong> Menstruation. Estradiol and progesterone are low, releasing the brake on follicle-stimulating hormone, which recruits a cohort of follicles.';
+      if(day < m.foll) return '<strong>Day '+day+'.</strong> Follicular phase. A dominant follicle has been selected and is pouring out estradiol, which thickens the lining and builds toward the feedback flip.';
+      if(day === m.foll) return '<strong>Day '+day+'.</strong> Estradiol has stayed high long enough to flip feedback from negative to positive. The luteinizing hormone surge is firing.';
+      if(Math.abs(day-m.ov) <= 1) return '<strong>Day '+day+'.</strong> Ovulation. The surge has triggered follicle rupture and the egg is released. This is the pivot between the two acts.';
+      if(day < m.total-1) return '<strong>Day '+day+'.</strong> Luteal phase. The corpus luteum secretes progesterone, converting the lining to a secretory state and keeping the brain quiet.';
+      return '<strong>Day '+day+'.</strong> Late luteal. With no pregnancy, the corpus luteum regresses, progesterone falls, and the lining is about to shed. Follicle-stimulating hormone begins to rise again.';
+    }
+
+    function render(){
+      var foll = parseInt(follSel.value,10);
+      var total = foll + 14;
+      daySlider.max = total;
+      var day = parseInt(daySlider.value,10);
+      if(day > total){ day = total; daySlider.value = total; }
+      var m = model(day, foll);
+      els.fsh.style.width = m.fsh+'%'; els.nfsh.textContent = Math.round(m.fsh/10);
+      els.e2.style.width = m.e2+'%'; els.ne2.textContent = Math.round(m.e2/10);
+      els.lh.style.width = m.lh+'%'; els.nlh.textContent = Math.round(m.lh/10);
+      els.p4.style.width = m.p4+'%'; els.np4.textContent = Math.round(m.p4/10);
+      els.fol.style.width = m.fol+'%'; els.nfol.textContent = m.folTxt;
+      els.lin.style.width = m.lin+'%'; els.nlin.textContent = m.linTxt;
+      cap.innerHTML = caption(day, m);
+    }
+
+    follSel.addEventListener('change', function(){ daySlider.value = 1; render(); });
+    daySlider.addEventListener('input', render);
+    reset.addEventListener('click', function(){ daySlider.value = 1; render(); });
+    render();
+  } catch(e){ /* fail quietly */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-predict');
+    if(!root) return;
+    var cycleSel = root.querySelector('#pred-cycle');
+    var daySlider = root.querySelector('#pred-day');
+    var reveal = root.querySelector('#pred-reveal');
+    var cap = root.querySelector('#pred-caption');
+    var e2fill = root.querySelector('#pm-e2');
+    var e2num = root.querySelector('#pn-e2');
+    var lhfill = root.querySelector('#pm-lh');
+    var lhnum = root.querySelector('#pn-lh');
+
+    // ovulation day roughly cycle - 13 (steadier luteal)
+    function ovDay(total){ return total - 13; }
+
+    function e2level(day, ov){
+      // rising to peak the day before ovulation
+      var foll = ov - 1;
+      var v;
+      if(day <= foll){ v = 8 + Math.pow(day/foll, 2.2)*82; }
+      else { v = Math.max(10, 90 - (day-foll)*25); }
+      return Math.max(0, Math.min(100, v));
+    }
+
+    function render(){
+      var total = parseInt(cycleSel.value,10);
+      daySlider.max = total - 1;
+      daySlider.min = 6;
+      var ov = ovDay(total);
+      var day = parseInt(daySlider.value,10);
+      var e2 = e2level(day, ov);
+      e2fill.style.width = e2+'%';
+      e2num.textContent = Math.round(e2/10);
+      lhfill.style.width = '0%';
+      lhnum.textContent = '?';
+      cap.innerHTML = 'Day '+day+'. Estradiol level shown at left. Set your predicted ovulation day with the slider, then reveal.';
+    }
+
+    function doReveal(){
+      var total = parseInt(cycleSel.value,10);
+      var ov = ovDay(total);
+      var guess = parseInt(daySlider.value,10);
+      var surgeDay = ov - 1; // surge precedes rupture
+      lhfill.style.width = '100%';
+      lhnum.textContent = 'surge';
+      var diff = guess - ov;
+      var msg;
+      if(Math.abs(diff) <= 1){
+        msg = 'Close. Ovulation is day '+ov+'. ';
+      } else if(diff < 0){
+        msg = 'A bit early. You picked day '+guess+'; ovulation is day '+ov+'. ';
+      } else {
+        msg = 'A bit late. You picked day '+guess+'; ovulation is day '+ov+'. ';
+      }
+      msg += 'The luteinizing hormone surge began around day '+surgeDay+', once estradiol had stayed above threshold for roughly fifty hours. Ovulation then followed the surge by about a day to a day and a half. Notice: the surge predicts release, but does not equal it.';
+      cap.innerHTML = '<strong>Revealed.</strong> ' + msg;
+    }
+
+    cycleSel.addEventListener('change', function(){
+      var total = parseInt(cycleSel.value,10);
+      daySlider.value = Math.round(total/2);
+      render();
+    });
+    daySlider.addEventListener('input', render);
+    reveal.addEventListener('click', doReveal);
+    render();
+  } catch(e){ /* fail quietly */ }
+})();
+</script>
+</body>
+</html>
