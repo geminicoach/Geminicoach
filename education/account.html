@@ -150,8 +150,9 @@
     var CHARTER = ["parker.gemini.coach@gmail.com","ebylander01@gmail.com","liamtsc1@gmail.com","jademckenzie3256@gmail.com"];
     var FLAGSHIP = ["connor@calibrated-strength.us","kobie@calibrated-strength.us"];
     function compTier(email){ var e=(email||"").toLowerCase(); if(CHARTER.indexOf(e)!==-1) return "charter"; if(FLAGSHIP.indexOf(e)!==-1) return "flagship"; return null; }
-    var FOUNDING_LIMIT = 50;                 // first N registered accounts get the reward
-    var FOUNDING_CODE  = "FOUNDING50";       // TODO: replace with the real Stripe coaching promo code
+    var FOUNDING_LIMIT = 50;                 // first N NON-comped accounts get the public reward
+    var FOUNDING_CODE  = "FOUNDING50";       // public first-50 coaching code (Stripe, coaching-only)
+    var CREW_CODE      = "OG-Geminis";       // comped members' coaching code (Stripe, coaching-only)
     var COURSES = (window.GEMINI_COURSES && window.GEMINI_COURSES.courses) || [];
     var COLORS = {A:{c:"#36c98d",c2:"#1f8f63"},B:{c:"#2e8de8",c2:"#1a6fc4"},C:{c:"#22b6c4",c2:"#147f8a"},D:{c:"#e8a23a",c2:"#b9781f"},E:{c:"#9a6cf0",c2:"#6a44c0"}};
 
@@ -254,7 +255,15 @@
 
       html+='<div class="wrap">';
 
-      if(d.isFounding){
+      if(d.isComp){
+        html+='<div class="foundcard" style="margin:0 0 18px;background:linear-gradient(135deg,#0f3226,#0b1f18);border:1px solid #2f9e73;border-radius:16px;padding:18px 22px;box-shadow:0 12px 30px rgba(0,0,0,.4)">'+
+          '<div style="font-family:\'Barlow Condensed\',sans-serif;letter-spacing:2px;color:#8fe6c2;font-size:12px">OG GEMINIS — CREW PERK</div>'+
+          '<div style="color:#fff;font-size:17px;line-height:1.5;margin:4px 0 10px">As one of our OG Geminis, here\'s <b>$50/mo off your first 2 months of coaching</b> with Parker — on us.</div>'+
+          '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">'+
+            '<code style="background:#0e1f38;border:1px dashed #36c98d;color:#d6ffe9;padding:8px 14px;border-radius:8px;font-size:16px;letter-spacing:1px">'+esc(CREW_CODE)+'</code>'+
+            '<span style="color:#9fb0cc;font-size:13px">Use at coaching checkout with this email.</span>'+
+          '</div></div>';
+      } else if(d.isFounding){
         html+='<div class="foundcard" style="margin:0 0 18px;background:linear-gradient(135deg,#241640,#160e2a);border:1px solid #6a44c0;border-radius:16px;padding:18px 22px;box-shadow:0 12px 30px rgba(0,0,0,.4)">'+
           '<div style="font-family:\'Barlow Condensed\',sans-serif;letter-spacing:2px;color:#c9b3ff;font-size:12px">FOUNDING 50 REWARD</div>'+
           '<div style="color:#fff;font-size:17px;line-height:1.5;margin:4px 0 10px">You\'re founding member <b>#'+d.founding+'</b> — thank you for being early. Here\'s <b>$50/mo off your first 2 months of coaching</b> with Parker.</div>'+

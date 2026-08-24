@@ -136,7 +136,7 @@
     // shown a "Charter Member" label. Keep lowercase.
     CHARTER: ["parker.gemini.coach@gmail.com", "ebylander01@gmail.com", "liamtsc1@gmail.com", "jademckenzie3256@gmail.com"],
     FLAGSHIP: ["connor@calibrated-strength.us", "kobie@calibrated-strength.us"],
-    PAYMENT_LINK: "https://buy.stripe.com/6oU14o0yncl87Z802c7bW01",
+    PAYMENT_LINK: "https://buy.stripe.com/4gM28sch5gBo7Z802c7bW02",
 
     // returns "charter" | "flagship" | null — both tiers get free access
     compTier: function (email) {
