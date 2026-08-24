@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Putting It Together: Population Fit, Risk, and the Line You Do Not Cross</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme, notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ', '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 9 · Module 3</div>
+    <h1 class="ch-title">Putting It Together: Population Fit, Risk, and the Line You Do Not Cross</h1>
+    <p class="ch-subtitle">One framework, three axes, and a boundary that never moves.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">T</span>wo people can occupy the same hour of attention and need almost nothing in common. The first is a physique competitor, eleven weeks out from a show, already lean, sleeping five hours a night, chasing the last stubborn pocket of fat over the lower abdomen. The second is Farah, forty-four years old, a hospital administrative supervisor whose body fat percentage sits north of thirty percent, who has ended three prior weight-loss attempts in regain, and whose resting heart rate suggests she has not walked for exercise in a decade. Someone hands you a single tool, say a green tea catechin extract, a fasted-cardio protocol, or a continuous glucose monitor, and asks the question this entire course has been preparing you to answer: is this a good idea?</p>
+    <p>The honest reply is that the question is malformed. There is no context-free answer, because there is no context-free person. The same tool is not equally useful across bodies. That single sentence is the thesis of the whole course, and this chapter is where you learn to operationalize it, to turn it from a slogan you agree with into a repeatable method you can run on anyone, including people this course never specifically described.</p>
+    <p>Operationalize is a deliberate word choice, not decoration. A slogan you agree with changes nothing about what you actually do on a Tuesday afternoon when someone hands you a bottle, a device, or a headline. A method changes what you do, because it forces the same three questions onto every tool before it earns a place in a plan: does this person's physiology and life make them a plausible responder, how large is the honest effect once you strip away the marketing, and what does it cost if you are wrong. Those three questions are the entire content of this chapter, applied first to a framework, then to real cases, then to claims neither you nor this course has ever seen before.</p>
+    <p>Farah will recur through this chapter as the throughline case, not because her situation matters more than the competitor's, but because it is far more common, and because it is the situation in which getting the framework right or wrong carries the largest real consequence. She is not a patient in this course and not a diagnosis to practice on. She is a stand-in for an honest, unglamorous question: for a real person starting from a real baseline, which of the tools this course has covered actually earns a place in the plan, and which ones are noise dressed up as sophistication.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The Job of This Chapter</h2>
+    <p>You have already learned the parts. What remains is synthesis. A professional does not carry a list of tricks; a professional carries a way of reasoning that produces the right tool for the right body at a defensible magnitude and an acceptable cost. By the end of this chapter you will be able to take any profile, or any novel claim you encounter after the course ends, and reason from physiology to a judgment that is <span class="ch-key">fit-aware</span>, <span class="ch-key">magnitude-aware</span>, and <span class="ch-key">risk-aware</span>, while knowing exactly where your scope ends and a clinician's begins.</p>
+
+    <h3>Eight Mechanisms, One Frame</h3>
+    <p>Before the three axes can do any work, the parts they operate on need to be back on the table, named plainly and in one place. This is not a review for its own sake. Every case later in this chapter draws directly on these eight mechanisms, and the whole discipline of this capstone is choosing correctly among them.</p>
+    <p><strong>The fat cell.</strong> Every gram of stored fat leaves the adipocyte through the same basic sequence: a catecholamine signal reaches the cell, tips the balance between beta-adrenergic acceleration and alpha-2 adrenergic braking, and activates hormone-sensitive lipase (HSL) to split stored triglyceride into fatty acids and glycerol. Depots richest in alpha-2 receptor density resist that release even when the rest of the body is responding well, which is the actual physiology behind the word stubborn.</p>
+    <p><strong>The mitochondrion.</strong> Releasing a fatty acid is not the same as disposing of it. Oxidative capacity, driven largely by mitochondrial density and enzyme machinery, sets the ceiling on how much of that released fuel is actually burned rather than re-stored. Brown adipose tissue, with its signature uncoupling protein 1 (UCP1), can burn fuel as pure heat, but its total contribution in a lean, temperate-climate adult is small next to the rest of the body's oxidative capacity.</p>
+    <p><strong>Exercise modality.</strong> High-intensity interval training (HIIT), steady-state conditioning, and progressive resistance training each carry a distinct physiological signature, a distinct recovery cost, and a distinct effect on the tissue that keeps a deficit sustainable, namely muscle. None is universally superior. Each earns its place only when matched to a specific recovery ceiling, joint history, and training age.</p>
+    <p><strong>The insulin lever.</strong> Insulin sensitivity governs nutrient partitioning, whether incoming fuel is more likely to be stored or oxidized, and it is one of the clearest real-world examples of a population-fit variable: an identical intervention can produce a wildly different payoff depending on where a person's baseline insulin action sits before they begin.</p>
+    <p><strong>The supplement shelf.</strong> Graded honestly, nearly the entire thermogenic aisle sorts onto a small number of mechanisms: raising the catecholamine signal, releasing the alpha-2 brake, slowing the enzymes that clear the signal, or triggering sympathetic outflow through a separate sensory route. Knowing which mechanism a compound touches lets you predict its honest effect size instead of trusting the label on the bottle.</p>
+    <p><strong>Adherence physiology.</strong> The brain defends its energy stores through appetite and satiety signaling, including hormones such as leptin and ghrelin, and that defense intensifies the leaner a person gets. Adherence is not a character trait. It is a biological and behavioral system with predictable failure points, and protecting it is frequently the single highest-leverage intervention available to you.</p>
+    <p><strong>Advanced pharmacology.</strong> Tools such as glucagon-like peptide-1 (GLP-1) receptor agonists act on appetite and gastric emptying with an effect size that dwarfs almost everything else covered in this course. That size is exactly why they sit strictly on the clinical side of the fence: real mechanism, real magnitude, and entirely out of scope for anyone without a prescribing license.</p>
+    <p>Eight mechanisms, each already graded on its own terms in its own chapter. What none of those chapters could do alone, because none of them had the whole person in front of them, is tell you which mechanism to reach for first, second, or never, for the specific body asking. That is this chapter's only job, and it is the reason this is the capstone rather than a ninth mechanism.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, name the single biggest fat-loss lever for Farah. Now name it for the lean competitor described in the opening. If your two answers are the same tool, you have not yet internalized the thesis of this course. Hold both answers and check them against the cases built later in this chapter.</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Three-Axis Decision Framework</h2>
+    <p>Every decision you make about a fat-loss tool can be resolved onto three independent axes. They are independent on purpose: a tool can score high on one and fail on another, and the failure usually wins. Learn to hold all three at once, and refuse the temptation to average them into a single comfortable number.</p>
+
+    <h3>Axis One: Population Fit</h3>
+    <p><span class="ch-key">Population fit</span> asks whether this person's baseline physiology and life circumstances make them a plausible responder to this tool at all. It is the axis most often skipped, and skipping it is why generic advice underperforms so reliably. The Mayo Clinic proof-of-concept study by Cifuentes and colleagues (2023) is the cleanest demonstration in the recent literature. In 165 adults with obesity, matching the intervention to the individual's physiological or behavioral phenotype (abnormal satiation, abnormal post-meal satiety, emotional eating, or a low resting energy expenditure) produced significantly more weight loss over twelve weeks than a standard, one-size lifestyle program: roughly 7.4 kilograms versus 4.3 kilograms. The tools themselves were not exotic. The difference was fit.</p>
+    <p>Mittendorfer and colleagues (2023) sharpen the point at the level of mechanism. When they induced roughly twenty percent weight loss in women with obesity, they found metabolic "responders" and "non-responders." Baseline insulin action determined how much metabolic benefit the weight loss actually delivered, and once normal insulin sensitivity was reached, further benefit hit a ceiling. Identical weight loss, dramatically different metabolic payoff, decided almost entirely by where the person started. Fit is not a soft variable you nod at and move past. It is often the whole story, and it is the direct real-world expression of the insulin lever this course covered on its own terms earlier.</p>
+    <p>In practice, checking fit means running through a short mental checklist before anything else: training age, current recovery capacity, adherence history, and psychological relationship to tracking and body image. None of those four require a laboratory test. All four are things you can learn from a conversation, and together they predict more about whether a tool will actually work for this person than the tool's own study data does in isolation. A perfectly evidenced intervention handed to a poor-fit person is not a small win, it is close to a wasted turn.</p>
+
+    <h3>Axis Two: Honest Effect Size</h3>
+    <p>The second axis asks how much the tool actually moves the needle, expressed as a magnitude with a range, not as a binary "it works." Here you must separate two ideas that casual reading blurs constantly. Schober and colleagues (2018) put it plainly: a p-value tells you nothing about the size of an effect. Statistical significance means an effect is probably not zero; it says nothing about whether the effect is large enough to matter to a human being. Every effect-size estimate should travel with a confidence interval, and clinical importance is a judgment made in context, not a threshold read off a table.</p>
+    <p>In practice this means you translate any claim into a sentence of the form: for this kind of person, this tool tends to produce about this much change, give or take this much, on top of the fundamentals. This is precisely the discipline the supplement-grading chapter modeled compound by compound. A thermogenic supplement that raises daily energy expenditure by a statistically significant fifteen or twenty kilocalories is real and functionally useless. A structured adherence intervention that keeps someone in a modest deficit for six months instead of six weeks is unglamorous and enormous. <span class="ch-key">Effect size honesty</span> is the antidote to the entire influencer economy, and it is a habit, not a one-time calculation.</p>
+    <p>Communicating that habit out loud matters as much as calculating it. Saying a supplement "works" invites someone to expect a transformation. Saying it produces, on average, a small and inconsistent nudge on top of a deficit that is already doing the real work sets an expectation that survives contact with reality. People rarely abandon a plan because the truth was too modest. They abandon it because an exaggerated promise collapsed under its own weight, and honest framing is itself a form of risk management for adherence.</p>
+
+    <h3>Axis Three: Risk</h3>
+    <p>The third axis asks what the tool can cost, and to whom, if things go wrong. Risk is not only physiological harm. It includes opportunity cost (attention spent on a trivial lever is attention stolen from a large one), financial cost, psychological cost (obsessive tracking feeding disordered patterns, a real concern the adherence chapter raised directly), and scope cost, a tool that pulls you across the professional boundary this chapter will spend its second half defending. Risk is asymmetric. A tool with a small upside and a rare but serious downside is usually a bad trade even when the downside is unlikely, because you will deploy it, or advise on it, across many people over many years, and rare events accumulate.</p>
+    <p>Risk also stacks across a whole program in ways that grading one tool in isolation misses. A fasted training session, a moderate caffeine dose, an aggressive step target, and a tight deficit can each look acceptable individually and still add up to a person who is under-fueled, under-slept, and one bad week away from abandoning the plan entirely. Grading tools one at a time is necessary but not sufficient. The program as a whole carries its own risk score, and that score is frequently higher than any single ingredient suggests.</p>
+
+    <figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-ink and watercolour editorial diagram of a three-axis decision framework, drawn as if in a physiologist's notebook. Three clean labelled arrows radiating from a central point: one axis labelled 'FIT', one labelled 'EFFECT SIZE', one labelled 'RISK', in small italic serif. Small hand-sketched icons at the tips: a human silhouette for fit, a set of nested brackets suggesting a range for effect size, a warning triangle for risk. Warm earthy palette of ink black, ochre, and muted teal on cream paper, shallow shadows, rule-of-thirds composition. No numerical data, no charts, no ticks." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img1.jpg" alt="<em>The three axes are independent, and a failure on any one can veto a tool that looks strong on the others.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The three axes are independent, and a failure on any one can veto a tool that looks strong on the others.</em></figcaption></figure>
+
+    <p>The framework resolves like this. A tool is worth deploying only when it clears all three axes for this specific person: the person is a plausible responder, the honest magnitude is large enough to matter, and the risk profile is acceptable. Most "advanced" tools fail on effect size, most "aggressive" tools fail on risk, and most "universal" tools fail on fit. The great lie of the plateau is that the answer is always a more exotic tool. Usually the answer is a better-fitted fundamental, chosen from the same eight mechanisms you already know, aimed more precisely.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>Advanced course, therefore advanced tools: that is the assumption almost everyone brings into a chapter like this one, and it is backward. Advanced simply means the easy wins are gone, so the remaining gains are smaller and more precisely targeted. The tools that actually move an advanced trainee's needle are usually the same fundamentals covered in the first chapters of this course, aimed with more precision, not a new and more exotic list. Reaching for novelty because a plateau feels sophisticated is exactly the error this framework exists to prevent.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone asks about a supplement with a real, replicated, statistically significant effect on fat oxidation. What are the two questions you must ask before that finding matters at all? (Hint: significance is not one of them.)</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <div class="ch-widget" id="fit-engine">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Population-Fit Decision Engine</div>
+    </div>
+    <p class="ch-widget-sub">Build a profile, choose a tool, and see how it scores on fit, honest effect size, and risk. The engine flags poor matches and boundary violations, then returns a reasoned grade.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Body-fat level</span>
+        <select class="ch-widget-select" id="fe-bf">
+          <option value="lean">Lean (competitor, sub-12% M / sub-20% F)</option>
+          <option value="mid">Mid-range (recreationally fit)</option>
+          <option value="high">Higher body fat, early in journey</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Training age</span>
+        <select class="ch-widget-select" id="fe-train">
+          <option value="novice">Novice (under 1 year)</option>
+          <option value="inter">Intermediate</option>
+          <option value="adv">Advanced (5+ years)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Recovery / sleep</span>
+        <select class="ch-widget-select" id="fe-rec">
+          <option value="poor">Poor (under 6h, high stress)</option>
+          <option value="ok">Adequate</option>
+          <option value="good">Robust</option>
+        </select>
+      </div>
+    </div>
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Adherence history</span>
+        <select class="ch-widget-select" id="fe-adh">
+          <option value="fragile">Fragile (multiple failed attempts)</option>
+          <option value="mixed">Mixed</option>
+          <option value="strong">Strong and consistent</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Tool selected</span>
+        <select class="ch-widget-select" id="fe-tool">
+          <option value="deficit">Structured deficit + protein floor</option>
+          <option value="steps">Daily step / NEAT target</option>
+          <option value="resist">Progressive resistance training</option>
+          <option value="hiit">HIIT / interval conditioning</option>
+          <option value="fasted">Fasted cardio</option>
+          <option value="sleep">Sleep & stress intervention</option>
+          <option value="caffeine">Caffeine (pre-training)</option>
+          <option value="thermo">Thermogenic "fat-burner" blend</option>
+          <option value="cgm">Continuous glucose monitor</option>
+          <option value="rx">Prescription pharmacology</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Fit</span>
+        <span class="ch-meter-bar"><span id="fe-fit-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="fe-fit-num">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Effect size</span>
+        <span class="ch-meter-bar"><span id="fe-eff-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="fe-eff-num">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Risk (lower is better)</span>
+        <span class="ch-meter-bar"><span id="fe-risk-bar" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="fe-risk-num">5</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="fe-btn">Score this choice</button>
+    <p class="ch-widget-sub" id="fe-out" style="margin-top:1rem;"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Integrated Cases Across the Population Spectrum</h2>
+    <p>The framework is abstract until you run real bodies through it. We will take three, deliberately spread across the spectrum, and reason each one from physiology to a graded plan using the eight reactivated mechanisms above. Watch how the ranking of tools inverts as we move along the spectrum. That inversion, more than any single fact in this chapter, is the lesson.</p>
+
+    <h3>Case A: The Lean Physique Competitor</h3>
+    <p>Female, 29, 17 percent body fat and dropping, five years of training, eleven weeks from stage, sleeping poorly, chasing a stubborn lower-abdominal and hip fat depot. She has read about alpha-2 adrenoceptor density in stubborn fat, remembers it from the fat-cell chapter, and wants to know what to add.</p>
+    <p>Run the axes. Her <em>fit</em> for exotic fat-oxidation tools is actually low, because she is already near the physiological floor where the binding constraint is recovery, muscle retention, and hormonal function, not a missing thermogenic. Her thermogenic options are the same short list graded in the supplement chapter, caffeine, green tea catechins, yohimbine, and the rest, and every one of them pushes on a beta-adrenergic accelerator that a diet-induced sympathetic tone is already driving hard. There is very little upstream slack left to add to. Her <em>effect sizes</em> for those supplements are trivial relative to the effect size of a well-managed deficit that preserves lean mass, and her <em>risk</em> profile is elevated precisely because she is lean and under-recovered: the poor sleep is not a side issue, it is a lever, and it is the one place her adherence physiology still has real room to improve. Mittendorfer and colleagues (2023) remind us that benefit hits a ceiling once physiology normalizes; she is near several such ceilings already, in insulin action, in recovery capacity, and in how much further the beta pathway can be pushed.</p>
+    <p>It is worth naming why the thermogenic-tissue chapter does not rescue her either. Cold exposure and other brown-adipose-tissue tools are real mechanisms, but brown fat's total contribution to daily energy expenditure in a lean adult is small next to the rest of her oxidative capacity, and no amount of cold exposure substitutes for the recovery she is not getting. A mechanism being real is not the same as a mechanism being the right lever for this particular body at this particular time, and her case is the cleanest illustration of that gap anywhere in this course.</p>
+    <p>The honest plan: the biggest available lever is sleep and stress management, followed by protecting training quality and protein intake through the deficit, followed by patient, small adjustments to the deficit itself. Stubborn regional fat resolves largely as total body fat continues to fall, not as a target you can hit directly by releasing one receptor's brake. The glamorous tools she asked about are near the bottom of the list. This is uncomfortable to deliver and it is correct.</p>
+
+    <figure class="ch-figure" data-image-idx="1" data-prompt="A hand-drawn field-guide plate comparing two human silhouettes side by side, in muted watercolour and graphite. Left silhouette lean and athletic, labelled in small italic serif 'lean, near physiological floor'; right silhouette higher body fat, labelled 'higher body fat, early journey'. Beneath each, a small stacked list of tiny icons suggesting priorities, larger icon at top shrinking downward, but no text on the priority icons. Earthy palette of sepia, sage green, and warm grey on cream paper. Balanced portrait composition, gentle single key light from upper left. No charts, no numbers, no ticks." data-aspect="portrait"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch9-img2.jpg" alt="<em>The ranking of tools inverts across the spectrum: the same list, reordered by the body in front of you.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The ranking of tools inverts across the spectrum: the same list, reordered by the body in front of you.</em></figcaption></figure>
+
+    <h3>Case B: The Recreationally Fit Mid-Range Trainee</h3>
+    <p>Male, 38, roughly 24 percent body fat, trains three times a week with decent consistency, sleeps adequately, has plateaued after an initial good run of progress. He wants to know whether to add HIIT, a fat-burner, or fasted cardio.</p>
+    <p>His <em>fit</em> is broad. He responds to most of the fundamentals because he has not exhausted them the way the competitor has. His largest untapped <em>effect size</em> is almost certainly total daily movement and a modest re-tightening of the deficit that has quietly drifted, exactly the pattern the earliest chapter of this course described as the exhaustion of the easy wins, plus continued progressive resistance training to protect and build the metabolically active tissue that keeps the deficit sustainable. HIIT is a legitimate option here, with a genuine conditioning and time-efficiency benefit, and its <em>risk</em> is low if his recovery supports it. The fat-burner fails on effect size for the same reason it failed for the competitor, it is one of a small number of catecholamine-side mechanisms, and his catecholamine signal is not the binding constraint yet. Fasted cardio fails on the claim it is usually sold on; fed or fasted, the total energy balance over the week is what governs fat loss, and the marginal difference in fat oxidation during the session is not a needle-mover for him.</p>
+    <p>His insulin lever is worth naming explicitly, because it separates him from both other cases. He is neither near the ceiling the competitor is approaching nor sitting on the enormous, untouched room Farah has. His insulin sensitivity is probably ordinary for an active man his age, which means partitioning tools add a marginal benefit at best, and the honest answer is that his plateau has little to do with insulin at all. It has to do with a deficit that quietly narrowed as his body adapted and his tracking got looser, which is the single most common story behind an intermediate plateau and the least dramatic one to diagnose.</p>
+    <p>The honest plan: audit and re-establish the deficit, raise NEAT (non-exercise activity thermogenesis) with a concrete step target, keep or add two resistance sessions, and insert intervals only if he enjoys them and recovers from them. Adherence is the hinge, and Lemstra and colleagues (2016) tell us what protects it: greater early results, action-stage readiness, and healthier baseline behaviors, along with supervised, socially supported programs that outperform unsupervised ones. Design the plan to generate a visible early win, because that win is what buys the months of consistency that follow.</p>
+
+    <h3>Case C: Farah, Higher Body Fat and Early in the Journey</h3>
+    <p>Farah is 44, above 32 percent body fat, largely sedentary, three previous attempts that ended in regain, elevated stress, and low mood on hard days. This is where the framework is most powerful and most humbling, and it is why she opened this chapter.</p>
+    <p>Her <em>fit</em> for the fundamentals is enormous because she is far from every ceiling. Cifuentes and colleagues (2023) show that phenotype-matched lifestyle intervention produced meaningfully more weight loss in exactly this population, roughly 7.4 kilograms versus 4.3 kilograms over twelve weeks, a difference driven by matching, not by a harsher protocol. Her largest <em>effect sizes</em> by a wide margin are consistent daily movement, a protein-anchored deficit she can actually sustain, resistance training to protect lean mass, and sleep. Her insulin lever has enormous room to move, unlike the competitor's, which is nearly maxed out. Her <em>risk</em> considerations are different in kind: Lemstra and colleagues (2016) identify depression, stress, and strong body-shape concern as predictors of poor adherence, which means the psychological architecture of the plan is not optional, it is load-bearing. Her low mood on hard days is a <span class="ch-key">sign</span>, not a datapoint you get to interpret. It routes to a qualified professional, full stop, a point this chapter returns to directly in its second half.</p>
+    <p>Her adherence physiology also deserves more than a label. The appetite and satiety system, including hormones such as leptin, which signals stored energy availability, and ghrelin, which rises before meals and drives hunger, defends body weight actively against a deficit, and that defense is a large part of why her three prior attempts ended in regain rather than plateau. She is not fighting a lack of willpower. She is fighting a hunger signal that gets louder the longer a deficit runs, which is precisely why the plan has to be sustainable enough to outlast that signal rather than fast enough to beat it.</p>
+    <p>It is also worth naming, honestly, that Farah's profile is exactly the kind of case where a clinician might eventually discuss prescription pharmacology, including GLP-1 receptor agonists, given their large effect size in appropriate candidates. That conversation, if it happens, belongs entirely to her physician. Your job is to build the fundamentals so well that whatever a clinician later adds has a stable foundation to work from, not to raise the topic yourself as a recommendation.</p>
+    <p>The honest plan: the least glamorous tools carry almost the entire load, and the coaching job is to make them fit her life so well that she stays in the action stage long enough for the early win to compound. There is no supplement anywhere on her list that competes with the effect size of eight months of consistency.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Field Note</div>
+      <p>Farah's first two weeks did not include a single item from the supplement chapter. They included a step target, a protein floor, two short resistance sessions, and a fixed bedtime. Nothing about that plan was advanced. Everything about it was correct for her, which is the entire point of building a framework instead of memorizing a list.</p>
+    </aside>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Across all three cases, one tool appeared near the top of two lists and near the bottom of one, and one category, a sustainable deficit, daily movement, sleep, and resistance training, appeared near the top of all three. What does that pattern tell you about where a professional should spend most of their attention?</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Grading New Claims After the Course Ends</h2>
+    <p>You will encounter tools this course never named. That is guaranteed, and it is fine, because the point was never to memorize a list. The point was to build a grading procedure that survives contact with novelty. Here is the procedure, and it is the same one the evidence-based-practice literature formalizes for practicing professionals.</p>
+    <p>Evidence-based practice (EBP) is not "follow the studies," and it is not "trust experience over data" either. Johnston and colleagues (2019) describe it as three integrated principles: awareness of the best available evidence, an honest accounting of how trustworthy that evidence actually is, and the recognition that evidence alone never settles a decision, because benefits must always be weighed against risk, burden, and cost for a specific person. Ritson, Hearris, and Bannock (2023) adapt this explicitly for practitioners working with real people under real time pressure. Neither the studies alone nor the anecdote alone is EBP. The integration of evidence, professional judgment, and the individual's values and circumstances is the discipline.</p>
+
+    <h3>The Claim Autopsy, Step by Step</h3>
+    <p><strong>Step 1: Locate the mechanism on the master map.</strong> Where does this claim say it acts? Intake, absorption, storage, mobilization, oxidation, expenditure, appetite, or adherence, the same map the fat-cell and mitochondrion chapters built. If a claim cannot name a plausible mechanism, that is itself a grade. If it names one, you can check whether the proposed magnitude is even physically possible given that mechanism, the way the supplement chapter checked whether a thermogenic bump could plausibly explain a claimed pound-a-week result.</p>
+    <p><strong>Step 2: Estimate honest effect size and variability.</strong> What is the realistic magnitude, and how wide is the range across people? Remember Schober and colleagues (2018): significant is not the same as meaningful, and an estimate without a confidence interval is a number pretending to be knowledge. Rate the certainty of the evidence the way the GRADE system does, high, moderate, low, or very low (Johnston et al., 2019). A high-certainty rating means you would be genuinely surprised if further research changed the estimate; a very-low rating means the true effect could plausibly be very different from what one small study suggested. Mechanistic reasoning alone, "it raises this hormone, therefore it should burn fat," sits at the bottom of that ladder, useful for generating a hypothesis and useless as proof on its own.</p>
+    <p><strong>Step 3: Identify best-fit population.</strong> For whom, if anyone, is the effect largest? A claim that helps insulin-resistant beginners may do nothing for a lean, insulin-sensitive athlete who has already reached the ceiling Mittendorfer and colleagues (2023) described. "Works" is always "works for whom," and the answer is frequently "not the person who is most excited about it."</p>
+    <p><strong>Step 4: Rate risk and scope.</strong> What is the downside, how asymmetric is it, and does deploying this tool require you to diagnose, prescribe, or treat? If it does, it is out of scope regardless of how good the evidence is. Scope is a gate, not a slider you can trade against a strong effect size.</p>
+    <p>Run any claim through those four steps and you will produce a defensible judgment even when you have never seen the tool before. That transferable procedure, not a list of approved products, is what you are actually taking away from this course.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Here Is Where People Get This Wrong</div>
+      <p>A common misreading of evidence-based practice treats it as a synonym for "cite a study." But a single study, however real, is not the same as a graded body of evidence, and a graded body of evidence is not the same as a decision. The opposite error is just as common: dismissing every study as "not real life" and defaulting entirely to personal experience or anecdote. Both errors skip the actual work, which is weighing trustworthy evidence against a specific person's fit, values, and risk. EBP is the weighing, not either ingredient alone.</p>
+    </aside>
+  </section>
+
+  <div class="ch-widget" id="autopsy">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Claim Autopsy Bench</div>
+    </div>
+    <p class="ch-widget-sub">Dissect a novel fat-loss claim the course never covered. Set your reading on each axis, then compare your autopsy to an expert breakdown.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Claim to dissect</span>
+        <select class="ch-widget-select" id="au-claim">
+          <option value="ice">"Ice baths after training raise fat loss by activating brown fat."</option>
+          <option value="acv">"A tablespoon of apple cider vinegar before meals drives weight loss."</option>
+          <option value="berb">"Berberine is 'nature's Ozempic' for fat loss."</option>
+          <option value="mealtime">"Eating your carbs only at night reprograms fat storage."</option>
+          <option value="vibration">"Whole-body vibration plates burn stubborn fat passively."</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Your honest effect size</span>
+        <select class="ch-widget-select" id="au-eff">
+          <option value="none">Negligible / noise</option>
+          <option value="tiny">Tiny but real</option>
+          <option value="modest">Modest</option>
+          <option value="large">Large</option>
+        </select>
+      </div>
+    </div>
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Best-fit population</span>
+        <select class="ch-widget-select" id="au-pop">
+          <option value="none">Essentially no one</option>
+          <option value="specific">A narrow subgroup</option>
+          <option value="broad">Broadly useful</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Risk / scope</span>
+        <select class="ch-widget-select" id="au-risk">
+          <option value="low">Low, in scope</option>
+          <option value="med">Moderate</option>
+          <option value="high">High or out of scope</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Autopsy alignment</span>
+        <span class="ch-meter-bar"><span id="au-bar" style="width:0%"></span></span>
+        <span class="ch-meter-num" id="au-num">0</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="au-btn">Compare to expert breakdown</button>
+    <p class="ch-widget-sub" id="au-out" style="margin-top:1rem;"></p>
+  </div>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The Permanent Professional and Clinical Boundary</h2>
+    <p>Everything above operates inside a fence, and the fence does not move. State it now in a form you can keep: <strong>coaching optimizes training, nutrition, sleep, and behavior. It does not prescribe, diagnose, or treat.</strong> Every symptom, every pain, every dysfunction is a sign that warrants professional evaluation, never a finding you interpret and act on yourself.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Where education ends</div>
+      <p>This course builds understanding, not a license to diagnose or treat, in yourself or anyone else. When a situation calls for diagnosis or treatment, that belongs to a qualified clinician.</p>
+    </aside>
+
+    <p>This is not timidity, and it is not a legal afterthought bolted onto real practice. It is the position the field's own evidence-based guidelines take. Robinson and colleagues (2023), publishing the joint evidence-based practice guideline from the Academy of Nutrition and Dietetics and the American Council on Exercise, are explicit that nutrition and exercise practitioners work within a defined scope, delivering individualized care to adults who are healthy or who carry cardiometabolic risk factors but have no diagnosed disease. The moment a diagnosis enters, so does a different professional, and the guideline is built around that handoff rather than around it.</p>
+    <p>The ACSM (American College of Sports Medicine) preparticipation screening model (Riebe et al., 2015) draws the same line from the exercise side. It replaced the old risk-stratification scheme with a process built on three questions: is the person currently active, do they show signs or symptoms of cardiovascular, metabolic, or renal disease, and how intense is the exercise they intend to do. The headline is reassuring, exercise is safe for most people, but the model exists precisely to catch the presentations that mandate medical clearance first. Signs and symptoms are the trigger, and recognizing them is a coaching competency; interpreting them is not.</p>
+    <p>The pharmacology chapter of this course held this line deliberately. Advanced pharmacology, including GLP-1 receptor agonists and other prescription tools, was presented as mechanism and intended benefit only, with no dosing, no protocols, and no sourcing, because the responsible educational job is to help you understand what a clinician's tools do and why, so you can collaborate intelligently and refer well, not to blur into practice you are not licensed for. That restraint was not a gap in the material. It was the material, and the same restraint governs everything in this capstone that touches Farah's eventual conversation with her own physician.</p>
+    <p>Referring well is itself a skill worth naming plainly, because "stay in your lane" can sound like an instruction to say nothing. It is not. A good referral names the observation without interpreting it, "you mentioned chest tightness during intervals, that is worth a conversation with your physician before we push intensity further," and keeps the training relationship intact while the medical question gets answered by someone qualified to answer it. Silence is not caution, and neither is quietly deciding a symptom is probably nothing. Naming what you noticed, clearly and without alarm, and pointing toward the right professional, is the whole of the skill, and it is well within scope every time.</p>
+
+    <blockquote class="ch-quote">
+      <p>Evidence-based practice is a thorough, integrated approach based on the best available evidence and expert professional judgment, taking into account the athlete's key performance determinants, values, goals, personal preferences and circumstances.</p>
+      <cite>Ritson, Hearris, and Bannock (2023)</cite>
+    </blockquote>
+
+    <p>Notice what that definition does. It puts evidence, judgment, and the person on equal footing, and it never once licenses you to step outside your scope in the name of any of them. A tool can be evidence-backed, well-fitted, and low-risk on our three axes and still be forbidden to you because it lives on the other side of the fence. Scope is the gate that sits before the axes, not a fourth axis you can trade against the others.</p>
+
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Someone you have been training for months mentions recurring chest tightness during their intervals but insists it is "just being out of shape" and wants to push harder. Two things are simultaneously true here about your job. What are they? (One concerns the training plan; the other concerns a sign, and the sign takes priority.)</p>
+    </aside>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Where the Arc Resolves</h2>
+    <p>Step back and look at the shape of the whole course. Chapter by chapter you disassembled fat loss into its real physiological parts, the fat cell's tug-of-war, the mitochondrion's ceiling, the honest signature of each exercise modality, the insulin lever, the graded supplement shelf, the biology of adherence, and the mechanisms of pharmacology held at arm's length, and in each chapter the same discipline recurred: grade the tool honestly, ask who it is actually for, and count the true cost. This capstone did not add a ninth mechanism. It gave you the frame that makes the other eight usable on a real person.</p>
+    <p>The difference between knowing tactics and thinking like a physiologist is exactly this frame. A tactician has a list and reaches for the most impressive item on it. A physiologist has three axes and a fence, runs the body in front of them through both, and arrives, more often than the tactician can bear, at an unglamorous answer that happens to be the correct one. The recurring lesson of this entire course is simple enough to carry in one sentence: the same tool is not equally useful across bodies, and the biggest levers are often the least glamorous.</p>
+    <p>Farah did not need a more advanced tool. She needed a sustainable deficit, daily movement, resistance training, sleep, and eight months of consistency that no supplement on any shelf could substitute for. The competitor did not need a more advanced tool either. She needed sleep, protected training quality, and patience with a depot that would resolve on its own timeline. Two very different bodies, two very different plans, and one identical method for arriving at both. That method, not any single fact inside it, is what you are taking with you.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>Every fat-loss decision resolves onto three independent axes: population fit, honest effect size, and risk. A tool must clear all three for a specific person, and a failure on any one usually vetoes the tool regardless of how strong it looks on the others.</li>
+      <li>Fit is often the whole story. Phenotype-matched interventions produced meaningfully more weight loss than generic ones, roughly 7.4 kilograms versus 4.3 kilograms over twelve weeks (Cifuentes et al., 2023), and baseline insulin action determined metabolic payoff, with benefit hitting a ceiling once normal function returned (Mittendorfer et al., 2023).</li>
+      <li>Statistical significance is not effect size. Translate every claim into a realistic magnitude with a range, and rate the certainty of the evidence rather than treating a p-value as proof of importance (Schober et al., 2018; Johnston et al., 2019).</li>
+      <li>Across the population spectrum, the ranking of tools inverts, but the fundamentals, a sustainable deficit, daily movement, resistance training, and sleep, sit near the top for almost everyone. The biggest levers are usually the least glamorous, and adherence is frequently the single largest one (Lemstra et al., 2016).</li>
+      <li>Grade any novel claim in four steps: locate the mechanism, estimate honest effect size and variability, identify the best-fit population, and rate risk and scope. This transferable procedure is the real deliverable of the course.</li>
+      <li>A large, real effect size does not override scope. Tools with genuine mechanism and magnitude, including prescription pharmacology, can still be entirely out of bounds for a non-clinician, and recognizing that is itself a professional competency, not a limitation of your knowledge.</li>
+      <li>The boundary is permanent. Coaching optimizes training, nutrition, sleep, and behavior; it does not prescribe, diagnose, or treat. Scope is a gate before the axes, and every symptom, pain, or dysfunction is a sign that routes to professional evaluation (Robinson et al., 2023; Riebe et al., 2015).</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>This is the final chapter, and it is meant to be the one you keep. There is no next mechanism to learn; there is a practice to run. The next time someone hands you a tool, whether that person looks like Farah, like the competitor, or like no one this course described, do not answer the tool. Answer the person, on three axes, inside the fence. That habit is the whole point, and it is now yours.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Cifuentes, L., Ghusn, W., Feris, F., Campos, A., Sacoto, D., De la Rosa, A., McRae, A., Rieck, T., Mansfield, S., Ewoldt, J., Friend, J., Grothe, K., Lennon, R. J., Hurtado, M. D., Clark, M. M., Camilleri, M., Hensrud, D. D., & Acosta, A. (2023). Phenotype tailored lifestyle intervention on weight loss and cardiometabolic risk factors in adults with obesity: A single-centre, non-randomised, proof-of-concept study. eClinicalMedicine, 58, 101923. https://www.thelancet.com/journals/eclinm/article/PIIS2589-5370(23)00100-1/fulltext</p>
+    <p>Johnston, B. C., Seivenpiper, J. L., Vernooij, R. W. M., de Souza, R. J., Jenkins, D. J. A., Zeraatkar, D., Bier, D. M., & Guyatt, G. H. (2019). The philosophy of evidence-based principles and practice in nutrition. Mayo Clinic Proceedings: Innovations, Quality & Outcomes, 3(2), 189 to 199. https://www.sciencedirect.com/science/article/pii/S2542454819300311</p>
+    <p>Lemstra, M., Bird, Y., Nwankwo, C., Rogers, M., & Moraros, J. (2016). Weight loss intervention adherence and factors promoting adherence: A meta-analysis. Patient Preference and Adherence, 10, 1547 to 1559. https://pmc.ncbi.nlm.nih.gov/articles/PMC4990387/</p>
+    <p>Mittendorfer, B., Kayser, B. D., Yoshino, M., Yoshino, J., Watrous, J. D., Jain, M., Eagon, J. C., Patterson, B. W., & Klein, S. (2023). Heterogeneity in the effect of marked weight loss on metabolic function in women with obesity. JCI Insight, 8(12), e169541. https://pmc.ncbi.nlm.nih.gov/articles/PMC10371235/</p>
+    <p>Riebe, D., Franklin, B. A., Thompson, P. D., Garber, C. E., Whitfield, G. P., Magal, M., & Pescatello, L. S. (2015). Updating ACSM's recommendations for exercise preparticipation health screening. Medicine & Science in Sports & Exercise, 47(11), 2473 to 2479. https://pubmed.ncbi.nlm.nih.gov/26473759/</p>
+    <p>Ritson, A. J., Hearris, M. A., & Bannock, L. G. (2023). Bridging the gap: Evidence-based practice guidelines for sports nutritionists. Frontiers in Nutrition, 10, 1118547. https://pmc.ncbi.nlm.nih.gov/articles/PMC10090397/</p>
+    <p>Robinson, J., Nitschke, E., Tovar, A., Mattar, L., Gottesman, K., Hamlett, P., & Rozga, M. (2023). Nutrition and physical activity interventions provided by nutrition and exercise practitioners for the general population: An evidence-based practice guideline from the Academy of Nutrition and Dietetics and American Council on Exercise. Journal of the Academy of Nutrition and Dietetics, 123(8), 1215 to 1237. https://www.jandonline.org/article/S2212-2672(23)00186-7/abstract</p>
+    <p>Schober, P., Bossers, S. M., & Schwarte, L. A. (2018). Statistical significance versus clinical importance of observed effect sizes: What do p values and confidence intervals really represent? Anesthesia & Analgesia, 126(3), 1068 to 1072. https://journals.lww.com/anesthesia-analgesia/fulltext/2018/03000/statistical_significance_versus_clinical.48.aspx</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 9 of 9</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('fit-engine');
+    if(!root) return;
+    var bf=root.querySelector('#fe-bf'), tr=root.querySelector('#fe-train'),
+        rc=root.querySelector('#fe-rec'), ad=root.querySelector('#fe-adh'),
+        tool=root.querySelector('#fe-tool');
+    var fitBar=root.querySelector('#fe-fit-bar'), fitNum=root.querySelector('#fe-fit-num'),
+        effBar=root.querySelector('#fe-eff-bar'), effNum=root.querySelector('#fe-eff-num'),
+        riskBar=root.querySelector('#fe-risk-bar'), riskNum=root.querySelector('#fe-risk-num'),
+        out=root.querySelector('#fe-out'), btn=root.querySelector('#fe-btn');
+
+    function clamp(x){return Math.max(1,Math.min(10,Math.round(x)));}
+
+    function score(){
+      var b=bf.value, t=tr.value, r=rc.value, a=ad.value, k=tool.value;
+      var fit=5, eff=5, risk=4, note='';
+
+      // Fundamentals: strong fit and effect nearly everywhere, low risk
+      if(k==='deficit'||k==='steps'||k==='resist'){
+        fit=9; eff=9; risk=2;
+        if(b==='high') eff=10;
+        if(b==='lean' && k==='steps') eff=7;
+        note='Foundational lever. Large honest effect for almost everyone, low risk, in scope. This belongs near the top of the plan.';
+      } else if(k==='sleep'){
+        fit=8; eff=7; risk=2;
+        if(r==='poor'){ fit=10; eff=10; note='Recovery is the binding constraint here. This is likely the single biggest available lever, not an afterthought.'; }
+        else note='Solid, low-risk lever. Effect is largest when sleep and stress are currently poor.';
+      } else if(k==='hiit'){
+        fit=6; eff=6; risk=4;
+        if(r==='poor'){ fit=3; risk=7; note='Poor recovery turns this into a net stressor. Effect size does not justify the added recovery cost right now.'; }
+        else if(b==='lean'){ fit=5; risk=6; note='A lean, under-recovered competitor gets little unique benefit and real recovery cost. Optional at best.'; }
+        else note='Legitimate conditioning and time-efficiency option when recovery supports it. Not a magic fat lever.';
+      } else if(k==='fasted'){
+        fit=4; eff=3; risk=3;
+        note='Sold on a mechanism that does not survive weekly energy balance. Marginal oxidation difference is not a needle-mover. Fine if preferred, useless if forced.';
+      } else if(k==='caffeine'){
+        fit=6; eff=4; risk=3;
+        if(r==='poor'){ risk=6; note='Real but small performance benefit, and it can mask and worsen an underlying recovery deficit. Watch the sleep cost.'; }
+        else note='Small, real performance and adherence benefit. Modest effect size, low risk in most healthy adults.';
+      } else if(k==='thermo'){
+        fit=3; eff=2; risk=6;
+        note='Fails on effect size. Statistically real thermogenic bumps are trivial in daily terms, and blends add cost and side-effect risk. Attention spent here is stolen from real levers.';
+      } else if(k==='cgm'){
+        fit=4; eff=3; risk=5;
+        if(a==='fragile'){ risk=7; note='In a fragile-adherence, body-shape-concerned person, constant glucose tracking can feed obsessive patterns. Psychological risk outweighs a weak effect for non-diabetics.'; }
+        else note='Interesting biofeedback, weak independent effect on fat loss in people without diabetes. Modest upside, real psychological and cost downside.';
+      } else if(k==='rx'){
+        fit=5; eff=8; risk=10;
+        note='BOUNDARY VIOLATION for a coach. Prescription pharmacology is prescribe/diagnose/treat territory. Regardless of evidence or fit, this is out of scope. Refer to a qualified clinician.';
+      }
+
+      // Adherence modifier for fundamentals
+      if((k==='deficit'||k==='steps'||k==='resist'||k==='sleep') && a==='fragile'){
+        note+=' Fragile adherence history means the plan must be built to produce an early, visible win to keep this person in the action stage (Lemstra et al., 2016).';
+      }
+
+      fit=clamp(fit); eff=clamp(eff); risk=clamp(risk);
+      fitBar.style.width=(fit*10)+'%'; fitNum.textContent=fit;
+      effBar.style.width=(eff*10)+'%'; effNum.textContent=eff;
+      riskBar.style.width=(risk*10)+'%'; riskNum.textContent=risk;
+
+      var verdict;
+      if(k==='rx'){ verdict='OUT OF SCOPE. '; }
+      else if(fit>=7 && eff>=7 && risk<=3){ verdict='DEPLOY. Clears all three axes for this profile. '; }
+      else if(eff<=3 || risk>=7){ verdict='DECLINE. Fails on effect size or risk for this profile. '; }
+      else { verdict='CONDITIONAL. Defensible only if the fundamentals above it are already handled. '; }
+      out.innerHTML='<strong>'+verdict+'</strong>'+note;
+    }
+    btn.addEventListener('click', score);
+    score();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root=document.getElementById('autopsy');
+    if(!root) return;
+    var claim=root.querySelector('#au-claim'), eff=root.querySelector('#au-eff'),
+        pop=root.querySelector('#au-pop'), risk=root.querySelector('#au-risk'),
+        bar=root.querySelector('#au-bar'), num=root.querySelector('#au-num'),
+        out=root.querySelector('#au-out'), btn=root.querySelector('#au-btn');
+
+    var expert={
+      ice:{eff:'tiny',pop:'none',risk:'low',
+        text:'MECHANISM: cold exposure can activate brown adipose tissue and raise thermogenesis, so the mechanism is real. EFFECT SIZE: tiny. Human BAT mass is small and the daily energy contribution is trivial next to total balance, and post-exercise cold can even blunt training adaptations. POPULATION: essentially no one gets meaningful fat loss from it. RISK/SCOPE: low, in scope. Verdict: real mechanism, negligible effect.'},
+      acv:{eff:'tiny',pop:'specific',risk:'low',
+        text:'MECHANISM: acetic acid may slow gastric emptying and modestly blunt glycemic response, plausibly nudging appetite. EFFECT SIZE: tiny, and studies are small with wide confidence intervals. POPULATION: at most a narrow appetite-driven subgroup. RISK/SCOPE: low, though dental and reflux irritation exist. Verdict: harmless, near-noise, not a lever.'},
+      berb:{eff:'modest',pop:'specific',risk:'med',
+        text:'MECHANISM: AMPK activation with real effects on glucose handling, hence the "nature\\'s Ozempic" hype. EFFECT SIZE: modest and mostly metabolic, far smaller than GLP-1 drugs, and the marketing overstates it. POPULATION: a narrow insulin-resistant subgroup, per the responder logic (Mittendorfer et al., 2023). RISK/SCOPE: moderate. GI effects, supplement quality variability, and drug interactions push this toward clinician territory. Verdict: real but oversold, and the comparison to a prescription drug is a red flag.'},
+      mealtime:{eff:'none',pop:'none',risk:'low',
+        text:'MECHANISM: claim invokes circadian carb "reprogramming," but there is no mechanism that overrides total energy balance for fat storage. EFFECT SIZE: negligible. Timing can matter at the margins for adherence and training, not for fat storage per se. POPULATION: essentially no one for the stated claim. RISK/SCOPE: low. Verdict: mechanism does not survive energy balance.'},
+      vibration:{eff:'tiny',pop:'none',risk:'low',
+        text:'MECHANISM: passive vibration produces minor muscle activation, but "passively burns stubborn fat" has no plausible pathway at meaningful magnitude. EFFECT SIZE: tiny to none for fat loss. POPULATION: essentially no one. RISK/SCOPE: low, though opportunity cost is real. Verdict: the word "passively" is the tell; large passive fat loss is physiologically implausible.'}
+    };
+
+    btn.addEventListener('click', function(){
+      var ex=expert[claim.value];
+      var pts=0;
+      if(eff.value===ex.eff) pts++;
+      if(pop.value===ex.pop) pts++;
+      if(risk.value===ex.risk) pts++;
+      // partial credit for adjacency on effect size
+      var effOrder=['none','tiny','modest','large'];
+      if(eff.value!==ex.eff && Math.abs(effOrder.indexOf(eff.value)-effOrder.indexOf(ex.eff))===1) pts+=0.5;
+      var pct=Math.round((pts/3)*100);
+      bar.style.width=pct+'%'; num.textContent=pct;
+      var lead;
+      if(pct>=85) lead='<strong>Sharp autopsy.</strong> ';
+      else if(pct>=50) lead='<strong>Close, refine your reading.</strong> ';
+      else lead='<strong>Re-examine your axes.</strong> ';
+      out.innerHTML=lead+'<em>Expert breakdown:</em> '+ex.text;
+    });
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
