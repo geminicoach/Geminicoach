@@ -17,17 +17,30 @@
     nav { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:14px; padding:14px 22px;
           background:rgba(10,22,40,.85); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); }
     .logo { width:24px; height:24px; border-radius:6px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    .logo-img { height:30px; width:auto; display:block; }
     nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
     nav .sp { flex:1; }
     nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; letter-spacing:.04em; font-size:14px; }
     nav a.acct { color:#fff; background:var(--blue); font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.04em;
                  font-size:13px; text-transform:uppercase; padding:7px 13px; border-radius:8px; }
     nav a.acct:hover { background:var(--blue-bright); }
-    .hero { background:radial-gradient(1000px 380px at 12% -20%, rgba(46,141,232,.18) 0, transparent 60%),
-            linear-gradient(180deg,#0b1a30,#0a1628); padding:48px 24px 38px; border-bottom:1px solid var(--line); }
+    .hero { position:relative; min-height:400px; display:flex; align-items:flex-end; overflow:hidden;
+            background:radial-gradient(1000px 380px at 12% -20%, rgba(46,141,232,.18) 0, transparent 60%),
+            linear-gradient(180deg,#0b1a30,#0a1628); padding:0; border-bottom:1px solid var(--line);
+            background-size:cover; background-position:center 38%; }
     .coverband { width:100%; height:200px; overflow:hidden; border-bottom:1px solid var(--line); }
     .coverband img { width:100%; height:100%; object-fit:cover; display:block; }
-    .hero .inner { max-width:880px; margin:0 auto; }
+    .hero .inner { position:relative; z-index:1; max-width:880px; margin:0 auto; width:100%; padding:48px 24px 32px; }
+    .wylsec { border-bottom:1px solid var(--line); background:linear-gradient(180deg,#0b1a30,#0a1628); }
+    .wylwrap { max-width:880px; margin:0 auto; padding:34px 24px 30px; }
+    .wylwrap .eye { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--blue-bright); }
+    .wylh { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:32px; letter-spacing:.03em; color:#fff; margin:4px 0 18px; line-height:1; }
+    .wyl { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .wc { display:flex; gap:13px; align-items:flex-start; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px; }
+    .wc .tile { flex:0 0 34px; height:34px; border-radius:9px; background:rgba(46,141,232,.14); display:flex; align-items:center; justify-content:center; }
+    .wc .tile svg { width:18px; height:18px; stroke:var(--blue-light); stroke-width:2; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+    .wc p { margin:0; font-size:14px; color:#cdd8ea; line-height:1.5; }
+    @media (max-width:640px){ .wyl { grid-template-columns:1fr; } }
     .kicker { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:var(--blue-light); margin-bottom:12px; }
     .hero h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; margin:0 0 12px; font-size:42px; letter-spacing:.02em; line-height:1.02; color:#fff; }
     .hero p { margin:0; color:var(--gray); max-width:640px; }
@@ -82,7 +95,7 @@
   </style>
 </head>
 <body>
-  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div>
+  <nav><img class="logo-img" src="../logo-transparent.png" alt="Gemini Coach"><b>GEMINI EDUCATION</b><div class="sp"></div>
     <a class="acct" href="account.html">My account</a>
     <a class="back" href="index.html">← Dashboard</a></nav>
   <div id="hero" class="hero"><div class="inner"><h1>Loading…</h1></div></div>
@@ -118,7 +131,7 @@
 
       document.title = c.title + " — Gemini Education";
       var chs = c.chapters || [];
-      if (c.image) { hero.insertAdjacentHTML('beforebegin', '<div class="coverband"><img alt="" src="'+esc(c.image)+'"></div>'); }
+      if (c.image) { hero.style.backgroundImage = "linear-gradient(180deg, rgba(10,22,40,.32), rgba(10,22,40,.66) 52%, rgba(10,22,40,.97)), url('" + c.image + "')"; }
       hero.innerHTML = '<div class="inner">'
         + '<div class="kicker">' + esc(c.code) + ' · ' + esc(trackName) + '</div>'
         + '<h1>' + esc(c.title) + '</h1><p>' + esc(c.description) + '</p>'
@@ -126,6 +139,12 @@
             + '<span><b>~' + esc(c.minutes_per_chapter||60) + ' min</b> each</span>'
             + (c.outcomes ? '<span><b>' + esc(c.outcomes) + '</b> learning outcomes</span>' : '') + '</div>' : '')
         + '</div>';
+
+      if (c.whatYouLearn && c.whatYouLearn.length) {
+        var CHK = '<svg viewBox="0 0 24 24"><path d="M4 12.5l5 5L20 6"/></svg>';
+        var wl = c.whatYouLearn.map(function(o){ return '<div class="wc"><span class="tile">' + CHK + '</span><p>' + esc(o) + '</p></div>'; }).join("");
+        hero.insertAdjacentHTML('afterend', '<section class="wylsec"><div class="wylwrap"><div class="eye">What you\'ll learn</div><h2 class="wylh">Skills you\'ll walk away with</h2><div class="wyl">' + wl + '</div></div></section>');
+      }
 
       if (!chs.length) {
         body.innerHTML = '<div class="info"><p style="font-size:17px;color:#fff"><strong>This course is coming soon.</strong></p>'

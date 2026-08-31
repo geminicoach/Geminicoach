@@ -16,6 +16,8 @@
     a { text-decoration:none; }
     nav { display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); }
     .logo { width:24px; height:24px; border-radius:6px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    .logo-img { height:30px; width:auto; display:block; }
+    .cert .emblem { height:54px; width:auto; margin:0 auto 8px; display:block; }
     nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
     nav .sp { flex:1; } nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:14px; }
     .wrap { max-width:840px; margin:0 auto; padding:30px 22px 70px; }
@@ -51,7 +53,7 @@
   </style>
 </head>
 <body>
-  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div><a class="back" href="account.html">← My account</a></nav>
+  <nav><img class="logo-img" src="../logo-transparent.png" alt="Gemini Coach"><b>GEMINI EDUCATION</b><div class="sp"></div><a class="back" href="account.html">← My account</a></nav>
   <div class="wrap" id="wrap"><div class="center">Loading…</div></div>
 
   <script>
@@ -76,11 +78,10 @@
         }
         var d = cert.issued_at ? new Date(cert.issued_at) : new Date();
         var date = d.toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" });
-        var prov = cert.provider_number ? ("NASM Approved Provider No. " + esc(cert.provider_number))
-                                        : "NASM CE provider approval pending";
         wrap.innerHTML =
           '<div class="toolbar"><button onclick="window.print()">Print / Save PDF</button></div>'+
           '<div class="cert"><div class="inner">'+
+            '<img class="emblem" src="../logo-transparent.png" alt="Gemini Coach">'+
             '<div class="brand">Gemini Education</div>'+
             '<h1>Certificate of Completion</h1><div class="rule"></div>'+
             '<div class="pre">This certifies that</div>'+
@@ -88,14 +89,11 @@
             '<div class="pre">has successfully completed the course</div>'+
             '<div class="course">'+esc(cert.course_title)+'</div>'+
             '<div class="grid">'+
-              (cert.ceu_value!=null?'<div><div class="k">CEUs</div><div class="v">'+esc(cert.ceu_value)+'</div></div>':'')+
-              (cert.contact_hours!=null?'<div><div class="k">Contact hours</div><div class="v">'+esc(cert.contact_hours)+'</div></div>':'')+
               (cert.score!=null?'<div><div class="k">Exam score</div><div class="v">'+esc(cert.score)+'%</div></div>':'')+
               '<div><div class="k">Date</div><div class="v">'+esc(date)+'</div></div>'+
             '</div>'+
             '<div class="foot"><div class="sig">Gemini Education<br>Parker Gruenhagen</div>'+
               '<div class="id">Certificate No.<br><b>'+esc(cert.certificate_no)+'</b></div></div>'+
-            '<div class="prov">'+prov+'</div>'+
           '</div></div>';
       });
     });

@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>No Clean Switches: How the Three Systems Blend in Real Effort</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme ,  notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ',  '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 6 · Module 2</div>
+    <h1 class="ch-title">No Clean Switches: How the Three Systems Blend in Real Effort</h1>
+    <p class="ch-subtitle">Your body never flips a gear. It mixes three sources of power at once, and the mix is always shifting.</p>
+    <div class="ch-meta">
+      <span>38 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>14 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">S</span>tand at the base of a short, steep hill and sprint up it as hard as you can for eight seconds. Somewhere in your popular imagination there is a little diagram: for the first few seconds a system labelled "phosphagen" is doing all the work, then it clicks off and "glycolysis" takes over, then that clicks off and "aerobic" takes the baton for anything longer. It is a tidy picture. It is also wrong, and the wrongness matters, because it leads people to make training and pacing decisions based on a machine that does not exist.</p>
+    <p>Here is what actually happened during your eight seconds. From the very first stride, all three of your energy systems were running simultaneously. The fast ones surged to the front of the crowd, but the slow oxidative system was already awake and already contributing, and it never went to sleep at any point in your life. This chapter teaches you to stop thinking in switches and start thinking in blends.</p>
+    <p>We will build the case in layers. First we refresh the mechanics of each system so the vocabulary is precise. Then we look at why overlap is the only physically sensible arrangement, given how each system's output actually rises over time. From there we walk the full intensity-duration spectrum, from a one-second jump to a three-hour ride, checking the measured blend at each stop and asking which muscle fibers and which enzymes are doing the work. Along the way we correct two of the most persistent myths in popular exercise science, the gear-switch model and the idea that lactate is a metabolic waste product, and we connect the blend back to fuel selection and thresholds from earlier chapters. By the end you should be able to look at almost any human effort and sketch its approximate energy blend from first principles, not from memorized numbers.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>A quick refresher: the three ways to rebuild ATP</h2>
+    <p>Everything your muscles do is paid for in a single currency called <span class="ch-key">adenosine triphosphate</span>, abbreviated ATP. The molecule is an adenosine backbone carrying three linked phosphate groups. Energy is released when the bond holding the outermost, or terminal, phosphate group is broken by a water molecule, a reaction called hydrolysis, which converts ATP into <span class="ch-key">adenosine diphosphate</span>, abbreviated ADP, plus a free phosphate group. A muscle fiber holds only a tiny reserve of ATP, enough for roughly one to two seconds of all-out work. So the real question of exercise physiology is never "how much ATP do you have," it is "how fast can you rebuild ATP once you spend it." Your body has three machines for that job, and you have met all three in earlier chapters. Let us refresh them in a bit more mechanistic detail before we watch them cooperate.</p>
+    <p>Two of the three machines rebuild ATP through a direct, one-step enzymatic handoff of a phosphate group from one molecule to another, a process called <span class="ch-key">substrate-level phosphorylation</span>. It requires no oxygen and no multi-stage assembly line, which is exactly why it can happen so fast. The third machine builds ATP through a much longer, indirect route called <span class="ch-key">oxidative phosphorylation</span>, in which the energy released by handing electrons down a chain of proteins is used to pump hydrogen ions across a membrane, and the flow of those ions back across the membrane spins a molecular turbine, called ATP synthase, that assembles ATP. Oxidative phosphorylation happens inside the mitochondria and absolutely requires oxygen as the final destination for those electrons. Holding onto this distinction, quick and direct versus slow and indirect, explains almost everything about why the three systems have such different speeds.</p>
+    <h3>The phosphagen system</h3>
+    <p>The <span class="ch-key">phosphagen system</span> rebuilds ATP by borrowing a phosphate from a stored molecule called creatine phosphate, also called phosphocreatine. An enzyme called creatine kinase catalyzes a single-step reaction, creatine phosphate plus ADP yields ATP plus creatine, which is about as fast and direct as biochemistry gets. It requires no oxygen and almost no chemical steps, so it is nearly instantaneous, the fastest of the three. Its weakness is that the creatine phosphate tank is small, roughly three to five times the size of the resting ATP pool, and it drains quickly under maximal effort. Direct muscle biopsy measurements during thirty-second maximal cycling sprints show phosphocreatine falling to roughly seventeen percent of its resting concentration by the end of the effort, with the sharpest drop occurring in the first ten seconds (Bogdanis, Nevill, Boobis, & Lakomy, 1996). Think of the phosphagen system as a small, explosively fast battery that is mostly spent within about ten seconds of maximal use.</p>
+    <h3>The glycolytic system</h3>
+    <p>The <span class="ch-key">glycolytic system</span> breaks down glucose, delivered by the blood, or glycogen, the branched storage polymer of glucose you met in earlier chapters, through a ten-step enzymatic pathway called glycolysis. Glycolysis rebuilds ATP through the same substrate-level phosphorylation mechanism as the phosphagen system, which is why it is also oxygen-independent, but it needs more steps to unfold, so its output rises more slowly and peaks later, at roughly ten to fifteen seconds into a maximal effort. Glycolysis converts glucose into a three-carbon molecule called pyruvate. When the demand for ATP is outrunning what the oxidative system can process, an enzyme called lactate dehydrogenase converts much of that pyruvate into lactate. This step matters enormously and we will return to it in detail: it is not a malfunction, it is what allows glycolysis to keep running rapidly by regenerating a chemical partner, called NAD+, that the pathway needs to continue. Glycolysis can sustain high power output for tens of seconds up to a couple of minutes before the accumulating disruption to the muscle's chemical environment forces power output down.</p>
+    <h3>The oxidative (aerobic) system</h3>
+    <p>The <span class="ch-key">oxidative system</span>, also called the aerobic system, rebuilds ATP inside the mitochondria using oxidative phosphorylation to fully combust carbohydrate, fat, and, in smaller amounts, protein. Pyruvate from glycolysis, and fatty acids broken down through a mitochondrial process called beta-oxidation, both feed into a central hub of reactions called the citric acid cycle, which strips off high-energy electrons that are then passed down the electron transport chain described above. Because it processes fuel so completely, oxidative phosphorylation yields far more ATP per unit of fuel than substrate-level phosphorylation alone, but it is the slowest system to ramp up because it depends on your heart, lungs, blood vessels, and mitochondria delivering and using oxygen, a delivery chain you studied in the aerobic capacity chapters. It is also the only system that can burn fat, which is by a wide margin the largest fuel reserve you carry, and it can sustain meaningful power output for hours.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Before reading further, predict: during a maximal eight-second sprint, what fraction of your ATP resupply do you think comes from the oxidative system? Write down a number. We will check it against measured data later, and the answer surprises almost everyone.</p>
+    </aside>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A hand-drawn pen-and-watercolour infographic in the style of a scientist's field notebook, showing three overlapping translucent power sources feeding a single glowing muscle fiber at the centre. Three soft ribbons of colour flow into the fiber: a bright coral ribbon labelled 'phosphagen', an amber ribbon labelled 'glycolytic', and a teal ribbon labelled 'oxidative'. The ribbons overlap and blend rather than meeting at hard edges. Warm paper texture, muted earthy palette of coral, amber, teal on cream. Small handwritten note reads 'all on at once'. No hard boundaries, no gears, no machinery, no people." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch6-img1.jpg" alt="<em>Three sources, one fiber, always blended.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Three sources, one fiber, always blended.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>The gear-switch myth and where it came from</h2>
+    <p>The gear model is seductive because each system does have a characteristic time signature. The phosphagen system peaks first, glycolysis peaks a little later, and oxidative metabolism keeps climbing for minutes. If you squint at those staggered peaks, it is easy to imagine a relay race with clean handoffs. Older textbooks reinforced this by drawing three separate curves with tidy crossover points, and coaches translated the picture into slogans like "the first ten seconds are anaerobic." Part of the reason this picture persisted for so long is genuinely practical: early laboratory methods could only measure the systems crudely and separately, and it was easier to publish a clean diagram of three sequential phases than to explain a continuously blended reality. We will come back to exactly how scientists measure these overlapping contributions, and why the measurement itself is hard, later in this chapter.</p>
+    <p>The problem is that a peak is not an on-off state. When the phosphagen system peaks in the first second or two, the oxidative system is not at zero, it is simply lower on its own slow climb. And when the phosphagen contribution fades, its fibers do not shut down a switch, they just run out of stored creatine phosphate while everything else keeps going. Paul Gastin's landmark review reframed the whole field around exactly this correction, describing the three systems as "distinct yet closely integrated processes that operate together" rather than in sequence (Gastin, 2001). The word to hold onto is <em>together</em>.</p>
+    <p>The most quoted consequence of Gastin's synthesis is the location of the <span class="ch-key">crossover point</span>, the moment during a sustained maximal effort at which the aerobic contribution finally equals the combined anaerobic contribution. In the old mental model, people placed that crossover somewhere past two or three minutes. Gastin found it at roughly seventy-five seconds, far earlier than the tradition assumed. In other words, by the time you have been going all-out for a minute and a quarter, the "slow" system is already carrying half the load. The formal 2026 update to that review, pooling evidence from more than one hundred studies, confirmed the picture and pushed the estimate of aerobic contribution at very short durations, under twenty seconds, even higher than the 2001 numbers suggested (Gastin & Suppiah, 2026). The aerobic system, it turns out, is never truly off, not even during a brief maximal sprint. Keep the label "crossover point" precise in your mind, because later in this chapter you will meet a second, unrelated concept that also uses the word "crossover," and confusing the two is a common and avoidable error.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why all three must run at once: a matter of kinetics</h2>
+    <p>To understand why the systems overlap instead of relay, you have to think about the difference between how <em>fast</em> a system responds and how <em>much</em> it can ultimately deliver. Physiologists call the speed of response the <span class="ch-key">kinetics</span> of a system, meaning how quickly its rate of ATP production rises after you start demanding energy.</p>
+    <p>When you begin intense exercise, the demand for ATP can jump by as much as a thousandfold within a single stride (Baker, McCormick, & Robergs, 2010). No single system can meet a thousandfold surge instantly. So the body does the only sensible thing: it recruits everything at once and lets each system contribute according to how fast it can come online. The phosphagen system, being nearly instantaneous, dominates the first instant. Glycolysis reaches its peak rate at roughly ten to fifteen seconds. Oxidative metabolism, limited by how fast oxygen delivery and mitochondrial enzymes can spin up, keeps rising over minutes (Baker, McCormick, & Robergs, 2010). These are staggered <em>ramps</em>, not staggered on-switches. All three ramps begin at the starting gun.</p>
+    <p>The oxidative ramp has been measured with particular precision. When exercise begins at a constant, moderate workload, oxygen uptake, the whole-body measure of how much oxidative phosphorylation is occurring, does not jump to its new steady level, it rises roughly exponentially, approaching its new level with a time constant on the order of twenty to thirty seconds, meaning it takes roughly that long to close about two thirds of the gap to its ultimate value, and a minute or more to fully arrive (Whipp & Wasserman, 1972). At harder intensities the climb is slower still, and above certain very high intensities oxygen uptake never truly settles into a steady state at all before fatigue intervenes. This measured lag is precisely why the fast systems exist. Because oxidative ATP production cannot instantly meet a sudden jump in demand, a shortfall accumulates during the early seconds of any hard effort, a shortfall physiologists literally call an oxygen deficit. That deficit has to be paid for by the phosphagen and glycolytic systems while the oxidative ramp catches up. The gear model fails because it mistakes this necessary, physically forced overlap for a sequence of independent phases. A gear is a discrete state; kinetics are continuous curves. The systems overlap precisely because their response times differ, and the differing response times are a feature, not a bug. The fast systems buy time for the slow one to reach full output, and the slow one takes over the sustained load once it arrives. A recent bioenergetic model of sprint running made this vivid by tracking all three contributions moment to moment across one hundred to four hundred meter sprints, and it found that aerobic, glycolytic, and phosphagen contributions all shift dynamically and simultaneously throughout the race, with no instant at which any system is fully inactive (Briand, Slawinski, & Morin, 2025).</p>
+  </section>
+
+  <div class="ch-widget" id="blend-mixer">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">The Energy Blend Mixer</div>
+    </div>
+    <p class="ch-widget-sub">Move the two sliders and watch the three contributions rebalance. Notice that none of them ever reaches zero.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Intensity (% of maximal power)</span>
+        <input class="ch-widget-select" type="range" id="mix-intensity" min="20" max="100" value="95" step="1">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Elapsed time into the effort</span>
+        <input class="ch-widget-select" type="range" id="mix-time" min="1" max="600" value="8" step="1">
+      </div>
+    </div>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Load a real effort</span>
+        <div>
+          <button class="ch-widget-btn" data-preset="single">Heavy single (2 s)</button>
+          <button class="ch-widget-btn" data-preset="sprint">200 m dash (22 s)</button>
+          <button class="ch-widget-btn" data-preset="fivek">5 km run (18 min)</button>
+          <button class="ch-widget-btn" data-preset="marathon">Long ride (3 h)</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Phosphagen</span>
+        <span class="ch-meter-bar"><span id="bar-phos" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="num-phos">60</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Glycolytic</span>
+        <span class="ch-meter-bar"><span id="bar-gly" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="num-gly">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Oxidative</span>
+        <span class="ch-meter-bar"><span id="bar-oxi" style="width:10%"></span></span>
+        <span class="ch-meter-num" id="num-oxi">10</span>
+      </div>
+    </div>
+
+    <p class="ch-widget-sub" id="mix-readout">Elapsed time shown as seconds until it exceeds sixty, then as minutes.</p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Measuring the blend: why the numbers carry error bars</h2>
+    <p>Before we walk the intensity-duration spectrum and start citing specific percentages, you deserve to know where those percentages come from and how much to trust them. Scientists cannot simply look inside a working muscle and read off three numbers. Instead they use several indirect methods, each with its own assumptions, and the fact that the methods sometimes disagree is itself an important lesson about why the gear model is wrong.</p>
+    <p>The most common whole-body method is <span class="ch-key">indirect calorimetry</span>, measuring how much oxygen you consume and carbon dioxide you produce at the mouth, which allows a reasonably precise estimate of oxidative energy expenditure and, through the ratio of the two gases, an estimate of whether that oxidative energy is coming more from carbohydrate or from fat. Indirect calorimetry works beautifully for the oxidative system, but it cannot see the anaerobic systems at all, since their substrate-level phosphorylation reactions consume no oxygen.</p>
+    <p>To estimate the anaerobic share, exercise scientists commonly use the <span class="ch-key">accumulated oxygen deficit</span> method, developed by Jon Ingulf Medbo and colleagues. The logic runs like this: at submaximal, steady exercise intensities, oxygen uptake rises in a predictable straight line as running speed or cycling power increases. Researchers measure that line, then extrapolate it upward to estimate how much oxygen the body would need to supply a supramaximal effort purely aerobically. They then measure how much oxygen was actually consumed during the real, all-out bout. The shortfall between the predicted demand and the measured supply, accumulated over the whole effort, is taken as an estimate of the total anaerobic energy contribution (Medbo, Mohn, Tabata, Bahr, Vaage, & Sejersted, 1988). This method was validated most carefully for exhausting efforts lasting about two to three minutes, and it rests on assumptions, a constant, linear efficiency relationship extrapolated well beyond the range where it was actually measured, that become shakier the shorter and more explosive the effort gets.</p>
+    <p>A second family of methods estimates anaerobic contribution more directly, using muscle biopsies to measure phosphocreatine depletion and using blood lactate accumulation to back-calculate glycolytic energy release, an approach often labelled the lactate and phosphocreatine, or La and PCr, method. Because both families of method rest on different assumptions, they do not always agree, and short, explosive efforts expose the disagreement most sharply. Duffield, Dawson, and Goodman applied both methods to elite sprinters running a maximal one hundred meter race, lasting roughly ten to eleven seconds, and found aerobic contribution estimates using the accumulated oxygen deficit method ranging from about one fifth to nearly four fifths of total energy across individual athletes, while the lactate and phosphocreatine method generally produced lower and even more variable estimates (Duffield, Dawson, & Goodman, 2004). That is a strikingly wide range for what feels like the most purely anaerobic event in track and field.</p>
+    <p>Rather than reading that spread as sloppy science, read it as confirmation of this chapter's whole argument. If the three systems were truly separate boxes with a clean handoff, a careful measurement would converge on one crisp number. The reason estimates diverge by method is that there is no seam in the underlying physiology for any method to measure cleanly across, only a smoothly blended, continuously overlapping process that different assumptions slice in slightly different places. A separate family of methods, using isotope-labelled tracer molecules infused into the blood, allows scientists to directly track the specific carbon atoms of fat and carbohydrate as they are oxidized, and this approach, better suited to longer submaximal exercise than to brief maximal sprints, is what produced some of the fuel-selection data you will see later in this chapter (Romijn et al., 1993). Treat every specific percentage in this chapter as a well-supported approximation that captures a real and reproducible pattern, the surprisingly early rise of aerobic contribution, rather than as a decimal to memorize.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Walking the intensity-duration spectrum</h2>
+    <p>The single most useful mental tool this course can give you is the <span class="ch-key">intensity-duration spectrum</span>. It is the observation that intensity and duration are inversely linked: the harder you go, the less time you can hold it, and this trade-off is precisely what shifts the energy blend. Let us walk from one end of the spectrum to the other and describe the blend at each stop, using measured numbers wherever they exist and noting, at each stop, which muscle fibers and which enzymes are doing most of the work.</p>
+
+    <h3>The maximal jump or heavy single: one to three seconds</h3>
+    <p>At the extreme short end, a single maximal vertical jump or one heavy lift lasting a second or two is powered overwhelmingly by the phosphagen system, because only it can respond fast enough for a movement that is over before glycolysis has meaningfully spun up. The rate-limiting enzyme of glycolysis, phosphofructokinase, needs a few seconds of rising signals to accelerate flux through the pathway, so in a one-second effort it barely gets started. Glycolysis contributes a small slice and oxidative metabolism a smaller one still. But note the word <em>small</em>, not <em>zero</em>. Even here the oxidative system is idling in the background, resupplying the ATP your resting tissues never stopped using, and the fibers that were already active before you jumped keep drawing on it throughout.</p>
+
+    <h3>The hundred-meter dash: roughly ten to eleven seconds</h3>
+    <p>Stretch the same all-out effort to the time it takes an elite sprinter to run one hundred meters and the picture shifts quickly. The phosphagen system is still the largest single contributor, and the largest, most powerful motor units, which we will discuss shortly, are recruited from the gun. But glycolysis is now accelerating rapidly, and, as the previous section explained, the oxidative contribution to a race this short is genuinely difficult to pin down. Using the accumulated oxygen deficit method, Duffield, Dawson, and Goodman estimated aerobic contribution to a maximal one hundred meter sprint at roughly one fifth to one quarter of total energy on average, though individual estimates ranged far more widely, and their alternative lactate and phosphocreatine method generally suggested a smaller aerobic share (Duffield, Dawson, & Goodman, 2004). Whichever exact number you prefer, the qualitative point survives every method: even the shortest sprint event contested at a global championship, run by elite men in under ten seconds, very likely draws a meaningful, non-trivial slice of its energy, plausibly on the order of a fifth, from a system popularly assumed to be irrelevant on that timescale.</p>
+
+    <h3>The two-hundred-meter dash: roughly twenty to twenty-five seconds</h3>
+    <p>Now something interesting happens. A two-hundred-meter sprint feels like the definition of anaerobic effort, all speed and burning legs. Yet when Spencer and Gastin directly measured energy system contributions in highly trained track athletes using the accumulated oxygen deficit method, they found that the aerobic system already supplied about twenty-nine percent of the energy for a two-hundred-meter race (Spencer & Gastin, 2001). Roughly a third of a "pure sprint" is aerobic. The phosphagen system, largely spent by ten seconds, has handed most of its share to glycolysis, which is now near its peak output, while the oxidative ramp has climbed high enough to be a genuine contributor. Notice how steep this early climb is: doubling the duration from about ten seconds to about twenty-two seconds appears to roughly double or more the aerobic share, a reminder that the oxidative ramp, while slow in absolute terms, is climbing fastest in exactly this early window.</p>
+
+    <h3>The four-hundred and eight-hundred meter: the crossover zone</h3>
+    <p>Push the duration out and watch the aerobic share climb steeply. In the same study, aerobic contribution rose to about forty-three percent for the four-hundred meter and about sixty-six percent for the eight-hundred meter (Spencer & Gastin, 2001). The eight-hundred-meter run, which most athletes experience as a savage anaerobic ordeal, is in fact already a majority-aerobic event by total energy supplied. This is the crossover zone Gastin located near seventy-five seconds, made concrete. Your subjective sense of "anaerobic suffering" tracks the glycolytic byproducts accumulating and the disruption they cause to the muscle's chemical environment, not the arithmetic of where your ATP is actually coming from. A related line of evidence makes the same point from a different angle: when Bogdanis and colleagues had cyclists perform a second maximal thirty-second sprint after a short recovery, with phosphocreatine only partly restored, aerobic metabolism supplied roughly half of the energy for that second sprint, up sharply from its share in the first (Bogdanis, Nevill, Boobis, & Lakomy, 1996). Whenever the fast systems are less available, whether because duration has stretched past a minute or because a prior bout has drained them, the oxidative system is right there to take up a larger share of the load, exactly as its always-on status would predict.</p>
+
+    <h3>The fifteen-hundred meter and the five-kilometer run: aerobic dominance</h3>
+    <p>By the fifteen-hundred meter, roughly three and a half to four minutes, aerobic contribution reaches about eighty-four percent (Spencer & Gastin, 2001). Extend to a five-kilometer run of fifteen to twenty minutes and the oxidative share climbs into the high eighties and beyond. A 2026 narrative review of bioenergetic profiling summarized the pattern cleanly: oxidative contribution exceeds roughly seventy-five to eighty-eight percent in efforts longer than six minutes (Rios, Becker, Monteiro, & Fernandes, 2026). The anaerobic systems have not switched off, they are still covering surges, the start, and the finishing kick, but the steady middle of the race is carried by oxygen. This is also the range where the fuel-selection material from earlier chapters becomes directly relevant again: within that dominant oxidative contribution, the muscle is drawing on both blood glucose and stored muscle glycogen, with the exact carbohydrate and fat split depending on the pace, a point we will return to shortly when we compare two different, easily confused meanings of the word "crossover."</p>
+
+    <h3>The multi-hour ride: the fat-burning tail</h3>
+    <p>At the far end of the spectrum, a three-hour ride at a moderate, conversational pace is almost entirely oxidative, with the additional feature that fuel selection now tilts strongly toward fat. Recall from the fuel chapters that only the oxidative system can burn fat, and that fat becomes a larger fraction of the fuel mix as intensity drops and duration extends. Careful isotope-tracer studies of exercise lasting two hours at a moderate steady intensity show this shift happening in real time within a single bout: reliance on muscle glycogen progressively declines as the ride continues, while reliance on circulating blood glucose and on fatty acids released from fat tissue progressively rises to compensate, even though the pace itself never changes (Romijn et al., 1993). The phosphagen and glycolytic systems are still present, quietly covering every small acceleration, every hill, every hard pedal stroke out of a corner, but averaged across the hours they are a rounding error against the aerobic total.</p>
+
+    <p>The same 2026 review noted the mirror image at the other extreme: supramaximal efforts lasting under thirty to ninety seconds show oxidative contributions as low as eight to nineteen percent (Rios, Becker, Monteiro, & Fernandes, 2026). Put the two findings side by side, plus the roughly one fifth estimated for a ten-second maximal sprint, and you have the whole spectrum in a small handful of numbers. Under a minute and a half of all-out work, aerobic supply can be as low as one part in ten, though it is rarely if ever truly zero even at ten seconds. Past six minutes, it is four parts in five or more. Everything in between is a smooth slide, not a set of gears.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="An editorial hand-drawn stacked-band diagram in the idiom of a vintage scientific illustration, showing a smooth horizontal gradient from left to right representing effort duration from very short to very long. Three stacked coloured bands fill the frame: a coral band ('phosphagen') that is thick at the far left and tapers to a thin sliver on the right; an amber band ('glycolytic') that bulges in the left-centre and thins toward both ends; and a broad teal band ('oxidative') that is thin at the far left and swells to fill most of the height on the right. The bands blend at their boundaries with soft feathered edges rather than hard lines. Axis label along the bottom reads 'duration'. No numerical ticks, no data values, no gears. Muted palette of coral, amber, teal on warm cream paper." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch6-img2.jpg" alt="<em>The blend slides continuously across the intensity-duration spectrum; no band ever vanishes.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The blend slides continuously across the intensity-duration spectrum; no band ever vanishes.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Fiber types and the recruitment order behind the blend</h2>
+    <p>So far we have described the blend as a function of time. There is a second, complementary lens that explains why the blend also depends so strongly on intensity, and it comes down to which muscle fibers are doing the work at any given moment. A <span class="ch-key">motor unit</span> is a single motor neuron together with every muscle fiber it controls, and motor units are recruited according to a well-established principle, called the size principle, in which the nervous system activates them in order from smallest to largest as force demand rises.</p>
+    <p>The smallest motor units control <span class="ch-key">type I</span> fibers, also called slow-twitch fibers, which are dense with mitochondria, richly supplied with capillaries, and biochemically specialized for sustained oxidative work. They fatigue slowly but cannot produce very high force or contract very quickly. The largest motor units control <span class="ch-key">type II</span> fibers, also called fast-twitch fibers, which come in a spectrum from the more oxidatively capable type IIa fibers to the highly glycolytic and phosphagen-rich type IIx fibers, which pack far fewer mitochondria and can generate high force and high speed but fatigue quickly. Because recruitment proceeds from small to large, a gentle jog recruits mostly type I fibers, whose native biochemistry is already tilted toward the oxidative system, which is one reason easy exercise feels so sustainable. A maximal sprint or jump, needing far more force delivered far more quickly, recruits type IIx fibers as well, and those fibers are simply built with a different mix of enzymes and stored fuels, weighted toward the phosphagen and glycolytic systems.</p>
+    <p>This gives you two equivalent ways to understand why the blend shifts, and it is worth holding both at once. The kinetic explanation, from earlier in this chapter, says the blend shifts with time because each system's rate of ATP production ramps up at a different speed. The fiber-recruitment explanation says the blend shifts with intensity because harder efforts call a different population of muscle fibers into service, and each population arrives with its own built-in bias toward one system or another. These are not competing explanations, they describe the same underlying event from two angles: intensity determines which fibers are recruited, and duration determines how far each recruited fiber's own local blend has had time to shift from fast systems toward the oxidative one as its phosphocreatine and glycogen are used up and it increasingly leans on fuel, including shuttled lactate, arriving from the bloodstream. And just as no timescale is purely one system, no fiber type is purely one system either. Type IIx fibers still contain some mitochondria and always contribute a small oxidative share; type I fibers still contain creatine kinase and glycolytic enzymes and can produce a burst of anaerobic power in a pinch. The blend is layered at every level of organization you look at, from the whole body down to a single fiber.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>The lactate shuttle: cooperation inside a single bout</h2>
+    <p>So far we have described the three systems as running side by side. But they do something more intimate than coexist: they feed each other. The clearest example is <span class="ch-key">lactate</span>, and correcting the folklore around it is one of the most satisfying moves in this whole course.</p>
+    <p>You have probably heard that lactic acid is a waste product that causes muscle burn and next-day soreness. Nearly every part of that sentence is wrong. First, the molecule your muscles actually produce is lactate, not lactic acid. Second, lactate is not waste. And third, it does not cause the muscle soreness you feel a day or two after hard exercise; that delayed soreness comes from microscopic mechanical damage and the inflammatory repair that follows, and lactate has long since been cleared from your muscles by then. Hold onto that correction, because it undoes a myth that has shaped how people think about training for decades.</p>
+    <p>What lactate actually is, in the framework developed over many years by George Brooks, is a fuel and a messenger. The <span class="ch-key">lactate shuttle</span> describes how lactate produced by glycolysis is continuously transported and burned by mitochondria, even under fully aerobic conditions. Brooks describes lactate as "the link between glycolytic and aerobic pathways," meaning it is literally the product of the fast system and the substrate for the slow one (Brooks, 2018). Lactate is the handoff molecule, the physical embodiment of the blend we have been describing. Notice how this connects back to the two mechanisms introduced at the start of the chapter: lactate is produced by substrate-level phosphorylation and consumed by oxidative phosphorylation, so the fast system is not merely active alongside the slow one in a loose, time-averaged sense, its direct chemical output is the slow system's fuel.</p>
+    <p>The physical transport happens through a family of membrane proteins called <span class="ch-key">monocarboxylate transporters</span>, abbreviated MCT. One variant, MCT4, is concentrated in glycolytic type IIx fibers and specializes in exporting lactate out of the cell as it is produced. Another variant, MCT1, is concentrated in oxidative type I fibers, in the heart, and on the mitochondrial membrane itself, and specializes in importing lactate to be oxidized. The shuttle operates at two scales built on these transporters. In the <span class="ch-key">cell-to-cell shuttle</span>, lactate produced by fast, glycolytic muscle fibers diffuses to neighboring slow, oxidative fibers, and even travels through the blood to the heart and other tissues, where mitochondria burn it for energy. In the <span class="ch-key">intracellular shuttle</span>, lactate produced in the cytoplasm of a single fiber is transported into that same fiber's own mitochondria and oxidized there (Brooks, 2009). Both happen constantly, not only during hard exercise. Brooks reported that lactate oxidation, meaning lactate being burned as fuel, accounts for seventy to seventy-five percent of how lactate is removed during exercise (Brooks, 2009). It is not sitting around poisoning your muscles; it is being eaten.</p>
+    <p>Now connect this back to the blend. During your eight-second hill sprint, glycolysis floods the fiber with lactate. That lactate does not wait for the sprint to end before it becomes useful. Even within the same bout, oxidative fibers next door are already pulling it in and burning it. The fast system and the slow system are not merely running in parallel; they are wired together by a shared fuel and a dedicated transporter system built to move it. This is why it is more accurate to picture one integrated metabolic network than three separate engines.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>If lactate is being oxidized by mitochondria the whole time, what does a rising blood lactate level during hard exercise actually tell you? (Hint: it reflects the balance between production and removal, not simply "too much acid." Production has outrun the rate at which the oxidative system, and the transporters that feed it, can clear it.)</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Two different "crossovers": do not mix them up</h2>
+    <p>Exercise physiology, unfortunately, reuses the word "crossover" for two genuinely different phenomena, and conflating them is one of the most common mistakes students make when they try to connect this chapter to the fuel-selection material from earlier in the course. It is worth pulling them apart carefully, because both are real, well-documented, and useful, and they answer different questions.</p>
+    <p><strong>The first crossover, the subject of most of this chapter, is about which system supplies the ATP, and it is organized by duration during a maximal, all-out effort.</strong> This is Gastin's crossover point, the moment, at roughly seventy-five seconds of sustained maximal work, when cumulative aerobic energy supply overtakes cumulative anaerobic energy supply (Gastin, 2001). It answers the question: at this point in an all-out race, is the phosphagen and glycolytic system or the oxidative system responsible for more of the energy delivered so far?</p>
+    <p><strong>The second crossover is about which fuel the oxidative system itself is burning, and it is organized by intensity during submaximal, steady exercise.</strong> This is the fuel crossover concept described by Brooks and Mercier, the exercise intensity at which the balance of oxidative fuel selection flips from being fat-dominant to being carbohydrate-dominant, driven by rising sympathetic nervous system activity and the recruitment of more type II fibers as intensity climbs (Brooks & Mercier, 1994). Careful isotope-tracer work by Romijn and colleagues put numbers on this: at a light intensity of about twenty-five percent of maximal oxygen uptake, fat oxidation, drawn mostly from fatty acids circulating in the blood, supplies most of the energy; at a moderate intensity of about sixty-five percent, oxidation of muscle glycogen becomes the dominant source; and at a hard intensity of about eighty-five percent, carbohydrate overwhelmingly dominates while fat oxidation is suppressed in absolute terms, even though total energy expenditure is much higher (Romijn et al., 1993). It answers a completely different question: within the energy the oxidative system is supplying, how much comes from fat versus carbohydrate?</p>
+    <p>Keeping these separate matters because a single athlete experiences both at once, and describing them with the same word invites confusion. Picture a cyclist grinding up a long climb for twenty minutes at a hard but sustainable pace. This chapter's crossover is already long resolved in the aerobic system's favor: past the six-minute mark, the anaerobic systems are a minor contributor covering only the steepest surges, and the ride is overwhelmingly powered by oxidative phosphorylation. But within that dominant oxidative supply, the Brooks and Mercier fuel crossover is doing its own separate work, and because the climb is hard, the cyclist's oxidative system is burning a carbohydrate-heavy mix rather than a fat-heavy one, exactly the fuel-selection logic from the earlier chapters on thresholds. Both crossovers are true simultaneously, they are just answering different questions, one about which engine is running, the other about what that engine is burning.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>How to read the blend of any activity</h2>
+    <p>You now have everything you need to estimate the energy blend of any effort you encounter. The procedure is short. First, judge the <em>intensity</em> relative to the hardest that effort could possibly be, and consider which fiber types that intensity is likely recruiting. Second, judge the <em>duration</em>, or if the effort is intermittent, the duration of its hard bursts and how much recovery sits between them, since partial recovery leaves the phosphagen system only partly restocked, pushing more of the next burst's load onto glycolysis and oxidative metabolism, exactly as it did for the cyclists in the repeated-sprint study discussed earlier. Then apply three rules of thumb drawn from the measured literature above.</p>
+    <p><strong>Rule one: the shorter and more maximal the effort, the larger the anaerobic share, but never the whole of it.</strong> Under about ten seconds at maximal intensity, expect the phosphagen system to lead, with a meaningful glycolytic slice and a small but real oxidative one, plausibly on the order of a fifth of total energy even for a maximal one hundred meter sprint by some estimates (Duffield, Dawson, & Goodman, 2004; Gastin & Suppiah, 2026).</p>
+    <p><strong>Rule two: the crossover to aerobic majority arrives fast, near seventy-five seconds of sustained maximal work.</strong> Any all-out effort you can hold for more than about a minute and a quarter is already majority-aerobic by total energy, even if it feels brutally anaerobic (Gastin, 2001; Spencer & Gastin, 2001).</p>
+    <p><strong>Rule three: past six minutes, the oxidative system supplies roughly eighty percent or more, and its fat-burning capacity becomes increasingly relevant the longer and easier the effort.</strong> The anaerobic systems shrink to the role of covering surges and finishes (Rios, Becker, Monteiro, & Fernandes, 2026).</p>
+    <p>Try applying the rules to an effort not covered above: a forty-second all-out effort on a rowing ergometer or a track cycling pursuit. Forty seconds sits between the twenty-two-second two-hundred-meter benchmark, at about twenty-nine percent aerobic, and the roughly forty-seven-second four-hundred-meter benchmark, at about forty-three percent aerobic (Spencer & Gastin, 2001). Interpolating between those two measured points, a reasonable estimate for a forty-second maximal effort lands in the mid-to-high thirties percent for aerobic contribution, with the anaerobic remainder split so that phosphagen, mostly spent by ten to fifteen seconds, contributes a shrinking share while glycolysis, near the middle of its effective operating window, carries the largest single piece. That is exactly the kind of estimate this chapter should let you build from first principles rather than from a memorized table, and it is the same reasoning process, matching an unfamiliar effort to its nearest measured neighbors on the spectrum, that you can apply to any activity you actually care about.</p>
+    <p>One caution worth restating plainly: these percentages come from research on trained athletes performing maximal efforts, often measured with the accumulated oxygen deficit method or the lactate and phosphocreatine method described earlier, both of which carry real uncertainty and can disagree with each other, especially at very short durations. Treat the numbers as well-supported approximations that capture the shape of the truth, not as decimals to memorize. The shape is the point: continuous, overlapping, always shifting.</p>
+  </section>
+
+  <div class="ch-widget" id="blend-quiz">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Name That Blend Challenge</div>
+    </div>
+    <p class="ch-widget-sub">Read the activity, set your three estimates so they feel right, then reveal the accepted blend and see how close you came.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">The activity</span>
+        <div class="ch-widget-title" id="quiz-prompt" style="width:100%">An all-out 8-second hill sprint</div>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">Phosphagen</span>
+        <span class="ch-meter-bar"><span id="qbar-phos" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="qnum-phos">50</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Glycolytic</span>
+        <span class="ch-meter-bar"><span id="qbar-gly" style="width:30%"></span></span>
+        <span class="ch-meter-num" id="qnum-gly">30</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Oxidative</span>
+        <span class="ch-meter-bar"><span id="qbar-oxi" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="qnum-oxi">20</span>
+      </div>
+    </div>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Phosphagen estimate</span>
+        <input class="ch-widget-select" type="range" id="qin-phos" min="0" max="100" value="50">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Glycolytic estimate</span>
+        <input class="ch-widget-select" type="range" id="qin-gly" min="0" max="100" value="30">
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Oxidative estimate</span>
+        <input class="ch-widget-select" type="range" id="qin-oxi" min="0" max="100" value="20">
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="quiz-reveal">Reveal the blend</button>
+    <button class="ch-widget-btn" id="quiz-next">Next activity</button>
+    <p class="ch-widget-sub" id="quiz-feedback">Your three sliders are normalized to sum to one hundred percent when you reveal. Estimates near the accepted blend score higher.</p>
+  </div>
+
+  <blockquote class="ch-quote">
+    <p>The energy systems are distinct yet closely integrated processes that operate together.</p>
+    <cite>Paul B. Gastin, Energy System Interaction and Relative Contribution During Maximal Exercise (2001)</cite>
+  </blockquote>
+
+  <section class="ch-section">
+    <h2>What the blend model means for pacing and repeatability</h2>
+    <p>Understanding the blend is not just an academic correction, it changes how you should reason about pacing and about repeated efforts, even before the next chapter's discussion of how training reshapes the systems themselves. Consider the eight-hundred-meter race again. If you believed the gear model, you might picture the race as a short anaerobic sprint followed by an aerobic cruise, and you might reasonably conclude that going out as fast as possible and hanging on is the right strategy, since "the anaerobic part" needs to be gotten out of the way early. But you now know the race is already about two-thirds aerobic by total energy. Sprinting the first lap burns through phosphagen and floods the muscle with lactate faster than the oxidative system and the lactate shuttle can process it, creating a large early oxygen deficit that must eventually be repaid at the cost of severe fatigue in the second lap. This is consistent with why elite eight-hundred-meter pacing profiles tend to be close to even, or only mildly front-loaded, rather than drastically front-loaded: the athletes are, whether they describe it this way or not, managing a blend rather than switching off one system before another switches on.</p>
+    <p>For longer events, the five-kilometer run, the marathon, the multi-hour ride, the practical implication is that because the oxidative system so thoroughly dominates the energy supply, performance differences between competitors are chiefly explained by oxidative factors you met in earlier chapters: maximal oxygen uptake, the fraction of that maximum sustainable for the duration in question, and fuel economy, meaning how effectively fat can be spared to conserve limited glycogen. The anaerobic systems remain genuinely important in these events, but chiefly for the opening surge, for covering hills, and for the finishing kick, not as the primary energy source for the steady middle portion of the effort.</p>
+    <p>For the shortest efforts, a single jump, a maximal lift, a ten-second sprint, the word "pacing" barely applies, since the whole effort is close to maximal from the start. What matters instead is repeatability. Because the phosphagen system needs several minutes to substantially replenish its creatine phosphate stores, back-to-back maximal efforts, repeated sprints in a field sport, multiple heavy sets in a weight room, a series of jumps, draw progressively more on glycolytic and oxidative sources as the phosphagen tank starts each successive effort only partially refilled. This is exactly the pattern the muscle biopsy data showed: aerobic contribution to a second thirty-second sprint rose to roughly half of total energy, far above its share in a fresh first sprint, once phosphocreatine had only partly recovered (Bogdanis, Nevill, Boobis, & Lakomy, 1996). An athlete, or a strength coach, who understands this can better anticipate why the fifth sprint of a training set feels so different from the first, and why that shift is a normal, expected rebalancing of the same three systems rather than a sign that something has gone wrong.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Why the myth is worth killing</h2>
+    <p>It would be easy to treat the gear model as a harmless simplification. It is not, because it produces bad reasoning downstream. If you believe the first ninety seconds of a hard effort are "purely anaerobic," you will neglect the aerobic base that actually supplies half of that effort's energy, and you will misunderstand why middle-distance athletes train their aerobic capacity so heavily. If you believe lactate is waste that causes soreness, you will chase recovery strategies aimed at a molecule that was cleared and burned hours earlier. If you picture a fixed set of muscle fibers simply "switching fuel," you will miss why intensity itself, through the size principle of motor unit recruitment, calls an entirely different population of fibers into play. And if you think of the systems as separate boxes, you will miss the single most elegant fact in this chapter: that the product of the fast system is the fuel of the slow one, so the harder your glycolysis works, the more it feeds the very oxidative machinery that will eventually take over.</p>
+    <p>Replacing switches with blends is the intellectual payoff of the first half of this course. The speed of the phosphagen system, the lactate of glycolysis, the oxygen dependence and fat-burning reach of the oxidative system, the recruitment order of muscle fibers, and the logic of choosing glycogen versus fat all stop being separate lessons and become one integrated picture of how any effort is powered. From here, every training question becomes a question about how to reshape a blend, not about how to strengthen one gear in isolation.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>All three energy systems run simultaneously from the first instant of effort. What changes over time is the proportion each contributes, never whether a system is on or off.</li>
+      <li>The systems overlap because their response speeds differ. The phosphagen system is near-instantaneous, glycolysis peaks around ten to fifteen seconds, and oxidative metabolism keeps climbing for one to two minutes with a measured time constant of roughly twenty to thirty seconds at moderate intensity; these are staggered ramps, not gears (Whipp & Wasserman, 1972).</li>
+      <li>The crossover to aerobic majority, meaning the point where cumulative aerobic energy overtakes cumulative anaerobic energy in a maximal effort, arrives near seventy-five seconds, far earlier than the folk model assumes (Gastin, 2001).</li>
+      <li>Measured contributions along the spectrum: aerobic supply is roughly one fifth for a maximal one hundred meter sprint, twenty-nine percent for a two-hundred-meter dash, sixty-six percent for eight hundred meters, eighty-four percent for fifteen hundred meters, and above eighty percent past six minutes (Duffield, Dawson, & Goodman, 2004; Spencer & Gastin, 2001; Rios, Becker, Monteiro, & Fernandes, 2026).</li>
+      <li>The size principle of motor unit recruitment means intensity determines which fiber types are active, from oxidative type I fibers at low intensity to glycolytic and phosphagen-rich type IIx fibers at maximal intensity, giving a second, complementary explanation for why the blend shifts.</li>
+      <li>Lactate is a fuel, not waste, and does not cause delayed muscle soreness. Monocarboxylate transporters carry it from glycolytic fibers to oxidative ones, linking the fast and slow systems chemically within a single bout (Brooks, 2009, 2018).</li>
+      <li>Do not confuse Gastin's energy-system crossover, organized by duration during maximal effort, with the Brooks and Mercier fuel crossover, organized by intensity during submaximal effort, which describes the fat-to-carbohydrate shift in fuel selection (Gastin, 2001; Brooks & Mercier, 1994; Romijn et al., 1993).</li>
+      <li>The percentages in this chapter come from methods, including the accumulated oxygen deficit method and muscle biopsy, that carry genuine uncertainty and can disagree with each other, especially at short durations. Treat them as well-supported approximations of a real pattern, not exact figures (Medbo, Mohn, Tabata, Bahr, Vaage, & Sejersted, 1988; Duffield, Dawson, & Goodman, 2004).</li>
+      <li>To read any activity, judge intensity and duration, consider which fibers are likely recruited, then apply the three rules of thumb. The same blend logic explains pacing strategy in middle-distance events and the declining phosphagen contribution across repeated maximal efforts.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>Now that you can read the blend of any effort, the natural next question is whether you can change it. In the next chapter we turn to training adaptation: how repeated stress reshapes each system, growing mitochondria, expanding the glycolytic and phosphagen capacities, and shifting the whole intensity-duration spectrum in your favor. The blend is not fixed. It is trainable, and understanding it is the first step to reshaping it.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Baker, J. S., McCormick, M. C., & Robergs, R. A. (2010). Interaction among skeletal muscle metabolic energy systems during intense exercise. <em>Journal of Nutrition and Metabolism, 2010</em>, 905612. https://doi.org/10.1155/2010/905612</p>
+    <p>Bogdanis, G. C., Nevill, M. E., Boobis, L. H., & Lakomy, H. K. A. (1996). Contribution of phosphocreatine and aerobic metabolism to energy supply during repeated sprint exercise. <em>Journal of Applied Physiology, 80</em>(3), 876-884. https://doi.org/10.1152/jappl.1996.80.3.876</p>
+    <p>Briand, J., Slawinski, J., & Morin, J.-B. (2025). Quantifying metabolic energy contributions in sprint running: A novel bioenergetic model. <em>European Journal of Applied Physiology</em>. https://doi.org/10.1007/s00421-025-05831-0</p>
+    <p>Brooks, G. A. (2009). Cell-cell and intracellular lactate shuttles. <em>The Journal of Physiology, 587</em>(23), 5591-5600. https://doi.org/10.1113/jphysiol.2009.178350</p>
+    <p>Brooks, G. A. (2018). The science and translation of lactate shuttle theory. <em>Cell Metabolism, 27</em>(4), 757-785. https://doi.org/10.1016/j.cmet.2018.03.008</p>
+    <p>Brooks, G. A., & Mercier, J. (1994). Balance of carbohydrate and lipid utilization during exercise: The "crossover" concept. <em>Journal of Applied Physiology, 76</em>(6), 2253-2261. https://doi.org/10.1152/jappl.1994.76.6.2253</p>
+    <p>Duffield, R., Dawson, B., & Goodman, C. (2004). Energy system contribution to 100-m and 200-m track running events. <em>Journal of Science and Medicine in Sport, 7</em>(3), 302-313. https://doi.org/10.1016/S1440-2440(04)80025-2</p>
+    <p>Gastin, P. B. (2001). Energy system interaction and relative contribution during maximal exercise. <em>Sports Medicine, 31</em>(10), 725-741. https://doi.org/10.2165/00007256-200131100-00003</p>
+    <p>Gastin, P. B., & Suppiah, H. (2026). Anaerobic and aerobic energy system contribution during maximal exercise: A systematic review. <em>Sports Medicine</em>. https://doi.org/10.1007/s40279-026-02414-7</p>
+    <p>Medbo, J. I., Mohn, A. C., Tabata, I., Bahr, R., Vaage, O., & Sejersted, O. M. (1988). Anaerobic capacity determined by maximal accumulated O2 deficit. <em>Journal of Applied Physiology, 64</em>(1), 50-60. https://doi.org/10.1152/jappl.1988.64.1.50</p>
+    <p>Rios, M., Becker, K., Monteiro, A. S., & Fernandes, R. J. (2026). Bioenergetic profiling in exercise: Methods, limitations and practical applications: A narrative review. <em>Physiologia, 6</em>(1), 19. https://doi.org/10.3390/physiologia6010019</p>
+    <p>Romijn, J. A., Coyle, E. F., Sidossis, L. S., Gastaldelli, A., Horowitz, J. F., Endert, E., & Wolfe, R. R. (1993). Regulation of endogenous fat and carbohydrate metabolism in relation to exercise intensity and duration. <em>American Journal of Physiology, 265</em>(3), E380-E391. https://doi.org/10.1152/ajpendo.1993.265.3.E380</p>
+    <p>Spencer, M. R., & Gastin, P. B. (2001). Energy system contribution during 200- to 1500-m running in highly trained athletes. <em>Medicine & Science in Sports & Exercise, 33</em>(1), 157-162. https://doi.org/10.1097/00005768-200101000-00024</p>
+    <p>Whipp, B. J., & Wasserman, K. (1972). Oxygen uptake kinetics for various intensities of constant-load work. <em>Journal of Applied Physiology, 33</em>(3), 351-356. https://doi.org/10.1152/jappl.1972.33.3.351</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 6 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('blend-mixer');
+    if(!root) return;
+    var intensity = root.querySelector('#mix-intensity');
+    var time = root.querySelector('#mix-time');
+    var barP = root.querySelector('#bar-phos');
+    var barG = root.querySelector('#bar-gly');
+    var barO = root.querySelector('#bar-oxi');
+    var numP = root.querySelector('#num-phos');
+    var numG = root.querySelector('#num-gly');
+    var numO = root.querySelector('#num-oxi');
+    var readout = root.querySelector('#mix-readout');
+
+    function compute(intPct, t){
+      // t in seconds. intPct 20-100.
+      // Oxidative fraction rises with time toward a ceiling; higher intensity slows the ramp slightly.
+      var intFrac = intPct/100;
+      // oxidative share: logistic-ish approach to ~0.95, midpoint near 75s at max intensity, earlier at lower intensity
+      var mid = 75 * (0.5 + intFrac); // higher intensity -> later crossover
+      var oxi = 1 / (1 + Math.exp(-(t - mid)/ (mid*0.55)));
+      // small non-zero floor even at t=1
+      oxi = Math.max(0.03, Math.min(0.96, oxi));
+      var anaerobic = 1 - oxi;
+      // split anaerobic between phosphagen and glycolytic based on time
+      // phosphagen dominates very early (<10s), fades quickly
+      var phosWeight = Math.exp(-t/6); // decays with time
+      var glyWeight = (t < 3) ? 0.4 : 1; // glycolysis ramps up
+      // normalize
+      var wSum = phosWeight + glyWeight;
+      var phos = anaerobic * (phosWeight/wSum);
+      var gly = anaerobic * (glyWeight/wSum);
+      // ensure small floors
+      phos = Math.max(0.01, phos);
+      var total = phos + gly + oxi;
+      return {p: phos/total, g: gly/total, o: oxi/total};
+    }
+
+    function render(){
+      var t = parseInt(time.value,10);
+      var b = compute(parseInt(intensity.value,10), t);
+      var p = Math.round(b.p*100), g = Math.round(b.g*100), o = 100-p-g;
+      barP.style.width = p+'%'; numP.textContent = p;
+      barG.style.width = g+'%'; numG.textContent = g;
+      barO.style.width = o+'%'; numO.textContent = o;
+      var timeStr = t < 60 ? (t + ' s') : ((t/60).toFixed(1) + ' min');
+      readout.textContent = 'Intensity ' + intensity.value + '% of maximal, elapsed ' + timeStr + '. Notice the oxidative band is never at zero, and the crossover to aerobic majority arrives near seventy-five seconds at maximal intensity.';
+    }
+
+    intensity.addEventListener('input', render);
+    time.addEventListener('input', render);
+
+    var presets = {
+      single:   {i:100, t:2},
+      sprint:   {i:98,  t:22},
+      fivek:    {i:88,  t:1080},
+      marathon: {i:60,  t:10800}
+    };
+    root.querySelectorAll('[data-preset]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var pr = presets[btn.getAttribute('data-preset')];
+        if(!pr) return;
+        intensity.value = pr.i;
+        time.value = Math.min(pr.t, parseInt(time.max,10));
+        render();
+      });
+    });
+
+    render();
+  } catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('blend-quiz');
+    if(!root) return;
+    var prompt = root.querySelector('#quiz-prompt');
+    var inP = root.querySelector('#qin-phos');
+    var inG = root.querySelector('#qin-gly');
+    var inO = root.querySelector('#qin-oxi');
+    var barP = root.querySelector('#qbar-phos');
+    var barG = root.querySelector('#qbar-gly');
+    var barO = root.querySelector('#qbar-oxi');
+    var numP = root.querySelector('#qnum-phos');
+    var numG = root.querySelector('#qnum-gly');
+    var numO = root.querySelector('#qnum-oxi');
+    var revealBtn = root.querySelector('#quiz-reveal');
+    var nextBtn = root.querySelector('#quiz-next');
+    var feedback = root.querySelector('#quiz-feedback');
+
+    var items = [
+      {name:'An all-out 8-second hill sprint', p:60, g:29, o:11,
+       why:'Under ten seconds at maximal intensity the phosphagen system leads, but glycolysis is already large and even a brief maximal sprint carries a small but real aerobic share (Gastin & Suppiah, 2026).'},
+      {name:'A 200-meter dash (about 22 seconds)', p:23, g:48, o:29,
+       why:'By twenty-two seconds the phosphagen tank is largely spent and glycolysis peaks, yet measured aerobic contribution is already about twenty-nine percent (Spencer & Gastin, 2001).'},
+      {name:'An 800-meter run (about 1 minute 50 seconds)', p:8, g:26, o:66,
+       why:'Past the seventy-five-second crossover the effort is already majority aerobic; measured aerobic contribution is about sixty-six percent even though it feels intensely anaerobic (Spencer & Gastin, 2001).'},
+      {name:'A 5-kilometer run (about 18 minutes)', p:3, g:12, o:85,
+       why:'Beyond six minutes the oxidative system supplies roughly seventy-five to eighty-eight percent, with the anaerobic systems covering the start, surges, and finish (Rios et al., 2026).'},
+      {name:'A 90-minute steady bike ride', p:2, g:6, o:92,
+       why:'Long, moderate efforts are almost entirely oxidative, with fuel selection tilting toward fat. The fast systems only cover brief accelerations (Rios et al., 2026).'}
+    ];
+    var idx = 0;
+    var revealed = false;
+
+    function updateBars(){
+      var p = parseInt(inP.value,10), g = parseInt(inG.value,10), o = parseInt(inO.value,10);
+      barP.style.width = p+'%'; numP.textContent = p;
+      barG.style.width = g+'%'; numG.textContent = g;
+      barO.style.width = o+'%'; numO.textContent = o;
+    }
+    inP.addEventListener('input', updateBars);
+    inG.addEventListener('input', updateBars);
+    inO.addEventListener('input', updateBars);
+
+    function loadItem(){
+      var it = items[idx];
+      prompt.textContent = it.name;
+      inP.value = 40; inG.value = 30; inO.value = 30;
+      updateBars();
+      revealed = false;
+      feedback.textContent = 'Set your three sliders, then reveal. They will be normalized to sum to one hundred percent for scoring.';
+    }
+
+    revealBtn.addEventListener('click', function(){
+      if(revealed) return;
+      var it = items[idx];
+      var p = parseInt(inP.value,10), g = parseInt(inG.value,10), o = parseInt(inO.value,10);
+      var sum = p+g+o; if(sum===0) sum=1;
+      var np = Math.round(p/sum*100), ng = Math.round(g/sum*100), no = 100-np-ng;
+      var err = Math.abs(np-it.p) + Math.abs(ng-it.g) + Math.abs(no-it.o);
+      var score = Math.max(0, 100 - Math.round(err));
+      // show accepted blend on bars
+      barP.style.width = it.p+'%'; numP.textContent = it.p;
+      barG.style.width = it.g+'%'; numG.textContent = it.g;
+      barO.style.width = it.o+'%'; numO.textContent = it.o;
+      feedback.textContent = 'Your normalized guess was phosphagen ' + np + ', glycolytic ' + ng + ', oxidative ' + no + '. Accepted blend: phosphagen ' + it.p + ', glycolytic ' + it.g + ', oxidative ' + it.o + '. Accuracy score ' + score + ' of 100. ' + it.why;
+      revealed = true;
+    });
+
+    nextBtn.addEventListener('click', function(){
+      idx = (idx + 1) % items.length;
+      loadItem();
+    });
+
+    loadItem();
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
