@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory, Precision, and the Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme ,  notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ',  '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+<header class="ch-head">
+  <div class="ch-eyebrow">Class 2 · Module 1</div>
+  <h1 class="ch-title">Memory, Precision, and the <em>Handoff</em></h1>
+  <p class="ch-subtitle">How the body trades speed for specificity ,  and learns to never forget.</p>
+  <div class="ch-meta">
+    <span>60 min read</span>
+    <span class="ch-meta-dot"></span>
+    <span>8 cited sources</span>
+  </div>
+</header>
+
+<section class="ch-hook">
+  <p><span class="ch-dropcap">I</span>n Chapter 1 we left the battlefield mid-fight. A splinter has broken the skin; bacteria are dividing in the warm wound; neutrophils are already pouring out of the capillaries, macrophages are engulfing whatever they can catch, and the whole neighborhood is red, hot, and swollen. The innate system is fast ,  it responds in minutes to hours, using a fixed set of pattern-recognition receptors that read the generic molecular signatures of "microbe." But it has two limitations we deliberately flagged and deferred. First, it is <em>imprecise</em>: it recognizes broad categories, not particular pathogens. Second, it is <em>forgetful</em>: it responds to your thousandth cold exactly as clumsily as it responded to your first.</p>
+  <p>This chapter is about what the innate response was buying time for. While macrophages and neutrophils hold the line, a slower, stranger, far more precise system is being recruited ,  one that will identify the <em>exact</em> molecular shape of this particular invader, manufacture custom weapons against it, and then, crucially, remember it for decades. That is the adaptive immune system, and the moment it takes over is one of the most elegant events in all of biology: the innate-to-adaptive handoff.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Two immune systems, one body</h2>
+  <p>It helps to hold the contrast explicitly before we build. The <span class="ch-key">innate immune system</span> is what you are born with fully operational. Its receptors are germline-encoded ,  written directly into your DNA, identical in every one of your macrophages ,  and they recognize conserved microbial features: bacterial cell-wall lipopolysaccharide, viral double-stranded RNA, the flagellin of a bacterium's whip-like tail. There are only a few hundred such receptors across the whole innate repertoire, and they cannot change during your lifetime. That is why the innate response is instantaneous but generic.</p>
+  <p>The <span class="ch-key">adaptive immune system</span> works on an entirely different principle. Instead of a few hundred fixed receptors, it generates a repertoire of <em>billions</em> of distinct receptors, each specific for a single molecular shape, and it does this not by encoding each receptor in the genome ,  that would be impossible, as we will see ,  but by <em>assembling</em> them combinatorially in each individual cell as it develops. The cost is speed: mounting an adaptive response from scratch takes days, not minutes. The payoff is precision and memory.</p>
+  <p>The workhorse cell of adaptive immunity is the <span class="ch-key">lymphocyte</span> ,  a small, round white blood cell that looks, under a microscope, almost boringly featureless: a large nucleus, a thin rim of cytoplasm, nothing dramatic. That plainness is deceptive. Each lymphocyte carries on its surface thousands of copies of a single receptor with a single specificity, and the population of lymphocytes as a whole covers an astronomical range of possible targets. There are two great lineages, distinguished by where they mature and what they do: <span class="ch-key">T cells</span> (matured in the thymus) and <span class="ch-key">B cells</span> (matured in the bone marrow).</p>
+
+  <h3>Where lymphocytes live, and how they travel</h3>
+  <p>A repertoire of billions of specific cells is useless if it simply sits in one place. The adaptive system is organized around a small set of specialized organs, and understanding this geography makes the rest of the chapter far easier to follow. Lymphocytes are born and undergo their initial development in the <span class="ch-key">primary lymphoid organs</span>: the bone marrow, where both B cells and T cells originate from blood stem cells, and the thymus, a gland behind the breastbone where T cell precursors migrate to complete their education. It is in the thymus that developing T cells first assemble their T cell receptor genes and are tested, brutally, for whether that receptor is useful and safe, a process we return to below.</p>
+  <p>Once a lymphocyte is mature, it does not stay put. It circulates continuously through the blood and a parallel plumbing system called the lymphatic system, a network of vessels that drains fluid from every tissue in the body and channels it through way-stations called lymph nodes before returning it to the bloodstream. Lymph nodes, along with the spleen (which filters blood rather than lymph) and patches of lymphoid tissue lining the gut and airway called <span class="ch-key">mucosa-associated lymphoid tissue (MALT)</span>, are the <span class="ch-key">secondary lymphoid organs</span>: the places where mature, naive lymphocytes wait, and where they will actually meet antigen. A naive lymphocyte's entire working life, until it finds its match, consists of entering a lymph node from the blood through specialized vessels called <span class="ch-key">high endothelial venules</span>, crawling through the node's meshwork for about a day while brushing past thousands of other cells, and then, if nothing matches its receptor, exiting through a lymphatic vessel back into the blood to try another node. This recirculation repeats every twelve to twenty-four hours for the lymphocyte's entire lifespan unless it finds its antigen. It is an enormous, continuous, body-wide search process, and it is why lymph nodes swell during an infection: they are recruiting recirculating lymphocytes and trapping them at the exact site where the matching antigen has just arrived.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>Before reading on: if each adaptive receptor recognizes only one shape, and there are billions of possible shapes, how can any single lymphocyte ever be "the right one" for a brand-new pathogen your body has never met? Hold that puzzle ,  it is the central design problem the rest of the chapter solves.</p>
+  </aside>
+</section>
+
+<figure class="ch-figure" data-image-idx="0" data-prompt="A pen-and-watercolour field-guide plate contrasting two immune strategies, split vertically. On the left panel, labelled 'innate' in small italic serif, a cluster of a few identical blunt key-shapes fitting many different locks loosely ,  fast, generic. On the right panel, labelled 'adaptive' in small italic serif, a vast fan of thousands of finely-cut distinct keys, each precisely matching one unique lock. Warm earthy palette of ochre, sage green, muted brick red, and cream paper. Hand-inked outlines, soft watercolour washes, sketchbook margin notes feel. No people, no watermarks, no cropped letters." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch2-img1.jpg" alt="<em>Fixed and few, versus assembled and astronomically many.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>Fixed and few, versus assembled and astronomically many.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>Specificity: one receptor, one shape</h2>
+  <p>Let us define the target precisely. An <span class="ch-key">antigen</span> is any molecule that an adaptive immune receptor can bind. In practice, receptors do not recognize a whole protein or a whole bacterium; they recognize a small patch of it ,  a particular contour of a few amino acids or a short peptide. That patch is called an <span class="ch-key">epitope</span>. A single virus particle presents dozens of distinct epitopes; a single antigen may carry several. The unit of recognition is always the epitope, and each lymphocyte receptor is tuned to one.</p>
+  <p>The recognition itself is physical ,  a lock-and-key complementarity of shape and charge, the same non-covalent chemistry (hydrogen bonds, van der Waals contacts, electrostatic attraction) that governs how any protein binds any ligand. When the receptor's binding surface is geometrically and chemically complementary to the epitope, they stick; when they aren't, they don't. There is no magic. The engineering marvel is not the binding ,  it is the <em>diversity</em>: generating enough different receptor shapes that at least one already fits any epitope the world can throw at you, including molecules that have never existed before.</p>
+
+  <h3>The receptors themselves</h3>
+  <p>B cells and T cells solve recognition with related but distinct molecules. The <span class="ch-key">B cell receptor (BCR)</span> is a membrane-anchored antibody ,  the very same Y-shaped molecule the cell will later secrete in bulk. It binds free-floating antigen directly: a chunk of a bacterial toxin, a protein on a virus's surface, a sugar on a cell wall. It reads three-dimensional shape in solution.</p>
+  <p>The <span class="ch-key">T cell receptor (TCR)</span> is stranger and more constrained. It cannot see free antigen at all. It only recognizes a short peptide ,  typically 8 to 15 amino acids ,  when that peptide is held in the groove of a specialized display molecule on the surface of another cell. That display molecule is the <span class="ch-key">major histocompatibility complex (MHC)</span>, and this requirement, called <span class="ch-key">MHC restriction</span>, is fundamental: a T cell responds to <em>peptide-plus-MHC</em>, a composite surface, not to peptide alone (Bradley &amp; Thomas, 2019). We will see why this constraint is a feature, not a bug ,  it forces T cells to inspect what is happening <em>inside</em> other cells.</p>
+
+  <h3>The molecular anatomy of a receptor</h3>
+  <p>It is worth looking briefly at the physical structure that makes all of this possible, because the same architectural trick reappears in both receptor families. A B cell receptor, like the antibody it will later become, is built from two identical "heavy" protein chains and two identical "light" protein chains, linked together by sulfur-to-sulfur (disulfide) bonds into a Y shape. Each chain folds into a series of compact protein domains, and the very tip of each arm of the Y ,  where heavy chain meets light chain ,  is where antigen binding happens. Within that tip, three short loops of the heavy chain and three short loops of the light chain project outward and do essentially all of the antigen contact; these loops are called <span class="ch-key">complementarity-determining regions (CDRs)</span> because their job is to be complementary in shape to the epitope. It is these six loops, and especially the loop formed at the V-D-J junction, that are hypervariable, meaning that the junctional diversification described below lands almost entirely inside them.</p>
+  <p>The T cell receptor is built the same way in miniature: two chains, usually called alpha and beta, each contributing CDR loops to a single antigen-binding tip, generated by the T cell's own V(D)J recombination. Unlike the B cell receptor, the TCR does not work alone on the cell surface; it is permanently escorted by a cluster of accessory proteins called the <span class="ch-key">CD3 complex</span>, which does not touch antigen itself but transmits the "I have bound something" signal into the cell once the TCR engages peptide-MHC. A receptor that only recognizes and cannot signal, or only signals and cannot recognize, would be useless; CD3 is the wiring that connects the TCR's recognition event to the cell's internal decision-making machinery.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Where does the diversity come from?</h2>
+  <p>Here is the arithmetic that makes the whole system seem impossible. The human genome contains roughly 20,000 protein-coding genes. Yet the adaptive immune system must produce on the order of 10¹¹ or more distinct antigen receptors. You cannot encode a hundred billion receptors in twenty thousand genes. The genome simply is not large enough. So how does the body do it?</p>
+  <p>The answer, worked out over decades and honored with a Nobel Prize, is that receptor genes are <em>not</em> inherited intact. They are assembled, piece by piece, in each developing lymphocyte, from a modest library of interchangeable gene segments. This process is <span class="ch-key">V(D)J recombination</span> (Chi et al., 2020; Eugster &amp; Bonifacio, 2018).</p>
+
+  <h3>V(D)J recombination, step by step</h3>
+  <p>Consider a B cell's antibody heavy chain. Its variable, antigen-binding region is not one gene but a choice made from three separate clusters of segments: the <span class="ch-key">V (variable)</span> segments ,  around 40 of them ,  the <span class="ch-key">D (diversity)</span> segments ,  around 25 ,  and the <span class="ch-key">J (joining)</span> segments ,  around 6. During the cell's development, an enzyme complex physically cuts the DNA and stitches together <em>one</em> V, <em>one</em> D, and <em>one</em> J segment, deleting everything in between. Just from the combinatorial choice ,  40 × 25 × 6 ,  you already generate thousands of possibilities for the heavy chain alone.</p>
+  <p>Then the diversity multiplies. The light chain undergoes its own independent V-J recombination, and the two chains pair combinatorially, multiplying the numbers together. And most powerfully, the joins themselves are <em>imprecise</em>: at each junction, random nucleotides are inserted or trimmed away in a process called junctional diversification, so that even the same V, D, and J segments joined twice will usually produce slightly different sequences. This junctional variability lands exactly in the part of the receptor that contacts antigen ,  the hypervariable loops ,  and it is where most of the real diversity is generated. Multiply combinatorial choice by chain pairing by junctional diversity and the estimated potential repertoire exceeds 10¹¹ distinct B cell receptors (Eugster &amp; Bonifacio, 2018).</p>
+  <p>T cell receptors are built the identical way, from their own V, D, and J libraries, with the same junctional diversification (Bradley &amp; Thomas, 2019). One mechanism, two receptor families, one enormous repertoire.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>V(D)J recombination cuts and permanently rearranges the cell's own DNA. This means every mature lymphocyte carries a genome slightly different from the one you inherited ,  and different from its neighbor lymphocyte. Why might a controlled program of cutting your own DNA be dangerous, and what might go wrong if it misfires? (Hold this; it foreshadows both lymphoma and, in later chapters, autoimmunity.)</p>
+  </aside>
+
+  <p>Two consequences follow immediately and are worth stating plainly. First, the repertoire is generated <em>before</em> the body has ever seen the pathogen. Diversity is created blindly, at random, in anticipation ,  so that whatever arrives, some lymphocyte with a roughly matching receptor already exists, waiting. This is <span class="ch-key">clonal selection</span>: the antigen does not instruct the cell what receptor to make; it merely <em>selects</em>, from a pre-existing pool, the rare cell that already happens to fit. Second, because the receptors are generated at random, some will inevitably recognize <em>your own</em> molecules. The body must delete or restrain those self-reactive cells ,  a quality-control process called tolerance ,  and when it fails, the result is autoimmunity, the subject of Chapter 9.</p>
+
+  <h3>Quality control: how self-reactive cells are weeded out</h3>
+  <p>Because V(D)J recombination is random, it cannot know in advance which receptor sequences will be harmless and which will bind your own liver, your own thyroid, or your own nerve sheaths. The body compensates with a screening step, and for T cells it happens right there in the thymus, before the cell is ever released into circulation. Each newly assembled T cell is first tested for <span class="ch-key">positive selection</span>: can its receptor bind the body's own MHC molecules at all, even weakly? A receptor that cannot engage MHC in any useful way is discarded, because such a cell could never later recognize peptide-on-MHC anywhere in the body; in practice, the large majority of developing T cells fail this first test and die without ever leaving the thymus. The survivors are then tested for <span class="ch-key">negative selection</span>: are they binding self-peptide-on-self-MHC too strongly? Thymic cells display an unusually broad sample of the body's own proteins, including proteins normally made only in distant organs, specifically to catch T cells that react dangerously to self. A T cell that binds too tightly to a self-peptide is instructed to self-destruct. Only receptors in the narrow middle ground, useful but not dangerously self-reactive, graduate.</p>
+  <p>B cells undergo an analogous check in the bone marrow: a newly assembled B cell receptor that binds self-antigen too strongly is either eliminated, silenced (rendered permanently unresponsive, a state called anergy), or given a second chance to rearrange a new light chain in a rescue process called receptor editing. None of this screening is perfect. Some self-reactive cells slip through into the circulating repertoire, which is why a second layer, peripheral tolerance, exists outside the primary lymphoid organs; the two-signal requirement for T cell activation described later in this chapter, together with dedicated suppressor cells called regulatory T cells, forms much of that second layer. Chapter 9 examines what happens when both layers fail together.</p>
+</section>
+
+<div class="ch-widget" id="w-antigen">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Antigen Lock-and-Key Matcher</div>
+  </div>
+  <p class="ch-widget-sub">Dock lymphocyte receptors against a pathogen's epitopes. A match triggers clonal expansion. Then shrink the repertoire and watch recognition fail.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Pathogen epitope</span>
+      <select class="ch-widget-select" id="w-antigen-epitope">
+        <option value="0">Epitope α (triangle)</option>
+        <option value="1">Epitope β (square)</option>
+        <option value="2">Epitope γ (pentagon)</option>
+        <option value="3">Epitope δ (star)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Try receptor clone</span>
+      <select class="ch-widget-select" id="w-antigen-receptor">
+        <option value="0">Clone #1 (triangle-cut)</option>
+        <option value="1">Clone #2 (square-cut)</option>
+        <option value="2">Clone #3 (pentagon-cut)</option>
+        <option value="3">Clone #4 (star-cut)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Repertoire diversity</span>
+      <select class="ch-widget-select" id="w-antigen-diversity">
+        <option value="4">Full (all 4 clones present)</option>
+        <option value="3">Reduced (3 clones)</option>
+        <option value="2">Depleted (2 clones)</option>
+        <option value="1">Collapsed (1 clone)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Shape match</span>
+      <span class="ch-meter-bar"><span id="w-antigen-match" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="w-antigen-match-n">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Clonal expansion</span>
+      <span class="ch-meter-bar"><span id="w-antigen-expand" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="w-antigen-expand-n">0</span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Pathogens still covered</span>
+      <span class="ch-meter-bar"><span id="w-antigen-cover" style="width:100%"></span></span>
+      <span class="ch-meter-num" id="w-antigen-cover-n">4</span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="w-antigen-btn">Attempt dock</button>
+  <p class="ch-widget-sub" id="w-antigen-out">Choose an epitope and a receptor clone, then dock.</p>
+</div>
+
+<section class="ch-section">
+  <h2>The handoff: antigen presentation</h2>
+  <p>We now have a repertoire of astonishing diversity sitting mostly in the lymph nodes and spleen, waiting. But there is a logistical problem. The infection is in your finger. The naive T cell that happens to recognize this particular pathogen is one in a million, drifting somewhere in a lymph node in your armpit. How does the rare right lymphocyte ever meet its antigen? And, for T cells, which can only read peptide-on-MHC, how does a peptide from a bacterium in your finger ever get displayed on an MHC molecule where a T cell can inspect it?</p>
+  <p>This is where the sentinel cells of Chapter 1 return as the protagonists. The bridge between innate and adaptive immunity is <span class="ch-key">antigen presentation</span>, carried out by <span class="ch-key">antigen-presenting cells (APCs)</span> ,  above all the <span class="ch-key">dendritic cell</span>, with macrophages and B cells playing supporting roles (Hilligan &amp; Ronchese, 2020).</p>
+
+  <h3>MHC class I and class II: two windows into the cell</h3>
+  <p>Before the handoff makes sense, we need the two flavors of MHC. <span class="ch-key">MHC class I</span> is present on nearly every nucleated cell in your body. It continuously samples proteins made <em>inside</em> the cell ,  chopping up a representative slice of the cell's own internal protein production and displaying those peptides on the surface. In a healthy cell, these are all "self" peptides and are ignored. But if a virus has hijacked the cell, viral proteins are being made inside, and fragments of them appear in the MHC class I display ,  a molecular confession that the cell is infected. MHC class I is read by <span class="ch-key">cytotoxic T cells</span>.</p>
+  <p><span class="ch-key">MHC class II</span> is restricted to professional APCs. It samples proteins the cell has <em>eaten</em> from outside ,  engulfed bacteria, extracellular debris, phagocytosed material ,  and displays those external peptides. MHC class II is read by <span class="ch-key">helper T cells</span>. So the two classes divide the surveillance problem cleanly: class I reports on the cell's internal state ("am I infected?"), class II reports on the environment ("what did I find out there?").</p>
+
+  <h3>The dendritic cell as courier</h3>
+  <p>Now the sequence. A dendritic cell resident in your infected finger tissue detects the bacteria through its innate pattern-recognition receptors ,  the same Chapter 1 machinery. It phagocytoses microbial material and, critically, this pathogen sensing does two things at once. First, it loads bacterial peptides onto MHC class II. Second, it triggers the dendritic cell to <em>mature</em> and migrate: it changes its surface molecules, stops eating, and travels through the lymphatic vessels to the nearest lymph node, where naive T cells are densely packed and constantly circulating (Hilligan &amp; Ronchese, 2020).</p>
+  <p>In the lymph node, the matured dendritic cell becomes a display stand. Thousands of naive T cells brush past it every hour, each testing its unique TCR against the peptide-MHC complexes on the dendritic cell's surface. Almost all fail to bind ,  their receptors don't fit this peptide. But eventually the rare T cell whose receptor <em>does</em> match arrives, docks, and is activated. The needle in the haystack has been found not by searching but by concentrating: the dendritic cell carried the evidence to the one place where the whole repertoire could be screened against it efficiently.</p>
+  <p>There is a wrinkle worth naming, because it solves an otherwise puzzling gap. Recall the clean division above: MHC class I displays what a cell made internally, MHC class II displays what a cell ate from outside. That division would leave a hole. Many viruses infect epithelial cells, gut lining, lung tissue, skin, but not dendritic cells themselves. If a dendritic cell never gets infected, how does it ever load viral peptide onto MHC class I to activate a cytotoxic T cell against that virus? The answer is a specialized detour called <span class="ch-key">cross-presentation</span>: certain dendritic cells can take material they engulfed from <em>outside</em>, such as debris from a virus-killed cell, and reroute a fraction of it into the MHC class I pathway instead of the usual class II pathway. This lets a dendritic cell that was never itself infected still prime a cytotoxic T cell response against a virus that infects other tissues entirely. It is an exception to the tidy rule, and it exists because the tidy rule, followed without exception, would leave whole categories of infection invisible to cytotoxic T cells.</p>
+
+  <h3>Two signals, and the licensing of adaptive immunity</h3>
+  <p>Recognition alone is not enough to activate a naive T cell ,  and this is one of the most important safety principles in immunology. Full activation requires <em>two</em> signals. Signal one is the TCR binding peptide-MHC: the specificity check. Signal two is <span class="ch-key">co-stimulation</span> ,  a separate set of surface molecules on the dendritic cell (such as the B7 proteins) that engage receptors on the T cell (such as CD28). Crucially, the dendritic cell only displays these co-stimulatory molecules when its innate receptors have detected genuine danger ,  a real pathogen (Hilligan &amp; Ronchese, 2020).</p>
+  <p>This two-signal requirement is elegant. It means a T cell that recognizes an antigen presented <em>without</em> co-stimulation ,  as would happen with a harmless self-protein displayed by a resting, undanger-signaled cell ,  does not activate. It may even be switched off. In other words, the innate system doesn't just start the adaptive response; it <em>licenses</em> it, vouching that the antigen is genuinely dangerous. This is the deepest sense in which Chapter 1's danger-sensing and Chapter 2's specificity are inseparable: specificity without a danger check would attack everything, including you.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>A dendritic cell can present antigen (signal one) without co-stimulation (signal two) if it hasn't sensed danger. What would happen to the immune system's behavior toward your own tissues if this two-signal rule were abolished and signal one alone activated T cells? Connect your answer to why Chapter 9 will be about autoimmunity.</p>
+  </aside>
+
+  <p>The two-signal system also has built-in brakes, not just an on-switch. Once activated, a T cell begins to express its own inhibitory receptors, including one called <span class="ch-key">CTLA-4 (cytotoxic T-lymphocyte-associated protein 4)</span>, which competes with the activating receptor CD28 for the same co-stimulatory molecules and dampens further activation, and another called <span class="ch-key">PD-1 (programmed cell death protein 1)</span>, which is induced on T cells that have been signaling for a long time and, when it engages its partner molecule, turns the cell's activity down. These brakes exist to prevent a normal, licensed response from running too hot or too long once the danger has passed. They are mentioned here mainly because they will reappear later in the course: tumors can exploit PD-1 to switch off the very cytotoxic T cells that would otherwise kill them, which is the biological basis for an entire modern class of cancer therapy that works by releasing this brake.</p>
+</section>
+
+<figure class="ch-figure" data-image-idx="1" data-prompt="An isometric infographic illustration of the innate-to-adaptive handoff, laid out left to right on cream paper. On the left, a stylised patch of infected skin tissue with a branching dendritic cell engulfing small dark microbe shapes. A dotted path arcs rightward through a lymphatic vessel to a rounded lymph node on the right, drawn in cross-section and packed with many small round lymphocytes. At the node, the dendritic cell holds up tiny peptide fragments in a groove for one matching lymphocyte, which begins to divide. Muted palette of teal, warm coral, mustard, and ink-brown line work. Small italic serif labels: 'dendritic cell', 'lymphatic vessel', 'lymph node'. Hand-drawn diagram register, no photorealism, no watermarks, no cropped letters." data-aspect="wide-landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch2-img2.jpg" alt="<em>The courier route: evidence of infection travels to where the whole repertoire can screen it.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>The courier route: evidence of infection travels to where the whole repertoire can screen it.</em></figcaption></figure>
+
+<section class="ch-section">
+  <h2>The specialists: what activated lymphocytes do</h2>
+  <p>Once activated and licensed, a naive lymphocyte proliferates massively ,  a single cell divides into thousands of identical daughters, all bearing the same receptor. This is <span class="ch-key">clonal expansion</span>, and it is why the adaptive response is slow: you are literally growing an army from a single founder over several days. The expanded clone then differentiates into functional subtypes. Let us take the three major players in turn.</p>
+
+  <h3>Helper T cells: the coordinators</h3>
+  <p>Helper T cells (marked by the surface molecule <span class="ch-key">CD4</span>, and thus called CD4⁺ T cells) recognize antigen on MHC class II. They do not kill infected cells or make antibodies directly. Instead they coordinate ,  secreting signaling molecules called <span class="ch-key">cytokines</span> that instruct and amplify everyone else. And the <em>flavor</em> of help they provide depends on what the dendritic cell told them at activation.</p>
+  <p>This is a subtle and important point from the primary literature: dendritic cells do not merely turn helper T cells on; they <em>instruct</em> what kind of helper the T cell becomes (Hilligan &amp; Ronchese, 2020). Depending on which innate pathogen-sensing pathways were triggered ,  signaling that this is a virus, versus a worm, versus an extracellular bacterium ,  the dendritic cell delivers a distinct cytokine context that polarizes the naive CD4⁺ cell toward a specialized subset (T helper 1, T helper 2, T follicular helper, and others). Each subset tailors the response to the class of threat: activating macrophages to kill intracellular pathogens, or licensing B cells to make antibodies, or recruiting other cell types entirely. The helper T cell is the conductor, and the dendritic cell hands it the score.</p>
+  <p>It is worth naming the major subsets concretely, because each one reappears later in the course whenever a specific disease pattern is discussed. Faced with signals suggesting an intracellular threat such as a virus or a bacterium living inside macrophages, the dendritic cell pushes the naive helper cell toward a <span class="ch-key">T helper 1 (Th1)</span> fate; Th1 cells secrete a cytokine called <span class="ch-key">interferon-gamma (IFN-γ)</span> that arms macrophages to kill the microbes they have already swallowed but could not otherwise destroy. Faced with signals suggesting a large extracellular parasite such as a worm, the dendritic cell instead pushes toward a <span class="ch-key">T helper 2 (Th2)</span> fate; Th2 cells secrete cytokines including <span class="ch-key">interleukin-4 (IL-4)</span> that favor antibody class switching toward the isotype IgE and recruit specialized granule-releasing cells suited to fighting parasites too large to phagocytose. Faced with signals suggesting extracellular bacteria or fungi at a barrier surface, a <span class="ch-key">T helper 17 (Th17)</span> fate predominates, producing the cytokine interleukin-17 to recruit neutrophils in large numbers. A separate subset, <span class="ch-key">T follicular helper (Tfh)</span> cells, does not leave the lymph node at all; instead it migrates into the specialized B cell zones described later in this chapter and personally supervises the antibody response, checking each B cell's work before allowing it to proceed. And a distinct, non-helping lineage, the <span class="ch-key">regulatory T cell (Treg)</span>, does the opposite of all of the above: rather than amplifying the response, it actively suppresses other T cells and is one of the main peripheral safeguards against autoimmunity mentioned earlier in this chapter. One naive cell, one antigen, but several possible finished products, chosen by context rather than by the antigen alone.</p>
+
+  <h3>Cytotoxic T cells: the targeted killers</h3>
+  <p>Cytotoxic T cells (marked by <span class="ch-key">CD8</span>, thus CD8⁺) recognize antigen on MHC class I ,  the internal-state window present on all nucleated cells. When a cytotoxic T cell's receptor matches a viral peptide displayed on an infected cell's MHC class I, it delivers a lethal hit: it releases proteins that punch pores in the target and enzymes that trigger the target to undergo programmed cell death. The infected cell is destroyed <em>before</em> the virus inside can finish replicating. This is the only efficient way to deal with an intracellular pathogen ,  antibodies cannot reach inside a living cell, so the cell itself must be sacrificed. The precision is remarkable: the cytotoxic T cell kills only cells displaying its specific peptide, sparing healthy neighbors.</p>
+  <p>The mechanics of that lethal hit are worth naming, because they explain both its speed and its precision. When the cytotoxic T cell's receptor engages its target, the two cells form a tight, sealed contact zone called an <span class="ch-key">immunological synapse</span>, oriented so that the killer's secretory machinery points directly and only at that one target, not at any bystander cell nearby. Into that sealed space the cytotoxic T cell releases <span class="ch-key">perforin</span>, a protein that inserts into the target's membrane and opens a channel, and a family of enzymes called <span class="ch-key">granzymes</span> that pass through that channel into the target's cytoplasm and trigger the target's own programmed self-destruction machinery from the inside. A second, slower route achieves the same end by a different lock: the cytotoxic T cell can display a surface protein called Fas ligand, which engages a death receptor called Fas on the target and triggers the same internal self-destruct program without perforin at all. Either way, the cell dies by a controlled, contained process rather than by bursting messily, which limits collateral release of viral particles into the surrounding tissue. A single activated cytotoxic T cell can kill several infected targets in sequence, detaching from one synapse and moving to the next, which is part of why an expanded clone of a few thousand cytotoxic T cells can clear an infection distributed across a large volume of tissue within days.</p>
+
+  <h3>B cells: the antibody factories</h3>
+  <p>B cells recognize free antigen directly through their BCR. Most B cells, however, need help ,  a matching helper T cell must confirm the same threat before the B cell commits to full activation. This dual requirement (B cell sees antigen, helper T cell endorses it) is another safety interlock. Once fully activated, the B cell proliferates and differentiates into <span class="ch-key">plasma cells</span> ,  dedicated secretory factories that pump out thousands of antibody molecules per second ,  and into memory B cells, which we will meet shortly.</p>
+  <p>The requirement for T cell help is called a <span class="ch-key">T-dependent</span> response, and it is the route for most protein antigens. There is, however, a faster and cruder alternative for a narrower class of antigens. Certain molecules, most notably the repetitive sugar chains (polysaccharides) that coat the outer surface of many bacteria, can cross-link many copies of the B cell receptor at once simply because the same sugar unit repeats hundreds of times across the bacterial surface. This repetitive cross-linking is enough to trigger a <span class="ch-key">T-independent</span> response in a specialized subset of B cells, without waiting for helper T cell confirmation. The trade-off is quality: T-independent responses are faster but produce lower-affinity antibody, generate little memory, and, because young children have not yet fully developed this specialized B cell subset, are poorly effective before roughly two years of age. That practical limitation, that a young immune system responds weakly to bare bacterial polysaccharide, turns out to matter directly for vaccine design, as the closing sections of this chapter will show.</p>
+</section>
+
+<section class="ch-section">
+  <h2>Antibodies: what they are and what they do</h2>
+  <p>An <span class="ch-key">antibody</span> (or immunoglobulin) is the secreted form of the B cell receptor. Its shape is the familiar Y. Understanding what it does requires understanding its two functional halves, because ,  as recent work stresses ,  an antibody is a molecule of two collaborating jobs (McConnell &amp; Casadevall, 2025; Lu et al., 2017).</p>
+
+  <h3>Two domains, two jobs</h3>
+  <p>The two tips of the Y are the <span class="ch-key">Fab regions</span> (fragment, antigen-binding). These contain the variable, hypervariable loops generated by V(D)J recombination ,  the part that grips the epitope. The specificity of the antibody lives entirely here. The stem of the Y is the <span class="ch-key">Fc region</span> (fragment, crystallizable). It is constant ,  it does not vary with specificity ,  and it is the part that talks to the rest of the immune system: it is recognized by receptors on macrophages and neutrophils, and it activates the complement cascade from Chapter 1.</p>
+  <p>Structurally, the whole Y is built, as noted above, from two heavy chains and two light chains held together by disulfide bonds, with a flexible, unstructured stretch of protein called the hinge region connecting the two Fab arms to the Fc stem. That hinge matters mechanically: it lets the two arms swing independently, so that a single antibody molecule can grip two separate copies of a repeating surface epitope at once, or bridge two nearby pathogen particles together, increasing the effective strength of binding well beyond what either arm could achieve alone. The six CDR loops described earlier sit at the very tip of each Fab arm and are the only part of the vast antibody molecule that differs from one specificity to the next; everything else, hinge, stem, the bulk of the Fab scaffold, is built from a shared, reusable structural template. This is a general design principle worth noting: the immune system concentrates its variability into the smallest possible surface and standardizes everything around it, which is precisely why a hard-won variable region can later be swapped onto a different constant region during class switching without having to be re-engineered.</p>
+  <p>The classical picture treated these as modular and independent: variable Fab for specificity, constant Fc for effector function, cleanly separable. The 2025 literature complicates this tidy story ,  there is measurable communication between the variable and constant domains, so that the choice of specificity and the choice of effector output are not fully independent after all (McConnell &amp; Casadevall, 2025). But the modular framing remains the right place to start, because it maps directly onto what antibodies <em>do</em>.</p>
+
+  <h3>The effector repertoire</h3>
+  <p>Lu and colleagues (2017) organize antibody function into a handful of mechanisms, and the phrase they use ,  "beyond binding" ,  is the key insight. Binding is necessary but rarely sufficient:</p>
+  <p><strong>Neutralization.</strong> The simplest mechanism, and pure Fab work: the antibody physically coats a virus or toxin, blocking the molecular surface it uses to enter cells or do damage. A neutralizing antibody bound over a virus's receptor-binding site prevents the virus from docking onto your cells at all. No other cell is needed.</p>
+  <p><strong>Opsonization.</strong> Here the Fab grips the pathogen while the Fc waves like a handle. Phagocytes carry Fc receptors; they grab the antibody's Fc stem and engulf whatever it is attached to. The antibody is a tag that says "eat this" ,  turning a bacterium the macrophage might otherwise struggle to grip into an easy meal. This directly amplifies the innate phagocytosis of Chapter 1.</p>
+  <p><strong>Complement activation.</strong> Clustered Fc regions on an antibody-coated surface trigger the complement cascade, depositing molecular explosives that can lyse the pathogen directly and further tag it for phagocytosis.</p>
+  <p><strong>Antibody-dependent cellular cytotoxicity (ADCC).</strong> When antibodies coat an infected or aberrant cell, natural killer cells recognize the arrayed Fc regions and kill the tagged cell. The antibody points the killer at its target.</p>
+
+  <h3>Isotypes: same specificity, different effector output</h3>
+  <p>The Fc region comes in several versions ,  the antibody <span class="ch-key">isotypes</span> (IgM, IgG, IgA, IgE, IgD) ,  and each engages a different set of effector mechanisms and body compartments. IgG dominates in blood and is the workhorse of opsonization and long-term protection; IgA guards mucosal surfaces like the gut and airway; IgM is the first isotype made in a response; IgE governs responses to parasites and, unfortunately, allergy (Lu et al., 2017).</p>
+  <p>Here is the beautiful part. A B cell can <em>change its isotype without changing its specificity</em>, through a DNA-editing process called <span class="ch-key">class switch recombination (CSR)</span>. The variable Fab region ,  the part that recognizes antigen ,  stays fixed; only the constant Fc region is swapped out (Chi et al., 2020). This means the immune system can keep a hard-won specificity and redeploy it: the same antibody that started as blood-patrolling IgM can be reissued as mucosa-guarding IgA. Specificity is expensive to generate; effector function is cheap to reassign.</p>
+  <p>And CSR has a partner in the same anatomical structure, the germinal center ,  a specialized zone in the lymph node where activated B cells iteratively improve. There, an enzyme called AID drives <span class="ch-key">somatic hypermutation (SHM)</span>: it introduces point mutations into the variable region at a furious rate, and B cells whose mutated receptors bind antigen <em>better</em> are preferentially selected to survive and keep dividing (Chi et al., 2020). Over successive rounds, this Darwinian process ,  <span class="ch-key">affinity maturation</span> ,  sculpts antibodies of progressively higher affinity. The response doesn't just get bigger over time; it gets <em>better</em> (Weisel &amp; Shlomchik, 2017).</p>
+  <p>The germinal center runs this Darwinian cycle by physically separating mutation from selection into two adjoining compartments. In the <span class="ch-key">dark zone</span>, densely packed B cells divide rapidly and undergo somatic hypermutation, shuffling their receptor sequence with each round of division. The mutated cells then move into the neighboring <span class="ch-key">light zone</span>, where the actual test happens: <span class="ch-key">follicular dendritic cells</span>, a stationary cell type unrelated to the migratory dendritic cells described earlier despite the shared name, hold intact antigen on their surface for weeks at a time, like a fixed target. Mutated B cells compete for a limited amount of this displayed antigen, and only those whose mutated receptor grips it well enough succeed in capturing it. Capturing antigen is not the finish line, though; the B cell must then present a fragment of that antigen to a patrolling Tfh cell, introduced earlier, and only receive a survival signal if the Tfh cell approves. A B cell that fails either test, poor binding in the light zone or no Tfh endorsement, dies by default; germinal centers destroy far more B cells than they graduate. The survivors cycle back into the dark zone for another round of mutation, and the whole loop repeats for one to two weeks, each pass nudging the population toward higher average affinity. It is competitive selection run at cellular speed, and it is the direct cellular reason a response mounted on day fourteen of an infection is qualitatively sharper than the same response on day four.</p>
+
+  <aside class="ch-callout">
+    <div class="ch-callout-label">Think About It</div>
+    <p>V(D)J recombination, somatic hypermutation, and class switch recombination all involve deliberately cutting and rewriting a lymphocyte's own DNA. Sort them: which one generates the initial repertoire before antigen is ever seen, which one fine-tunes <em>specificity</em> after antigen arrives, and which one changes <em>effector function</em> without touching specificity?</p>
+  </aside>
+</section>
+
+<section class="ch-section">
+  <h2>Memory: the reason any of this matters twice</h2>
+  <p>Everything so far explains how the adaptive system defeats a first infection ,  slowly, precisely, at the cost of days of clonal expansion. But the defining feature of adaptive immunity, the property that separates it from every innate mechanism and that underlies all of vaccination, is what happens <em>after</em> the fight is won.</p>
+  <p>When an infection is cleared, the vast expanded army of effector lymphocytes is no longer needed, and most of it dies off ,  a deliberate contraction that returns the system to baseline. But not all of it. A subset of the expanded clone persists as <span class="ch-key">memory cells</span>: long-lived memory T cells and memory B cells that carry the exact receptor that worked, now present at far higher numbers than the original single naive founder, and poised in a partially pre-activated state (Crotty, 2026; Weisel &amp; Shlomchik, 2017). Alongside them, some plasma cells become <span class="ch-key">long-lived plasma cells</span> that lodge in the bone marrow and secrete protective antibody continuously, for years, even in the absence of the pathogen.</p>
+  <p>This transforms the arithmetic of a second encounter. On first exposure ,  the <span class="ch-key">primary response</span> ,  the right lymphocyte was one in a million, and it took days to find the antigen, activate, and expand. On a second exposure to the <em>same</em> pathogen ,  the <span class="ch-key">secondary response</span> ,  the specific cells are already numerous, already primed, and in the case of memory B cells, already carrying high-affinity, class-switched receptors sculpted during the first response. The result: the lag time collapses, and the response is faster, larger, and of higher quality. Often the pathogen is neutralized before you ever feel sick.</p>
+
+  <h3>How long is memory?</h3>
+  <p>Astonishingly long. Crotty's (2026) synthesis of the field notes that memory B cells raised by some live viral vaccines can persist for <em>over sixty years</em> ,  effectively, for life. Integrating decades of vaccine data with modern findings from COVID-19 mRNA vaccines, the review builds a picture in which durable protection rests on the coordinated persistence of memory B cells, long-lived plasma cells secreting circulating antibody, and memory T cells ,  layered defenses with different kinetics and lifespans (Crotty, 2026; Weisel &amp; Shlomchik, 2017).</p>
+  <p>Not all memory cells are the same kind of cell, and the distinction explains a pattern many people have noticed without knowing why: sometimes you fight off a familiar illness in a day with barely a symptom, and other times you feel unwell for a few days before recovering unusually fast. Memory T cells split broadly into <span class="ch-key">central memory T cells (Tcm)</span>, which recirculate through lymph nodes much like naive cells and are slower to respond but expand into large new effector armies, and <span class="ch-key">effector memory T cells (Tem)</span>, which patrol peripheral tissues directly, skin, gut, lung, and can act within hours of re-encountering antigen without ever routing through a lymph node first. A robust secondary response typically draws on both: an immediate, local skirmish from tissue-resident effector memory cells while a larger reinforcing wave is mobilized from central memory. Memory B cells show a parallel logic, and one particular feature is worth highlighting: the germinal center does not export only its single best-affinity clone into the memory pool. It deliberately retains a range of memory B cells, including some of only modest affinity for the original antigen. This apparent inefficiency is a hedge. If the pathogen returns in a slightly altered form, a lower-affinity memory cell that recognizes the altered version, even weakly, can still respond and be sent through another round of affinity maturation, while a memory pool consisting only of perfectly fitted clones might recognize nothing at all.</p>
+
+  <h3>When the target moves: why memory is not a permanent guarantee</h3>
+  <p>Honesty requires stating a limitation plainly. Adaptive immunity's entire strategy rests on specificity, matching a receptor to a particular epitope, and specificity cuts both ways. A memory response built against one exact epitope can lose much of its speed and power if that epitope changes. This is exactly what happens with influenza virus, whose surface proteins accumulate small mutations year over year, a process called <span class="ch-key">antigenic drift</span>. Enough drift accumulates most years that last year's memory B cells and antibodies bind the new strain poorly, which is the actual, mechanistic reason the influenza vaccine is reformulated annually while a vaccine against a genetically stable virus like measles is not: measles' surface proteins have changed comparatively little across generations, so memory laid down by a childhood vaccine still matches a currently circulating measles virus decades later, whereas last year's flu memory often does not match this year's flu virus well. This same logic, memory that is only as good as the match between the epitope it was built against and the epitope it later meets, is a central design constraint for any vaccine program and will recur when this course covers viral evolution in more depth. It is also why reinfection with the ordinary cold-causing coronaviruses and rhinoviruses is unremarkable: those viruses circulate in many drifting variants simultaneously, and immunity to one variant offers only partial protection against its cousins.</p>
+  <p>A second, separate limitation is simple waning: even a stable antigen can see its circulating antibody level fall over months to years as long-lived plasma cells gradually decline in number, even while memory B and T cells persist quietly in the background, ready to be reactivated. This is the biological basis for a <span class="ch-key">booster dose</span>: a booster does not usually need to teach the immune system something new, since the memory cells are typically still present; it simply re-exposes the antigen, triggering the fast, high-affinity secondary response described above and driving circulating antibody back up to a protective level.</p>
+
+  <h3>Vaccination, mechanistically</h3>
+  <p>Now we can define a vaccine with full mechanistic precision. A <span class="ch-key">vaccine</span> is a preparation that presents antigen ,  and, critically, the danger signals needed to license a response ,  to the adaptive immune system <em>without</em> causing the disease. It might be a weakened (attenuated) live virus, a killed pathogen, a purified protein plus an adjuvant that supplies innate danger signals, or an mRNA that instructs your own cells to make the antigen transiently. Whatever the format, the goal is identical: run a primary response and its germinal-center affinity maturation on a harmless stand-in, so that memory cells and long-lived plasma cells are laid down. Then, when the real pathogen arrives, your first exposure to it is met with a <em>secondary</em> response. The whole enterprise of vaccination is nothing more, and nothing less, than deliberately installing immunological memory.</p>
+  <p>Every major vaccine platform is simply a different engineering answer to the same two-part problem this chapter has already laid out: supply an antigen the adaptive system can build a memory response against, and supply enough of a danger signal to obtain co-stimulation, without supplying an actual infection. A <span class="ch-key">live-attenuated vaccine</span>, such as the combined measles, mumps, and rubella (MMR) vaccine or the varicella (chickenpox) vaccine, uses a version of the virus weakened until it replicates poorly enough to avoid causing disease in a person with a normal immune system, while still replicating just enough to mimic a real infection closely, including natural antigen presentation on MHC class I and robust dendritic cell activation; this tends to produce especially strong and durable memory, consistent with the multi-decade persistence Crotty (2026) describes. An <span class="ch-key">inactivated (killed) vaccine</span>, such as the injectable polio vaccine, uses a whole pathogen that has been chemically killed so it cannot replicate at all; because it cannot replicate, it typically needs to be given in multiple doses and often paired with an adjuvant to generate comparable memory. A <span class="ch-key">subunit or recombinant protein vaccine</span>, such as the hepatitis B vaccine or the human papillomavirus (HPV) vaccine, presents only a single purified surface protein of the pathogen rather than the whole organism, minimizing side effects at the cost of needing an adjuvant to supply the danger signal that a whole pathogen would have provided on its own. A <span class="ch-key">toxoid vaccine</span>, such as the tetanus and diphtheria vaccines, uses a chemically inactivated version of a bacterial toxin, training memory against the toxin itself rather than the bacterium, since in these diseases the toxin, not the bacterium, does the damage. A <span class="ch-key">conjugate vaccine</span>, such as the vaccine against Haemophilus influenzae type b (Hib) or against pneumococcus, chemically links a bacterial polysaccharide, which alone would trigger only a weak, T-independent response of the kind described earlier and would barely work in infants, to a carrier protein that helper T cells readily recognize; this conversion recruits full T-dependent help, germinal-center formation, and lasting memory for an antigen that could not achieve any of that unassisted. Finally, the <span class="ch-key">messenger RNA (mRNA) vaccines</span> developed for COVID-19 take yet another route: they deliver genetic instructions that direct a person's own cells to manufacture a single viral protein transiently, which is then naturally processed and displayed on MHC class I and class II exactly as if the cell had encountered the real infection, priming both antibody and T cell memory without ever introducing the pathogen itself.</p>
+  <p>Two supporting details tie these platforms back to mechanisms already introduced. First, an <span class="ch-key">adjuvant</span>, a substance such as an aluminum salt included in many non-live vaccines, exists purely to supply an artificial danger signal, standing in for the pattern-recognition-receptor triggering that a real pathogen would provide, so that the dendritic cell delivers co-stimulation and licenses the response rather than tolerizing against it. Second, most vaccines require multiple doses spaced weeks to months apart precisely because of the germinal-center biology in this chapter: a single exposure primes the response and starts affinity maturation, but a second exposure, once the first wave of memory and germinal-center B cells has formed, drives a secondary-style boost that pushes affinity and memory-cell numbers substantially higher than a single dose would achieve alone. Population-level protection built this way, enough vaccinated individuals carrying durable memory, also indirectly protects people who cannot be vaccinated or whose own response is weak, by reducing the pathogen's opportunities to spread through a community; this is the basic logic behind the public-health concept of herd immunity, an epidemiological topic beyond the scope of this course but a direct downstream consequence of the cellular mechanisms described here. None of this is medical guidance about any specific vaccine or schedule; it is simply what the underlying cell biology of memory formation predicts and explains.</p>
+  <p>This is also, at last, the full answer to what Chapter 1's innate system was buying time for. Those first frantic days of inflammation, neutrophil recruitment, and macrophage phagocytosis were holding the pathogen in check while the slow, precise adaptive machinery assembled ,  screened the repertoire, expanded the right clone, matured its antibodies, and installed the memory that will make the <em>next</em> encounter almost effortless. Innate immunity fights the battle in front of you; adaptive immunity wins the war for the rest of your life.</p>
+</section>
+
+<div class="ch-widget" id="w-memory">
+  <div class="ch-widget-head">
+    <div class="ch-widget-label">Interactive</div>
+    <div class="ch-widget-title">Primary vs Secondary Response Grapher</div>
+  </div>
+  <p class="ch-widget-sub">Trigger a first exposure, then a second. Same pathogen → fast, tall secondary curve. Novel pathogen → resets to a slow primary curve.</p>
+
+  <div class="ch-widget-row">
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">First exposure</span>
+      <select class="ch-widget-select" id="w-memory-first">
+        <option value="A">Pathogen A</option>
+        <option value="B">Pathogen B</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Second exposure</span>
+      <select class="ch-widget-select" id="w-memory-second">
+        <option value="A">Pathogen A (same)</option>
+        <option value="B">Pathogen B (novel)</option>
+      </select>
+    </div>
+    <div class="ch-widget-field">
+      <span class="ch-widget-fieldlabel">Interval between exposures</span>
+      <select class="ch-widget-select" id="w-memory-interval">
+        <option value="short">Short (weeks)</option>
+        <option value="med">Medium (months)</option>
+        <option value="long">Long (years)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="ch-widget-meters">
+    <div class="ch-meter">
+      <span class="ch-meter-label">Lag time (2nd)</span>
+      <span class="ch-meter-bar"><span id="w-memory-lag" style="width:50%"></span></span>
+      <span class="ch-meter-num" id="w-memory-lag-n">, </span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Peak antibody (2nd)</span>
+      <span class="ch-meter-bar"><span id="w-memory-peak" style="width:20%"></span></span>
+      <span class="ch-meter-num" id="w-memory-peak-n">, </span>
+    </div>
+    <div class="ch-meter">
+      <span class="ch-meter-label">Memory-cell contribution</span>
+      <span class="ch-meter-bar"><span id="w-memory-mem" style="width:0%"></span></span>
+      <span class="ch-meter-num" id="w-memory-mem-n">, </span>
+    </div>
+  </div>
+
+  <button class="ch-widget-btn" id="w-memory-btn">Run exposures</button>
+  <p class="ch-widget-sub" id="w-memory-out">Pick both exposures and an interval, then run.</p>
+</div>
+
+<blockquote class="ch-quote">
+  <p>Memory B cells to some live viral vaccines can persist for over sixty years ,  a molecular record of an infection the body may have fought before the person was old enough to remember it.</p>
+  <cite>After Crotty (2026), <em>Immunological memory to vaccines</em></cite>
+</blockquote>
+
+<section class="ch-section">
+  <h2>Putting the handoff together: a worked example</h2>
+  <p>Return to the splinter. Trace the full arc now, with everything named.</p>
+  <p><strong>Hours 0-12.</strong> Bacteria divide in the wound. Tissue-resident macrophages and dendritic cells detect them through innate pattern-recognition receptors. Inflammation begins; neutrophils flood in. This is Chapter 1 ,  fast, generic, and buying time.</p>
+  <p><strong>Hours 12-48.</strong> A dendritic cell that phagocytosed bacteria matures, loads bacterial peptides onto MHC class II, upregulates co-stimulatory molecules (because it sensed genuine danger), and migrates to the draining lymph node.</p>
+  <p><strong>Days 2-4.</strong> In the node, the rare naive CD4⁺ helper T cell whose TCR fits the presented peptide docks, receives signal one and signal two, and is activated and instructed toward an appropriate helper subtype. It clonally expands. Meanwhile a B cell whose BCR binds a bacterial antigen, endorsed by a matching helper T cell, is activated too.</p>
+  <p><strong>Days 4-10.</strong> In the germinal center, activated B cells undergo somatic hypermutation and affinity maturation; some class-switch their isotype. Plasma cells begin secreting antibody ,  which neutralizes toxins, opsonizes bacteria for phagocytes, and fixes complement. The infection is cleared.</p>
+  <p><strong>Days 10 onward.</strong> The effector army contracts. Memory T cells, memory B cells, and long-lived plasma cells persist. If these bacteria ever return, the response will be a secondary one ,  measured in hours, not days.</p>
+  <p>Every step is a specific, nameable mechanism, and every step depends on the one before. The innate danger check licenses the adaptive response; antigen presentation delivers the evidence; clonal selection finds the needle; clonal expansion builds the army; affinity maturation sharpens the weapons; and memory banks the whole solution for next time.</p>
+</section>
+
+<section class="ch-takeaways">
+  <h2>Key Takeaways</h2>
+  <ul>
+    <li>Innate immunity uses a few hundred fixed, germline-encoded receptors ,  fast but generic and forgetful. Adaptive immunity uses a repertoire of billions of unique receptors ,  slow to start but exquisitely specific and capable of memory.</li>
+    <li>Each lymphocyte bears one receptor with one specificity. B cell receptors bind free antigen directly; T cell receptors read short peptides only when displayed on MHC molecules (MHC restriction).</li>
+    <li>The astronomical receptor diversity cannot be genome-encoded; it is assembled in each cell by V(D)J recombination ,  combinatorial segment choice plus imprecise, junctional diversification ,  generating over 10¹¹ possibilities before any pathogen is seen (clonal selection).</li>
+    <li>Dendritic cells bridge innate and adaptive immunity: they sense danger, carry antigen to lymph nodes, present it on MHC, and provide co-stimulation. Full T cell activation requires two signals ,  specificity <em>and</em> a danger check ,  which is why the innate system <em>licenses</em> the adaptive one.</li>
+    <li>Helper (CD4⁺) T cells coordinate via cytokines; cytotoxic (CD8⁺) T cells kill infected cells displaying peptide on MHC class I; B cells differentiate into plasma cells that secrete antibodies.</li>
+    <li>Antibodies work "beyond binding": Fab confers specificity, Fc drives effector functions ,  neutralization, opsonization, complement activation, ADCC. Class switch recombination changes isotype (Fc) without changing specificity (Fab); somatic hypermutation drives affinity maturation.</li>
+    <li>Immunological memory ,  memory B and T cells plus long-lived plasma cells ,  makes the secondary response faster, larger, and higher in affinity, can last over 60 years, and is the entire mechanistic basis of vaccination.</li>
+  </ul>
+</section>
+
+<section class="ch-lookahead">
+  <div class="ch-lookahead-label">Looking Ahead</div>
+  <p>We have now built both arms of the immune system and the handoff between them. But the same random receptor generation that lets you recognize any pathogen also, inevitably, produces cells that recognize <em>you</em> ,  and the two-signal safeguards that normally restrain them can fail. In coming chapters we turn to what happens when the system loses its balance: when inflammation runs unchecked, when tolerance breaks and the response turns inward (autoimmunity, Chapter 9), and how everyday forces like exercise and stress reshape the very cell populations we have just introduced (Chapters 6 and 7).</p>
+</section>
+
+<section class="ch-refs">
+  <h2>References</h2>
+  <p>Bradley, P., &amp; Thomas, P. G. (2019). Using T cell receptor repertoires to understand the principles of adaptive immune recognition. <em>Annual Review of Immunology, 37</em>, 547-570. https://doi.org/10.1146/annurev-immunol-042718-041757</p>
+  <p>Chi, X., Li, Y., &amp; Qiu, X. (2020). V(D)J recombination, somatic hypermutation and class switch recombination of immunoglobulins: Mechanism and regulation. <em>Immunology, 160</em>(3), 233-247. https://doi.org/10.1111/imm.13176</p>
+  <p>Crotty, S. (2026). Immunological memory to vaccines. <em>Immunity.</em> https://doi.org/10.1016/j.immuni.2026.02.019</p>
+  <p>Eugster, A., &amp; Bonifacio, E. (2018). Assessing human B cell repertoire diversity and convergence. <em>Immunology &amp; Cell Biology, 96</em>(10), 1092-1103. https://pubmed.ncbi.nlm.nih.gov/29944762/</p>
+  <p>Hilligan, K. L., &amp; Ronchese, F. (2020). Antigen presentation by dendritic cells and their instruction of CD4+ T helper cell responses. <em>Cellular &amp; Molecular Immunology, 17</em>(6), 587-599. https://pmc.ncbi.nlm.nih.gov/articles/PMC7264306/</p>
+  <p>Lu, L. L., Suscovich, T. J., Fortune, S. M., &amp; Alter, G. (2017). Beyond binding: Antibody effector functions in infectious diseases. <em>Nature Reviews Immunology, 18</em>(1), 46-61. https://doi.org/10.1038/nri.2017.106</p>
+  <p>McConnell, S. A., &amp; Casadevall, A. (2025). New insights into antibody structure with implications for specificity, variable region restriction and isotype choice. <em>Nature Reviews Immunology.</em> https://doi.org/10.1038/s41577-025-01150-9</p>
+  <p>Weisel, F., &amp; Shlomchik, M. (2017). Remembrance of things past: Long-term B cell memory after infection and vaccination. <em>Frontiers in Immunology, 10</em>, 1787. https://doi.org/10.3389/fimmu.2019.01787</p>
+</section>
+
+<footer class="ch-foot">
+  <span class="ch-foot-mark">¶</span>
+  <span class="ch-foot-meta">Gemini Education · Chapter 2 of 12</span>
+</footer>
+
+</article>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-antigen');
+    if(!root) return;
+    var epSel = root.querySelector('#w-antigen-epitope');
+    var reSel = root.querySelector('#w-antigen-receptor');
+    var dvSel = root.querySelector('#w-antigen-diversity');
+    var matchBar = root.querySelector('#w-antigen-match');
+    var matchN = root.querySelector('#w-antigen-match-n');
+    var expBar = root.querySelector('#w-antigen-expand');
+    var expN = root.querySelector('#w-antigen-expand-n');
+    var covBar = root.querySelector('#w-antigen-cover');
+    var covN = root.querySelector('#w-antigen-cover-n');
+    var out = root.querySelector('#w-antigen-out');
+    var btn = root.querySelector('#w-antigen-btn');
+    var names = ['α (triangle)','β (square)','γ (pentagon)','δ (star)'];
+
+    function updateCover(){
+      var d = parseInt(dvSel.value,10);
+      covBar.style.width = (d/4*100)+'%';
+      covN.textContent = d;
+    }
+    dvSel.addEventListener('change', function(){
+      updateCover();
+      var d = parseInt(dvSel.value,10);
+      if(d<4){
+        out.textContent = 'Repertoire shrunk to '+d+' clone'+(d>1?'s':'')+'. Epitopes with no matching receptor can no longer be recognized ,  those pathogens escape entirely. This is why receptor diversity is survival.';
+      }
+    });
+
+    btn.addEventListener('click', function(){
+      var ep = parseInt(epSel.value,10);
+      var re = parseInt(reSel.value,10);
+      var d = parseInt(dvSel.value,10);
+      var receptorPresent = re < d; // only first d clones survive
+      var isMatch = (ep === re) && receptorPresent;
+      if(isMatch){
+        matchBar.style.width='100%'; matchN.textContent='98';
+        expBar.style.width='100%'; expN.textContent='2048';
+        out.textContent='Match! Receptor clone #'+(re+1)+' is complementary to epitope '+names[ep]+'. Two signals delivered → clonal expansion: one founder cell becomes thousands of identical daughters, all specific for this epitope.';
+      } else if(!receptorPresent){
+        matchBar.style.width='0%'; matchN.textContent='0';
+        expBar.style.width='0%'; expN.textContent='0';
+        out.textContent='Clone #'+(re+1)+' has been removed from this reduced repertoire ,  no cell with that receptor exists. Even if it were the right shape, there is nobody to select. The pathogen escapes.';
+      } else {
+        var pct = 6 + (ep!==re?0:0);
+        matchBar.style.width=pct+'%'; matchN.textContent=String(pct);
+        expBar.style.width='0%'; expN.textContent='0';
+        out.textContent='No fit. Receptor clone #'+(re+1)+' does not complement epitope '+names[ep]+'. Below the activation threshold ,  the cell drifts on, untriggered. Try the clone whose cut matches this epitope.';
+      }
+    });
+    updateCover();
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
+  try{
+    var root = document.getElementById('w-memory');
+    if(!root) return;
+    var firstSel = root.querySelector('#w-memory-first');
+    var secondSel = root.querySelector('#w-memory-second');
+    var intSel = root.querySelector('#w-memory-interval');
+    var lagBar = root.querySelector('#w-memory-lag');
+    var lagN = root.querySelector('#w-memory-lag-n');
+    var peakBar = root.querySelector('#w-memory-peak');
+    var peakN = root.querySelector('#w-memory-peak-n');
+    var memBar = root.querySelector('#w-memory-mem');
+    var memN = root.querySelector('#w-memory-mem-n');
+    var out = root.querySelector('#w-memory-out');
+    var btn = root.querySelector('#w-memory-btn');
+
+    btn.addEventListener('click', function(){
+      var same = firstSel.value === secondSel.value;
+      var iv = intSel.value;
+      if(same){
+        // memory decays slightly with interval but stays strong
+        var lag, peak, mem;
+        if(iv==='short'){ lag=14; peak=95; mem=90; }
+        else if(iv==='med'){ lag=18; peak=90; mem=85; }
+        else { lag=25; peak=82; mem=75; }
+        lagBar.style.width = lag+'%'; lagN.textContent = (iv==='long'?'~2 days':(iv==='med'?'~1.5 days':'~1 day'));
+        peakBar.style.width = peak+'%'; peakN.textContent = 'high';
+        memBar.style.width = mem+'%'; memN.textContent = mem+'%';
+        out.textContent='SECONDARY RESPONSE. Same pathogen re-encountered. Memory B and T cells and long-lived plasma cells are already present and pre-primed ,  lag time collapses, the peak is far taller, and antibodies are already high-affinity and class-switched from the first response. Longer intervals blunt it only slightly; memory can persist for decades. This is exactly what a vaccine installs.';
+      } else {
+        lagBar.style.width = '85%'; lagN.textContent = '~5-7 days';
+        peakBar.style.width = '30%'; peakN.textContent = 'low';
+        memBar.style.width = '0%'; memN.textContent = '0%';
+        out.textContent='PRIMARY RESPONSE (again). The second exposure is a NOVEL pathogen ,  no matching memory exists, so the system starts from scratch: the rare specific lymphocyte must be found, activated, and clonally expanded over days. Memory to pathogen '+firstSel.value+' gives zero head start against a different pathogen. Specificity means memory does not transfer.';
+      }
+    });
+  }catch(e){}
+})();
+</script>
+</body>
+</html>

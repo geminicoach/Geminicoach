@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rust and Repair: Oxidative Stress, Antioxidants, and Hormesis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700;800&display=swap">
+<style>
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+/* Gemini Education chapter theme ,  notebook
+   Scope: body.theme-notebook or any ancestor with class="theme-notebook"
+   Markup contract: see patches/themes-six.md */
+.theme-notebook {
+  font-family: 'IBM Plex Serif', Georgia, serif;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 100% 26px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.08) 1px, transparent 1px) 0 0 / 26px 100%,
+    #fbf9f3;
+  color: #1a2238;
+  padding: 60px 70px 44px 90px;
+  font-size: 15px;
+  line-height: 1.55;
+  position: relative;
+}
+.theme-notebook::before {
+  /* margin rule */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 62px;
+  width: 1px;
+  background: #c93b2a;
+  opacity: 0.35;
+}
+.theme-notebook::after {
+  /* punched holes */
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0; left: 30px;
+  width: 12px;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.05) 4.5px, transparent 5px);
+  background-size: 12px 88px;
+  background-repeat: repeat-y;
+  background-position: 0 60px;
+}
+.theme-notebook p { margin: 0 0 0.9em; }
+.theme-notebook em { font-style: italic; }
+
+/* HEAD */
+.theme-notebook .ch-head {
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #1a2238;
+  position: relative;
+}
+.theme-notebook .ch-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.theme-notebook .ch-eyebrow::before { content: '[ '; opacity: 0.6; }
+.theme-notebook .ch-eyebrow::after { content: ' ]'; opacity: 0.6; }
+.theme-notebook .ch-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+  color: #1a2238;
+}
+.theme-notebook .ch-title em {
+  font-style: italic;
+  font-weight: 500;
+  color: #c93b2a;
+}
+.theme-notebook .ch-subtitle {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #3a4458;
+  margin: 0 0 14px;
+  max-width: 38em;
+}
+.theme-notebook .ch-meta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-notebook .ch-meta-dot {
+  width: 4px; height: 4px; background: #6b758b;
+  display: inline-block;
+}
+
+/* HOOK */
+.theme-notebook .ch-hook { margin-bottom: 26px; }
+.theme-notebook .ch-dropcap {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: 28px;
+  color: #c93b2a;
+  margin-right: 4px;
+}
+
+/* HEADINGS */
+.theme-notebook h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 28px 0 12px;
+  color: #1a2238;
+  letter-spacing: -0.01em;
+}
+.theme-notebook h2::before {
+  content: '§ ';
+  color: #c93b2a;
+  font-weight: 500;
+}
+.theme-notebook h3 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+  color: #1a2238;
+}
+.theme-notebook h3::before {
+  content: '› ';
+  color: #c93b2a;
+}
+
+/* KEY TERMS */
+.theme-notebook .ch-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 13.5px;
+  background: #fff3cf;
+  padding: 1px 5px;
+  color: #1a2238;
+  font-weight: 500;
+}
+
+/* CALLOUT */
+.theme-notebook .ch-callout {
+  border: 1.5px dashed #c93b2a;
+  padding: 14px 18px;
+  margin: 22px 0;
+  background: #fef7f0;
+  position: relative;
+}
+.theme-notebook .ch-callout-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: inline-block;
+  background: #fef7f0;
+  padding: 0 6px;
+  position: absolute;
+  top: -7px;
+  left: 12px;
+}
+.theme-notebook .ch-callout p {
+  margin: 0;
+  font-size: 14px;
+  color: #1a2238;
+  line-height: 1.5;
+  padding-top: 4px;
+}
+
+/* DIVIDER */
+.theme-notebook .ch-divider {
+  border: none;
+  height: 22px;
+  margin: 22px 0;
+  background-image: repeating-linear-gradient(90deg, #1a2238 0 6px, transparent 6px 14px);
+  background-position: center;
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+/* WIDGET */
+.theme-notebook .ch-widget {
+  border: 1.5px solid #1a2238;
+  padding: 18px 20px;
+  margin: 22px 0;
+  background: #fbf9f3;
+  position: relative;
+}
+.theme-notebook .ch-widget::before {
+  /* taped-on label */
+  content: 'INTERACTIVE · WIDGET-01';
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #fff3cf;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid #1a2238;
+  color: #1a2238;
+  font-weight: 500;
+}
+.theme-notebook .ch-widget-head {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed #1a2238;
+}
+.theme-notebook .ch-widget-label { display: none; }
+.theme-notebook .ch-widget-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 17px;
+  font-weight: 700;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-sub {
+  margin: 0 0 14px;
+  color: #3a4458;
+  font-size: 13.5px;
+  font-style: italic;
+}
+.theme-notebook .ch-widget-row {
+  display: flex; gap: 14px; margin-bottom: 14px;
+}
+.theme-notebook .ch-widget-field {
+  flex: 1; display: flex; flex-direction: column; gap: 4px;
+}
+.theme-notebook .ch-widget-fieldlabel {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #6b758b;
+}
+.theme-notebook .ch-widget-fieldlabel::before { content: '> '; color: #c93b2a; }
+.theme-notebook .ch-widget-select {
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  padding: 7px 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-meters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 26px;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 100% 22px,
+    linear-gradient(90deg, rgba(80, 110, 160, 0.05) 1px, transparent 1px) 0 0 / 22px 100%;
+  padding: 8px;
+}
+.theme-notebook .ch-meter {
+  display: grid;
+  grid-template-columns: 84px 1fr 22px;
+  align-items: center;
+  gap: 8px;
+}
+.theme-notebook .ch-meter-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1a2238;
+}
+.theme-notebook .ch-meter-bar {
+  height: 14px;
+  background: #ffffff;
+  border: 1px solid #1a2238;
+  position: relative;
+  display: block;
+}
+.theme-notebook .ch-meter-bar > span {
+  position: absolute; left: 0; top: 0; bottom: 0;
+  background: repeating-linear-gradient(45deg, #1a2238 0 3px, transparent 3px 6px);
+  display: block;
+}
+.theme-notebook .ch-meter-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  text-align: right;
+  font-size: 12px;
+  color: #1a2238;
+}
+.theme-notebook .ch-widget-btn {
+  background: #1a2238;
+  color: #fbf9f3;
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.theme-notebook .ch-widget-btn::before { content: '[ '; }
+.theme-notebook .ch-widget-btn::after { content: ' ]'; }
+
+/* FIGURE */
+.theme-notebook .ch-figure { margin: 26px 0; }
+.theme-notebook .ch-figbox {
+  background: #ffffff;
+  color: #1a2238;
+  height: 160px;
+  position: relative;
+  border: 1.5px solid #1a2238;
+  overflow: hidden;
+}
+.theme-notebook .ch-figbox svg {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.theme-notebook .ch-figbox-tag {
+  position: absolute; bottom: 8px; left: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #1a2238;
+  background: #fff3cf;
+  padding: 2px 6px;
+  border: 1px solid #1a2238;
+}
+.theme-notebook .ch-figure figcaption {
+  font-family: 'IBM Plex Serif', serif;
+  font-size: 13px;
+  line-height: 1.4;
+  margin-top: 8px;
+  color: #3a4458;
+}
+.theme-notebook .ch-fig-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* QUOTE */
+.theme-notebook .ch-quote {
+  border-left: 4px double #c93b2a;
+  padding: 6px 0 6px 18px;
+  margin: 26px 0;
+}
+.theme-notebook .ch-quote p {
+  font-family: 'IBM Plex Serif', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  color: #1a2238;
+  margin: 0 0 8px;
+}
+.theme-notebook .ch-quote cite {
+  font-family: 'IBM Plex Mono', monospace;
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: #6b758b;
+}
+.theme-notebook .ch-quote cite::before { content: ',  '; }
+
+/* TAKEAWAYS */
+.theme-notebook .ch-takeaways {
+  border: 1.5px solid #1a2238;
+  padding: 18px 22px;
+  margin: 28px 0;
+  background: #fff3cf;
+  position: relative;
+}
+.theme-notebook .ch-takeaways h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  border: none;
+  margin: 0 0 12px;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  font-weight: 700;
+  padding: 0;
+}
+.theme-notebook .ch-takeaways h2::before { content: '[ '; color: #c93b2a; }
+.theme-notebook .ch-takeaways h2::after { content: ' ]'; color: #c93b2a; }
+.theme-notebook .ch-takeaways ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  counter-reset: takeaway;
+}
+.theme-notebook .ch-takeaways li {
+  font-size: 13.5px;
+  line-height: 1.5;
+  position: relative;
+  padding-left: 28px;
+  counter-increment: takeaway;
+}
+.theme-notebook .ch-takeaways li::before {
+  content: '☐  ' counter(takeaway);
+  position: absolute;
+  left: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: #c93b2a;
+  top: 1px;
+  font-weight: 600;
+}
+
+/* LOOKAHEAD */
+.theme-notebook .ch-lookahead {
+  margin: 22px 0 18px;
+  padding: 14px 16px;
+  border-left: 4px solid #c93b2a;
+  background: #fef7f0;
+}
+.theme-notebook .ch-lookahead-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #c93b2a;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.theme-notebook .ch-lookahead-label::before { content: '→ '; }
+.theme-notebook .ch-lookahead p {
+  margin: 0;
+  font-size: 13.5px;
+  color: #1a2238;
+  line-height: 1.5;
+}
+
+/* REFS */
+.theme-notebook .ch-refs { margin-top: 24px; }
+.theme-notebook .ch-refs h2 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a2238;
+  margin: 0 0 10px;
+  font-weight: 600;
+}
+.theme-notebook .ch-refs h2::before { content: '['; color: #c93b2a; padding-right: 4px; }
+.theme-notebook .ch-refs h2::after { content: ']'; color: #c93b2a; padding-left: 4px; }
+.theme-notebook .ch-refs p {
+  font-size: 11px;
+  line-height: 1.5;
+  text-indent: -1.8em;
+  padding-left: 1.8em;
+  color: #3a4458;
+  margin: 0 0 6px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* FOOT */
+.theme-notebook .ch-foot {
+  margin-top: 28px;
+  padding-top: 14px;
+  border-top: 1.5px solid #1a2238;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: #6b758b;
+}
+.theme-notebook .ch-foot-mark {
+  color: #c93b2a;
+  font-size: 13px;
+  font-weight: 700;
+}
+.theme-notebook .ch-foot-mark::before { content: '·· '; }
+.theme-notebook .ch-foot-mark::after { content: ' ··'; }
+
+</style>
+</head>
+<body class="theme-notebook">
+<article class="ch">
+
+  <header class="ch-head">
+    <div class="ch-eyebrow">Class 5 · Module 2</div>
+    <h1 class="ch-title">Rust and Repair: <em>Oxidative Stress, Antioxidants, and Hormesis</em></h1>
+    <p class="ch-subtitle">Why the same molecules that corrode us are also the ones that make us stronger.</p>
+    <div class="ch-meta">
+      <span>60 min read</span>
+      <span class="ch-meta-dot"></span>
+      <span>8 cited sources</span>
+    </div>
+  </header>
+
+  <section class="ch-hook">
+    <p><span class="ch-dropcap">C</span>ut an apple in half and leave it on the counter. Within minutes the exposed flesh browns, the crisp interior turning dull and leathery. What you are watching is oxidation ,  oxygen from the air chemically attacking the fruit's tissues, the same slow chemistry that turns iron to rust and butter rancid. Now consider that every cell in your body is running a controlled version of that reaction, right now, billions of times per second, to extract energy from the food you ate this morning. You are, in a very literal sense, a slow-burning apple.</p>
+    <p>The puzzle at the heart of this chapter is that oxidation is neither simply good nor simply bad. The molecules that "rust" your proteins and nick your DNA are the very same molecules your cells use to send messages, tune metabolism, and ,  remarkably ,  to trigger the adaptations that make tissue tougher. Learning to hold both of these truths at once is one of the most important conceptual moves in the entire course.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="0" data-prompt="A pencil-and-watercolour editorial illustration in the style of a naturalist's field notebook, split down the middle. On the left, a halved apple with its exposed flesh gently browning, rendered in warm ochre and russet tones. On the right, the same apple form abstracted into a glowing cell with tiny spark-like molecules radiating outward as signals, rendered in cool teal and amber. A hand-drawn hairline divides the two halves. Muted paper-cream background, soft single key light from upper left, loose ink linework. Small handwritten italic serif label 'damage' under the left half and 'signal' under the right half. No watermarks, no cropped letters, no other text." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch5-img1.jpg" alt="<em>The same chemistry that browns an apple also carries messages inside a living cell.</em>" data-image-idx="0" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 1</span> <em>The same chemistry that browns an apple also carries messages inside a living cell.</em></figcaption></figure>
+
+  <section class="ch-section">
+    <h2>Oxygen: the double-edged gift</h2>
+    <p>Roughly 2.4 billion years ago, photosynthetic bacteria began flooding Earth's atmosphere with oxygen ,  a catastrophe for most of the life then living, which was adapted to an oxygen-free world. Oxygen is chemically greedy: it pulls electrons away from other molecules. Organisms that survived the "Great Oxidation Event" did so by domesticating this greed, learning to route oxygen's electron hunger through controlled pathways that release usable energy. That domestication is <span class="ch-key">aerobic respiration</span>, and it is why you breathe.</p>
+    <p>Here is the mechanism in brief. Inside your <span class="ch-key">mitochondria</span> ,  the membrane-bound compartments that act as cellular power plants ,  food-derived electrons are passed down a series of protein complexes called the <span class="ch-key">electron transport chain</span>. At the end of the line, oxygen accepts those electrons and combines with hydrogen to form water. The energy released along the way is captured as ATP, the cell's usable fuel currency. It is an elegant, efficient system. But it leaks.</p>
+    <p>Every so often ,  estimates historically ranged from a fraction of a percent to a few percent of oxygen consumed ,  an electron escapes the chain prematurely and lands on an oxygen molecule out of turn. Instead of forming harmless water, it forms a partially reduced, chemically unstable species. This is the origin of the molecules at the center of our story.</p>
+    <p>This leak is not evenly distributed along the chain. Two protein complexes, confusingly named Complex I and Complex III, account for most of the electron slippage, and the rate of leakage rises and falls with how hard the mitochondria are working and how electron-rich the chain becomes at any given moment. During intense exercise, for instance, electron flow through the chain accelerates dramatically, and with it, the absolute amount of reactive oxygen species produced, even though the fraction leaking may not change much. This single fact, that harder metabolic work generates more reactive byproducts, is the thread that will connect this chapter's chemistry to the exercise physiology discussed later on.</p>
+
+    <h3>What, precisely, is a reactive oxygen species?</h3>
+    <p>A <span class="ch-key">reactive oxygen species</span> (ROS) is an oxygen-containing molecule that is chemically more reactive than ordinary molecular oxygen (O₂) because it carries an unpaired electron or an easily broken bond that makes it eager to react. "Reactive" is the operative word: these molecules do not sit still. They grab electrons from whatever is nearby ,  a lipid in a membrane, an amino acid in a protein, a base in DNA ,  and in doing so they chemically alter that target.</p>
+    <p>The ROS family is not monolithic; its members differ enormously in aggressiveness and lifetime:</p>
+    <p><strong>Superoxide (O₂•⁻)</strong> is the primary radical produced when the electron transport chain leaks. It is moderately reactive and short-lived, and it is also produced deliberately by dedicated enzymes called <span class="ch-key">NADPH oxidases</span> ,  a fact that will matter enormously in a moment.</p>
+    <p><strong>Hydrogen peroxide (H₂O₂)</strong> is, technically, not even a radical ,  it has no unpaired electron. It is relatively stable, can diffuse across membranes, and lingers long enough to travel between cellular compartments. This stability is exactly why it has become the cell's preferred <em>signaling</em> molecule. Hold that thought.</p>
+    <p><strong>The hydroxyl radical (•OH)</strong> is the thug of the family: so ferociously reactive that it reacts with essentially the first molecule it touches, within nanometers of where it forms. It cannot signal because it cannot travel; it can only damage. It is generated when H₂O₂ encounters free iron or copper in the so-called Fenton reaction.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Hydrogen peroxide is stable and diffusible; the hydroxyl radical is violent and stays put. Before reading on, predict: which of these two would evolution more plausibly recruit as a messenger, and why?</p>
+    </aside>
+
+    <h3>Cousins in the family: reactive nitrogen species and singlet oxygen</h3>
+    <p>Oxygen is not the only reactive element cells must manage. A parallel family called <span class="ch-key">reactive nitrogen species</span> (RNS) arises when nitric oxide (NO), itself an important signaling gas that relaxes blood vessels and helps immune cells communicate, collides with superoxide. The product, <span class="ch-key">peroxynitrite</span> (ONOO⁻), is even more indiscriminately destructive than the hydroxyl radical: it nitrates proteins, damages DNA, and can disable entire enzyme complexes in one strike. Peroxynitrite formation is one reason chronic inflammation, which floods tissue with both nitric oxide and superoxide at once, is so much more damaging than either signal alone.</p>
+    <p>A further relative, <span class="ch-key">singlet oxygen</span> (¹O₂), is not a radical either; it is ordinary molecular oxygen with one electron bumped into an excited, higher-energy arrangement. It forms mainly when light energy strikes a light-absorbing pigment in the presence of oxygen, which is why singlet oxygen matters enormously in skin exposed to ultraviolet radiation and in the light-harvesting membranes of plants, but comparatively little in the everyday chemistry of resting human muscle or liver.</p>
+    <p>The practical lesson is that "oxidative stress" is really an umbrella term covering a whole chemical family with different sources, different lifetimes, and different targets. When a study reports that oxidative stress increased, a careful reader immediately asks which species was measured, because the answer changes what the finding actually means.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>From villain to messenger: the redox revolution</h2>
+    <p>For most of the twentieth century, the story stopped at "damage." The <span class="ch-key">free radical theory of aging</span>, proposed by Denham Harman in 1956, cast ROS as agents of accumulating molecular wreckage ,  the reason we grow old, the reason cells fail. This framing was intuitive, powerful, and, as we now understand, importantly incomplete.</p>
+    <p>The correction came from careful observation of what cells actually do with ROS. Cells do not merely tolerate reactive oxygen species; they <em>manufacture</em> them on purpose. NADPH oxidases exist for the sole function of producing superoxide and hydrogen peroxide. Immune cells, as you saw in earlier chapters, use a "respiratory burst" of ROS to kill engulfed pathogens ,  a controlled chemical weapon. But beyond killing, cells use low, tightly regulated pulses of H₂O₂ to regulate their own behavior.</p>
+    <p>The mechanism is beautifully specific. Hydrogen peroxide can reversibly oxidize particular cysteine amino acids in target proteins ,  the sulfur atom in a cysteine side chain is exquisitely sensitive to oxidation. This oxidation acts like a molecular switch, changing the protein's shape and activity, and it can be switched back off by the cell's reducing machinery. Through this reversible chemistry, H₂O₂ activates a roster of signaling pathways ,  MAPK, PI3K/Akt, Nrf2, HIF-1α, AP-1, and NF-κB among them ,  that govern metabolism, growth, differentiation, and stress responses (Bryan et al., 2023). Specialized sensor proteins called <span class="ch-key">peroxiredoxins</span> act as relay stations, catching the peroxide signal and passing the oxidation onward to downstream targets.</p>
+    <p>Sies and Jones (2020) crystallized this reframing in a single influential phrase: ROS are <span class="ch-key">pleiotropic physiological signaling agents</span>. "Pleiotropic" means having many effects. At physiological nanomolar concentrations, hydrogen peroxide and superoxide are not accidents to be mopped up ,  they are the cell's redox vocabulary, a language written in reversible oxidation.</p>
+    <p>Concrete examples make this abstraction vivid. When a cell is briefly starved of oxygen, a rise in mitochondrial ROS helps stabilize a protein called hypoxia-inducible factor 1-alpha (HIF-1α), which then switches on genes that improve oxygen delivery and metabolic efficiency, an adaptive response to a hypoxic (low-oxygen) challenge that depends on ROS acting as messenger, not as damage. Insulin signaling offers a second example: when insulin binds its receptor, the cell briefly generates a burst of hydrogen peroxide that inactivates a class of enzymes called protein tyrosine phosphatases, which would otherwise shut the signal down prematurely. The peroxide pulse is not a side effect of insulin action; it is part of how the signal is amplified and sustained.</p>
+
+    <h3>The measurement problem: why ROS are so hard to study</h3>
+    <p>One reason the field took decades to move from "ROS are damage" to "ROS are damage and message" is that reactive oxygen species are exceptionally difficult to measure accurately in living tissue. Their defining property, high reactivity, is precisely what makes them hard to catch: a molecule that reacts within microseconds of forming does not sit still for a detector. Many older studies relied on probes and assays that, it later became clear, could themselves generate artificial ROS during the measurement process, or that responded to several different oxidant species without distinguishing between them, inflating and confusing the reported signal.</p>
+    <p>Because directly counting ROS molecules in a living human is rarely feasible, researchers instead measure downstream footprints, the stable byproducts left behind after ROS have already reacted with a lipid, a protein, or a strand of DNA. This indirect approach is workable but imperfect, and it means that different studies measuring "oxidative stress" are often measuring genuinely different things, which is one honest reason the human antioxidant literature can look inconsistent even when each individual study was competently done. We will return to this measurement question directly in a few pages, because it matters for how skeptically to read any single claim about oxidative stress in the news.</p>
+
+    <h3>Eustress and distress: the crucial distinction</h3>
+    <p>To hold both truths ,  messenger and menace ,  the field adopted a distinction borrowed from stress biology. Sies and colleagues coined the pairing <span class="ch-key">oxidative eustress</span> and <span class="ch-key">oxidative distress</span> (Sies et al., 2017; Sies & Jones, 2020).</p>
+    <p><em>Oxidative eustress</em> ("eu-" meaning good, as in euphoria) is the low-level, physiological state in which ROS operate as beneficial signals enabling essential cellular processes. <em>Oxidative distress</em> is the pathological state in which ROS overwhelm the system, causing indiscriminate damage to lipids, proteins, and DNA (Bryan et al., 2023). The difference between them is not the identity of the molecule ,  it is the same H₂O₂ in both cases ,  but the <em>amount</em>, the <em>location</em>, and the <em>duration</em>. This is a dose story. Keep that firmly in mind; it is the seed from which hormesis will grow.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Defining oxidative stress properly</h2>
+    <p>We can now state the central definition with precision. The authoritative formulation, from Sies and colleagues in the <em>Annual Review of Biochemistry</em>, defines <span class="ch-key">oxidative stress</span> as:</p>
+    <blockquote class="ch-quote">
+      <p>"An imbalance between oxidants and antioxidants in favor of the oxidants, leading to a disruption of redox signaling and control and/or molecular damage."</p>
+      <cite>Sies, Berndt & Jones (2017)</cite>
+    </blockquote>
+    <p>Read that definition slowly, because two features distinguish it from the naïve version. First, it is defined as an <em>imbalance</em>, not as the mere presence of oxidants. ROS are always present; their presence is not the problem. Second ,  and this is the modern refinement ,  the harm is described as a disruption of <em>redox signaling and control</em>, not only as crude molecular damage. Oxidative stress can be damaging even when it does not shred molecules, if it garbles the redox messages the cell relies on.</p>
+    <p>The concept that anchors this balance is <span class="ch-key">redox balance</span> (or redox homeostasis). "Redox" is shorthand for reduction-oxidation: a coupled chemistry in which one molecule loses electrons (is oxidized) while another gains them (is reduced). Your cells maintain a carefully tuned electron economy ,  a slight surplus of reducing power held in reserve, ready to neutralize oxidants ,  and they defend a set-point the way a thermostat defends a temperature. Oxidative stress is what happens when the thermostat loses control.</p>
+    <p>Crucially, imbalance can run in <em>either</em> direction. Too many oxidants is the familiar problem. But an excess of reducing power ,  <span class="ch-key">reductive stress</span> ,  is also pathological, because it silences the ROS signals the cell needs. This is not a theoretical footnote. It is precisely why, as we will see, forcing antioxidant levels ever higher can create its own kind of dysfunction.</p>
+
+    <h3>How scientists actually measure oxidative stress</h3>
+    <p>Given the measurement problem introduced earlier, what do researchers actually report when they say a person or tissue is under oxidative stress? A handful of stable, chemically well-defined biomarkers have become the field's standard currency. <span class="ch-key">F2-isoprostanes</span> are compounds formed when free radicals attack polyunsaturated fats in cell membranes; because they are stable and measurable in blood or urine, they are widely regarded as one of the more reliable indices of lipid oxidation in the body. <span class="ch-key">8-hydroxy-2'-deoxyguanosine</span> (8-OHdG) is a damaged DNA base, produced when a hydroxyl radical or similar oxidant attacks guanine, and its urinary concentration is used as an index of oxidative DNA damage. Protein carbonyl content measures oxidized amino acid side chains directly on proteins. And the ratio of reduced glutathione to its oxidized partner, glutathione disulfide (GSH to GSSG), is used as a running readout of a cell's overall redox balance, since a healthy cell keeps that ratio heavily tilted toward the reduced form.</p>
+    <p>None of these measures is perfect. Each reflects a different oxidative process, in a different tissue compartment, over a different time window, and levels can be influenced by diet, exercise timing, and even the specific assay kit used in a given laboratory. When you next encounter a headline claiming a food or supplement "reduces oxidative stress," a well-trained reader immediately asks which biomarker was used, in which tissue, and whether the change in that biomarker was ever shown to translate into a meaningful difference in health or disease, a translation step that, as the final sections of this chapter will show, very often fails to occur.</p>
+  </section>
+
+  <div class="ch-widget" id="w-balance">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Redox Balance Beam</div>
+    </div>
+    <p class="ch-widget-sub">Set the inputs and watch the beam tip. Notice that both ends are dangerous ,  some ROS is required for healthy signaling.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Metabolic rate (ROS production)</span>
+        <select class="ch-widget-select" id="rb-metab">
+          <option value="1">Resting / low</option>
+          <option value="2" selected>Moderate activity</option>
+          <option value="3">Hard exercise</option>
+          <option value="4">Sustained overexertion</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Environmental exposure</span>
+        <select class="ch-widget-select" id="rb-env">
+          <option value="0" selected>Clean (none)</option>
+          <option value="1">Some (UV, city air)</option>
+          <option value="2">Heavy (smoke, pollution)</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Antioxidant capacity</span>
+        <select class="ch-widget-select" id="rb-anti">
+          <option value="1">Depleted</option>
+          <option value="2" selected>Normal endogenous</option>
+          <option value="3">High (diet-rich)</option>
+          <option value="4">Megadosed supplements</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">ROS load</span>
+        <span class="ch-meter-bar"><span id="rb-bar-ros" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="rb-num-ros">4</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Antioxidant buffer</span>
+        <span class="ch-meter-bar"><span id="rb-bar-buf" style="width:40%"></span></span>
+        <span class="ch-meter-num" id="rb-num-buf">2</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Useful signaling</span>
+        <span class="ch-meter-bar"><span id="rb-bar-sig" style="width:60%"></span></span>
+        <span class="ch-meter-num" id="rb-num-sig">6</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Damage risk</span>
+        <span class="ch-meter-bar"><span id="rb-bar-dmg" style="width:20%"></span></span>
+        <span class="ch-meter-num" id="rb-num-dmg">2</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="rb-eval">Evaluate balance</button>
+    <p class="ch-widget-sub" id="rb-readout" style="width:70%">, </p>
+  </div>
+
+  <section class="ch-section">
+    <h2>The body's antioxidant defenses</h2>
+    <p>If ROS were left unchecked, the leak from respiration alone would corrode us within hours. It does not, because every cell is equipped with a layered defense system ,  an "antioxidant" being simply any molecule that can safely neutralize an oxidant by donating an electron without itself becoming dangerous. These defenses fall into two broad categories, and the distinction between them turns out to be the most practically important thing in this chapter.</p>
+
+    <h3>Endogenous antioxidants: the enzymatic frontline</h3>
+    <p><span class="ch-key">Endogenous antioxidants</span> are the ones your body makes itself, and they do the overwhelming majority of the work. They are catalytic ,  enzymes that neutralize ROS over and over, each molecule processing thousands of oxidants per second:</p>
+    <p><strong>Superoxide dismutase (SOD)</strong> converts the primary radical, superoxide, into hydrogen peroxide and oxygen ,  the first line of defense, positioned right where superoxide is born. Humans carry three isoforms tuned to different compartments: copper/zinc-SOD (SOD1) patrols the cytosol, manganese-SOD (SOD2) works inside the mitochondrial matrix where the electron transport chain leaks, and extracellular SOD (SOD3) protects the space outside cells. Having a dedicated isoform inside the mitochondrion is not a coincidence; it places the defense at the exact site of production, the same design logic that recurs throughout this section.</p>
+    <p><strong>Catalase</strong> and the <strong>glutathione peroxidase</strong> system then convert that hydrogen peroxide into water. The glutathione system relies on <span class="ch-key">glutathione</span> (GSH), a small sulfur-containing molecule that is the cell's most abundant reducing buffer, present in millimolar concentrations. Each time glutathione peroxidase neutralizes a molecule of hydrogen peroxide, it converts two molecules of reduced glutathione (GSH) into one molecule of oxidized glutathione disulfide (GSSG); a separate enzyme, glutathione reductase, then spends cellular energy in the form of NADPH to convert GSSG back into GSH, closing the loop. The ratio of GSH to GSSG at any given moment functions like a capacitor charge level for the cell's reducing power, and it is this ratio, more than the absolute amount of glutathione present, that most directly tracks a cell's redox state.</p>
+    <p><strong>The thioredoxin and peroxiredoxin systems</strong> provide a parallel network that both scavenges peroxide and, as we saw, relays redox signals (Sies et al., 2017). Like glutathione reductase, thioredoxin reductase is powered by NADPH, which means both major antioxidant systems ultimately draw on the same energy currency, linking a cell's overall metabolic and energetic state to its capacity to defend itself against oxidants.</p>
+    <p>Governing this whole apparatus is a master regulatory switch: the transcription factor <span class="ch-key">Nrf2</span>, held in check under normal conditions by a partner protein called Keap1. When oxidants rise, Keap1's sensor cysteines are oxidized, Nrf2 is released, and it travels to the nucleus to switch on hundreds of protective genes ,  antioxidant enzymes, detoxification proteins, glutathione-synthesis machinery. This is the key point: <em>a rise in ROS is itself the signal that tells the cell to build more defenses.</em> The stressor triggers the adaptation. We are one step from hormesis.</p>
+    <p>The full name of Nrf2, nuclear factor erythroid 2-related factor 2, describes a transcription factor, a protein that binds DNA and controls whether nearby genes are switched on. Under quiet conditions, Keap1 (Kelch-like ECH-associated protein 1) continuously tags Nrf2 for destruction, keeping its levels low. Keap1 itself functions as the sensor because it is studded with reactive cysteine residues; when oxidants or certain reactive plant compounds modify those cysteines, Keap1 changes shape, releases its grip, and newly made Nrf2 accumulates and moves into the nucleus. There it partners with another protein to bind a DNA sequence called the antioxidant response element (ARE), found in the promoter region of more than 200 genes, including those encoding SOD, glutathione-synthesis enzymes, and the machinery of the thioredoxin system. In short, Keap1 to Nrf2 to ARE is the molecular circuit that converts a transient chemical insult into a durable, systemwide upgrade of defenses, and it is the mechanistic engine underneath essentially every example of hormesis discussed later in this chapter.</p>
+
+    <h3>Dietary antioxidants: the supporting cast</h3>
+    <p><span class="ch-key">Dietary antioxidants</span> are the ones you consume ,  vitamin C, vitamin E, carotenoids, and the vast family of plant polyphenols. Popular culture treats these as the main event; the biochemistry suggests otherwise. Unlike the enzymatic defenses, most dietary antioxidants are <em>stoichiometric</em>, not catalytic: one molecule of vitamin C neutralizes roughly one oxidant and is used up. They function more as a modest sacrificial buffer than as a primary defense.</p>
+    <p>Intriguingly, some of the health benefits attributed to dietary "antioxidants" may not come from their antioxidant chemistry at all. Many polyphenols are, at the doses we actually consume, mild <em>pro-oxidants</em> or metabolic irritants that nudge the Nrf2 system into action ,  meaning they work by provoking a small stress, not by absorbing one. That is a hormetic mechanism in disguise, and it foreshadows why the intuitive "more antioxidants = better" logic breaks down so badly in the clinic.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>SOD, catalase, and glutathione peroxidase are catalytic; vitamin C is stoichiometric. Given that distinction, why might swallowing large doses of vitamin C be a far weaker intervention than upregulating your own enzymatic defenses ,  and how would exercise accomplish the latter?</p>
+    </aside>
+
+    <h3>Chain-breaking antioxidants and the regeneration network</h3>
+    <p>Not all small-molecule antioxidants work the same way. Vitamin C (ascorbic acid) is water-soluble and works mainly in the watery compartments of the cell and blood plasma, donating an electron to neutralize an oxidant and becoming, itself, a mild and relatively harmless radical that is then recycled back to its active form. Vitamin E (chiefly alpha-tocopherol) is fat-soluble and sits inside cell membranes, where it performs a specific job called chain-breaking antioxidant activity: when a free radical attacks one fatty acid in a membrane, it can trigger a self-propagating chain reaction called lipid peroxidation, in which the damaged fatty acid attacks its neighbor, which attacks the next, and so on down the membrane. Vitamin E interrupts that chain by donating its own electron and absorbing the reactive intermediate before the damage can propagate further, sacrificing itself to protect the surrounding membrane.</p>
+    <p>Once vitamin E has done this job, it becomes a radical itself and is, in healthy tissue, regenerated back to its active form by vitamin C, which donates an electron to it; vitamin C, now oxidized, can in turn be regenerated using electrons drawn from glutathione. This chain of hand-offs, sometimes called the antioxidant network, illustrates why thinking about any single antioxidant in isolation is misleading: these molecules function as a linked relay team, not as independent soldiers, and a deficiency or excess anywhere in the chain can shift the behavior of the whole system.</p>
+    <p>Several other small molecules round out this network. Coenzyme Q10 (ubiquinone), a component of the electron transport chain itself, also functions as a lipid-soluble antioxidant. Uric acid, better known as the culprit behind gout when present in excess, is in fact the single largest contributor to total antioxidant capacity in human blood plasma. Bilirubin, the pigment responsible for jaundice and for bruises turning yellow as they heal, has measurable antioxidant activity at the low concentrations found in healthy blood. None of these facts is an argument for supplementing with uric acid or bilirubin; they are included to make a broader point, that "antioxidant" is a chemical function performed by an enormous and diverse cast of molecules the body already produces and regulates, most of which never appear on a supplement label.</p>
+
+    <h3>The antioxidant capacity myth: what happened to ORAC</h3>
+    <p>For much of the 2000s, food packaging and health articles touted a food's <span class="ch-key">Oxygen Radical Absorbance Capacity</span> (ORAC), a laboratory test-tube measurement of how much a food extract could neutralize a standardized oxidant in a beaker. Blueberries, dark chocolate, and various "superfoods" earned marketing claims from high ORAC scores. In 2012, the United States Department of Agriculture withdrew its ORAC database for foods entirely, stating plainly that the values had no proven relevance to the effects of specific foods on human health, because antioxidant capacity in a test tube does not reveal what happens after digestion, absorption, and metabolism inside an actual human body.</p>
+    <p>The ORAC episode is a compact case study in a mistake this chapter has been building toward from its first page: treating "antioxidant" as a single, simple, always-beneficial quantity that can be measured in a beaker and assumed to transfer, more of it is better, directly into a living, signaling, hormetically responsive organism. The chemistry inside a test tube has no Nrf2 pathway, no mitochondria producing a training signal, no redox balance to disrupt. A high ORAC score describes a food's behavior toward a synthetic oxidant in glassware; it does not describe what that food does inside you.</p>
+  </section>
+
+  <figure class="ch-figure" data-image-idx="1" data-prompt="A clean isometric infographic in the idiom of a scientific textbook plate, showing a stylised cross-section of a single cell with a mitochondrion at its centre glowing softly. Three concentric defensive layers are depicted as translucent shells around the mitochondrion, drawn in a limited palette of slate blue, warm amber, teal, and cream. Small labelled nodes in a clean sans-serif read 'superoxide dismutase', 'catalase', 'glutathione', and 'Nrf2' placed neatly beside their layers. Tiny spark motifs represent reactive oxygen species leaking from the mitochondrion and being intercepted. Soft even studio lighting, flat matte finish, thin confident linework, generous negative space. No watermarks, no cropped letters, no additional text beyond the four quoted labels." data-aspect="landscape"><div class="ch-figbox" style="height:auto;overflow:visible;"><img src="img/ch5-img2.jpg" alt="<em>Layered defense: enzymatic antioxidants intercept ROS near their mitochondrial source, while Nrf2 governs the whole response.</em>" data-image-idx="1" style="display:block;max-width:100%;max-height:75vh;height:auto;width:auto;margin:0 auto;cursor:pointer;"></div><figcaption><span class="ch-fig-num">Fig. 2</span> <em>Layered defense: enzymatic antioxidants intercept ROS near their mitochondrial source, while Nrf2 governs the whole response.</em></figcaption></figure>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>Hormesis: the dose makes the medicine</h2>
+    <p>We now arrive at the intellectual keystone of the course. The Renaissance physician Paracelsus famously observed that "the dose makes the poison" ,  that any substance is toxic at a high enough amount and harmless or beneficial at a low one. <span class="ch-key">Hormesis</span> is the sharper, more surprising version of that insight: a low dose of a stressor does not merely fail to harm ,  it actively <em>benefits</em>, by triggering an adaptive response that leaves the system stronger than before.</p>
+    <p>The signature of hormesis is a <span class="ch-key">biphasic dose-response curve</span>: as the intensity of a stressor rises from zero, the outcome first improves, reaches a peak, and then ,  as the dose climbs further ,  reverses and turns harmful. Plotted, it looks like an inverted U (or, depending on the outcome measured, a J). The same agent is beneficial at moderate doses and toxic at high ones. Nitti and colleagues (2022) organize the entire redox field around exactly this spectrum: moderate ROS activate redox-sensitive pathways driving proliferation, growth, and differentiation, while supraphysiological ROS cause biomolecular damage ,  hormesis at one end, oxidative distress at the other.</p>
+    <p>The logic is intuitive once you see it through the Nrf2 mechanism. A moderate oxidative challenge trips the sensor, and the cell responds by <em>overbuilding</em> its defenses ,  synthesizing more SOD, more glutathione, more repair enzymes than the immediate challenge required. When the challenge passes, the reinforced defenses remain. The cell has been vaccinated against future stress. Too small a challenge never trips the sensor, so no adaptation occurs. Too large a challenge overwhelms the defenses before they can respond, and damage accumulates. Only the moderate, intermittent dose lands in the adaptive window.</p>
+
+    <h3>Mitohormesis: ROS as the trigger for health</h3>
+    <p>When the stressor is specifically the ROS leaking from mitochondria, the phenomenon has a name: <span class="ch-key">mitohormesis</span>. In a synthesis of over 500 publications, Ristow and Schmeisser (2014) assembled the evidence that low levels of mitochondrial ROS function as signaling molecules that promote health and delay chronic disease. Interventions as varied as calorie restriction, transient hypoxia, temperature stress, and physical activity all converge on the same mechanism: they raise mitochondrial ROS modestly, which activates adaptive pathways ,  AMPK, TOR, and the sirtuins ,  that improve metabolic health and, in model organisms, extend lifespan.</p>
+    <p>Then comes the finding that should unsettle anyone who owns a bottle of antioxidant capsules. Ristow and Schmeisser reported that pharmacological antioxidant interference with these ROS signals is, in their words, "useless or even harmful." If the ROS pulse <em>is</em> the health signal, and you mop it up with high-dose antioxidants, you delete the message. The stressor no longer registers; the adaptation never fires. This is not speculation but the direct prediction of the mechanism ,  and, as we will see, it has been tested in humans.</p>
+
+    <h3>Hormesis beyond exercise: a short survey</h3>
+    <p>Exercise is the clearest example of hormesis because the stressor is easy to dose and the outcome is easy to feel, but it is far from the only one. Recognizing the same underlying logic across different stressors helps make clear that hormesis is a general principle of biology, not a quirk specific to muscle.</p>
+    <p><strong>Caloric restriction</strong>, eating meaningfully less than one would eat freely while avoiding malnutrition, reliably extends lifespan in yeast, worms, flies, and rodents, and part of that effect appears to run through the same mitohormetic mechanism discussed above: a mild nutrient-stress signal activates AMP-activated protein kinase (AMPK), a cellular fuel-sensing enzyme, along with a family of proteins called sirtuins, and the transcription factor FOXO (forkhead box O), all of which converge on strengthening stress resistance and quality-control pathways such as autophagy, the cell's internal recycling system for damaged components.</p>
+    <p><strong>Temperature stress</strong> works similarly. Brief exposure to cold or heat activates the production of heat shock proteins (HSPs), a class of molecular chaperones that help other proteins fold correctly and that also participate in broader stress-resistance signaling; a body repeatedly and mildly challenged by temperature extremes becomes, within limits, more resilient to a range of other stressors as well, a phenomenon called cross-adaptation.</p>
+    <p><strong>Phytochemical hormesis</strong>, foreshadowed earlier in this chapter, describes how many of the compounds in vegetables that are popularly called antioxidants, such as sulforaphane in broccoli and resveratrol in grapes, actually act at the concentrations found in food as mild, low-dose irritants or pro-oxidants that trip the Keap1 to Nrf2 switch, rather than as bulk electron donors. Some researchers describe this as xenohormesis, the idea that mild plant stress chemicals, evolved by the plant to deter insects or cope with its own environmental stress, cross over to trigger a protective hormetic response in the animal that eats them.</p>
+    <p>One further example deserves mention specifically because it is genuinely contested rather than settled: <span class="ch-key">radiation hormesis</span>, the hypothesis that very low doses of ionizing radiation, well below levels known to cause harm, might likewise trigger a net beneficial adaptive response rather than a proportionally scaled-down risk. Unlike the exercise and caloric restriction examples, this claim remains scientifically disputed, and the regulatory and public health consensus continues to treat any dose of ionizing radiation as carrying some non-zero cancer risk, out of caution, since the stakes of being wrong in that domain are high and irreversible. It is included here not because it is established, but because a good scientific education requires seeing where a plausible framework is being actively tested rather than universally accepted.</p>
+  </section>
+
+  <div class="ch-widget" id="w-horm">
+    <div class="ch-widget-head">
+      <div class="ch-widget-label">Interactive</div>
+      <div class="ch-widget-title">Hormesis Dose-Response Explorer</div>
+    </div>
+    <p class="ch-widget-sub">Slide the stressor intensity and read the outcome. Then overlay high-dose antioxidants and watch the adaptive peak collapse.</p>
+
+    <div class="ch-widget-row">
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">Stressor intensity (e.g. training load)</span>
+        <select class="ch-widget-select" id="hz-dose">
+          <option value="0">None (couch rest)</option>
+          <option value="1">Very light</option>
+          <option value="2">Light</option>
+          <option value="3" selected>Moderate</option>
+          <option value="4">Vigorous</option>
+          <option value="5">Extreme / chronic overload</option>
+        </select>
+      </div>
+      <div class="ch-widget-field">
+        <span class="ch-widget-fieldlabel">High-dose antioxidant overlay</span>
+        <select class="ch-widget-select" id="hz-anti">
+          <option value="off" selected>Off</option>
+          <option value="on">On (megadose vit C + E)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="ch-widget-meters">
+      <div class="ch-meter">
+        <span class="ch-meter-label">ROS / stress signal</span>
+        <span class="ch-meter-bar"><span id="hz-bar-sig" style="width:50%"></span></span>
+        <span class="ch-meter-num" id="hz-num-sig">5</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Adaptive resilience gain</span>
+        <span class="ch-meter-bar"><span id="hz-bar-adapt" style="width:70%"></span></span>
+        <span class="ch-meter-num" id="hz-num-adapt">7</span>
+      </div>
+      <div class="ch-meter">
+        <span class="ch-meter-label">Damage / distress</span>
+        <span class="ch-meter-bar"><span id="hz-bar-dmg" style="width:15%"></span></span>
+        <span class="ch-meter-num" id="hz-num-dmg">2</span>
+      </div>
+    </div>
+
+    <button class="ch-widget-btn" id="hz-eval">Trace the curve</button>
+    <p class="ch-widget-sub" id="hz-readout" style="width:70%">, </p>
+  </div>
+
+  <section class="ch-section">
+    <h2>Exercise: hormesis you can feel</h2>
+    <p>No system illustrates redox hormesis more cleanly than skeletal muscle under load. In their landmark <em>Physiological Reviews</em> article, Powers and Jackson (2008) established that contracting muscles generate both reactive oxygen and reactive nitrogen species, and ,  critically ,  that this is not incidental damage but regulated physiology. Low-to-moderate oxidant levels play essential regulatory roles in gene expression, cell signaling, and even the production of muscle force itself. A muscle with its ROS entirely scavenged actually produces <em>less</em> force; a modest oxidative tone is required for optimal contraction. High oxidant levels, by contrast, promote contractile dysfunction and fatigue. There is the inverted U again, written into every rep.</p>
+    <p>Powers and Jackson documented that exercise-induced oxidants directly regulate the expression of antioxidant enzymes, stress proteins, DNA repair proteins, and mitochondrial electron transport proteins. In other words, the oxidative stress of a workout is the <em>signal that instructs the muscle to rebuild itself better</em>. Radak and colleagues (2013) drew the conclusion explicitly: exercise-induced mild-to-moderate ROS generation is a "tool" for hormesis, and the beneficial adaptations of training are driven by exercise-induced oxidative stress acting as a signaling stimulus. The soreness, the transient inflammation, the oxidative flush ,  these are not the price of adaptation. They are its cause.</p>
+    <p>Where, mechanistically, does this exercise-induced ROS actually come from? Contracting muscle fibers generate reactive oxygen from several distinct sources working together: leak from the electron transport chain rises simply because mitochondria are working harder, but two additional dedicated sources contribute substantially. An enzyme called xanthine oxidase, activated during the metabolic stress of intense contraction, generates superoxide as a byproduct of breaking down purine molecules. And NADPH oxidase 2 (NOX2), the same enzyme family immune cells use for their respiratory burst, is also expressed in muscle tissue and is deliberately activated by the mechanical and calcium signals of contraction itself, meaning the muscle is not merely leaking oxidants as a side effect of hard work, it is manufacturing them on purpose as part of the adaptive signal. That signal converges, through the AMPK and calcium-sensitive pathways mentioned earlier, on a master regulator of mitochondrial growth called peroxisome proliferator-activated receptor gamma coactivator 1-alpha (PGC-1α), which switches on the genetic program for building new mitochondria, a process called mitochondrial biogenesis. This is the concrete answer to why a training program makes a muscle better at using oxygen over weeks: repeated ROS pulses, via PGC-1α, repeatedly order the construction of more of the very machinery that produced the pulse in the first place.</p>
+
+    <h3>The antioxidant paradox in athletes</h3>
+    <p>This mechanism generates a sharp, testable prediction: if you flood an exercising body with high-dose antioxidants, you should <em>blunt</em> the training adaptation. And that is, repeatedly, what controlled human trials have found. In several studies, supplementing endurance and resistance trainees with large doses of vitamin C and vitamin E prevented the exercise-induced increase in mitochondrial biogenesis and antioxidant enzyme expression ,  the very adaptations the athletes were training to build. The supplements did exactly what the mechanism predicted: they erased the signal, and with it the benefit.</p>
+    <p>The specific human data behind this claim, as synthesized by Ristow and Schmeisser (2014), came from controlled trials in which healthy, physically active volunteers trained for several weeks while taking large daily doses of vitamin C (around 1 gram) and vitamin E (around 400 international units), amounts well above what a typical diet supplies. Compared with training alone, the supplemented groups showed a blunted rise in markers of mitochondrial biogenesis and a blunted increase in the body's own endogenous antioxidant enzymes, the opposite of an "extra protection" effect; in some outcome measures, the expected improvement in insulin sensitivity from exercise training was prevented almost entirely. The antioxidants did exactly what a chemist would predict from the mechanism: they mopped up the messenger before it could deliver its instructions.</p>
+    <p>Two nuances keep this finding from becoming its own kind of hype. First, the effect is a dose and timing story, exactly like everything else in this chapter: the doses used in these trials were high, isolated, and taken daily around the training period, not the modest amount of vitamin C in an orange eaten with breakfast. Second, the effect appears specific to blunting the training adaptation itself; it is not a claim that vitamin C or E is generally toxic, or that a person recovering from illness or with a demonstrated nutrient deficiency should avoid them. The practical distinction that recurs throughout this course, between a whole food's modest, mixed, self-limiting dose and an isolated supplement's large, sustained, unbuffered dose, is exactly the distinction that determines whether an antioxidant helps, does nothing, or backfires.</p>
+    <p>This is the harm-reduction lesson at the heart of the chapter, and it deserves a plain statement. Blindly megadosing antioxidants is not a neutral "insurance policy." Because ROS carry indispensable adaptive messages, suppressing them can be counterproductive. This does <em>not</em> mean antioxidants are poison, that vitamin C from food is bad, or that everyone should avoid supplements ,  it means the naïve model of "oxidants bad, antioxidants good, more is better" is wrong at the level of mechanism. Any decision about high-dose supplementation is genuinely medical and should be made with a clinician who knows your circumstances, not on the basis of a marketing slogan.</p>
+  </section>
+
+  <hr class="ch-divider">
+
+  <section class="ch-section">
+    <h2>The vicious circle: oxidative stress and inflammation</h2>
+    <p>Everything so far connects directly back to the inflammation you studied in Chapter 4, because oxidative stress and inflammation are not separate stories ,  they are two descriptions of one intertwined process, locked in a mutually reinforcing loop.</p>
+    <p>The loop runs in both directions. In one direction, ROS <em>trigger</em> inflammation: rising oxidants activate the master inflammatory switch <span class="ch-key">NF-κB</span> (through the same redox-sensitive cysteine chemistry we met earlier), which turns on genes for inflammatory cytokines. In the other direction, inflammation <em>generates</em> ROS: activated immune cells deploy NADPH oxidases and the respiratory burst, releasing oxidants into the tissue, and inflammatory cytokines like TNF-α stimulate still more ROS production in surrounding cells. Altanam and colleagues (2025) document exactly this architecture ,  ROS production triggering inflammatory signaling through the NF-κB and NRF2-Keap1 pathways, and inflammatory cytokines in turn generating more ROS, creating reinforcing feedback loops.</p>
+    <p>Notice the elegant tension in that description: the very same rise in oxidants activates <em>both</em> NF-κB (pro-inflammatory) <em>and</em> Nrf2 (anti-inflammatory, pro-defense). Under acute, self-limiting conditions this dual activation is adaptive ,  the fire and the fire brigade are dispatched together, and Nrf2's resolution program eventually damps NF-κB. The trouble comes when the loop cannot switch off.</p>
+    <p>One specific molecular bridge between oxidative stress and inflammation deserves a closer look because it recurs throughout modern medicine: the <span class="ch-key">NLRP3 inflammasome</span> (NOD-like receptor family, pyrin domain containing 3), a multi-protein sensor complex that immune cells assemble in response to danger signals. Mitochondrial ROS is one of the most potent known triggers for NLRP3 assembly; once assembled, the inflammasome activates an enzyme that cleaves a precursor protein into its active, highly inflammatory form, interleukin-1 beta (IL-1β), one of the most powerful fever- and inflammation-driving signals the immune system possesses. Damaged mitochondria compound the problem by leaking fragments of their own DNA into the cell. Because mitochondria descend evolutionarily from free-living bacteria, mitochondrial DNA (mtDNA) still carries bacterial-like chemical signatures, and the immune system's pattern-recognition receptors treat leaked mtDNA as a <span class="ch-key">damage-associated molecular pattern</span> (DAMP), a danger signal indistinguishable, as far as the immune system can tell, from an actual bacterial infection. A cell under chronic oxidative stress is, in effect, quietly ringing its own bacterial alarm bell.</p>
+
+    <h3>Why chronic low-grade inflammation is so corrosive</h3>
+    <p>Here the redox lens finally explains the mystery left open in Chapter 4: why <span class="ch-key">chronic low-grade inflammation</span> ,  the smoldering, systemic, never-resolving state associated with aging, obesity, and metabolic disease ,  is so uniquely destructive. In acute inflammation, the oxidative burst is intense but brief, a pulse that resolves. In chronic low-grade inflammation, the loop settles into a persistent hum: continuous modest ROS production feeding continuous modest NF-κB activation, each sustaining the other. The eustress pulse becomes distress by <em>duration</em> rather than by intensity.</p>
+    <p>And chronic exposure has a second consequence: it wears down redox signaling itself. When cells are bathed in constant oxidants, the reversible cysteine switches that carry redox messages become permanently over-oxidized and stuck. The signaling channel is jammed. This is the deeper meaning of Sies's definition ,  oxidative stress as "disruption of redox signaling and control." The corrosion of chronic inflammation is not only the slow accumulation of damaged molecules; it is the degradation of the cell's ability to hear its own signals. The thermostat, held off its set-point for years, loses the ability to regulate at all.</p>
+    <p>This same feedback loop is now understood to sit underneath several of the chronic diseases most associated with aging. In atherosclerosis, the buildup of fatty plaque inside artery walls, low-density lipoprotein (LDL) cholesterol particles that become oxidized are far more likely to be engulfed by immune cells in the artery wall, triggering local inflammation that further raises local ROS, further oxidizing more LDL, a self-sustaining local version of the same loop described above. In type 2 diabetes, chronically elevated blood glucose drives excess mitochondrial ROS production in a range of tissues, which both damages insulin-signaling machinery directly and sustains the low-grade inflammation that further worsens insulin resistance. Researchers studying aging itself have coined the term <span class="ch-key">inflammaging</span> to describe the low-grade, sterile, chronic inflammatory state that tends to rise with age even without any infection, and the oxidative-inflammatory feedback loop described here is one of the leading mechanistic explanations for why inflammaging develops and why it proves so difficult to reverse once established.</p>
+    <p>A note of appropriate caution belongs here. Oxidative stress and neuroinflammation are also actively studied in neurodegenerative conditions such as Alzheimer's disease and Parkinson's disease, and the mechanistic story is genuinely intriguing, but the causal picture in these conditions remains considerably less settled than the atherosclerosis or diabetes examples above; whether oxidative stress is a primary driver, a downstream consequence, or a bit of both is still an active area of research, and this course will not overstate a case that the field itself has not closed.</p>
+    <aside class="ch-callout">
+      <div class="ch-callout-label">Think About It</div>
+      <p>Acute exercise and chronic low-grade inflammation both raise ROS and inflammatory signaling ,  yet one builds health and the other erodes it. Using the hormesis curve and the words "intensity," "duration," and "resolution," explain in your own words why the outcomes diverge.</p>
+    </aside>
+  </section>
+
+  <section class="ch-section">
+    <h2>Honest evidence-grading: the antioxidant supplement story</h2>
+    <p>This chapter is the course's first extended encounter with a discipline you will need throughout: grading evidence honestly, even when the mechanism is seductive and the marketing is loud. The antioxidant-supplement literature is a near-perfect case study in <em>hype outrunning data</em>.</p>
+    <p>The rationale was compelling. ROS damage biomolecules; damage drives aging and disease; antioxidants neutralize ROS; therefore antioxidant supplements should prevent aging and disease. Every link in that chain is mechanistically plausible. The pharmaceutical and supplement industries invested accordingly, and the public embraced it. Then the large randomized controlled trials arrived ,  and the effects vanished. As Nitti and colleagues (2022) summarize, dietary antioxidant supplementation has "consistently failed to demonstrate efficacy in preventing aging and chronic disease," and has sometimes produced harmful side effects. Certain large beta-carotene trials, notoriously, found <em>increased</em> cancer risk in high-risk groups. Altanam and colleagues (2025) reach the same measured verdict: despite compelling mechanistic rationale, clinical trials of antioxidant interventions show inconsistent benefit.</p>
+    <p>Why did such a plausible chain fail? The redox biology of this chapter supplies three converging answers. First, endogenous enzymatic defenses vastly outweigh dietary antioxidants, so swallowing more of the weaker player changes little. Second ,  the mitohormesis insight ,  indiscriminately suppressing ROS deletes the adaptive signals that keep tissue healthy, so the intervention can be self-defeating. Third, the crude "antioxidants good" model ignores that redox balance can be pushed too far in the reducing direction, producing its own dysfunction.</p>
+    <p>It is worth naming a few of the specific trials behind this reversal, because the details are instructive. Two large randomized trials in the 1990s, the Alpha-Tocopherol, Beta-Carotene Cancer Prevention Study and the Beta-Carotene and Retinol Efficacy Trial, gave high-dose beta-carotene supplements to smokers and workers exposed to asbestos, on the reasonable hypothesis that an antioxidant would neutralize the oxidative damage from smoking and reduce lung cancer risk. Both trials were stopped early because the supplemented groups showed a higher, not lower, incidence of lung cancer and overall mortality than the placebo groups. A later large trial testing high-dose vitamin E and selenium for prostate cancer prevention, the Selenium and Vitamin E Cancer Prevention Trial, likewise found no benefit and a modestly increased risk of prostate cancer in the vitamin E group. Systematic reviews pooling many such antioxidant supplement trials together have generally failed to find a mortality benefit, and some have found a small increased risk with certain antioxidant combinations. None of this means beta-carotene, vitamin E, or selenium are inherently harmful; whole foods rich in these compounds are consistently associated with better, not worse, health outcomes in observational research. The specific and repeated failure is of high-dose, isolated, long-term supplementation to reproduce that benefit, which is exactly the pattern this chapter's mechanism predicts.</p>
+    <p>The lesson is not nihilism about nutrition. A diet rich in colorful plants is robustly associated with health ,  but likely because whole foods deliver a complex, low-dose mixture that nudges the Nrf2 system hormetically, alongside fiber, minerals, and countless other constituents, not because they "flood the body with antioxidants." The failure of isolated high-dose supplements to reproduce that benefit is one of nutrition science's most important and most under-appreciated results. When a mechanism is elegant and the trials are null, the honest scientist believes the trials.</p>
+  </section>
+
+  <section class="ch-section">
+    <h2>Applying hormesis without hype: a practical framework</h2>
+    <p>None of the mechanism in this chapter translates into a prescription, and this course is not in the business of writing one. But the biology does support a coherent, honest framework for thinking about oxidative stress in ordinary life, distinct from both the "oxidants are evil, neutralize them" marketing pitch and an equally unhelpful nihilism that concludes nothing about diet or lifestyle matters.</p>
+    <p>First, the clearest, best-evidenced way to engage the hormetic system deliberately is a stressor this course has already covered in depth: regular physical activity. Its ROS signal is well-characterized, dosed by your own effort, self-limiting, and followed by genuine recovery, all the features that distinguish a hormetic eustress from a chronic distress. Second, the whole-foods pattern connected repeatedly to good health outcomes, plenty of vegetables, fruits, legumes, and whole grains, most plausibly works in part through the mild, mixed, low-dose phytochemical hormesis described earlier, alongside fiber, minerals, and satiety effects that have nothing to do with antioxidant chemistry at all. Eating the blueberries is well supported; assuming the mechanism is "neutralizing free radicals," and therefore that a concentrated blueberry extract capsule must be even better, is exactly the leap the evidence does not support.</p>
+    <p>Third, high-dose isolated antioxidant supplementation, particularly stacked doses of vitamin C, vitamin E, or beta-carotene taken daily over long periods, is not a harmless insurance policy given the mechanisms and trial data reviewed in this chapter, and deciding whether to take such supplements is a genuine medical question, not a lifestyle default. People with a diagnosed nutrient deficiency, a specific medical condition, or a clinician's explicit recommendation are in a different situation than a healthy person self-prescribing megadoses on the theory that more protection is always better, a theory this chapter has spent its length dismantling. Anyone considering supplementation, especially alongside a training program or a chronic disease, should raise it with a doctor or registered dietitian who can weigh their individual situation, rather than relying on a chapter in a continuing-education course.</p>
+    <p>Finally, hold onto the single reframing that this chapter has aimed to install: the question to ask is never simply whether something is oxidative, yes or no. It is always how much, where, for how long, and whether it resolves. That question, applied carefully, is what separates the rust from the repair.</p>
+  </section>
+
+  <section class="ch-takeaways">
+    <h2>Key Takeaways</h2>
+    <ul>
+      <li>A reactive oxygen species is an oxygen-derived molecule more chemically reactive than O₂. The family ranges from the stable, diffusible messenger hydrogen peroxide to the violently destructive, short-lived hydroxyl radical ,  so "ROS" is not one thing.</li>
+      <li>ROS are both damage agents and essential signals. At low physiological levels ("oxidative eustress") H₂O₂ regulates metabolism, growth, and defense through reversible oxidation of protein cysteines; at high levels ("oxidative distress") it damages lipids, proteins, and DNA. The difference is dose, location, and duration.</li>
+      <li>Oxidative stress is an <em>imbalance</em> between oxidants and antioxidants that disrupts redox signaling and/or causes molecular damage ,  not merely the presence of oxidants. Redox balance can be pushed too far in either direction; excess reducing power (reductive stress) is also pathological.</li>
+      <li>Endogenous enzymatic antioxidants (SOD, catalase, glutathione and thioredoxin systems, governed by Nrf2) do most of the defensive work catalytically; dietary antioxidants are a weaker, stoichiometric supporting cast, some of whose benefits are actually hormetic.</li>
+      <li>Hormesis is the biphasic principle that a moderate stressor triggers adaptive over-compensation, leaving the system stronger ,  while too little does nothing and too much causes harm. Exercise is the clearest example: training ROS are the signal that builds resilience, which is why megadosing antioxidants can blunt adaptation.</li>
+      <li>Oxidative stress and inflammation reinforce each other in a feedback loop (ROS activate NF-κB; inflammation generates ROS). This explains why chronic low-grade inflammation is so corrosive: sustained duration converts adaptive eustress into distress and jams redox signaling itself.</li>
+      <li>The antioxidant-supplement literature is a case study in hype outrunning data: a mechanistically plausible chain that failed in large trials. When mechanism and evidence disagree, grade honestly and follow the evidence ,  and treat any high-dose supplementation as a medical decision for a clinician.</li>
+    </ul>
+  </section>
+
+  <section class="ch-lookahead">
+    <div class="ch-lookahead-label">Looking Ahead</div>
+    <p>We have now seen that a controlled stress can strengthen a system ,  and that oxidative stress and inflammation feed one another. In the next chapter we turn to what happens when that loop refuses to switch off: the biology of resolution, the specialized signals that actively end inflammation, and why the failure to resolve ,  rather than the inflammation itself ,  is increasingly understood as the root of chronic disease.</p>
+  </section>
+
+  <section class="ch-refs">
+    <h2>References</h2>
+    <p>Altanam, S., et al. (2025). Exploring the interplay of antioxidants, inflammation, and oxidative stress: Mechanisms, therapeutic potential, and clinical implications. <em>Diseases, 13</em>(9), 309. https://doi.org/10.3390/diseases13090309</p>
+    <p>Bryan, N. S., et al. (2023). Reactive oxygen species and cell signaling. <em>Redox Biology.</em> https://pubmed.ncbi.nlm.nih.gov/37949302/</p>
+    <p>Nitti, M., et al. (2022). Hormesis and oxidative distress: Pathophysiology of reactive oxygen species and the open question of antioxidant modulation and supplementation. <em>Antioxidants, 11</em>(8), 1613. https://doi.org/10.3390/antiox11081613</p>
+    <p>Powers, S. K., & Jackson, M. J. (2008). Exercise-induced oxidative stress: Cellular mechanisms and impact on muscle force production. <em>Physiological Reviews, 88</em>(4), 1243-1276. https://pmc.ncbi.nlm.nih.gov/articles/PMC2909187/</p>
+    <p>Radak, Z., Zhao, Z., Koltai, E., Ohno, H., & Atalay, M. (2013). Exercise-induced oxidative stress: A tool for "hormesis" and "adaptive response." <em>Journal of Physical Fitness and Sports Medicine, 3</em>(1), 115-121. https://www.jstage.jst.go.jp/article/jpfsm/3/1/3_115/_article</p>
+    <p>Ristow, M., & Schmeisser, K. (2014). Mitohormesis: Promoting health and lifespan by increased levels of reactive oxygen species (ROS). <em>Dose-Response, 12</em>(2), 288-341. https://doi.org/10.2203/dose-response.13-035.Ristow</p>
+    <p>Sies, H., Berndt, C., & Jones, D. P. (2017). Oxidative stress. <em>Annual Review of Biochemistry, 86,</em> 715-748. https://doi.org/10.1146/annurev-biochem-061516-045037</p>
+    <p>Sies, H., & Jones, D. P. (2020). Reactive oxygen species (ROS) as pleiotropic physiological signalling agents. <em>Nature Reviews Molecular Cell Biology, 21,</em> 363-383. https://doi.org/10.1038/s41580-020-0230-3</p>
+  </section>
+
+  <footer class="ch-foot">
+    <span class="ch-foot-mark">¶</span>
+    <span class="ch-foot-meta">Gemini Education · Chapter 5 of 12</span>
+  </footer>
+
+</article>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-balance');
+    if(!root) return;
+    var metab = root.querySelector('#rb-metab');
+    var env = root.querySelector('#rb-env');
+    var anti = root.querySelector('#rb-anti');
+    var btn = root.querySelector('#rb-eval');
+    var readout = root.querySelector('#rb-readout');
+    var barRos = root.querySelector('#rb-bar-ros'), numRos = root.querySelector('#rb-num-ros');
+    var barBuf = root.querySelector('#rb-bar-buf'), numBuf = root.querySelector('#rb-num-buf');
+    var barSig = root.querySelector('#rb-bar-sig'), numSig = root.querySelector('#rb-num-sig');
+    var barDmg = root.querySelector('#rb-bar-dmg'), numDmg = root.querySelector('#rb-num-dmg');
+
+    function clamp(x){ return Math.max(0, Math.min(10, x)); }
+
+    function update(){
+      var m = parseFloat(metab.value);
+      var e = parseFloat(env.value);
+      var a = parseFloat(anti.value);
+      // ROS load: from metabolism + environment
+      var ros = clamp(m*2 + e*1.5);
+      // buffer: antioxidant capacity
+      var buf = clamp(a*2);
+      // net oxidant tone = ros - buffer, but signaling needs SOME oxidant tone
+      var net = ros - buf; // can be negative (reductive) or positive (oxidative)
+      // useful signaling peaks when net is slightly positive (~1-3)
+      var sig = clamp(10 - Math.abs(net - 2)*1.8);
+      // damage rises when net is high (oxidative distress) OR when net very negative (dysfunction, but milder)
+      var dmg;
+      if(net >= 0){ dmg = clamp(Math.max(0,(net-2))*1.9); }
+      else { dmg = clamp(Math.abs(net)*1.3); } // reductive dysfunction
+
+      numRos.textContent = ros.toFixed(0); barRos.style.width = (ros*10)+'%';
+      numBuf.textContent = buf.toFixed(0); barBuf.style.width = (buf*10)+'%';
+      numSig.textContent = sig.toFixed(0); barSig.style.width = (sig*10)+'%';
+      numDmg.textContent = dmg.toFixed(0); barDmg.style.width = (dmg*10)+'%';
+
+      var msg;
+      if(net < -1.5){
+        msg = 'Reductive stress: antioxidants have swamped the redox signal. ROS messages go silent, adaptation and normal signaling falter ,  a different kind of dysfunction. More antioxidants is not more health.';
+      } else if(net <= 3 && dmg < 3){
+        msg = 'Balanced eustress: a modest oxidant tone keeps redox signaling loud and clear while damage stays low. This is the adaptive sweet spot.';
+      } else if(net <= 5){
+        msg = 'Tipping toward distress: oxidant load is outpacing defenses. Signaling is degrading and damage is climbing ,  sustained, this becomes corrosive.';
+      } else {
+        msg = 'Oxidative distress: ROS overwhelm the buffer. Lipids, proteins, and DNA take damage and redox signaling is jammed. This is the pathological end of the beam.';
+      }
+      readout.textContent = msg;
+    }
+
+    btn.addEventListener('click', update);
+    metab.addEventListener('change', update);
+    env.addEventListener('change', update);
+    anti.addEventListener('change', update);
+    update();
+  } catch(err){ /* fail silently */ }
+})();
+</script>
+<script>
+(function(){
+  try {
+    var root = document.getElementById('w-horm');
+    if(!root) return;
+    var dose = root.querySelector('#hz-dose');
+    var anti = root.querySelector('#hz-anti');
+    var btn = root.querySelector('#hz-eval');
+    var readout = root.querySelector('#hz-readout');
+    var barSig = root.querySelector('#hz-bar-sig'), numSig = root.querySelector('#hz-num-sig');
+    var barAd = root.querySelector('#hz-bar-adapt'), numAd = root.querySelector('#hz-num-adapt');
+    var barDmg = root.querySelector('#hz-bar-dmg'), numDmg = root.querySelector('#hz-num-dmg');
+
+    function clamp(x){ return Math.max(0, Math.min(10, x)); }
+
+    function update(){
+      var d = parseFloat(dose.value); // 0..5
+      var blunt = anti.value === 'on';
+      // raw ROS/stress signal proportional to dose
+      var sig = clamp(d*2);
+      // antioxidant overlay suppresses the effective signal
+      var effSig = blunt ? sig*0.35 : sig;
+      // adaptive resilience: inverted U over effective signal, peak around effSig ~ 6
+      var adapt = clamp(10 - Math.abs(effSig - 6)*1.4);
+      // if effSig very low, no adaptation
+      if(effSig < 1.5) adapt = clamp(effSig*1.2);
+      // damage: rises steeply once raw dose is excessive (real ROS still present even if signal blunted)
+      var dmg = clamp(Math.max(0,(d-3.5))*3.0);
+
+      numSig.textContent = effSig.toFixed(0); barSig.style.width = (effSig*10)+'%';
+      numAd.textContent = adapt.toFixed(0); barAd.style.width = (adapt*10)+'%';
+      numDmg.textContent = dmg.toFixed(0); barDmg.style.width = (dmg*10)+'%';
+
+      var msg;
+      if(d === 0){
+        msg = 'No stressor, no signal, no adaptation. Rest is necessary ,  but without any challenge the hormetic pathway is never tripped.';
+      } else if(d <= 2){
+        msg = 'Sub-threshold: the challenge is too small to trip Nrf2 and the adaptive pathways. Little harm, but little gain.';
+      } else if(d <= 4){
+        msg = 'The adaptive window: a moderate oxidative/inflammatory pulse over-builds defenses, leaving the system stronger. This is hormesis working.';
+      } else {
+        msg = 'Excessive load: ROS outrun defenses before adaptation can compensate. Damage climbs and the benefit collapses ,  past the peak of the curve.';
+      }
+      if(blunt){
+        msg += ' Antioxidant overlay ON: the ROS signal is mopped up, so even a well-chosen dose barely registers ,  the adaptive peak flattens. Blunting the signal blunts the benefit.';
+      }
+      readout.textContent = msg;
+    }
+
+    btn.addEventListener('click', update);
+    dose.addEventListener('change', update);
+    anti.addEventListener('change', update);
+    update();
+  } catch(err){ /* fail silently */ }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat-Sheet, Chapter 2: Memory, Precision, and the Handoff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.4; }
+  .sheet{ max-width:880px; margin:0 auto; background:var(--paper); padding:46px 54px 60px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:27px; line-height:1.12; margin:10px 0 4px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:14px; margin:0 0 14px; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:14px 0 18px; }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px 26px; }
+  .card{ break-inside:avoid; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink); margin:0 0 6px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  h2::before{ content:'§ '; color:var(--accent); }
+  ul{ margin:0 0 8px; padding-left:16px; font-size:13.5px; } li{ margin:0 0 4px; }
+  .k{ font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--accent); font-size:12.5px; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  td{ border-bottom:1px solid var(--line); padding:4px 6px; vertical-align:top; }
+  td.s{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink); white-space:nowrap; }
+  .full{ grid-column:1 / -1; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:10px 14px; font-size:13px; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:22px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:24px; border-top:1px solid var(--line); padding-top:10px; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 10px; } .noprint{ display:none; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<div class="sheet">
+  <div class="eyebrow">Cheat-Sheet &middot; E2 Immune System and Inflammation</div>
+  <h1>Chapter 2 : Memory, Precision, and the Handoff</h1>
+  <p class="sub">Trading speed for specificity: billions of receptors, one match per cell, and a memory that lasts for years.</p>
+  <hr class="rule">
+
+  <div class="grid">
+    <div class="card full">
+      <h2>Innate vs Adaptive, Side by Side</h2>
+      <table>
+        <tr><td class="s">Receptors</td><td>Innate: a few hundred, fixed at birth. Adaptive: billions, assembled per cell by V(D)J recombination.</td></tr>
+        <tr><td class="s">Speed</td><td>Innate: minutes to hours. Adaptive: days for a first response.</td></tr>
+        <tr><td class="s">Specificity</td><td>Innate: recognizes broad microbial categories. Adaptive: recognizes one precise epitope.</td></tr>
+        <tr><td class="s">Memory</td><td>Innate: none. Adaptive: long-lived memory cells enable a faster, stronger second response.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>The Two Lymphocyte Lineages</h2>
+      <ul>
+        <li><span class="k">T cell</span> : matures in the thymus; T cell receptor (TCR) reads peptide displayed on MHC (MHC restriction).</li>
+        <li><span class="k">B cell</span> : matures in the bone marrow; B cell receptor (BCR) is a membrane antibody that binds free antigen directly.</li>
+        <li>Both circulate through blood and lymph, waiting in secondary lymphoid organs (lymph nodes, spleen) to meet antigen.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Key Terms</h2>
+      <ul>
+        <li><span class="k">Antigen</span> : any molecule an adaptive receptor can bind.</li>
+        <li><span class="k">Epitope</span> : the small patch of antigen a receptor actually contacts.</li>
+        <li><span class="k">Antibody</span> : the Y-shaped molecule secreted by activated B cells.</li>
+        <li><span class="k">MHC</span> : the surface molecule that displays peptide for a T cell to inspect.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Diversity and Selection</h2>
+      <ul>
+        <li><span class="k">V(D)J recombination</span> : assembles receptor genes from gene-segment libraries, generating over 10<sup>11</sup> possible receptors.</li>
+        <li><span class="k">Clonal selection</span> : antigen selects the rare pre-existing lymphocyte that already fits it, then that clone expands.</li>
+        <li><span class="k">Immunological memory</span> : long-lived memory cells left behind after a response make the next encounter faster and stronger.</li>
+        <li><span class="k">Vaccination</span> : deliberately triggers clonal selection and memory using a harmless antigen.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>The Innate-to-Adaptive Handoff</h2>
+      <ul>
+        <li>Dendritic cells capture antigen at the site of infection.</li>
+        <li>They travel to the nearest lymph node carrying that antigen.</li>
+        <li>There they present it to naive T cells, triggering clonal selection.</li>
+        <li>This is why lymph nodes swell near an active infection.</li>
+      </ul>
+    </div>
+
+    <div class="card full">
+      <div class="boundary"><b>Where education ends</b> &nbsp; This builds understanding of how adaptive defense and memory work, not a license to diagnose or treat. Difficulty breathing, facial or throat swelling, or unusually severe or prolonged illness are signs that warrant evaluation by a qualified clinician. Work within your role, whatever it is.</div>
+    </div>
+  </div>
+
+  <div class="noprint"><button onclick="window.print()">Print / Save as PDF</button></div>
+  <p class="foot">Gemini Education &middot; E2 Immune System and Inflammation &middot; Chapter 2 Cheat-Sheet</p>
+</div>
+<script src="../../courses-data.js"></script>
+<script src="../../gem-course-nav.js"></script>
+</body>
+</html>

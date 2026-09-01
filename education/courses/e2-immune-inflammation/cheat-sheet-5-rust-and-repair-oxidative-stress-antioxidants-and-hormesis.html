@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat-Sheet, Chapter 5: Rust and Repair</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+  :root{ --ink:#1a2238; --accent:#c93b2a; --muted:#3a4458; --faint:#6b758b; --paper:#fbf9f4; --line:#d9d2c4; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:#efeae0; color:var(--ink); font-family:'IBM Plex Serif',Georgia,serif; line-height:1.4; }
+  .sheet{ max-width:880px; margin:0 auto; background:var(--paper); padding:46px 54px 60px; min-height:100vh; box-shadow:0 0 0 1px rgba(0,0,0,0.04); }
+  .eyebrow{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent); font-weight:600; }
+  .eyebrow::before{ content:'[ '; opacity:0.6; } .eyebrow::after{ content:' ]'; opacity:0.6; }
+  h1{ font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:27px; line-height:1.12; margin:10px 0 4px; }
+  .sub{ font-style:italic; color:var(--muted); font-size:14px; margin:0 0 14px; }
+  .rule{ border:0; border-top:1.5px solid var(--ink); margin:14px 0 18px; }
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px 26px; }
+  .card{ break-inside:avoid; }
+  h2{ font-family:'IBM Plex Mono',monospace; font-size:13px; font-weight:700; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink); margin:0 0 6px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  h2::before{ content:'§ '; color:var(--accent); }
+  ul{ margin:0 0 8px; padding-left:16px; font-size:13.5px; } li{ margin:0 0 4px; }
+  .k{ font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--accent); font-size:12.5px; }
+  table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  td{ border-bottom:1px solid var(--line); padding:4px 6px; vertical-align:top; }
+  td.s{ font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--ink); white-space:nowrap; }
+  .full{ grid-column:1 / -1; }
+  .boundary{ border-left:3px solid var(--accent); background:#f7efe9; padding:10px 14px; font-size:13px; }
+  .boundary b{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--accent); }
+  .noprint{ margin:22px 0 0; } button{ font-family:'IBM Plex Mono',monospace; font-size:12px; background:var(--ink); color:#fff; border:0; padding:9px 16px; cursor:pointer; }
+  .foot{ font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--faint); margin-top:24px; border-top:1px solid var(--line); padding-top:10px; }
+  @media print{ body{ background:#fff; } .sheet{ box-shadow:none; max-width:none; padding:0 10px; } .noprint{ display:none; } }
+</style>
+  <link rel="stylesheet" href="../../gem-theme-paper.css">
+</head>
+<body>
+<div class="sheet">
+  <div class="eyebrow">Cheat-Sheet &middot; E2 Immune System &amp; Inflammation</div>
+  <h1>Chapter 5 : Rust and Repair</h1>
+  <p class="sub">The same molecules that corrode us are also the ones that make us stronger. It is a dose story.</p>
+  <hr class="rule">
+
+  <div class="grid">
+    <div class="card full">
+      <h2>The Core Definition</h2>
+      <table>
+        <tr><td class="s">Oxidative stress</td><td>An imbalance between oxidants and antioxidants in favor of the oxidants, disrupting redox signaling and control, or causing molecular damage (Sies, Berndt &amp; Jones, 2017).</td></tr>
+        <tr><td class="s">Reactive oxygen species (ROS)</td><td>Oxygen-containing molecules more reactive than ordinary oxygen, for example superoxide, hydrogen peroxide, and the hydroxyl radical. Produced as a byproduct of the electron transport chain and deliberately by dedicated enzymes.</td></tr>
+        <tr><td class="s">Oxidative eustress</td><td>Low-level, physiological ROS signaling that regulates metabolism, growth, and defense.</td></tr>
+        <tr><td class="s">Oxidative distress</td><td>ROS overwhelming the system, causing indiscriminate damage to lipids, proteins, and DNA.</td></tr>
+        <tr><td class="s">Reductive stress</td><td>Too much reducing (antioxidant) power, which silences the ROS signals the cell actually needs.</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Endogenous Antioxidants</h2>
+      <ul>
+        <li><span class="k">Superoxide dismutase (SOD)</span> : converts superoxide into hydrogen peroxide. Catalytic.</li>
+        <li><span class="k">Catalase</span> : breaks hydrogen peroxide into water and oxygen. Catalytic.</li>
+        <li><span class="k">Glutathione peroxidase</span> : neutralizes peroxides using glutathione. Catalytic.</li>
+        <li><span class="k">Nrf2</span> : master transcription factor that switches on genes for antioxidant enzymes.</li>
+        <li><span class="k">Thioredoxin / peroxiredoxin systems</span> : parallel network that scavenges peroxide and relays redox signals.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Dietary Antioxidants</h2>
+      <ul>
+        <li>Vitamin C, vitamin E, and plant polyphenols are <span class="k">stoichiometric</span>: each molecule is used up after one reaction, unlike catalytic enzymes.</li>
+        <li>Useful as part of an ordinary varied diet.</li>
+        <li>Megadosing does not simply "add more protection." It can blunt the ROS signal the body needs for adaptation.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Hormesis</h2>
+      <ul>
+        <li>A biphasic dose-response: too little stressor, no adaptation. A moderate dose, adaptive over-compensation, a stronger system. Too much, damage outruns repair.</li>
+        <li><span class="k">Mitohormesis</span> : exercise-induced ROS act as the trigger for beneficial adaptations, including new mitochondria and upregulated antioxidant defenses.</li>
+        <li>Ristow and colleagues found that high-dose antioxidant supplementation around training blunted some of these training adaptations.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Why Grading the Evidence Matters</h2>
+      <ul>
+        <li>ROS are hard to measure directly. Researchers usually measure downstream footprints (for example F2-isoprostanes, 8-OHdG).</li>
+        <li>Ask which biomarker was used, in which tissue, and whether a lab change actually translated into a health outcome.</li>
+        <li>Oxidative stress and inflammation reinforce each other in a feedback loop, which is why chronic low-grade inflammation is so corrosive.</li>
+      </ul>
+    </div>
+
+    <div class="card full">
+      <div class="boundary"><b>Where education ends</b> &nbsp; This builds literacy in redox biology, not a license to diagnose, treat, or prescribe supplement doses. Anyone with a diagnosed condition, medication, or specific dosing question should consult a qualified clinician or registered dietitian. Work within your role, whatever it is.</div>
+    </div>
+  </div>
+
+  <div class="noprint"><button onclick="window.print()">Print / Save as PDF</button></div>
+  <p class="foot">Gemini Education &middot; E2 Immune System &amp; Inflammation &middot; Chapter 5 Cheat-Sheet</p>
+</div>
+<script src="../../courses-data.js"></script>
+<script src="../../gem-course-nav.js"></script>
+</body>
+</html>
