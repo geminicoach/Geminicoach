@@ -45,6 +45,19 @@
                     font-family:'Barlow',sans-serif; font-size:14px; padding:11px 13px; resize:vertical; }
     textarea.free:focus { outline:none; border-color:var(--blue-bright); }
     .emsg { color:var(--bad); margin-top:10px; min-height:16px; font-size:13px; }
+    .hint { color:var(--gray); font-size:12.5px; margin:0 0 8px; }
+    .tfrow { display:flex; gap:10px; }
+    .opt.tf { flex:1; justify-content:center; font-weight:600; }
+    .matchgrid { display:flex; flex-direction:column; gap:8px; }
+    .matchrow { display:flex; gap:10px; align-items:center; }
+    .mleft { flex:1; background:#0c1d33; border:1px solid var(--line); border-radius:9px; padding:10px 12px; font-size:14px; }
+    .msel { flex:1; min-width:0; background:#0c1d33; border:1px solid var(--line); border-radius:9px; padding:10px 12px; color:var(--off-white); font-family:'Barlow',sans-serif; font-size:14px; }
+    .msel:focus { outline:none; border-color:var(--blue-bright); }
+    .bank { display:flex; flex-wrap:wrap; gap:8px; margin:6px 0; }
+    .tok { background:#12325a; border:1px solid #2a4a78; color:#cfe4ff; border-radius:8px; padding:7px 13px; font-size:14px; font-family:'Barlow',sans-serif; cursor:pointer; }
+    .tok:hover { border-color:var(--blue-bright); } .tok.sel { background:var(--blue); border-color:var(--blue-light); color:#fff; }
+    .blank { display:inline-block; min-width:74px; text-align:center; border-bottom:2px solid var(--blue-light); color:var(--blue-light); padding:0 6px; cursor:pointer; font-weight:600; }
+    .blank.done { color:#fff; border-bottom-color:#fff; }
   </style>
 </head>
 <body>
@@ -102,44 +115,75 @@
     });
 
     function start(user, ex){
-      var run = ex.questions;          // drawn + shuffled by the server; contains NO answer key
+      var run = ex.questions;          // objective items, shuffled by the server; NO answer key
       var pass = ex.pass_threshold || 80;
+      var fillSel = {};                // per-question currently-picked word-bank token
+
+      function typeLabel(t){ return t==="tf"?"True / False":t==="multi"?"Select all that apply":t==="match"?"Matching":t==="fill"?"Fill in the blank":"Multiple choice"; }
+      function qHead(r,qi){ return '<div class="qn">Question '+(qi+1)+' · '+typeLabel(r.type)+'</div>'; }
+      function fillStem(r){ return esc(r.q).replace(/\{\{(\w+)\}\}/g, function(_,k){ return '<span class="blank" data-q="'+esc(r.id)+'" data-k="'+esc(k)+'">____</span>'; }); }
 
       function render(){
-        var nFree = run.filter(function(r){ return r.type==="free"; }).length;
         var html = '<div class="kicker">'+esc(ex.title)+' · Final Exam</div>'+
           '<h1>Final Exam</h1>'+
-          '<div class="meta">Pass mark '+pass+'% · '+run.length+' questions'+(nFree?(' ('+nFree+' written)'):'')+' · '+(ex.ceu_value||"")+' CEU on passing</div>';
+          '<div class="meta">Pass mark '+pass+'% · '+run.length+' questions · '+(ex.ceu_value||"")+' CEU on passing</div>';
         html += run.map(function(r,qi){
-          if (r.type === "free") {
-            return '<div class="q"><div class="qn">Question '+(qi+1)+' · Written</div><h3>'+esc(r.q)+'</h3>'+
-              '<textarea class="free" data-id="'+esc(r.id)+'" rows="5" placeholder="Write your answer in a few sentences…"></textarea></div>';
+          var h = '<div class="q">'+qHead(r,qi);
+          if (r.type==="fill") {
+            h += '<h3>'+fillStem(r)+'</h3>'
+              + '<div class="bank" data-q="'+esc(r.id)+'">'+ (r.bank||[]).map(function(tok){ return '<button type="button" class="tok" data-tok="'+esc(tok)+'">'+esc(tok)+'</button>'; }).join("") +'</div>'
+              + '<div class="hint">Tap a word, then tap a blank. Tap a filled blank to clear it.</div>';
+            return h+'</div>';
           }
-          return '<div class="q"><div class="qn">Question '+(qi+1)+'</div><h3>'+esc(r.q)+'</h3>'+
-            r.options.map(function(o){
-              return '<label class="opt"><input type="radio" name="'+esc(r.id)+'" value="'+esc(o.id)+'"><span>'+esc(o.text)+'</span></label>';
-            }).join("")+'</div>';
+          h += '<h3>'+esc(r.q)+'</h3>';
+          if (r.type==="mc") { h += (r.options||[]).map(function(o){ return '<label class="opt"><input type="radio" name="'+esc(r.id)+'" value="'+esc(o.v)+'"><span>'+esc(o.text)+'</span></label>'; }).join(""); }
+          else if (r.type==="multi") { h += '<div class="hint">Select all that apply.</div>' + (r.options||[]).map(function(o){ return '<label class="opt"><input type="checkbox" class="ck" data-q="'+esc(r.id)+'" value="'+esc(o.v)+'"><span>'+esc(o.text)+'</span></label>'; }).join(""); }
+          else if (r.type==="tf") { h += '<div class="tfrow">'
+              + '<label class="opt tf"><input type="radio" name="'+esc(r.id)+'" value="true"><span>True</span></label>'
+              + '<label class="opt tf"><input type="radio" name="'+esc(r.id)+'" value="false"><span>False</span></label></div>'; }
+          else if (r.type==="match") { h += '<div class="matchgrid">' + (r.left||[]).map(function(l){
+              return '<div class="matchrow"><div class="mleft">'+esc(l.text)+'</div>'
+                + '<select class="msel" data-q="'+esc(r.id)+'" data-li="'+esc(l.li)+'"><option value="">— choose a match —</option>'
+                + (r.right||[]).map(function(rt){ return '<option value="'+esc(rt.text)+'">'+esc(rt.text)+'</option>'; }).join("")
+                + '</select></div>';
+            }).join("") + '</div>'; }
+          return h+'</div>';
         }).join("");
         html += '<button class="primary" id="submit">Submit exam</button><div class="emsg" id="emsg"></div>';
         wrap.innerHTML = html;
+        wireFill();
         document.getElementById("submit").onclick = submit;
+      }
+
+      function wireFill(){
+        Array.prototype.forEach.call(document.querySelectorAll('.bank .tok'), function(b){
+          b.onclick = function(){
+            var bank=b.parentNode, q=bank.getAttribute('data-q'), was=b.classList.contains('sel');
+            Array.prototype.forEach.call(bank.querySelectorAll('.tok'), function(x){ x.classList.remove('sel'); });
+            if(!was){ b.classList.add('sel'); fillSel[q]=b.getAttribute('data-tok'); } else { delete fillSel[q]; }
+          };
+        });
+        Array.prototype.forEach.call(document.querySelectorAll('.blank'), function(sl){
+          sl.onclick = function(){
+            var q=sl.getAttribute('data-q');
+            if (sl.getAttribute('data-filled')){ sl.removeAttribute('data-filled'); sl.textContent="____"; sl.classList.remove('done'); return; }
+            if (fillSel[q]){ sl.setAttribute('data-filled', fillSel[q]); sl.textContent=fillSel[q]; sl.classList.add('done');
+              var bank=document.querySelector('.bank[data-q="'+q+'"]'); if(bank){ Array.prototype.forEach.call(bank.querySelectorAll('.tok'),function(x){x.classList.remove('sel');}); } delete fillSel[q]; }
+          };
+        });
       }
 
       function submit(){
         var btn = document.getElementById("submit");
         var answers = [], answered = 0;
         run.forEach(function(r){
-          if (r.type === "free") {
-            var ta = document.querySelector('textarea[data-id="'+r.id+'"]');
-            var val = ta ? ta.value.trim() : "";
-            if (val) answered++;
-            answers.push({ id:r.id, text:val });
-          } else {
-            var sel = document.querySelector('input[name="'+r.id+'"]:checked');
-            if (sel) { answered++; answers.push({ id:r.id, choice:sel.value }); }
-          }
+          if (r.type==="mc"){ var s=document.querySelector('input[name="'+r.id+'"]:checked'); if(s){ answered++; answers.push({ id:r.id, choice:Number(s.value) }); } }
+          else if (r.type==="tf"){ var s2=document.querySelector('input[name="'+r.id+'"]:checked'); if(s2){ answered++; answers.push({ id:r.id, choice:(s2.value==="true") }); } }
+          else if (r.type==="multi"){ var cks=document.querySelectorAll('.ck[data-q="'+r.id+'"]:checked'); if(cks.length){ answered++; answers.push({ id:r.id, choices:Array.prototype.map.call(cks,function(c){return Number(c.value);}) }); } }
+          else if (r.type==="match"){ var sels=document.querySelectorAll('.msel[data-q="'+r.id+'"]'); var pairs={}, any=false; Array.prototype.forEach.call(sels,function(s3){ if(s3.value!==""){ pairs[s3.getAttribute('data-li')]=s3.value; any=true; } }); if(any){ answered++; answers.push({ id:r.id, pairs:pairs }); } }
+          else if (r.type==="fill"){ var slots=document.querySelectorAll('.blank[data-q="'+r.id+'"]'); var amap={}, any2=false; Array.prototype.forEach.call(slots,function(sl){ var f=sl.getAttribute('data-filled'); if(f){ amap[sl.getAttribute('data-k')]=f; any2=true; } }); if(any2){ answered++; answers.push({ id:r.id, answers:amap }); } }
         });
-        if (answered < run.length) { if(!confirm("You have unanswered questions. Submit anyway?")) return; }
+        if (answered < run.length) { if(!confirm("You have "+(run.length-answered)+" unanswered question(s). Submit anyway?")) return; }
         btn.disabled = true; btn.textContent = "Submitting…";
         window.GEM.submitExam(slug, answers).then(function(res){
           if (!res || res.error) {
@@ -158,12 +202,13 @@
         var pct = res.score, passed = res.passed;
         wrap.innerHTML = '<div class="result"><div class="score">'+pct+'%</div>'+
           '<div class="verdict '+(passed?"pass":"fail")+'">'+(passed?"Passed":"Not yet")+'</div>'+
-          '<p>You got '+res.correct+' of '+res.total+' right. Pass mark is '+(res.pass_threshold||pass)+'%.</p>'+
+          '<p>You scored '+pct+'%. Pass mark is '+(res.pass_threshold||pass)+'%.</p>'+
           (passed
             ? '<p>Your certificate has been issued.</p><button class="primary" id="cert">View my certificate</button>'
-            : '<p>Review the chapters and try again.</p>')+
+            : '<p>Review the chapters and try again — the questions reshuffle each attempt.</p>')+
           '<div><button class="ghost" id="again">'+(passed?"Retake":"Try again")+'</button></div></div>';
         document.getElementById("again").onclick = function(){
+          fillSel = {};
           window.GEM.getExam(slug).then(function(ex2){ if (ex2 && ex2.questions) { run = ex2.questions; } render(); }, render);
         };
         if (passed) document.getElementById("cert").onclick = function(){ location.href = "certificate.html?slug="+encodeURIComponent(slug); };

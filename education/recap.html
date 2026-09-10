@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Recap &amp; Practice — Gemini Education</title>
+  <link rel="icon" href="../logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --navy:#0a1628; --blue:#1a6fc4; --blue-bright:#2e8de8; --blue-light:#5aaff5; --white:#fff;
+            --off-white:#e8edf5; --gray:#8a9ab5; --panel:#0f2138; --line:#1c3354; --good:#36c98d; --bad:#ff8585; --violet:#9a6cf0; }
+    * { box-sizing:border-box; }
+    body { font-family:'Barlow',system-ui,sans-serif; font-weight:300; color:var(--off-white); margin:0; background:var(--navy); line-height:1.55; -webkit-font-smoothing:antialiased; }
+    a { text-decoration:none; }
+    nav { display:flex; align-items:center; gap:14px; padding:14px 22px; border-bottom:1px solid var(--line); }
+    .logo { width:24px; height:24px; border-radius:6px; background:conic-gradient(from 210deg,var(--blue),var(--blue-light),var(--blue)); }
+    nav b { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:19px; letter-spacing:.06em; color:#fff; }
+    nav .sp { flex:1; } nav a.back { color:var(--blue-light); font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:14px; }
+    .wrap { max-width:760px; margin:0 auto; padding:30px 22px 70px; }
+    .kicker { font-family:'Barlow Condensed',sans-serif; font-weight:600; font-size:12px; letter-spacing:.2em; text-transform:uppercase; color:var(--blue-light); }
+    h1 { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:38px; letter-spacing:.02em; margin:6px 0 2px; color:#fff; }
+    .sub { color:var(--gray); font-size:14px; margin-bottom:18px; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .tab { padding:9px 16px; border:1px solid var(--line); border-radius:999px; background:transparent; color:var(--blue-light);
+           font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:.05em; text-transform:uppercase; font-size:13px; cursor:pointer; }
+    .tab.on { background:linear-gradient(135deg,var(--blue-bright),var(--blue)); color:#fff; border-color:transparent; }
+    .center { text-align:center; color:var(--gray); padding:40px 0; } .center a { color:var(--blue-light); }
+    /* flashcards */
+    .card { perspective:1200px; margin:10px 0 14px; }
+    .cardin { position:relative; min-height:230px; transition:transform .5s; transform-style:preserve-3d; cursor:pointer; }
+    .cardin.flip { transform:rotateY(180deg); }
+    .face { position:absolute; inset:0; backface-visibility:hidden; border:1px solid var(--line); border-radius:16px; padding:26px; display:flex; flex-direction:column; justify-content:center; }
+    .front { background:linear-gradient(160deg,#0f2138,#0b1830); }
+    .back { background:linear-gradient(160deg,#122a1f,#0b1f18); transform:rotateY(180deg); border-color:#2f9e73; }
+    .face .lbl { font-family:'Barlow Condensed',sans-serif; letter-spacing:.14em; text-transform:uppercase; font-size:11px; color:var(--gray); margin-bottom:10px; }
+    .face .txt { font-size:18px; color:#fff; } .back .ans { color:var(--good); font-weight:700; font-size:19px; margin-bottom:8px; }
+    .face .why { color:#aab8d2; font-size:14px; margin-top:8px; }
+    .rowbtns { display:flex; gap:10px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
+    button.b { padding:11px 18px; border:1px solid var(--line); border-radius:10px; background:rgba(20,40,70,.5); color:var(--blue-light);
+               font-family:'Barlow Condensed',sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.05em; font-size:13px; cursor:pointer; }
+    button.b.solid { background:linear-gradient(135deg,var(--blue-bright),var(--blue)); color:#fff; border-color:transparent; }
+    button.b:hover { border-color:var(--blue-bright); } .prog { color:var(--gray); font-size:13px; }
+    /* quiz */
+    .q { background:var(--panel); border:1px solid var(--line); border-radius:13px; padding:18px 20px; margin:12px 0; }
+    .q h3 { margin:2px 0 12px; font-size:16.5px; color:#fff; font-weight:600; }
+    .opt { display:flex; gap:10px; align-items:flex-start; padding:11px 13px; border:1px solid var(--line); border-radius:9px; margin-bottom:8px; cursor:pointer; font-size:15px; }
+    .opt:hover { border-color:#2a4a78; } .opt.right { border-color:var(--good); background:rgba(54,201,141,.12); } .opt.wrong { border-color:var(--bad); background:rgba(255,133,133,.1); }
+    .why2 { color:#aab8d2; font-size:14px; margin-top:8px; display:none; } .why2.show { display:block; }
+    /* matching */
+    .mwrap { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .mcol { display:flex; flex-direction:column; gap:8px; }
+    .mitem { border:1px solid var(--line); border-radius:9px; padding:11px 13px; background:#0c1d33; font-size:14px; cursor:pointer; }
+    .mitem:hover { border-color:#2a4a78; } .mitem.sel { border-color:var(--blue-light); background:#12325a; }
+    .mitem.done { border-color:var(--good); background:rgba(54,201,141,.12); color:#bff0d8; cursor:default; }
+    .mitem.bad { border-color:var(--bad); }
+    @media (max-width:560px){ .mwrap{ grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <nav><div class="logo"></div><b>GEMINI EDUCATION</b><div class="sp"></div><a class="back" id="backlink" href="index.html">← Back to course</a></nav>
+  <div class="wrap" id="wrap"><div class="center">Loading…</div></div>
+
+  <script src="courses-data.js"></script>
+  <script>
+  (function(){
+    var wrap = document.getElementById("wrap");
+    var esc = function(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(m){return ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" })[m];}); };
+    function shuffle(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+    var slug = new URLSearchParams(location.search).get("slug");
+    if (!slug){ wrap.innerHTML='<div class="center">No course specified.</div>'; return; }
+    document.getElementById("backlink").href = "course.html?slug="+encodeURIComponent(slug);
+
+    // load the course bank (ungraded practice reuses the authored questions)
+    var s = document.createElement("script");
+    s.src = "exams/"+slug+".full.js";
+    s.onerror = function(){
+      // fall back to the live subset file
+      var s2=document.createElement("script"); s2.src="exams/"+slug+".js"; s2.onerror=function(){ wrap.innerHTML='<div class="center">No practice set is available for this course yet.<br><br><a href="course.html?slug='+encodeURIComponent(slug)+'">Back to the course →</a></div>'; }; s2.onload=boot; document.body.appendChild(s2);
+    };
+    s.onload = boot;
+    document.body.appendChild(s);
+
+    function boot(){
+      var ex = window.GEM_EXAM;
+      if (!ex || !Array.isArray(ex.questions)){ wrap.innerHTML='<div class="center">No practice set is available yet.</div>'; return; }
+      var Q = ex.questions;
+      var mc = Q.filter(function(q){ return q.type==="mc"; });
+      var tf = Q.filter(function(q){ return q.type==="tf"; });
+      var match = Q.filter(function(q){ return q.type==="match"; });
+      var cards = shuffle(mc.concat(tf));
+      var quiz = shuffle(mc.slice());
+      var mode = "cards";
+
+      function chrome(inner){
+        return '<div class="kicker">'+esc(ex.title)+' · Recap &amp; Practice</div>'+
+          '<h1>Recap &amp; Practice</h1>'+
+          '<div class="sub">Optional, ungraded. Warm up before the final exam — nothing here is recorded.</div>'+
+          '<div class="tabs">'+
+            '<button class="tab'+(mode==="cards"?" on":"")+'" data-m="cards">Flip cards</button>'+
+            (match.length?'<button class="tab'+(mode==="match"?" on":"")+'" data-m="match">Matching</button>':'')+
+            '<button class="tab'+(mode==="quiz"?" on":"")+'" data-m="quiz">Practice quiz</button>'+
+            '<a class="tab" style="background:linear-gradient(135deg,#9a6cf0,#6a44c0);color:#fff;border-color:transparent" href="exam.html?slug='+encodeURIComponent(slug)+'">Take the final →</a>'+
+          '</div><div id="body">'+inner+'</div>';
+      }
+      function wireTabs(){ Array.prototype.forEach.call(document.querySelectorAll('.tab[data-m]'), function(t){ t.onclick=function(){ mode=t.getAttribute('data-m'); route(); }; }); }
+
+      // ---- flip cards ----
+      var ci = 0;
+      function cardAnswer(q){ if (q.type==="tf") return q.answer ? "True" : "False"; return q.options[q.answer]; }
+      function renderCards(){
+        if (!cards.length) return '<div class="center">No flip cards for this course.</div>';
+        var q = cards[ci];
+        return '<div class="card"><div class="cardin" id="cardin">'+
+            '<div class="face front"><div class="lbl">Question '+(ci+1)+' of '+cards.length+'</div><div class="txt">'+esc(q.q)+'</div><div class="why" style="margin-top:14px;color:#7f93b4">Tap to reveal</div></div>'+
+            '<div class="face back"><div class="lbl">Answer</div><div class="ans">'+esc(cardAnswer(q))+'</div>'+(q.explanation?'<div class="why">'+esc(q.explanation)+'</div>':'')+'</div>'+
+          '</div></div>'+
+          '<div class="rowbtns"><button class="b" id="prev">← Prev</button><span class="prog">'+(ci+1)+' / '+cards.length+'</span><button class="b solid" id="next">Next →</button></div>'+
+          '<div style="text-align:center;margin-top:10px"><button class="b" id="shuf">Shuffle deck</button></div>';
+      }
+      function wireCards(){
+        var inn=document.getElementById("cardin"); if(inn) inn.onclick=function(){ inn.classList.toggle("flip"); };
+        var p=document.getElementById("prev"), n=document.getElementById("next"), sh=document.getElementById("shuf");
+        if(p) p.onclick=function(){ ci=(ci-1+cards.length)%cards.length; route(); };
+        if(n) n.onclick=function(){ ci=(ci+1)%cards.length; route(); };
+        if(sh) sh.onclick=function(){ cards=shuffle(cards); ci=0; route(); };
+      }
+
+      // ---- practice quiz (instant feedback) ----
+      function renderQuiz(){
+        if(!quiz.length) return '<div class="center">No practice questions for this course.</div>';
+        return quiz.map(function(q,qi){
+          return '<div class="q" data-qi="'+qi+'"><h3>'+(qi+1)+'. '+esc(q.q)+'</h3>'+
+            q.options.map(function(o,oi){ return '<label class="opt" data-oi="'+oi+'"><span>'+esc(o)+'</span></label>'; }).join("")+
+            '<div class="why2">'+esc(q.explanation||"")+'</div></div>';
+        }).join("");
+      }
+      function wireQuiz(){
+        Array.prototype.forEach.call(document.querySelectorAll('.q'), function(qd){
+          var qi=Number(qd.getAttribute('data-qi')); var q=quiz[qi]; var locked=false;
+          Array.prototype.forEach.call(qd.querySelectorAll('.opt'), function(op){
+            op.onclick=function(){ if(locked) return; locked=true; var oi=Number(op.getAttribute('data-oi'));
+              qd.querySelectorAll('.opt')[q.answer].classList.add('right');
+              if(oi!==q.answer) op.classList.add('wrong');
+              var w=qd.querySelector('.why2'); if(w) w.classList.add('show');
+            };
+          });
+        });
+      }
+
+      // ---- matching game ----
+      var mmi = 0;
+      function renderMatch(){
+        if(!match.length) return '<div class="center">No matching sets for this course.</div>';
+        var q = match[mmi];
+        var lefts = q.pairs.map(function(p,i){ return {i:i, text:p.left}; });
+        var rights = shuffle(q.pairs.map(function(p,i){ return {i:i, text:p.right}; }));
+        window.__mstate = { q:q, lefts:lefts, rights:rights, sel:null, done:{} };
+        return '<div class="q"><h3>'+esc(q.q)+'</h3><div class="sub" style="margin:0 0 10px">Tap an item on the left, then its match on the right.</div>'+
+          '<div class="mwrap"><div class="mcol" id="lcol">'+ lefts.map(function(l){ return '<div class="mitem" data-side="L" data-i="'+l.i+'">'+esc(l.text)+'</div>'; }).join("")+'</div>'+
+          '<div class="mcol" id="rcol">'+ rights.map(function(r){ return '<div class="mitem" data-side="R" data-i="'+r.i+'">'+esc(r.text)+'</div>'; }).join("")+'</div></div>'+
+          '<div class="rowbtns" style="margin-top:12px"><span class="prog" id="mprog">0 / '+q.pairs.length+' matched</span>'+
+          (match.length>1?'<button class="b solid" id="mnext">Next set →</button>':'<button class="b" id="mreset">Reset</button>')+'</div></div>';
+      }
+      function wireMatch(){
+        var st=window.__mstate; if(!st) return;
+        function items(){ return document.querySelectorAll('.mitem'); }
+        Array.prototype.forEach.call(items(), function(it){
+          it.onclick=function(){
+            if(it.classList.contains('done')) return;
+            var side=it.getAttribute('data-side'), i=Number(it.getAttribute('data-i'));
+            if(!st.sel){ if(side!=="L"){ return; } st.sel=it; it.classList.add('sel'); return; }
+            if(side==="L"){ st.sel.classList.remove('sel'); st.sel=it; it.classList.add('sel'); return; }
+            // R clicked with an L selected
+            var li=Number(st.sel.getAttribute('data-i'));
+            if(li===i){ st.sel.classList.remove('sel'); st.sel.classList.add('done'); it.classList.add('done'); st.done[li]=1;
+              var n=Object.keys(st.done).length; var pr=document.getElementById('mprog'); if(pr) pr.textContent=n+' / '+st.q.pairs.length+' matched';
+            } else { it.classList.add('bad'); setTimeout(function(){ it.classList.remove('bad'); }, 450); st.sel.classList.remove('sel'); st.sel=null; }
+          };
+        });
+        var mn=document.getElementById('mnext'); if(mn) mn.onclick=function(){ mmi=(mmi+1)%match.length; route(); };
+        var mr=document.getElementById('mreset'); if(mr) mr.onclick=function(){ route(); };
+      }
+
+      function route(){
+        var inner = mode==="cards" ? renderCards() : mode==="match" ? renderMatch() : renderQuiz();
+        wrap.innerHTML = chrome(inner);
+        wireTabs();
+        if(mode==="cards") wireCards(); else if(mode==="match") wireMatch(); else wireQuiz();
+      }
+      route();
+    }
+  })();
+  </script>
+</body>
+</html>
