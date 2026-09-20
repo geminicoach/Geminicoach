@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Checkpoint: Reading Muscles &middot; Functional Anatomy for Coaches</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="anatomy.css">
+</head>
+<body>
+<div class="page">
+  <div class="topbar"><img class="logo" src="gemini-logo.png" alt="Gemini"><b>Gemini Education</b><div class="sp"></div><a href="index.html">All chapters</a></div>
+
+  <div class="ch-body">
+    <div class="eyebrow">Checkpoint &middot; After Chapter 2</div>
+    <h1>Checkpoint: Reading Muscles</h1>
+    <p class="subtitle">Eight questions on Chapters 1 and 2: the logic of pull, origin and insertion, muscle names as clues, and the superficial muscles you can see and feel.</p>
+
+    <div class="qintro">This is a self-check, not a test. Pick an option and the answer reveals right away, along with the reasoning behind it. No grade is recorded anywhere, so answer honestly and reread anything that surprises you.</div>
+
+    <div id="quiz"></div>
+    <div class="quizscore"><span id="ans">0 answered</span><span class="num" id="score">0 / 8</span></div>
+    <div id="done"></div>
+
+    <div class="chnav">
+      <a class="home" href="index.html">&larr; All chapters</a>
+      <a href="chapter-3-the-skeleton-and-the-landmarks-you-palpate.html">Continue: Chapter 3 &rarr;</a>
+    </div>
+    <div class="foot">Gemini Education &middot; Functional Anatomy for Coaches</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var questions = [
+    {
+      q: "A muscle contracts and shortens across a joint. What can it actually do?",
+      opts: ["Only pull its two ends toward each other", "Push its two ends apart", "Push or pull, depending on the exercise", "Rotate a joint without shortening at all"],
+      answer: 0,
+      why: "A muscle can only shorten and pull its two attachments toward each other. It can never push. Every action you see, flexing, extending, rotating, is that one pulling action applied across a joint."
+    },
+    {
+      q: "By the default convention from Chapter 1, which attachment is the origin?",
+      opts: ["The more distal, more mobile end that gets pulled", "The more stable, usually more proximal anchor that tends to stay put", "Whichever end is closer to the skin", "The attachment with the thickest tendon"],
+      answer: 1,
+      why: "The origin is the more stable, usually more proximal anchor. The insertion is the more mobile, usually more distal end that gets pulled toward the origin when the muscle shortens."
+    },
+    {
+      q: "The name sternocleidomastoid tells you the muscle's attachments directly. What are they?",
+      opts: ["The scapula and the radius", "The sternum and clavicle, and the mastoid process behind the ear", "The ilium and the femur", "The sacrum and the greater trochanter"],
+      answer: 1,
+      why: "Sterno (sternum), cleido (clavicle), and mastoid (the mastoid process behind the ear) name both of this muscle's attachments right in the word itself."
+    },
+    {
+      q: "During a triceps push-down, which muscle is the agonist?",
+      opts: ["Biceps brachii", "Triceps brachii", "Deltoid", "Brachioradialis"],
+      answer: 1,
+      why: "Roles depend on the movement, not a fixed identity. In a push-down the triceps does the work as the agonist while the biceps lengthens as the antagonist, the reverse of their roles in a curl."
+    },
+    {
+      q: "Trapezius is one named muscle, but a client can have a strong upper trapezius and a weak lower trapezius at the same time. Why?",
+      opts: ["Trapezius is actually two separate muscles under one name", "Trapezius has upper, middle, and lower fibers that pull in different directions and can act somewhat independently", "The lower fibers do not attach to the spine at all", "Trapezius only works during shoulder abduction"],
+      answer: 1,
+      why: "Trapezius is a single kite-shaped sheet, but its upper, middle, and lower fibers pull in different directions, shrug, retract, and depress, and can be trained and assessed somewhat independently."
+    },
+    {
+      q: "Which muscle is the prime mover for driving the hips forward at the top of a deadlift?",
+      opts: ["Quadriceps group", "Gluteus maximus", "Rectus abdominis", "Erector spinae"],
+      answer: 1,
+      why: "Gluteus maximus runs from the back of the pelvis to the upper thigh bone, so shortening pulls the thigh backward and extends the hip. Quadriceps handles the knee, not the hip."
+    },
+    {
+      q: "A client shows rounded shoulders and a flat, underdeveloped upper back. Which imbalance does this most likely point to?",
+      opts: ["Overactive hamstrings and underactive quadriceps", "A pectoralis major and anterior deltoid dominant client who needs more pulling work", "A weak rectus abdominis paired with an overactive erector spinae", "Overactive gluteus medius on one side"],
+      answer: 1,
+      why: "Rounded shoulders and a flat upper back are the classic visual sign of the pecs and anterior deltoid winning the tug of war against an undertrained mid and lower trapezius and rhomboids."
+    },
+    {
+      q: "A client's shoulder blade wings, sticking out visibly during a push-up. Which muscle is most likely underperforming?",
+      opts: ["Serratus anterior", "Sternocleidomastoid", "External oblique", "Tibialis anterior"],
+      answer: 0,
+      why: "Serratus anterior pulls the shoulder blade forward and flat against the ribcage. A weak serratus anterior lets the shoulder blade wing during a push-up or plank, and push-up plus drills target it directly."
+    }
+  ];
+
+  var quiz = document.getElementById('quiz');
+  var ansEl = document.getElementById('ans');
+  var scoreEl = document.getElementById('score');
+  var doneEl = document.getElementById('done');
+  var answered = 0, correct = 0;
+  scoreEl.textContent = '0 / ' + questions.length;
+
+  questions.forEach(function(q, idx){
+    var card = document.createElement('div');
+    card.className = 'qcard';
+
+    var qn = document.createElement('div');
+    qn.className = 'qn';
+    qn.textContent = 'Question ' + (idx + 1) + ' of ' + questions.length;
+    card.appendChild(qn);
+
+    var qq = document.createElement('div');
+    qq.className = 'qq';
+    qq.textContent = q.q;
+    card.appendChild(qq);
+
+    q.opts.forEach(function(opt, oi){
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'qopt';
+      btn.textContent = opt;
+      btn.addEventListener('click', function(){
+        var opts = card.querySelectorAll('.qopt');
+        if(opts[0].disabled) return;
+        Array.prototype.forEach.call(opts, function(b){ b.disabled = true; });
+        opts[q.answer].classList.add('correct');
+        if(oi !== q.answer){ opts[oi].classList.add('wrong'); }
+        else { correct++; }
+        explain.classList.add('show');
+        answered++;
+        ansEl.textContent = answered + ' answered';
+        scoreEl.textContent = correct + ' / ' + questions.length;
+        if(answered === questions.length){
+          doneEl.innerHTML = '<div class="quizdone">You finished. You got ' + correct + ' of ' + questions.length + '. Reread any you missed, the answer and why are shown under each.</div>';
+        }
+      });
+      card.appendChild(btn);
+    });
+
+    var explain = document.createElement('div');
+    explain.className = 'qexplain';
+    explain.textContent = q.why;
+    card.appendChild(explain);
+
+    quiz.appendChild(card);
+  });
+})();
+</script>
+</body>
+</html>
