@@ -46,7 +46,11 @@
     var wrap = document.createElement("div");
     wrap.setAttribute("data-gem-nav", "1");
     wrap.style.cssText = "max-width:900px;margin:32px auto 60px;padding:18px 20px;border-top:1px solid rgba(120,150,200,.25);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:'Barlow',system-ui,sans-serif";
-    wrap.innerHTML = '<a href="' + esc(back) + '" style="' + ghost + '">&larr; Back to course</a>' +
+    var dash = "../../index.html";
+    wrap.innerHTML = '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">' +
+                       '<a href="' + esc(back) + '" style="' + ghost + '">&larr; Back to course</a>' +
+                       '<a href="' + dash + '" style="' + ghost + '">&#8962; Dashboard</a>' +
+                     '</div>' +
                      '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end">' + right + '</div>';
     document.body.appendChild(wrap);
   } catch (e) { /* nav is non-critical; never break the page */ }
