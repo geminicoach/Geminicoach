@@ -1,0 +1,30 @@
+name: Supabase keep-alive
+
+# Free-tier Supabase projects auto-pause after 7 days with no API activity.
+# This workflow pings the project every 3 days so it never goes idle.
+# Runs on GitHub's servers (not your computer), so it keeps working
+# regardless of the local "tasks on this computer" deprecation.
+
+on:
+  schedule:
+    - cron: '17 13 */3 * *'   # ~1:17pm UTC, every 3rd day
+  workflow_dispatch:           # lets you run it manually from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST (counts as project activity)
+        run: |
+          KEY="sb_publishable_hnDaEyTkttG2Q4yF_YmDpw_tWYcY7c4"
+          BASE="https://btnqyetimebksqxxvqxl.supabase.co/rest/v1"
+          # Hit an actual table so the request reaches Postgres, not just the gateway.
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            "$BASE/courses?select=slug&limit=1" \
+            -H "apikey: $KEY")
+          echo "Supabase responded with HTTP $code"
+          # Any HTTP response means the project was reached and is now marked active.
+          if [ -z "$code" ]; then
+            echo "No response from Supabase" >&2
+            exit 1
+          fi
