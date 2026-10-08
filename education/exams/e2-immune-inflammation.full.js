@@ -6,7 +6,7 @@
 window.GEM_EXAM = {
   slug: "e2-immune-inflammation",
   title: "Immune System and Inflammation",
-  contact_hours: null, ceu_value: null, pass_threshold: 80, placeholder: false,
+  contact_hours: 10, ceu_value: 1.0, pass_threshold: 80, placeholder: false,
   draw: { mc: 22, multi: 0, tf: 6, match: 0, fill: 0, free: 0 },
   shuffle: { questions: true, options: true },
   questions: [

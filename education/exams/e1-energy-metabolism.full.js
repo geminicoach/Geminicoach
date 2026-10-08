@@ -6,7 +6,7 @@
 window.GEM_EXAM = {
   slug: "e1-energy-metabolism",
   title: "Energy Systems & Metabolism",
-  contact_hours: null, ceu_value: null, pass_threshold: 80, placeholder: false,
+  contact_hours: 9, ceu_value: 0.9, pass_threshold: 80, placeholder: false,
   draw: { mc: 14, multi: 3, tf: 4, match: 2, fill: 2, free: 0 },
   shuffle: { questions: true, options: true },
   questions: [
