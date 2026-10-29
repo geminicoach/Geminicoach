@@ -1,34 +1,35 @@
 name: Supabase keep-alive
 
-# Free-tier Supabase projects auto-pause after 7 days with no API activity.
-# GitHub's scheduled runs can be delayed or skipped, so we ping TWICE DAILY
-# (not every 3 days) to guarantee a hit inside every 7-day window even if
-# GitHub drops several runs. Runs on GitHub's servers, independent of your PC.
+# Free-tier Supabase projects auto-pause after 7 days with no DB activity.
+# IMPORTANT: a ping only counts if it executes a REAL authenticated query.
+# This sends BOTH headers a real client sends (apikey + Authorization: Bearer),
+# prints the HTTP code, and FAILS (red) on anything that isn't a 2xx —
+# so a green run truly means a real database query ran and was counted.
 
 on:
   schedule:
-    - cron: '23 6 * * *'    # 06:23 UTC daily (odd minute = less likely to be dropped)
-    - cron: '23 18 * * *'   # 18:23 UTC daily (second daily attempt for safety)
+    - cron: '23 6 * * *'    # 06:23 UTC daily
+    - cron: '23 18 * * *'   # 18:23 UTC daily
   push:
-    branches: [ main ]       # every push also counts as a ping (bonus activity)
-  workflow_dispatch:         # lets you run it on demand from the Actions tab
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: Ping Supabase (marks the project active)
+      - name: Real authenticated query against Postgres
         run: |
           KEY="sb_publishable_hnDaEyTkttG2Q4yF_YmDpw_tWYcY7c4"
           BASE="https://btnqyetimebksqxxvqxl.supabase.co/rest/v1"
-          # 1) REST root — always answers, no RLS dependency.
-          r1=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/" -H "apikey: $KEY")
-          echo "REST root responded: $r1"
-          # 2) A real table read so the request reaches Postgres too.
-          r2=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/courses?select=slug&limit=1" -H "apikey: $KEY")
-          echo "Table read responded: $r2"
-          if [ -z "$r1" ] && [ -z "$r2" ]; then
-            echo "No response from Supabase at all" >&2
-            exit 1
-          fi
-          echo "Keep-alive ping complete."
+          code=$(curl -s -o /tmp/body -w "%{http_code}" \
+            "$BASE/exams?select=course_slug&limit=1" \
+            -H "apikey: $KEY" \
+            -H "Authorization: Bearer $KEY" \
+            -H "Accept: application/json")
+          echo "HTTP $code"
+          echo "Response body:"; cat /tmp/body; echo
+          case "$code" in
+            2*) echo "OK - real query executed, project marked active." ;;
+            *)  echo "FAIL - not a 2xx; this ping did NOT count as activity." >&2; exit 1 ;;
+          esac
